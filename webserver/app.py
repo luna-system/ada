@@ -24,8 +24,14 @@ EMBED_MODEL = os.getenv("OLLAMA_EMBED_MODEL", "nomic-embed-text")
 # Section toggles and sizes
 RAG_ENABLE_PERSONA = os.getenv("RAG_ENABLE_PERSONA", "true").lower() == "true"
 RAG_ENABLE_FAQ = os.getenv("RAG_ENABLE_FAQ", "true").lower() == "true"
+RAG_ENABLE_MEMORY = os.getenv("RAG_ENABLE_MEMORY", "true").lower() == "true"
+RAG_ENABLE_SUMMARY = os.getenv("RAG_ENABLE_SUMMARY", "true").lower() == "true"
 RAG_TURNS_TOP_K = int(os.getenv("RAG_TURNS_TOP_K", os.getenv("RAG_TOP_K", "4")))
 RAG_FAQ_TOP_K = int(os.getenv("RAG_FAQ_TOP_K", "2"))
+RAG_MEMORY_TOP_K = int(os.getenv("RAG_MEMORY_TOP_K", "3"))
+RAG_MEMORY_IMPORTANCE_WEIGHT = float(os.getenv("RAG_MEMORY_IMPORTANCE_WEIGHT", "0.5"))
+RAG_SUMMARY_EVERY_N = int(os.getenv("RAG_SUMMARY_EVERY_N", "8"))
+RAG_SUMMARY_TURNS_WINDOW = int(os.getenv("RAG_SUMMARY_TURNS_WINDOW", "12"))
 RAG_DEBUG = os.getenv("RAG_DEBUG", "false").lower() == "true"
 
 rag_store = None
@@ -167,18 +173,22 @@ def chat():
     conversation_id = data.get('conversation_id')
     turns_k = int(data.get('turns_k', RAG_TURNS_TOP_K))
     faq_k = int(data.get('faq_k', RAG_FAQ_TOP_K))
+    memory_k = int(data.get('memory_k', RAG_MEMORY_TOP_K))
+    save_memory = bool(data.get('save_memory', False))
+    memory_text = (data.get('memory_text') or '').strip()
+    entity = (data.get('entity') or '').strip() or None
 
     # Build payload for Ollama. Per your backend contract, the toggle
     # must be a top-level "think" property on the payload object.
     final_prompt = prompt
 
-    used_context: Dict[str, Any] = {"persona": None, "faqs": [], "turns": []}
+    used_context: Dict[str, Any] = {"persona": None, "faqs": [], "turns": [], "memories": [], "summaries": [], "entity": entity}
     # Capture when we received the user's message
     user_timestamp = datetime.datetime.now(datetime.timezone.utc).isoformat()
     if rag_store is not None and final_prompt:
         try:
             sections: List[str] = []
-            dbg = {"persona": False, "faqs": 0, "turns": 0, "cid": conversation_id}
+            dbg = {"persona": False, "faqs": 0, "turns": 0, "memories": 0, "cid": conversation_id}
 
             # Persona block (always-on if enabled and available)
             if RAG_ENABLE_PERSONA:
@@ -195,6 +205,26 @@ def chat():
                     }
                 else:
                     used_context["persona"] = {"included": False}
+
+            # Long-term memory (global/entity) — similarity + importance/recency rerank
+            if RAG_ENABLE_MEMORY and memory_k > 0:
+                mem_hits = rag_store.retrieve_memories(query=prompt, k=memory_k, entity=entity)
+                if mem_hits:
+                    mem_lines = []
+                    for text_m, meta_m in mem_hits:
+                        imp = (meta_m or {}).get('importance')
+                        scope = (meta_m or {}).get('scope', 'global')
+                        tag_str = ''
+                        tags = (meta_m or {}).get('tags')
+                        if isinstance(tags, list) and tags:
+                            tag_str = f" tags={','.join(tags)}"
+                        if imp is not None:
+                            mem_lines.append(f"- ({scope}, importance={imp}{tag_str}) {text_m}")
+                        else:
+                            mem_lines.append(f"- ({scope}{tag_str}) {text_m}")
+                        used_context["memories"].append(text_m)
+                    sections.append("Long-term memory:\n" + "\n".join(mem_lines))
+                    dbg["memories"] = len(mem_hits)
 
             # FAQs/reference (similarity-only)
             if RAG_ENABLE_FAQ and faq_k > 0:
@@ -226,6 +256,13 @@ def chat():
                     sections.append("Memory (most relevant first):\n" + "\n".join(turn_lines))
                     dbg["turns"] = len(hits)
 
+            # Conversation summaries (latest few)
+            if RAG_ENABLE_SUMMARY and conversation_id:
+                sum_hits = rag_store.retrieve_summaries(conversation_id=conversation_id, k=2)
+                if sum_hits:
+                    used_context["summaries"] = [t for t, _ in sum_hits]
+                    sections.append("Conversation summaries:\n" + "\n".join(f"- {t}" for t, _ in sum_hits))
+
             # Build instructions and final prompt
             instructions = (
                 "You are a helpful assistant. Follow the persona and policies above. Use the reference snippets and "
@@ -240,7 +277,7 @@ def chat():
                 f"User: {prompt}\nAssistant:"
             )
             if RAG_DEBUG:
-                print(f"[RAG][build] cid={dbg['cid']} persona={bool(used_context.get('persona',{}).get('included'))} faqs={dbg['faqs']} turns={dbg['turns']}")
+                print(f"[RAG][build] cid={dbg['cid']} persona={bool(used_context.get('persona',{}).get('included'))} faqs={dbg['faqs']} memories={dbg['memories']} turns={dbg['turns']}")
         except Exception:
             # If retrieval fails, proceed without context
             pass
@@ -280,6 +317,55 @@ def chat():
                     print("[RAG][upsert] failed:\n" + traceback.format_exc())
                 pass
 
+        # Possibly generate and store a conversation summary every N turns
+        if RAG_ENABLE_SUMMARY and rag_store is not None and conversation_id:
+            try:
+                total_turn_docs = rag_store.count_turns(conversation_id)
+                # There are two docs per turn; trigger roughly every N user+assistant pairs
+                if total_turn_docs >= 2 and (total_turn_docs // 2) % max(RAG_SUMMARY_EVERY_N, 1) == 0:
+                    last_pairs = rag_store.get_last_turns(conversation_id, limit=RAG_SUMMARY_TURNS_WINDOW)
+                    # Build a compact summarization prompt from last turns
+                    convo_lines = []
+                    for t, m in last_pairs:
+                        role = (m or {}).get('role', 'context')
+                        ts = (m or {}).get('timestamp')
+                        if ts:
+                            convo_lines.append(f"- {role} [{ts}]: {t}")
+                        else:
+                            convo_lines.append(f"- {role}: {t}")
+                    summary_prompt = (
+                        "Summarize the following recent conversation turns succinctly (3-5 bullet points). "
+                        "Capture decisions, facts, preferences, and open items.\n\n" +
+                        "\n".join(convo_lines)
+                    )
+                    sum_payload = {
+                        'model': OLLAMA_MODEL,
+                        'prompt': summary_prompt,
+                        'stream': False,
+                        'think': False,
+                    }
+                    rsum = requests.post(OLLAMA_API_URL, json=sum_payload, timeout=120)
+                    rsum.raise_for_status()
+                    sdata = rsum.json()
+                    stext = (sdata.get('response') or '').strip()
+                    if stext:
+                        rag_store.upsert_summary(conversation_id, stext, timestamp=assistant_timestamp, source='chat')
+            except Exception:
+                if RAG_DEBUG:
+                    import traceback
+                    print("[RAG][summary] failed:\n" + traceback.format_exc())
+
+        # Optionally save a long-term memory entry (consent-driven)
+        if rag_store is not None and save_memory:
+            try:
+                mem_text = memory_text or text
+                if mem_text and mem_text.strip():
+                    rag_store.upsert_memory(mem_text.strip(), scope="global", importance=int(data.get('memory_importance', 3)))
+            except Exception:
+                if RAG_DEBUG:
+                    import traceback
+                    print("[RAG][memory-upsert] failed:\n" + traceback.format_exc())
+
         return jsonify({
             'response': text,
             'thinking': thinking,
@@ -290,6 +376,73 @@ def chat():
         })
     except Exception as e:
         return jsonify({'error': str(e)}), 500
+
+
+# ---- Memory management endpoints ----
+@app.route('/api/memory', methods=['GET'])
+def list_memory():
+    if rag_store is None:
+        return jsonify({'items': []})
+    q = (request.args.get('search') or '').strip()
+    scope = (request.args.get('scope') or '').strip()
+    entity = (request.args.get('entity') or '').strip()
+    try:
+        limit = int(request.args.get('limit', '20'))
+    except Exception:
+        limit = 20
+    items = []
+    try:
+        if q:
+            hits = rag_store.retrieve_memories(query=q, k=min(limit, 20), entity=(entity or None))
+            for text, meta in hits:
+                items.append({'id': None, 'text': text, 'meta': meta})
+        else:
+            rows = rag_store.list_memories(limit=limit)
+            for mid, text, meta in rows:
+                # optional filter by scope/entity
+                if scope and (meta or {}).get('scope') != scope:
+                    continue
+                if entity and (meta or {}).get('scope') != f"entity:{entity}":
+                    continue
+                items.append({'id': mid, 'text': text, 'meta': meta})
+    except Exception as err:
+        return jsonify({'error': str(err)}), 500
+    return jsonify({'items': items})
+
+
+@app.route('/api/memory', methods=['POST'])
+def create_memory():
+    if rag_store is None:
+        return jsonify({'error': 'RAG not available'}), 503
+    data = request.json or {}
+    text = (data.get('text') or '').strip()
+    if not text:
+        return jsonify({'error': 'text is required'}), 400
+    scope = (data.get('scope') or 'global').strip() or 'global'
+    entity = (data.get('entity') or '').strip()
+    if entity and not scope.startswith('entity:'):
+        scope = f'entity:{entity}'
+    try:
+        importance = int(data.get('importance', 3))
+    except Exception:
+        importance = 3
+    tags = data.get('tags') if isinstance(data.get('tags'), list) else None
+    try:
+        mem_id = rag_store.upsert_memory(text, scope=scope, importance=importance, tags=tags, source='chat')
+        return jsonify({'id': mem_id})
+    except Exception as err:
+        return jsonify({'error': str(err)}), 500
+
+
+@app.route('/api/memory/<mem_id>', methods=['DELETE'])
+def delete_memory(mem_id: str):
+    if rag_store is None:
+        return jsonify({'error': 'RAG not available'}), 503
+    try:
+        rag_store.delete_memory(mem_id)
+        return jsonify({'ok': True})
+    except Exception as err:
+        return jsonify({'error': str(err)}), 500
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000)

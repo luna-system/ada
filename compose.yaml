@@ -18,8 +18,14 @@ services:
       # RAG section toggles and sizes
       - RAG_ENABLE_PERSONA=true
       - RAG_ENABLE_FAQ=true
+      - RAG_ENABLE_MEMORY=true
+      - RAG_ENABLE_SUMMARY=true
       - RAG_TURNS_TOP_K=4
       - RAG_FAQ_TOP_K=2
+      - RAG_MEMORY_TOP_K=3
+      - RAG_MEMORY_IMPORTANCE_WEIGHT=0.5
+      - RAG_SUMMARY_EVERY_N=8
+      - RAG_SUMMARY_TURNS_WINDOW=12
       - RAG_DEBUG=true
     volumes:
       - ./webserver/static:/app/static
