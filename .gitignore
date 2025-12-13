@@ -1,0 +1,52 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.egg-info/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+coverage.xml
+htmlcov/
+
+# Virtual envs (uv creates .venv by default)
+.venv/
+venv/
+env/
+
+# Editor/IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Logs & runtime
+*.log
+log-*.txt
+
+# Docker
+.dockerignore
+*.pid
+docker-compose.override.yml
+
+# Node/build (if any future frontend tooling appears)
+node_modules/
+dist/
+build/
+
+# Data & models
+data/**
+!data/.gitkeep
+
+# Lock & cache (keep uv.lock tracked if you prefer deterministic builds)
+# Uncomment next line if you do NOT want to track uv.lock
+# uv.lock
+
+# Generated assets
+webserver/static/*.map
