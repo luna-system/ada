@@ -152,6 +152,9 @@ class RagStore:
         source: str = "kb",
         timestamp: Optional[str] = None,
         conversation_id: Optional[str] = None,
+        importance: Optional[int] = None,
+        tags: Optional[List[str]] = None,
+        extra_meta: Optional[Dict[str, Any]] = None,
     ) -> str:
         """Insert a single non-turn document (faq/doc/persona/policy/summary).
         Returns the generated id.
@@ -170,6 +173,17 @@ class RagStore:
             meta["version"] = version
         if conversation_id:
             meta["conversation_id"] = conversation_id
+        if importance is not None:
+            try:
+                imp = int(importance)
+            except Exception:
+                imp = None
+            if imp is not None:
+                meta["importance"] = imp
+        if tags:
+            meta["tags"] = tags
+        if extra_meta:
+            meta.update(extra_meta)
 
         if self.use_http:
             emb = self.embedding_fn([text])
@@ -177,6 +191,213 @@ class RagStore:
         else:
             self.col.upsert(ids=[doc_id], documents=[text], metadatas=[meta])
         return doc_id
+
+    # ---- Long-term memory helpers ----
+    def upsert_memory(
+        self,
+        text: str,
+        *,
+        scope: str = "global",
+        importance: int = 3,
+        tags: Optional[List[str]] = None,
+        timestamp: Optional[str] = None,
+        source: str = "chat",
+    ) -> str:
+        return self.upsert_doc(
+            text,
+            type="memory",
+            scope=scope,
+            importance=importance,
+            tags=tags,
+            timestamp=timestamp,
+            source=source,
+        )
+
+    def retrieve_memories(self, query: str, k: int = 3, entity: Optional[str] = None) -> List[Tuple[str, dict]]:
+        """Retrieve global/entity memories by similarity and rerank by importance + recency.
+        If `entity` is provided, prefer scope="entity:<entity>" but also allow global as backfill.
+        """
+        entity_scope = f"entity:{entity}" if entity else None
+        where: Dict[str, Any] = {"type": "memory"}
+        try:
+            if entity_scope:
+                # Try entity-scoped first
+                w_ent: Dict[str, Any] = {"$and": [{"type": "memory"}, {"scope": {"$eq": entity_scope}}]}
+                if self.use_http:
+                    qemb = self.embedding_fn([query])
+                    result = self.col.query(query_embeddings=qemb, n_results=max(k, 6), where=w_ent)
+                else:
+                    result = self.col.query(query_texts=[query], n_results=max(k, 6), where=w_ent)
+            else:
+                if self.use_http:
+                    qemb = self.embedding_fn([query])
+                    result = self.col.query(query_embeddings=qemb, n_results=max(k, 6), where=where)
+                else:
+                    result = self.col.query(query_texts=[query], n_results=max(k, 6), where=where)
+            docs = result.get("documents", [[]])[0]
+            metas = result.get("metadatas", [[]])[0]
+            items = list(zip(docs, metas))
+            # If entity-scoped yielded too few, backfill with global memories
+            if entity_scope and len(items) < k:
+                w_global = {"$and": [{"type": "memory"}, {"scope": {"$eq": "global"}}]}
+                if self.use_http:
+                    qemb = self.embedding_fn([query])
+                    res2 = self.col.query(query_embeddings=qemb, n_results=max(k, 6), where=w_global)
+                else:
+                    res2 = self.col.query(query_texts=[query], n_results=max(k, 6), where=w_global)
+                docs2 = res2.get("documents", [[]])[0]
+                metas2 = res2.get("metadatas", [[]])[0]
+                items2 = list(zip(docs2, metas2))
+                # merge unique preserving order
+                seen = set()
+                merged: List[Tuple[str, dict]] = []
+                for d,m in items + items2:
+                    key = (d, (m or {}).get("timestamp"))
+                    if key in seen:
+                        continue
+                    seen.add(key)
+                    merged.append((d,m))
+                items = merged
+        except Exception:
+            # Fallback to listing all memories
+            try:
+                if entity_scope:
+                    got = self.col.get(where={"$and": [{"type": "memory"}, {"scope": {"$eq": entity_scope}}]})
+                    docs = got.get("documents", [])
+                    metas = got.get("metadatas", [])
+                    items = list(zip(docs, metas))
+                    if len(items) < k:
+                        got2 = self.col.get(where={"$and": [{"type": "memory"}, {"scope": {"$eq": "global"}}]})
+                        items += list(zip(got2.get("documents", []), got2.get("metadatas", [])))
+                else:
+                    got = self.col.get(where=where)
+                    items = list(zip(got.get("documents", []), got.get("metadatas", [])))
+            except Exception:
+                items = []
+
+        # Rerank: importance (0..1) and recency decay
+        half_life = float(os.getenv("RAG_RECENCY_HALF_LIFE_SECONDS", "3600"))
+        now = datetime.datetime.now(datetime.timezone.utc)
+
+        def recency_score(ts_iso: Optional[str]) -> float:
+            if not ts_iso:
+                return 0.0
+            try:
+                ts = datetime.datetime.fromisoformat(ts_iso)
+                age = (now - ts).total_seconds()
+                if age < 0:
+                    age = 0
+                return 0.5 ** (age / half_life) if half_life > 0 else 0.0
+            except Exception:
+                return 0.0
+
+        def importance_norm(meta: dict) -> float:
+            imp = (meta or {}).get("importance")
+            try:
+                imp = int(imp)
+            except Exception:
+                imp = 0
+            return max(0, min(5, imp)) / 5.0
+
+        w_imp = float(os.getenv("RAG_MEMORY_IMPORTANCE_WEIGHT", "0.5"))
+        items.sort(
+            key=lambda it: (w_imp * importance_norm(it[1] or {})) + ((1 - w_imp) * recency_score((it[1] or {}).get("timestamp"))),
+            reverse=True,
+        )
+        return items[:k]
+
+    # ---- Conversation summaries ----
+    def upsert_summary(self, conversation_id: str, text: str, *, timestamp: Optional[str] = None, source: str = "chat") -> str:
+        """Store a brief summary for a conversation."""
+        return self.upsert_doc(
+            text,
+            type="summary",
+            scope="conversation",
+            source=source,
+            timestamp=timestamp,
+            conversation_id=conversation_id,
+        )
+
+    def retrieve_summaries(self, conversation_id: str, k: int = 2) -> List[Tuple[str, dict]]:
+        where: Dict[str, Any] = {"$and": [{"type": "summary"}, {"conversation_id": {"$eq": conversation_id}}]}
+        try:
+            got = self.col.get(where=where)
+            docs = got.get("documents", [])
+            metas = got.get("metadatas", [])
+            pairs = list(zip(docs, metas))
+            # order by timestamp desc
+            def ts_of(meta: dict) -> float:
+                try:
+                    ts = datetime.datetime.fromisoformat((meta or {}).get("timestamp"))
+                    return ts.timestamp()
+                except Exception:
+                    return 0.0
+            pairs.sort(key=lambda p: ts_of(p[1] or {}), reverse=True)
+            return pairs[:k]
+        except Exception:
+            return []
+
+    def count_turns(self, conversation_id: str) -> int:
+        where: Dict[str, Any] = {"$and": [{"type": "turn"}, {"conversation_id": {"$eq": conversation_id}}]}
+        try:
+            got = self.col.get(where=where)
+            return len(got.get("documents", []))
+        except Exception:
+            return 0
+
+    def get_last_turns(self, conversation_id: str, limit: int = 8) -> List[Tuple[str, dict]]:
+        where: Dict[str, Any] = {"$and": [{"type": "turn"}, {"conversation_id": {"$eq": conversation_id}}]}
+        try:
+            got = self.col.get(where=where)
+            docs = got.get("documents", [])
+            metas = got.get("metadatas", [])
+            pairs = list(zip(docs, metas))
+            # order by timestamp desc and take last N in chronological order
+            def ts_of(meta: dict) -> float:
+                try:
+                    ts = datetime.datetime.fromisoformat((meta or {}).get("timestamp"))
+                    return ts.timestamp()
+                except Exception:
+                    return 0.0
+            pairs.sort(key=lambda p: ts_of(p[1] or {}), reverse=True)
+            latest = pairs[:limit]
+            latest.reverse()  # chronological
+            return latest
+        except Exception:
+            return []
+
+    def list_memories(self, limit: int = 20) -> List[Tuple[str, str, dict]]:
+        """Return [(id, text, meta), ...] ordered by timestamp desc then importance."""
+        try:
+            got = self.col.get(where={"type": "memory"})
+            ids = got.get("ids", [])
+            docs = got.get("documents", [])
+            metas = got.get("metadatas", [])
+            rows = list(zip(ids, docs, metas))
+        except Exception:
+            rows = []
+
+        def ts_of(meta: dict) -> float:
+            try:
+                ts = datetime.datetime.fromisoformat((meta or {}).get("timestamp"))
+                return ts.timestamp()
+            except Exception:
+                return 0.0
+
+        def imp_of(meta: dict) -> int:
+            try:
+                return int((meta or {}).get("importance", 0))
+            except Exception:
+                return 0
+
+        rows.sort(key=lambda r: (ts_of(r[2]), imp_of(r[2])), reverse=True)
+        return rows[:limit]
+
+    def delete_memory(self, mem_id: str) -> None:
+        try:
+            self.col.delete(ids=[mem_id])
+        except Exception:
+            pass
 
     def retrieve_turns(
         self,

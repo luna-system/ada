@@ -29,6 +29,20 @@ header {
   gap: 12px;
   justify-content: space-between;
 }
+.grow { flex: 1; }
+.field { display: flex; flex-direction: column; gap: 4px; font-size: 12px; color: var(--muted); }
+.field input, .field select, .field textarea {
+  height: 28px;
+  border-radius: 8px;
+  border: 1px solid #374151;
+  background: #0b1220;
+  color: var(--text);
+  padding: 4px 8px;
+}
+.field.small input, .field.small select { height: 28px; font-size: 12px; }
+.ghost { background: transparent; color: var(--muted); border: 1px solid #374151; padding: 6px 10px; border-radius: 8px; cursor: pointer; }
+.icon { background: #1f2937; border: 1px solid #374151; color: var(--text); border-radius: 8px; padding: 4px 8px; cursor: pointer; }
+.icon.danger { border-color: #7f1d1d; color: #fca5a5; background: #1f1b1b; }
 .brand { display: flex; align-items: center; gap: 12px; }
 header .dot { width: 10px; height: 10px; border-radius: 50%; background: var(--accent); }
 header h1 { font-size: 16px; margin: 0; letter-spacing: 0.5px; }
@@ -156,6 +170,18 @@ button {
 }
 button:disabled, textarea:disabled { opacity: 0.6; cursor: not-allowed; }
 .hint { color: var(--muted); font-size: 12px; padding: 0 12px 12px; }
+
+/* Memories panel */
+.panel { position: fixed; top: 0; right: 0; width: 360px; height: 100%; background: #0b1220; border-left: 1px solid #1f2937; box-shadow: -4px 0 16px rgba(0,0,0,0.4); display: grid; grid-template-rows: auto 1fr; z-index: 20; }
+.panel-header { display: flex; align-items: center; justify-content: space-between; padding: 12px; border-bottom: 1px solid #1f2937; }
+.panel-body { padding: 12px; display: grid; grid-template-rows: auto 1fr auto; gap: 10px; }
+.panel-controls { display: flex; gap: 8px; align-items: end; }
+.mem-list { overflow-y: auto; display: flex; flex-direction: column; gap: 8px; }
+.mem-item { display: flex; align-items: start; justify-content: space-between; gap: 8px; background: #0f172a; border: 1px solid #1f2937; border-radius: 8px; padding: 8px; }
+.mem-text { white-space: pre-wrap; word-break: break-word; font-size: 13px; }
+.panel-add { display: grid; gap: 8px; }
+.row { display: flex; gap: 12px; align-items: center; }
+.muted { color: var(--muted); }
 
 /* Spinner styles */
 .spinner {
