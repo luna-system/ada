@@ -1,4 +1,5 @@
 const messagesEl = document.getElementById('messages');
+const healthDot = document.querySelector('header .brand .dot');
 const form = document.getElementById('composer');
 const input = document.getElementById('prompt');
 const sendBtn = document.getElementById('send');
@@ -15,6 +16,8 @@ const addMemBtn    = document.getElementById('addMem');
 const memTextEl    = document.getElementById('memText');
 const memImportanceEl = document.getElementById('memImportance');
 const memEntityScopedEl = document.getElementById('memEntityScoped');
+const refreshStatusBtn = document.getElementById('refreshStatus');
+const statusBoxEl = document.getElementById('statusBox');
 let thinkingEl = null;
 
 // Track last assistant reply for optional long-term memory save
@@ -36,6 +39,30 @@ if (entityInput) {
     localStorage.setItem('entity', currentEntity);
   });
 }
+
+// --- Health indicator ---
+async function refreshHealth() {
+  if (!healthDot) return;
+  try {
+    const res = await fetch('/api/health', { cache: 'no-store' });
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    const data = await res.json();
+    const ok = !!data.ok;
+    healthDot.classList.toggle('ok', ok);
+    healthDot.classList.toggle('bad', !ok);
+    healthDot.title = ok ? 'Brain: healthy' : 'Brain: unavailable';
+    healthDot.setAttribute('aria-label', healthDot.title);
+  } catch (err) {
+    healthDot.classList.remove('ok');
+    healthDot.classList.add('bad');
+    healthDot.title = 'Brain: unavailable';
+    healthDot.setAttribute('aria-label', healthDot.title);
+  }
+}
+
+// Kick off periodic health checks
+refreshHealth();
+setInterval(refreshHealth, 10000);
 
 function addMessage(role, text) {
   const wrap = document.createElement('div');
@@ -261,6 +288,45 @@ addMessage('bot', 'Hello! Ask me anything.');
 input.focus();
 
 // --- Memories panel wiring ---
+function renderStatusBox(data) {
+  if (!statusBoxEl) return;
+  try {
+    const ok = !!data.ok;
+    const parts = [];
+    parts.push(`Brain: ${ok ? 'healthy' : 'unavailable'}`);
+    if (data.python) parts.push(`Python: ${data.python}`);
+    if (data.config) {
+      if (data.config.OLLAMA_MODEL) parts.push(`Model: ${data.config.OLLAMA_MODEL}`);
+      if (data.config.OLLAMA_BASE_URL) parts.push(`Ollama: ${data.config.OLLAMA_BASE_URL}`);
+      if (data.config.CHROMA_URL) parts.push(`Chroma: ${data.config.CHROMA_URL}`);
+    }
+    if (data.persona && typeof data.persona.loaded !== 'undefined') {
+      parts.push(`Persona: ${data.persona.loaded ? 'loaded' : 'missing'}`);
+    }
+    if (data.chroma) {
+      const cOK = data.chroma.ok;
+      parts.push(`Chroma heartbeat: ${cOK === null ? 'n/a' : (cOK ? 'ok' : 'fail')}`);
+    }
+    statusBoxEl.textContent = parts.join(' \u2022 ');
+    statusBoxEl.classList.toggle('bad', !ok);
+  } catch (e) {
+    statusBoxEl.textContent = `Status error: ${e.message}`;
+    statusBoxEl.classList.add('bad');
+  }
+}
+
+async function refreshStatusPanel() {
+  if (!statusBoxEl) return;
+  statusBoxEl.textContent = 'Loading…';
+  statusBoxEl.classList.remove('bad');
+  try {
+    const res = await fetch('/api/health', { cache: 'no-store' });
+    const data = await res.json();
+    renderStatusBox(data);
+  } catch (e) {
+    renderStatusBox({ ok: false });
+  }
+}
 function renderMemList(items) {
   memListEl.innerHTML = '';
   if (!items || !items.length) {
@@ -322,6 +388,7 @@ openMemBtn?.addEventListener('click', async () => {
   memPanel.hidden = false;
   memFilterEntityEl.value = currentEntity || '';
   try { await refreshMemList(); } catch (e) { /* ignore */ }
+  try { await refreshStatusPanel(); } catch (e) { /* ignore */ }
 });
 
 closeMemBtn?.addEventListener('click', () => {
@@ -330,6 +397,10 @@ closeMemBtn?.addEventListener('click', () => {
 
 refreshMemBtn?.addEventListener('click', async () => {
   try { await refreshMemList(); } catch (e) { alert(e.message); }
+});
+
+refreshStatusBtn?.addEventListener('click', async () => {
+  try { await refreshStatusPanel(); } catch (e) { alert(e.message); }
 });
 
 addMemBtn?.addEventListener('click', async () => {
