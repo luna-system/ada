@@ -18,6 +18,7 @@ const memImportanceEl = document.getElementById('memImportance');
 const memEntityScopedEl = document.getElementById('memEntityScoped');
 const refreshStatusBtn = document.getElementById('refreshStatus');
 const statusBoxEl = document.getElementById('statusBox');
+const clientLibsEl = document.getElementById('clientLibs');
 let thinkingEl = null;
 
 // Track last assistant reply for optional long-term memory save
@@ -74,12 +75,15 @@ function addMessage(role, text) {
 
   const bubble = document.createElement('div');
   bubble.className = 'bubble';
-  bubble.textContent = text;
+  // Render markdown into the bubble (sanitized via DOMPurify)
+  // Always render full markdown for all messages.
+  renderMarkdownToElement(bubble, String(text || ''), { allowBlocks: true });
 
   wrap.appendChild(avatar);
   wrap.appendChild(bubble);
   messagesEl.appendChild(wrap);
   messagesEl.scrollTo({ top: messagesEl.scrollHeight, behavior: 'smooth' });
+  updateClientLibStatus();
 }
 
 function showThinking() {
@@ -126,7 +130,8 @@ function replaceThinkingWithBot(text) {
 
     const content = document.createElement('div');
     content.className = 'think-content';
-    content.textContent = thinkMatch[1].trim();
+    // Render thinking content with full markdown as well
+    renderMarkdownToElement(content, (thinkMatch[1] || '').trim(), { allowBlocks: true });
 
     thinkDetails.appendChild(summary);
     thinkDetails.appendChild(content);
@@ -134,12 +139,13 @@ function replaceThinkingWithBot(text) {
 
     const answerBubble = document.createElement('div');
     answerBubble.className = 'bubble answer';
-    answerBubble.textContent = (thinkMatch[2] || '').trim();
+    // Allow the assistant's final answers to render full block markdown (headers, lists, code fences)
+    renderMarkdownToElement(answerBubble, (thinkMatch[2] || '').trim(), { allowBlocks: true });
     stack.appendChild(answerBubble);
   } else {
     const bubble = document.createElement('div');
     bubble.className = 'bubble';
-    bubble.textContent = (thinkMatch ? thinkMatch[2] : text) || '';
+    renderMarkdownToElement(bubble, (thinkMatch ? (thinkMatch[2] || '') : (text || '')) || '', { allowBlocks: true });
     stack.appendChild(bubble);
   }
 
@@ -156,6 +162,123 @@ function replaceThinkingWithBot(text) {
 
   // Capture plain text for optional memory saving
   lastAssistantText = (thinkMatch ? (thinkMatch[2] || '') : (text || '')).trim();
+}
+
+// Convert a markdown string to sanitized HTML and set it inside an element
+// Uses 'marked' to convert markdown -> HTML and 'DOMPurify' to sanitize.
+function renderMarkdownToElement(el, markdownText, options = { allowBlocks: false }) {
+  const { allowBlocks = false } = options || {};
+  if (!el) return;
+  const md = String(markdownText || '');
+  try {
+    // Detect if there are fenced code blocks. If allowBlocks is true we will allow
+    // all block-level markdown; otherwise, only inline markup with optional code fences
+    // is supported.
+    const fencedRegex = /(^|\n)```(\w+)?\n([\s\S]*?)\n```/m;
+    const hasFenced = fencedRegex.test(md);
+    if (typeof console !== 'undefined' && console.debug) console.debug('renderMarkdownToElement: hasFenced=', hasFenced, 'mdSnippet=', md.slice(0, 200));
+    // Detect other block-level elements (excluding fenced code blocks)
+    const otherBlockRegex = /(^|\n)( {4,}|\#{1,6}\s+|>\s+|[-*+]\s+|\d+\.\s+)/m;
+    if (typeof console !== 'undefined' && console.debug) console.debug('renderMarkdownToElement: hasOtherBlocks=', otherBlockRegex.test(md));
+    const hasOtherBlocks = otherBlockRegex.test(md);
+    let rawHtml;
+
+    if (allowBlocks) {
+      // Allow full markdown rendering when explicitly requested (e.g., for bot messages)
+      if (typeof marked !== 'undefined' && typeof marked.parse === 'function') {
+        try {
+          if (typeof hljs !== 'undefined' && typeof hljs.highlight !== 'undefined') {
+            marked.setOptions({
+              highlight: function(code, lang) {
+                try {
+                  if (lang && hljs.getLanguage(lang)) {
+                    return hljs.highlight(code, { language: lang }).value;
+                  }
+                  return hljs.highlightAuto(code).value;
+                } catch (e) {
+                  return code;
+                }
+              }
+            });
+          }
+          rawHtml = marked.parse(md);
+        } catch (e) {
+          rawHtml = md.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/\n/g, '<br>');
+        }
+      } else {
+        rawHtml = md.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/\n/g, '<br>');
+      }
+    } else if (hasFenced && !hasOtherBlocks) {
+      // We allow fenced code blocks plus inline content and paragraphs; use marked.parse
+      // with a highlight function if highlight.js is available.
+      if (typeof marked !== 'undefined' && typeof marked.parse === 'function') {
+        try {
+          // Configure highlight function for marked
+          if (typeof hljs !== 'undefined' && typeof hljs.highlight !== 'undefined') {
+            marked.setOptions({
+              highlight: function(code, lang) {
+                try {
+                  if (lang && hljs.getLanguage(lang)) {
+                    return hljs.highlight(code, { language: lang }).value;
+                  }
+                  return hljs.highlightAuto(code).value;
+                } catch (e) {
+                  return code;
+                }
+              }
+            });
+          }
+          rawHtml = marked.parse(md);
+        } catch (e) {
+          rawHtml = md.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/\n/g, '<br>');
+        }
+      } else {
+        rawHtml = md.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/\n/g, '<br>');
+      }
+    } else if (!hasOtherBlocks) {
+      // No block-level content other than potential inline markdown -> parse inline
+      if (typeof marked !== 'undefined' && typeof marked.parseInline === 'function') {
+        rawHtml = marked.parseInline(md);
+      } else if (typeof marked !== 'undefined' && typeof marked.parse === 'function') {
+        rawHtml = marked.parse(md);
+        rawHtml = rawHtml.replace(/^<p>([\s\S]*)<\/p>\s*$/i, '$1');
+      } else {
+        rawHtml = md.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/\n/g, '<br>');
+      }
+    } else {
+      // Has block-level constructs we don't render; escape and keep newlines
+      rawHtml = md.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/\n/g, '<br>');
+    }
+    // Sanitize and set the HTML
+    // Sanitize and allow limited tags including <pre> and <code> for code blocks
+    const sanitizeConfig = (typeof DOMPurify !== 'undefined') ? (
+      allowBlocks ? {
+        ALLOWED_TAGS: ['a','b','i','strong','em','del','code','pre','p','br','ul','ol','li','span','h1','h2','h3','h4','h5','h6','blockquote','img'],
+        ALLOWED_ATTR: ['href','title','class','src','alt']
+      } : {
+        ALLOWED_TAGS: ['a','b','i','strong','em','code','pre','p','br','ul','ol','li','span'],
+        ALLOWED_ATTR: ['href','title','class']
+      }
+    ) : undefined;
+    const clean = (typeof DOMPurify !== 'undefined') ? DOMPurify.sanitize(rawHtml, sanitizeConfig) : rawHtml;
+    el.innerHTML = clean;
+    // Force external links to open safely in a new tab
+    const anchors = el.querySelectorAll('a');
+    anchors.forEach(a => {
+      a.setAttribute('target', '_blank');
+      a.setAttribute('rel', 'noopener noreferrer');
+    });
+
+    // Run syntax highlighting on any code blocks if highlight.js loaded
+    if (typeof hljs !== 'undefined' && typeof hljs.highlightElement === 'function') {
+      el.querySelectorAll('pre code').forEach((codeEl) => {
+        try { hljs.highlightElement(codeEl); } catch (e) { /* ignore */ }
+      });
+    }
+  } catch (e) {
+    // Fallback to plain text if anything goes wrong
+    el.textContent = markdownText;
+  }
 }
 
 function setBusy(busy) {
@@ -285,6 +408,10 @@ form.addEventListener('submit', async (e) => {
 
 // Greet on load
 addMessage('bot', 'Hello! Ask me anything.');
+// Update client libs status once when DOM content is ready in case scripts loaded after run
+if (typeof window !== 'undefined') {
+  window.addEventListener('DOMContentLoaded', updateClientLibStatus);
+}
 input.focus();
 
 // --- Memories panel wiring ---
@@ -313,6 +440,18 @@ function renderStatusBox(data) {
     statusBoxEl.textContent = `Status error: ${e.message}`;
     statusBoxEl.classList.add('bad');
   }
+}
+
+// Reflect presence/absence of client-side libraries into the small header status
+function updateClientLibStatus() {
+  if (!clientLibsEl) return;
+  const libs = [
+    ['marked', typeof marked !== 'undefined'],
+    ['DOMPurify', typeof DOMPurify !== 'undefined'],
+    ['hljs', typeof hljs !== 'undefined']
+  ];
+  clientLibsEl.textContent = libs.map(([n, ok]) => `${n}:${ok ? '✓' : '✕'}`).join(' ');
+  if (typeof console !== 'undefined' && console.debug) console.debug('Client libs:', libs);
 }
 
 async function refreshStatusPanel() {
