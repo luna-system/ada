@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>ADA Chat</title>
+    <link rel="stylesheet" href="/static/style.css" />
+  </head>
+  <body>
+    <div class="app">
+      <header>
+        <div class="brand">
+          <div class="dot" aria-hidden="true"></div>
+          <h1>ADA · Chat</h1>
+        </div>
+        <label class="toggle" title="Show model's thinking (<think>…</think>)">
+          <span>Include thinking</span>
+          <span class="switch">
+            <input type="checkbox" id="includeThinking" />
+            <span class="knob"></span>
+          </span>
+        </label>
+      </header>
+
+      <main id="messages" aria-live="polite" aria-busy="false"></main>
+      <div class="hint">Press Enter to send, Shift+Enter for newline</div>
+
+      <form id="composer">
+        <textarea id="prompt" placeholder="Type your message..." autocomplete="off"></textarea>
+        <button id="send" type="submit">Send</button>
+      </form>
+    </div>
+
+    <script src="/static/app.js"></script>
+  </body>
+</html>

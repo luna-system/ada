@@ -1,0 +1,177 @@
+:root {
+  --bg: #0f172a;
+  --panel: #111827;
+  --muted: #94a3b8;
+  --text: #e5e7eb;
+  --me: #2563eb;
+  --bot: #334155;
+  --accent: #10b981;
+}
+html, body {
+  height: 100%;
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji";
+}
+.app {
+  height: 100%;
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  max-width: 900px;
+  margin: 0 auto;
+}
+header {
+  padding: 16px;
+  border-bottom: 1px solid #1f2937;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  justify-content: space-between;
+}
+.brand { display: flex; align-items: center; gap: 12px; }
+header .dot { width: 10px; height: 10px; border-radius: 50%; background: var(--accent); }
+header h1 { font-size: 16px; margin: 0; letter-spacing: 0.5px; }
+
+/* simple toggle */
+.toggle {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--muted);
+  font-size: 13px;
+}
+.switch {
+  position: relative;
+  width: 38px;
+  height: 22px;
+  background: #1f2937;
+  border-radius: 999px;
+  border: 1px solid #374151;
+  cursor: pointer;
+}
+.switch input { display: none; }
+.knob {
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: #9ca3af;
+  transition: transform 0.15s ease, background 0.15s ease;
+}
+.switch input:checked + .knob {
+  transform: translateX(16px);
+  background: var(--accent);
+}
+
+#messages {
+  padding: 16px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  background: radial-gradient(1200px 600px at 50% -200px, rgba(16,185,129,0.08), transparent 60%);
+}
+.msg {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  max-width: 85%;
+}
+.msg .stack {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 0; /* allow wrapping */
+}
+.msg.me { align-self: flex-end; flex-direction: row-reverse; }
+.bubble {
+  padding: 10px 12px;
+  border-radius: 12px;
+  line-height: 1.35;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+.me .bubble { background: var(--me); color: white; }
+.bot .bubble { background: var(--bot); }
+.bot .bubble.answer { background: var(--bot); }
+.bot .bubble.think {
+    background: #1f2937;
+    color: var(--muted);
+    border: 1px solid #374151;
+}
+.bubble.think { padding: 0; overflow: hidden; }
+.bubble.think summary {
+  padding: 10px 12px;
+  cursor: pointer;
+  list-style: none;
+  color: var(--muted);
+  font-weight: 600;
+}
+.bubble.think summary::-webkit-details-marker { display: none; }
+.bubble.think summary::after {
+  content: '▸';
+  float: right;
+  color: var(--muted);
+  transition: transform 0.15s ease;
+}
+.bubble.think[open] summary::after { transform: rotate(90deg); }
+.bubble.think .think-content {
+  padding: 10px 12px;
+  border-top: 1px solid #374151;
+  white-space: pre-wrap;
+  word-break: break-word;
+  font-size: 0.9em; /* slightly smaller than surrounding text */
+}
+.avatar { width: 28px; height: 28px; border-radius: 50%; background: #1f2937; display: grid; place-items: center; font-size: 14px; }
+
+form#composer {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 8px;
+  padding: 12px;
+  border-top: 1px solid #1f2937;
+  background: linear-gradient(0deg, rgba(17,24,39,0.9), rgba(17,24,39,0.9));
+}
+textarea {
+  resize: none;
+  height: 44px;
+  border-radius: 10px;
+  border: 1px solid #374151;
+  background: #0b1220;
+  color: var(--text);
+  padding: 10px 12px;
+  outline: none;
+}
+button {
+  height: 44px;
+  padding: 0 16px;
+  border: 1px solid #2563eb;
+  border-radius: 10px;
+  background: #1d4ed8;
+  color: white;
+  cursor: pointer;
+}
+button:disabled, textarea:disabled { opacity: 0.6; cursor: not-allowed; }
+.hint { color: var(--muted); font-size: 12px; padding: 0 12px 12px; }
+
+/* Spinner styles */
+.spinner {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  border: 2px solid #334155; /* base ring */
+  border-top-color: var(--accent); /* animated segment */
+  animation: spin 0.9s linear infinite;
+}
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* Centered placeholder row for thinking state */
+.msg.thinking {
+  align-self: stretch;
+  justify-content: center;
+}

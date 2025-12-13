@@ -1,0 +1,22 @@
+services:
+  web:
+    build:
+      context: .
+      dockerfile: webserver/Dockerfile
+    network_mode: host
+    environment:
+      - OLLAMA_API_URL=http://localhost:11434/api/generate
+      - OLLAMA_MODEL=deepseek-r1
+    volumes:
+      - ./webserver/static:/app/static
+#    depends_on:
+#      - ollama
+#
+#  ollama:
+#    image: ollama/ollama:latest
+#    ports:
+#      - "11434:11434"
+#    environment:
+#      - OLLAMA_MODEL=deepseek-r1
+#      - OLLAMA_NUM_PARALLEL=4
+#    command: ["serve", "/models"]
