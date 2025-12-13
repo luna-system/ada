@@ -4,7 +4,10 @@ import requests
 
 # Serve static files from /app/static so docker volume mount works
 # (compose.yaml mounts ./webserver/static -> /app/static)
-app = Flask(__name__, static_folder="/app/static", static_url_path="/static")
+# Use the Docker-mounted /app/static path when available; otherwise fall back to the
+# local repo path `webserver/static` so the UI loads correctly during local dev.
+static_path = "/app/static" if os.path.isdir("/app/static") else os.path.join(os.path.dirname(__file__), 'static')
+app = Flask(__name__, static_folder=static_path, static_url_path="/static")
 
 # URL of the brain service
 BRAIN_URL = os.getenv("BRAIN_URL", "http://localhost:7000")
