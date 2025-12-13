@@ -1,0 +1,14 @@
+[project]
+name = "ada-v1"
+version = "0.1.0"
+description = ""
+authors = [
+    {name = "luna system",email = "luna@airsi.de"}
+]
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = [
+    "flask>=3.1.2",
+    "gunicorn>=23.0.0",
+    "requests>=2.32.5",
+]
