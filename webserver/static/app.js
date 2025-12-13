@@ -5,6 +5,13 @@ const sendBtn = document.getElementById('send');
 const includeThinkingEl = document.getElementById('includeThinking');
 let thinkingEl = null;
 
+// Maintain a per-session conversation id so RAG can thread context
+let conversationId = localStorage.getItem('conversation_id');
+if (!conversationId && window.crypto && crypto.randomUUID) {
+  conversationId = crypto.randomUUID();
+  localStorage.setItem('conversation_id', conversationId);
+}
+
 function addMessage(role, text) {
   const wrap = document.createElement('div');
   wrap.className = `msg ${role}`;
@@ -122,12 +129,22 @@ form.addEventListener('submit', async (e) => {
     const res = await fetch('/api/chat', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ prompt, include_thinking: !!includeThinkingEl.checked })
+      body: JSON.stringify({
+        prompt,
+        include_thinking: !!includeThinkingEl.checked,
+        conversation_id: conversationId
+      })
     });
 
     const data = await res.json();
     if (!res.ok) {
       throw new Error(data.error || `Request failed: ${res.status}`);
+    }
+
+    // Update local conversation id if backend generated one
+    if (data.conversation_id && data.conversation_id !== conversationId) {
+      conversationId = data.conversation_id;
+      localStorage.setItem('conversation_id', conversationId);
     }
 
     // If the API returns a separate 'thinking' field and the toggle is ON,

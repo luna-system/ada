@@ -12,3 +12,7 @@ packaging==25.0
 requests==2.32.5
 urllib3==2.6.2
 werkzeug==3.1.4
+
+# RAG deps
+chromadb==0.5.11
+haystack-ai==2.2.3
