@@ -9,6 +9,9 @@ from typing import List, Dict, Any
 import sys
 import time
 import uuid
+from dotenv import load_dotenv
+
+load_dotenv()
 
 from rag import RagStore
 
