@@ -5,17 +5,15 @@
   "type": "module",
   "scripts": {
     "dev": "astro dev",
-    "bundle:app": "esbuild src/scripts/app.ts --bundle --format=esm --outfile=public/app.js",
-    "build": "npm run bundle:app && astro build",
+    "build": "astro build",
     "preview": "astro preview",
     "check": "astro check"
   },
   "dependencies": {
     "@astrojs/check": "^0.9.6",
-    "astro": "^4.15.6",
+    "@astrojs/svelte": "^7.2.3",
+    "astro": "^5.16.5",
+    "svelte": "^5.46.0",
     "typescript": "^5.9.3"
-  },
-  "devDependencies": {
-    "esbuild": "^0.23.0"
   }
 }
