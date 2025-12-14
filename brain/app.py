@@ -128,6 +128,44 @@ if RAG_ENABLED:
 
 @app.route('/v1/healthz', methods=['GET'])
 def healthz():
+    """
+    Health check endpoint for the brain service.
+    
+    Returns detailed information about service status, dependencies, and configuration.
+    
+    **HTTP Method:** GET
+    
+    **Response (200 OK):**
+        JSON object with keys:
+        
+        - ok (bool): Overall service health status
+        - service (str): Service name ("brain")
+        - python (str): Python version
+        - config (dict): Active configuration including:
+            - OLLAMA_BASE_URL: LLM backend URL
+            - OLLAMA_MODEL: Active LLM model name
+            - CHROMA_URL: Vector database URL
+            - RAG_ENABLE_*: Feature toggles for Persona, FAQ, Memory, Summary
+        - persona (dict): Persona status with 'loaded' boolean
+        - chroma (dict): Vector database connectivity status with:
+            - ok (bool): Connectivity status
+            - version (str): Database version if available
+            - error (str): Error message if unhealthy
+    
+    **Response (503 Service Unavailable):**
+        Returned if critical dependencies are unavailable.
+    
+    **Example:**
+        >>> curl http://localhost:7000/v1/healthz
+        {
+            "ok": true,
+            "service": "brain",
+            "python": "3.13.0",
+            "config": {...},
+            "persona": {"loaded": true},
+            "chroma": {"ok": true, "version": "0.5.11", "error": null}
+        }
+    """
     try:
         # Compose detailed health info
         chroma_url = os.getenv("CHROMA_URL")
@@ -198,6 +236,68 @@ def healthz():
 
 @app.route('/v1/chat', methods=['POST'])
 def chat():
+    """
+    Non-streaming chat endpoint for generating responses with optional RAG context.
+    
+    Accepts a prompt and optional parameters, retrieves relevant context from the RAG system
+    (persona, FAQ, memory, conversation history), and returns a complete LLM response.
+    Use /v1/chat/stream for real-time token streaming.
+    
+    **HTTP Method:** POST
+    
+    **Request Body (JSON):**
+        - prompt (str, required): User message/question
+        - conversation_id (str, optional): UUID to thread multiple turns. Auto-generated if omitted.
+        - include_thinking (bool, optional): Include LLM reasoning in response (default: false)
+        - entity (str, optional): Entity/topic scope for memory retrieval (default: null)
+        - save_memory (bool, optional): Save assistant response to long-term memory (default: false)
+        - memory_text (str, optional): Custom text to save to memory (uses response if omitted)
+        - turns_k (int, optional): Number of recent conversation turns to retrieve (default: 3)
+        - faq_k (int, optional): Number of FAQ entries to retrieve (default: 3)
+        - memory_k (int, optional): Number of memories to retrieve (default: 5)
+    
+    **Response (200 OK):**
+        JSON object with keys:
+        
+        - response (str): Main assistant response text
+        - thinking (str): LLM reasoning/thinking (only if include_thinking=true)
+        - conversation_id (str): Conversation thread ID (same as input or generated)
+        - user_timestamp (str): ISO 8601 timestamp of user message
+        - assistant_timestamp (str): ISO 8601 timestamp of assistant response
+        - request_id (str): Unique request identifier for debugging
+        - used_context (dict): Retrieved context including:
+            - persona (dict): Persona block metadata if included
+            - faqs (list): FAQ snippets used
+            - turns (list): Conversation history snippets
+            - memories (list): Long-term memories matched
+            - summaries (list): Conversation summaries matched
+            - entity (str): Entity scope used
+    
+    **Response (400 Bad Request):**
+        Returned if prompt is missing or not a string.
+    
+    **Response (500 Internal Server Error):**
+        Returned if Ollama or vector database is unavailable.
+    
+    **Side Effects:**
+        - If RAG_ENABLED: Stores conversation turn in vector database for future retrieval
+        - If RAG_ENABLE_SUMMARY: May generate conversation summary every N turns
+        - If save_memory: Stores response/memory_text in long-term memory store
+    
+    **Example:**
+        >>> curl -X POST http://localhost:7000/v1/chat \\
+        ...   -H "Content-Type: application/json" \\
+        ...   -d '{"prompt": "What is the weather?", "include_thinking": true}'
+        {
+            "response": "I don't have access to real-time weather data...",
+            "thinking": "The user is asking about weather. I should clarify...",
+            "conversation_id": "550e8400-e29b-41d4-a716-446655440000",
+            "user_timestamp": "2025-12-13T10:30:45.123456+00:00",
+            "assistant_timestamp": "2025-12-13T10:30:48.456789+00:00",
+            "request_id": "abc12345",
+            "used_context": {...}
+        }
+    """
     data = request.json or {}
     prompt = data.get('prompt', '')
     if not isinstance(prompt, str):
@@ -426,8 +526,26 @@ def chat():
 @app.route('/v1/chat/stream', methods=['POST'])
 def chat_stream():
     """
-    Streaming version of /v1/chat endpoint using Server-Sent Events (SSE).
-    Streams tokens as they're generated from Ollama.
+    Streaming chat endpoint using Server-Sent Events (SSE).
+
+    - **Method:** POST
+    - **Path:** /v1/chat/stream
+    - **Request JSON:** prompt (required), conversation_id, include_thinking, entity,
+      save_memory, memory_text, turns_k, faq_k, memory_k
+    - **Content-Type:** text/event-stream
+
+    Events (newline-delimited, prefixed with ``data: ``):
+    - ``token``: assistant response token
+    - ``thinking``: reasoning token (only if include_thinking=true)
+    - ``done``: final metadata (conversation_id, used_context, timestamps, request_id)
+    - ``error``: error details
+
+    Responses:
+    - 200: Stream started
+    - 400: Missing prompt
+    - 500: Internal error (e.g., Ollama unreachable)
+
+    Side effects: same as /v1/chat (turn upserts, optional memories, summaries).
     """
     data = request.get_json()
     prompt = (data.get('prompt') or '').strip()
@@ -610,6 +728,22 @@ def chat_stream():
 
 @app.route('/v1/memory', methods=['GET'])
 def list_memory():
+    """
+    Retrieve long-term memories with optional semantic search.
+
+    - **Method:** GET
+    - **Path:** /v1/memory
+    - **Query params:**
+      - search (optional): semantic query; if omitted returns empty list
+      - scope (optional): memory scope (e.g., ``global``, ``user:123``)
+      - entity (optional): entity/topic scope
+      - limit (optional): max results (default 20, capped at 20)
+
+    Responses:
+    - 200: ``{"items": [...]}``
+    - 200: empty items if RAG disabled
+    - 500: retrieval error
+    """
     if rag_store is None:
         return jsonify({'items': []})
     q = (request.args.get('search') or '').strip()
@@ -640,6 +774,20 @@ def list_memory():
 
 @app.route('/v1/memory', methods=['POST'])
 def create_memory():
+    """
+    Create a new long-term memory entry.
+
+    - **Method:** POST
+    - **Path:** /v1/memory
+    - **Request JSON:** text (required), importance (1-5, default 3),
+      scope (default ``global``), entity (optional)
+
+    Responses:
+    - 201: memory created (id returned)
+    - 400: text missing
+    - 503: RAG unavailable
+    - 500: storage error
+    """
     if rag_store is None:
         return jsonify({'error': 'RAG not available'}), 503
     data = request.json or {}
@@ -664,6 +812,17 @@ def create_memory():
 
 @app.route('/v1/memory/<mem_id>', methods=['DELETE'])
 def delete_memory(mem_id: str):
+    """
+    Delete a long-term memory entry by ID.
+
+    - **Method:** DELETE
+    - **Path:** /v1/memory/<mem_id>
+
+    Responses:
+    - 200: deleted
+    - 503: RAG unavailable
+    - 500: delete error (e.g., missing id)
+    """
     if rag_store is None:
         return jsonify({'error': 'RAG not available'}), 503
     try:
@@ -675,6 +834,18 @@ def delete_memory(mem_id: str):
 
 @app.route('/v1/debug/rag', methods=['GET'])
 def rag_debug():
+    """
+    Debug information for the RAG system (development only).
+
+    - **Method:** GET
+    - **Path:** /v1/debug/rag
+    - **Query params:** conversation_id (optional)
+
+    Responses:
+    - 200: RAG stats (persona_count, faq_count, memory_count, summary_count, optional turn_count_for_conversation)
+    - 404: debug disabled (RAG_DEBUG!=true or RAG unavailable)
+    - 500: error retrieving stats
+    """
     if not RAG_DEBUG or rag_store is None:
         return jsonify({'error': 'debug disabled'}), 404
     try:

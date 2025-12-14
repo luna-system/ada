@@ -1,0 +1,1012 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>brain.app &mdash; Ada v1 Brain API 0.1.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=01f34227"></script>
+      <script src="../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            Ada v1 Brain API
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Documentation:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../getting_started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api_reference.html">API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../streaming.html">Streaming</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../memory.html">Memory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../examples.html">Examples</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">Ada v1 Brain API</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">brain.app</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for brain.app</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span><span class="w"> </span><span class="nn">flask</span><span class="w"> </span><span class="kn">import</span> <span class="n">Flask</span><span class="p">,</span> <span class="n">request</span><span class="p">,</span> <span class="n">jsonify</span><span class="p">,</span> <span class="n">Response</span><span class="p">,</span> <span class="n">stream_with_context</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">requests</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">datetime</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">json</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">csv</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Any</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">sys</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">time</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">uuid</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">dotenv</span><span class="w"> </span><span class="kn">import</span> <span class="n">load_dotenv</span>
+
+<span class="n">load_dotenv</span><span class="p">()</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">rag</span><span class="w"> </span><span class="kn">import</span> <span class="n">RagStore</span>
+
+<span class="n">app</span> <span class="o">=</span> <span class="n">Flask</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
+
+<span class="c1"># Ollama + models</span>
+<span class="n">OLLAMA_API_URL</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s2">&quot;OLLAMA_API_URL&quot;</span><span class="p">,</span> <span class="s2">&quot;http://localhost:11434/api/generate&quot;</span><span class="p">)</span>
+<span class="n">OLLAMA_MODEL</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s2">&quot;OLLAMA_MODEL&quot;</span><span class="p">,</span> <span class="s2">&quot;deepseek-r1&quot;</span><span class="p">)</span>
+<span class="n">OLLAMA_BASE_URL</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s2">&quot;OLLAMA_BASE_URL&quot;</span><span class="p">,</span> <span class="s2">&quot;http://localhost:11434&quot;</span><span class="p">)</span>
+
+<span class="c1"># RAG configuration</span>
+<span class="n">RAG_ENABLED</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s2">&quot;RAG_ENABLED&quot;</span><span class="p">,</span> <span class="s2">&quot;true&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s2">&quot;true&quot;</span>
+<span class="n">EMBED_MODEL</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s2">&quot;OLLAMA_EMBED_MODEL&quot;</span><span class="p">,</span> <span class="s2">&quot;nomic-embed-text&quot;</span><span class="p">)</span>
+
+<span class="c1"># Section toggles and sizes</span>
+<span class="n">RAG_ENABLE_PERSONA</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s2">&quot;RAG_ENABLE_PERSONA&quot;</span><span class="p">,</span> <span class="s2">&quot;true&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s2">&quot;true&quot;</span>
+<span class="n">RAG_ENABLE_FAQ</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s2">&quot;RAG_ENABLE_FAQ&quot;</span><span class="p">,</span> <span class="s2">&quot;true&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s2">&quot;true&quot;</span>
+<span class="n">RAG_ENABLE_MEMORY</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s2">&quot;RAG_ENABLE_MEMORY&quot;</span><span class="p">,</span> <span class="s2">&quot;true&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s2">&quot;true&quot;</span>
+<span class="n">RAG_ENABLE_SUMMARY</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s2">&quot;RAG_ENABLE_SUMMARY&quot;</span><span class="p">,</span> <span class="s2">&quot;true&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s2">&quot;true&quot;</span>
+<span class="n">RAG_TURNS_TOP_K</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s2">&quot;RAG_TURNS_TOP_K&quot;</span><span class="p">,</span> <span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s2">&quot;RAG_TOP_K&quot;</span><span class="p">,</span> <span class="s2">&quot;4&quot;</span><span class="p">)))</span>
+<span class="n">RAG_FAQ_TOP_K</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s2">&quot;RAG_FAQ_TOP_K&quot;</span><span class="p">,</span> <span class="s2">&quot;2&quot;</span><span class="p">))</span>
+<span class="n">RAG_MEMORY_TOP_K</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s2">&quot;RAG_MEMORY_TOP_K&quot;</span><span class="p">,</span> <span class="s2">&quot;3&quot;</span><span class="p">))</span>
+<span class="n">RAG_MEMORY_IMPORTANCE_WEIGHT</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s2">&quot;RAG_MEMORY_IMPORTANCE_WEIGHT&quot;</span><span class="p">,</span> <span class="s2">&quot;0.5&quot;</span><span class="p">))</span>
+<span class="n">RAG_SUMMARY_EVERY_N</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s2">&quot;RAG_SUMMARY_EVERY_N&quot;</span><span class="p">,</span> <span class="s2">&quot;8&quot;</span><span class="p">))</span>
+<span class="n">RAG_SUMMARY_TURNS_WINDOW</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s2">&quot;RAG_SUMMARY_TURNS_WINDOW&quot;</span><span class="p">,</span> <span class="s2">&quot;12&quot;</span><span class="p">))</span>
+<span class="n">RAG_DEBUG</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s2">&quot;RAG_DEBUG&quot;</span><span class="p">,</span> <span class="s2">&quot;false&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s2">&quot;true&quot;</span>
+
+<span class="n">rag_store</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="k">if</span> <span class="n">RAG_ENABLED</span><span class="p">:</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">rag_store</span> <span class="o">=</span> <span class="n">RagStore</span><span class="p">(</span>
+            <span class="n">persist_dir</span><span class="o">=</span><span class="s2">&quot;/data/chroma&quot;</span><span class="p">,</span>
+            <span class="n">collection_name</span><span class="o">=</span><span class="s2">&quot;conversations&quot;</span><span class="p">,</span>
+            <span class="n">ollama_base_url</span><span class="o">=</span><span class="n">OLLAMA_BASE_URL</span><span class="p">,</span>
+            <span class="n">embed_model</span><span class="o">=</span><span class="n">EMBED_MODEL</span><span class="p">,</span>
+        <span class="p">)</span>
+    <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+        <span class="n">rag_store</span> <span class="o">=</span> <span class="kc">None</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_autoload_seed</span><span class="p">():</span>
+        <span class="k">if</span> <span class="n">rag_store</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="c1"># Persona</span>
+            <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s2">&quot;RAG_AUTOLOAD_PERSONA&quot;</span><span class="p">,</span> <span class="s2">&quot;true&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s2">&quot;true&quot;</span><span class="p">:</span>
+                <span class="n">persona_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s2">&quot;RAG_PERSONA_PATH&quot;</span><span class="p">,</span> <span class="s2">&quot;/app/persona.md&quot;</span><span class="p">)</span>
+                <span class="n">p</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">persona_path</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">p</span><span class="o">.</span><span class="n">exists</span><span class="p">()</span> <span class="ow">and</span> <span class="n">p</span><span class="o">.</span><span class="n">is_file</span><span class="p">():</span>
+                    <span class="k">try</span><span class="p">:</span>
+                        <span class="n">text</span> <span class="o">=</span> <span class="n">p</span><span class="o">.</span><span class="n">read_text</span><span class="p">(</span><span class="n">encoding</span><span class="o">=</span><span class="s2">&quot;utf-8&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+                        <span class="k">if</span> <span class="n">text</span><span class="p">:</span>
+                            <span class="c1"># Ensure idempotency: remove previous persona docs, then insert fresh copy</span>
+                            <span class="k">try</span><span class="p">:</span>
+                                <span class="n">rag_store</span><span class="o">.</span><span class="n">col</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="n">where</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;persona&quot;</span><span class="p">})</span>
+                            <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+                                <span class="k">pass</span>
+                            <span class="n">mtime</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">utcfromtimestamp</span><span class="p">(</span><span class="n">p</span><span class="o">.</span><span class="n">stat</span><span class="p">()</span><span class="o">.</span><span class="n">st_mtime</span><span class="p">)</span><span class="o">.</span><span class="n">isoformat</span><span class="p">()</span> <span class="o">+</span> <span class="s2">&quot;Z&quot;</span>
+                            <span class="n">rag_store</span><span class="o">.</span><span class="n">upsert_doc</span><span class="p">(</span>
+                                <span class="n">text</span><span class="p">,</span>
+                                <span class="nb">type</span><span class="o">=</span><span class="s2">&quot;persona&quot;</span><span class="p">,</span>
+                                <span class="n">scope</span><span class="o">=</span><span class="s2">&quot;global&quot;</span><span class="p">,</span>
+                                <span class="n">version</span><span class="o">=</span><span class="n">mtime</span><span class="p">,</span>
+                                <span class="n">source</span><span class="o">=</span><span class="s2">&quot;kb&quot;</span><span class="p">,</span>
+                            <span class="p">)</span>
+                            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;[BRAIN][RAG] Autoloaded persona from </span><span class="si">{</span><span class="n">persona_path</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+                    <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">perr</span><span class="p">:</span>
+                        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;[BRAIN][RAG] Persona autoload failed: </span><span class="si">{</span><span class="n">perr</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="c1"># FAQs</span>
+            <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s2">&quot;RAG_AUTOLOAD_FAQ&quot;</span><span class="p">,</span> <span class="s2">&quot;false&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s2">&quot;true&quot;</span><span class="p">:</span>
+                <span class="n">faq_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s2">&quot;RAG_FAQ_PATH&quot;</span><span class="p">,</span> <span class="s2">&quot;/app/seed/faqs.jsonl&quot;</span><span class="p">)</span>
+                <span class="n">fpath</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">faq_path</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">fpath</span><span class="o">.</span><span class="n">exists</span><span class="p">()</span> <span class="ow">and</span> <span class="n">fpath</span><span class="o">.</span><span class="n">is_file</span><span class="p">():</span>
+                    <span class="n">count</span> <span class="o">=</span> <span class="mi">0</span>
+                    <span class="k">try</span><span class="p">:</span>
+                        <span class="k">if</span> <span class="n">fpath</span><span class="o">.</span><span class="n">suffix</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s2">&quot;.jsonl&quot;</span><span class="p">:</span>
+                            <span class="k">with</span> <span class="n">fpath</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="s2">&quot;r&quot;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">&quot;utf-8&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">fh</span><span class="p">:</span>
+                                <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">fh</span><span class="p">:</span>
+                                    <span class="n">line</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+                                    <span class="k">if</span> <span class="ow">not</span> <span class="n">line</span><span class="p">:</span>
+                                        <span class="k">continue</span>
+                                    <span class="k">try</span><span class="p">:</span>
+                                        <span class="n">obj</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>
+                                    <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+                                        <span class="k">continue</span>
+                                    <span class="n">q</span> <span class="o">=</span> <span class="p">(</span><span class="n">obj</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;question&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="s2">&quot;&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+                                    <span class="n">a</span> <span class="o">=</span> <span class="p">(</span><span class="n">obj</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;answer&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="s2">&quot;&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+                                    <span class="n">topic</span> <span class="o">=</span> <span class="p">(</span><span class="n">obj</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;topic&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="kc">None</span><span class="p">)</span>
+                                    <span class="k">if</span> <span class="n">q</span> <span class="ow">and</span> <span class="n">a</span><span class="p">:</span>
+                                        <span class="n">text</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;Q: </span><span class="si">{</span><span class="n">q</span><span class="si">}</span><span class="se">\n</span><span class="s2">A: </span><span class="si">{</span><span class="n">a</span><span class="si">}</span><span class="s2">&quot;</span>
+                                        <span class="n">rag_store</span><span class="o">.</span><span class="n">upsert_doc</span><span class="p">(</span><span class="n">text</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="s2">&quot;faq&quot;</span><span class="p">,</span> <span class="n">scope</span><span class="o">=</span><span class="s2">&quot;global&quot;</span><span class="p">,</span> <span class="n">topic</span><span class="o">=</span><span class="n">topic</span><span class="p">,</span> <span class="n">source</span><span class="o">=</span><span class="s2">&quot;kb&quot;</span><span class="p">)</span>
+                                        <span class="n">count</span> <span class="o">+=</span> <span class="mi">1</span>
+                        <span class="k">elif</span> <span class="n">fpath</span><span class="o">.</span><span class="n">suffix</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s2">&quot;.csv&quot;</span><span class="p">:</span>
+                            <span class="k">with</span> <span class="n">fpath</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="s2">&quot;r&quot;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">&quot;utf-8&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">fh</span><span class="p">:</span>
+                                <span class="n">reader</span> <span class="o">=</span> <span class="n">csv</span><span class="o">.</span><span class="n">DictReader</span><span class="p">(</span><span class="n">fh</span><span class="p">)</span>
+                                <span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">reader</span><span class="p">:</span>
+                                    <span class="n">q</span> <span class="o">=</span> <span class="p">(</span><span class="n">row</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;question&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="s2">&quot;&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+                                    <span class="n">a</span> <span class="o">=</span> <span class="p">(</span><span class="n">row</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;answer&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="s2">&quot;&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+                                    <span class="n">topic</span> <span class="o">=</span> <span class="p">(</span><span class="n">row</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;topic&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="kc">None</span><span class="p">)</span>
+                                    <span class="k">if</span> <span class="n">q</span> <span class="ow">and</span> <span class="n">a</span><span class="p">:</span>
+                                        <span class="n">text</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;Q: </span><span class="si">{</span><span class="n">q</span><span class="si">}</span><span class="se">\n</span><span class="s2">A: </span><span class="si">{</span><span class="n">a</span><span class="si">}</span><span class="s2">&quot;</span>
+                                        <span class="n">rag_store</span><span class="o">.</span><span class="n">upsert_doc</span><span class="p">(</span><span class="n">text</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="s2">&quot;faq&quot;</span><span class="p">,</span> <span class="n">scope</span><span class="o">=</span><span class="s2">&quot;global&quot;</span><span class="p">,</span> <span class="n">topic</span><span class="o">=</span><span class="n">topic</span><span class="p">,</span> <span class="n">source</span><span class="o">=</span><span class="s2">&quot;kb&quot;</span><span class="p">)</span>
+                                        <span class="n">count</span> <span class="o">+=</span> <span class="mi">1</span>
+                        <span class="k">else</span><span class="p">:</span>
+                            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;[BRAIN][RAG] FAQ autoload skipped: unsupported extension for </span><span class="si">{</span><span class="n">faq_path</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+                        <span class="k">if</span> <span class="n">count</span><span class="p">:</span>
+                            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;[BRAIN][RAG] Autoloaded </span><span class="si">{</span><span class="n">count</span><span class="si">}</span><span class="s2"> FAQ entries from </span><span class="si">{</span><span class="n">faq_path</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+                    <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">ferr</span><span class="p">:</span>
+                        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;[BRAIN][RAG] FAQ autoload failed: </span><span class="si">{</span><span class="n">ferr</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">err</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;[BRAIN][RAG] Autoload seed unexpected error: </span><span class="si">{</span><span class="n">err</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="n">_autoload_seed</span><span class="p">()</span>
+
+
+<div class="viewcode-block" id="healthz">
+<a class="viewcode-back" href="../../api_reference.html#brain.app.healthz">[docs]</a>
+<span class="nd">@app</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="s1">&#39;/v1/healthz&#39;</span><span class="p">,</span> <span class="n">methods</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;GET&#39;</span><span class="p">])</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">healthz</span><span class="p">():</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Health check endpoint for the brain service.</span>
+<span class="sd">    </span>
+<span class="sd">    Returns detailed information about service status, dependencies, and configuration.</span>
+<span class="sd">    </span>
+<span class="sd">    **HTTP Method:** GET</span>
+<span class="sd">    </span>
+<span class="sd">    **Response (200 OK):**</span>
+<span class="sd">        JSON object with keys:</span>
+<span class="sd">        </span>
+<span class="sd">        - ok (bool): Overall service health status</span>
+<span class="sd">        - service (str): Service name (&quot;brain&quot;)</span>
+<span class="sd">        - python (str): Python version</span>
+<span class="sd">        - config (dict): Active configuration including:</span>
+<span class="sd">            - OLLAMA_BASE_URL: LLM backend URL</span>
+<span class="sd">            - OLLAMA_MODEL: Active LLM model name</span>
+<span class="sd">            - CHROMA_URL: Vector database URL</span>
+<span class="sd">            - RAG_ENABLE_*: Feature toggles for Persona, FAQ, Memory, Summary</span>
+<span class="sd">        - persona (dict): Persona status with &#39;loaded&#39; boolean</span>
+<span class="sd">        - chroma (dict): Vector database connectivity status with:</span>
+<span class="sd">            - ok (bool): Connectivity status</span>
+<span class="sd">            - version (str): Database version if available</span>
+<span class="sd">            - error (str): Error message if unhealthy</span>
+<span class="sd">    </span>
+<span class="sd">    **Response (503 Service Unavailable):**</span>
+<span class="sd">        Returned if critical dependencies are unavailable.</span>
+<span class="sd">    </span>
+<span class="sd">    **Example:**</span>
+<span class="sd">        &gt;&gt;&gt; curl http://localhost:7000/v1/healthz</span>
+<span class="sd">        {</span>
+<span class="sd">            &quot;ok&quot;: true,</span>
+<span class="sd">            &quot;service&quot;: &quot;brain&quot;,</span>
+<span class="sd">            &quot;python&quot;: &quot;3.13.0&quot;,</span>
+<span class="sd">            &quot;config&quot;: {...},</span>
+<span class="sd">            &quot;persona&quot;: {&quot;loaded&quot;: true},</span>
+<span class="sd">            &quot;chroma&quot;: {&quot;ok&quot;: true, &quot;version&quot;: &quot;0.5.11&quot;, &quot;error&quot;: null}</span>
+<span class="sd">        }</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="c1"># Compose detailed health info</span>
+        <span class="n">chroma_url</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s2">&quot;CHROMA_URL&quot;</span><span class="p">)</span>
+        <span class="n">chroma_ok</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="n">chroma_error</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="n">chroma_version</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">if</span> <span class="n">chroma_url</span><span class="p">:</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">r</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">chroma_url</span><span class="o">.</span><span class="n">rstrip</span><span class="p">(</span><span class="s1">&#39;/&#39;</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;/api/v1/heartbeat&#39;</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+                <span class="c1"># Some Chroma builds return 410 on /api/v1/heartbeat even when healthy.</span>
+                <span class="c1"># Treat any reachable response (including 410) as an indicator the server is up.</span>
+                <span class="k">if</span> <span class="n">r</span><span class="o">.</span><span class="n">status_code</span> <span class="ow">in</span> <span class="p">(</span><span class="mi">200</span><span class="p">,</span> <span class="mi">204</span><span class="p">):</span>
+                    <span class="n">chroma_ok</span> <span class="o">=</span> <span class="kc">True</span>
+                    <span class="k">try</span><span class="p">:</span>
+                        <span class="n">chroma_version</span> <span class="o">=</span> <span class="n">r</span><span class="o">.</span><span class="n">json</span><span class="p">()</span>
+                    <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+                        <span class="n">chroma_version</span> <span class="o">=</span> <span class="kc">None</span>
+                <span class="k">elif</span> <span class="n">r</span><span class="o">.</span><span class="n">status_code</span> <span class="ow">in</span> <span class="p">(</span><span class="mi">404</span><span class="p">,</span> <span class="mi">405</span><span class="p">,</span> <span class="mi">410</span><span class="p">):</span>
+                    <span class="c1"># Endpoint exists or method differs across versions – consider service reachable</span>
+                    <span class="n">chroma_ok</span> <span class="o">=</span> <span class="kc">True</span>
+                    <span class="n">chroma_error</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;HTTP </span><span class="si">{</span><span class="n">r</span><span class="o">.</span><span class="n">status_code</span><span class="si">}</span><span class="s2">&quot;</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">chroma_ok</span> <span class="o">=</span> <span class="kc">False</span>
+                    <span class="n">chroma_error</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;HTTP </span><span class="si">{</span><span class="n">r</span><span class="o">.</span><span class="n">status_code</span><span class="si">}</span><span class="s2">&quot;</span>
+            <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                <span class="n">chroma_ok</span> <span class="o">=</span> <span class="kc">False</span>
+                <span class="n">chroma_error</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
+
+        <span class="n">persona_loaded</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">rag_store</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">got_p</span> <span class="o">=</span> <span class="n">rag_store</span><span class="o">.</span><span class="n">col</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">where</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;persona&quot;</span><span class="p">})</span>
+                <span class="n">persona_loaded</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">got_p</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;documents&#39;</span><span class="p">,</span> <span class="p">[]))</span> <span class="o">&gt;</span> <span class="mi">0</span>
+        <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+            <span class="n">persona_loaded</span> <span class="o">=</span> <span class="kc">False</span>
+
+        <span class="n">ok</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="c1"># Basic checks: collection exists and Chroma reachable</span>
+        <span class="k">if</span> <span class="n">rag_store</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">rag_store</span><span class="p">,</span> <span class="s1">&#39;col&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">ok</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="k">if</span> <span class="n">chroma_url</span> <span class="ow">and</span> <span class="p">(</span><span class="n">chroma_ok</span> <span class="ow">is</span> <span class="kc">False</span><span class="p">):</span>
+            <span class="n">ok</span> <span class="o">=</span> <span class="kc">False</span>
+
+        <span class="n">payload</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;ok&quot;</span><span class="p">:</span> <span class="n">ok</span><span class="p">,</span>
+            <span class="s2">&quot;service&quot;</span><span class="p">:</span> <span class="s2">&quot;brain&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;python&quot;</span><span class="p">:</span> <span class="n">sys</span><span class="o">.</span><span class="n">version</span><span class="o">.</span><span class="n">split</span><span class="p">()[</span><span class="mi">0</span><span class="p">],</span>
+            <span class="s2">&quot;config&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s2">&quot;OLLAMA_BASE_URL&quot;</span><span class="p">:</span> <span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s2">&quot;OLLAMA_BASE_URL&quot;</span><span class="p">),</span>
+                <span class="s2">&quot;OLLAMA_MODEL&quot;</span><span class="p">:</span> <span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s2">&quot;OLLAMA_MODEL&quot;</span><span class="p">),</span>
+                <span class="s2">&quot;CHROMA_URL&quot;</span><span class="p">:</span> <span class="n">chroma_url</span><span class="p">,</span>
+                <span class="s2">&quot;RAG_ENABLE_PERSONA&quot;</span><span class="p">:</span> <span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s2">&quot;RAG_ENABLE_PERSONA&quot;</span><span class="p">,</span> <span class="s2">&quot;true&quot;</span><span class="p">),</span>
+                <span class="s2">&quot;RAG_ENABLE_FAQ&quot;</span><span class="p">:</span> <span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s2">&quot;RAG_ENABLE_FAQ&quot;</span><span class="p">,</span> <span class="s2">&quot;true&quot;</span><span class="p">),</span>
+                <span class="s2">&quot;RAG_ENABLE_MEMORY&quot;</span><span class="p">:</span> <span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s2">&quot;RAG_ENABLE_MEMORY&quot;</span><span class="p">,</span> <span class="s2">&quot;true&quot;</span><span class="p">),</span>
+                <span class="s2">&quot;RAG_ENABLE_SUMMARY&quot;</span><span class="p">:</span> <span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s2">&quot;RAG_ENABLE_SUMMARY&quot;</span><span class="p">,</span> <span class="s2">&quot;true&quot;</span><span class="p">),</span>
+            <span class="p">},</span>
+            <span class="s2">&quot;persona&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;loaded&quot;</span><span class="p">:</span> <span class="n">persona_loaded</span><span class="p">},</span>
+            <span class="s2">&quot;chroma&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s2">&quot;ok&quot;</span><span class="p">:</span> <span class="n">chroma_ok</span><span class="p">,</span>
+                <span class="s2">&quot;version&quot;</span><span class="p">:</span> <span class="n">chroma_version</span><span class="p">,</span>
+                <span class="s2">&quot;error&quot;</span><span class="p">:</span> <span class="n">chroma_error</span><span class="p">,</span>
+            <span class="p">},</span>
+        <span class="p">}</span>
+        <span class="k">return</span> <span class="n">jsonify</span><span class="p">(</span><span class="n">payload</span><span class="p">),</span> <span class="p">(</span><span class="mi">200</span> <span class="k">if</span> <span class="n">ok</span> <span class="k">else</span> <span class="mi">503</span><span class="p">)</span>
+    <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">jsonify</span><span class="p">({</span><span class="s2">&quot;ok&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span> <span class="s2">&quot;error&quot;</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)}),</span> <span class="mi">500</span></div>
+
+
+
+<div class="viewcode-block" id="chat">
+<a class="viewcode-back" href="../../api_reference.html#brain.app.chat">[docs]</a>
+<span class="nd">@app</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="s1">&#39;/v1/chat&#39;</span><span class="p">,</span> <span class="n">methods</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;POST&#39;</span><span class="p">])</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">chat</span><span class="p">():</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Non-streaming chat endpoint for generating responses with optional RAG context.</span>
+<span class="sd">    </span>
+<span class="sd">    Accepts a prompt and optional parameters, retrieves relevant context from the RAG system</span>
+<span class="sd">    (persona, FAQ, memory, conversation history), and returns a complete LLM response.</span>
+<span class="sd">    Use /v1/chat/stream for real-time token streaming.</span>
+<span class="sd">    </span>
+<span class="sd">    **HTTP Method:** POST</span>
+<span class="sd">    </span>
+<span class="sd">    **Request Body (JSON):**</span>
+<span class="sd">        - prompt (str, required): User message/question</span>
+<span class="sd">        - conversation_id (str, optional): UUID to thread multiple turns. Auto-generated if omitted.</span>
+<span class="sd">        - include_thinking (bool, optional): Include LLM reasoning in response (default: false)</span>
+<span class="sd">        - entity (str, optional): Entity/topic scope for memory retrieval (default: null)</span>
+<span class="sd">        - save_memory (bool, optional): Save assistant response to long-term memory (default: false)</span>
+<span class="sd">        - memory_text (str, optional): Custom text to save to memory (uses response if omitted)</span>
+<span class="sd">        - turns_k (int, optional): Number of recent conversation turns to retrieve (default: 3)</span>
+<span class="sd">        - faq_k (int, optional): Number of FAQ entries to retrieve (default: 3)</span>
+<span class="sd">        - memory_k (int, optional): Number of memories to retrieve (default: 5)</span>
+<span class="sd">    </span>
+<span class="sd">    **Response (200 OK):**</span>
+<span class="sd">        JSON object with keys:</span>
+<span class="sd">        </span>
+<span class="sd">        - response (str): Main assistant response text</span>
+<span class="sd">        - thinking (str): LLM reasoning/thinking (only if include_thinking=true)</span>
+<span class="sd">        - conversation_id (str): Conversation thread ID (same as input or generated)</span>
+<span class="sd">        - user_timestamp (str): ISO 8601 timestamp of user message</span>
+<span class="sd">        - assistant_timestamp (str): ISO 8601 timestamp of assistant response</span>
+<span class="sd">        - request_id (str): Unique request identifier for debugging</span>
+<span class="sd">        - used_context (dict): Retrieved context including:</span>
+<span class="sd">            - persona (dict): Persona block metadata if included</span>
+<span class="sd">            - faqs (list): FAQ snippets used</span>
+<span class="sd">            - turns (list): Conversation history snippets</span>
+<span class="sd">            - memories (list): Long-term memories matched</span>
+<span class="sd">            - summaries (list): Conversation summaries matched</span>
+<span class="sd">            - entity (str): Entity scope used</span>
+<span class="sd">    </span>
+<span class="sd">    **Response (400 Bad Request):**</span>
+<span class="sd">        Returned if prompt is missing or not a string.</span>
+<span class="sd">    </span>
+<span class="sd">    **Response (500 Internal Server Error):**</span>
+<span class="sd">        Returned if Ollama or vector database is unavailable.</span>
+<span class="sd">    </span>
+<span class="sd">    **Side Effects:**</span>
+<span class="sd">        - If RAG_ENABLED: Stores conversation turn in vector database for future retrieval</span>
+<span class="sd">        - If RAG_ENABLE_SUMMARY: May generate conversation summary every N turns</span>
+<span class="sd">        - If save_memory: Stores response/memory_text in long-term memory store</span>
+<span class="sd">    </span>
+<span class="sd">    **Example:**</span>
+<span class="sd">        &gt;&gt;&gt; curl -X POST http://localhost:7000/v1/chat \\</span>
+<span class="sd">        ...   -H &quot;Content-Type: application/json&quot; \\</span>
+<span class="sd">        ...   -d &#39;{&quot;prompt&quot;: &quot;What is the weather?&quot;, &quot;include_thinking&quot;: true}&#39;</span>
+<span class="sd">        {</span>
+<span class="sd">            &quot;response&quot;: &quot;I don&#39;t have access to real-time weather data...&quot;,</span>
+<span class="sd">            &quot;thinking&quot;: &quot;The user is asking about weather. I should clarify...&quot;,</span>
+<span class="sd">            &quot;conversation_id&quot;: &quot;550e8400-e29b-41d4-a716-446655440000&quot;,</span>
+<span class="sd">            &quot;user_timestamp&quot;: &quot;2025-12-13T10:30:45.123456+00:00&quot;,</span>
+<span class="sd">            &quot;assistant_timestamp&quot;: &quot;2025-12-13T10:30:48.456789+00:00&quot;,</span>
+<span class="sd">            &quot;request_id&quot;: &quot;abc12345&quot;,</span>
+<span class="sd">            &quot;used_context&quot;: {...}</span>
+<span class="sd">        }</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">json</span> <span class="ow">or</span> <span class="p">{}</span>
+    <span class="n">prompt</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;prompt&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">prompt</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">jsonify</span><span class="p">({</span><span class="s1">&#39;error&#39;</span><span class="p">:</span> <span class="s1">&#39;prompt must be a string&#39;</span><span class="p">}),</span> <span class="mi">400</span>
+    <span class="n">include_thinking</span> <span class="o">=</span> <span class="nb">bool</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;include_thinking&#39;</span><span class="p">,</span> <span class="kc">False</span><span class="p">))</span>
+    <span class="n">conversation_id</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;conversation_id&#39;</span><span class="p">)</span>
+    <span class="n">turns_k</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;turns_k&#39;</span><span class="p">,</span> <span class="n">RAG_TURNS_TOP_K</span><span class="p">))</span>
+    <span class="n">faq_k</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;faq_k&#39;</span><span class="p">,</span> <span class="n">RAG_FAQ_TOP_K</span><span class="p">))</span>
+    <span class="n">memory_k</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;memory_k&#39;</span><span class="p">,</span> <span class="n">RAG_MEMORY_TOP_K</span><span class="p">))</span>
+    <span class="n">save_memory</span> <span class="o">=</span> <span class="nb">bool</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;save_memory&#39;</span><span class="p">,</span> <span class="kc">False</span><span class="p">))</span>
+    <span class="n">memory_text</span> <span class="o">=</span> <span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;memory_text&#39;</span><span class="p">)</span> <span class="ow">or</span> <span class="s1">&#39;&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+    <span class="n">entity</span> <span class="o">=</span> <span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;entity&#39;</span><span class="p">)</span> <span class="ow">or</span> <span class="s1">&#39;&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span> <span class="ow">or</span> <span class="kc">None</span>
+
+    <span class="n">final_prompt</span> <span class="o">=</span> <span class="n">prompt</span>
+    <span class="n">used_context</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;persona&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span> <span class="s2">&quot;faqs&quot;</span><span class="p">:</span> <span class="p">[],</span> <span class="s2">&quot;turns&quot;</span><span class="p">:</span> <span class="p">[],</span> <span class="s2">&quot;memories&quot;</span><span class="p">:</span> <span class="p">[],</span> <span class="s2">&quot;summaries&quot;</span><span class="p">:</span> <span class="p">[],</span> <span class="s2">&quot;entity&quot;</span><span class="p">:</span> <span class="n">entity</span><span class="p">}</span>
+    <span class="n">user_timestamp</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">(</span><span class="n">datetime</span><span class="o">.</span><span class="n">timezone</span><span class="o">.</span><span class="n">utc</span><span class="p">)</span><span class="o">.</span><span class="n">isoformat</span><span class="p">()</span>
+
+    <span class="c1"># Request ID and timing</span>
+    <span class="n">req_id</span> <span class="o">=</span> <span class="n">uuid</span><span class="o">.</span><span class="n">uuid4</span><span class="p">()</span><span class="o">.</span><span class="n">hex</span><span class="p">[:</span><span class="mi">8</span><span class="p">]</span>
+    <span class="n">t0</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">perf_counter</span><span class="p">()</span>
+    <span class="n">t_retrieve</span> <span class="o">=</span> <span class="mf">0.0</span>
+    <span class="n">t_assemble</span> <span class="o">=</span> <span class="mf">0.0</span>
+    <span class="n">t_generate</span> <span class="o">=</span> <span class="mf">0.0</span>
+    <span class="n">t_upsert</span> <span class="o">=</span> <span class="mf">0.0</span>
+    <span class="n">t_summary</span> <span class="o">=</span> <span class="mf">0.0</span>
+
+    <span class="k">if</span> <span class="n">rag_store</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">final_prompt</span><span class="p">:</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">t_rs</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">perf_counter</span><span class="p">()</span>
+            <span class="n">sections</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="n">dbg</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;persona&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span> <span class="s2">&quot;faqs&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;turns&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;memories&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;cid&quot;</span><span class="p">:</span> <span class="n">conversation_id</span><span class="p">}</span>
+
+            <span class="c1"># Persona</span>
+            <span class="k">if</span> <span class="n">RAG_ENABLE_PERSONA</span><span class="p">:</span>
+                <span class="n">persona</span> <span class="o">=</span> <span class="n">rag_store</span><span class="o">.</span><span class="n">load_persona_block</span><span class="p">()</span>
+                <span class="k">if</span> <span class="n">persona</span><span class="p">:</span>
+                    <span class="n">p_text</span><span class="p">,</span> <span class="n">p_meta</span> <span class="o">=</span> <span class="n">persona</span>
+                    <span class="n">short_persona</span> <span class="o">=</span> <span class="n">p_text</span> <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">p_text</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="mi">2000</span> <span class="k">else</span> <span class="n">p_text</span><span class="p">[:</span><span class="mi">2000</span><span class="p">]</span>
+                    <span class="n">sections</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;Persona and style guidelines (global):</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">+</span> <span class="n">short_persona</span><span class="p">)</span>
+                    <span class="n">used_context</span><span class="p">[</span><span class="s2">&quot;persona&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
+                        <span class="s2">&quot;included&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+                        <span class="s2">&quot;version&quot;</span><span class="p">:</span> <span class="p">(</span><span class="n">p_meta</span> <span class="ow">or</span> <span class="p">{})</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;version&quot;</span><span class="p">),</span>
+                        <span class="s2">&quot;timestamp&quot;</span><span class="p">:</span> <span class="p">(</span><span class="n">p_meta</span> <span class="ow">or</span> <span class="p">{})</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;timestamp&quot;</span><span class="p">),</span>
+                    <span class="p">}</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">used_context</span><span class="p">[</span><span class="s2">&quot;persona&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;included&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">}</span>
+
+            <span class="c1"># Long-term memory</span>
+            <span class="k">if</span> <span class="n">RAG_ENABLE_MEMORY</span> <span class="ow">and</span> <span class="n">memory_k</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">mem_hits</span> <span class="o">=</span> <span class="n">rag_store</span><span class="o">.</span><span class="n">retrieve_memories</span><span class="p">(</span><span class="n">query</span><span class="o">=</span><span class="n">prompt</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="n">memory_k</span><span class="p">,</span> <span class="n">entity</span><span class="o">=</span><span class="n">entity</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">mem_hits</span><span class="p">:</span>
+                    <span class="n">mem_lines</span> <span class="o">=</span> <span class="p">[]</span>
+                    <span class="k">for</span> <span class="n">text_m</span><span class="p">,</span> <span class="n">meta_m</span> <span class="ow">in</span> <span class="n">mem_hits</span><span class="p">:</span>
+                        <span class="n">imp</span> <span class="o">=</span> <span class="p">(</span><span class="n">meta_m</span> <span class="ow">or</span> <span class="p">{})</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;importance&#39;</span><span class="p">)</span>
+                        <span class="n">scope</span> <span class="o">=</span> <span class="p">(</span><span class="n">meta_m</span> <span class="ow">or</span> <span class="p">{})</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;scope&#39;</span><span class="p">,</span> <span class="s1">&#39;global&#39;</span><span class="p">)</span>
+                        <span class="n">tag_str</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+                        <span class="n">tags</span> <span class="o">=</span> <span class="p">(</span><span class="n">meta_m</span> <span class="ow">or</span> <span class="p">{})</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;tags&#39;</span><span class="p">)</span>
+                        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">tags</span><span class="p">,</span> <span class="nb">list</span><span class="p">)</span> <span class="ow">and</span> <span class="n">tags</span><span class="p">:</span>
+                            <span class="n">tag_str</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot; tags=</span><span class="si">{</span><span class="s1">&#39;,&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">tags</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span>
+                        <span class="k">if</span> <span class="n">imp</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                            <span class="n">mem_lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;- (</span><span class="si">{</span><span class="n">scope</span><span class="si">}</span><span class="s2">, importance=</span><span class="si">{</span><span class="n">imp</span><span class="si">}{</span><span class="n">tag_str</span><span class="si">}</span><span class="s2">) </span><span class="si">{</span><span class="n">text_m</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+                        <span class="k">else</span><span class="p">:</span>
+                            <span class="n">mem_lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;- (</span><span class="si">{</span><span class="n">scope</span><span class="si">}{</span><span class="n">tag_str</span><span class="si">}</span><span class="s2">) </span><span class="si">{</span><span class="n">text_m</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+                        <span class="n">used_context</span><span class="p">[</span><span class="s2">&quot;memories&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">text_m</span><span class="p">)</span>
+                    <span class="n">sections</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;Long-term memory:</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">mem_lines</span><span class="p">))</span>
+                    <span class="n">dbg</span><span class="p">[</span><span class="s2">&quot;memories&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">mem_hits</span><span class="p">)</span>
+
+            <span class="c1"># FAQs/reference</span>
+            <span class="k">if</span> <span class="n">RAG_ENABLE_FAQ</span> <span class="ow">and</span> <span class="n">faq_k</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">faq_hits</span> <span class="o">=</span> <span class="n">rag_store</span><span class="o">.</span><span class="n">retrieve_faqs</span><span class="p">(</span><span class="n">query</span><span class="o">=</span><span class="n">prompt</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="n">faq_k</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">faq_hits</span><span class="p">:</span>
+                    <span class="n">faq_lines</span> <span class="o">=</span> <span class="p">[]</span>
+                    <span class="k">for</span> <span class="n">text</span><span class="p">,</span> <span class="n">meta</span> <span class="ow">in</span> <span class="n">faq_hits</span><span class="p">:</span>
+                        <span class="n">topic</span> <span class="o">=</span> <span class="p">(</span><span class="n">meta</span> <span class="ow">or</span> <span class="p">{})</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;topic&#39;</span><span class="p">,</span> <span class="s1">&#39;faq&#39;</span><span class="p">)</span>
+                        <span class="n">faq_lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;- (</span><span class="si">{</span><span class="n">topic</span><span class="si">}</span><span class="s2">) </span><span class="si">{</span><span class="n">text</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+                        <span class="n">used_context</span><span class="p">[</span><span class="s2">&quot;faqs&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
+                    <span class="n">sections</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;Reference snippets (FAQs):</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">faq_lines</span><span class="p">))</span>
+                    <span class="n">dbg</span><span class="p">[</span><span class="s2">&quot;faqs&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">faq_hits</span><span class="p">)</span>
+
+            <span class="c1"># Conversation turns with timestamps (recency-aware)</span>
+            <span class="k">if</span> <span class="n">turns_k</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">hits</span> <span class="o">=</span> <span class="n">rag_store</span><span class="o">.</span><span class="n">retrieve_turns</span><span class="p">(</span><span class="n">query</span><span class="o">=</span><span class="n">prompt</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="n">turns_k</span><span class="p">,</span> <span class="n">conversation_id</span><span class="o">=</span><span class="n">conversation_id</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">hits</span><span class="p">:</span>
+                    <span class="n">turn_lines</span> <span class="o">=</span> <span class="p">[]</span>
+                    <span class="k">for</span> <span class="n">text</span><span class="p">,</span> <span class="n">meta</span> <span class="ow">in</span> <span class="n">hits</span><span class="p">:</span>
+                        <span class="n">role</span> <span class="o">=</span> <span class="p">(</span><span class="n">meta</span> <span class="ow">or</span> <span class="p">{})</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;role&#39;</span><span class="p">,</span> <span class="s1">&#39;context&#39;</span><span class="p">)</span>
+                        <span class="n">ts</span> <span class="o">=</span> <span class="p">(</span><span class="n">meta</span> <span class="ow">or</span> <span class="p">{})</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;timestamp&#39;</span><span class="p">)</span>
+                        <span class="k">if</span> <span class="n">ts</span><span class="p">:</span>
+                            <span class="n">turn_lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;- </span><span class="si">{</span><span class="n">role</span><span class="si">}</span><span class="s2"> [</span><span class="si">{</span><span class="n">ts</span><span class="si">}</span><span class="s2">]: </span><span class="si">{</span><span class="n">text</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+                        <span class="k">else</span><span class="p">:</span>
+                            <span class="n">turn_lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;- </span><span class="si">{</span><span class="n">role</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">text</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+                        <span class="n">used_context</span><span class="p">[</span><span class="s2">&quot;turns&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
+                    <span class="n">sections</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;Memory (most relevant first):</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">turn_lines</span><span class="p">))</span>
+                    <span class="n">dbg</span><span class="p">[</span><span class="s2">&quot;turns&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">hits</span><span class="p">)</span>
+
+            <span class="c1"># Conversation summaries</span>
+            <span class="k">if</span> <span class="n">RAG_ENABLE_SUMMARY</span> <span class="ow">and</span> <span class="n">conversation_id</span><span class="p">:</span>
+                <span class="n">sum_hits</span> <span class="o">=</span> <span class="n">rag_store</span><span class="o">.</span><span class="n">retrieve_summaries</span><span class="p">(</span><span class="n">conversation_id</span><span class="o">=</span><span class="n">conversation_id</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">sum_hits</span><span class="p">:</span>
+                    <span class="n">used_context</span><span class="p">[</span><span class="s2">&quot;summaries&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">t</span> <span class="k">for</span> <span class="n">t</span><span class="p">,</span> <span class="n">_</span> <span class="ow">in</span> <span class="n">sum_hits</span><span class="p">]</span>
+                    <span class="n">sections</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;Conversation summaries:</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;- </span><span class="si">{</span><span class="n">t</span><span class="si">}</span><span class="s2">&quot;</span> <span class="k">for</span> <span class="n">t</span><span class="p">,</span> <span class="n">_</span> <span class="ow">in</span> <span class="n">sum_hits</span><span class="p">))</span>
+
+            <span class="n">instructions</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="s2">&quot;You are a helpful assistant. Follow the persona and policies above. Use the reference snippets and &quot;</span>
+                <span class="s2">&quot;conversation memory when relevant. If the user asks about times or durations, use the provided &quot;</span>
+                <span class="s2">&quot;UTC ISO timestamps to compute precise differences and express them in human-friendly units.&quot;</span>
+            <span class="p">)</span>
+            <span class="n">current_ts_line</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;Current user message timestamp (UTC): </span><span class="si">{</span><span class="n">user_timestamp</span><span class="si">}</span><span class="s2">&quot;</span>
+            <span class="n">assembled</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">instructions</span><span class="si">}</span><span class="se">\n\n</span><span class="s2">&quot;</span> <span class="o">+</span> <span class="p">(</span><span class="s2">&quot;</span><span class="se">\n\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">sections</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n\n</span><span class="s2">&quot;</span> <span class="k">if</span> <span class="n">sections</span> <span class="k">else</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+            <span class="n">final_prompt</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">assembled</span><span class="si">}</span><span class="s2">&quot;</span>
+                <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">current_ts_line</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span>
+                <span class="sa">f</span><span class="s2">&quot;User: </span><span class="si">{</span><span class="n">prompt</span><span class="si">}</span><span class="se">\n</span><span class="s2">Assistant:&quot;</span>
+            <span class="p">)</span>
+            <span class="n">t_retrieve</span> <span class="o">=</span> <span class="n">t_rs</span> <span class="o">-</span> <span class="n">t0</span>
+            <span class="n">t_assemble</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">perf_counter</span><span class="p">()</span> <span class="o">-</span> <span class="n">t_rs</span>
+            <span class="k">if</span> <span class="n">RAG_DEBUG</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;[BRAIN][RAG][build][</span><span class="si">{</span><span class="n">req_id</span><span class="si">}</span><span class="s2">] cid=</span><span class="si">{</span><span class="n">conversation_id</span><span class="si">}</span><span class="s2"> persona=</span><span class="si">{</span><span class="nb">bool</span><span class="p">(</span><span class="n">used_context</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;persona&#39;</span><span class="p">,{})</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;included&#39;</span><span class="p">))</span><span class="si">}</span><span class="s2"> faqs=</span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">used_context</span><span class="p">[</span><span class="s1">&#39;faqs&#39;</span><span class="p">])</span><span class="si">}</span><span class="s2"> memories=</span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">used_context</span><span class="p">[</span><span class="s1">&#39;memories&#39;</span><span class="p">])</span><span class="si">}</span><span class="s2"> turns=</span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">used_context</span><span class="p">[</span><span class="s1">&#39;turns&#39;</span><span class="p">])</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+            <span class="k">pass</span>
+
+    <span class="n">payload</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s1">&#39;model&#39;</span><span class="p">:</span> <span class="n">OLLAMA_MODEL</span><span class="p">,</span>
+        <span class="s1">&#39;prompt&#39;</span><span class="p">:</span> <span class="n">final_prompt</span><span class="p">,</span>
+        <span class="s1">&#39;stream&#39;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
+        <span class="s1">&#39;think&#39;</span><span class="p">:</span> <span class="n">include_thinking</span><span class="p">,</span>
+    <span class="p">}</span>
+
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">tg0</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">perf_counter</span><span class="p">()</span>
+        <span class="n">response</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="n">OLLAMA_API_URL</span><span class="p">,</span> <span class="n">json</span><span class="o">=</span><span class="n">payload</span><span class="p">)</span>
+        <span class="n">response</span><span class="o">.</span><span class="n">raise_for_status</span><span class="p">()</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="n">response</span><span class="o">.</span><span class="n">json</span><span class="p">()</span>
+        <span class="n">text</span> <span class="o">=</span> <span class="n">result</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;response&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span>
+        <span class="n">thinking</span> <span class="o">=</span> <span class="n">result</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;thinking&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span> <span class="k">if</span> <span class="n">include_thinking</span> <span class="k">else</span> <span class="s1">&#39;&#39;</span>
+        <span class="n">assistant_timestamp</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">(</span><span class="n">datetime</span><span class="o">.</span><span class="n">timezone</span><span class="o">.</span><span class="n">utc</span><span class="p">)</span><span class="o">.</span><span class="n">isoformat</span><span class="p">()</span>
+        <span class="n">t_generate</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">perf_counter</span><span class="p">()</span> <span class="o">-</span> <span class="n">tg0</span>
+
+        <span class="c1"># Upsert turn</span>
+        <span class="k">if</span> <span class="n">rag_store</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">prompt</span> <span class="ow">and</span> <span class="n">text</span><span class="p">:</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">tu0</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">perf_counter</span><span class="p">()</span>
+                <span class="n">cid</span> <span class="o">=</span> <span class="n">rag_store</span><span class="o">.</span><span class="n">upsert_turn</span><span class="p">(</span>
+                    <span class="n">conversation_id</span><span class="p">,</span>
+                    <span class="n">user_text</span><span class="o">=</span><span class="n">prompt</span><span class="p">,</span>
+                    <span class="n">assistant_text</span><span class="o">=</span><span class="n">text</span><span class="p">,</span>
+                    <span class="n">user_ts</span><span class="o">=</span><span class="n">user_timestamp</span><span class="p">,</span>
+                    <span class="n">assistant_ts</span><span class="o">=</span><span class="n">assistant_timestamp</span><span class="p">,</span>
+                    <span class="n">source</span><span class="o">=</span><span class="s2">&quot;chat&quot;</span><span class="p">,</span>
+                <span class="p">)</span>
+                <span class="n">conversation_id</span> <span class="o">=</span> <span class="n">cid</span>
+                <span class="n">t_upsert</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">perf_counter</span><span class="p">()</span> <span class="o">-</span> <span class="n">tu0</span>
+            <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">RAG_DEBUG</span><span class="p">:</span>
+                    <span class="kn">import</span><span class="w"> </span><span class="nn">traceback</span>
+                    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;[BRAIN][RAG][upsert][</span><span class="si">{</span><span class="n">req_id</span><span class="si">}</span><span class="s2">] failed:</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">+</span> <span class="n">traceback</span><span class="o">.</span><span class="n">format_exc</span><span class="p">())</span>
+
+        <span class="c1"># Summarize periodically</span>
+        <span class="k">if</span> <span class="n">RAG_ENABLE_SUMMARY</span> <span class="ow">and</span> <span class="n">rag_store</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">conversation_id</span><span class="p">:</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">total_turn_docs</span> <span class="o">=</span> <span class="n">rag_store</span><span class="o">.</span><span class="n">count_turns</span><span class="p">(</span><span class="n">conversation_id</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">total_turn_docs</span> <span class="o">&gt;=</span> <span class="mi">2</span> <span class="ow">and</span> <span class="p">(</span><span class="n">total_turn_docs</span> <span class="o">//</span> <span class="mi">2</span><span class="p">)</span> <span class="o">%</span> <span class="nb">max</span><span class="p">(</span><span class="n">RAG_SUMMARY_EVERY_N</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                    <span class="n">ts0</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">perf_counter</span><span class="p">()</span>
+                    <span class="n">last_pairs</span> <span class="o">=</span> <span class="n">rag_store</span><span class="o">.</span><span class="n">get_last_turns</span><span class="p">(</span><span class="n">conversation_id</span><span class="p">,</span> <span class="n">limit</span><span class="o">=</span><span class="n">RAG_SUMMARY_TURNS_WINDOW</span><span class="p">)</span>
+                    <span class="n">convo_lines</span> <span class="o">=</span> <span class="p">[]</span>
+                    <span class="k">for</span> <span class="n">t</span><span class="p">,</span> <span class="n">m</span> <span class="ow">in</span> <span class="n">last_pairs</span><span class="p">:</span>
+                        <span class="n">role</span> <span class="o">=</span> <span class="p">(</span><span class="n">m</span> <span class="ow">or</span> <span class="p">{})</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;role&#39;</span><span class="p">,</span> <span class="s1">&#39;context&#39;</span><span class="p">)</span>
+                        <span class="n">ts</span> <span class="o">=</span> <span class="p">(</span><span class="n">m</span> <span class="ow">or</span> <span class="p">{})</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;timestamp&#39;</span><span class="p">)</span>
+                        <span class="k">if</span> <span class="n">ts</span><span class="p">:</span>
+                            <span class="n">convo_lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;- </span><span class="si">{</span><span class="n">role</span><span class="si">}</span><span class="s2"> [</span><span class="si">{</span><span class="n">ts</span><span class="si">}</span><span class="s2">]: </span><span class="si">{</span><span class="n">t</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+                        <span class="k">else</span><span class="p">:</span>
+                            <span class="n">convo_lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;- </span><span class="si">{</span><span class="n">role</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">t</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+                    <span class="n">summary_prompt</span> <span class="o">=</span> <span class="p">(</span>
+                        <span class="s2">&quot;Summarize the following recent conversation turns succinctly (3-5 bullet points). &quot;</span>
+                        <span class="s2">&quot;Capture decisions, facts, preferences, and open items.</span><span class="se">\n\n</span><span class="s2">&quot;</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">convo_lines</span><span class="p">)</span>
+                    <span class="p">)</span>
+                    <span class="n">sum_payload</span> <span class="o">=</span> <span class="p">{</span>
+                        <span class="s1">&#39;model&#39;</span><span class="p">:</span> <span class="n">OLLAMA_MODEL</span><span class="p">,</span>
+                        <span class="s1">&#39;prompt&#39;</span><span class="p">:</span> <span class="n">summary_prompt</span><span class="p">,</span>
+                        <span class="s1">&#39;stream&#39;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
+                        <span class="s1">&#39;think&#39;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
+                    <span class="p">}</span>
+                    <span class="n">rsum</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="n">OLLAMA_API_URL</span><span class="p">,</span> <span class="n">json</span><span class="o">=</span><span class="n">sum_payload</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="mi">120</span><span class="p">)</span>
+                    <span class="n">rsum</span><span class="o">.</span><span class="n">raise_for_status</span><span class="p">()</span>
+                    <span class="n">sdata</span> <span class="o">=</span> <span class="n">rsum</span><span class="o">.</span><span class="n">json</span><span class="p">()</span>
+                    <span class="n">stext</span> <span class="o">=</span> <span class="p">(</span><span class="n">sdata</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;response&#39;</span><span class="p">)</span> <span class="ow">or</span> <span class="s1">&#39;&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+                    <span class="k">if</span> <span class="n">stext</span><span class="p">:</span>
+                        <span class="n">rag_store</span><span class="o">.</span><span class="n">upsert_summary</span><span class="p">(</span><span class="n">conversation_id</span><span class="p">,</span> <span class="n">stext</span><span class="p">,</span> <span class="n">timestamp</span><span class="o">=</span><span class="n">assistant_timestamp</span><span class="p">,</span> <span class="n">source</span><span class="o">=</span><span class="s1">&#39;chat&#39;</span><span class="p">)</span>
+                    <span class="n">t_summary</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">perf_counter</span><span class="p">()</span> <span class="o">-</span> <span class="n">ts0</span>
+            <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">RAG_DEBUG</span><span class="p">:</span>
+                    <span class="kn">import</span><span class="w"> </span><span class="nn">traceback</span>
+                    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;[BRAIN][RAG][summary][</span><span class="si">{</span><span class="n">req_id</span><span class="si">}</span><span class="s2">] failed:</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">+</span> <span class="n">traceback</span><span class="o">.</span><span class="n">format_exc</span><span class="p">())</span>
+
+        <span class="n">total_ms</span> <span class="o">=</span> <span class="nb">int</span><span class="p">((</span><span class="n">time</span><span class="o">.</span><span class="n">perf_counter</span><span class="p">()</span> <span class="o">-</span> <span class="n">t0</span><span class="p">)</span> <span class="o">*</span> <span class="mi">1000</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">RAG_DEBUG</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;[BRAIN][timing][</span><span class="si">{</span><span class="n">req_id</span><span class="si">}</span><span class="s2">] retrieve=</span><span class="si">{</span><span class="nb">int</span><span class="p">(</span><span class="n">t_retrieve</span><span class="o">*</span><span class="mi">1000</span><span class="p">)</span><span class="si">}</span><span class="s2">ms assemble=</span><span class="si">{</span><span class="nb">int</span><span class="p">(</span><span class="n">t_assemble</span><span class="o">*</span><span class="mi">1000</span><span class="p">)</span><span class="si">}</span><span class="s2">ms &quot;</span>
+                <span class="sa">f</span><span class="s2">&quot;generate=</span><span class="si">{</span><span class="nb">int</span><span class="p">(</span><span class="n">t_generate</span><span class="o">*</span><span class="mi">1000</span><span class="p">)</span><span class="si">}</span><span class="s2">ms upsert=</span><span class="si">{</span><span class="nb">int</span><span class="p">(</span><span class="n">t_upsert</span><span class="o">*</span><span class="mi">1000</span><span class="p">)</span><span class="si">}</span><span class="s2">ms summary=</span><span class="si">{</span><span class="nb">int</span><span class="p">(</span><span class="n">t_summary</span><span class="o">*</span><span class="mi">1000</span><span class="p">)</span><span class="si">}</span><span class="s2">ms total=</span><span class="si">{</span><span class="n">total_ms</span><span class="si">}</span><span class="s2">ms&quot;</span>
+            <span class="p">)</span>
+
+        <span class="c1"># Consent-based memory save</span>
+        <span class="k">if</span> <span class="n">rag_store</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">save_memory</span><span class="p">:</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">mem_text</span> <span class="o">=</span> <span class="n">memory_text</span> <span class="ow">or</span> <span class="n">text</span>
+                <span class="k">if</span> <span class="n">mem_text</span> <span class="ow">and</span> <span class="n">mem_text</span><span class="o">.</span><span class="n">strip</span><span class="p">():</span>
+                    <span class="n">rag_store</span><span class="o">.</span><span class="n">upsert_memory</span><span class="p">(</span><span class="n">mem_text</span><span class="o">.</span><span class="n">strip</span><span class="p">(),</span> <span class="n">scope</span><span class="o">=</span><span class="s2">&quot;global&quot;</span><span class="p">,</span> <span class="n">importance</span><span class="o">=</span><span class="nb">int</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;memory_importance&#39;</span><span class="p">,</span> <span class="mi">3</span><span class="p">)))</span>
+            <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">RAG_DEBUG</span><span class="p">:</span>
+                    <span class="kn">import</span><span class="w"> </span><span class="nn">traceback</span>
+                    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;[BRAIN][RAG][memory-upsert] failed:</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">+</span> <span class="n">traceback</span><span class="o">.</span><span class="n">format_exc</span><span class="p">())</span>
+
+        <span class="k">return</span> <span class="n">jsonify</span><span class="p">({</span>
+            <span class="s1">&#39;response&#39;</span><span class="p">:</span> <span class="n">text</span><span class="p">,</span>
+            <span class="s1">&#39;thinking&#39;</span><span class="p">:</span> <span class="n">thinking</span><span class="p">,</span>
+            <span class="s1">&#39;conversation_id&#39;</span><span class="p">:</span> <span class="n">conversation_id</span><span class="p">,</span>
+            <span class="s1">&#39;used_context&#39;</span><span class="p">:</span> <span class="n">used_context</span><span class="p">,</span>
+            <span class="s1">&#39;user_timestamp&#39;</span><span class="p">:</span> <span class="n">user_timestamp</span><span class="p">,</span>
+            <span class="s1">&#39;assistant_timestamp&#39;</span><span class="p">:</span> <span class="n">assistant_timestamp</span><span class="p">,</span>
+            <span class="s1">&#39;request_id&#39;</span><span class="p">:</span> <span class="n">req_id</span><span class="p">,</span>
+        <span class="p">})</span>
+    <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">jsonify</span><span class="p">({</span><span class="s1">&#39;error&#39;</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)}),</span> <span class="mi">500</span></div>
+
+
+
+<div class="viewcode-block" id="chat_stream">
+<a class="viewcode-back" href="../../api_reference.html#brain.app.chat_stream">[docs]</a>
+<span class="nd">@app</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="s1">&#39;/v1/chat/stream&#39;</span><span class="p">,</span> <span class="n">methods</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;POST&#39;</span><span class="p">])</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">chat_stream</span><span class="p">():</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Streaming chat endpoint using Server-Sent Events (SSE).</span>
+
+<span class="sd">    - **Method:** POST</span>
+<span class="sd">    - **Path:** /v1/chat/stream</span>
+<span class="sd">    - **Request JSON:** prompt (required), conversation_id, include_thinking, entity,</span>
+<span class="sd">      save_memory, memory_text, turns_k, faq_k, memory_k</span>
+<span class="sd">    - **Content-Type:** text/event-stream</span>
+
+<span class="sd">    Events (newline-delimited, prefixed with ``data: ``):</span>
+<span class="sd">    - ``token``: assistant response token</span>
+<span class="sd">    - ``thinking``: reasoning token (only if include_thinking=true)</span>
+<span class="sd">    - ``done``: final metadata (conversation_id, used_context, timestamps, request_id)</span>
+<span class="sd">    - ``error``: error details</span>
+
+<span class="sd">    Responses:</span>
+<span class="sd">    - 200: Stream started</span>
+<span class="sd">    - 400: Missing prompt</span>
+<span class="sd">    - 500: Internal error (e.g., Ollama unreachable)</span>
+
+<span class="sd">    Side effects: same as /v1/chat (turn upserts, optional memories, summaries).</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">get_json</span><span class="p">()</span>
+    <span class="n">prompt</span> <span class="o">=</span> <span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;prompt&#39;</span><span class="p">)</span> <span class="ow">or</span> <span class="s1">&#39;&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">prompt</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">jsonify</span><span class="p">({</span><span class="s1">&#39;error&#39;</span><span class="p">:</span> <span class="s1">&#39;prompt required&#39;</span><span class="p">}),</span> <span class="mi">400</span>
+
+    <span class="n">req_id</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">uuid</span><span class="o">.</span><span class="n">uuid4</span><span class="p">())[:</span><span class="mi">8</span><span class="p">]</span>
+    <span class="n">conversation_id</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;conversation_id&#39;</span><span class="p">)</span> <span class="ow">or</span> <span class="nb">str</span><span class="p">(</span><span class="n">uuid</span><span class="o">.</span><span class="n">uuid4</span><span class="p">())</span>
+    <span class="n">include_thinking</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;include_thinking&#39;</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
+    <span class="n">user_timestamp</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;user_timestamp&#39;</span><span class="p">)</span> <span class="ow">or</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">(</span><span class="n">datetime</span><span class="o">.</span><span class="n">timezone</span><span class="o">.</span><span class="n">utc</span><span class="p">)</span><span class="o">.</span><span class="n">isoformat</span><span class="p">()</span>
+    <span class="n">save_memory</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;save_memory&#39;</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
+    <span class="n">memory_text</span> <span class="o">=</span> <span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;memory_text&#39;</span><span class="p">)</span> <span class="ow">or</span> <span class="s1">&#39;&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span> <span class="k">if</span> <span class="n">save_memory</span> <span class="k">else</span> <span class="kc">None</span>
+
+    <span class="c1"># Build RAG context (same as non-streaming endpoint)</span>
+    <span class="n">final_prompt</span> <span class="o">=</span> <span class="n">prompt</span>
+    <span class="n">used_context</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;persona&#39;</span><span class="p">:</span> <span class="p">{},</span> <span class="s1">&#39;faqs&#39;</span><span class="p">:</span> <span class="p">[],</span> <span class="s1">&#39;memories&#39;</span><span class="p">:</span> <span class="p">[],</span> <span class="s1">&#39;turns&#39;</span><span class="p">:</span> <span class="p">[],</span> <span class="s1">&#39;summaries&#39;</span><span class="p">:</span> <span class="p">[]}</span>
+    <span class="n">t_retrieve</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">t_assemble</span> <span class="o">=</span> <span class="mi">0</span>
+
+    <span class="k">if</span> <span class="n">RAG_ENABLED</span> <span class="ow">and</span> <span class="n">rag_store</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">t0</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">perf_counter</span><span class="p">()</span>
+            <span class="n">sections</span> <span class="o">=</span> <span class="p">[]</span>
+
+            <span class="c1"># Persona</span>
+            <span class="k">if</span> <span class="n">RAG_ENABLE_PERSONA</span><span class="p">:</span>
+                <span class="n">persona_doc</span> <span class="o">=</span> <span class="n">rag_store</span><span class="o">.</span><span class="n">load_persona_block</span><span class="p">()</span>
+                <span class="k">if</span> <span class="n">persona_doc</span><span class="p">:</span>
+                    <span class="n">sections</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">persona_doc</span><span class="p">)</span>
+                    <span class="n">used_context</span><span class="p">[</span><span class="s1">&#39;persona&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;included&#39;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span> <span class="s1">&#39;length&#39;</span><span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="n">persona_doc</span><span class="p">)}</span>
+
+            <span class="c1"># Query embedding for retrieval</span>
+            <span class="n">t_rs</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">perf_counter</span><span class="p">()</span>
+            <span class="n">query_embed</span> <span class="o">=</span> <span class="kc">None</span>
+            <span class="k">if</span> <span class="n">RAG_ENABLE_FAQ</span> <span class="ow">or</span> <span class="n">RAG_ENABLE_MEMORY</span> <span class="ow">or</span> <span class="n">RAG_ENABLE_TURN</span><span class="p">:</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="n">r</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">post</span><span class="p">(</span>
+                        <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">OLLAMA_BASE_URL</span><span class="si">}</span><span class="s2">/api/embeddings&quot;</span><span class="p">,</span>
+                        <span class="n">json</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;model&quot;</span><span class="p">:</span> <span class="n">EMBED_MODEL</span><span class="p">,</span> <span class="s2">&quot;prompt&quot;</span><span class="p">:</span> <span class="n">prompt</span><span class="p">},</span>
+                        <span class="n">timeout</span><span class="o">=</span><span class="mi">10</span>
+                    <span class="p">)</span>
+                    <span class="n">r</span><span class="o">.</span><span class="n">raise_for_status</span><span class="p">()</span>
+                    <span class="n">query_embed</span> <span class="o">=</span> <span class="n">r</span><span class="o">.</span><span class="n">json</span><span class="p">()</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;embedding&#39;</span><span class="p">,</span> <span class="p">[])</span>
+                <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+                    <span class="k">pass</span>
+
+            <span class="c1"># FAQ, Memory, Turns, Summaries retrieval</span>
+            <span class="k">if</span> <span class="n">query_embed</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">RAG_ENABLE_FAQ</span><span class="p">:</span>
+                    <span class="n">faq_hits</span> <span class="o">=</span> <span class="n">rag_store</span><span class="o">.</span><span class="n">retrieve_faqs</span><span class="p">(</span><span class="n">query_embed</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="n">RAG_FAQ_TOP_K</span><span class="p">)</span>
+                    <span class="k">if</span> <span class="n">faq_hits</span><span class="p">:</span>
+                        <span class="n">used_context</span><span class="p">[</span><span class="s2">&quot;faqs&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">t</span> <span class="k">for</span> <span class="n">t</span><span class="p">,</span> <span class="n">_</span> <span class="ow">in</span> <span class="n">faq_hits</span><span class="p">]</span>
+                        <span class="n">sections</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;Knowledge base:</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;- </span><span class="si">{</span><span class="n">t</span><span class="si">}</span><span class="s2">&quot;</span> <span class="k">for</span> <span class="n">t</span><span class="p">,</span> <span class="n">_</span> <span class="ow">in</span> <span class="n">faq_hits</span><span class="p">))</span>
+
+                <span class="k">if</span> <span class="n">RAG_ENABLE_MEMORY</span><span class="p">:</span>
+                    <span class="n">mem_hits</span> <span class="o">=</span> <span class="n">rag_store</span><span class="o">.</span><span class="n">retrieve_memories_by_embedding</span><span class="p">(</span><span class="n">query_embed</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="n">RAG_MEMORY_TOP_K</span><span class="p">)</span>
+                    <span class="k">if</span> <span class="n">mem_hits</span><span class="p">:</span>
+                        <span class="n">used_context</span><span class="p">[</span><span class="s2">&quot;memories&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">t</span> <span class="k">for</span> <span class="n">t</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span> <span class="ow">in</span> <span class="n">mem_hits</span><span class="p">]</span>
+                        <span class="n">sections</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;Relevant context:</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;- </span><span class="si">{</span><span class="n">t</span><span class="si">}</span><span class="s2">&quot;</span> <span class="k">for</span> <span class="n">t</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span> <span class="ow">in</span> <span class="n">mem_hits</span><span class="p">))</span>
+
+                <span class="k">if</span> <span class="n">RAG_ENABLE_TURN</span><span class="p">:</span>
+                    <span class="n">turn_hits</span> <span class="o">=</span> <span class="n">rag_store</span><span class="o">.</span><span class="n">retrieve_turns_by_embedding</span><span class="p">(</span>
+                        <span class="n">query_embed</span><span class="p">,</span> <span class="n">conversation_id</span><span class="o">=</span><span class="n">conversation_id</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="n">RAG_TURN_TOP_K</span>
+                    <span class="p">)</span>
+                    <span class="k">if</span> <span class="n">turn_hits</span><span class="p">:</span>
+                        <span class="n">used_context</span><span class="p">[</span><span class="s2">&quot;turns&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">t</span> <span class="k">for</span> <span class="n">t</span><span class="p">,</span> <span class="n">_</span> <span class="ow">in</span> <span class="n">turn_hits</span><span class="p">]</span>
+                        <span class="n">sections</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;Past exchanges:</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;- </span><span class="si">{</span><span class="n">t</span><span class="si">}</span><span class="s2">&quot;</span> <span class="k">for</span> <span class="n">t</span><span class="p">,</span> <span class="n">_</span> <span class="ow">in</span> <span class="n">turn_hits</span><span class="p">))</span>
+
+                <span class="k">if</span> <span class="n">RAG_ENABLE_SUMMARY</span><span class="p">:</span>
+                    <span class="n">sum_hits</span> <span class="o">=</span> <span class="n">rag_store</span><span class="o">.</span><span class="n">retrieve_summaries_by_embedding</span><span class="p">(</span>
+                        <span class="n">query_embed</span><span class="p">,</span> <span class="n">conversation_id</span><span class="o">=</span><span class="n">conversation_id</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="n">RAG_SUMMARY_TOP_K</span>
+                    <span class="p">)</span>
+                    <span class="k">if</span> <span class="n">sum_hits</span><span class="p">:</span>
+                        <span class="n">used_context</span><span class="p">[</span><span class="s2">&quot;summaries&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">t</span> <span class="k">for</span> <span class="n">t</span><span class="p">,</span> <span class="n">_</span> <span class="ow">in</span> <span class="n">sum_hits</span><span class="p">]</span>
+                        <span class="n">sections</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;Conversation summaries:</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;- </span><span class="si">{</span><span class="n">t</span><span class="si">}</span><span class="s2">&quot;</span> <span class="k">for</span> <span class="n">t</span><span class="p">,</span> <span class="n">_</span> <span class="ow">in</span> <span class="n">sum_hits</span><span class="p">))</span>
+
+            <span class="n">instructions</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="s2">&quot;You are a helpful assistant. Follow the persona and policies above. Use the reference snippets and &quot;</span>
+                <span class="s2">&quot;conversation memory when relevant. If the user asks about times or durations, use the provided &quot;</span>
+                <span class="s2">&quot;UTC ISO timestamps to compute precise differences and express them in human-friendly units.&quot;</span>
+            <span class="p">)</span>
+            <span class="n">current_ts_line</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;Current user message timestamp (UTC): </span><span class="si">{</span><span class="n">user_timestamp</span><span class="si">}</span><span class="s2">&quot;</span>
+            <span class="n">assembled</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">instructions</span><span class="si">}</span><span class="se">\n\n</span><span class="s2">&quot;</span> <span class="o">+</span> <span class="p">(</span><span class="s2">&quot;</span><span class="se">\n\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">sections</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n\n</span><span class="s2">&quot;</span> <span class="k">if</span> <span class="n">sections</span> <span class="k">else</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+            <span class="n">final_prompt</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">assembled</span><span class="si">}</span><span class="s2">&quot;</span>
+                <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">current_ts_line</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span>
+                <span class="sa">f</span><span class="s2">&quot;User: </span><span class="si">{</span><span class="n">prompt</span><span class="si">}</span><span class="se">\n</span><span class="s2">Assistant:&quot;</span>
+            <span class="p">)</span>
+            <span class="n">t_retrieve</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">perf_counter</span><span class="p">()</span> <span class="o">-</span> <span class="n">t0</span>
+            <span class="n">t_assemble</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">perf_counter</span><span class="p">()</span> <span class="o">-</span> <span class="n">t_rs</span>
+        <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+            <span class="k">pass</span>
+
+    <span class="c1"># Generator function for SSE streaming</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">generate</span><span class="p">():</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">payload</span> <span class="o">=</span> <span class="p">{</span>
+                <span class="s1">&#39;model&#39;</span><span class="p">:</span> <span class="n">OLLAMA_MODEL</span><span class="p">,</span>
+                <span class="s1">&#39;prompt&#39;</span><span class="p">:</span> <span class="n">final_prompt</span><span class="p">,</span>
+                <span class="s1">&#39;stream&#39;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+                <span class="s1">&#39;think&#39;</span><span class="p">:</span> <span class="n">include_thinking</span><span class="p">,</span>
+            <span class="p">}</span>
+
+            <span class="c1"># Stream from Ollama</span>
+            <span class="n">accumulated_text</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+            <span class="n">accumulated_thinking</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+            
+            <span class="k">with</span> <span class="n">requests</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="n">OLLAMA_API_URL</span><span class="p">,</span> <span class="n">json</span><span class="o">=</span><span class="n">payload</span><span class="p">,</span> <span class="n">stream</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span> <span class="k">as</span> <span class="n">response</span><span class="p">:</span>
+                <span class="n">response</span><span class="o">.</span><span class="n">raise_for_status</span><span class="p">()</span>
+                
+                <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">response</span><span class="o">.</span><span class="n">iter_lines</span><span class="p">():</span>
+                    <span class="k">if</span> <span class="n">line</span><span class="p">:</span>
+                        <span class="n">chunk</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>
+                        
+                        <span class="c1"># Send response tokens</span>
+                        <span class="k">if</span> <span class="s1">&#39;response&#39;</span> <span class="ow">in</span> <span class="n">chunk</span> <span class="ow">and</span> <span class="n">chunk</span><span class="p">[</span><span class="s1">&#39;response&#39;</span><span class="p">]:</span>
+                            <span class="n">token</span> <span class="o">=</span> <span class="n">chunk</span><span class="p">[</span><span class="s1">&#39;response&#39;</span><span class="p">]</span>
+                            <span class="n">accumulated_text</span> <span class="o">+=</span> <span class="n">token</span>
+                            <span class="k">yield</span> <span class="sa">f</span><span class="s2">&quot;data: </span><span class="si">{</span><span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">({</span><span class="s1">&#39;type&#39;</span><span class="p">:</span><span class="w"> </span><span class="s1">&#39;token&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;content&#39;</span><span class="p">:</span><span class="w"> </span><span class="n">token</span><span class="p">})</span><span class="si">}</span><span class="se">\n\n</span><span class="s2">&quot;</span>
+                        
+                        <span class="c1"># Send thinking tokens if enabled</span>
+                        <span class="k">if</span> <span class="n">include_thinking</span> <span class="ow">and</span> <span class="s1">&#39;thinking&#39;</span> <span class="ow">in</span> <span class="n">chunk</span> <span class="ow">and</span> <span class="n">chunk</span><span class="p">[</span><span class="s1">&#39;thinking&#39;</span><span class="p">]:</span>
+                            <span class="n">thinking_token</span> <span class="o">=</span> <span class="n">chunk</span><span class="p">[</span><span class="s1">&#39;thinking&#39;</span><span class="p">]</span>
+                            <span class="n">accumulated_thinking</span> <span class="o">+=</span> <span class="n">thinking_token</span>
+                            <span class="k">yield</span> <span class="sa">f</span><span class="s2">&quot;data: </span><span class="si">{</span><span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">({</span><span class="s1">&#39;type&#39;</span><span class="p">:</span><span class="w"> </span><span class="s1">&#39;thinking&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;content&#39;</span><span class="p">:</span><span class="w"> </span><span class="n">thinking_token</span><span class="p">})</span><span class="si">}</span><span class="se">\n\n</span><span class="s2">&quot;</span>
+                        
+                        <span class="c1"># Check if stream is done</span>
+                        <span class="k">if</span> <span class="n">chunk</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;done&#39;</span><span class="p">,</span> <span class="kc">False</span><span class="p">):</span>
+                            <span class="n">assistant_timestamp</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">(</span><span class="n">datetime</span><span class="o">.</span><span class="n">timezone</span><span class="o">.</span><span class="n">utc</span><span class="p">)</span><span class="o">.</span><span class="n">isoformat</span><span class="p">()</span>
+                            
+                            <span class="c1"># Upsert turn after generation completes</span>
+                            <span class="k">if</span> <span class="n">rag_store</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">prompt</span> <span class="ow">and</span> <span class="n">accumulated_text</span><span class="p">:</span>
+                                <span class="k">try</span><span class="p">:</span>
+                                    <span class="n">cid</span> <span class="o">=</span> <span class="n">rag_store</span><span class="o">.</span><span class="n">upsert_turn</span><span class="p">(</span>
+                                        <span class="n">conversation_id</span><span class="p">,</span>
+                                        <span class="n">user_text</span><span class="o">=</span><span class="n">prompt</span><span class="p">,</span>
+                                        <span class="n">assistant_text</span><span class="o">=</span><span class="n">accumulated_text</span><span class="p">,</span>
+                                        <span class="n">user_ts</span><span class="o">=</span><span class="n">user_timestamp</span><span class="p">,</span>
+                                        <span class="n">assistant_ts</span><span class="o">=</span><span class="n">assistant_timestamp</span><span class="p">,</span>
+                                        <span class="n">source</span><span class="o">=</span><span class="s2">&quot;chat&quot;</span><span class="p">,</span>
+                                    <span class="p">)</span>
+                                <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+                                    <span class="k">if</span> <span class="n">RAG_DEBUG</span><span class="p">:</span>
+                                        <span class="kn">import</span><span class="w"> </span><span class="nn">traceback</span>
+                                        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;[BRAIN][RAG][upsert][</span><span class="si">{</span><span class="n">req_id</span><span class="si">}</span><span class="s2">] failed:</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">+</span> <span class="n">traceback</span><span class="o">.</span><span class="n">format_exc</span><span class="p">())</span>
+
+                            <span class="c1"># Consent-based memory save</span>
+                            <span class="k">if</span> <span class="n">rag_store</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">save_memory</span><span class="p">:</span>
+                                <span class="k">try</span><span class="p">:</span>
+                                    <span class="n">mem_text</span> <span class="o">=</span> <span class="n">memory_text</span> <span class="ow">or</span> <span class="n">accumulated_text</span>
+                                    <span class="k">if</span> <span class="n">mem_text</span> <span class="ow">and</span> <span class="n">mem_text</span><span class="o">.</span><span class="n">strip</span><span class="p">():</span>
+                                        <span class="n">rag_store</span><span class="o">.</span><span class="n">upsert_memory</span><span class="p">(</span>
+                                            <span class="n">mem_text</span><span class="o">.</span><span class="n">strip</span><span class="p">(),</span>
+                                            <span class="n">scope</span><span class="o">=</span><span class="s2">&quot;global&quot;</span><span class="p">,</span>
+                                            <span class="n">importance</span><span class="o">=</span><span class="nb">int</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;memory_importance&#39;</span><span class="p">,</span> <span class="mi">3</span><span class="p">))</span>
+                                        <span class="p">)</span>
+                                <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+                                    <span class="k">if</span> <span class="n">RAG_DEBUG</span><span class="p">:</span>
+                                        <span class="kn">import</span><span class="w"> </span><span class="nn">traceback</span>
+                                        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;[BRAIN][RAG][memory-upsert] failed:</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">+</span> <span class="n">traceback</span><span class="o">.</span><span class="n">format_exc</span><span class="p">())</span>
+
+                            <span class="c1"># Send completion metadata</span>
+                            <span class="n">metadata</span> <span class="o">=</span> <span class="p">{</span>
+                                <span class="s1">&#39;type&#39;</span><span class="p">:</span> <span class="s1">&#39;done&#39;</span><span class="p">,</span>
+                                <span class="s1">&#39;conversation_id&#39;</span><span class="p">:</span> <span class="n">conversation_id</span><span class="p">,</span>
+                                <span class="s1">&#39;used_context&#39;</span><span class="p">:</span> <span class="n">used_context</span><span class="p">,</span>
+                                <span class="s1">&#39;user_timestamp&#39;</span><span class="p">:</span> <span class="n">user_timestamp</span><span class="p">,</span>
+                                <span class="s1">&#39;assistant_timestamp&#39;</span><span class="p">:</span> <span class="n">assistant_timestamp</span><span class="p">,</span>
+                                <span class="s1">&#39;request_id&#39;</span><span class="p">:</span> <span class="n">req_id</span><span class="p">,</span>
+                            <span class="p">}</span>
+                            <span class="k">yield</span> <span class="sa">f</span><span class="s2">&quot;data: </span><span class="si">{</span><span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">metadata</span><span class="p">)</span><span class="si">}</span><span class="se">\n\n</span><span class="s2">&quot;</span>
+                            <span class="k">break</span>
+
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="n">error_data</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;type&#39;</span><span class="p">:</span> <span class="s1">&#39;error&#39;</span><span class="p">,</span> <span class="s1">&#39;error&#39;</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)}</span>
+            <span class="k">yield</span> <span class="sa">f</span><span class="s2">&quot;data: </span><span class="si">{</span><span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">error_data</span><span class="p">)</span><span class="si">}</span><span class="se">\n\n</span><span class="s2">&quot;</span>
+
+    <span class="k">return</span> <span class="n">Response</span><span class="p">(</span><span class="n">stream_with_context</span><span class="p">(</span><span class="n">generate</span><span class="p">()),</span> <span class="n">mimetype</span><span class="o">=</span><span class="s1">&#39;text/event-stream&#39;</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="list_memory">
+<a class="viewcode-back" href="../../api_reference.html#brain.app.list_memory">[docs]</a>
+<span class="nd">@app</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="s1">&#39;/v1/memory&#39;</span><span class="p">,</span> <span class="n">methods</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;GET&#39;</span><span class="p">])</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">list_memory</span><span class="p">():</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Retrieve long-term memories with optional semantic search.</span>
+
+<span class="sd">    - **Method:** GET</span>
+<span class="sd">    - **Path:** /v1/memory</span>
+<span class="sd">    - **Query params:**</span>
+<span class="sd">      - search (optional): semantic query; if omitted returns empty list</span>
+<span class="sd">      - scope (optional): memory scope (e.g., ``global``, ``user:123``)</span>
+<span class="sd">      - entity (optional): entity/topic scope</span>
+<span class="sd">      - limit (optional): max results (default 20, capped at 20)</span>
+
+<span class="sd">    Responses:</span>
+<span class="sd">    - 200: ``{&quot;items&quot;: [...]}``</span>
+<span class="sd">    - 200: empty items if RAG disabled</span>
+<span class="sd">    - 500: retrieval error</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">rag_store</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">jsonify</span><span class="p">({</span><span class="s1">&#39;items&#39;</span><span class="p">:</span> <span class="p">[]})</span>
+    <span class="n">q</span> <span class="o">=</span> <span class="p">(</span><span class="n">request</span><span class="o">.</span><span class="n">args</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;search&#39;</span><span class="p">)</span> <span class="ow">or</span> <span class="s1">&#39;&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+    <span class="n">scope</span> <span class="o">=</span> <span class="p">(</span><span class="n">request</span><span class="o">.</span><span class="n">args</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;scope&#39;</span><span class="p">)</span> <span class="ow">or</span> <span class="s1">&#39;&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+    <span class="n">entity</span> <span class="o">=</span> <span class="p">(</span><span class="n">request</span><span class="o">.</span><span class="n">args</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;entity&#39;</span><span class="p">)</span> <span class="ow">or</span> <span class="s1">&#39;&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">limit</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">request</span><span class="o">.</span><span class="n">args</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;limit&#39;</span><span class="p">,</span> <span class="s1">&#39;20&#39;</span><span class="p">))</span>
+    <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+        <span class="n">limit</span> <span class="o">=</span> <span class="mi">20</span>
+    <span class="n">items</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">q</span><span class="p">:</span>
+            <span class="n">hits</span> <span class="o">=</span> <span class="n">rag_store</span><span class="o">.</span><span class="n">retrieve_memories</span><span class="p">(</span><span class="n">query</span><span class="o">=</span><span class="n">q</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="nb">min</span><span class="p">(</span><span class="n">limit</span><span class="p">,</span> <span class="mi">20</span><span class="p">),</span> <span class="n">entity</span><span class="o">=</span><span class="p">(</span><span class="n">entity</span> <span class="ow">or</span> <span class="kc">None</span><span class="p">))</span>
+            <span class="k">for</span> <span class="n">text</span><span class="p">,</span> <span class="n">meta</span> <span class="ow">in</span> <span class="n">hits</span><span class="p">:</span>
+                <span class="n">items</span><span class="o">.</span><span class="n">append</span><span class="p">({</span><span class="s1">&#39;id&#39;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span> <span class="s1">&#39;text&#39;</span><span class="p">:</span> <span class="n">text</span><span class="p">,</span> <span class="s1">&#39;meta&#39;</span><span class="p">:</span> <span class="n">meta</span><span class="p">})</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">rows</span> <span class="o">=</span> <span class="n">rag_store</span><span class="o">.</span><span class="n">list_memories</span><span class="p">(</span><span class="n">limit</span><span class="o">=</span><span class="n">limit</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">mid</span><span class="p">,</span> <span class="n">text</span><span class="p">,</span> <span class="n">meta</span> <span class="ow">in</span> <span class="n">rows</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">scope</span> <span class="ow">and</span> <span class="p">(</span><span class="n">meta</span> <span class="ow">or</span> <span class="p">{})</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;scope&#39;</span><span class="p">)</span> <span class="o">!=</span> <span class="n">scope</span><span class="p">:</span>
+                    <span class="k">continue</span>
+                <span class="k">if</span> <span class="n">entity</span> <span class="ow">and</span> <span class="p">(</span><span class="n">meta</span> <span class="ow">or</span> <span class="p">{})</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;scope&#39;</span><span class="p">)</span> <span class="o">!=</span> <span class="sa">f</span><span class="s2">&quot;entity:</span><span class="si">{</span><span class="n">entity</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">:</span>
+                    <span class="k">continue</span>
+                <span class="n">items</span><span class="o">.</span><span class="n">append</span><span class="p">({</span><span class="s1">&#39;id&#39;</span><span class="p">:</span> <span class="n">mid</span><span class="p">,</span> <span class="s1">&#39;text&#39;</span><span class="p">:</span> <span class="n">text</span><span class="p">,</span> <span class="s1">&#39;meta&#39;</span><span class="p">:</span> <span class="n">meta</span><span class="p">})</span>
+    <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">err</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">jsonify</span><span class="p">({</span><span class="s1">&#39;error&#39;</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">err</span><span class="p">)}),</span> <span class="mi">500</span>
+    <span class="k">return</span> <span class="n">jsonify</span><span class="p">({</span><span class="s1">&#39;items&#39;</span><span class="p">:</span> <span class="n">items</span><span class="p">})</span></div>
+
+
+
+<div class="viewcode-block" id="create_memory">
+<a class="viewcode-back" href="../../api_reference.html#brain.app.create_memory">[docs]</a>
+<span class="nd">@app</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="s1">&#39;/v1/memory&#39;</span><span class="p">,</span> <span class="n">methods</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;POST&#39;</span><span class="p">])</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">create_memory</span><span class="p">():</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Create a new long-term memory entry.</span>
+
+<span class="sd">    - **Method:** POST</span>
+<span class="sd">    - **Path:** /v1/memory</span>
+<span class="sd">    - **Request JSON:** text (required), importance (1-5, default 3),</span>
+<span class="sd">      scope (default ``global``), entity (optional)</span>
+
+<span class="sd">    Responses:</span>
+<span class="sd">    - 201: memory created (id returned)</span>
+<span class="sd">    - 400: text missing</span>
+<span class="sd">    - 503: RAG unavailable</span>
+<span class="sd">    - 500: storage error</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">rag_store</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">jsonify</span><span class="p">({</span><span class="s1">&#39;error&#39;</span><span class="p">:</span> <span class="s1">&#39;RAG not available&#39;</span><span class="p">}),</span> <span class="mi">503</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">json</span> <span class="ow">or</span> <span class="p">{}</span>
+    <span class="n">text</span> <span class="o">=</span> <span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;text&#39;</span><span class="p">)</span> <span class="ow">or</span> <span class="s1">&#39;&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">text</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">jsonify</span><span class="p">({</span><span class="s1">&#39;error&#39;</span><span class="p">:</span> <span class="s1">&#39;text is required&#39;</span><span class="p">}),</span> <span class="mi">400</span>
+    <span class="n">scope</span> <span class="o">=</span> <span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;scope&#39;</span><span class="p">)</span> <span class="ow">or</span> <span class="s1">&#39;global&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span> <span class="ow">or</span> <span class="s1">&#39;global&#39;</span>
+    <span class="n">entity</span> <span class="o">=</span> <span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;entity&#39;</span><span class="p">)</span> <span class="ow">or</span> <span class="s1">&#39;&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+    <span class="k">if</span> <span class="n">entity</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">scope</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s1">&#39;entity:&#39;</span><span class="p">):</span>
+        <span class="n">scope</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;entity:</span><span class="si">{</span><span class="n">entity</span><span class="si">}</span><span class="s1">&#39;</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">importance</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;importance&#39;</span><span class="p">,</span> <span class="mi">3</span><span class="p">))</span>
+    <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+        <span class="n">importance</span> <span class="o">=</span> <span class="mi">3</span>
+    <span class="n">tags</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;tags&#39;</span><span class="p">)</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;tags&#39;</span><span class="p">),</span> <span class="nb">list</span><span class="p">)</span> <span class="k">else</span> <span class="kc">None</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">mem_id</span> <span class="o">=</span> <span class="n">rag_store</span><span class="o">.</span><span class="n">upsert_memory</span><span class="p">(</span><span class="n">text</span><span class="p">,</span> <span class="n">scope</span><span class="o">=</span><span class="n">scope</span><span class="p">,</span> <span class="n">importance</span><span class="o">=</span><span class="n">importance</span><span class="p">,</span> <span class="n">tags</span><span class="o">=</span><span class="n">tags</span><span class="p">,</span> <span class="n">source</span><span class="o">=</span><span class="s1">&#39;chat&#39;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">jsonify</span><span class="p">({</span><span class="s1">&#39;id&#39;</span><span class="p">:</span> <span class="n">mem_id</span><span class="p">})</span>
+    <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">err</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">jsonify</span><span class="p">({</span><span class="s1">&#39;error&#39;</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">err</span><span class="p">)}),</span> <span class="mi">500</span></div>
+
+
+
+<div class="viewcode-block" id="delete_memory">
+<a class="viewcode-back" href="../../api_reference.html#brain.app.delete_memory">[docs]</a>
+<span class="nd">@app</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="s1">&#39;/v1/memory/&lt;mem_id&gt;&#39;</span><span class="p">,</span> <span class="n">methods</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;DELETE&#39;</span><span class="p">])</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">delete_memory</span><span class="p">(</span><span class="n">mem_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Delete a long-term memory entry by ID.</span>
+
+<span class="sd">    - **Method:** DELETE</span>
+<span class="sd">    - **Path:** /v1/memory/&lt;mem_id&gt;</span>
+
+<span class="sd">    Responses:</span>
+<span class="sd">    - 200: deleted</span>
+<span class="sd">    - 503: RAG unavailable</span>
+<span class="sd">    - 500: delete error (e.g., missing id)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">rag_store</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">jsonify</span><span class="p">({</span><span class="s1">&#39;error&#39;</span><span class="p">:</span> <span class="s1">&#39;RAG not available&#39;</span><span class="p">}),</span> <span class="mi">503</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">rag_store</span><span class="o">.</span><span class="n">delete_memory</span><span class="p">(</span><span class="n">mem_id</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">jsonify</span><span class="p">({</span><span class="s1">&#39;ok&#39;</span><span class="p">:</span> <span class="kc">True</span><span class="p">})</span>
+    <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">err</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">jsonify</span><span class="p">({</span><span class="s1">&#39;error&#39;</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">err</span><span class="p">)}),</span> <span class="mi">500</span></div>
+
+
+
+<div class="viewcode-block" id="rag_debug">
+<a class="viewcode-back" href="../../api_reference.html#brain.app.rag_debug">[docs]</a>
+<span class="nd">@app</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="s1">&#39;/v1/debug/rag&#39;</span><span class="p">,</span> <span class="n">methods</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;GET&#39;</span><span class="p">])</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">rag_debug</span><span class="p">():</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Debug information for the RAG system (development only).</span>
+
+<span class="sd">    - **Method:** GET</span>
+<span class="sd">    - **Path:** /v1/debug/rag</span>
+<span class="sd">    - **Query params:** conversation_id (optional)</span>
+
+<span class="sd">    Responses:</span>
+<span class="sd">    - 200: RAG stats (persona_count, faq_count, memory_count, summary_count, optional turn_count_for_conversation)</span>
+<span class="sd">    - 404: debug disabled (RAG_DEBUG!=true or RAG unavailable)</span>
+<span class="sd">    - 500: error retrieving stats</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">RAG_DEBUG</span> <span class="ow">or</span> <span class="n">rag_store</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">jsonify</span><span class="p">({</span><span class="s1">&#39;error&#39;</span><span class="p">:</span> <span class="s1">&#39;debug disabled&#39;</span><span class="p">}),</span> <span class="mi">404</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">cid</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">args</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;conversation_id&#39;</span><span class="p">)</span>
+        <span class="n">info</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;conversation_id&#39;</span><span class="p">:</span> <span class="n">cid</span><span class="p">}</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">got_p</span> <span class="o">=</span> <span class="n">rag_store</span><span class="o">.</span><span class="n">col</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">where</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;persona&quot;</span><span class="p">})</span>
+            <span class="n">info</span><span class="p">[</span><span class="s1">&#39;persona_count&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">got_p</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;documents&#39;</span><span class="p">,</span> <span class="p">[]))</span>
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="n">info</span><span class="p">[</span><span class="s1">&#39;persona_error&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
+        <span class="c1"># turn docs</span>
+        <span class="n">where_t</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;$and&quot;</span><span class="p">:</span> <span class="p">[{</span><span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;turn&quot;</span><span class="p">}]}</span>
+        <span class="k">if</span> <span class="n">cid</span><span class="p">:</span>
+            <span class="n">where_t</span><span class="p">[</span><span class="s2">&quot;$and&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">({</span><span class="s2">&quot;conversation_id&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;$eq&quot;</span><span class="p">:</span> <span class="n">cid</span><span class="p">}})</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">got_t</span> <span class="o">=</span> <span class="n">rag_store</span><span class="o">.</span><span class="n">col</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">where</span><span class="o">=</span><span class="n">where_t</span><span class="p">)</span>
+            <span class="n">docs_t</span> <span class="o">=</span> <span class="n">got_t</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;documents&#39;</span><span class="p">,</span> <span class="p">[])</span>
+            <span class="n">metas_t</span> <span class="o">=</span> <span class="n">got_t</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;metadatas&#39;</span><span class="p">,</span> <span class="p">[])</span>
+            <span class="n">info</span><span class="p">[</span><span class="s1">&#39;turn_count&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">docs_t</span><span class="p">)</span>
+            <span class="n">sample</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">min</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">metas_t</span><span class="p">))):</span>
+                <span class="n">m</span> <span class="o">=</span> <span class="n">metas_t</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="ow">or</span> <span class="p">{}</span>
+                <span class="n">sample</span><span class="o">.</span><span class="n">append</span><span class="p">({</span>
+                    <span class="s1">&#39;role&#39;</span><span class="p">:</span> <span class="n">m</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;role&#39;</span><span class="p">),</span>
+                    <span class="s1">&#39;timestamp&#39;</span><span class="p">:</span> <span class="n">m</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;timestamp&#39;</span><span class="p">),</span>
+                    <span class="s1">&#39;conversation_id&#39;</span><span class="p">:</span> <span class="n">m</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;conversation_id&#39;</span><span class="p">),</span>
+                    <span class="s1">&#39;source&#39;</span><span class="p">:</span> <span class="n">m</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;source&#39;</span><span class="p">),</span>
+                <span class="p">})</span>
+            <span class="n">info</span><span class="p">[</span><span class="s1">&#39;turn_sample&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">sample</span>
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="n">info</span><span class="p">[</span><span class="s1">&#39;turns_error&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">jsonify</span><span class="p">(</span><span class="n">info</span><span class="p">)</span>
+    <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">jsonify</span><span class="p">({</span><span class="s1">&#39;error&#39;</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)}),</span> <span class="mi">500</span></div>
+
+
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+    <span class="n">app</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">host</span><span class="o">=</span><span class="s1">&#39;0.0.0.0&#39;</span><span class="p">,</span> <span class="n">port</span><span class="o">=</span><span class="mi">7000</span><span class="p">)</span>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025, Luna Team.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
