@@ -361,7 +361,7 @@ form.addEventListener('submit', async (e) => {
   setBusy(true);
 
   try {
-    const res = await fetch('/api/chat', {
+    const res = await fetch('/api/chat/stream', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
@@ -375,26 +375,145 @@ form.addEventListener('submit', async (e) => {
       })
     });
 
-    const data = await res.json();
     if (!res.ok) {
-      throw new Error(data.error || `Request failed: ${res.status}`);
+      throw new Error(`Request failed: ${res.status}`);
     }
 
-    // Update local conversation id if backend generated one
-    if (data.conversation_id && data.conversation_id !== conversationId) {
-      conversationId = data.conversation_id;
-      localStorage.setItem('conversation_id', conversationId);
+    // Hide the thinking spinner - we'll create the proper message structure
+    hideThinking();
+
+    // Create proper message structure with avatar and bubble
+    const wrap = document.createElement('div');
+    wrap.className = 'msg bot';
+
+    const avatar = document.createElement('div');
+    avatar.className = 'avatar';
+    avatar.textContent = '🤖';
+
+    const stack = document.createElement('div');
+    stack.className = 'stack';
+
+    // Add spinner below where the message will appear
+    const spinner = document.createElement('div');
+    spinner.className = 'spinner';
+    spinner.setAttribute('aria-hidden', 'true');
+    spinner.title = 'Generating...';
+    stack.appendChild(spinner);
+
+    wrap.appendChild(avatar);
+    wrap.appendChild(stack);
+    messagesEl.appendChild(wrap);
+    messagesEl.scrollTop = messagesEl.scrollHeight;
+
+    // Create separate elements for thinking and answer
+    let thinkDetailsEl = null;
+    let thinkContentEl = null;
+    let answerBubbleEl = null;
+    let spinnerRef = spinner; // Keep reference to remove it
+
+    let accumulatedText = '';
+    let accumulatedThinking = '';
+
+    // Process SSE stream
+    const reader = res.body.getReader();
+    const decoder = new TextDecoder();
+    let buffer = '';
+
+    while (true) {
+      const { done, value } = await reader.read();
+      if (done) break;
+
+      buffer += decoder.decode(value, { stream: true });
+      const lines = buffer.split('\n');
+      buffer = lines.pop(); // Keep the last incomplete line in buffer
+
+      for (const line of lines) {
+        if (line.startsWith('data: ')) {
+          const dataStr = line.slice(6);
+          try {
+            const data = JSON.parse(dataStr);
+
+            if (data.type === 'token') {
+              // Remove spinner on first token
+              if (spinnerRef && spinnerRef.parentNode) {
+                spinnerRef.remove();
+                spinnerRef = null;
+              }
+
+              // Create answer bubble if not exists
+              if (!answerBubbleEl) {
+                answerBubbleEl = document.createElement('div');
+                answerBubbleEl.className = 'bubble answer';
+                stack.appendChild(answerBubbleEl);
+              }
+
+              accumulatedText += data.content;
+              renderMarkdownToElement(answerBubbleEl, accumulatedText, { allowBlocks: true });
+              messagesEl.scrollTop = messagesEl.scrollHeight;
+            } else if (data.type === 'thinking' && includeThinkingEl.checked) {
+              // Remove spinner on first thinking token
+              if (spinnerRef && spinnerRef.parentNode) {
+                spinnerRef.remove();
+                spinnerRef = null;
+              }
+
+              // Create thinking details if not exists
+              if (!thinkDetailsEl) {
+                thinkDetailsEl = document.createElement('details');
+                thinkDetailsEl.className = 'bubble think';
+                thinkDetailsEl.open = true; // Expand by default
+
+                const summary = document.createElement('summary');
+                summary.textContent = 'Thinking';
+                thinkDetailsEl.appendChild(summary);
+
+                thinkContentEl = document.createElement('div');
+                thinkContentEl.className = 'think-content';
+                thinkDetailsEl.appendChild(thinkContentEl);
+
+                // Insert thinking before answer bubble (or at start of stack)
+                if (answerBubbleEl) {
+                  stack.insertBefore(thinkDetailsEl, answerBubbleEl);
+                } else {
+                  stack.appendChild(thinkDetailsEl);
+                }
+              }
+
+              accumulatedThinking += data.content;
+              renderMarkdownToElement(thinkContentEl, accumulatedThinking, { allowBlocks: true });
+              messagesEl.scrollTop = messagesEl.scrollHeight;
+            } else if (data.type === 'done') {
+              // Update conversation ID if backend generated one
+              if (data.conversation_id && data.conversation_id !== conversationId) {
+                conversationId = data.conversation_id;
+                localStorage.setItem('conversation_id', conversationId);
+              }
+              // Store the accumulated text for potential memory save
+              lastAssistantText = accumulatedText;
+            } else if (data.type === 'error') {
+              throw new Error(data.error || 'Stream error');
+            }
+          } catch (e) {
+            console.error('Error parsing SSE data:', e);
+          }
+        }
+      }
     }
 
-    // If the API returns a separate 'thinking' field and the toggle is ON,
-    // prepend it wrapped in <think>...</think> so existing rendering logic
-    // shows a muted thinking bubble followed by the answer.
-    let displayText = data.response || '';
-    if (includeThinkingEl.checked && data.thinking) {
-      displayText = `<think>${data.thinking}</think>` + (data.response || '');
+    // Final render to ensure everything is displayed
+    if (thinkContentEl && accumulatedThinking) {
+      renderMarkdownToElement(thinkContentEl, accumulatedThinking, { allowBlocks: true });
+    }
+    if (answerBubbleEl && accumulatedText) {
+      renderMarkdownToElement(answerBubbleEl, accumulatedText, { allowBlocks: true });
+    }
+    messagesEl.scrollTop = messagesEl.scrollHeight;
+
+    // Remove spinner if still present (in case no tokens arrived)
+    if (spinnerRef && spinnerRef.parentNode) {
+      spinnerRef.remove();
     }
 
-    replaceThinkingWithBot(displayText);
   } catch (err) {
     console.error(err);
     replaceThinkingWithBot(`Error: ${err.message}`);
