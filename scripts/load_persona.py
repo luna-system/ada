@@ -3,7 +3,7 @@
 Load a persona prompt into Chroma as a typed document.
 
 Usage examples:
-  uv run python scripts/load_persona.py --file prompt.md --version 2025-12-12
+  uv run python scripts/load_persona.py --file persona.md --version 2025-12-12
   uv run python scripts/load_persona.py --text "Be concise and friendly." --version v1
 
 Environment (used by RagStore):

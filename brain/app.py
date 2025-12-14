@@ -57,7 +57,7 @@ if RAG_ENABLED:
         try:
             # Persona
             if os.getenv("RAG_AUTOLOAD_PERSONA", "true").lower() == "true":
-                persona_path = os.getenv("RAG_PERSONA_PATH", "/app/prompt.md")
+                persona_path = os.getenv("RAG_PERSONA_PATH", "/app/persona.md")
                 p = Path(persona_path)
                 if p.exists() and p.is_file():
                     try:
