@@ -1,6 +1,4 @@
 ---
-// Client app script is bundled via inline module import
-
 const { title = 'ADA Chat' } = Astro.props;
 ---
 <!DOCTYPE html>
@@ -9,7 +7,6 @@ const { title = 'ADA Chat' } = Astro.props;
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{title}</title>
-    <link rel="stylesheet" href="/style.css" />
     <link rel="stylesheet" href="/lib/github-dark.min.css" />
   </head>
   <body>

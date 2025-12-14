@@ -19,7 +19,6 @@ services:
 
   chroma:
     image: chromadb/chroma:latest
-    container_name: chroma
     restart: unless-stopped
     environment:
       - CHROMA_SERVER_HOST=0.0.0.0
@@ -27,7 +26,7 @@ services:
       - CHROMA_DB_IMPL=duckdb+parquet
       - ANONYMIZED_TELEMETRY=False
     volumes:
-      - chroma-data:/chroma
+      - ./data/chroma:/chroma
     healthcheck:
       test: ["CMD-SHELL", "python -c \"import urllib.request,sys;u='http://localhost:8000/api/v2/heartbeat';\ntry:\n r=urllib.request.urlopen(u,timeout=3); sys.exit(0 if r.status==200 else 1)\nexcept Exception:\n sys.exit(1)\"" ]
       interval: 10s
@@ -138,6 +137,3 @@ services:
         wait $pid2
         printf '[ollama-init] %s model pulls complete.
         ' "$(date -u +%FT%TZ)"
-
-volumes:
-  chroma-data:
