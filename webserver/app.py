@@ -40,6 +40,15 @@ def prompt_debug():
         return jsonify({'error': str(e)}), 500
 
 
+@app.route('/api/media/listenbrainz', methods=['GET'])
+def media_listenbrainz():
+    try:
+        r = requests.get(f"{BRAIN_URL}/v1/media/listenbrainz", timeout=10)
+        return (r.text, r.status_code, {"Content-Type": r.headers.get("Content-Type", "application/json")})
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+
 @app.route('/api/health', methods=['GET'])
 def health_proxy():
     """Proxy the brain service health endpoint for same-origin access from the UI."""
