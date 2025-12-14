@@ -20,6 +20,9 @@
   let prompt = '';
   let includeThinking = false;
   let showEntityInput = false;
+  let shareListenBrainz = false;
+  let listenBrainzPreview: any = null;
+  let listenBrainzLoading = false;
   let entity = '';
   let panelOpen: 'none' | 'debug' | 'mem' | 'prompt' = 'none';
   let menuOpen = false;
@@ -94,6 +97,48 @@
       ['hljs', typeof (window as any).hljs !== 'undefined']
     ];
     clientLibs = libs.map(([n, ok]) => `${n}:${ok ? '✓' : '✕'}`).join(' ');
+  }
+
+  async function fetchListenBrainzNowPlaying() {
+    if (!shareListenBrainz) {
+      listenBrainzPreview = null;
+      listenBrainzLoading = false;
+      return null;
+    }
+    listenBrainzLoading = true;
+    try {
+      const res = await fetch('/api/media/listenbrainz', { cache: 'no-store' });
+      const data = await res.json();
+      if (!res.ok || data.error) {
+        listenBrainzPreview = null;
+        listenBrainzLoading = false;
+        return null;
+      }
+      listenBrainzPreview = data;
+      listenBrainzLoading = false;
+      return data;
+    } catch (e) {
+      listenBrainzPreview = null;
+      listenBrainzLoading = false;
+      return null;
+    }
+  }
+
+  // Re-fetch ListenBrainz data when toggle changes
+  $: if (shareListenBrainz) {
+    fetchListenBrainzNowPlaying();
+  } else {
+    listenBrainzPreview = null;
+    listenBrainzLoading = false;
+  }
+
+  function mediaSummary(data: any): string {
+    if (!data) return '';
+    const artist = data.artist || 'Unknown';
+    const track = data.track || 'Unknown';
+    const release = data.release ? ` • album: ${data.release}` : '';
+    const status = data.status ? ` • status: ${data.status}` : '';
+    return `${artist} — ${track}${release}${status}`;
   }
 
   function renderMarkdown(md: string, allowBlocks = true): string {
@@ -175,11 +220,13 @@
     let activeConversationId = convId;
 
     try {
+      const media = await fetchListenBrainzNowPlaying();
       await streamChat({
         prompt: userText,
         includeThinking,
         conversationId: activeConversationId,
         entity: entity || undefined,
+        media,
         onToken: (content) => {
           assistantText += content;
           updateMessage(answerId, { text: assistantText, thinking: thinkingText });
@@ -215,6 +262,7 @@
       const convId = ensureConversationId(uuid);
       if (convId) params.set('conversation_id', convId);
       if (entity.trim()) params.set('entity', entity.trim());
+      if (shareListenBrainz) params.set('share_listenbrainz', 'true');
       const lastUser = lastOfRole('user');
       if (lastUser?.text) params.set('prompt', lastUser.text);
       const res = await fetch(`/api/debug/prompt?${params.toString()}`);
@@ -337,6 +385,13 @@
           <span class="knob"></span>
         </span>
       </label>
+      <label class="toggle-control" title="Share ListenBrainz now playing/last track">
+        <span class="emoji">🎧</span>
+        <span class="switch">
+          <input type="checkbox" bind:checked={shareListenBrainz} />
+          <span class="knob"></span>
+        </span>
+      </label>
       <label class="toggle-control" title="Filter memory by entity">
         <span class="emoji">🏷️</span>
         <span class="switch">
@@ -346,6 +401,16 @@
       </label>
       {#if showEntityInput}
         <input class="entity-input" value={entity} on:input={(e) => onEntityChange((e.target as HTMLInputElement).value)} placeholder="entity/topic" />
+      {/if}
+      <div class="spacer"></div>
+      {#if shareListenBrainz && listenBrainzLoading}
+        <span class="media-pill loading" title="Loading now playing...">
+          🎧 <span class="load-dots"><span>.</span><span>.</span><span>.</span></span>
+        </span>
+      {:else if shareListenBrainz && listenBrainzPreview}
+        <span class="media-pill" title={mediaSummary(listenBrainzPreview)}>
+          🎧 {mediaSummary(listenBrainzPreview)}
+        </span>
       {/if}
     </div>
   </form>
@@ -556,10 +621,12 @@
   form#composer { display: grid; grid-template-columns: 1fr auto; grid-template-rows: auto auto; gap: 8px; padding: 12px; border-top: 1px solid #1f2937; background: linear-gradient(0deg, rgba(17,24,39,0.9), rgba(17,24,39,0.9)); align-items: stretch; }
   textarea { resize: none; border-radius: 10px; border: 1px solid #374151; background: #0b1220; color: var(--text); padding: 10px 12px; outline: none; box-sizing: border-box; }
   button { padding: 0 16px; border: 1px solid #2563eb; border-radius: 10px; background: #1d4ed8; color: white; cursor: pointer; box-sizing: border-box; }
-  .controls-row { grid-column: 1 / -1; display: flex; align-items: center; gap: 12px; }
+  .controls-row { grid-column: 1 / -1; display: flex; align-items: center; gap: 12px; padding: 8px 0; min-height: 44px; }
+  .spacer { flex: 1; }
   .toggle-control { display: flex; align-items: center; gap: 6px; cursor: pointer; }
   .toggle-control .emoji { font-size: 18px; user-select: none; }
-  .entity-input { border-radius: 6px; border: 1px solid #374151; background: #0b1220; color: var(--text); padding: 0 8px; font-size: 12px; flex: 1; max-width: 200px; box-sizing: border-box; }
+  .entity-input { border-radius: 6px; border: 1px solid #374151; background: #0b1220; color: var(--text); padding: 0 8px; font-size: 12px; flex: 1; max-width: 200px; height: 32px; box-sizing: border-box; }
+  .media-pill { border: 1px solid #374151; background: #111827; color: var(--text); padding: 6px 12px; border-radius: 999px; font-size: 12px; white-space: nowrap; display: flex; align-items: center; gap: 6px; }
   button:disabled, textarea:disabled { opacity: 0.6; cursor: not-allowed; }
   .hint { color: var(--muted); font-size: 12px; padding: 0 12px 12px; }
   .panel { position: fixed; top: 0; right: 0; width: 420px; height: 100%; background: #0b1220; border-left: 1px solid #1f2937; box-shadow: -4px 0 16px rgba(0,0,0,0.4); display: grid; grid-template-rows: auto 1fr; z-index: 20; }
@@ -578,6 +645,11 @@
   .muted { color: var(--muted); }
   .spinner { width: 16px; height: 16px; border-radius: 50%; border: 2px solid #334155; border-top-color: var(--accent); animation: spin 0.9s linear infinite; }
   @keyframes spin { to { transform: rotate(360deg); } }
+  .load-dots { display: inline-flex; gap: 0px; }
+  .load-dots span { opacity: 0.4; animation: fade 1.4s infinite; }
+  .load-dots span:nth-child(2) { animation-delay: 0.2s; }
+  .load-dots span:nth-child(3) { animation-delay: 0.4s; }
+  @keyframes fade { 0%, 60%, 100% { opacity: 0.4; } 30% { opacity: 1; } }
   .msg.thinking { align-self: stretch; justify-content: center; }
   .menu { position: relative; }
   .menu-list { position: absolute; right: 0; top: calc(100% + 8px); background: #0b1220; border: 1px solid #1f2937; border-radius: 10px; box-shadow: 0 8px 24px rgba(0,0,0,0.4); padding: 8px; display: flex; flex-direction: column; gap: 6px; z-index: 30; }

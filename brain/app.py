@@ -43,6 +43,20 @@ RAG_SUMMARY_TURNS_WINDOW = int(os.getenv("RAG_SUMMARY_TURNS_WINDOW", "12"))
 RAG_DEBUG = os.getenv("RAG_DEBUG", "false").lower() == "true"
 PERSONA_MAX_CHARS = int(os.getenv("RAG_PERSONA_MAX_CHARS", "2000"))
 
+# System identity block (used in all chat endpoints)
+IDENTITY_BLOCK = (
+    "System identity:\n"
+    "- You are Ada, a helpful personal assistant for user Luna (the developer).\n"
+    "- Always refer to yourself as Ada; never claim other model names (e.g., DeepSeek).\n"
+    "- If asked your name or who you are, reply: 'I am Ada, Luna's assistant.'\n"
+    "- Tone: warm, concise; mirror the user's formality; sparse emojis.\n"
+)
+
+# ListenBrainz integration
+LISTENBRAINZ_USER = os.getenv("LISTENBRAINZ_USER")
+LISTENBRAINZ_TOKEN = os.getenv("LISTENBRAINZ_TOKEN")
+LISTENBRAINZ_CACHE = {"ts": 0.0, "data": None}
+
 rag_store = None
 if RAG_ENABLED:
     try:
@@ -316,7 +330,8 @@ def chat():
     entity = (data.get('entity') or '').strip() or None
 
     final_prompt = prompt
-    used_context: Dict[str, Any] = {"persona": None, "faqs": [], "turns": [], "memories": [], "summaries": [], "entity": entity}
+    media_info = data.get('media') if isinstance(data.get('media'), dict) else None
+    used_context: Dict[str, Any] = {"persona": None, "faqs": [], "turns": [], "memories": [], "summaries": [], "entity": entity, "media": media_info}
     user_timestamp = datetime.datetime.now(datetime.timezone.utc).isoformat()
 
     # Request ID and timing
@@ -335,14 +350,13 @@ def chat():
             dbg = {"persona": False, "faqs": 0, "turns": 0, "memories": 0, "cid": conversation_id}
 
             # Identity guardrail
-            identity_block = (
-                "System identity:\n"
-                "- You are Ada, a helpful personal assistant for user Luna (the developer).\n"
-                "- Always refer to yourself as Ada; never claim other model names (e.g., DeepSeek).\n"
-                "- If asked your name or who you are, reply: 'I am Ada, Luna's assistant.'\n"
-                "- Tone: warm, concise; mirror the user's formality; sparse emojis.\n"
-            )
-            sections.append(identity_block)
+            sections.append(IDENTITY_BLOCK)
+
+            # Media (ListenBrainz) if provided
+            if media_info and isinstance(media_info, dict):
+                media_line = _format_media_for_prompt(media_info)
+                if media_line:
+                    sections.append(media_line)
 
             # Persona
             if RAG_ENABLE_PERSONA:
@@ -538,6 +552,99 @@ def chat():
         return jsonify({'error': str(e)}), 500
 
 
+def _fetch_listenbrainz():
+    if not LISTENBRAINZ_USER:
+        return None, "LISTENBRAINZ_USER not configured"
+    now = time.time()
+    cached = LISTENBRAINZ_CACHE.get("data")
+    if cached and (now - LISTENBRAINZ_CACHE.get("ts", 0) < 5):
+        return cached, None
+
+    headers = {"User-Agent": "ada-v1/brain"}
+    if LISTENBRAINZ_TOKEN:
+        headers["Authorization"] = f"Token {LISTENBRAINZ_TOKEN}"
+
+    def normalize(meta, status, listened_at=None):
+        if not meta:
+            return None
+        return {
+            "source": "listenbrainz",
+            "status": status,
+            "artist": (meta or {}).get("artist_name"),
+            "track": (meta or {}).get("track_name"),
+            "release": (meta or {}).get("release_name"),
+            "listened_at": listened_at,
+        }
+
+    base = "https://api.listenbrainz.org/1/user/" + LISTENBRAINZ_USER
+    
+    # Try to fetch recent listens with count=1 (most recent, which is effectively "now playing")
+    try:
+        r = requests.get(base + "/listens", headers=headers, params={"count": 1}, timeout=5)
+        if r.status_code == 200:
+            payload = r.json() or {}
+            listens = (payload.get("payload") or {}).get("listens") or []
+            if listens:
+                first = listens[0]
+                meta = (first.get("track_metadata") or {})
+                listened_at = (first.get("listened_at") or first.get("played_at"))
+                info = normalize(meta, status="playing", listened_at=listened_at)
+                LISTENBRAINZ_CACHE.update({"ts": now, "data": info})
+                return info, None
+    except Exception as e:
+        return None, str(e)
+
+    info = {"source": "listenbrainz", "status": "idle"}
+    LISTENBRAINZ_CACHE.update({"ts": now, "data": info})
+    return info, None
+
+
+def _format_media_for_prompt(media_info: dict) -> str | None:
+    """Format ListenBrainz media info as natural language for the prompt."""
+    if not media_info or not isinstance(media_info, dict):
+        return None
+    status = media_info.get("status")
+    if status == "playing":
+        artist = media_info.get("artist", "Unknown Artist")
+        track = media_info.get("track", "Unknown Track")
+        return f"luna has chosen to share that she is currently listening to the song {track} by artist {artist}."
+    elif status == "recent":
+        artist = media_info.get("artist", "Unknown Artist")
+        track = media_info.get("track", "Unknown Track")
+        listened_at = media_info.get("listened_at")
+        time_str = ""
+        if listened_at:
+            try:
+                from datetime import datetime as dt
+                ldt = dt.fromisoformat(listened_at.replace("Z", "+00:00"))
+                now_dt = dt.now(ldt.tzinfo)
+                delta = now_dt - ldt
+                days = delta.days
+                hours = delta.seconds // 3600
+                if days > 0:
+                    time_str = f"{days} day{'s' if days != 1 else ''} ago"
+                elif hours > 0:
+                    time_str = f"{hours} hour{'s' if hours != 1 else ''} ago"
+                else:
+                    time_str = "a few minutes ago"
+            except Exception:
+                time_str = "recently"
+        else:
+            time_str = "recently"
+        return f"luna has chosen to share that the last song she listened to was {track} by artist {artist} {time_str}."
+    return None
+
+
+@app.route('/v1/media/listenbrainz', methods=['GET'])
+def media_listenbrainz():
+    data, err = _fetch_listenbrainz()
+    if err and data is None:
+        return jsonify({"error": err}), 500
+    if data is None:
+        return jsonify({"error": "unavailable"}), 500
+    return jsonify(data)
+
+
 @app.route('/v1/chat/stream', methods=['POST'])
 def chat_stream():
     """
@@ -580,7 +687,8 @@ def chat_stream():
 
     # Build RAG context (same as non-streaming endpoint)
     final_prompt = prompt
-    used_context = {'persona': None, 'faqs': [], 'memories': [], 'turns': [], 'summaries': [], 'entity': entity}
+    media_info = data.get('media') if isinstance(data.get('media'), dict) else None
+    used_context = {'persona': None, 'faqs': [], 'memories': [], 'turns': [], 'summaries': [], 'entity': entity, 'media': media_info}
     t_retrieve = 0
     t_assemble = 0
 
@@ -590,14 +698,13 @@ def chat_stream():
             sections = []
 
             # Identity guardrail
-            identity_block = (
-                "System identity:\n"
-                "- You are Ada, a helpful personal assistant for user Luna (the developer).\n"
-                "- Always refer to yourself as Ada; never claim other model names (e.g., DeepSeek).\n"
-                "- If asked your name or who you are, reply: 'I am Ada, Luna's assistant.'\n"
-                "- Tone: warm, concise; mirror the user's formality; sparse emojis.\n"
-            )
-            sections.append(identity_block)
+            sections.append(IDENTITY_BLOCK)
+
+            # Media (ListenBrainz) if provided
+            if media_info and isinstance(media_info, dict):
+                media_line = _format_media_for_prompt(media_info)
+                if media_line:
+                    sections.append(media_line)
 
             # Persona
             if RAG_ENABLE_PERSONA:
@@ -1000,19 +1107,23 @@ def prompt_debug():
         turns_k = int(request.args.get('turns_k', RAG_TURN_TOP_K))
         faq_k = int(request.args.get('faq_k', RAG_FAQ_TOP_K))
         memory_k = int(request.args.get('memory_k', RAG_MEMORY_TOP_K))
+        share_lb = (request.args.get('share_listenbrainz') or '').lower() in ('1', 'true', 'yes', 'on')
 
         user_timestamp = datetime.datetime.now(datetime.timezone.utc).isoformat()
         sections: List[str] = []
-        used_context: Dict[str, Any] = {"persona": None, "faqs": [], "turns": [], "memories": [], "summaries": [], "entity": entity}
+        media_info = None
+        used_context: Dict[str, Any] = {"persona": None, "faqs": [], "turns": [], "memories": [], "summaries": [], "entity": entity, "media": None}
 
-        identity_block = (
-            "System identity:\n"
-            "- You are Ada, a helpful personal assistant for user Luna (the developer).\n"
-            "- Always refer to yourself as Ada; never claim other model names (e.g., DeepSeek).\n"
-            "- If asked your name or who you are, reply: 'I am Ada, Luna's assistant.'\n"
-            "- Tone: warm, concise; mirror the user's formality; sparse emojis.\n"
-        )
-        sections.append(identity_block)
+        sections.append(IDENTITY_BLOCK)
+
+        # Media (ListenBrainz) if requested
+        if share_lb:
+            media_info, media_err = _fetch_listenbrainz()
+            used_context["media"] = media_info
+            if media_info and isinstance(media_info, dict):
+                media_line = _format_media_for_prompt(media_info)
+                if media_line:
+                    sections.append(media_line)
 
         # Persona
         if RAG_ENABLE_PERSONA:
