@@ -49,7 +49,7 @@ services:
       - OLLAMA_BASE_URL=${OLLAMA_BASE_URL:-http://ollama:11434}
       - CHROMA_URL=${CHROMA_URL:-http://chroma:8000}
       - RAG_AUTOLOAD_PERSONA=${RAG_AUTOLOAD_PERSONA:-true}
-      - RAG_PERSONA_PATH=${RAG_PERSONA_PATH:-/app/prompt.md}
+      - RAG_PERSONA_PATH=${RAG_PERSONA_PATH:-/app/persona.md}
       - RAG_AUTOLOAD_FAQ=${RAG_AUTOLOAD_FAQ:-false}
       - RAG_FAQ_PATH=${RAG_FAQ_PATH:-/app/seed/faqs.jsonl}
       - RAG_ENABLE_PERSONA=${RAG_ENABLE_PERSONA:-true}
