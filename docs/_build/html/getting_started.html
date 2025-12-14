@@ -1,0 +1,433 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Getting Started &mdash; Ada v1 Brain API 0.1.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=01f34227"></script>
+      <script src="_static/doctools.js?v=9bcbadda"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="API Reference" href="api_reference.html" />
+    <link rel="prev" title="Ada v1 Brain API Docs" href="index.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            Ada v1 Brain API
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Documentation:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Getting Started</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#installation">Installation</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#requirements">Requirements</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#setup">Setup</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#configuration">Configuration</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#environment-variables">Environment Variables</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#running-the-service">Running the Service</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#start-brain-api">Start Brain API</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#start-web-server">Start Web Server</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#using-docker-compose">Using Docker Compose</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#your-first-request">Your First Request</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#health-check">Health Check</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#simple-chat">Simple Chat</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#streaming-response">Streaming Response</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#troubleshooting">Troubleshooting</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#service-won-t-start">Service Won’t Start</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#health-check-failing">Health Check Failing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#memory-not-saving">Memory Not Saving</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#debugging">Debugging</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#enable-debug-mode">Enable Debug Mode</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#view-debug-info">View Debug Info</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#view-logs">View Logs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#check-imports">Check Imports</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#next-steps">Next Steps</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="api_reference.html">API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="streaming.html">Streaming</a></li>
+<li class="toctree-l1"><a class="reference internal" href="memory.html">Memory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="examples.html">Examples</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Ada v1 Brain API</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Getting Started</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/getting_started.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="getting-started">
+<h1>Getting Started<a class="headerlink" href="#getting-started" title="Link to this heading"></a></h1>
+<section id="installation">
+<h2>Installation<a class="headerlink" href="#installation" title="Link to this heading"></a></h2>
+<section id="requirements">
+<h3>Requirements<a class="headerlink" href="#requirements" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p>Python 3.13+</p></li>
+<li><p>Ollama (LLM backend)</p></li>
+<li><p>ChromaDB (Vector database)</p></li>
+<li><p>Docker Compose (optional, for containerized setup)</p></li>
+</ul>
+</section>
+<section id="setup">
+<h3>Setup<a class="headerlink" href="#setup" title="Link to this heading"></a></h3>
+<ol class="arabic">
+<li><p><strong>Clone and activate virtual environment:</strong></p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span><span class="w"> </span>/home/luna/Code/ada-v1
+<span class="nb">source</span><span class="w"> </span>.venv/bin/activate
+</pre></div>
+</div>
+</li>
+<li><p><strong>Start dependencies:</strong></p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>docker<span class="w"> </span>compose<span class="w"> </span>up<span class="w"> </span>-d
+</pre></div>
+</div>
+<p>This starts:
+- Ollama LLM backend (port 11434)
+- ChromaDB vector store (port 8000)
+- Web server (port 5000)
+- Brain API (port 7000)</p>
+</li>
+<li><p><strong>Verify health:</strong></p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>curl<span class="w"> </span>http://localhost:7000/v1/healthz
+</pre></div>
+</div>
+</li>
+</ol>
+</section>
+</section>
+<section id="configuration">
+<h2>Configuration<a class="headerlink" href="#configuration" title="Link to this heading"></a></h2>
+<section id="environment-variables">
+<h3>Environment Variables<a class="headerlink" href="#environment-variables" title="Link to this heading"></a></h3>
+<p>Copy <cite>.env.example</cite> to <cite>.env</cite> and configure:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>cp<span class="w"> </span>.env.example<span class="w"> </span>.env
+</pre></div>
+</div>
+<p>Key variables:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">OLLAMA_BASE_URL</span></code> - LLM backend URL (default: <a class="reference external" href="http://localhost:11434">http://localhost:11434</a>)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">OLLAMA_MODEL</span></code> - Model name (default: deepseek-r1)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">CHROMA_URL</span></code> - Vector DB URL (default: <a class="reference external" href="http://localhost:8000">http://localhost:8000</a>)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">RAG_ENABLED</span></code> - Enable RAG features (default: true)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">RAG_ENABLE_PERSONA</span></code> - Load persona/style guidelines (default: true)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">RAG_ENABLE_FAQ</span></code> - Include FAQ retrieval (default: true)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">RAG_ENABLE_MEMORY</span></code> - Include memory retrieval (default: true)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">RAG_ENABLE_SUMMARY</span></code> - Auto-generate conversation summaries (default: true)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">RAG_DEBUG</span></code> - Enable debug endpoints (default: false)</p></li>
+</ul>
+<p>For complete list, see <cite>.env.example</cite>.</p>
+</section>
+</section>
+<section id="running-the-service">
+<h2>Running the Service<a class="headerlink" href="#running-the-service" title="Link to this heading"></a></h2>
+<section id="start-brain-api">
+<h3>Start Brain API<a class="headerlink" href="#start-brain-api" title="Link to this heading"></a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span><span class="w"> </span>/home/luna/Code/ada-v1
+<span class="nb">source</span><span class="w"> </span>.venv/bin/activate
+python<span class="w"> </span>brain/app.py
+</pre></div>
+</div>
+<p>Or with Gunicorn (production):</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>gunicorn<span class="w"> </span>-b<span class="w"> </span><span class="m">0</span>.0.0.0:7000<span class="w"> </span>brain.app:app
+</pre></div>
+</div>
+</section>
+<section id="start-web-server">
+<h3>Start Web Server<a class="headerlink" href="#start-web-server" title="Link to this heading"></a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span><span class="w"> </span>/home/luna/Code/ada-v1
+<span class="nb">source</span><span class="w"> </span>.venv/bin/activate
+python<span class="w"> </span>webserver/app.py
+</pre></div>
+</div>
+<p>Or with Gunicorn:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>gunicorn<span class="w"> </span>-b<span class="w"> </span><span class="m">0</span>.0.0.0:5000<span class="w"> </span>webserver.app:app
+</pre></div>
+</div>
+</section>
+<section id="using-docker-compose">
+<h3>Using Docker Compose<a class="headerlink" href="#using-docker-compose" title="Link to this heading"></a></h3>
+<p>Start all services:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>docker<span class="w"> </span>compose<span class="w"> </span>up
+</pre></div>
+</div>
+<p>Stop services:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>docker<span class="w"> </span>compose<span class="w"> </span>down
+</pre></div>
+</div>
+<p>View logs:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>docker<span class="w"> </span>compose<span class="w"> </span>logs<span class="w"> </span>-f<span class="w"> </span>brain
+docker<span class="w"> </span>compose<span class="w"> </span>logs<span class="w"> </span>-f<span class="w"> </span>web
+</pre></div>
+</div>
+</section>
+</section>
+<section id="your-first-request">
+<h2>Your First Request<a class="headerlink" href="#your-first-request" title="Link to this heading"></a></h2>
+<section id="health-check">
+<h3>Health Check<a class="headerlink" href="#health-check" title="Link to this heading"></a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>curl<span class="w"> </span>http://localhost:7000/v1/healthz
+</pre></div>
+</div>
+<p>Response:</p>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+<span class="w">  </span><span class="nt">&quot;ok&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;service&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;brain&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;python&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;3.13.0&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;config&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nt">&quot;OLLAMA_BASE_URL&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;http://localhost:11434&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;OLLAMA_MODEL&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;deepseek-r1&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="err">...</span>
+<span class="w">  </span><span class="p">},</span>
+<span class="w">  </span><span class="nt">&quot;persona&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="nt">&quot;loaded&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">},</span>
+<span class="w">  </span><span class="nt">&quot;chroma&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="nt">&quot;ok&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</section>
+<section id="simple-chat">
+<h3>Simple Chat<a class="headerlink" href="#simple-chat" title="Link to this heading"></a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>curl<span class="w"> </span>-X<span class="w"> </span>POST<span class="w"> </span>http://localhost:7000/v1/chat<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>-H<span class="w"> </span><span class="s2">&quot;Content-Type: application/json&quot;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>-d<span class="w"> </span><span class="s1">&#39;{</span>
+<span class="s1">    &quot;prompt&quot;: &quot;What is the capital of France?&quot;,</span>
+<span class="s1">    &quot;include_thinking&quot;: false</span>
+<span class="s1">  }&#39;</span>
+</pre></div>
+</div>
+<p>Response:</p>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+<span class="w">  </span><span class="nt">&quot;response&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;The capital of France is Paris, located in northern France on the Seine River. It is the largest city in France and serves as the country&#39;s political, economic, and cultural center.&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;thinking&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;conversation_id&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;550e8400-e29b-41d4-a716-446655440000&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;user_timestamp&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;2025-12-13T10:30:45.123456+00:00&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;assistant_timestamp&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;2025-12-13T10:30:48.456789+00:00&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;request_id&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;abc12345&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;used_context&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nt">&quot;persona&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="nt">&quot;included&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;version&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;timestamp&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">},</span>
+<span class="w">    </span><span class="nt">&quot;faqs&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[],</span>
+<span class="w">    </span><span class="nt">&quot;turns&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[],</span>
+<span class="w">    </span><span class="nt">&quot;memories&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[],</span>
+<span class="w">    </span><span class="nt">&quot;summaries&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[],</span>
+<span class="w">    </span><span class="nt">&quot;entity&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</section>
+<section id="streaming-response">
+<h3>Streaming Response<a class="headerlink" href="#streaming-response" title="Link to this heading"></a></h3>
+<p>For real-time token delivery, see <a class="reference internal" href="streaming.html"><span class="doc">Streaming</span></a>.</p>
+</section>
+</section>
+<section id="troubleshooting">
+<h2>Troubleshooting<a class="headerlink" href="#troubleshooting" title="Link to this heading"></a></h2>
+<section id="service-won-t-start">
+<h3>Service Won’t Start<a class="headerlink" href="#service-won-t-start" title="Link to this heading"></a></h3>
+<p><strong>Issue:</strong> <code class="docutils literal notranslate"><span class="pre">Connection</span> <span class="pre">refused</span> <span class="pre">to</span> <span class="pre">Ollama</span></code></p>
+<p><strong>Solution:</strong></p>
+<ol class="arabic">
+<li><p>Ensure Ollama is running:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>docker<span class="w"> </span>ps<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>ollama
+</pre></div>
+</div>
+</li>
+<li><p>Check Ollama API:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>curl<span class="w"> </span>http://localhost:11434/api/tags
+</pre></div>
+</div>
+</li>
+<li><p>If not running, start with Docker Compose:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>docker<span class="w"> </span>compose<span class="w"> </span>up<span class="w"> </span>-d<span class="w"> </span>ollama
+</pre></div>
+</div>
+</li>
+</ol>
+<p><strong>Issue:</strong> <code class="docutils literal notranslate"><span class="pre">ChromaDB</span> <span class="pre">connection</span> <span class="pre">failed</span></code></p>
+<p><strong>Solution:</strong></p>
+<ol class="arabic">
+<li><p>Verify Chroma is running:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>curl<span class="w"> </span>http://localhost:8000/api/v1/heartbeat
+</pre></div>
+</div>
+</li>
+<li><p>Restart if needed:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>docker<span class="w"> </span>compose<span class="w"> </span>restart<span class="w"> </span>chroma
+</pre></div>
+</div>
+</li>
+</ol>
+</section>
+<section id="health-check-failing">
+<h3>Health Check Failing<a class="headerlink" href="#health-check-failing" title="Link to this heading"></a></h3>
+<p><strong>Issue:</strong> <code class="docutils literal notranslate"><span class="pre">GET</span> <span class="pre">/v1/healthz</span> <span class="pre">returns</span> <span class="pre">503</span></code></p>
+<p><strong>Solution:</strong></p>
+<p>The health check probes dependencies. Check which one is failing:</p>
+<ol class="arabic">
+<li><p>Ollama:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>curl<span class="w"> </span>http://localhost:11434/api/tags
+</pre></div>
+</div>
+</li>
+<li><p>ChromaDB:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>curl<span class="w"> </span>http://localhost:8000/api/v1/heartbeat
+</pre></div>
+</div>
+</li>
+<li><p>RAG system:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>curl<span class="w"> </span><span class="s2">&quot;http://localhost:7000/v1/debug/rag&quot;</span>
+</pre></div>
+</div>
+</li>
+</ol>
+</section>
+<section id="memory-not-saving">
+<h3>Memory Not Saving<a class="headerlink" href="#memory-not-saving" title="Link to this heading"></a></h3>
+<p><strong>Issue:</strong> <code class="docutils literal notranslate"><span class="pre">POST</span> <span class="pre">/v1/memory</span> <span class="pre">returns</span> <span class="pre">503</span></code></p>
+<p><strong>Solution:</strong></p>
+<p>Ensure RAG is enabled in <cite>.env</cite>:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nv">RAG_ENABLED</span><span class="o">=</span><span class="nb">true</span>
+<span class="nv">CHROMA_URL</span><span class="o">=</span>http://localhost:8000
+</pre></div>
+</div>
+<p>Then restart Brain API.</p>
+</section>
+</section>
+<section id="debugging">
+<h2>Debugging<a class="headerlink" href="#debugging" title="Link to this heading"></a></h2>
+<section id="enable-debug-mode">
+<h3>Enable Debug Mode<a class="headerlink" href="#enable-debug-mode" title="Link to this heading"></a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># In .env</span>
+<span class="nv">RAG_DEBUG</span><span class="o">=</span><span class="nb">true</span>
+</pre></div>
+</div>
+<p>Then restart services.</p>
+</section>
+<section id="view-debug-info">
+<h3>View Debug Info<a class="headerlink" href="#view-debug-info" title="Link to this heading"></a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Get RAG statistics</span>
+curl<span class="w"> </span><span class="s2">&quot;http://localhost:7000/v1/debug/rag?conversation_id=your-uuid&quot;</span>
+</pre></div>
+</div>
+</section>
+<section id="view-logs">
+<h3>View Logs<a class="headerlink" href="#view-logs" title="Link to this heading"></a></h3>
+<p>With Docker:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>docker<span class="w"> </span>compose<span class="w"> </span>logs<span class="w"> </span>-f<span class="w"> </span>brain
+</pre></div>
+</div>
+<p>Direct:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Set log level</span>
+<span class="nb">export</span><span class="w"> </span><span class="nv">LOG_LEVEL</span><span class="o">=</span>DEBUG
+python<span class="w"> </span>brain/app.py
+</pre></div>
+</div>
+</section>
+<section id="check-imports">
+<h3>Check Imports<a class="headerlink" href="#check-imports" title="Link to this heading"></a></h3>
+<p>Verify all dependencies are installed:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">source</span><span class="w"> </span>.venv/bin/activate
+python<span class="w"> </span>-c<span class="w"> </span><span class="s2">&quot;from brain.app import *; print(&#39;✓ All imports OK&#39;)&quot;</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="next-steps">
+<h2>Next Steps<a class="headerlink" href="#next-steps" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>See <a class="reference internal" href="api_reference.html"><span class="doc">API Reference</span></a> for full endpoint documentation</p></li>
+<li><p>See <a class="reference internal" href="streaming.html"><span class="doc">Streaming</span></a> for real-time response handling</p></li>
+<li><p>See <a class="reference internal" href="memory.html"><span class="doc">Memory</span></a> for memory management</p></li>
+<li><p>See <a class="reference internal" href="examples.html"><span class="doc">Examples</span></a> for code examples</p></li>
+</ul>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="index.html" class="btn btn-neutral float-left" title="Ada v1 Brain API Docs" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="api_reference.html" class="btn btn-neutral float-right" title="API Reference" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025, Luna Team.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
