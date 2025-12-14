@@ -279,7 +279,23 @@ def _fetch_listenbrainz():
 
     base = "https://api.listenbrainz.org/1/user/" + LISTENBRAINZ_USER
     
-    # Try to fetch recent listens with count=1 (most recent, which is effectively "now playing")
+    # Try /playing-now first (requires token for accurate "now playing" data)
+    if LISTENBRAINZ_TOKEN:
+        try:
+            r = requests.get(base + "/playing-now", headers=headers, timeout=5)
+            if r.status_code == 200:
+                payload = r.json() or {}
+                pn = (payload.get("playing_now") or {})
+                if pn:
+                    meta = pn.get("track_metadata")
+                    if meta:
+                        info = normalize(meta, status="playing", listened_at=pn.get("listened_at"))
+                        LISTENBRAINZ_CACHE.update({"ts": now, "data": info})
+                        return info, None
+        except Exception:
+            pass  # Fall through to /listens
+    
+    # Fall back to recent listens (works without token, but lags behind current playback)
     try:
         r = requests.get(base + "/listens", headers=headers, params={"count": 1}, timeout=5)
         if r.status_code == 200:
