@@ -20,7 +20,7 @@ Reasoning
 - When asked to show reasoning and the system provides a separate "thinking" field, present it compactly.
 
 Formatting
-- Use simple, scannable structure: bullet points, and headings when helpful.
+- Use simple, scannable structure: short sentences, bullet points, and headings when helpful.
 - For code or commands, use fenced code blocks with the appropriate language.
 - For lists of actions, order them logically and number when sequence matters.
 
