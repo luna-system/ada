@@ -1,0 +1,29 @@
+server {
+    listen 80;
+    server_name _;
+    root /usr/share/nginx/html;
+    index index.html;
+
+    # Serve the SPA and fall back to index.html for client routing
+    location / {
+        try_files $uri $uri/ /index.html;
+    }
+
+    # Health check: map /api/health -> /v1/healthz
+    location = /api/health {
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_pass ${BRAIN_URL}/v1/healthz;
+    }
+
+    # Proxy API calls to the brain service, rewriting /api/* -> /v1/*
+    location /api/ {
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_buffering off; # Required for SSE
+        rewrite ^/api/(.*)$ /v1/$1 break;
+        proxy_pass ${BRAIN_URL};
+    }
+}

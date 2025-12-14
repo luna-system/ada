@@ -1,20 +1,18 @@
 services:
   web:
     build:
-      context: .
-      dockerfile: webserver/Dockerfile
+      context: ./frontend
+      dockerfile: Dockerfile
     ports:
-      - "5000:5000"
+      - "5000:80"
     env_file:
       - .env
     environment:
       - BRAIN_URL=${BRAIN_URL:-http://brain:7000}
-    volumes:
-      - ./webserver/static:/app/static
     depends_on:
       - brain
     healthcheck:
-      test: ["CMD-SHELL", "curl -fsS http://localhost:5000/api/health || exit 1"]
+      test: ["CMD-SHELL", "curl -fsS http://localhost:80/api/health || exit 1"]
       interval: 10s
       timeout: 3s
       retries: 5
@@ -29,11 +27,11 @@ services:
       - CHROMA_DB_IMPL=duckdb+parquet
       - ANONYMIZED_TELEMETRY=False
     volumes:
-      - ./data/chroma:/chroma
+      - chroma-data:/chroma
     healthcheck:
-      test: ["CMD", "wget", "-qO-", "http://localhost:8000/api/v1/heartbeat"]
+      test: ["CMD-SHELL", "python -c \"import urllib.request,sys;u='http://localhost:8000/api/v2/heartbeat';\ntry:\n r=urllib.request.urlopen(u,timeout=3); sys.exit(0 if r.status==200 else 1)\nexcept Exception:\n sys.exit(1)\"" ]
       interval: 10s
-      timeout: 3s
+      timeout: 5s
       retries: 5
 
   brain:
@@ -140,3 +138,6 @@ services:
         wait $pid2
         printf '[ollama-init] %s model pulls complete.
         ' "$(date -u +%FT%TZ)"
+
+volumes:
+  chroma-data:
