@@ -955,5 +955,134 @@ def rag_debug():
         return jsonify({'error': str(e)}), 500
 
 
+@app.route('/v1/debug/prompt', methods=['GET'])
+def prompt_debug():
+    """
+    Return the assembled prompt sections and context that would be sent to the LLM.
+
+    - Method: GET
+    - Path: /v1/debug/prompt
+    - Query params: conversation_id (optional), entity (optional), prompt (optional),
+      turns_k, faq_k, memory_k
+    - Returns: counts and sections for persona/faq/memory/turns/summaries plus the final prompt string.
+
+    Requires RAG_DEBUG=true and an available rag_store.
+    """
+    if not RAG_DEBUG or rag_store is None:
+        return jsonify({'error': 'debug disabled'}), 404
+
+    try:
+        prompt = (request.args.get('prompt') or '').strip() or 'debug'
+        conversation_id = (request.args.get('conversation_id') or '').strip() or None
+        entity = (request.args.get('entity') or '').strip() or None
+        turns_k = int(request.args.get('turns_k', RAG_TURNS_TOP_K))
+        faq_k = int(request.args.get('faq_k', RAG_FAQ_TOP_K))
+        memory_k = int(request.args.get('memory_k', RAG_MEMORY_TOP_K))
+
+        user_timestamp = datetime.datetime.now(datetime.timezone.utc).isoformat()
+        sections: List[str] = []
+        used_context: Dict[str, Any] = {"persona": None, "faqs": [], "turns": [], "memories": [], "summaries": [], "entity": entity}
+
+        identity_block = (
+            "System identity:\n"
+            "- You are Ada, a helpful personal assistant for user Luna (the developer).\n"
+            "- Always refer to yourself as Ada; never claim other model names (e.g., DeepSeek).\n"
+            "- If asked your name or who you are, reply: 'I am Ada, Luna's assistant.'\n"
+            "- Tone: warm, concise; mirror the user's formality; sparse emojis.\n"
+        )
+        sections.append(identity_block)
+
+        # Persona
+        if RAG_ENABLE_PERSONA:
+            persona = rag_store.load_persona_block()
+            if persona:
+                if isinstance(persona, tuple):
+                    p_text, p_meta = persona
+                else:
+                    p_text, p_meta = str(persona), {}
+                sections.append("Persona and style guidelines (global):\n" + p_text)
+                used_context["persona"] = {
+                    "included": True,
+                    "version": (p_meta or {}).get("version"),
+                    "timestamp": (p_meta or {}).get("timestamp"),
+                    "length": len(p_text),
+                }
+            else:
+                used_context["persona"] = {"included": False}
+
+        # Memory
+        if RAG_ENABLE_MEMORY and memory_k > 0:
+            mem_hits = rag_store.retrieve_memories(query=prompt, k=memory_k, entity=entity)
+            if mem_hits:
+                mem_lines = []
+                for text_m, meta_m in mem_hits:
+                    imp = (meta_m or {}).get('importance')
+                    scope = (meta_m or {}).get('scope', 'global')
+                    tag_str = ''
+                    tags = (meta_m or {}).get('tags')
+                    if isinstance(tags, list) and tags:
+                        tag_str = f" tags={','.join(tags)}"
+                    if imp is not None:
+                        mem_lines.append(f"- ({scope}, importance={imp}{tag_str}) {text_m}")
+                    else:
+                        mem_lines.append(f"- ({scope}{tag_str}) {text_m}")
+                    used_context["memories"].append(text_m)
+                sections.append("Long-term memory:\n" + "\n".join(mem_lines))
+
+        # FAQs
+        if RAG_ENABLE_FAQ and faq_k > 0:
+            faq_hits = rag_store.retrieve_faqs(query=prompt, k=faq_k)
+            if faq_hits:
+                faq_lines = []
+                for text, meta in faq_hits:
+                    topic = (meta or {}).get('topic', 'faq')
+                    faq_lines.append(f"- ({topic}) {text}")
+                    used_context["faqs"].append(text)
+                sections.append("Reference snippets (FAQs):\n" + "\n".join(faq_lines))
+
+        # Conversation turns
+        if turns_k > 0:
+            hits = rag_store.retrieve_turns(query=prompt, k=turns_k, conversation_id=conversation_id)
+            if hits:
+                turn_lines = []
+                for text_t, meta_t in hits:
+                    role = (meta_t or {}).get('role', 'context')
+                    ts = (meta_t or {}).get('timestamp')
+                    if ts:
+                        turn_lines.append(f"- {role} [{ts}]: {text_t}")
+                    else:
+                        turn_lines.append(f"- {role}: {text_t}")
+                    used_context["turns"].append(text_t)
+                sections.append("Memory (most relevant first):\n" + "\n".join(turn_lines))
+
+        # Summaries
+        if RAG_ENABLE_SUMMARY and conversation_id:
+            sum_hits = rag_store.retrieve_summaries(conversation_id=conversation_id, k=2)
+            if sum_hits:
+                used_context["summaries"] = [t for t, _ in sum_hits]
+                sections.append("Conversation summaries:\n" + "\n".join(f"- {t}" for t, _ in sum_hits))
+
+        instructions = (
+            "You are a helpful assistant. Follow the persona and policies above. Use the reference snippets and "
+            "conversation memory when relevant. If the user asks about times or durations, use the provided "
+            "UTC ISO timestamps to compute precise differences and express them in human-friendly units."
+        )
+        reminder = "Reminder: You are Ada, Luna's assistant. Always identify as Ada."
+        current_ts_line = f"Current user message timestamp (UTC): {user_timestamp}"
+        assembled = ("\n\n".join(sections) + "\n\n" if sections else "") + instructions + "\n" + reminder + "\n" + current_ts_line
+        final_prompt = f"{assembled}\nUser: {prompt}\nAssistant:"
+
+        return jsonify({
+            "conversation_id": conversation_id,
+            "entity": entity,
+            "prompt_used": prompt,
+            "final_prompt": final_prompt,
+            "sections": sections,
+            "used_context": used_context,
+        })
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=7000)
