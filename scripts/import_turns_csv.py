@@ -27,6 +27,9 @@ import os
 import sys
 import uuid
 from typing import Optional
+from dotenv import load_dotenv
+
+load_dotenv()
 
 # Reuse the shared RAG module; ensure /app is on sys.path when running ad-hoc
 try:

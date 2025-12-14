@@ -22,6 +22,9 @@ import json
 import os
 import sys
 from typing import Iterable, Dict
+from dotenv import load_dotenv
+
+load_dotenv()
 
 from rag import RagStore
 
