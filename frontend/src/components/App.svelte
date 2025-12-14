@@ -237,6 +237,7 @@
           updateMessage(answerId, { text: assistantText, thinking: thinkingText });
         },
         onDone: (newConvId) => {
+          setThinking(false);
           if (newConvId && newConvId !== activeConversationId) {
             activeConversationId = newConvId;
             setConversationId(activeConversationId);
