@@ -45,9 +45,8 @@ node_modules/
 dist/
 build/
 
-# Data & models
-data/**
-!data/.gitkeep
+# cached ollama data
+data/ollama
 
 # Lock & cache (keep uv.lock tracked if you prefer deterministic builds)
 # Uncomment next line if you do NOT want to track uv.lock

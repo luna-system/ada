@@ -19,6 +19,7 @@
 
   let prompt = '';
   let includeThinking = false;
+  let showEntityInput = false;
   let entity = '';
   let panelOpen: 'none' | 'debug' | 'mem' | 'prompt' = 'none';
   let menuOpen = false;
@@ -284,17 +285,6 @@
       <h1>ADA · Chat</h1>
     </div>
     <div class="grow"></div>
-    <label class="field" title="Optional entity/topic to scope memory">
-      <span>Entity</span>
-      <input value={entity} on:input={(e) => onEntityChange((e.target as HTMLInputElement).value)} placeholder="entity/topic (optional)" />
-    </label>
-    <label class="toggle" title="Show model's thinking (<think>…</think>)">
-      <span>Include thinking</span>
-      <span class="switch">
-        <input type="checkbox" bind:checked={includeThinking} />
-        <span class="knob"></span>
-      </span>
-    </label>
     <div class="menu" id="panelMenu">
       <button id="panelMenuButton" class="ghost" type="button" aria-haspopup="true" aria-expanded={menuOpen} on:click={() => menuOpen = !menuOpen}>Panels ▾</button>
       {#if menuOpen}
@@ -338,7 +328,26 @@
         handleSubmit();
       }
     }}></textarea>
-    <button type="submit" disabled={thinking}>Send</button>
+    <button type="submit" disabled={$thinking || !prompt.trim()}>Send</button>
+    <div class="controls-row">
+      <label class="toggle-control" title="Include thinking">
+        <span class="emoji">🧠</span>
+        <span class="switch">
+          <input type="checkbox" bind:checked={includeThinking} />
+          <span class="knob"></span>
+        </span>
+      </label>
+      <label class="toggle-control" title="Filter memory by entity">
+        <span class="emoji">🏷️</span>
+        <span class="switch">
+          <input type="checkbox" bind:checked={showEntityInput} />
+          <span class="knob"></span>
+        </span>
+      </label>
+      {#if showEntityInput}
+        <input class="entity-input" value={entity} on:input={(e) => onEntityChange((e.target as HTMLInputElement).value)} placeholder="entity/topic" />
+      {/if}
+    </div>
   </form>
 
   {#if panelOpen === 'debug'}
@@ -544,9 +553,13 @@
   .bubble pre code { display: block; white-space: pre; }
   .bubble ul, .bubble ol { padding-left: 1.25rem; margin: 0.25rem 0; }
   .bubble h1, .bubble h2, .bubble h3, .bubble h4 { margin: 0.25rem 0; }
-  form#composer { display: grid; grid-template-columns: 1fr auto; gap: 8px; padding: 12px; border-top: 1px solid #1f2937; background: linear-gradient(0deg, rgba(17,24,39,0.9), rgba(17,24,39,0.9)); }
-  textarea { resize: none; height: 44px; border-radius: 10px; border: 1px solid #374151; background: #0b1220; color: var(--text); padding: 10px 12px; outline: none; }
-  button { height: 44px; padding: 0 16px; border: 1px solid #2563eb; border-radius: 10px; background: #1d4ed8; color: white; cursor: pointer; }
+  form#composer { display: grid; grid-template-columns: 1fr auto; grid-template-rows: auto auto; gap: 8px; padding: 12px; border-top: 1px solid #1f2937; background: linear-gradient(0deg, rgba(17,24,39,0.9), rgba(17,24,39,0.9)); align-items: stretch; }
+  textarea { resize: none; border-radius: 10px; border: 1px solid #374151; background: #0b1220; color: var(--text); padding: 10px 12px; outline: none; box-sizing: border-box; }
+  button { padding: 0 16px; border: 1px solid #2563eb; border-radius: 10px; background: #1d4ed8; color: white; cursor: pointer; box-sizing: border-box; }
+  .controls-row { grid-column: 1 / -1; display: flex; align-items: center; gap: 12px; }
+  .toggle-control { display: flex; align-items: center; gap: 6px; cursor: pointer; }
+  .toggle-control .emoji { font-size: 18px; user-select: none; }
+  .entity-input { border-radius: 6px; border: 1px solid #374151; background: #0b1220; color: var(--text); padding: 0 8px; font-size: 12px; flex: 1; max-width: 200px; box-sizing: border-box; }
   button:disabled, textarea:disabled { opacity: 0.6; cursor: not-allowed; }
   .hint { color: var(--muted); font-size: 12px; padding: 0 12px 12px; }
   .panel { position: fixed; top: 0; right: 0; width: 420px; height: 100%; background: #0b1220; border-left: 1px solid #1f2937; box-shadow: -4px 0 16px rgba(0,0,0,0.4); display: grid; grid-template-rows: auto 1fr; z-index: 20; }
