@@ -31,13 +31,17 @@ RAG_ENABLE_PERSONA = os.getenv("RAG_ENABLE_PERSONA", "true").lower() == "true"
 RAG_ENABLE_FAQ = os.getenv("RAG_ENABLE_FAQ", "true").lower() == "true"
 RAG_ENABLE_MEMORY = os.getenv("RAG_ENABLE_MEMORY", "true").lower() == "true"
 RAG_ENABLE_SUMMARY = os.getenv("RAG_ENABLE_SUMMARY", "true").lower() == "true"
-RAG_TURNS_TOP_K = int(os.getenv("RAG_TURNS_TOP_K", os.getenv("RAG_TOP_K", "4")))
+# Stream/non-stream parity toggles
+RAG_ENABLE_TURN = os.getenv("RAG_ENABLE_TURN", "true").lower() == "true"
+RAG_TURN_TOP_K = int(os.getenv("RAG_TURN_TOP_K", os.getenv("RAG_TURNS_TOP_K", os.getenv("RAG_TOP_K", "4"))))
+RAG_SUMMARY_TOP_K = int(os.getenv("RAG_SUMMARY_TOP_K", "2"))
 RAG_FAQ_TOP_K = int(os.getenv("RAG_FAQ_TOP_K", "2"))
 RAG_MEMORY_TOP_K = int(os.getenv("RAG_MEMORY_TOP_K", "3"))
 RAG_MEMORY_IMPORTANCE_WEIGHT = float(os.getenv("RAG_MEMORY_IMPORTANCE_WEIGHT", "0.5"))
 RAG_SUMMARY_EVERY_N = int(os.getenv("RAG_SUMMARY_EVERY_N", "8"))
 RAG_SUMMARY_TURNS_WINDOW = int(os.getenv("RAG_SUMMARY_TURNS_WINDOW", "12"))
 RAG_DEBUG = os.getenv("RAG_DEBUG", "false").lower() == "true"
+PERSONA_MAX_CHARS = int(os.getenv("RAG_PERSONA_MAX_CHARS", "2000"))
 
 rag_store = None
 if RAG_ENABLED:
@@ -304,7 +308,7 @@ def chat():
         return jsonify({'error': 'prompt must be a string'}), 400
     include_thinking = bool(data.get('include_thinking', False))
     conversation_id = data.get('conversation_id')
-    turns_k = int(data.get('turns_k', RAG_TURNS_TOP_K))
+    turns_k = int(data.get('turns_k', RAG_TURN_TOP_K))
     faq_k = int(data.get('faq_k', RAG_FAQ_TOP_K))
     memory_k = int(data.get('memory_k', RAG_MEMORY_TOP_K))
     save_memory = bool(data.get('save_memory', False))
@@ -349,7 +353,7 @@ def chat():
                         p_text, p_meta = persona
                     else:
                         p_text, p_meta = str(persona), {}
-                    short_persona = p_text if len(p_text) <= 2000 else p_text[:2000]
+                    short_persona = p_text if len(p_text) <= PERSONA_MAX_CHARS else p_text[:PERSONA_MAX_CHARS]
                     sections.append("Persona and style guidelines (global):\n" + short_persona)
                     used_context["persona"] = {
                         "included": True,
@@ -392,7 +396,7 @@ def chat():
                     dbg["faqs"] = len(faq_hits)
 
             # Conversation turns with timestamps (recency-aware)
-            if turns_k > 0:
+            if RAG_ENABLE_TURN and turns_k > 0:
                 hits = rag_store.retrieve_turns(query=prompt, k=turns_k, conversation_id=conversation_id)
                 if hits:
                     turn_lines = []
@@ -404,12 +408,12 @@ def chat():
                         else:
                             turn_lines.append(f"- {role}: {text}")
                         used_context["turns"].append(text)
-                    sections.append("Memory (most relevant first):\n" + "\n".join(turn_lines))
+                    sections.append("Recent conversation turns (most relevant first):\n" + "\n".join(turn_lines))
                     dbg["turns"] = len(hits)
 
             # Conversation summaries
             if RAG_ENABLE_SUMMARY and conversation_id:
-                sum_hits = rag_store.retrieve_summaries(conversation_id=conversation_id, k=2)
+                sum_hits = rag_store.retrieve_summaries(conversation_id=conversation_id, k=RAG_SUMMARY_TOP_K)
                 if sum_hits:
                     used_context["summaries"] = [t for t, _ in sum_hits]
                     sections.append("Conversation summaries:\n" + "\n".join(f"- {t}" for t, _ in sum_hits))
@@ -569,10 +573,14 @@ def chat_stream():
     user_timestamp = data.get('user_timestamp') or datetime.datetime.now(datetime.timezone.utc).isoformat()
     save_memory = data.get('save_memory', False)
     memory_text = (data.get('memory_text') or '').strip() if save_memory else None
+    entity = (data.get('entity') or '').strip() or None
+    turns_k = int(data.get('turns_k', RAG_TURN_TOP_K))
+    faq_k = int(data.get('faq_k', RAG_FAQ_TOP_K))
+    memory_k = int(data.get('memory_k', RAG_MEMORY_TOP_K))
 
     # Build RAG context (same as non-streaming endpoint)
     final_prompt = prompt
-    used_context = {'persona': {}, 'faqs': [], 'memories': [], 'turns': [], 'summaries': []}
+    used_context = {'persona': None, 'faqs': [], 'memories': [], 'turns': [], 'summaries': [], 'entity': entity}
     t_retrieve = 0
     t_assemble = 0
 
@@ -599,53 +607,67 @@ def chat_stream():
                         p_text, p_meta = persona_doc
                     else:
                         p_text, p_meta = str(persona_doc), {}
-                    sections.append(f"Persona:\n{p_text}")
-                    used_context['persona'] = {'included': True, 'length': len(p_text), 'meta': p_meta}
+                    short_persona = p_text if len(p_text) <= PERSONA_MAX_CHARS else p_text[:PERSONA_MAX_CHARS]
+                    sections.append("Persona and style guidelines (global):\n" + short_persona)
+                    used_context['persona'] = {
+                        'included': True,
+                        'version': (p_meta or {}).get('version'),
+                        'timestamp': (p_meta or {}).get('timestamp'),
+                    }
+                else:
+                    used_context['persona'] = {'included': False}
 
-            # Query embedding for retrieval
-            t_rs = time.perf_counter()
-            query_embed = None
-            if RAG_ENABLE_FAQ or RAG_ENABLE_MEMORY or RAG_ENABLE_TURN:
-                try:
-                    r = requests.post(
-                        f"{OLLAMA_BASE_URL}/api/embeddings",
-                        json={"model": EMBED_MODEL, "prompt": prompt},
-                        timeout=10
-                    )
-                    r.raise_for_status()
-                    query_embed = r.json().get('embedding', [])
-                except Exception:
-                    pass
+            # Long-term memory
+            if RAG_ENABLE_MEMORY and memory_k > 0:
+                mem_hits = rag_store.retrieve_memories(query=prompt, k=memory_k, entity=entity)
+                if mem_hits:
+                    mem_lines = []
+                    for text_m, meta_m in mem_hits:
+                        imp = (meta_m or {}).get('importance')
+                        scope = (meta_m or {}).get('scope', 'global')
+                        tag_str = ''
+                        tags = (meta_m or {}).get('tags')
+                        if isinstance(tags, list) and tags:
+                            tag_str = f" tags={','.join(tags)}"
+                        if imp is not None:
+                            mem_lines.append(f"- ({scope}, importance={imp}{tag_str}) {text_m}")
+                        else:
+                            mem_lines.append(f"- ({scope}{tag_str}) {text_m}")
+                        used_context['memories'].append(text_m)
+                    sections.append("Long-term memory:\n" + "\n".join(mem_lines))
 
-            # FAQ, Memory, Turns, Summaries retrieval
-            if query_embed:
-                if RAG_ENABLE_FAQ:
-                    faq_hits = rag_store.retrieve_faqs(query_embed, k=RAG_FAQ_TOP_K)
-                    if faq_hits:
-                        used_context["faqs"] = [t for t, _ in faq_hits]
-                        sections.append("Knowledge base:\n" + "\n".join(f"- {t}" for t, _ in faq_hits))
+            # FAQs/reference
+            if RAG_ENABLE_FAQ and faq_k > 0:
+                faq_hits = rag_store.retrieve_faqs(query=prompt, k=faq_k)
+                if faq_hits:
+                    faq_lines = []
+                    for text, meta in faq_hits:
+                        topic = (meta or {}).get('topic', 'faq')
+                        faq_lines.append(f"- ({topic}) {text}")
+                        used_context['faqs'].append(text)
+                    sections.append("Reference snippets (FAQs):\n" + "\n".join(faq_lines))
 
-                if RAG_ENABLE_MEMORY:
-                    mem_hits = rag_store.retrieve_memories_by_embedding(query_embed, k=RAG_MEMORY_TOP_K)
-                    if mem_hits:
-                        used_context["memories"] = [t for t, _, _ in mem_hits]
-                        sections.append("Relevant context:\n" + "\n".join(f"- {t}" for t, _, _ in mem_hits))
+            # Conversation turns with timestamps (recency-aware)
+            if RAG_ENABLE_TURN and turns_k > 0:
+                hits = rag_store.retrieve_turns(query=prompt, k=turns_k, conversation_id=conversation_id)
+                if hits:
+                    turn_lines = []
+                    for text, meta in hits:
+                        role = (meta or {}).get('role', 'context')
+                        ts = (meta or {}).get('timestamp')
+                        if ts:
+                            turn_lines.append(f"- {role} [{ts}]: {text}")
+                        else:
+                            turn_lines.append(f"- {role}: {text}")
+                        used_context['turns'].append(text)
+                    sections.append("Recent conversation turns (most relevant first):\n" + "\n".join(turn_lines))
 
-                if RAG_ENABLE_TURN:
-                    turn_hits = rag_store.retrieve_turns_by_embedding(
-                        query_embed, conversation_id=conversation_id, k=RAG_TURN_TOP_K
-                    )
-                    if turn_hits:
-                        used_context["turns"] = [t for t, _ in turn_hits]
-                        sections.append("Past exchanges:\n" + "\n".join(f"- {t}" for t, _ in turn_hits))
-
-                if RAG_ENABLE_SUMMARY:
-                    sum_hits = rag_store.retrieve_summaries_by_embedding(
-                        query_embed, conversation_id=conversation_id, k=RAG_SUMMARY_TOP_K
-                    )
-                    if sum_hits:
-                        used_context["summaries"] = [t for t, _ in sum_hits]
-                        sections.append("Conversation summaries:\n" + "\n".join(f"- {t}" for t, _ in sum_hits))
+            # Conversation summaries
+            if RAG_ENABLE_SUMMARY and conversation_id:
+                sum_hits = rag_store.retrieve_summaries(conversation_id=conversation_id, k=RAG_SUMMARY_TOP_K)
+                if sum_hits:
+                    used_context['summaries'] = [t for t, _ in sum_hits]
+                    sections.append("Conversation summaries:\n" + "\n".join(f"- {t}" for t, _ in sum_hits))
 
             instructions = (
                 "You are a helpful assistant. Follow the persona and policies above. Use the reference snippets and "
@@ -657,7 +679,7 @@ def chat_stream():
             assembled = ("\n\n".join(sections) + "\n\n" if sections else "") + instructions + "\n" + reminder + "\n" + current_ts_line
             final_prompt = f"{assembled}\nUser: {prompt}\nAssistant:"
             t_retrieve = time.perf_counter() - t0
-            t_assemble = time.perf_counter() - t_rs
+            t_assemble = time.perf_counter() - t0
         except Exception:
             pass
 
@@ -975,7 +997,7 @@ def prompt_debug():
         prompt = (request.args.get('prompt') or '').strip() or 'debug'
         conversation_id = (request.args.get('conversation_id') or '').strip() or None
         entity = (request.args.get('entity') or '').strip() or None
-        turns_k = int(request.args.get('turns_k', RAG_TURNS_TOP_K))
+        turns_k = int(request.args.get('turns_k', RAG_TURN_TOP_K))
         faq_k = int(request.args.get('faq_k', RAG_FAQ_TOP_K))
         memory_k = int(request.args.get('memory_k', RAG_MEMORY_TOP_K))
 
@@ -1000,12 +1022,13 @@ def prompt_debug():
                     p_text, p_meta = persona
                 else:
                     p_text, p_meta = str(persona), {}
-                sections.append("Persona and style guidelines (global):\n" + p_text)
+                short_persona = p_text if len(p_text) <= PERSONA_MAX_CHARS else p_text[:PERSONA_MAX_CHARS]
+                sections.append("Persona and style guidelines (global):\n" + short_persona)
                 used_context["persona"] = {
                     "included": True,
                     "version": (p_meta or {}).get("version"),
                     "timestamp": (p_meta or {}).get("timestamp"),
-                    "length": len(p_text),
+                    "length": len(short_persona),
                 }
             else:
                 used_context["persona"] = {"included": False}
@@ -1041,7 +1064,7 @@ def prompt_debug():
                 sections.append("Reference snippets (FAQs):\n" + "\n".join(faq_lines))
 
         # Conversation turns
-        if turns_k > 0:
+        if RAG_ENABLE_TURN and turns_k > 0:
             hits = rag_store.retrieve_turns(query=prompt, k=turns_k, conversation_id=conversation_id)
             if hits:
                 turn_lines = []
@@ -1053,7 +1076,7 @@ def prompt_debug():
                     else:
                         turn_lines.append(f"- {role}: {text_t}")
                     used_context["turns"].append(text_t)
-                sections.append("Memory (most relevant first):\n" + "\n".join(turn_lines))
+                sections.append("Recent conversation turns (most relevant first):\n" + "\n".join(turn_lines))
 
         # Summaries
         if RAG_ENABLE_SUMMARY and conversation_id:

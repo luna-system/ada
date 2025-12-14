@@ -4,6 +4,10 @@ server {
     root /usr/share/nginx/html;
     index index.html;
 
+    # Resolve service names (e.g., brain) at runtime so container IP changes don't break proxying
+    resolver 127.0.0.11 ipv6=off valid=10s;
+    set $brain_upstream ${BRAIN_URL};
+
     # Serve the SPA and fall back to index.html for client routing
     location / {
         try_files $uri $uri/ /index.html;
@@ -14,7 +18,7 @@ server {
         proxy_set_header Host $host;
         proxy_set_header X-Real-IP $remote_addr;
         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-        proxy_pass ${BRAIN_URL}/v1/healthz;
+        proxy_pass $brain_upstream/v1/healthz;
     }
 
     # Proxy API calls to the brain service, rewriting /api/* -> /v1/*
@@ -24,6 +28,6 @@ server {
         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
         proxy_buffering off; # Required for SSE
         rewrite ^/api/(.*)$ /v1/$1 break;
-        proxy_pass ${BRAIN_URL};
+        proxy_pass $brain_upstream;
     }
 }
