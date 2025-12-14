@@ -13,18 +13,14 @@
     type Role
   } from '../stores/chat';
   import { memList, memLoading, memError, fetchMemories, addMemoryItem, deleteMemoryItem } from '../stores/memory';
-  type StreamMessage =
-    | { type: 'token'; content: string }
-    | { type: 'thinking'; content: string }
-    | { type: 'done'; conversation_id?: string }
-    | { type: 'error'; error?: string };
+  import { streamChat, type StreamMessage } from '../services/chat';
 
   const uuid = () => crypto.randomUUID ? crypto.randomUUID() : Math.random().toString(36).slice(2);
 
   let prompt = '';
   let includeThinking = false;
   let entity = '';
-  let panelOpen: 'none' | 'debug' | 'mem' = 'none';
+  let panelOpen: 'none' | 'debug' | 'mem' | 'prompt' = 'none';
   let menuOpen = false;
 
   // Status & client libs
@@ -40,6 +36,10 @@
   let memEntity = '';
 
   let messagesContainer: HTMLElement | null = null;
+
+  let promptDebug: any = null;
+  let promptDebugError: string | null = null;
+  let promptDebugLoading = false;
 
   function scrollMessages() {
     if (!messagesContainer) return;
@@ -126,7 +126,7 @@
     }
   }
 
-  function togglePanel(which: 'debug' | 'mem') {
+  function togglePanel(which: 'debug' | 'mem' | 'prompt') {
     panelOpen = panelOpen === which ? 'none' : which;
     menuOpen = false;
     if (which === 'debug') {
@@ -137,11 +137,22 @@
       refreshMemList();
       memEntity = entity || memEntity;
     }
+    if (which === 'prompt') {
+      fetchPromptDebug();
+    }
   }
 
   function onEntityChange(val: string) {
     entity = val;
     localStorage.setItem('entity', entity);
+  }
+
+  function lastOfRole(role: Role) {
+    const list = get(messages);
+    for (let i = list.length - 1; i >= 0; i -= 1) {
+      if (list[i].role === role) return list[i];
+    }
+    return undefined;
   }
 
   async function handleSubmit() {
@@ -163,46 +174,27 @@
     let activeConversationId = convId;
 
     try {
-      const res = await fetch('/api/chat/stream', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          prompt: userText,
-          include_thinking: includeThinking,
-          conversation_id: activeConversationId,
-          entity: entity || undefined
-        })
-      });
-      if (!res.body) throw new Error('No response body');
-      const reader = res.body.getReader();
-      const decoder = new TextDecoder();
-      let buffer = '';
-      while (true) {
-        const { done, value } = await reader.read();
-        if (done) break;
-        buffer += decoder.decode(value, { stream: true });
-        const lines = buffer.split('\n');
-        buffer = lines.pop() ?? '';
-        for (const line of lines) {
-          if (!line.startsWith('data: ')) continue;
-          const dataStr = line.slice(6);
-          let data: StreamMessage;
-          try { data = JSON.parse(dataStr); } catch { continue; }
-          if (data.type === 'token') {
-            assistantText += data.content;
-          } else if (data.type === 'thinking' && includeThinking) {
-            thinkingText += data.content;
-          } else if (data.type === 'done') {
-            if (data.conversation_id && data.conversation_id !== activeConversationId) {
-              activeConversationId = data.conversation_id;
-              setConversationId(activeConversationId);
-            }
-          } else if (data.type === 'error') {
-            throw new Error(data.error || 'Stream error');
-          }
+      await streamChat({
+        prompt: userText,
+        includeThinking,
+        conversationId: activeConversationId,
+        entity: entity || undefined,
+        onToken: (content) => {
+          assistantText += content;
           updateMessage(answerId, { text: assistantText, thinking: thinkingText });
+        },
+        onThinking: (content) => {
+          if (!includeThinking) return;
+          thinkingText += content;
+          updateMessage(answerId, { text: assistantText, thinking: thinkingText });
+        },
+        onDone: (newConvId) => {
+          if (newConvId && newConvId !== activeConversationId) {
+            activeConversationId = newConvId;
+            setConversationId(activeConversationId);
+          }
         }
-      }
+      });
     } catch (e: any) {
       updateMessage(answerId, { text: `Error: ${e.message || e}` });
     } finally {
@@ -212,6 +204,26 @@
 
   async function refreshMemList() {
     await fetchMemories(memFilter);
+  }
+
+  async function fetchPromptDebug() {
+    promptDebugLoading = true;
+    promptDebugError = null;
+    try {
+      const params = new URLSearchParams();
+      const convId = ensureConversationId(uuid);
+      if (convId) params.set('conversation_id', convId);
+      if (entity.trim()) params.set('entity', entity.trim());
+      const res = await fetch(`/api/debug/rag?${params.toString()}`);
+      const data = await res.json();
+      if (!res.ok || data.error) throw new Error(data.error || `HTTP ${res.status}`);
+      promptDebug = data;
+    } catch (e: any) {
+      promptDebugError = e.message || 'Failed to load prompt debug';
+      promptDebug = null;
+    } finally {
+      promptDebugLoading = false;
+    }
   }
 
   async function addMemory() {
@@ -287,6 +299,7 @@
         <div class="menu-list">
           <button type="button" class="menu-item" on:click={() => togglePanel('debug')}>Debug</button>
           <button type="button" class="menu-item" on:click={() => togglePanel('mem')}>Memories</button>
+          <button type="button" class="menu-item" on:click={() => togglePanel('prompt')}>Prompt Debug</button>
         </div>
       {/if}
     </div>
@@ -419,6 +432,40 @@
       </div>
     </aside>
   {/if}
+
+  {#if panelOpen === 'prompt'}
+    <aside class="panel" id="promptPanel">
+      <div class="panel-header">
+        <strong>Prompt Debug</strong>
+        <button class="icon" type="button" aria-label="Close" on:click={() => panelOpen = 'none'}>✕</button>
+      </div>
+      <div class="panel-body">
+        <div class="panel-status">
+          <div class="row" style="justify-content: space-between;">
+            <strong>Most recent turn</strong>
+            <button class="ghost" type="button" on:click={fetchPromptDebug}>Refresh</button>
+          </div>
+          <div class="status-box muted">
+            <div><strong>User:</strong> {lastOfRole('user')?.text || '—'}</div>
+            <div><strong>Assistant:</strong> {lastOfRole('assistant')?.text || '—'}</div>
+          </div>
+        </div>
+        <div class="panel-status">
+          <div class="row" style="justify-content: space-between;">
+            <strong>Prompt context</strong>
+            {#if promptDebugLoading}<span class="muted">Loading…</span>{/if}
+          </div>
+          {#if promptDebugError}
+            <div class="status-box bad">{promptDebugError}</div>
+          {:else if promptDebug}
+            <pre class="status-box" style="white-space: pre-wrap; overflow:auto; max-height: 60vh;">{JSON.stringify(promptDebug, null, 2)}</pre>
+          {:else}
+            <div class="status-box muted">No prompt debug data yet. Refresh to load.</div>
+          {/if}
+        </div>
+      </div>
+    </aside>
+  {/if}
 </div>
 
 <style>
@@ -486,15 +533,15 @@
   button { height: 44px; padding: 0 16px; border: 1px solid #2563eb; border-radius: 10px; background: #1d4ed8; color: white; cursor: pointer; }
   button:disabled, textarea:disabled { opacity: 0.6; cursor: not-allowed; }
   .hint { color: var(--muted); font-size: 12px; padding: 0 12px 12px; }
-  .panel { position: fixed; top: 0; right: 0; width: 360px; height: 100%; background: #0b1220; border-left: 1px solid #1f2937; box-shadow: -4px 0 16px rgba(0,0,0,0.4); display: grid; grid-template-rows: auto 1fr; z-index: 20; }
+  .panel { position: fixed; top: 0; right: 0; width: 420px; height: 100%; background: #0b1220; border-left: 1px solid #1f2937; box-shadow: -4px 0 16px rgba(0,0,0,0.4); display: grid; grid-template-rows: auto 1fr; z-index: 20; }
   .panel-header { display: flex; align-items: center; justify-content: space-between; padding: 12px; border-bottom: 1px solid #1f2937; }
   .panel-body { padding: 12px; display: grid; grid-template-rows: auto 1fr auto; gap: 10px; }
   .panel-controls { display: flex; gap: 8px; align-items: end; }
   .panel-status { display: grid; gap: 6px; }
   .status-box { border: 1px solid #1f2937; background: #0f172a; border-radius: 8px; padding: 8px; font-size: 12px; color: var(--text); }
   .status-box.bad { border-color: #7f1d1d; color: #fca5a5; background: #1f1b1b; }
-  .mem-list { overflow-y: auto; display: flex; flex-direction: column; gap: 8px; }
-  .mem-item { display: flex; align-items: start; justify-content: space-between; gap: 8px; background: #0f172a; border: 1px solid #1f2937; border-radius: 8px; padding: 8px; }
+  .mem-list { overflow-y: auto; display: flex; flex-direction: column; gap: 8px; max-height: 50vh; padding-right: 12px; }
+  .mem-item { display: flex; align-items: start; justify-content: space-between; gap: 8px; background: #0f172a; border: 1px solid #1f2937; border-radius: 8px; padding: 8px 8px 8px 8px; }
   .mem-text { white-space: pre-wrap; word-break: break-word; font-size: 13px; }
   .panel-add { display: grid; gap: 8px; }
   .panel-add textarea { min-height: 120px; }
