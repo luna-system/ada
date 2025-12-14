@@ -30,6 +30,16 @@ def rag_debug():
         return jsonify({'error': str(e)}), 500
 
 
+@app.route('/api/debug/prompt', methods=['GET'])
+def prompt_debug():
+    # Proxy to brain's prompt debug endpoint
+    try:
+        r = requests.get(f"{BRAIN_URL}/v1/debug/prompt", params=request.args, timeout=30)
+        return (r.text, r.status_code, {"Content-Type": r.headers.get("Content-Type", "application/json")})
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+
 @app.route('/api/health', methods=['GET'])
 def health_proxy():
     """Proxy the brain service health endpoint for same-origin access from the UI."""

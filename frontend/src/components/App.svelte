@@ -214,7 +214,9 @@
       const convId = ensureConversationId(uuid);
       if (convId) params.set('conversation_id', convId);
       if (entity.trim()) params.set('entity', entity.trim());
-      const res = await fetch(`/api/debug/rag?${params.toString()}`);
+      const lastUser = lastOfRole('user');
+      if (lastUser?.text) params.set('prompt', lastUser.text);
+      const res = await fetch(`/api/debug/prompt?${params.toString()}`);
       const data = await res.json();
       if (!res.ok || data.error) throw new Error(data.error || `HTTP ${res.status}`);
       promptDebug = data;
@@ -458,7 +460,21 @@
           {#if promptDebugError}
             <div class="status-box bad">{promptDebugError}</div>
           {:else if promptDebug}
-            <pre class="status-box" style="white-space: pre-wrap; overflow:auto; max-height: 60vh;">{JSON.stringify(promptDebug, null, 2)}</pre>
+            <div class="status-box" style="max-height: 28vh; overflow:auto; white-space: pre-wrap;">
+              <strong>Context counts</strong>
+              <div class="muted">persona: {promptDebug.used_context?.persona?.included ? 'yes' : 'no'},
+                faqs: {promptDebug.used_context?.faqs?.length || 0},
+                memories: {promptDebug.used_context?.memories?.length || 0},
+                turns: {promptDebug.used_context?.turns?.length || 0},
+                summaries: {promptDebug.used_context?.summaries?.length || 0}
+              </div>
+              <strong>Sections</strong>
+              <pre style="white-space: pre-wrap; overflow:auto; margin: 8px 0;">{(promptDebug.sections || []).join('\n\n')}</pre>
+            </div>
+            <div class="status-box" style="max-height: 28vh; overflow:auto; white-space: pre-wrap;">
+              <strong>Final prompt</strong>
+              <pre style="white-space: pre-wrap; overflow:auto; margin: 8px 0;">{promptDebug.final_prompt}</pre>
+            </div>
           {:else}
             <div class="status-box muted">No prompt debug data yet. Refresh to load.</div>
           {/if}
