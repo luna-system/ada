@@ -41,7 +41,7 @@ services:
     volumes:
       - ./data/chroma:/data:ro
       - ./data/chroma/backups:/out
-    command: sh -c "apk add --no-cache sqlite && mkdir -p /out && while true; do ts=$$(date -u +%Y%m%dT%H%M%SZ) && sqlite3 /data/chroma.sqlite3 '.backup /out/chroma-'$$ts'.sqlite3' && ls -1t /out/chroma-*.sqlite3 2>/dev/null | tail -n +11 | xargs -r rm -- ; sleep 3600; done"
+    command: sh -c "apk add --no-cache sqlite && mkdir -p /out && while true; do ts=$$(date -u +%Y%m%dT%H%M%SZ) && sqlite3 /data/chroma.sqlite3 '.backup /out/chroma-'$$ts'.sqlite3' && ls -1t /out/chroma-*.sqlite3 2>/dev/null | tail -n +51 | xargs -r rm -- ; sleep 3600; done"
 
   brain:
     build:
