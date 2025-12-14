@@ -1,4 +1,6 @@
 ---
+// Client app script is bundled via inline module import
+
 const { title = 'ADA Chat' } = Astro.props;
 ---
 <!DOCTYPE html>
@@ -15,6 +17,6 @@ const { title = 'ADA Chat' } = Astro.props;
     <script src="/lib/highlight.min.js" is:inline></script>
     <script src="/lib/marked.min.js" is:inline></script>
     <script src="/lib/purify.min.js" is:inline></script>
-    <script src="/app.js" is:inline></script>
+    <script type="module" src="/app.js"></script>
   </body>
 </html>
