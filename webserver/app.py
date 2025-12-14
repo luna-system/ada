@@ -1,6 +1,9 @@
 from flask import Flask, request, jsonify, send_from_directory
 import os
 import requests
+from dotenv import load_dotenv
+
+load_dotenv()
 
 # Serve static files from /app/static so docker volume mount works
 # (compose.yaml mounts ./webserver/static -> /app/static)

@@ -56,6 +56,9 @@ def main():
         source=args.source,
     )
 
+        from dotenv import load_dotenv
+
+        load_dotenv()
     print({"status": "ok", "doc_id": doc_id, "type": "persona", "version": args.version})
     return 0
 

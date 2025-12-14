@@ -16,6 +16,11 @@ htmlcov/
 venv/
 env/
 
+# Env files
+.env
+.env.*
+!.env.example
+
 # Editor/IDE
 .idea/
 .vscode/
