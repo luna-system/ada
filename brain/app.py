@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, Response, stream_with_context
 import os
 import requests
 import datetime
@@ -421,6 +421,191 @@ def chat():
         })
     except Exception as e:
         return jsonify({'error': str(e)}), 500
+
+
+@app.route('/v1/chat/stream', methods=['POST'])
+def chat_stream():
+    """
+    Streaming version of /v1/chat endpoint using Server-Sent Events (SSE).
+    Streams tokens as they're generated from Ollama.
+    """
+    data = request.get_json()
+    prompt = (data.get('prompt') or '').strip()
+    if not prompt:
+        return jsonify({'error': 'prompt required'}), 400
+
+    req_id = str(uuid.uuid4())[:8]
+    conversation_id = data.get('conversation_id') or str(uuid.uuid4())
+    include_thinking = data.get('include_thinking', False)
+    user_timestamp = data.get('user_timestamp') or datetime.datetime.now(datetime.timezone.utc).isoformat()
+    save_memory = data.get('save_memory', False)
+    memory_text = (data.get('memory_text') or '').strip() if save_memory else None
+
+    # Build RAG context (same as non-streaming endpoint)
+    final_prompt = prompt
+    used_context = {'persona': {}, 'faqs': [], 'memories': [], 'turns': [], 'summaries': []}
+    t_retrieve = 0
+    t_assemble = 0
+
+    if RAG_ENABLED and rag_store is not None:
+        try:
+            t0 = time.perf_counter()
+            sections = []
+
+            # Persona
+            if RAG_ENABLE_PERSONA:
+                persona_doc = rag_store.load_persona_block()
+                if persona_doc:
+                    sections.append(persona_doc)
+                    used_context['persona'] = {'included': True, 'length': len(persona_doc)}
+
+            # Query embedding for retrieval
+            t_rs = time.perf_counter()
+            query_embed = None
+            if RAG_ENABLE_FAQ or RAG_ENABLE_MEMORY or RAG_ENABLE_TURN:
+                try:
+                    r = requests.post(
+                        f"{OLLAMA_BASE_URL}/api/embeddings",
+                        json={"model": EMBED_MODEL, "prompt": prompt},
+                        timeout=10
+                    )
+                    r.raise_for_status()
+                    query_embed = r.json().get('embedding', [])
+                except Exception:
+                    pass
+
+            # FAQ, Memory, Turns, Summaries retrieval
+            if query_embed:
+                if RAG_ENABLE_FAQ:
+                    faq_hits = rag_store.retrieve_faqs(query_embed, k=RAG_FAQ_TOP_K)
+                    if faq_hits:
+                        used_context["faqs"] = [t for t, _ in faq_hits]
+                        sections.append("Knowledge base:\n" + "\n".join(f"- {t}" for t, _ in faq_hits))
+
+                if RAG_ENABLE_MEMORY:
+                    mem_hits = rag_store.retrieve_memories_by_embedding(query_embed, k=RAG_MEMORY_TOP_K)
+                    if mem_hits:
+                        used_context["memories"] = [t for t, _, _ in mem_hits]
+                        sections.append("Relevant context:\n" + "\n".join(f"- {t}" for t, _, _ in mem_hits))
+
+                if RAG_ENABLE_TURN:
+                    turn_hits = rag_store.retrieve_turns_by_embedding(
+                        query_embed, conversation_id=conversation_id, k=RAG_TURN_TOP_K
+                    )
+                    if turn_hits:
+                        used_context["turns"] = [t for t, _ in turn_hits]
+                        sections.append("Past exchanges:\n" + "\n".join(f"- {t}" for t, _ in turn_hits))
+
+                if RAG_ENABLE_SUMMARY:
+                    sum_hits = rag_store.retrieve_summaries_by_embedding(
+                        query_embed, conversation_id=conversation_id, k=RAG_SUMMARY_TOP_K
+                    )
+                    if sum_hits:
+                        used_context["summaries"] = [t for t, _ in sum_hits]
+                        sections.append("Conversation summaries:\n" + "\n".join(f"- {t}" for t, _ in sum_hits))
+
+            instructions = (
+                "You are a helpful assistant. Follow the persona and policies above. Use the reference snippets and "
+                "conversation memory when relevant. If the user asks about times or durations, use the provided "
+                "UTC ISO timestamps to compute precise differences and express them in human-friendly units."
+            )
+            current_ts_line = f"Current user message timestamp (UTC): {user_timestamp}"
+            assembled = f"{instructions}\n\n" + ("\n\n".join(sections) + "\n\n" if sections else "")
+            final_prompt = (
+                f"{assembled}"
+                f"{current_ts_line}\n"
+                f"User: {prompt}\nAssistant:"
+            )
+            t_retrieve = time.perf_counter() - t0
+            t_assemble = time.perf_counter() - t_rs
+        except Exception:
+            pass
+
+    # Generator function for SSE streaming
+    def generate():
+        try:
+            payload = {
+                'model': OLLAMA_MODEL,
+                'prompt': final_prompt,
+                'stream': True,
+                'think': include_thinking,
+            }
+
+            # Stream from Ollama
+            accumulated_text = ""
+            accumulated_thinking = ""
+            
+            with requests.post(OLLAMA_API_URL, json=payload, stream=True) as response:
+                response.raise_for_status()
+                
+                for line in response.iter_lines():
+                    if line:
+                        chunk = json.loads(line)
+                        
+                        # Send response tokens
+                        if 'response' in chunk and chunk['response']:
+                            token = chunk['response']
+                            accumulated_text += token
+                            yield f"data: {json.dumps({'type': 'token', 'content': token})}\n\n"
+                        
+                        # Send thinking tokens if enabled
+                        if include_thinking and 'thinking' in chunk and chunk['thinking']:
+                            thinking_token = chunk['thinking']
+                            accumulated_thinking += thinking_token
+                            yield f"data: {json.dumps({'type': 'thinking', 'content': thinking_token})}\n\n"
+                        
+                        # Check if stream is done
+                        if chunk.get('done', False):
+                            assistant_timestamp = datetime.datetime.now(datetime.timezone.utc).isoformat()
+                            
+                            # Upsert turn after generation completes
+                            if rag_store is not None and prompt and accumulated_text:
+                                try:
+                                    cid = rag_store.upsert_turn(
+                                        conversation_id,
+                                        user_text=prompt,
+                                        assistant_text=accumulated_text,
+                                        user_ts=user_timestamp,
+                                        assistant_ts=assistant_timestamp,
+                                        source="chat",
+                                    )
+                                except Exception:
+                                    if RAG_DEBUG:
+                                        import traceback
+                                        print(f"[BRAIN][RAG][upsert][{req_id}] failed:\n" + traceback.format_exc())
+
+                            # Consent-based memory save
+                            if rag_store is not None and save_memory:
+                                try:
+                                    mem_text = memory_text or accumulated_text
+                                    if mem_text and mem_text.strip():
+                                        rag_store.upsert_memory(
+                                            mem_text.strip(),
+                                            scope="global",
+                                            importance=int(data.get('memory_importance', 3))
+                                        )
+                                except Exception:
+                                    if RAG_DEBUG:
+                                        import traceback
+                                        print("[BRAIN][RAG][memory-upsert] failed:\n" + traceback.format_exc())
+
+                            # Send completion metadata
+                            metadata = {
+                                'type': 'done',
+                                'conversation_id': conversation_id,
+                                'used_context': used_context,
+                                'user_timestamp': user_timestamp,
+                                'assistant_timestamp': assistant_timestamp,
+                                'request_id': req_id,
+                            }
+                            yield f"data: {json.dumps(metadata)}\n\n"
+                            break
+
+        except Exception as e:
+            error_data = {'type': 'error', 'error': str(e)}
+            yield f"data: {json.dumps(error_data)}\n\n"
+
+    return Response(stream_with_context(generate()), mimetype='text/event-stream')
 
 
 @app.route('/v1/memory', methods=['GET'])

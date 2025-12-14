@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify, send_from_directory
+from flask import Flask, request, jsonify, send_from_directory, Response, stream_with_context
 import os
 import requests
 from dotenv import load_dotenv
@@ -46,6 +46,29 @@ def chat():
         return (r.text, r.status_code, {"Content-Type": r.headers.get("Content-Type", "application/json")})
     except Exception as e:
         return jsonify({'error': str(e)}), 500
+
+
+@app.route('/api/chat/stream', methods=['POST'])
+def chat_stream():
+    """Proxy streaming chat endpoint from brain using SSE."""
+    def generate():
+        try:
+            with requests.post(
+                f"{BRAIN_URL}/v1/chat/stream",
+                json=request.json,
+                stream=True,
+                timeout=300
+            ) as r:
+                r.raise_for_status()
+                for line in r.iter_lines():
+                    if line:
+                        yield line + b'\n'
+        except Exception as e:
+            import json
+            error_data = json.dumps({'type': 'error', 'error': str(e)})
+            yield f"data: {error_data}\n\n".encode('utf-8')
+
+    return Response(stream_with_context(generate()), mimetype='text/event-stream')
 
 
 @app.route('/api/memory', methods=['GET'])
