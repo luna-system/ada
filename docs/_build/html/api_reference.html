@@ -1,0 +1,549 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>API Reference &mdash; Ada v1 Brain API 0.1.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=01f34227"></script>
+      <script src="_static/doctools.js?v=9bcbadda"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Streaming" href="streaming.html" />
+    <link rel="prev" title="Getting Started" href="getting_started.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            Ada v1 Brain API
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Documentation:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="getting_started.html">Getting Started</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">API Reference</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#module-brain.app">Brain API Endpoints</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#brain.app.healthz"><code class="docutils literal notranslate"><span class="pre">healthz()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#brain.app.chat"><code class="docutils literal notranslate"><span class="pre">chat()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#brain.app.chat_stream"><code class="docutils literal notranslate"><span class="pre">chat_stream()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#brain.app.list_memory"><code class="docutils literal notranslate"><span class="pre">list_memory()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#brain.app.create_memory"><code class="docutils literal notranslate"><span class="pre">create_memory()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#brain.app.delete_memory"><code class="docutils literal notranslate"><span class="pre">delete_memory()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#brain.app.rag_debug"><code class="docutils literal notranslate"><span class="pre">rag_debug()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#endpoint-summary">Endpoint Summary</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#health-monitoring">Health &amp; Monitoring</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#chat-endpoints">Chat Endpoints</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#memory-endpoints">Memory Endpoints</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#debug-endpoint">Debug Endpoint</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#request-response-models">Request/Response Models</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#chat-request">Chat Request</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#chat-response">Chat Response</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#stream-events-sse">Stream Events (SSE)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#memory-request">Memory Request</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#memory-response">Memory Response</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#status-codes">Status Codes</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#http-status-code-reference">HTTP Status Code Reference</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="streaming.html">Streaming</a></li>
+<li class="toctree-l1"><a class="reference internal" href="memory.html">Memory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="examples.html">Examples</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Ada v1 Brain API</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">API Reference</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/api_reference.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="api-reference">
+<h1>API Reference<a class="headerlink" href="#api-reference" title="Link to this heading"></a></h1>
+<section id="module-brain.app">
+<span id="brain-api-endpoints"></span><h2>Brain API Endpoints<a class="headerlink" href="#module-brain.app" title="Link to this heading"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="brain.app.healthz">
+<span class="sig-prename descclassname"><span class="pre">brain.app.</span></span><span class="sig-name descname"><span class="pre">healthz</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/brain/app.html#healthz"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#brain.app.healthz" title="Link to this definition"></a></dt>
+<dd><p>Health check endpoint for the brain service.</p>
+<p>Returns detailed information about service status, dependencies, and configuration.</p>
+<p><strong>HTTP Method:</strong> GET</p>
+<dl>
+<dt><strong>Response (200 OK):</strong></dt><dd><p>JSON object with keys:</p>
+<ul class="simple">
+<li><p>ok (bool): Overall service health status</p></li>
+<li><p>service (str): Service name (“brain”)</p></li>
+<li><p>python (str): Python version</p></li>
+<li><dl class="simple">
+<dt>config (dict): Active configuration including:</dt><dd><ul>
+<li><p>OLLAMA_BASE_URL: LLM backend URL</p></li>
+<li><p>OLLAMA_MODEL: Active LLM model name</p></li>
+<li><p>CHROMA_URL: Vector database URL</p></li>
+<li><p>RAG_ENABLE_*: Feature toggles for Persona, FAQ, Memory, Summary</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><p>persona (dict): Persona status with ‘loaded’ boolean</p></li>
+<li><dl class="simple">
+<dt>chroma (dict): Vector database connectivity status with:</dt><dd><ul>
+<li><p>ok (bool): Connectivity status</p></li>
+<li><p>version (str): Database version if available</p></li>
+<li><p>error (str): Error message if unhealthy</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+</dd>
+<dt><strong>Response (503 Service Unavailable):</strong></dt><dd><p>Returned if critical dependencies are unavailable.</p>
+</dd>
+<dt><strong>Example:</strong></dt><dd><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">curl</span> <span class="n">http</span><span class="p">:</span><span class="o">//</span><span class="n">localhost</span><span class="p">:</span><span class="mi">7000</span><span class="o">/</span><span class="n">v1</span><span class="o">/</span><span class="n">healthz</span>
+<span class="go">{</span>
+<span class="go">    &quot;ok&quot;: true,</span>
+<span class="go">    &quot;service&quot;: &quot;brain&quot;,</span>
+<span class="go">    &quot;python&quot;: &quot;3.13.0&quot;,</span>
+<span class="go">    &quot;config&quot;: {...},</span>
+<span class="go">    &quot;persona&quot;: {&quot;loaded&quot;: true},</span>
+<span class="go">    &quot;chroma&quot;: {&quot;ok&quot;: true, &quot;version&quot;: &quot;0.5.11&quot;, &quot;error&quot;: null}</span>
+<span class="go">}</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="brain.app.chat">
+<span class="sig-prename descclassname"><span class="pre">brain.app.</span></span><span class="sig-name descname"><span class="pre">chat</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/brain/app.html#chat"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#brain.app.chat" title="Link to this definition"></a></dt>
+<dd><p>Non-streaming chat endpoint for generating responses with optional RAG context.</p>
+<p>Accepts a prompt and optional parameters, retrieves relevant context from the RAG system
+(persona, FAQ, memory, conversation history), and returns a complete LLM response.
+Use /v1/chat/stream for real-time token streaming.</p>
+<p><strong>HTTP Method:</strong> POST</p>
+<dl>
+<dt><strong>Request Body (JSON):</strong></dt><dd><ul class="simple">
+<li><p>prompt (str, required): User message/question</p></li>
+<li><p>conversation_id (str, optional): UUID to thread multiple turns. Auto-generated if omitted.</p></li>
+<li><p>include_thinking (bool, optional): Include LLM reasoning in response (default: false)</p></li>
+<li><p>entity (str, optional): Entity/topic scope for memory retrieval (default: null)</p></li>
+<li><p>save_memory (bool, optional): Save assistant response to long-term memory (default: false)</p></li>
+<li><p>memory_text (str, optional): Custom text to save to memory (uses response if omitted)</p></li>
+<li><p>turns_k (int, optional): Number of recent conversation turns to retrieve (default: 3)</p></li>
+<li><p>faq_k (int, optional): Number of FAQ entries to retrieve (default: 3)</p></li>
+<li><p>memory_k (int, optional): Number of memories to retrieve (default: 5)</p></li>
+</ul>
+</dd>
+<dt><strong>Response (200 OK):</strong></dt><dd><p>JSON object with keys:</p>
+<ul class="simple">
+<li><p>response (str): Main assistant response text</p></li>
+<li><p>thinking (str): LLM reasoning/thinking (only if include_thinking=true)</p></li>
+<li><p>conversation_id (str): Conversation thread ID (same as input or generated)</p></li>
+<li><p>user_timestamp (str): ISO 8601 timestamp of user message</p></li>
+<li><p>assistant_timestamp (str): ISO 8601 timestamp of assistant response</p></li>
+<li><p>request_id (str): Unique request identifier for debugging</p></li>
+<li><dl class="simple">
+<dt>used_context (dict): Retrieved context including:</dt><dd><ul>
+<li><p>persona (dict): Persona block metadata if included</p></li>
+<li><p>faqs (list): FAQ snippets used</p></li>
+<li><p>turns (list): Conversation history snippets</p></li>
+<li><p>memories (list): Long-term memories matched</p></li>
+<li><p>summaries (list): Conversation summaries matched</p></li>
+<li><p>entity (str): Entity scope used</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+</dd>
+<dt><strong>Response (400 Bad Request):</strong></dt><dd><p>Returned if prompt is missing or not a string.</p>
+</dd>
+<dt><strong>Response (500 Internal Server Error):</strong></dt><dd><p>Returned if Ollama or vector database is unavailable.</p>
+</dd>
+<dt><strong>Side Effects:</strong></dt><dd><ul class="simple">
+<li><p>If RAG_ENABLED: Stores conversation turn in vector database for future retrieval</p></li>
+<li><p>If RAG_ENABLE_SUMMARY: May generate conversation summary every N turns</p></li>
+<li><p>If save_memory: Stores response/memory_text in long-term memory store</p></li>
+</ul>
+</dd>
+<dt><strong>Example:</strong></dt><dd><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">curl</span> <span class="o">-</span><span class="n">X</span> <span class="n">POST</span> <span class="n">http</span><span class="p">:</span><span class="o">//</span><span class="n">localhost</span><span class="p">:</span><span class="mi">7000</span><span class="o">/</span><span class="n">v1</span><span class="o">/</span><span class="n">chat</span> \
+<span class="gp">... </span>  <span class="o">-</span><span class="n">H</span> <span class="s2">&quot;Content-Type: application/json&quot;</span> \
+<span class="gp">... </span>  <span class="o">-</span><span class="n">d</span> <span class="s1">&#39;{&quot;prompt&quot;: &quot;What is the weather?&quot;, &quot;include_thinking&quot;: true}&#39;</span>
+<span class="go">{</span>
+<span class="go">    &quot;response&quot;: &quot;I don&#39;t have access to real-time weather data...&quot;,</span>
+<span class="go">    &quot;thinking&quot;: &quot;The user is asking about weather. I should clarify...&quot;,</span>
+<span class="go">    &quot;conversation_id&quot;: &quot;550e8400-e29b-41d4-a716-446655440000&quot;,</span>
+<span class="go">    &quot;user_timestamp&quot;: &quot;2025-12-13T10:30:45.123456+00:00&quot;,</span>
+<span class="go">    &quot;assistant_timestamp&quot;: &quot;2025-12-13T10:30:48.456789+00:00&quot;,</span>
+<span class="go">    &quot;request_id&quot;: &quot;abc12345&quot;,</span>
+<span class="go">    &quot;used_context&quot;: {...}</span>
+<span class="go">}</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="brain.app.chat_stream">
+<span class="sig-prename descclassname"><span class="pre">brain.app.</span></span><span class="sig-name descname"><span class="pre">chat_stream</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/brain/app.html#chat_stream"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#brain.app.chat_stream" title="Link to this definition"></a></dt>
+<dd><p>Streaming chat endpoint using Server-Sent Events (SSE).</p>
+<ul class="simple">
+<li><p><strong>Method:</strong> POST</p></li>
+<li><p><strong>Path:</strong> /v1/chat/stream</p></li>
+<li><p><strong>Request JSON:</strong> prompt (required), conversation_id, include_thinking, entity,
+save_memory, memory_text, turns_k, faq_k, memory_k</p></li>
+<li><p><strong>Content-Type:</strong> text/event-stream</p></li>
+</ul>
+<p>Events (newline-delimited, prefixed with <code class="docutils literal notranslate"><span class="pre">data:</span> <span class="pre">``):</span>
+<span class="pre">-</span> <span class="pre">``token</span></code>: assistant response token
+- <code class="docutils literal notranslate"><span class="pre">thinking</span></code>: reasoning token (only if include_thinking=true)
+- <code class="docutils literal notranslate"><span class="pre">done</span></code>: final metadata (conversation_id, used_context, timestamps, request_id)
+- <code class="docutils literal notranslate"><span class="pre">error</span></code>: error details</p>
+<p>Responses:
+- 200: Stream started
+- 400: Missing prompt
+- 500: Internal error (e.g., Ollama unreachable)</p>
+<p>Side effects: same as /v1/chat (turn upserts, optional memories, summaries).</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="brain.app.list_memory">
+<span class="sig-prename descclassname"><span class="pre">brain.app.</span></span><span class="sig-name descname"><span class="pre">list_memory</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/brain/app.html#list_memory"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#brain.app.list_memory" title="Link to this definition"></a></dt>
+<dd><p>Retrieve long-term memories with optional semantic search.</p>
+<ul class="simple">
+<li><p><strong>Method:</strong> GET</p></li>
+<li><p><strong>Path:</strong> /v1/memory</p></li>
+<li><p><strong>Query params:</strong>
+- search (optional): semantic query; if omitted returns empty list
+- scope (optional): memory scope (e.g., <code class="docutils literal notranslate"><span class="pre">global</span></code>, <code class="docutils literal notranslate"><span class="pre">user:123</span></code>)
+- entity (optional): entity/topic scope
+- limit (optional): max results (default 20, capped at 20)</p></li>
+</ul>
+<p>Responses:
+- 200: <code class="docutils literal notranslate"><span class="pre">{&quot;items&quot;:</span> <span class="pre">[...]}</span></code>
+- 200: empty items if RAG disabled
+- 500: retrieval error</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="brain.app.create_memory">
+<span class="sig-prename descclassname"><span class="pre">brain.app.</span></span><span class="sig-name descname"><span class="pre">create_memory</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/brain/app.html#create_memory"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#brain.app.create_memory" title="Link to this definition"></a></dt>
+<dd><p>Create a new long-term memory entry.</p>
+<ul class="simple">
+<li><p><strong>Method:</strong> POST</p></li>
+<li><p><strong>Path:</strong> /v1/memory</p></li>
+<li><p><strong>Request JSON:</strong> text (required), importance (1-5, default 3),
+scope (default <code class="docutils literal notranslate"><span class="pre">global</span></code>), entity (optional)</p></li>
+</ul>
+<p>Responses:
+- 201: memory created (id returned)
+- 400: text missing
+- 503: RAG unavailable
+- 500: storage error</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="brain.app.delete_memory">
+<span class="sig-prename descclassname"><span class="pre">brain.app.</span></span><span class="sig-name descname"><span class="pre">delete_memory</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mem_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/brain/app.html#delete_memory"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#brain.app.delete_memory" title="Link to this definition"></a></dt>
+<dd><p>Delete a long-term memory entry by ID.</p>
+<ul class="simple">
+<li><p><strong>Method:</strong> DELETE</p></li>
+<li><p><strong>Path:</strong> /v1/memory/&lt;mem_id&gt;</p></li>
+</ul>
+<p>Responses:
+- 200: deleted
+- 503: RAG unavailable
+- 500: delete error (e.g., missing id)</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="brain.app.rag_debug">
+<span class="sig-prename descclassname"><span class="pre">brain.app.</span></span><span class="sig-name descname"><span class="pre">rag_debug</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/brain/app.html#rag_debug"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#brain.app.rag_debug" title="Link to this definition"></a></dt>
+<dd><p>Debug information for the RAG system (development only).</p>
+<ul class="simple">
+<li><p><strong>Method:</strong> GET</p></li>
+<li><p><strong>Path:</strong> /v1/debug/rag</p></li>
+<li><p><strong>Query params:</strong> conversation_id (optional)</p></li>
+</ul>
+<p>Responses:
+- 200: RAG stats (persona_count, faq_count, memory_count, summary_count, optional turn_count_for_conversation)
+- 404: debug disabled (RAG_DEBUG!=true or RAG unavailable)
+- 500: error retrieving stats</p>
+</dd></dl>
+
+</section>
+<section id="endpoint-summary">
+<h2>Endpoint Summary<a class="headerlink" href="#endpoint-summary" title="Link to this heading"></a></h2>
+<section id="health-monitoring">
+<h3>Health &amp; Monitoring<a class="headerlink" href="#health-monitoring" title="Link to this heading"></a></h3>
+<p><strong>GET /v1/healthz</strong> — Service health status and dependency info.</p>
+<p>Status codes: 200 (healthy), 503 (dependency unavailable).</p>
+</section>
+<section id="chat-endpoints">
+<h3>Chat Endpoints<a class="headerlink" href="#chat-endpoints" title="Link to this heading"></a></h3>
+<p><strong>POST /v1/chat</strong> — Non-streaming chat with RAG.</p>
+<p>Status codes: 200 (ok), 400 (bad request), 500 (server error).</p>
+<p><strong>POST /v1/chat/stream</strong> — Streaming chat via SSE.</p>
+<p>Status codes: 200 (stream), 400 (bad request), 500 (server error).</p>
+</section>
+<section id="memory-endpoints">
+<h3>Memory Endpoints<a class="headerlink" href="#memory-endpoints" title="Link to this heading"></a></h3>
+<p><strong>GET /v1/memory</strong> — Semantic search over memories.</p>
+<p>Query params: search, entity, limit.
+Status codes: 200 (ok), 500 (query error).</p>
+<p><strong>POST /v1/memory</strong> — Create memory entry.</p>
+<p>Status codes: 201 (created), 400 (bad request), 503 (RAG unavailable).</p>
+<p><strong>DELETE /v1/memory/&lt;mem_id&gt;</strong> — Delete memory entry.</p>
+<p>Status codes: 200 (ok), 503 (RAG unavailable), 500 (delete error).</p>
+</section>
+<section id="debug-endpoint">
+<h3>Debug Endpoint<a class="headerlink" href="#debug-endpoint" title="Link to this heading"></a></h3>
+<p><strong>GET /v1/debug/rag</strong> — RAG statistics (RAG_DEBUG=true).</p>
+<p>Query params: conversation_id (optional).
+Status codes: 200 (ok), 404 (debug disabled), 500 (error).</p>
+</section>
+</section>
+<section id="request-response-models">
+<h2>Request/Response Models<a class="headerlink" href="#request-response-models" title="Link to this heading"></a></h2>
+<section id="chat-request">
+<h3>Chat Request<a class="headerlink" href="#chat-request" title="Link to this heading"></a></h3>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+<span class="w">  </span><span class="nt">&quot;prompt&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Your question here&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;conversation_id&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;uuid-optional&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;include_thinking&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;entity&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;optional-topic&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;save_memory&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;memory_text&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;optional-custom-text&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;turns_k&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">3</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;faq_k&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">3</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;memory_k&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">5</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</section>
+<section id="chat-response">
+<h3>Chat Response<a class="headerlink" href="#chat-response" title="Link to this heading"></a></h3>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+<span class="w">  </span><span class="nt">&quot;response&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Assistant response text&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;thinking&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Reasoning (if enabled)&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;conversation_id&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;uuid-here&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;used_context&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nt">&quot;persona&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="nt">&quot;included&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">},</span>
+<span class="w">    </span><span class="nt">&quot;faqs&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;faq text snippets&quot;</span><span class="p">],</span>
+<span class="w">    </span><span class="nt">&quot;turns&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;previous exchanges&quot;</span><span class="p">],</span>
+<span class="w">    </span><span class="nt">&quot;memories&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;relevant memories&quot;</span><span class="p">],</span>
+<span class="w">    </span><span class="nt">&quot;summaries&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;conversation summaries&quot;</span><span class="p">],</span>
+<span class="w">    </span><span class="nt">&quot;entity&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span>
+<span class="w">  </span><span class="p">},</span>
+<span class="w">  </span><span class="nt">&quot;user_timestamp&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;2025-12-13T10:30:45.123456+00:00&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;assistant_timestamp&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;2025-12-13T10:30:48.456789+00:00&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;request_id&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;abc12345&quot;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</section>
+<section id="stream-events-sse">
+<h3>Stream Events (SSE)<a class="headerlink" href="#stream-events-sse" title="Link to this heading"></a></h3>
+<p>Token Event:</p>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+<span class="w">  </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;token&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;content&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Hello &quot;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>Thinking Event:</p>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+<span class="w">  </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;thinking&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;content&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;The user is asking...&quot;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>Done Event:</p>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+<span class="w">  </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;done&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;conversation_id&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;uuid&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;used_context&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[],</span>
+<span class="w">    </span><span class="nt">&quot;user_timestamp&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;2024-01-01T00:00:00Z&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;assistant_timestamp&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;2024-01-01T00:00:01Z&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;request_id&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;req-123&quot;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>Error Event:</p>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+<span class="w">  </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;error&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;error&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Error message&quot;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</section>
+<section id="memory-request">
+<h3>Memory Request<a class="headerlink" href="#memory-request" title="Link to this heading"></a></h3>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+<span class="w">  </span><span class="nt">&quot;text&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Memory content to store&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;importance&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">3</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;scope&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;global&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;entity&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;optional-topic&quot;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</section>
+<section id="memory-response">
+<h3>Memory Response<a class="headerlink" href="#memory-response" title="Link to this heading"></a></h3>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+<span class="w">  </span><span class="nt">&quot;id&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;memory-uuid&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;text&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Memory content&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;meta&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nt">&quot;importance&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">3</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;timestamp&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;2025-12-13T10:30:45.123456+00:00&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;source&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;chat&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;scope&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;global&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;entity&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="status-codes">
+<h2>Status Codes<a class="headerlink" href="#status-codes" title="Link to this heading"></a></h2>
+<dl class="simple">
+<dt>200 OK</dt><dd><p>Request succeeded. Response in body.</p>
+</dd>
+<dt>201 Created</dt><dd><p>Resource created successfully.</p>
+</dd>
+<dt>400 Bad Request</dt><dd><p>Invalid parameters or missing required fields.</p>
+</dd>
+<dt>404 Not Found</dt><dd><p>Endpoint not found or feature disabled.</p>
+</dd>
+<dt>500 Internal Server Error</dt><dd><p>Server error (Ollama down, database error, etc).</p>
+</dd>
+<dt>503 Service Unavailable</dt><dd><p>Critical dependency unavailable (RAG, database).</p>
+</dd>
+</dl>
+<section id="http-status-code-reference">
+<h3>HTTP Status Code Reference<a class="headerlink" href="#http-status-code-reference" title="Link to this heading"></a></h3>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 14.3%" />
+<col style="width: 28.6%" />
+<col style="width: 57.1%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Code</p></th>
+<th class="head"><p>Meaning</p></th>
+<th class="head"><p>Common Causes</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>200</p></td>
+<td><p>Success</p></td>
+<td><p>Valid request processed</p></td>
+</tr>
+<tr class="row-odd"><td><p>201</p></td>
+<td><p>Created</p></td>
+<td><p>Memory created successfully</p></td>
+</tr>
+<tr class="row-even"><td><p>400</p></td>
+<td><p>Bad Request</p></td>
+<td><p>Missing prompt, invalid JSON</p></td>
+</tr>
+<tr class="row-odd"><td><p>404</p></td>
+<td><p>Not Found</p></td>
+<td><p>Debug disabled (RAG_DEBUG=false)</p></td>
+</tr>
+<tr class="row-even"><td><p>500</p></td>
+<td><p>Server Error</p></td>
+<td><p>Ollama timeout, DB error</p></td>
+</tr>
+<tr class="row-odd"><td><p>503</p></td>
+<td><p>Unavailable</p></td>
+<td><p>RAG disabled, Chroma down</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="getting_started.html" class="btn btn-neutral float-left" title="Getting Started" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="streaming.html" class="btn btn-neutral float-right" title="Streaming" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025, Luna Team.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
