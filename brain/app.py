@@ -330,11 +330,25 @@ def chat():
             sections: List[str] = []
             dbg = {"persona": False, "faqs": 0, "turns": 0, "memories": 0, "cid": conversation_id}
 
+            # Identity guardrail
+            identity_block = (
+                "System identity:\n"
+                "- You are Ada, a helpful personal assistant for user Luna (the developer).\n"
+                "- Always refer to yourself as Ada; never claim other model names (e.g., DeepSeek).\n"
+                "- If asked your name or who you are, reply: 'I am Ada, Luna's assistant.'\n"
+                "- Tone: warm, concise; mirror the user's formality; sparse emojis.\n"
+            )
+            sections.append(identity_block)
+
             # Persona
             if RAG_ENABLE_PERSONA:
                 persona = rag_store.load_persona_block()
                 if persona:
-                    p_text, p_meta = persona
+                    # persona may be (text, meta) or just text
+                    if isinstance(persona, tuple):
+                        p_text, p_meta = persona
+                    else:
+                        p_text, p_meta = str(persona), {}
                     short_persona = p_text if len(p_text) <= 2000 else p_text[:2000]
                     sections.append("Persona and style guidelines (global):\n" + short_persona)
                     used_context["persona"] = {
@@ -405,13 +419,10 @@ def chat():
                 "conversation memory when relevant. If the user asks about times or durations, use the provided "
                 "UTC ISO timestamps to compute precise differences and express them in human-friendly units."
             )
+            reminder = "Reminder: You are Ada, Luna's assistant. Always identify as Ada."
             current_ts_line = f"Current user message timestamp (UTC): {user_timestamp}"
-            assembled = f"{instructions}\n\n" + ("\n\n".join(sections) + "\n\n" if sections else "")
-            final_prompt = (
-                f"{assembled}"
-                f"{current_ts_line}\n"
-                f"User: {prompt}\nAssistant:"
-            )
+            assembled = ("\n\n".join(sections) + "\n\n" if sections else "") + instructions + "\n" + reminder + "\n" + current_ts_line
+            final_prompt = f"{assembled}\nUser: {prompt}\nAssistant:"
             t_retrieve = t_rs - t0
             t_assemble = time.perf_counter() - t_rs
             if RAG_DEBUG:
@@ -570,12 +581,26 @@ def chat_stream():
             t0 = time.perf_counter()
             sections = []
 
+            # Identity guardrail
+            identity_block = (
+                "System identity:\n"
+                "- You are Ada, a helpful personal assistant for user Luna (the developer).\n"
+                "- Always refer to yourself as Ada; never claim other model names (e.g., DeepSeek).\n"
+                "- If asked your name or who you are, reply: 'I am Ada, Luna's assistant.'\n"
+                "- Tone: warm, concise; mirror the user's formality; sparse emojis.\n"
+            )
+            sections.append(identity_block)
+
             # Persona
             if RAG_ENABLE_PERSONA:
                 persona_doc = rag_store.load_persona_block()
                 if persona_doc:
-                    sections.append(persona_doc)
-                    used_context['persona'] = {'included': True, 'length': len(persona_doc)}
+                    if isinstance(persona_doc, tuple):
+                        p_text, p_meta = persona_doc
+                    else:
+                        p_text, p_meta = str(persona_doc), {}
+                    sections.append(f"Persona:\n{p_text}")
+                    used_context['persona'] = {'included': True, 'length': len(p_text), 'meta': p_meta}
 
             # Query embedding for retrieval
             t_rs = time.perf_counter()
@@ -627,13 +652,10 @@ def chat_stream():
                 "conversation memory when relevant. If the user asks about times or durations, use the provided "
                 "UTC ISO timestamps to compute precise differences and express them in human-friendly units."
             )
+            reminder = "Reminder: You are Ada, Luna's assistant. Always identify as Ada."
             current_ts_line = f"Current user message timestamp (UTC): {user_timestamp}"
-            assembled = f"{instructions}\n\n" + ("\n\n".join(sections) + "\n\n" if sections else "")
-            final_prompt = (
-                f"{assembled}"
-                f"{current_ts_line}\n"
-                f"User: {prompt}\nAssistant:"
-            )
+            assembled = ("\n\n".join(sections) + "\n\n" if sections else "") + instructions + "\n" + reminder + "\n" + current_ts_line
+            final_prompt = f"{assembled}\nUser: {prompt}\nAssistant:"
             t_retrieve = time.perf_counter() - t0
             t_assemble = time.perf_counter() - t_rs
         except Exception:
@@ -641,6 +663,7 @@ def chat_stream():
 
     # Generator function for SSE streaming
     def generate():
+        nonlocal conversation_id
         try:
             payload = {
                 'model': OLLAMA_MODEL,
@@ -687,10 +710,46 @@ def chat_stream():
                                         assistant_ts=assistant_timestamp,
                                         source="chat",
                                     )
+                                    conversation_id = cid
                                 except Exception:
                                     if RAG_DEBUG:
                                         import traceback
                                         print(f"[BRAIN][RAG][upsert][{req_id}] failed:\n" + traceback.format_exc())
+
+                            # Summarize periodically (mirror non-streaming endpoint)
+                            if RAG_ENABLE_SUMMARY and rag_store is not None and conversation_id:
+                                try:
+                                    total_turn_docs = rag_store.count_turns(conversation_id)
+                                    if total_turn_docs >= 2 and (total_turn_docs // 2) % max(RAG_SUMMARY_EVERY_N, 1) == 0:
+                                        last_pairs = rag_store.get_last_turns(conversation_id, limit=RAG_SUMMARY_TURNS_WINDOW)
+                                        convo_lines = []
+                                        for t, m in last_pairs:
+                                            role = (m or {}).get('role', 'context')
+                                            ts = (m or {}).get('timestamp')
+                                            if ts:
+                                                convo_lines.append(f"- {role} [{ts}]: {t}")
+                                            else:
+                                                convo_lines.append(f"- {role}: {t}")
+                                        summary_prompt = (
+                                            "Summarize the following recent conversation turns succinctly (3-5 bullet points). "
+                                            "Capture decisions, facts, preferences, and open items.\n\n" + "\n".join(convo_lines)
+                                        )
+                                        sum_payload = {
+                                            'model': OLLAMA_MODEL,
+                                            'prompt': summary_prompt,
+                                            'stream': False,
+                                            'think': False,
+                                        }
+                                        rsum = requests.post(OLLAMA_API_URL, json=sum_payload, timeout=120)
+                                        rsum.raise_for_status()
+                                        sdata = rsum.json()
+                                        stext = (sdata.get('response') or '').strip()
+                                        if stext:
+                                            rag_store.upsert_summary(conversation_id, stext, timestamp=assistant_timestamp, source='chat')
+                                except Exception:
+                                    if RAG_DEBUG:
+                                        import traceback
+                                        print(f"[BRAIN][RAG][summary][{req_id}] failed:\n" + traceback.format_exc())
 
                             # Consent-based memory save
                             if rag_store is not None and save_memory:
@@ -857,9 +916,7 @@ def rag_debug():
         except Exception as e:
             info['persona_error'] = str(e)
         # turn docs
-        where_t: Dict[str, Any] = {"$and": [{"type": "turn"}]}
-        if cid:
-            where_t["$and"].append({"conversation_id": {"$eq": cid}})
+        where_t: Dict[str, Any] = {"type": "turn"} if not cid else {"$and": [{"type": "turn"}, {"conversation_id": {"$eq": cid}}]}
         try:
             got_t = rag_store.col.get(where=where_t)
             docs_t = got_t.get('documents', [])
@@ -877,6 +934,22 @@ def rag_debug():
             info['turn_sample'] = sample
         except Exception as e:
             info['turns_error'] = str(e)
+
+        # summaries and memories
+        try:
+            where_s: Dict[str, Any] = {"type": "summary"} if not cid else {"$and": [{"type": "summary"}, {"conversation_id": {"$eq": cid}}]}
+            got_s = rag_store.col.get(where=where_s)
+            info['summary_count'] = len(got_s.get('documents', []))
+        except Exception as e:
+            info['summary_error'] = str(e)
+
+        try:
+            where_m: Dict[str, Any] = {"type": "memory"}
+            got_m = rag_store.col.get(where=where_m)
+            info['memory_count'] = len(got_m.get('documents', []))
+        except Exception as e:
+            info['memory_error'] = str(e)
+
         return jsonify(info)
     except Exception as e:
         return jsonify({'error': str(e)}), 500
