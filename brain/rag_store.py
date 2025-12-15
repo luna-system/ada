@@ -499,3 +499,81 @@ class RagStore:
                 return 0.0
         pairs.sort(key=lambda p: ts_of(p[1] or {}), reverse=True)
         return pairs[0]
+
+    def get_recent_conversations(self, limit: int = 10) -> List[Dict[str, Any]]:
+        """Return a list of recent conversations with metadata.
+        Each entry: {id, preview, timestamp, turn_count}
+        """
+        # Get all turns sorted by timestamp
+        where: Dict[str, Any] = {"type": "turn"}
+        result = self.col.get(where=where)
+        docs = result.get("documents", [])
+        metas = result.get("metadatas", [])
+        
+        if not docs:
+            return []
+        
+        # Group by conversation_id
+        convos: Dict[str, Dict[str, Any]] = {}
+        for doc, meta in zip(docs, metas):
+            cid = meta.get("conversation_id")
+            if not cid:
+                continue
+            
+            ts_str = meta.get("timestamp", "")
+            try:
+                ts = datetime.datetime.fromisoformat(ts_str)
+            except Exception:
+                ts = datetime.datetime.min
+            
+            if cid not in convos:
+                convos[cid] = {
+                    "id": cid,
+                    "preview": doc[:100] if meta.get("role") == "user" else "",
+                    "timestamp": ts,
+                    "turn_count": 0
+                }
+            
+            # Update with earliest user message as preview
+            if meta.get("role") == "user" and not convos[cid]["preview"]:
+                convos[cid]["preview"] = doc[:100]
+            
+            # Track latest timestamp
+            if ts > convos[cid]["timestamp"]:
+                convos[cid]["timestamp"] = ts
+            
+            convos[cid]["turn_count"] += 1
+        
+        # Sort by timestamp desc and limit
+        sorted_convos = sorted(convos.values(), key=lambda c: c["timestamp"], reverse=True)[:limit]
+        
+        # Convert timestamps to ISO strings
+        for c in sorted_convos:
+            c["timestamp"] = c["timestamp"].isoformat()
+        
+        return sorted_convos
+
+    def get_conversation_turns(self, conversation_id: str) -> List[Dict[str, Any]]:
+        """Get all turns for a specific conversation, ordered chronologically.
+        Returns: [{role, text, timestamp}, ...]
+        """
+        where: Dict[str, Any] = {"$and": [{"type": "turn"}, {"conversation_id": conversation_id}]}
+        result = self.col.get(where=where)
+        docs = result.get("documents", [])
+        metas = result.get("metadatas", [])
+        
+        if not docs:
+            return []
+        
+        # Build turns list
+        turns = []
+        for doc, meta in zip(docs, metas):
+            turns.append({
+                "role": meta.get("role", "user"),
+                "text": doc,
+                "timestamp": meta.get("timestamp", "")
+            })
+        
+        # Sort by timestamp
+        turns.sort(key=lambda t: t["timestamp"])
+        return turns

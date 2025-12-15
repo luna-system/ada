@@ -19,4 +19,5 @@ COPY . .
 
 ENV PATH="/app/.venv/bin:${PATH}"
 
-CMD ["uv", "run", "gunicorn", "brain.app:app", "--bind", "0.0.0.0:7000"]
+# Run gunicorn with explicit config
+CMD ["gunicorn", "-c", "brain/gunicorn_config.py", "brain.wsgi:app"]
