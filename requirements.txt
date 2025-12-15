@@ -274,3 +274,10 @@ werkzeug==3.1.4
     # via flask
 zipp==3.23.0
     # via importlib-metadata
+
+boto3==1.35.71
+    # via ada-v1 (Backblaze R2 uploader)
+botocore==1.35.71
+    # via boto3
+s3transfer==0.10.3
+    # via boto3

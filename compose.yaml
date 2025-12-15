@@ -24,9 +24,10 @@ services:
       - CHROMA_SERVER_HOST=0.0.0.0
       - CHROMA_SERVER_HTTP_PORT=8000
       - CHROMA_DB_IMPL=duckdb+parquet
+      - PERSIST_DIRECTORY=/data
       - ANONYMIZED_TELEMETRY=False
     volumes:
-      - ./data/chroma:/chroma
+      - ./data/chroma:/data
     healthcheck:
       test: ["CMD-SHELL", "python -c \"import urllib.request,sys;u='http://localhost:8000/api/v2/heartbeat';\ntry:\n r=urllib.request.urlopen(u,timeout=3); sys.exit(0 if r.status==200 else 1)\nexcept Exception:\n sys.exit(1)\"" ]
       interval: 10s
@@ -34,14 +35,43 @@ services:
       retries: 5
 
   sqlite-backup:
-    image: alpine:latest
+    image: python:3.13-slim
     restart: unless-stopped
     depends_on:
       - chroma
+    working_dir: /app
+    env_file:
+      - .env
+    environment:
+      - BACKUPS_DIR=${BACKUPS_DIR:-/data/backups}
+      - UPLOAD_MODE=${UPLOAD_MODE:-latest}
+      - B2_BUCKET_PREFIX=${B2_BUCKET_PREFIX:-chroma-backups}
     volumes:
-      - ./data/chroma:/data:ro
-      - ./data/chroma/backups:/out
-    command: sh -c "apk add --no-cache sqlite && mkdir -p /out && while true; do ts=$$(date -u +%Y%m%dT%H%M%SZ) && sqlite3 /data/chroma.sqlite3 '.backup /out/chroma-'$$ts'.sqlite3' && ls -1t /out/chroma-*.sqlite3 2>/dev/null | tail -n +51 | xargs -r rm -- ; sleep 3600; done"
+      - ./scripts:/app/scripts:ro
+      - ./data/chroma:/data
+    command:
+      - sh
+      - -lc
+      - |
+        set -euo pipefail
+        apt-get update -qq && apt-get install -y -qq sqlite3 > /dev/null 2>&1
+        python -m pip install --no-cache-dir boto3 python-dotenv > /dev/null 2>&1
+        mkdir -p /data/backups
+        echo "[backup+upload] starting hourly loop"
+        while true; do
+          ts=$(date -u +%Y%m%dT%H%M%SZ)
+          echo "[backup+upload] $ts creating backup"
+          if sqlite3 /data/chroma.sqlite3 ".backup /data/backups/chroma-$ts.sqlite3"; then
+            echo "[backup+upload] $ts backup successful, uploading to B2"
+            python /app/scripts/upload_backups_b2.py || echo "[backup+upload] upload failed (will retry next cycle)"
+            echo "[backup+upload] $ts cleaning old backups (keeping 10)"
+            ls -1t /data/backups/chroma-*.sqlite3 2>/dev/null | tail -n +11 | xargs -r rm --
+          else
+            echo "[backup+upload] $ts backup failed, skipping upload"
+          fi
+          echo "[backup+upload] sleeping for 3600s (1h)"
+          sleep 3600
+        done
 
   brain:
     build:
@@ -147,3 +177,27 @@ services:
         wait $pid2
         printf '[ollama-init] %s model pulls complete.
         ' "$(date -u +%FT%TZ)"
+
+
+  # Standalone uploader for manual/catch-up runs (optional, not auto-started)
+  # To run manually: docker compose run --rm b2-uploader-manual
+  b2-uploader-manual:
+    image: python:3.13-slim
+    profiles: ["manual"]
+    working_dir: /app
+    env_file:
+      - .env
+    environment:
+      - BACKUPS_DIR=${BACKUPS_DIR:-/data/chroma/backups}
+      - UPLOAD_MODE=${UPLOAD_MODE:-all}
+      - B2_BUCKET_PREFIX=${B2_BUCKET_PREFIX:-chroma-backups}
+    volumes:
+      - ./scripts:/app/scripts:ro
+      - ./data/chroma:/data/chroma:ro
+    command:
+      - sh
+      - -lc
+      - |
+        set -euo pipefail
+        python -m pip install --no-cache-dir boto3 python-dotenv > /dev/null 2>&1
+        python /app/scripts/upload_backups_b2.py
