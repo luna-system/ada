@@ -15,7 +15,14 @@ Environment (used by RagStore):
 import argparse
 import os
 import sys
-from rag import RagStore
+from dotenv import load_dotenv
+
+# Add brain module to path
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', 'brain'))
+
+load_dotenv()
+
+from rag_store import RagStore
 
 
 def main():

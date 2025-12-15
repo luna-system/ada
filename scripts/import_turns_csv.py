@@ -31,14 +31,17 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-# Reuse the shared RAG module; ensure /app is on sys.path when running ad-hoc
+# Add brain module to path
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', 'brain'))
+
+# Reuse the shared RAG module
 try:
-    from rag import RagStore
+    from rag_store import RagStore
 except ModuleNotFoundError:  # pragma: no cover
-    import sys as _sys, os as _os
-    if "/app" not in _sys.path:
-        _sys.path.append("/app")
-    from rag import RagStore
+    # Fallback: try adding /app to path for container environment
+    if "/app" not in sys.path:
+        sys.path.append("/app")
+    from rag_store import RagStore
 
 
 def parse_args() -> argparse.Namespace:

@@ -5,6 +5,7 @@
   import {
     messages,
     thinking,
+    conversationId,
     ensureConversationId,
     setConversationId,
     setThinking,
@@ -14,7 +15,14 @@
     type Role
   } from '../stores/chat';
   import { memList, memLoading, memError, fetchMemories, addMemoryItem, deleteMemoryItem } from '../stores/memory';
+  import { conversations, conversationsLoading, conversationsError, fetchConversations, loadConversation } from '../stores/conversations';
+  import ConversationsPanel from './ConversationsPanel.svelte';
+  import PanelMenu from './PanelMenu.svelte';
+  import DebugPanel from './DebugPanel.svelte';
+  import MemoriesPanel from './MemoriesPanel.svelte';
+  import PromptPanel from './PromptPanel.svelte';
   import { streamChat, type StreamMessage } from '../services/chat';
+  import { panelOpen as panelOpenStore, menuOpen as menuOpenStore } from '../stores/ui';
 
   const uuid = () => crypto.randomUUID ? crypto.randomUUID() : Math.random().toString(36).slice(2);
 
@@ -22,10 +30,12 @@
   let includeThinking = false;
   let showEntityInput = false;
   let shareListenBrainz = false;
+  let showAddMemory = false;
+  let showComposerControls = true;
   let listenBrainzPreview: any = null;
   let listenBrainzLoading = false;
   let entity = '';
-  let panelOpen: 'none' | 'debug' | 'mem' | 'prompt' = 'none';
+  let panelOpen: 'none' | 'debug' | 'mem' | 'prompt' | 'conversations' = 'none';
   let menuOpen = false;
 
   // Status & client libs
@@ -39,6 +49,9 @@
   let memImportance = 3;
   let memEntityScoped = false;
   let memEntity = '';
+  let conversationIdInput = '';
+  let conversationIdError = '';
+  let conversationIdEditing = false;
 
   let messagesContainer: HTMLElement | null = null;
 
@@ -67,6 +80,7 @@
     refreshHealth();
     updateClientLibStatus();
     refreshMemList();
+    fetchConversations();
 
     // Set up auto-refresh for ListenBrainz every 2 minutes
     const listenBrainzInterval = setInterval(() => {
@@ -75,7 +89,9 @@
       }
     }, 2 * 60 * 1000); // 2 minutes
 
-    return () => clearInterval(listenBrainzInterval);
+    const unsubPanel = panelOpenStore.subscribe((v) => panelOpen = v);
+    const unsubMenu = menuOpenStore.subscribe((v) => menuOpen = v);
+    return () => { clearInterval(listenBrainzInterval); unsubPanel(); unsubMenu(); };
   });
 
   async function refreshHealth() {
@@ -182,9 +198,9 @@
     }
   }
 
-  function togglePanel(which: 'debug' | 'mem' | 'prompt') {
-    panelOpen = panelOpen === which ? 'none' : which;
-    menuOpen = false;
+  function togglePanel(which: 'debug' | 'mem' | 'prompt' | 'conversations') {
+    panelOpenStore.set(panelOpen === which ? 'none' : which);
+    menuOpenStore.set(false);
     if (which === 'debug') {
       refreshHealth();
       updateClientLibStatus();
@@ -288,15 +304,71 @@
     }
   }
 
+  async function selectConversation(id: string) {
+    const turns = await loadConversation(id);
+    if (!turns) {
+      alert('Failed to load conversation');
+      return;
+    }
+    // Clear current messages and load conversation
+    messages.set([]);
+    setConversationId(id);
+    // Convert turns to messages
+    for (const turn of turns) {
+      pushMessage({
+        id: uuid(),
+        role: turn.role as Role,
+        text: turn.text
+      });
+    }
+    panelOpenStore.set('none');
+    scrollMessages();
+  }
+
+  function newConversation() {
+    messages.set([]);
+    setConversationId(uuid());
+    prompt = '';
+    conversationIdInput = '';
+    conversationIdError = '';
+    conversationIdEditing = false;
+    showAddMemory = false;
+  }
+
+  async function updateConversationId() {
+    const newId = conversationIdInput.trim();
+    if (!newId) {
+      conversationIdError = 'ID cannot be empty';
+      return;
+    }
+    
+    // Check if this ID already exists
+    const convos = get(conversations);
+    const exists = convos.some(c => c.id === newId);
+    
+    if (exists && newId !== get(conversationId)) {
+      conversationIdError = 'This conversation ID already exists';
+      return;
+    }
+    
+    // Valid ID, update it
+    conversationIdError = '';
+    setConversationId(newId);
+    conversationIdEditing = false;
+  }
+
+  // Sync input with store
+  $: if ($conversationId && !conversationIdInput) {
+    conversationIdInput = $conversationId;
+  }
+
   async function addMemory() {
-    const lastAssistant = (() => {
-      const list = get(messages);
-      for (let i = list.length - 1; i >= 0; i -= 1) {
-        if (list[i].role === 'assistant') return list[i];
-      }
-      return undefined;
-    })();
-    const text = (memText || lastAssistant?.text || '').trim();
+    let text = (memText || '').trim();
+    const lower = text.toLowerCase();
+    const hasRolePrefix = lower.startsWith('assistant:') || lower.startsWith('user:') || lower.startsWith('system:');
+    if (!hasRolePrefix && text) {
+      text = `assistant: ${text}`;
+    }
     if (!text) return alert('Nothing to save.');
     const body: Record<string, any> = { text, importance: memImportance };
     if (memEntityScoped && memEntity.trim()) body.entity = memEntity.trim();
@@ -321,10 +393,11 @@
   }
 
   function openSaveToMemory(text: string) {
-    panelOpen = 'mem';
-    memText = text;
+    panelOpenStore.set('mem');
+    memText = text ? `assistant: ${text}` : '';
     memEntity = entity || memEntity;
-    menuOpen = false;
+    menuOpenStore.set(false);
+    showAddMemory = true;
   }
 </script>
 
@@ -334,7 +407,7 @@
   if (!menuEl || !btnEl) return;
   if (!menuOpen) return;
   if (menuEl.contains(e.target as Node) || btnEl.contains(e.target as Node)) return;
-  menuOpen = false;
+  menuOpenStore.set(false);
 }} />
 
 <div class="app">
@@ -343,17 +416,33 @@
       <div class="dot {healthOk === true ? 'ok' : healthOk === false ? 'bad' : ''}" aria-hidden="true"></div>
       <h1>ADA · Chat</h1>
     </div>
+    {#if $conversationId}
+      <div class="conversation-id" style="display: flex; align-items: center; gap: 8px;">
+        <span class="muted" style="font-size: 0.85em;">ID:</span>
+        {#if !conversationIdEditing}
+          <span style="font-size: 0.85em; font-family: monospace;">{$conversationId}</span>
+          <button class="ghost" type="button" title="Edit conversation ID" on:click={() => { conversationIdInput = $conversationId; conversationIdEditing = true; }}>
+            ✎
+          </button>
+        {:else}
+          <input
+            type="text"
+            bind:value={conversationIdInput}
+            style="width: clamp(16ch, 50vw, 36ch); font-size: 0.95em; padding: 6px 10px;"
+            placeholder="conversation-id"
+            aria-invalid={!!conversationIdError}
+          />
+          <button class="ghost" type="button" title="Save ID" on:click={updateConversationId}>OK</button>
+          <button class="ghost" type="button" title="Cancel" on:click={() => { conversationIdEditing = false; conversationIdInput = $conversationId; conversationIdError = ''; }}>Cancel</button>
+          {#if conversationIdError}
+            <span class="muted" style="color: var(--danger, #ef4444); font-size: 0.8em;">{conversationIdError}</span>
+          {/if}
+        {/if}
+      </div>
+    {/if}
     <div class="grow"></div>
-    <div class="menu" id="panelMenu">
-      <button id="panelMenuButton" class="ghost" type="button" aria-haspopup="true" aria-expanded={menuOpen} on:click={() => menuOpen = !menuOpen}>Panels ▾</button>
-      {#if menuOpen}
-        <div class="menu-list">
-          <button type="button" class="menu-item" on:click={() => togglePanel('debug')}>Debug</button>
-          <button type="button" class="menu-item" on:click={() => togglePanel('mem')}>Memories</button>
-          <button type="button" class="menu-item" on:click={() => togglePanel('prompt')}>Prompt Debug</button>
-        </div>
-      {/if}
-    </div>
+    <button class="ghost" type="button" on:click={newConversation} title="Start new conversation">New Chat</button>
+    <PanelMenu open={menuOpen} setOpen={(v) => menuOpenStore.set(v)} onToggle={togglePanel} />
   </header>
 
   <main id="messages" bind:this={messagesContainer} aria-live="polite" aria-busy={$thinking}>
@@ -381,191 +470,97 @@
   <div class="hint">Press Enter to send, Shift+Enter for newline</div>
 
   <form id="composer" on:submit|preventDefault={handleSubmit}>
-    <textarea bind:value={prompt} placeholder="Type your message..." autocomplete="off" on:keydown={(e) => {
-      if (e.key === 'Enter' && !e.shiftKey) {
-        e.preventDefault();
-        handleSubmit();
-      }
-    }}></textarea>
-    <button type="submit" disabled={$thinking || !prompt.trim()}>Send</button>
-    <div class="controls-row">
-      <label class="toggle-control" title="Include thinking">
-        <span class="emoji">🧠</span>
-        <span class="switch">
-          <input type="checkbox" bind:checked={includeThinking} />
-          <span class="knob"></span>
-        </span>
-      </label>
-      <label class="toggle-control" title="Share ListenBrainz now playing/last track">
-        <span class="emoji">🎧</span>
-        <span class="switch">
-          <input type="checkbox" bind:checked={shareListenBrainz} />
-          <span class="knob"></span>
-        </span>
-      </label>
-      <label class="toggle-control" title="Filter memory by entity">
-        <span class="emoji">🏷️</span>
-        <span class="switch">
-          <input type="checkbox" bind:checked={showEntityInput} />
-          <span class="knob"></span>
-        </span>
-      </label>
-      {#if showEntityInput}
-        <input class="entity-input" value={entity} on:input={(e) => onEntityChange((e.target as HTMLInputElement).value)} placeholder="entity/topic" />
-      {/if}
-      <div class="spacer"></div>
-      {#if shareListenBrainz && listenBrainzLoading}
-        <span class="media-pill loading" title="Loading now playing...">
-          🎧 <span class="load-dots"><span>.</span><span>.</span><span>.</span></span>
-        </span>
-      {:else if shareListenBrainz && listenBrainzPreview}
-        <span class="media-pill" title={mediaSummary(listenBrainzPreview)}>
-          🎧 {mediaSummary(listenBrainzPreview)}
-        </span>
-      {/if}
+    <div class="input-row">
+      <textarea bind:value={prompt} placeholder="Type your message..." autocomplete="off" on:keydown={(e) => {
+        if (e.key === 'Enter' && !e.shiftKey) {
+          e.preventDefault();
+          handleSubmit();
+        }
+      }}></textarea>
+      <button type="submit" disabled={$thinking || !prompt.trim()}>Send</button>
     </div>
+    <button type="button" class="composer-divider" title="Toggle composer options" on:click={() => showComposerControls = !showComposerControls}>
+      <span class="chevron" class:open={showComposerControls}>▼</span>
+    </button>
+    {#if showComposerControls}
+      <div class="controls-row">
+        <label class="toggle-control" title="Include thinking">
+          <span class="emoji">🧠</span>
+          <span class="switch">
+            <input type="checkbox" bind:checked={includeThinking} />
+            <span class="knob"></span>
+          </span>
+        </label>
+        <label class="toggle-control" title="Share ListenBrainz now playing/last track">
+          <span class="emoji">🎧</span>
+          <span class="switch">
+            <input type="checkbox" bind:checked={shareListenBrainz} />
+            <span class="knob"></span>
+          </span>
+        </label>
+        <label class="toggle-control" title="Filter memory by entity">
+          <span class="emoji">🏷️</span>
+          <span class="switch">
+            <input type="checkbox" bind:checked={showEntityInput} />
+            <span class="knob"></span>
+          </span>
+        </label>
+        {#if showEntityInput}
+          <input class="entity-input" value={entity} on:input={(e) => onEntityChange((e.target as HTMLInputElement).value)} placeholder="entity/topic" />
+        {/if}
+        <div class="spacer"></div>
+        {#if shareListenBrainz && listenBrainzLoading}
+          <span class="media-pill loading" title="Loading now playing...">
+            🎧 <span class="load-dots"><span>.</span><span>.</span><span>.</span></span>
+          </span>
+        {:else if shareListenBrainz && listenBrainzPreview}
+          <span class="media-pill" title={mediaSummary(listenBrainzPreview)}>
+            🎧 {mediaSummary(listenBrainzPreview)}
+          </span>
+        {/if}
+      </div>
+    {/if}
   </form>
 
   {#if panelOpen === 'debug'}
-    <aside class="panel" id="debugPanel">
-      <div class="panel-header">
-        <strong>Debug</strong>
-        <button class="icon" type="button" aria-label="Close" on:click={() => panelOpen = 'none'}>✕</button>
-      </div>
-      <div class="panel-body">
-        <div class="panel-status">
-          <div class="row" style="justify-content: space-between;">
-            <strong>Status</strong>
-            <button class="ghost" type="button" title="Refresh health" on:click={refreshHealth}>Refresh</button>
-          </div>
-          <div class={`status-box muted ${healthOk === false ? 'bad' : ''}`} aria-live="polite">{health}</div>
-        </div>
-        <div class="panel-status">
-          <div class="row" style="justify-content: space-between;">
-            <strong>Client libraries</strong>
-            <button class="ghost" type="button" title="Refresh client libraries" on:click={updateClientLibStatus}>Refresh</button>
-          </div>
-          <div class="status-box muted" aria-live="polite">{clientLibs || 'Loading…'}</div>
-        </div>
-      </div>
-    </aside>
+    <DebugPanel health={health} healthOk={healthOk} clientLibs={clientLibs} onRefreshHealth={refreshHealth} onRefreshLibs={updateClientLibStatus} onClose={() => panelOpenStore.set('none')} />
   {/if}
 
   {#if panelOpen === 'mem'}
-    <aside class="panel" id="memPanel">
-      <div class="panel-header">
-        <strong>Memories</strong>
-        <button class="icon" type="button" aria-label="Close" on:click={() => panelOpen = 'none'}>✕</button>
-      </div>
-      <div class="panel-body">
-        <div class="panel-controls">
-          <label class="field small">
-            <span>Filter by entity</span>
-            <input type="text" bind:value={memFilter} placeholder="entity (optional)" />
-          </label>
-          <button class="ghost" type="button" on:click={refreshMemList}>Refresh</button>
-        </div>
-        <div class="mem-list" aria-live="polite">
-          {#if $memLoading}
-            <div class="muted">Loading…</div>
-          {:else if $memError}
-            <div class="muted">{$memError}</div>
-          {:else if !$memList || $memList.length === 0}
-            <div class="muted">No memories found.</div>
-          {:else}
-            {#each $memList as it}
-              <div class="mem-item">
-                <div class="mem-text">[{it.meta?.scope || 'global'}]{it.meta?.importance ? ` (importance=${it.meta.importance})` : ''} {it.text}</div>
-                {#if it.id}
-                  <button class="icon danger" title="Delete memory" on:click={() => deleteMemory(it.id)}>🗑</button>
-                {/if}
-              </div>
-            {/each}
-          {/if}
-        </div>
-        <hr />
-        <div class="panel-add">
-          <label class="field">
-            <span>New memory text</span>
-            <textarea rows="5" bind:value={memText} placeholder="Enter memory text or leave blank to use last answer..."></textarea>
-          </label>
-          <div class="row">
-            <label class="field small">
-              <span>Importance</span>
-              <select bind:value={memImportance}>
-                <option value="5">5 (high)</option>
-                <option value="4">4</option>
-                <option value="3">3</option>
-                <option value="2">2</option>
-                <option value="1">1 (low)</option>
-              </select>
-            </label>
-            <label class="toggle">
-              <span>Entity-scoped</span>
-              <span class="switch">
-                <input type="checkbox" bind:checked={memEntityScoped} />
-                <span class="knob"></span>
-              </span>
-            </label>
-          </div>
-          {#if memEntityScoped}
-            <label class="field">
-              <span>Entity</span>
-              <input type="text" bind:value={memEntity} placeholder="e.g., project-x" />
-            </label>
-          {/if}
-          <button type="button" on:click={addMemory}>Add memory</button>
-        </div>
-      </div>
-    </aside>
+    <MemoriesPanel
+      memFilter={memFilter}
+      onSetMemFilter={(v) => memFilter = v}
+      onRefresh={refreshMemList}
+      onDelete={(id) => deleteMemory(id)}
+      memText={memText}
+      onSetMemText={(v) => memText = v}
+      memImportance={memImportance}
+      onSetMemImportance={(v) => memImportance = v}
+      memEntityScoped={memEntityScoped}
+      onSetMemEntityScoped={(v) => memEntityScoped = v}
+      memEntity={memEntity}
+      onSetMemEntity={(v) => memEntity = v}
+      onAddMemory={addMemory}
+      showAddMemory={showAddMemory}
+      onToggleAddMemory={(v) => showAddMemory = v}
+      onClose={() => panelOpenStore.set('none')}
+    />
+  {/if}
+
+  {#if panelOpen === 'conversations'}
+    <ConversationsPanel onClose={() => panelOpenStore.set('none')} />
   {/if}
 
   {#if panelOpen === 'prompt'}
-    <aside class="panel" id="promptPanel">
-      <div class="panel-header">
-        <strong>Prompt Debug</strong>
-        <button class="icon" type="button" aria-label="Close" on:click={() => panelOpen = 'none'}>✕</button>
-      </div>
-      <div class="panel-body">
-        <div class="panel-status">
-          <div class="row" style="justify-content: space-between;">
-            <strong>Most recent turn</strong>
-            <button class="ghost" type="button" on:click={fetchPromptDebug}>Refresh</button>
-          </div>
-          <div class="status-box muted">
-            <div><strong>User:</strong> {lastOfRole('user')?.text || '—'}</div>
-            <div><strong>Assistant:</strong> {lastOfRole('assistant')?.text || '—'}</div>
-          </div>
-        </div>
-        <div class="panel-status">
-          <div class="row" style="justify-content: space-between;">
-            <strong>Prompt context</strong>
-            {#if promptDebugLoading}<span class="muted">Loading…</span>{/if}
-          </div>
-          {#if promptDebugError}
-            <div class="status-box bad">{promptDebugError}</div>
-          {:else if promptDebug}
-            <div class="status-box" style="max-height: 28vh; overflow:auto; white-space: pre-wrap;">
-              <strong>Context counts</strong>
-              <div class="muted">persona: {promptDebug.used_context?.persona?.included ? 'yes' : 'no'},
-                faqs: {promptDebug.used_context?.faqs?.length || 0},
-                memories: {promptDebug.used_context?.memories?.length || 0},
-                turns: {promptDebug.used_context?.turns?.length || 0},
-                summaries: {promptDebug.used_context?.summaries?.length || 0}
-              </div>
-              <strong>Sections</strong>
-              <pre style="white-space: pre-wrap; overflow:auto; margin: 8px 0;">{(promptDebug.sections || []).join('\n\n')}</pre>
-            </div>
-            <div class="status-box" style="max-height: 28vh; overflow:auto; white-space: pre-wrap;">
-              <strong>Final prompt</strong>
-              <pre style="white-space: pre-wrap; overflow:auto; margin: 8px 0;">{promptDebug.final_prompt}</pre>
-            </div>
-          {:else}
-            <div class="status-box muted">No prompt debug data yet. Refresh to load.</div>
-          {/if}
-        </div>
-      </div>
-    </aside>
+    <PromptPanel
+      promptDebug={promptDebug}
+      promptDebugError={promptDebugError}
+      promptDebugLoading={promptDebugLoading}
+      lastUserText={lastOfRole('user')?.text}
+      lastAssistantText={lastOfRole('assistant')?.text}
+      onRefresh={fetchPromptDebug}
+      onClose={() => panelOpenStore.set('none')}
+    />
   {/if}
 </div>
 

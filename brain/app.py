@@ -1,64 +1,81 @@
-from flask import Flask, request, jsonify, Response, stream_with_context
+"""
+Ada Brain Service: REST API for LLM orchestration with RAG.
+
+Pure FastAPI backend service that handles:
+- Chat streaming with Server-Sent Events (SSE)
+- Memory management (long-term storage)
+- RAG context assembly (persona, FAQ, memories, conversation turns)
+- Health checking and debugging
+
+The frontend (Nginx) proxies /api/* requests to /v1/* endpoints here.
+External tools can also hit the API directly at http://brain:7000/v1/*
+"""
+
 import os
-import requests
 import datetime
 import json
 import csv
 from pathlib import Path
-from typing import List, Dict, Any
+from typing import List, Dict, Any, Optional
 import sys
-import time
 import uuid
-from dotenv import load_dotenv
+from contextlib import asynccontextmanager
 
-load_dotenv()
+from fastapi import FastAPI, Query, Request
+from fastapi.responses import JSONResponse, StreamingResponse
+import requests
 
-from rag import RagStore
+# Ensure brain module is in path for Docker container
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
-app = Flask(__name__)
+# Import modular components
+import config
+from rag_store import RagStore
+from llm import stream_chat_async, complete
+from media import fetch_listenbrainz, format_media_for_prompt
+from prompt_builder import build_prompt
 
 # Ollama + models
-OLLAMA_API_URL = os.getenv("OLLAMA_API_URL", "http://localhost:11434/api/generate")
-OLLAMA_MODEL = os.getenv("OLLAMA_MODEL", "deepseek-r1")
-OLLAMA_BASE_URL = os.getenv("OLLAMA_BASE_URL", "http://localhost:11434")
+OLLAMA_API_URL = config.OLLAMA_API_URL
+OLLAMA_MODEL = config.OLLAMA_MODEL
+OLLAMA_BASE_URL = config.OLLAMA_BASE_URL
 
 # RAG configuration
-RAG_ENABLED = os.getenv("RAG_ENABLED", "true").lower() == "true"
-EMBED_MODEL = os.getenv("OLLAMA_EMBED_MODEL", "nomic-embed-text")
+RAG_ENABLED = config.RAG_ENABLED
+EMBED_MODEL = config.EMBED_MODEL
 
-# Section toggles and sizes
-RAG_ENABLE_PERSONA = os.getenv("RAG_ENABLE_PERSONA", "true").lower() == "true"
-RAG_ENABLE_FAQ = os.getenv("RAG_ENABLE_FAQ", "true").lower() == "true"
-RAG_ENABLE_MEMORY = os.getenv("RAG_ENABLE_MEMORY", "true").lower() == "true"
-RAG_ENABLE_SUMMARY = os.getenv("RAG_ENABLE_SUMMARY", "true").lower() == "true"
-# Stream/non-stream parity toggles
-RAG_ENABLE_TURN = os.getenv("RAG_ENABLE_TURN", "true").lower() == "true"
-RAG_TURN_TOP_K = int(os.getenv("RAG_TURN_TOP_K", os.getenv("RAG_TURNS_TOP_K", os.getenv("RAG_TOP_K", "4"))))
-RAG_SUMMARY_TOP_K = int(os.getenv("RAG_SUMMARY_TOP_K", "2"))
-RAG_FAQ_TOP_K = int(os.getenv("RAG_FAQ_TOP_K", "2"))
-RAG_MEMORY_TOP_K = int(os.getenv("RAG_MEMORY_TOP_K", "3"))
-RAG_MEMORY_IMPORTANCE_WEIGHT = float(os.getenv("RAG_MEMORY_IMPORTANCE_WEIGHT", "0.5"))
-RAG_SUMMARY_EVERY_N = int(os.getenv("RAG_SUMMARY_EVERY_N", "8"))
-RAG_SUMMARY_TURNS_WINDOW = int(os.getenv("RAG_SUMMARY_TURNS_WINDOW", "12"))
-RAG_DEBUG = os.getenv("RAG_DEBUG", "false").lower() == "true"
-PERSONA_MAX_CHARS = int(os.getenv("RAG_PERSONA_MAX_CHARS", "2000"))
+# Section toggles
+RAG_ENABLE_PERSONA = config.RAG_ENABLE_PERSONA
+RAG_ENABLE_FAQ = config.RAG_ENABLE_FAQ
+RAG_ENABLE_MEMORY = config.RAG_ENABLE_MEMORY
+RAG_ENABLE_SUMMARY = config.RAG_ENABLE_SUMMARY
+RAG_ENABLE_TURN = config.RAG_ENABLE_TURN
+RAG_TURN_TOP_K = config.RAG_TURN_TOP_K
+RAG_SUMMARY_TOP_K = config.RAG_SUMMARY_TOP_K
+RAG_FAQ_TOP_K = config.RAG_FAQ_TOP_K
+RAG_MEMORY_TOP_K = config.RAG_MEMORY_TOP_K
+RAG_MEMORY_IMPORTANCE_WEIGHT = config.RAG_MEMORY_IMPORTANCE_WEIGHT
+RAG_SUMMARY_EVERY_N = config.RAG_SUMMARY_EVERY_N
+RAG_SUMMARY_TURNS_WINDOW = config.RAG_SUMMARY_TURNS_WINDOW
+RAG_DEBUG = config.RAG_DEBUG
+PERSONA_MAX_CHARS = config.PERSONA_MAX_CHARS
 
-# System identity block (used in all chat endpoints)
-IDENTITY_BLOCK = (
-    "System identity:\n"
-    "- You are Ada, a helpful personal assistant for user luna (the developer).\n"
-    "- Always refer to yourself as Ada; never claim other model names (e.g., DeepSeek).\n"
-    "- If asked your name or who you are, reply: 'I am Ada, luna's assistant.'\n"
-    "- Tone: warm, concise, conversational; mirror the user's formality; sparse emojis.\n"
-)
+# System identity block
+IDENTITY_BLOCK = config.IDENTITY_BLOCK
 
-# ListenBrainz integration
-LISTENBRAINZ_USER = os.getenv("LISTENBRAINZ_USER")
-LISTENBRAINZ_TOKEN = os.getenv("LISTENBRAINZ_TOKEN")
-LISTENBRAINZ_CACHE = {"ts": 0.0, "data": None}
+# ListenBrainz
+LISTENBRAINZ_USER = config.LISTENBRAINZ_USER
+LISTENBRAINZ_TOKEN = config.LISTENBRAINZ_TOKEN
 
+# Global RAG store instance
 rag_store = None
-if RAG_ENABLED:
+
+def _init_rag_store():
+    """Initialize RAG store and load seed data."""
+    global rag_store
+    if not RAG_ENABLED:
+        return
+    
     try:
         rag_store = RagStore(
             persist_dir="/data/chroma",
@@ -66,92 +83,103 @@ if RAG_ENABLED:
             ollama_base_url=OLLAMA_BASE_URL,
             embed_model=EMBED_MODEL,
         )
-    except Exception:
+        _autoload_seed()
+    except Exception as e:
+        print(f"[BRAIN][RAG] Init failed: {e}")
         rag_store = None
+def _autoload_seed():
+    """Autoload persona and FAQ seed data into RAG store."""
+    if rag_store is None:
+        return
+    try:
+        # Persona
+        if config.RAG_AUTOLOAD_PERSONA:
+            persona_path = config.RAG_PERSONA_PATH
+            p = Path(persona_path)
+            if p.exists() and p.is_file():
+                try:
+                    text = p.read_text(encoding="utf-8").strip()
+                    if text:
+                        # Ensure idempotency: remove previous persona docs, then insert fresh copy
+                        try:
+                            rag_store.col.delete(where={"type": "persona"})
+                        except Exception:
+                            pass
+                        mtime = datetime.datetime.utcfromtimestamp(p.stat().st_mtime).isoformat() + "Z"
+                        rag_store.upsert_doc(
+                            text,
+                            type="persona",
+                            scope="global",
+                            version=mtime,
+                            source="kb",
+                        )
+                        print(f"[BRAIN][RAG] Autoloaded persona from {persona_path}")
+                except Exception as perr:
+                    print(f"[BRAIN][RAG] Persona autoload failed: {perr}")
+        
+        # FAQs
+        if config.RAG_AUTOLOAD_FAQ:
+            faq_path = config.RAG_FAQ_PATH
+            fpath = Path(faq_path)
+            if fpath.exists() and fpath.is_file():
+                count = 0
+                try:
+                    if fpath.suffix.lower() == ".jsonl":
+                        with fpath.open("r", encoding="utf-8") as fh:
+                            for line in fh:
+                                line = line.strip()
+                                if not line:
+                                    continue
+                                try:
+                                    obj = json.loads(line)
+                                except Exception:
+                                    continue
+                                q = (obj.get("question") or "").strip()
+                                a = (obj.get("answer") or "").strip()
+                                topic = (obj.get("topic") or None)
+                                if q and a:
+                                    text = f"Q: {q}\nA: {a}"
+                                    rag_store.upsert_doc(text, type="faq", scope="global", topic=topic, source="kb")
+                                    count += 1
+                    elif fpath.suffix.lower() == ".csv":
+                        with fpath.open("r", encoding="utf-8") as fh:
+                            reader = csv.DictReader(fh)
+                            for row in reader:
+                                q = (row.get("question") or "").strip()
+                                a = (row.get("answer") or "").strip()
+                                topic = (row.get("topic") or None)
+                                if q and a:
+                                    text = f"Q: {q}\nA: {a}"
+                                    rag_store.upsert_doc(text, type="faq", scope="global", topic=topic, source="kb")
+                                    count += 1
+                    else:
+                        print(f"[BRAIN][RAG] FAQ autoload skipped: unsupported extension for {faq_path}")
+                    if count:
+                        print(f"[BRAIN][RAG] Autoloaded {count} FAQ entries from {faq_path}")
+                except Exception as ferr:
+                    print(f"[BRAIN][RAG] FAQ autoload failed: {ferr}")
+    except Exception as err:
+        print(f"[BRAIN][RAG] Autoload seed unexpected error: {err}")
 
-    def _autoload_seed():
-        if rag_store is None:
-            return
-        try:
-            # Persona
-            if os.getenv("RAG_AUTOLOAD_PERSONA", "true").lower() == "true":
-                persona_path = os.getenv("RAG_PERSONA_PATH", "/app/persona.md")
-                p = Path(persona_path)
-                if p.exists() and p.is_file():
-                    try:
-                        text = p.read_text(encoding="utf-8").strip()
-                        if text:
-                            # Ensure idempotency: remove previous persona docs, then insert fresh copy
-                            try:
-                                rag_store.col.delete(where={"type": "persona"})
-                            except Exception:
-                                pass
-                            mtime = datetime.datetime.utcfromtimestamp(p.stat().st_mtime).isoformat() + "Z"
-                            rag_store.upsert_doc(
-                                text,
-                                type="persona",
-                                scope="global",
-                                version=mtime,
-                                source="kb",
-                            )
-                            print(f"[BRAIN][RAG] Autoloaded persona from {persona_path}")
-                    except Exception as perr:
-                        print(f"[BRAIN][RAG] Persona autoload failed: {perr}")
-            # FAQs
-            if os.getenv("RAG_AUTOLOAD_FAQ", "false").lower() == "true":
-                faq_path = os.getenv("RAG_FAQ_PATH", "/app/seed/faqs.jsonl")
-                fpath = Path(faq_path)
-                if fpath.exists() and fpath.is_file():
-                    count = 0
-                    try:
-                        if fpath.suffix.lower() == ".jsonl":
-                            with fpath.open("r", encoding="utf-8") as fh:
-                                for line in fh:
-                                    line = line.strip()
-                                    if not line:
-                                        continue
-                                    try:
-                                        obj = json.loads(line)
-                                    except Exception:
-                                        continue
-                                    q = (obj.get("question") or "").strip()
-                                    a = (obj.get("answer") or "").strip()
-                                    topic = (obj.get("topic") or None)
-                                    if q and a:
-                                        text = f"Q: {q}\nA: {a}"
-                                        rag_store.upsert_doc(text, type="faq", scope="global", topic=topic, source="kb")
-                                        count += 1
-                        elif fpath.suffix.lower() == ".csv":
-                            with fpath.open("r", encoding="utf-8") as fh:
-                                reader = csv.DictReader(fh)
-                                for row in reader:
-                                    q = (row.get("question") or "").strip()
-                                    a = (row.get("answer") or "").strip()
-                                    topic = (row.get("topic") or None)
-                                    if q and a:
-                                        text = f"Q: {q}\nA: {a}"
-                                        rag_store.upsert_doc(text, type="faq", scope="global", topic=topic, source="kb")
-                                        count += 1
-                        else:
-                            print(f"[BRAIN][RAG] FAQ autoload skipped: unsupported extension for {faq_path}")
-                        if count:
-                            print(f"[BRAIN][RAG] Autoloaded {count} FAQ entries from {faq_path}")
-                    except Exception as ferr:
-                        print(f"[BRAIN][RAG] FAQ autoload failed: {ferr}")
-        except Exception as err:
-            print(f"[BRAIN][RAG] Autoload seed unexpected error: {err}")
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    """Manage application lifecycle - init RAG store on startup."""
+    # Startup
+    print("[BRAIN] Server is ready. Spawning workers")
+    _init_rag_store()
+    yield
+    # Shutdown
+    print("[BRAIN] Server shutting down")
 
-    _autoload_seed()
+app = FastAPI(lifespan=lifespan)
 
 
-@app.route('/v1/healthz', methods=['GET'])
-def healthz():
+@app.get('/v1/healthz')
+async def healthz():
     """
     Health check endpoint for the brain service.
     
     Returns detailed information about service status, dependencies, and configuration.
-    
-    **HTTP Method:** GET
     
     **Response (200 OK):**
         JSON object with keys:
@@ -159,30 +187,9 @@ def healthz():
         - ok (bool): Overall service health status
         - service (str): Service name ("brain")
         - python (str): Python version
-        - config (dict): Active configuration including:
-            - OLLAMA_BASE_URL: LLM backend URL
-            - OLLAMA_MODEL: Active LLM model name
-            - CHROMA_URL: Vector database URL
-            - RAG_ENABLE_*: Feature toggles for Persona, FAQ, Memory, Summary
-        - persona (dict): Persona status with 'loaded' boolean
-        - chroma (dict): Vector database connectivity status with:
-            - ok (bool): Connectivity status
-            - version (str): Database version if available
-            - error (str): Error message if unhealthy
-    
-    **Response (503 Service Unavailable):**
-        Returned if critical dependencies are unavailable.
-    
-    **Example:**
-        >>> curl http://localhost:7000/v1/healthz
-        {
-            "ok": true,
-            "service": "brain",
-            "python": "3.13.0",
-            "config": {...},
-            "persona": {"loaded": true},
-            "chroma": {"ok": true, "version": "0.5.11", "error": null}
-        }
+        - config (dict): Active configuration
+        - persona (dict): Persona status
+        - chroma (dict): Vector database status
     """
     try:
         # Compose detailed health info
@@ -193,8 +200,6 @@ def healthz():
         if chroma_url:
             try:
                 r = requests.get(chroma_url.rstrip('/') + '/api/v1/heartbeat', timeout=3)
-                # Some Chroma builds return 410 on /api/v1/heartbeat even when healthy.
-                # Treat any reachable response (including 410) as an indicator the server is up.
                 if r.status_code in (200, 204):
                     chroma_ok = True
                     try:
@@ -231,15 +236,7 @@ def healthz():
             "ok": ok,
             "service": "brain",
             "python": sys.version.split()[0],
-            "config": {
-                "OLLAMA_BASE_URL": os.getenv("OLLAMA_BASE_URL"),
-                "OLLAMA_MODEL": os.getenv("OLLAMA_MODEL"),
-                "CHROMA_URL": chroma_url,
-                "RAG_ENABLE_PERSONA": os.getenv("RAG_ENABLE_PERSONA", "true"),
-                "RAG_ENABLE_FAQ": os.getenv("RAG_ENABLE_FAQ", "true"),
-                "RAG_ENABLE_MEMORY": os.getenv("RAG_ENABLE_MEMORY", "true"),
-                "RAG_ENABLE_SUMMARY": os.getenv("RAG_ENABLE_SUMMARY", "true"),
-            },
+            "config": config.get_config_dict(),
             "persona": {"loaded": persona_loaded},
             "chroma": {
                 "ok": chroma_ok,
@@ -247,123 +244,36 @@ def healthz():
                 "error": chroma_error,
             },
         }
-        return jsonify(payload), (200 if ok else 503)
+        status_code = 200 if ok else 503
+        return JSONResponse(content=payload, status_code=status_code)
     except Exception as e:
-        return jsonify({"ok": False, "error": str(e)}), 500
+        return JSONResponse(
+            status_code=500,
+            content={'ok': False, 'error': str(e)}
+        )
 
 
 
 def _fetch_listenbrainz():
-    if not LISTENBRAINZ_USER:
-        return None, "LISTENBRAINZ_USER not configured"
-    now = time.time()
-    cached = LISTENBRAINZ_CACHE.get("data")
-    if cached and (now - LISTENBRAINZ_CACHE.get("ts", 0) < 5):
-        return cached, None
-
-    headers = {"User-Agent": "ada-v1/brain"}
-    if LISTENBRAINZ_TOKEN:
-        headers["Authorization"] = f"Token {LISTENBRAINZ_TOKEN}"
-
-    def normalize(meta, status, listened_at=None):
-        if not meta:
-            return None
-        return {
-            "source": "listenbrainz",
-            "status": status,
-            "artist": (meta or {}).get("artist_name"),
-            "track": (meta or {}).get("track_name"),
-            "release": (meta or {}).get("release_name"),
-            "listened_at": listened_at,
-        }
-
-    base = "https://api.listenbrainz.org/1/user/" + LISTENBRAINZ_USER
-    
-    # Try /playing-now first (requires token for accurate "now playing" data)
-    if LISTENBRAINZ_TOKEN:
-        try:
-            r = requests.get(base + "/playing-now", headers=headers, timeout=5)
-            if r.status_code == 200:
-                payload = r.json() or {}
-                pn = (payload.get("playing_now") or {})
-                if pn:
-                    meta = pn.get("track_metadata")
-                    if meta:
-                        info = normalize(meta, status="playing", listened_at=pn.get("listened_at"))
-                        LISTENBRAINZ_CACHE.update({"ts": now, "data": info})
-                        return info, None
-        except Exception:
-            pass  # Fall through to /listens
-    
-    # Fall back to recent listens (works without token, but lags behind current playback)
-    try:
-        r = requests.get(base + "/listens", headers=headers, params={"count": 1}, timeout=5)
-        if r.status_code == 200:
-            payload = r.json() or {}
-            listens = (payload.get("payload") or {}).get("listens") or []
-            if listens:
-                first = listens[0]
-                meta = (first.get("track_metadata") or {})
-                listened_at = (first.get("listened_at") or first.get("played_at"))
-                info = normalize(meta, status="playing", listened_at=listened_at)
-                LISTENBRAINZ_CACHE.update({"ts": now, "data": info})
-                return info, None
-    except Exception as e:
-        return None, str(e)
-
-    info = {"source": "listenbrainz", "status": "idle"}
-    LISTENBRAINZ_CACHE.update({"ts": now, "data": info})
-    return info, None
+    return fetch_listenbrainz(LISTENBRAINZ_USER, LISTENBRAINZ_TOKEN)
 
 
-def _format_media_for_prompt(media_info: dict) -> str | None:
-    """Format ListenBrainz media info as natural language for the prompt."""
-    if not media_info or not isinstance(media_info, dict):
-        return None
-    status = media_info.get("status")
-    if status == "playing":
-        artist = media_info.get("artist", "Unknown Artist")
-        track = media_info.get("track", "Unknown Track")
-        return f"luna has chosen to share that she is currently listening to the song {track} by artist {artist}."
-    elif status == "recent":
-        artist = media_info.get("artist", "Unknown Artist")
-        track = media_info.get("track", "Unknown Track")
-        listened_at = media_info.get("listened_at")
-        time_str = ""
-        if listened_at:
-            try:
-                from datetime import datetime as dt
-                ldt = dt.fromisoformat(listened_at.replace("Z", "+00:00"))
-                now_dt = dt.now(ldt.tzinfo)
-                delta = now_dt - ldt
-                days = delta.days
-                hours = delta.seconds // 3600
-                if days > 0:
-                    time_str = f"{days} day{'s' if days != 1 else ''} ago"
-                elif hours > 0:
-                    time_str = f"{hours} hour{'s' if hours != 1 else ''} ago"
-                else:
-                    time_str = "a few minutes ago"
-            except Exception:
-                time_str = "recently"
-        else:
-            time_str = "recently"
-        return f"luna has chosen to share that the last song she listened to was {track} by artist {artist} {time_str}."
-    return None
+def _format_media_for_prompt(media_info):
+    return format_media_for_prompt(media_info)
 
 
-@app.route('/v1/media/listenbrainz', methods=['GET'])
-def media_listenbrainz():
+@app.get('/v1/media/listenbrainz')
+async def media_listenbrainz():
     data, err = _fetch_listenbrainz()
     if err and data is None:
-        return jsonify({"error": err}), 500
+        return JSONResponse(status_code=500, content={"error": err})
     if data is None:
-        return jsonify({"error": "unavailable"}), 500
-    return jsonify(data)
+        return JSONResponse(status_code=500, content={"error": "unavailable"})
+    return data
 
 
-@app.route('/v1/chat/stream', methods=['POST'])
-def chat_stream():
+@app.post('/v1/chat/stream')
+async def chat_stream(request: Request):
     """
     Streaming chat endpoint using Server-Sent Events (SSE).
 
@@ -386,10 +296,14 @@ def chat_stream():
 
     Side effects: same as /v1/chat (turn upserts, optional memories, summaries).
     """
-    data = request.get_json()
+    try:
+        data = await request.json()
+    except Exception:
+        return JSONResponse(status_code=400, content={'error': 'invalid json'})
+    
     prompt = (data.get('prompt') or '').strip()
     if not prompt:
-        return jsonify({'error': 'prompt required'}), 400
+        return JSONResponse(status_code=400, content={'error': 'prompt required'})
 
     req_id = str(uuid.uuid4())[:8]
     conversation_id = data.get('conversation_id') or str(uuid.uuid4())
@@ -402,283 +316,186 @@ def chat_stream():
     faq_k = int(data.get('faq_k', RAG_FAQ_TOP_K))
     memory_k = int(data.get('memory_k', RAG_MEMORY_TOP_K))
 
-    # Build RAG context (same as non-streaming endpoint)
-    final_prompt = prompt
+    # Build prompt using modularized builder
     media_info = data.get('media') if isinstance(data.get('media'), dict) else None
-    used_context = {'persona': None, 'faqs': [], 'memories': [], 'turns': [], 'summaries': [], 'entity': entity, 'media': media_info}
-    t_retrieve = 0
-    t_assemble = 0
-
     if RAG_ENABLED and rag_store is not None:
-        try:
-            t0 = time.perf_counter()
-            sections = []
-
-            # Identity guardrail
-            sections.append(IDENTITY_BLOCK)
-
-            # Media (ListenBrainz) if provided
-            if media_info and isinstance(media_info, dict):
-                media_line = _format_media_for_prompt(media_info)
-                if media_line:
-                    sections.append(media_line)
-
-            # Persona
-            if RAG_ENABLE_PERSONA:
-                persona_doc = rag_store.load_persona_block()
-                if persona_doc:
-                    if isinstance(persona_doc, tuple):
-                        p_text, p_meta = persona_doc
-                    else:
-                        p_text, p_meta = str(persona_doc), {}
-                    short_persona = p_text if len(p_text) <= PERSONA_MAX_CHARS else p_text[:PERSONA_MAX_CHARS]
-                    sections.append("Persona and style guidelines (global):\n" + short_persona)
-                    used_context['persona'] = {
-                        'included': True,
-                        'version': (p_meta or {}).get('version'),
-                        'timestamp': (p_meta or {}).get('timestamp'),
-                    }
-                else:
-                    used_context['persona'] = {'included': False}
-
-            # Long-term memory
-            if RAG_ENABLE_MEMORY and memory_k > 0:
-                mem_hits = rag_store.retrieve_memories(query=prompt, k=memory_k, entity=entity)
-                if mem_hits:
-                    mem_lines = []
-                    for text_m, meta_m in mem_hits:
-                        imp = (meta_m or {}).get('importance')
-                        scope = (meta_m or {}).get('scope', 'global')
-                        tag_str = ''
-                        tags = (meta_m or {}).get('tags')
-                        if isinstance(tags, list) and tags:
-                            tag_str = f" tags={','.join(tags)}"
-                        if imp is not None:
-                            mem_lines.append(f"- ({scope}, importance={imp}{tag_str}) {text_m}")
-                        else:
-                            mem_lines.append(f"- ({scope}{tag_str}) {text_m}")
-                        used_context['memories'].append(text_m)
-                    sections.append("Long-term memory:\n" + "\n".join(mem_lines))
-
-            # FAQs/reference
-            if RAG_ENABLE_FAQ and faq_k > 0:
-                faq_hits = rag_store.retrieve_faqs(query=prompt, k=faq_k)
-                if faq_hits:
-                    faq_lines = []
-                    for text, meta in faq_hits:
-                        topic = (meta or {}).get('topic', 'faq')
-                        faq_lines.append(f"- ({topic}) {text}")
-                        used_context['faqs'].append(text)
-                    sections.append("Reference snippets (FAQs):\n" + "\n".join(faq_lines))
-
-            # Conversation turns with timestamps (recency-aware)
-            if RAG_ENABLE_TURN and turns_k > 0:
-                hits = rag_store.retrieve_turns(query=prompt, k=turns_k, conversation_id=conversation_id)
-                if hits:
-                    turn_lines = []
-                    for text, meta in hits:
-                        role = (meta or {}).get('role', 'context')
-                        ts = (meta or {}).get('timestamp')
-                        if ts:
-                            turn_lines.append(f"- {role} [{ts}]: {text}")
-                        else:
-                            turn_lines.append(f"- {role}: {text}")
-                        used_context['turns'].append(text)
-                    sections.append("Recent conversation turns (most relevant first):\n" + "\n".join(turn_lines))
-
-            # Conversation summaries
-            if RAG_ENABLE_SUMMARY and conversation_id:
-                sum_hits = rag_store.retrieve_summaries(conversation_id=conversation_id, k=RAG_SUMMARY_TOP_K)
-                if sum_hits:
-                    used_context['summaries'] = [t for t, _ in sum_hits]
-                    sections.append("Conversation summaries:\n" + "\n".join(f"- {t}" for t, _ in sum_hits))
-
-            instructions = (
-                "You are a helpful assistant. Follow the persona and policies above. Use the reference snippets and "
-                "conversation memory when relevant. If the user asks about times or durations, use the provided "
-                "UTC ISO timestamps to compute precise differences and express them in human-friendly units."
-            )
-            reminder = "Reminder: You are Ada, Luna's assistant. Always identify as Ada."
-            current_ts_line = f"Current user message timestamp (UTC): {user_timestamp}"
-            assembled = ("\n\n".join(sections) + "\n\n" if sections else "") + instructions + "\n" + reminder + "\n" + current_ts_line
-            final_prompt = f"{assembled}\nUser: {prompt}\nAssistant:"
-            t_retrieve = time.perf_counter() - t0
-            t_assemble = time.perf_counter() - t0
-        except Exception:
-            pass
+        final_prompt, used_context = build_prompt(
+            prompt,
+            conversation_id,
+            entity,
+            media_info,
+            user_timestamp,
+            rag_store,
+            turns_k=turns_k,
+            faq_k=faq_k,
+            memory_k=memory_k,
+        )
+    else:
+        final_prompt = f"User: {prompt}\nAssistant:"
+        used_context = {'persona': None, 'faqs': [], 'memories': [], 'turns': [], 'summaries': [], 'entity': entity, 'media': media_info}
 
     # Generator function for SSE streaming
-    def generate():
+    async def generate():
         nonlocal conversation_id
         try:
-            payload = {
-                'model': OLLAMA_MODEL,
-                'prompt': final_prompt,
-                'stream': True,
-                'think': include_thinking,
-            }
-
-            # Stream from Ollama
             accumulated_text = ""
             accumulated_thinking = ""
             
-            with requests.post(OLLAMA_API_URL, json=payload, stream=True) as response:
-                response.raise_for_status()
+            # Stream from Ollama using modularized llm module (async)
+            async for chunk in stream_chat_async(final_prompt, model=OLLAMA_MODEL, include_thinking=include_thinking):
+                if 'error' in chunk:
+                    yield f"data: {json.dumps({'type': 'error', 'error': chunk['error']})}\n\n"
+                    return
                 
-                for line in response.iter_lines():
-                    if line:
-                        chunk = json.loads(line)
-                        
-                        # Send response tokens
-                        if 'response' in chunk and chunk['response']:
-                            token = chunk['response']
-                            accumulated_text += token
-                            yield f"data: {json.dumps({'type': 'token', 'content': token})}\n\n"
-                        
-                        # Send thinking tokens if enabled
-                        if include_thinking and 'thinking' in chunk and chunk['thinking']:
-                            thinking_token = chunk['thinking']
-                            accumulated_thinking += thinking_token
-                            yield f"data: {json.dumps({'type': 'thinking', 'content': thinking_token})}\n\n"
-                        
-                        # Check if stream is done
-                        if chunk.get('done', False):
-                            assistant_timestamp = datetime.datetime.now(datetime.timezone.utc).isoformat()
-                            
-                            # Upsert turn after generation completes
-                            if rag_store is not None and prompt and accumulated_text:
-                                try:
-                                    cid = rag_store.upsert_turn(
-                                        conversation_id,
-                                        user_text=prompt,
-                                        assistant_text=accumulated_text,
-                                        user_ts=user_timestamp,
-                                        assistant_ts=assistant_timestamp,
-                                        source="chat",
-                                    )
-                                    conversation_id = cid
-                                except Exception:
-                                    if RAG_DEBUG:
-                                        import traceback
-                                        print(f"[BRAIN][RAG][upsert][{req_id}] failed:\n" + traceback.format_exc())
+                # Send response tokens
+                if 'token' in chunk:
+                    token = chunk['token']
+                    accumulated_text += token
+                    yield f"data: {json.dumps({'type': 'token', 'content': token})}\n\n"
+                
+                # Send thinking tokens if enabled
+                if 'thinking' in chunk:
+                    thinking_token = chunk['thinking']
+                    accumulated_thinking += thinking_token
+                    yield f"data: {json.dumps({'type': 'thinking', 'content': thinking_token})}\n\n"
+                
+                # Check if stream is done
+                if 'done' in chunk and chunk['done']:
+                    assistant_timestamp = datetime.datetime.now(datetime.timezone.utc).isoformat()
+                    
+                    # Upsert turn after generation completes
+                    if rag_store is not None and prompt and accumulated_text:
+                        try:
+                            cid = rag_store.upsert_turn(
+                                conversation_id,
+                                user_text=prompt,
+                                assistant_text=accumulated_text,
+                                user_ts=user_timestamp,
+                                assistant_ts=assistant_timestamp,
+                                source="chat",
+                            )
+                            conversation_id = cid
+                        except Exception:
+                            if RAG_DEBUG:
+                                import traceback
+                                print(f"[BRAIN][RAG][upsert][{req_id}] failed:\n" + traceback.format_exc())
 
-                            # Summarize periodically (mirror non-streaming endpoint)
-                            if RAG_ENABLE_SUMMARY and rag_store is not None and conversation_id:
-                                try:
-                                    total_turn_docs = rag_store.count_turns(conversation_id)
-                                    if total_turn_docs >= 2 and (total_turn_docs // 2) % max(RAG_SUMMARY_EVERY_N, 1) == 0:
-                                        last_pairs = rag_store.get_last_turns(conversation_id, limit=RAG_SUMMARY_TURNS_WINDOW)
-                                        convo_lines = []
-                                        for t, m in last_pairs:
-                                            role = (m or {}).get('role', 'context')
-                                            ts = (m or {}).get('timestamp')
-                                            if ts:
-                                                convo_lines.append(f"- {role} [{ts}]: {t}")
-                                            else:
-                                                convo_lines.append(f"- {role}: {t}")
-                                        summary_prompt = (
-                                            "Summarize the following recent conversation turns succinctly (3-5 bullet points). "
-                                            "Capture decisions, facts, preferences, and open items.\n\n" + "\n".join(convo_lines)
-                                        )
-                                        sum_payload = {
-                                            'model': OLLAMA_MODEL,
-                                            'prompt': summary_prompt,
-                                            'stream': False,
-                                            'think': False,
-                                        }
-                                        rsum = requests.post(OLLAMA_API_URL, json=sum_payload, timeout=120)
-                                        rsum.raise_for_status()
-                                        sdata = rsum.json()
-                                        stext = (sdata.get('response') or '').strip()
-                                        if stext:
-                                            rag_store.upsert_summary(conversation_id, stext, timestamp=assistant_timestamp, source='chat')
-                                except Exception:
-                                    if RAG_DEBUG:
-                                        import traceback
-                                        print(f"[BRAIN][RAG][summary][{req_id}] failed:\n" + traceback.format_exc())
+                    # Summarize periodically
+                    if RAG_ENABLE_SUMMARY and rag_store is not None and conversation_id:
+                        try:
+                            total_turn_docs = rag_store.count_turns(conversation_id)
+                            if total_turn_docs >= 2 and (total_turn_docs // 2) % max(RAG_SUMMARY_EVERY_N, 1) == 0:
+                                last_pairs = rag_store.get_last_turns(conversation_id, limit=RAG_SUMMARY_TURNS_WINDOW)
+                                convo_lines = []
+                                for t, m in last_pairs:
+                                    role = (m or {}).get('role', 'context')
+                                    ts = (m or {}).get('timestamp')
+                                    if ts:
+                                        convo_lines.append(f"- {role} [{ts}]: {t}")
+                                    else:
+                                        convo_lines.append(f"- {role}: {t}")
+                                summary_prompt = (
+                                    "Summarize the following recent conversation turns succinctly (3-5 bullet points). "
+                                    "Capture decisions, facts, preferences, and open items.\n\n" + "\n".join(convo_lines)
+                                )
+                                stext, _, _ = complete(summary_prompt, model=OLLAMA_MODEL)
+                                if stext:
+                                    rag_store.upsert_summary(conversation_id, stext, timestamp=assistant_timestamp, source='chat')
+                        except Exception:
+                            if RAG_DEBUG:
+                                import traceback
+                                print(f"[BRAIN][RAG][summary][{req_id}] failed:\n" + traceback.format_exc())
 
-                            # Consent-based memory save
-                            if rag_store is not None and save_memory:
-                                try:
-                                    mem_text = memory_text or accumulated_text
-                                    if mem_text and mem_text.strip():
-                                        rag_store.upsert_memory(
-                                            mem_text.strip(),
-                                            scope="global",
-                                            importance=int(data.get('memory_importance', 3))
-                                        )
-                                except Exception:
-                                    if RAG_DEBUG:
-                                        import traceback
-                                        print("[BRAIN][RAG][memory-upsert] failed:\n" + traceback.format_exc())
+                    # Consent-based memory save
+                    if rag_store is not None and save_memory:
+                        try:
+                            mem_text = memory_text or accumulated_text
+                            if mem_text and mem_text.strip():
+                                rag_store.upsert_memory(
+                                    mem_text.strip(),
+                                    scope="global",
+                                    importance=int(data.get('memory_importance', 3))
+                                )
+                        except Exception:
+                            if RAG_DEBUG:
+                                import traceback
+                                print("[BRAIN][RAG][memory-upsert] failed:\n" + traceback.format_exc())
 
-                            # Send completion metadata
-                            metadata = {
-                                'type': 'done',
-                                'conversation_id': conversation_id,
-                                'used_context': used_context,
-                                'user_timestamp': user_timestamp,
-                                'assistant_timestamp': assistant_timestamp,
-                                'request_id': req_id,
-                            }
-                            yield f"data: {json.dumps(metadata)}\n\n"
-                            break
+                    # Send completion metadata
+                    metadata = {
+                        'type': 'done',
+                        'conversation_id': conversation_id,
+                        'used_context': used_context,
+                        'user_timestamp': user_timestamp,
+                        'assistant_timestamp': assistant_timestamp,
+                        'request_id': req_id,
+                    }
+                    yield f"data: {json.dumps(metadata)}\n\n"
+                    break
 
         except Exception as e:
             error_data = {'type': 'error', 'error': str(e)}
             yield f"data: {json.dumps(error_data)}\n\n"
 
-    return Response(stream_with_context(generate()), mimetype='text/event-stream')
+    return StreamingResponse(generate(), media_type='text/event-stream')
 
 
-@app.route('/v1/memory', methods=['GET'])
-def list_memory():
+@app.get('/v1/memory')
+async def list_memory(
+    search: Optional[str] = Query(None),
+    query: Optional[str] = Query(None),
+    scope: Optional[str] = Query(None),
+    entity: Optional[str] = Query(None),
+    limit: int = Query(20)
+):
     """
     Retrieve long-term memories with optional semantic search.
 
     - **Method:** GET
     - **Path:** /v1/memory
     - **Query params:**
-      - search (optional): semantic query; if omitted returns empty list
+      - search or query (optional): semantic search term; if omitted returns all memories
       - scope (optional): memory scope (e.g., ``global``, ``user:123``)
       - entity (optional): entity/topic scope
-      - limit (optional): max results (default 20, capped at 20)
+      - limit (optional): max results (default 20, capped at 100)
 
     Responses:
-    - 200: ``{"items": [...]}``
+    - 200: ``{"items": [...]}`` - list of memories
     - 200: empty items if RAG disabled
     - 500: retrieval error
     """
     if rag_store is None:
-        return jsonify({'items': []})
-    q = (request.args.get('search') or '').strip()
-    scope = (request.args.get('scope') or '').strip()
-    entity = (request.args.get('entity') or '').strip()
-    try:
-        limit = int(request.args.get('limit', '20'))
-    except Exception:
-        limit = 20
+        return {'items': []}
+    
+    # Support both 'search' and 'query' parameter names
+    search_term = (search or query or '').strip()
+    scope_str = (scope or '').strip()
+    entity_str = (entity or '').strip()
     items = []
+    
     try:
-        if q:
-            hits = rag_store.retrieve_memories(query=q, k=min(limit, 20), entity=(entity or None))
+        if search_term:
+            # Semantic search for matching memories
+            hits = rag_store.retrieve_memories(query=search_term, k=min(limit, 100), entity=(entity_str or None))
             for text, meta in hits:
                 items.append({'id': None, 'text': text, 'meta': meta})
         else:
-            rows = rag_store.list_memories(limit=limit)
+            # No search query: list all memories
+            rows = rag_store.list_memories(limit=min(limit, 100))
             for mid, text, meta in rows:
-                if scope and (meta or {}).get('scope') != scope:
+                if scope_str and (meta or {}).get('scope') != scope_str:
                     continue
-                if entity and (meta or {}).get('scope') != f"entity:{entity}":
+                if entity_str and (meta or {}).get('scope') != f"entity:{entity_str}":
                     continue
                 items.append({'id': mid, 'text': text, 'meta': meta})
     except Exception as err:
-        return jsonify({'error': str(err)}), 500
-    return jsonify({'items': items})
+        return JSONResponse(status_code=500, content={'error': str(err)})
+    
+    return {'items': items}
 
 
-@app.route('/v1/memory', methods=['POST'])
-def create_memory():
+@app.post('/v1/memory')
+async def create_memory(request: Request):
     """
     Create a new long-term memory entry.
 
@@ -694,11 +511,16 @@ def create_memory():
     - 500: storage error
     """
     if rag_store is None:
-        return jsonify({'error': 'RAG not available'}), 503
-    data = request.json or {}
+        return JSONResponse(status_code=503, content={'error': 'RAG not available'})
+    
+    try:
+        data = await request.json()
+    except Exception:
+        return JSONResponse(status_code=400, content={'error': 'invalid json'})
+    
     text = (data.get('text') or '').strip()
     if not text:
-        return jsonify({'error': 'text is required'}), 400
+        return JSONResponse(status_code=400, content={'error': 'text is required'})
     scope = (data.get('scope') or 'global').strip() or 'global'
     entity = (data.get('entity') or '').strip()
     if entity and not scope.startswith('entity:'):
@@ -710,13 +532,13 @@ def create_memory():
     tags = data.get('tags') if isinstance(data.get('tags'), list) else None
     try:
         mem_id = rag_store.upsert_memory(text, scope=scope, importance=importance, tags=tags, source='chat')
-        return jsonify({'id': mem_id})
+        return JSONResponse(status_code=201, content={'id': mem_id})
     except Exception as err:
-        return jsonify({'error': str(err)}), 500
+        return JSONResponse(status_code=500, content={'error': str(err)})
 
 
-@app.route('/v1/memory/<mem_id>', methods=['DELETE'])
-def delete_memory(mem_id: str):
+@app.delete('/v1/memory/{mem_id}')
+async def delete_memory(mem_id: str):
     """
     Delete a long-term memory entry by ID.
 
@@ -729,16 +551,16 @@ def delete_memory(mem_id: str):
     - 500: delete error (e.g., missing id)
     """
     if rag_store is None:
-        return jsonify({'error': 'RAG not available'}), 503
+        return JSONResponse(status_code=503, content={'error': 'RAG not available'})
     try:
         rag_store.delete_memory(mem_id)
-        return jsonify({'ok': True})
+        return {'ok': True}
     except Exception as err:
-        return jsonify({'error': str(err)}), 500
+        return JSONResponse(status_code=500, content={'error': str(err)})
 
 
-@app.route('/v1/debug/rag', methods=['GET'])
-def rag_debug():
+@app.get('/v1/debug/rag')
+async def rag_debug(conversation_id: Optional[str] = Query(None)):
     """
     Debug information for the RAG system (development only).
 
@@ -752,9 +574,9 @@ def rag_debug():
     - 500: error retrieving stats
     """
     if not RAG_DEBUG or rag_store is None:
-        return jsonify({'error': 'debug disabled'}), 404
+        return JSONResponse(status_code=404, content={'error': 'debug disabled'})
     try:
-        cid = request.args.get('conversation_id')
+        cid = conversation_id
         info: Dict[str, Any] = {'conversation_id': cid}
         try:
             got_p = rag_store.col.get(where={"type": "persona"})
@@ -796,13 +618,21 @@ def rag_debug():
         except Exception as e:
             info['memory_error'] = str(e)
 
-        return jsonify(info)
+        return info
     except Exception as e:
-        return jsonify({'error': str(e)}), 500
+        return JSONResponse(status_code=500, content={'error': str(e)})
 
 
-@app.route('/v1/debug/prompt', methods=['GET'])
-def prompt_debug():
+@app.get('/v1/debug/prompt')
+async def prompt_debug(
+    conversation_id: Optional[str] = Query(None),
+    entity: Optional[str] = Query(None),
+    prompt: Optional[str] = Query(None),
+    turns_k: int = Query(None),
+    faq_k: int = Query(None),
+    memory_k: int = Query(None),
+    share_listenbrainz: Optional[str] = Query(None)
+):
     """
     Return the assembled prompt sections and context that would be sent to the LLM.
 
@@ -815,21 +645,21 @@ def prompt_debug():
     Requires RAG_DEBUG=true and an available rag_store.
     """
     if not RAG_DEBUG or rag_store is None:
-        return jsonify({'error': 'debug disabled'}), 404
+        return JSONResponse(status_code=404, content={'error': 'debug disabled'})
 
     try:
-        prompt = (request.args.get('prompt') or '').strip() or 'debug'
-        conversation_id = (request.args.get('conversation_id') or '').strip() or None
-        entity = (request.args.get('entity') or '').strip() or None
-        turns_k = int(request.args.get('turns_k', RAG_TURN_TOP_K))
-        faq_k = int(request.args.get('faq_k', RAG_FAQ_TOP_K))
-        memory_k = int(request.args.get('memory_k', RAG_MEMORY_TOP_K))
-        share_lb = (request.args.get('share_listenbrainz') or '').lower() in ('1', 'true', 'yes', 'on')
+        prompt_str = (prompt or '').strip() or 'debug'
+        cid = (conversation_id or '').strip() or None
+        entity_str = (entity or '').strip() or None
+        turns_k_val = turns_k if turns_k is not None else RAG_TURN_TOP_K
+        faq_k_val = faq_k if faq_k is not None else RAG_FAQ_TOP_K
+        memory_k_val = memory_k if memory_k is not None else RAG_MEMORY_TOP_K
+        share_lb = (share_listenbrainz or '').lower() in ('1', 'true', 'yes', 'on')
 
         user_timestamp = datetime.datetime.now(datetime.timezone.utc).isoformat()
         sections: List[str] = []
         media_info = None
-        used_context: Dict[str, Any] = {"persona": None, "faqs": [], "turns": [], "memories": [], "summaries": [], "entity": entity, "media": None}
+        used_context: Dict[str, Any] = {"persona": None, "faqs": [], "turns": [], "memories": [], "summaries": [], "entity": entity_str, "media": None}
 
         sections.append(IDENTITY_BLOCK)
 
@@ -862,8 +692,8 @@ def prompt_debug():
                 used_context["persona"] = {"included": False}
 
         # Memory
-        if RAG_ENABLE_MEMORY and memory_k > 0:
-            mem_hits = rag_store.retrieve_memories(query=prompt, k=memory_k, entity=entity)
+        if RAG_ENABLE_MEMORY and memory_k_val > 0:
+            mem_hits = rag_store.retrieve_memories(query=prompt_str, k=memory_k_val, entity=entity_str)
             if mem_hits:
                 mem_lines = []
                 for text_m, meta_m in mem_hits:
@@ -881,8 +711,8 @@ def prompt_debug():
                 sections.append("Long-term memory:\n" + "\n".join(mem_lines))
 
         # FAQs
-        if RAG_ENABLE_FAQ and faq_k > 0:
-            faq_hits = rag_store.retrieve_faqs(query=prompt, k=faq_k)
+        if RAG_ENABLE_FAQ and faq_k_val > 0:
+            faq_hits = rag_store.retrieve_faqs(query=prompt_str, k=faq_k_val)
             if faq_hits:
                 faq_lines = []
                 for text, meta in faq_hits:
@@ -892,8 +722,8 @@ def prompt_debug():
                 sections.append("Reference snippets (FAQs):\n" + "\n".join(faq_lines))
 
         # Conversation turns
-        if RAG_ENABLE_TURN and turns_k > 0:
-            hits = rag_store.retrieve_turns(query=prompt, k=turns_k, conversation_id=conversation_id)
+        if RAG_ENABLE_TURN and turns_k_val > 0:
+            hits = rag_store.retrieve_turns(query=prompt_str, k=turns_k_val, conversation_id=cid)
             if hits:
                 turn_lines = []
                 for text_t, meta_t in hits:
@@ -907,8 +737,8 @@ def prompt_debug():
                 sections.append("Recent conversation turns (most relevant first):\n" + "\n".join(turn_lines))
 
         # Summaries
-        if RAG_ENABLE_SUMMARY and conversation_id:
-            sum_hits = rag_store.retrieve_summaries(conversation_id=conversation_id, k=2)
+        if RAG_ENABLE_SUMMARY and cid:
+            sum_hits = rag_store.retrieve_summaries(conversation_id=cid, k=2)
             if sum_hits:
                 used_context["summaries"] = [t for t, _ in sum_hits]
                 sections.append("Conversation summaries:\n" + "\n".join(f"- {t}" for t, _ in sum_hits))
@@ -921,19 +751,62 @@ def prompt_debug():
         reminder = "Reminder: You are Ada, Luna's assistant. Always identify as Ada."
         current_ts_line = f"Current user message timestamp (UTC): {user_timestamp}"
         assembled = ("\n\n".join(sections) + "\n\n" if sections else "") + instructions + "\n" + reminder + "\n" + current_ts_line
-        final_prompt = f"{assembled}\nUser: {prompt}\nAssistant:"
+        final_prompt = f"{assembled}\nUser: {prompt_str}\nAssistant:"
 
-        return jsonify({
-            "conversation_id": conversation_id,
-            "entity": entity,
-            "prompt_used": prompt,
+        return {
+            "conversation_id": cid,
+            "entity": entity_str,
+            "prompt_used": prompt_str,
             "final_prompt": final_prompt,
             "sections": sections,
             "used_context": used_context,
-        })
+        }
     except Exception as e:
-        return jsonify({"error": str(e)}), 500
+        return JSONResponse(status_code=500, content={"error": str(e)})
+
+
+@app.get('/v1/conversations/recent')
+async def get_recent_conversations(limit: int = Query(10)):
+    """
+    Return a list of recent conversations with preview and metadata.
+
+    - Method: GET
+    - Path: /v1/conversations/recent
+    - Query params: limit (optional, default 10)
+    - Returns: [{id, preview, timestamp, turn_count}, ...]
+    """
+    if rag_store is None:
+        return JSONResponse(status_code=503, content={'error': 'RAG not available'})
+
+    try:
+        conversations = rag_store.get_recent_conversations(limit=limit)
+        return conversations
+    except Exception as e:
+        return JSONResponse(status_code=500, content={'error': str(e)})
+
+
+@app.get('/v1/conversations/{conversation_id}')
+async def get_conversation(conversation_id: str):
+    """
+    Return all turns for a specific conversation.
+
+    - Method: GET
+    - Path: /v1/conversations/<conversation_id>
+    - Returns: {conversation_id, turns: [{role, text, timestamp}, ...]}
+    """
+    if rag_store is None:
+        return JSONResponse(status_code=503, content={'error': 'RAG not available'})
+
+    try:
+        turns = rag_store.get_conversation_turns(conversation_id)
+        return {
+            'conversation_id': conversation_id,
+            'turns': turns
+        }
+    except Exception as e:
+        return JSONResponse(status_code=500, content={'error': str(e)})
 
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=7000)
+    import uvicorn
+    uvicorn.run(app, host='0.0.0.0', port=7000)
