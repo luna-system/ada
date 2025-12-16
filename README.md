@@ -54,7 +54,7 @@ Most AI assistants lock essential features behind subscriptions:
   - CPU-only works but is slower
 - **8GB+ RAM** for smaller models, 16GB+ for larger ones
 
-See [Hardware Guide](/docs/HARDWARE_GUIDE.md) for detailed setup and recommendations.
+See [Hardware Guide](/docs/hardware.rst) for detailed setup and recommendations.
 
 ### 2. Clone and Setup
 
@@ -189,12 +189,13 @@ ada/
 **Full documentation available at http://localhost:5000/docs** when running.
 
 **Quick links:**
-- [Getting Started from Scratch](/docs/GETTING_STARTED_FROM_SCRATCH.md) - Customize your AI
-- [Hardware Guide](/docs/HARDWARE_GUIDE.md) - GPU setup, hardware recommendations
-- [SBC Guide](/docs/SBC_GUIDE.md) - Running Ada on Raspberry Pi, Orange Pi, etc.
-- [Build Your First Specialist](/docs/BUILD_YOUR_FIRST_SPECIALIST.md) - Extend capabilities
+- [Getting Started from Scratch](/docs/getting_started_scratch.rst) - Customize your AI
+- [Hardware Guide](/docs/hardware.rst) - GPU setup, hardware recommendations
+- [SBC Guide](/docs/sbc.rst) - Running Ada on Raspberry Pi, Orange Pi, etc.
+- [Build Your First Specialist](/docs/build_specialist.rst) - Extend capabilities
 - [Architecture Guide](/docs/architecture.rst) - How it all works
 - [API Reference](/docs/api_reference.rst) - Complete API docs
+- [Specialists](/docs/specialists.rst) - Plugin system documentation
 - [Xenofeminism & Design](/docs/xenofeminism.rst) - Our philosophical foundation
 - [Principles](/PRINCIPLES.md) - Why Ada is always free and open
 
