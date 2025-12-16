@@ -52,12 +52,12 @@ Most AI assistants lock essential features behind subscriptions:
 
 ### 2. Clone and Setup
 
-\`\`\`bash
+```bash
 git clone https://github.com/luna-system/ada.git
 cd ada
 ./setup.sh          # Creates data directories and checks prerequisites
 docker compose up -d
-\`\`\`
+```
 
 That's it! Ada will:
 - Pull and start all services (Ollama, ChromaDB, frontend, brain API)
@@ -67,25 +67,25 @@ That's it! Ada will:
 ### 3. Customize (Optional)
 
 **Change the AI model:**
-\`\`\`bash
+```bash
 # Edit .env
 OLLAMA_MODEL=llama3.1
 # or mistral, qwen, gemma, etc. - any model Ollama supports
-\`\`\`
+```
 
 **Give your AI a different personality:**
-\`\`\`bash
+```bash
 # Copy an example persona or create your own
 cp examples/personas/coding-buddy.md persona.md
 docker compose restart brain
-\`\`\`
+```
 
 **Change your AI's name:**
-\`\`\`bash
+```bash
 # In .env
 AI_NAME=Jarvis
 AI_USER_NAME=Tony
-\`\`\`
+```
 
 See [Getting Started from Scratch](/docs/GETTING_STARTED_FROM_SCRATCH.md) for detailed customization.
 
@@ -114,13 +114,13 @@ Drop a Python file in \`brain/specialists/\` and Ada gains new capabilities:
 - **Docs search** - Ada can read her own documentation
 
 **Build your own in minutes:**
-\`\`\`python
+```python
 # brain/specialists/weather_specialist.py
 class WeatherSpecialist(BaseSpecialist):
     async def process(self, location: str):
         # Your weather API logic here
         return SpecialistResult(data={...})
-\`\`\`
+```
 
 See [Building Your First Specialist](/docs/BUILD_YOUR_FIRST_SPECIALIST.md) for a complete tutorial.
 
@@ -162,7 +162,7 @@ See [ada-mcp/](/ada-mcp/) for setup instructions.
 
 ## Project Structure
 
-\`\`\`
+```
 ada/
 ├── brain/              # FastAPI backend + LLM orchestration
 │   ├── specialists/    # Extensible plugin system
@@ -174,7 +174,7 @@ ada/
 ├── examples/
 │   └── personas/      # Example AI personalities
 └── compose.yaml       # Docker orchestration
-\`\`\`
+```
 
 ---
 
