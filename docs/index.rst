@@ -11,12 +11,19 @@ Welcome to the Ada Brain API documentation. This is the REST API backend for the
    :caption: Documentation:
 
    getting_started
+   getting_started_scratch
    configuration
+   hardware
+   sbc
    architecture
    data_model
    api_usage
    api_reference
    specialists
+   build_specialist
+   bidirectional
+   specialist_rag
+   web_search
    testing
    development
    streaming
