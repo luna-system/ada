@@ -39,7 +39,7 @@ Repository = "https://github.com/luna-system/ada"
 Issues = "https://github.com/luna-system/ada/issues"
 
 [project.scripts]
-ada-mcp = "ada_mcp.server:main"
+ada-mcp = "ada_mcp.server:run"
 
 [build-system]
 requires = ["hatchling"]
