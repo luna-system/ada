@@ -63,7 +63,13 @@ See [Hardware Guide](/docs/hardware.rst) for detailed setup and recommendations.
 git clone https://github.com/luna-system/ada.git
 cd ada
 ./setup.sh          # Creates data directories and checks prerequisites
+
+# Start Ada (CPU-only by default)
 docker compose up -d
+
+# OR with GPU acceleration:
+docker compose --profile cuda up -d  # NVIDIA GPUs
+docker compose --profile rocm up -d  # AMD GPUs
 ```
 
 That's it! Ada will:

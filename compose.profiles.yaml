@@ -1,0 +1,53 @@
+# Docker Compose GPU Profiles for Ada
+#
+# Usage:
+#   CPU-only (default):  docker compose up
+#   NVIDIA GPU:          docker compose --profile cuda up
+#   AMD GPU:             docker compose --profile rocm up
+#
+# See docs/hardware.rst for full hardware setup guide
+
+services:
+  # Override base ollama service for NVIDIA CUDA
+  ollama-cuda:
+    container_name: ada-ollama-1
+    image: ollama/ollama:latest
+    profiles: ["cuda"]
+    restart: unless-stopped
+    env_file:
+      - .env
+    environment:
+      - OLLAMA_KEEP_ALIVE=${OLLAMA_KEEP_ALIVE:-24h}
+    volumes:
+      - ./data/ollama:/root/.ollama
+    command: ["serve"]
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities: [gpu]
+
+  # Override base ollama service for AMD ROCm
+  ollama-rocm:
+    container_name: ada-ollama-1
+    image: ollama/ollama:rocm
+    profiles: ["rocm"]
+    restart: unless-stopped
+    env_file:
+      - .env
+    environment:
+      - OLLAMA_KEEP_ALIVE=${OLLAMA_KEEP_ALIVE:-24h}
+      - OLLAMA_GPU_DRIVER=rocm
+      # Optionally limit to specific GPU: HIP_VISIBLE_DEVICES=0
+      # Override GFX version if needed: HSA_OVERRIDE_GFX_VERSION=10.3.0
+    devices:
+      - "/dev/kfd:/dev/kfd"
+      - "/dev/dri:/dev/dri"
+    group_add:
+      - "video"
+    volumes:
+      - ./data/ollama:/root/.ollama
+      - /opt/rocm:/opt/rocm:ro
+    command: ["serve"]
