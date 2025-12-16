@@ -1,8 +1,8 @@
 {
   "mcp.servers": {
     "ada": {
-      "command": "ada-mcp",
-      "args": [],
+      "command": "uv",
+      "args": ["run", "--directory", "/path/to/ada-v1/ada-mcp", "ada-mcp"],
       "env": {
         "ADA_BASE_URL": "http://localhost:8000"
       }
@@ -10,18 +10,6 @@
   },
   "mcp.serverAutostart": true
 }
-
-// Alternative with absolute path:
-// {
-//   "mcp.servers": {
-//     "ada": {
-//       "command": "/path/to/ada-v1/ada-mcp/.venv/bin/ada-mcp",
-//       "env": {
-//         "ADA_BASE_URL": "http://localhost:8000"
-//       }
-//     }
-//   }
-// }
 
 // Usage in VSCodium:
 // 1. Install MCP extension (if available)

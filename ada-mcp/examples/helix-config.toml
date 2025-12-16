@@ -6,9 +6,8 @@
 # Check Helix documentation for current MCP support status.
 
 [[language-server.ada-mcp]]
-command = "ada-mcp"
-# Or absolute path:
-# command = "/path/to/ada-v1/ada-mcp/.venv/bin/ada-mcp"
+command = "uv"
+args = ["run", "--directory", "/path/to/ada-v1/ada-mcp", "ada-mcp"]
 
 [language-server.ada-mcp.environment]
 ADA_BASE_URL = "http://localhost:8000"
