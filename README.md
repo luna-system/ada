@@ -4,7 +4,7 @@
 
 Named after Ada Lovelace, the first programmer. Build AI assistants with memory, web search, vision, and tool use - features that usually cost $20-200/month - using any open model.
 
-🔓 **Always free and open source** • �� **Runs entirely local** • 🔧 **Extensible by design** • 📚 **Self-documenting architecture**
+🔓 **Always free and open source** • 🏠 **Runs entirely local** • 🔧 **Extensible by design** • 📚 **Self-documenting architecture**
 
 ---
 
@@ -48,7 +48,7 @@ Most AI assistants lock essential features behind subscriptions:
 ### 2. Clone and Setup
 
 \`\`\`bash
-git clone https://github.com/yourusername/ada.git
+git clone https://github.com/luna-system/ada.git
 cd ada
 ./setup.sh          # Creates data directories and checks prerequisites
 docker compose up -d
@@ -82,7 +82,7 @@ AI_NAME=Jarvis
 AI_USER_NAME=Tony
 \`\`\`
 
-See [Getting Started from Scratch](docs/GETTING_STARTED_FROM_SCRATCH.md) for detailed customization.
+See [Getting Started from Scratch](/docs/GETTING_STARTED_FROM_SCRATCH.md) for detailed customization.
 
 ---
 
@@ -117,7 +117,7 @@ class WeatherSpecialist(BaseSpecialist):
         return SpecialistResult(data={...})
 \`\`\`
 
-See [Building Your First Specialist](docs/BUILD_YOUR_FIRST_SPECIALIST.md) for a complete tutorial.
+See [Building Your First Specialist](/docs/BUILD_YOUR_FIRST_SPECIALIST.md) for a complete tutorial.
 
 ### 📡 Bidirectional Tool Use
 
@@ -144,6 +144,15 @@ Ada can introspect herself:
 - \`GET /v1/schema\` - Complete API documentation
 - Built-in docs specialist - Ada reads her own Sphinx documentation
 
+### ⌨️ Editor Integration (v1.1+)
+
+Use Ada directly from your editor via Model Context Protocol:
+- **VSCode/GitHub Copilot** - Chat with Ada without leaving your code
+- **Any MCP-compatible editor** - Neovim, Helix, Zed, etc.
+- 4 tools exposed: chat, search memory, add memory, health check
+
+See [ada-mcp/](/ada-mcp/) for setup instructions.
+
 ---
 
 ## Project Structure
@@ -159,7 +168,6 @@ ada/
 ├── docs/              # Sphinx documentation
 ├── examples/
 │   └── personas/      # Example AI personalities
-├── .ai/               # Machine-readable docs for AI assistants
 └── compose.yaml       # Docker orchestration
 \`\`\`
 
@@ -170,12 +178,12 @@ ada/
 **Full documentation available at http://localhost:5000/docs** when running.
 
 **Quick links:**
-- [Getting Started from Scratch](docs/GETTING_STARTED_FROM_SCRATCH.md) - Customize your AI
-- [Build Your First Specialist](docs/BUILD_YOUR_FIRST_SPECIALIST.md) - Extend capabilities
-- [Architecture Guide](docs/architecture.rst) - How it all works
-- [API Reference](docs/api_reference.rst) - Complete API docs
-- [Documentation Philosophy](docs/documentation_philosophy.rst) - Our approach
-- [Principles](PRINCIPLES.md) - Why Ada is always free and open
+- [Getting Started from Scratch](/docs/GETTING_STARTED_FROM_SCRATCH.md) - Customize your AI
+- [Build Your First Specialist](/docs/BUILD_YOUR_FIRST_SPECIALIST.md) - Extend capabilities
+- [Architecture Guide](/docs/architecture.rst) - How it all works
+- [API Reference](/docs/api_reference.rst) - Complete API docs
+- [Xenofeminism & Design](/docs/xenofeminism.rst) - Our philosophical foundation
+- [Principles](/PRINCIPLES.md) - Why Ada is always free and open
 
 ---
 
@@ -230,7 +238,7 @@ We welcome:
 - 💡 Architecture suggestions
 - 🧪 Testing improvements
 
-See [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines.
+Open an issue or pull request on [GitHub](https://github.com/luna-system/ada).
 
 **Your contributions join the commons** under CC0 1.0 Universal, helping democratize AI infrastructure for everyone.
 
@@ -269,7 +277,7 @@ See [LICENSE](LICENSE) for details.
 
 ## Credits
 
-Built by [Luna](https://github.com/yourusername) with significant contributions from Claude Sonnet 4.5.
+Built by [Luna](https://github.com/luna-system) with significant contributions from Claude Sonnet 4.5.
 
 Named after **Ada Lovelace** (1815-1852), who wrote the first computer program and imagined machines that could create art and music - not just calculate.
 
@@ -298,7 +306,7 @@ A: Yes, but that defeats the purpose. Ada is designed for local/open models to m
 A: It's stable for personal use. For production workloads, you'll want to add authentication, rate limiting, and monitoring.
 
 **Q: How do I contribute a new specialist?**  
-A: See [Build Your First Specialist](docs/BUILD_YOUR_FIRST_SPECIALIST.md)! We love weird use cases.
+A: See [Build Your First Specialist](/docs/BUILD_YOUR_FIRST_SPECIALIST.md)! We love weird use cases.
 
 ---
 
