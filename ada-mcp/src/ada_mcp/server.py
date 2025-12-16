@@ -51,6 +51,11 @@ async def main():
 
 def run():
     """Entry point for command-line execution."""
+    import sys
+    # Print startup message to stderr so it doesn't interfere with stdio protocol
+    print("🤖 Ada MCP Server starting...", file=sys.stderr)
+    print(f"📡 Listening on stdio for MCP protocol messages", file=sys.stderr)
+    print(f"🔗 Ada Brain: {os.getenv('ADA_BASE_URL', 'http://localhost:8000')}", file=sys.stderr)
     asyncio.run(main())
 
 
