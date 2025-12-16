@@ -69,15 +69,15 @@ services:
         mkdir -p /data/backups
         echo "[backup+upload] starting hourly loop"
         while true; do
-          ts=$(date -u +%Y%m%dT%H%M%SZ)
-          echo "[backup+upload] $ts creating backup"
-          if sqlite3 /data/chroma.sqlite3 ".backup /data/backups/chroma-$ts.sqlite3"; then
-            echo "[backup+upload] $ts backup successful, uploading to B2"
+          ts=$$(date -u +%Y%m%dT%H%M%SZ)
+          echo "[backup+upload] $$ts creating backup"
+          if sqlite3 /data/chroma.sqlite3 ".backup /data/backups/chroma-$$ts.sqlite3"; then
+            echo "[backup+upload] $$ts backup successful, uploading to B2"
             python /app/scripts/upload_backups_b2.py || echo "[backup+upload] upload failed (will retry next cycle)"
-            echo "[backup+upload] $ts cleaning old backups (keeping 10)"
+            echo "[backup+upload] $$ts cleaning old backups (keeping 10)"
             ls -1t /data/backups/chroma-*.sqlite3 2>/dev/null | tail -n +11 | xargs -r rm --
           else
-            echo "[backup+upload] $ts backup failed, skipping upload"
+            echo "[backup+upload] $$ts backup failed, skipping upload"
           fi
           echo "[backup+upload] sleeping for 3600s (1h)"
           sleep 3600
@@ -193,23 +193,23 @@ services:
         printf '[ollama-init] %s API up. Pulling deepseek-r1…
         ' "$(date -u +%FT%TZ)"
         curl -sS -X POST -H 'Content-Type: application/json' -d '{"name":"deepseek-r1"}' http://ollama:11434/api/pull &
-        pid1=$!
-        while kill -0 $pid1 2>/dev/null; do
+        pid1=$$!
+        while kill -0 $$pid1 2>/dev/null; do
           printf '[ollama-init] %s pulling deepseek-r1… (still running)
           ' "$(date -u +%FT%TZ)"
           sleep 30
         done
-        wait $pid1
+        wait $$pid1
         printf '[ollama-init] %s Pulling nomic-embed-text…
         ' "$(date -u +%FT%TZ)"
         curl -sS -X POST -H 'Content-Type: application/json' -d '{"name":"nomic-embed-text"}' http://ollama:11434/api/pull &
-        pid2=$!
-        while kill -0 $pid2 2>/dev/null; do
+        pid2=$$!
+        while kill -0 $$pid2 2>/dev/null; do
           printf '[ollama-init] %s pulling nomic-embed-text… (still running)
           ' "$(date -u +%FT%TZ)"
           sleep 30
         done
-        wait $pid2
+        wait $$pid2
         printf '[ollama-init] %s model pulls complete.
         ' "$(date -u +%FT%TZ)"
 
