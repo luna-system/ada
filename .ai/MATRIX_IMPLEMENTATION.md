@@ -70,6 +70,7 @@ INTRO_MESSAGE = """👋 Hi! I'm Ada, an AI assistant running on this community's
 • No data sent to external services
 • You can opt out of memory storage with: !ada privacy off
 
+**Community Guidelines:** https://github.com/luna-system/ada/blob/trunk/COMMUNITY_GUIDELINES.md
 **Remove me:** Just kick me from the room anytime!
 
 Learn more: https://github.com/luna-system/ada
