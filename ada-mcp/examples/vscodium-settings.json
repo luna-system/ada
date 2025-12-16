@@ -1,0 +1,36 @@
+{
+  "mcp.servers": {
+    "ada": {
+      "command": "ada-mcp",
+      "args": [],
+      "env": {
+        "ADA_BASE_URL": "http://localhost:8000"
+      }
+    }
+  },
+  "mcp.serverAutostart": true
+}
+
+// Alternative with absolute path:
+// {
+//   "mcp.servers": {
+//     "ada": {
+//       "command": "/path/to/ada-v1/ada-mcp/.venv/bin/ada-mcp",
+//       "env": {
+//         "ADA_BASE_URL": "http://localhost:8000"
+//       }
+//     }
+//   }
+// }
+
+// Usage in VSCodium:
+// 1. Install MCP extension (if available)
+// 2. Add this config to settings.json
+// 3. Reload window (Ctrl+Shift+P -> "Reload Window")
+// 4. Open Command Palette (Ctrl+Shift+P)
+// 5. Search for "MCP: " commands to interact with Ada
+//
+// Available commands:
+// - MCP: List Tools (shows ada_chat, ada_search_memory, etc.)
+// - MCP: Call Tool (invoke Ada tools directly)
+// - MCP: Chat with Ada (if extension supports chat interface)
