@@ -223,6 +223,8 @@ OLLAMA_NUM_THREADS=8 ollama serve
 - **Option 3:** Orange Pi 5 Plus (~$80)
   - NPU support, 3B models
 
+**For single-board computers:** See [SBC_GUIDE.md](SBC_GUIDE.md) for detailed recommendations on Raspberry Pi, Orange Pi, Rock Pi, and other ARM boards.
+
 ---
 
 ## Model Size vs VRAM Requirements
@@ -300,12 +302,14 @@ OLLAMA_NUM_THREADS=8            # CPU threads to use
 
 ## Hackable Hardware Projects
 
+**For detailed single-board computer builds:** See [SBC_GUIDE.md](SBC_GUIDE.md) - comprehensive guide to running Ada on Raspberry Pi, Orange Pi, Rock Pi, and other ARM boards.
+
 ### Raspberry Pi 5 + AI HAT
 - **Cost:** ~$100 total
 - **Models:** 1B-3B quantized
 - **Pros:** Ultra low power, portable, great for learning
 - **Cons:** Very limited, slow inference
-- **Guide:** [Ollama on Pi 5](https://ollama.com/blog/ollama-on-raspberry-pi)
+- **Details:** [SBC_GUIDE.md](SBC_GUIDE.md#-runner-up-raspberry-pi-5-8gb)
 
 ### Used Gaming Laptop
 - **Cost:** $300-600

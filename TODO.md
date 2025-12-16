@@ -16,12 +16,14 @@ Active development tasks and future work.
   - ✅ Model size vs VRAM table
 
 ### Hardware Research
-- [x] **Investigate hackable hardware options** - ✅ Completed in HARDWARE_GUIDE.md (2025-12-16)
+- [x] **Investigate hackable hardware options** - ✅ Completed in HARDWARE_GUIDE.md + SBC_GUIDE.md (2025-12-16)
   - ✅ Raspberry Pi 5 with AI HAT documented
-  - ✅ Orange Pi options mentioned
+  - ✅ Orange Pi 5/5+ comprehensive coverage
+  - ✅ Rock 5B hacker's choice
   - ✅ Used gaming laptops covered
   - ✅ Cloud instances (Vast.ai, RunPod) documented
   - ✅ DIY builds with price tiers ($500, $1200, $3000)
+  - ✅ **NEW:** Complete SBC guide with 5+ boards, setup instructions, performance benchmarks
 - [x] **Create hardware guide** - ✅ "Building an Ada box for $X" sections created (2025-12-16)
 - [x] **Power consumption benchmarks** - ✅ Monthly cost calculations included (2025-12-16)
 
