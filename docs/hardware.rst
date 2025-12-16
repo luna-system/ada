@@ -65,19 +65,14 @@ NVIDIA GPUs (CUDA)
    sudo nvidia-ctk runtime configure --runtime=docker
    sudo systemctl restart docker
 
-**compose.yaml changes:**
+**Using CUDA with Ada:**
 
-.. code-block:: yaml
+.. code-block:: bash
 
-   ollama:
-     image: ollama/ollama  # Default image has CUDA support
-     deploy:
-       resources:
-         reservations:
-           devices:
-             - driver: nvidia
-               count: all
-               capabilities: [gpu]
+   # Use the cuda profile (already configured in compose.profiles.yaml)
+   docker compose --profile cuda up -d
+
+That's it! Ada ships with CUDA support pre-configured. No manual compose.yaml editing needed.
 
 **Environment variables:**
 
@@ -116,25 +111,18 @@ AMD GPUs (ROCm)
    rocminfo
    rocm-smi
 
-**compose.yaml (already configured for ROCm):**
+**Using ROCm with Ada:**
 
-.. code-block:: yaml
+.. code-block:: bash
 
-   ollama:
-     image: ollama/ollama:rocm
-     devices:
-       - "/dev/kfd:/dev/kfd"
-       - "/dev/dri:/dev/dri"
-     group_add:
-       - "video"
-     volumes:
-       - /opt/rocm:/opt/rocm:ro
-     environment:
-       - OLLAMA_GPU_DRIVER=rocm
-       # Optional: Limit to specific GPU
-       # - HIP_VISIBLE_DEVICES=0
-       # Optional: ISA override for older GPUs
-       # - HSA_OVERRIDE_GFX_VERSION=10.3.0
+   # Use the rocm profile (already configured in compose.profiles.yaml)
+   docker compose --profile rocm up -d
+
+   # Optional environment variables (in .env):
+   # HIP_VISIBLE_DEVICES=0              # Limit to specific GPU
+   # HSA_OVERRIDE_GFX_VERSION=10.3.0   # ISA override for older GPUs
+
+That's it! Ada ships with ROCm support pre-configured.
 
 **Troubleshooting:**
 

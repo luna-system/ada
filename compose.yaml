@@ -1,3 +1,9 @@
+# Include GPU profile configurations
+# Usage: docker compose --profile cuda up    (NVIDIA)
+#        docker compose --profile rocm up    (AMD)
+include:
+  - compose.profiles.yaml
+
 services:
   web:
     build:
@@ -151,30 +157,19 @@ services:
       timeout: 3s
       retries: 5
 
+  # Ollama LLM server (CPU-only by default)
+  # For GPU: docker compose --profile cuda up  (NVIDIA)
+  #          docker compose --profile rocm up  (AMD)
+  # See compose.profiles.yaml and docs/hardware.rst for details
   ollama:
-    image: ollama/ollama:rocm
+    image: ollama/ollama:latest
     restart: unless-stopped
     env_file:
       - .env
     environment:
       - OLLAMA_KEEP_ALIVE=${OLLAMA_KEEP_ALIVE:-24h}
-      - OLLAMA_GPU_DRIVER=${OLLAMA_GPU_DRIVER:-rocm}
-      # Optionally limit to a specific GPU index, otherwise expose all
-      # - HIP_VISIBLE_DEVICES=${HIP_VISIBLE_DEVICES:-0}
-      # Some GPUs may require an ISA override; leave commented unless needed
-      # - HSA_OVERRIDE_GFX_VERSION=${HSA_OVERRIDE_GFX_VERSION:-10.3.0}
-      # If your ROCm libs aren’t in default linker paths inside the image, uncomment:
-      # - LD_LIBRARY_PATH=${LD_LIBRARY_PATH:-/opt/rocm/lib:/opt/rocm/lib64:/opt/rocm/hip/lib}
-    devices:
-      - "/dev/kfd:/dev/kfd"
-      - "/dev/dri:/dev/dri"
-    group_add:
-      - "video"
-    # Mount ROCm userspace libraries (host path may vary by distro/ROCm version)
     volumes:
       - ./data/ollama:/root/.ollama
-      - /opt/rocm:/opt/rocm:ro
-    # Run Ollama in server mode; model pulling is handled by a separate init job
     command: ["serve"]
 
   # One-shot helper that pulls the required model once Ollama is healthy
