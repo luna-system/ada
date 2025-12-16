@@ -2,9 +2,9 @@ name: AI Documentation Validation
 
 on:
   push:
-    branches: [ main, develop ]
+    branches: [ trunk, develop ]
   pull_request:
-    branches: [ main, develop ]
+    branches: [ trunk, develop ]
     paths:
       - 'brain/**/*.py'
       - '.ai/**'
