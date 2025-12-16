@@ -100,6 +100,8 @@ services:
       - RAG_SUMMARY_EVERY_N=${RAG_SUMMARY_EVERY_N:-8}
       - RAG_SUMMARY_TURNS_WINDOW=${RAG_SUMMARY_TURNS_WINDOW:-12}
       - RAG_DEBUG=${RAG_DEBUG:-true}
+    volumes:
+      - ./data/brain:/data
     depends_on:
       - chroma
       - ollama
