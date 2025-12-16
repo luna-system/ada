@@ -1,0 +1,2 @@
+# Keep this directory - required for Ollama model storage
+# Models are pulled on first run via docker compose
