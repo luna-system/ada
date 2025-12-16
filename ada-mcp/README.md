@@ -100,6 +100,61 @@ Check if Ada Brain is running and healthy.
 
 **Output:** Health status and version info
 
+## Available Resources
+
+Ada exposes her machine-readable documentation as MCP resources. This lets AI assistants (including Ada herself!) introspect the codebase without parsing HTML.
+
+### `ada://docs/context`
+
+High-level architecture overview optimized for AI consumption.
+
+**MIME Type:** `text/markdown`  
+**Priority:** 1.0 (most important)
+
+### `ada://docs/codebase-map`
+
+Module dependency graph with metadata about each file.
+
+**MIME Type:** `application/json`  
+**Priority:** 0.9
+
+### `ada://docs/specialist-registry`
+
+Plugin system metadata - all specialist capabilities and schemas.
+
+**MIME Type:** `application/json`  
+**Priority:** 0.8
+
+### `ada://docs/conventions`
+
+Documentation strategy and placement guidelines.
+
+**MIME Type:** `text/markdown`  
+**Priority:** 0.7
+
+### `ada://docs/quickstart`
+
+Common tasks and patterns for AI assistants.
+
+**MIME Type:** `text/markdown`  
+**Priority:** 0.8
+
+### `ada://docs/gotchas`
+
+Known pitfalls and their solutions.
+
+**MIME Type:** `text/markdown`  
+**Priority:** 0.6
+
+### `ada://docs/testing`
+
+Testing strategies and patterns.
+
+**MIME Type:** `text/markdown`  
+**Priority:** 0.5
+
+**Usage:** MCP clients can list and read these resources to understand Ada's architecture. Ada can introspect her own docs by connecting to her MCP server.
+
 ## Development
 
 ```bash

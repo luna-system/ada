@@ -213,12 +213,58 @@ How tests are structured
 - Number of clarifying questions needed
 - Developer satisfaction scores
 
+## Integration with MCP (Model Context Protocol)
+
+**Next-Level Pattern:** Expose `.ai/` docs as MCP resources.
+
+### Why This Works
+
+MCP already defines how to expose structured data to AI assistants. Your `.ai/` folder can become MCP resources:
+
+```python
+# MCP Server exposes documentation resources
+RESOURCES = [
+    Resource(
+        uri="ada://docs/context",
+        name="Architecture Context",
+        mimeType="text/markdown",
+        annotations={"audience": ["assistant"], "priority": 1.0}
+    ),
+    Resource(
+        uri="ada://docs/codebase-map",
+        name="Module Dependency Graph",
+        mimeType="application/json",
+        annotations={"audience": ["assistant"], "priority": 0.9}
+    ),
+    # ... more resources
+]
+```
+
+### Benefits
+
+- **No HTML parsing** - Direct structured access
+- **Standard protocol** - Works with any MCP client
+- **Priority hints** - AI knows what's important
+- **Live updates** - Resources can subscribe to changes
+- **Self-introspection** - AI can read its own documentation
+
+### Example: Ada Self-Introspection
+
+Ada's MCP server exposes her `.ai/` folder as resources. When Ada needs to understand her own architecture:
+
+1. MCP client: `resources/list` → Gets all docs
+2. MCP client: `resources/read ada://docs/context` → Gets architecture
+3. Ada now understands her own structure without file system access
+
+**The same protocol that connects Ada to your editor also gives her access to her own documentation.**
+
 ## Related Patterns
 
 - **`.cursorrules`** - Single file instructions (complementary, not competing)
 - **`docs/`** - Human documentation (different audience)
 - **`ARCHITECTURE.md`** - High-level overview (often duplicates context.md)
 - **ADRs (Architecture Decision Records)** - Historical decisions (complementary)
+- **MCP Resources** - Standard protocol for exposing structured data (see above)
 
 ## Philosophy
 

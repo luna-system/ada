@@ -7,9 +7,10 @@ from typing import Any
 from dotenv import load_dotenv
 from mcp.server import Server
 from mcp.server.stdio import stdio_server
-from mcp.types import TextContent, Tool
+from mcp.types import Resource, TextContent, Tool
 
 from .ada_client import AdaClient
+from .resources import RESOURCES, read_resource
 from .tools import TOOLS, handle_tool_call
 
 # Load environment variables
@@ -37,6 +38,18 @@ async def main():
         """Handle tool calls."""
         return await handle_tool_call(name, arguments, ada)
 
+    @server.list_resources()
+    async def list_resources() -> list[Resource]:
+        """List available documentation resources."""
+        return RESOURCES
+
+    @server.read_resource()
+    async def read_resource_handler(uri: str) -> str:
+        """Read documentation resource by URI."""
+        contents = await read_resource(uri)
+        # Return the text content
+        return contents[0].text if contents else ""
+
     # Run server with stdio transport
     async with stdio_server() as (read_stream, write_stream):
         await server.run(
@@ -44,7 +57,8 @@ async def main():
             write_stream,
             server.create_initialization_options(),
         )
-
+print(f"📚 Documentation resources: {len(RESOURCES)} available", file=sys.stderr)
+    
     # Cleanup
     await ada.close()
 
