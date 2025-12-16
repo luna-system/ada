@@ -71,7 +71,19 @@ def fetch_listenbrainz(user: Optional[str], token: Optional[str]) -> tuple[Optio
                 first = listens[0]
                 meta = (first.get("track_metadata") or {})
                 listened_at = (first.get("listened_at") or first.get("played_at"))
-                info = normalize(meta, status="playing", listened_at=listened_at)
+                
+                # Check if the track is recent enough to be considered "now playing"
+                # Consider it "playing" if listened within the last 5 minutes
+                status = "recent"
+                if listened_at:
+                    try:
+                        track_age = now - int(listened_at)
+                        if track_age < 300:  # 5 minutes
+                            status = "playing"
+                    except (ValueError, TypeError):
+                        pass
+                
+                info = normalize(meta, status=status, listened_at=listened_at)
                 _LISTENBRAINZ_CACHE.update({"ts": now, "data": info})
                 return info, None
     except Exception as e:

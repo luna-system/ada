@@ -23,6 +23,53 @@ from contextlib import asynccontextmanager
 
 from fastapi import FastAPI, Query, Request
 from fastapi.responses import JSONResponse, StreamingResponse
+
+# System notice manager
+from brain.notices import notice_manager
+from pydantic import BaseModel
+
+from fastapi import APIRouter
+
+# --- System Notice API Models ---
+class NoticeIn(BaseModel):
+    severity: str
+    component: str
+    code: str
+    message: str
+
+class AckIn(BaseModel):
+    ack_by: str = "system"
+
+# Router so endpoints can be registered after app creation
+router = APIRouter()
+
+@router.get('/v1/notices')
+async def list_notices(active: bool = True):
+    """List active (default) or all system notices."""
+    return notice_manager.list_notices(active_only=active)
+
+@router.post('/v1/notices')
+async def add_notice(notice: NoticeIn):
+    """Add a new system notice (deduplicated by component/code/message)."""
+    nid = notice_manager.add_notice(
+        severity=notice.severity,
+        component=notice.component,
+        code=notice.code,
+        message=notice.message,
+    )
+    return {"id": nid}
+
+@router.post('/v1/notices/{notice_id}/ack')
+async def ack_notice(notice_id: str, ack: AckIn):
+    """Acknowledge a notice by id."""
+    ok = notice_manager.acknowledge(notice_id, ack_by=ack.ack_by)
+    return {"ok": ok}
+
+@router.post('/v1/notices/{notice_id}/clear')
+async def clear_notice(notice_id: str):
+    """Remove a notice immediately."""
+    ok = notice_manager.clear_notice(notice_id)
+    return {"ok": ok}
 import requests
 
 # Ensure brain module is in path for Docker container
@@ -34,6 +81,7 @@ from rag_store import RagStore
 from llm import stream_chat_async, complete
 from media import fetch_listenbrainz, format_media_for_prompt
 from prompt_builder import build_prompt
+from brain.notices_client import get_active_notices
 
 # Ollama + models
 OLLAMA_API_URL = config.OLLAMA_API_URL
@@ -172,6 +220,10 @@ async def lifespan(app: FastAPI):
     print("[BRAIN] Server shutting down")
 
 app = FastAPI(lifespan=lifespan)
+
+# Include system notice router
+app.include_router(router)
+
 
 
 @app.get('/v1/healthz')
@@ -660,6 +712,19 @@ async def prompt_debug(
         sections: List[str] = []
         media_info = None
         used_context: Dict[str, Any] = {"persona": None, "faqs": [], "turns": [], "memories": [], "summaries": [], "entity": entity_str, "media": None}
+
+        # Inject system notices (active, unacknowledged)
+        try:
+            notices = get_active_notices()
+            if notices:
+                notice_lines = []
+                for n in notices[:3]:
+                    msg = n.get('message','')[:200] + ('...' if len(n.get('message','')) > 200 else '')
+                    severity_label = n.get('severity','').upper()
+                    notice_lines.append(f"⚠️ {severity_label} ALERT [{n.get('component','')}.{n.get('code','')}]: {msg}")
+                sections.append("🔔 SYSTEM NOTICES — Acknowledge these immediately before responding to the user:\n" + "\n".join(notice_lines))
+        except Exception:
+            pass
 
         sections.append(IDENTITY_BLOCK)
 

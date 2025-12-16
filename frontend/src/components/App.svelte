@@ -21,6 +21,7 @@
   import DebugPanel from './DebugPanel.svelte';
   import MemoriesPanel from './MemoriesPanel.svelte';
   import PromptPanel from './PromptPanel.svelte';
+  import NoticesPanel from './NoticesPanel.svelte';
   import { streamChat, type StreamMessage } from '../services/chat';
   import { panelOpen as panelOpenStore, menuOpen as menuOpenStore } from '../stores/ui';
 
@@ -35,7 +36,7 @@
   let listenBrainzPreview: any = null;
   let listenBrainzLoading = false;
   let entity = '';
-  let panelOpen: 'none' | 'debug' | 'mem' | 'prompt' | 'conversations' = 'none';
+  let panelOpen: 'none' | 'debug' | 'mem' | 'prompt' | 'conversations' | 'notices' = 'none';
   let menuOpen = false;
 
   // Status & client libs
@@ -549,6 +550,10 @@
 
   {#if panelOpen === 'conversations'}
     <ConversationsPanel onClose={() => panelOpenStore.set('none')} />
+  {/if}
+
+  {#if panelOpen === 'notices'}
+    <NoticesPanel onClose={() => panelOpenStore.set('none')} />
   {/if}
 
   {#if panelOpen === 'prompt'}
