@@ -31,17 +31,8 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-# Add brain module to path
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', 'brain'))
-
 # Reuse the shared RAG module
-try:
-    from rag_store import RagStore
-except ModuleNotFoundError:  # pragma: no cover
-    # Fallback: try adding /app to path for container environment
-    if "/app" not in sys.path:
-        sys.path.append("/app")
-    from rag_store import RagStore
+from brain.rag_store import RagStore
 
 
 def parse_args() -> argparse.Namespace:

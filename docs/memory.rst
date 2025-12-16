@@ -4,6 +4,8 @@ Memory
 
 The Brain API provides long-term memory storage and semantic retrieval to personalize responses.
 
+Memory is part of the RAG (Retrieval-Augmented Generation) system. See :doc:`architecture` for system overview and :doc:`configuration` for RAG configuration options.
+
 Endpoints
 ---------
 
@@ -54,7 +56,15 @@ Delete Memory
 Notes
 -----
 
-- RAG must be enabled (``RAG_ENABLED=true``) and Chroma reachable.
+- RAG must be enabled (``RAG_ENABLED=true``) and Chroma reachable. See :doc:`configuration` for RAG setup.
 - Memories are retrieved semantically; include clear, concise facts.
-- Entity scopes (``entity:project-x``) let you isolate context by topic.
-- Memory saves from chat occur after completion of a turn/stream.
+- Entity scopes (``entity:project-x``) let you isolate context by topic. See :doc:`data_model` for metadata schemas.
+- Memory saves from chat occur after completion of a turn/stream. See :doc:`streaming` for SSE implementation.
+
+Related Documentation
+---------------------
+
+- :doc:`data_model` - Memory metadata schema and validation
+- :doc:`configuration` - RAG and memory configuration options
+- :doc:`api_reference` - Complete API endpoint reference
+- :doc:`examples` - Code examples for memory operations

@@ -4,6 +4,8 @@ Streaming
 
 The Brain API supports real-time token delivery via **Server-Sent Events (SSE)** on ``POST /v1/chat/stream``. Use this for low-latency, progressive rendering of LLM responses.
 
+For complete endpoint documentation, see :doc:`api_reference`. For client examples, see :doc:`examples`.
+
 Endpoint
 --------
 
@@ -116,4 +118,12 @@ Best Practices
 - In UIs, batch DOM updates (e.g., via ``requestAnimationFrame``) for smoother rendering.
 - Handle both HTTP errors and stream ``error`` events.
 - Use ``AbortController`` (fetch) to cancel long-running streams.
-- Memory is persisted after ``done``; partial streams do not save.
+- Memory is persisted after ``done``; partial streams do not save. See :doc:`memory` for memory management.
+
+Related Documentation
+---------------------
+
+- :doc:`api_reference` - Complete endpoint documentation
+- :doc:`examples` - Code examples in Python, JavaScript, curl
+- :doc:`memory` - Memory persistence and retrieval
+- :doc:`configuration` - Streaming and timeout configuration

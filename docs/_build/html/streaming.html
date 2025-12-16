@@ -1,5 +1,3 @@
-
-
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" data-content_root="./">
 <head>
@@ -8,19 +6,24 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Streaming &mdash; Ada v1 Brain API 0.1.0 documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
-      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=19f00094" />
+      <link rel="stylesheet" type="text/css" href="_static/graphviz.css?v=4ae1632d" />
 
   
-      <script src="_static/jquery.js?v=5d32c60e"></script>
-      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="_static/documentation_options.js?v=01f34227"></script>
-      <script src="_static/doctools.js?v=9bcbadda"></script>
-      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="_static/jquery.js?v=5d32c60e"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="_static/documentation_options.js?v=01f34227"></script>
+        <script src="_static/doctools.js?v=9bcbadda"></script>
+        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Memory" href="memory.html" />
-    <link rel="prev" title="API Reference" href="api_reference.html" /> 
+    <link rel="prev" title="Development Tools" href="development.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -45,7 +48,14 @@
               <p class="caption" role="heading"><span class="caption-text">Documentation:</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="getting_started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="configuration.html">Configuration Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="architecture.html">Architecture</a></li>
+<li class="toctree-l1"><a class="reference internal" href="data_model.html">Data Model Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api_usage.html">API Usage Guide</a></li>
 <li class="toctree-l1"><a class="reference internal" href="api_reference.html">API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="specialists.html">Specialist System</a></li>
+<li class="toctree-l1"><a class="reference internal" href="testing.html">Testing Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="development.html">Development Tools</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Streaming</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#endpoint">Endpoint</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#request-body-json">Request Body (JSON)</a></li>
@@ -55,6 +65,7 @@
 <li class="toctree-l2"><a class="reference internal" href="#python-requests">Python (requests)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#javascript-fetch-readablestream">JavaScript (fetch + ReadableStream)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#best-practices">Best Practices</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#related-documentation">Related Documentation</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="memory.html">Memory</a></li>
@@ -88,6 +99,7 @@
   <section id="streaming">
 <h1>Streaming<a class="headerlink" href="#streaming" title="Link to this heading"></a></h1>
 <p>The Brain API supports real-time token delivery via <strong>Server-Sent Events (SSE)</strong> on <code class="docutils literal notranslate"><span class="pre">POST</span> <span class="pre">/v1/chat/stream</span></code>. Use this for low-latency, progressive rendering of LLM responses.</p>
+<p>For complete endpoint documentation, see <a class="reference internal" href="api_reference.html"><span class="doc">API Reference</span></a>. For client examples, see <a class="reference internal" href="examples.html"><span class="doc">Examples</span></a>.</p>
 <section id="endpoint">
 <h2>Endpoint<a class="headerlink" href="#endpoint" title="Link to this heading"></a></h2>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>POST<span class="w"> </span>/v1/chat/stream
@@ -194,7 +206,16 @@ data: {&quot;type&quot;: &quot;done&quot;, &quot;conversation_id&quot;: &quot;..
 <li><p>In UIs, batch DOM updates (e.g., via <code class="docutils literal notranslate"><span class="pre">requestAnimationFrame</span></code>) for smoother rendering.</p></li>
 <li><p>Handle both HTTP errors and stream <code class="docutils literal notranslate"><span class="pre">error</span></code> events.</p></li>
 <li><p>Use <code class="docutils literal notranslate"><span class="pre">AbortController</span></code> (fetch) to cancel long-running streams.</p></li>
-<li><p>Memory is persisted after <code class="docutils literal notranslate"><span class="pre">done</span></code>; partial streams do not save.</p></li>
+<li><p>Memory is persisted after <code class="docutils literal notranslate"><span class="pre">done</span></code>; partial streams do not save. See <a class="reference internal" href="memory.html"><span class="doc">Memory</span></a> for memory management.</p></li>
+</ul>
+</section>
+<section id="related-documentation">
+<h2>Related Documentation<a class="headerlink" href="#related-documentation" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p><a class="reference internal" href="api_reference.html"><span class="doc">API Reference</span></a> - Complete endpoint documentation</p></li>
+<li><p><a class="reference internal" href="examples.html"><span class="doc">Examples</span></a> - Code examples in Python, JavaScript, curl</p></li>
+<li><p><a class="reference internal" href="memory.html"><span class="doc">Memory</span></a> - Memory persistence and retrieval</p></li>
+<li><p><a class="reference internal" href="configuration.html"><span class="doc">Configuration Reference</span></a> - Streaming and timeout configuration</p></li>
 </ul>
 </section>
 </section>
@@ -203,14 +224,14 @@ data: {&quot;type&quot;: &quot;done&quot;, &quot;conversation_id&quot;: &quot;..
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="api_reference.html" class="btn btn-neutral float-left" title="API Reference" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="development.html" class="btn btn-neutral float-left" title="Development Tools" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
         <a href="memory.html" class="btn btn-neutral float-right" title="Memory" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>
 
   <div role="contentinfo">
-    <p>&#169; Copyright 2025, Luna Team.</p>
+    <p>&#169; Copyright CC0 1.0 Universal - Public Domain.</p>
   </div>
 
   Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
