@@ -8,29 +8,59 @@ Welcome to the Ada Brain API documentation. This is the REST API backend for the
 
 .. toctree::
    :maxdepth: 2
-   :caption: Documentation:
+   :caption: Getting Started
 
    getting_started
    getting_started_scratch
    configuration
+   examples
+
+.. toctree::
+   :maxdepth: 2
+   :caption: Hardware Setup
+
    hardware
    sbc
+
+.. toctree::
+   :maxdepth: 2
+   :caption: Core Architecture
+
    architecture
    data_model
+   streaming
+   memory
+
+.. toctree::
+   :maxdepth: 2
+   :caption: API Documentation
+
    api_usage
    api_reference
+
+.. toctree::
+   :maxdepth: 2
+   :caption: Specialist System
+
    specialists
    build_specialist
    bidirectional
    specialist_rag
    web_search
-   testing
+
+.. toctree::
+   :maxdepth: 2
+   :caption: Development
+
    development
-   streaming
-   memory
+   testing
+
+.. toctree::
+   :maxdepth: 1
+   :caption: Philosophy & Design
+
    documentation_philosophy
    empathetic_documentation
-   examples
    xenofeminism
 
 
