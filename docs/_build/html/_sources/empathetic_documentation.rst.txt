@@ -5,7 +5,7 @@ Empathetic Documentation
 A Pattern Discovery
 ====================
 
-During development of Ada v1's AI-optimized documentation system, we discovered an emergent pattern that appears to improve how both AI models and humans process anti-pattern documentation.
+During development of Ada's AI-optimized documentation system, we discovered an emergent pattern that appears to improve how both AI models and humans process anti-pattern documentation.
 
 The Genesis
 -----------
@@ -78,8 +78,8 @@ For transformer-based language models:
 
 Practical impact: AI assistants spend less context re-deriving why standard patterns exist, and more understanding the specific deviation.
 
-Implementation in Ada v1
-========================
+Implementation in Ada
+=====================
 
 Where We Use This Pattern
 -------------------------

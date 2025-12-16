@@ -24,6 +24,7 @@ Welcome to the Ada Brain API documentation. This is the REST API backend for the
    documentation_philosophy
    empathetic_documentation
    examples
+   xenofeminism
 
 
 Overview
