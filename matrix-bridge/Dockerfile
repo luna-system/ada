@@ -2,7 +2,14 @@ FROM python:3.13-slim
 
 WORKDIR /app
 
-# Install dependencies
+# Install build dependencies for matrix-nio[e2e] (python-olm)
+RUN apt-get update && apt-get install -y \
+    build-essential \
+    cmake \
+    libolm-dev \
+    && rm -rf /var/lib/apt/lists/*
+
+# Install Python dependencies
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 

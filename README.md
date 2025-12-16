@@ -48,14 +48,21 @@ Most AI assistants lock essential features behind subscriptions:
 ### 1. Install Prerequisites
 
 - **Docker & Docker Compose** (required)
+- **Disk Space** ⚠️ **Important!**
+  - Minimum: 20GB free space
+  - Recommended: 50GB+ (allows multiple models)
+  - Large models (DeepSeek R1): 15-20GB each
+  - Tip: Run `./scripts/check_disk_space.sh` to monitor usage
 - **GPU** (optional but recommended)
   - NVIDIA (CUDA) - Widest support
   - AMD (ROCm) - Great performance, Ada's default config
   - Apple Silicon (Metal) - M1/M2/M3/M4 Macs
   - CPU-only works but is slower
-- **8GB+ RAM** for smaller models, 16GB+ for larger ones
+- **RAM**
+  - Minimum: 8GB (small models)
+  - Recommended: 16GB+ (larger models)
 
-See [Hardware Guide](/docs/hardware.rst) for detailed setup and recommendations.
+See [Hardware Guide](/docs/hardware.rst) for detailed setup and GPU configuration.
 
 ### 2. Clone and Setup
 
