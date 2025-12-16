@@ -60,9 +60,9 @@ Welcome to the Ada Brain API documentation. This is the REST API backend for the
    :caption: Philosophy & Design
 
    documentation_philosophy
+   ai_documentation
    empathetic_documentation
    xenofeminism
-   ai_documentation
 
 
 Overview
