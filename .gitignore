@@ -62,3 +62,4 @@ data/backups/*
 
 # Generated assets
 webserver/static/*.map
+docs/_build/

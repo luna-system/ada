@@ -8,7 +8,7 @@
 
 project = 'Ada Brain API'
 copyright = 'CC0 1.0 Universal - Public Domain'
-author = 'Luna Team'
+author = 'luna system'
 release = '0.1.0'
 
 # -- General configuration ---------------------------------------------------
