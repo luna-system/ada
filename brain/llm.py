@@ -7,7 +7,10 @@ import json
 import requests
 import httpx
 from typing import Generator, Dict, Any, AsyncGenerator
-from config import OLLAMA_API_URL, OLLAMA_MODEL
+from config import OLLAMA_BASE_URL, OLLAMA_MODEL
+
+# Construct API endpoint
+OLLAMA_API_URL = f"{OLLAMA_BASE_URL}/api/generate"
 
 
 def stream_chat(

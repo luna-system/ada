@@ -9,7 +9,7 @@ import datetime
 import logging
 from typing import Dict, Any, List, Optional, Tuple
 from config import (
-    IDENTITY_BLOCK,
+    SYSTEM_PROMPT,
     RAG_ENABLE_PERSONA,
     RAG_ENABLE_FAQ,
     RAG_ENABLE_MEMORY,
@@ -20,11 +20,13 @@ from config import (
     RAG_MEMORY_TOP_K,
     RAG_SUMMARY_TOP_K,
     PERSONA_MAX_CHARS,
+    SPECIALIST_RAG_DOCS,
 )
 from rag_store import RagStore
 from media import format_media_for_prompt
 from notices_client import get_active_notices
 from brain.specialists import execute_specialists
+from brain.specialists.specialist_docs import get_relevant_specialist_docs
 
 logger = logging.getLogger(__name__)
 
@@ -75,8 +77,16 @@ async def build_prompt(
         'media': None,
     }
     
-    # Always include identity guardrail
-    sections.append(IDENTITY_BLOCK)
+    # Always include system prompt (identity)
+    # Note: If SPECIALIST_RAG_DOCS is enabled, specialist instructions come from RAG instead
+    sections.append(SYSTEM_PROMPT)
+    
+    # --- Dynamic Specialist Documentation (RAG-based) ---
+    if SPECIALIST_RAG_DOCS and rag_store is not None:
+        specialist_docs = get_relevant_specialist_docs(user_prompt, rag_store, k=2)
+        if specialist_docs:
+            sections.append(specialist_docs)
+            used_context['specialist_docs'] = True
     
     # --- Execute Specialist Plugins ---
     # Build request context for specialists

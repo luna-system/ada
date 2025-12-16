@@ -1,5 +1,3 @@
-
-
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" data-content_root="./">
 <head>
@@ -8,19 +6,24 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>API Reference &mdash; Ada v1 Brain API 0.1.0 documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
-      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=19f00094" />
+      <link rel="stylesheet" type="text/css" href="_static/graphviz.css?v=4ae1632d" />
 
   
-      <script src="_static/jquery.js?v=5d32c60e"></script>
-      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="_static/documentation_options.js?v=01f34227"></script>
-      <script src="_static/doctools.js?v=9bcbadda"></script>
-      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="_static/jquery.js?v=5d32c60e"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="_static/documentation_options.js?v=01f34227"></script>
+        <script src="_static/doctools.js?v=9bcbadda"></script>
+        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Streaming" href="streaming.html" />
-    <link rel="prev" title="Getting Started" href="getting_started.html" /> 
+    <link rel="next" title="Specialist System" href="specialists.html" />
+    <link rel="prev" title="API Usage Guide" href="api_usage.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -45,22 +48,17 @@
               <p class="caption" role="heading"><span class="caption-text">Documentation:</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="getting_started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="configuration.html">Configuration Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="architecture.html">Architecture</a></li>
+<li class="toctree-l1"><a class="reference internal" href="data_model.html">Data Model Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api_usage.html">API Usage Guide</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">API Reference</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#module-brain.app">Brain API Endpoints</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#brain.app.healthz"><code class="docutils literal notranslate"><span class="pre">healthz()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#brain.app.chat"><code class="docutils literal notranslate"><span class="pre">chat()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#brain.app.chat_stream"><code class="docutils literal notranslate"><span class="pre">chat_stream()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#brain.app.list_memory"><code class="docutils literal notranslate"><span class="pre">list_memory()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#brain.app.create_memory"><code class="docutils literal notranslate"><span class="pre">create_memory()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#brain.app.delete_memory"><code class="docutils literal notranslate"><span class="pre">delete_memory()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#brain.app.rag_debug"><code class="docutils literal notranslate"><span class="pre">rag_debug()</span></code></a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="#endpoint-summary">Endpoint Summary</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#health-monitoring">Health &amp; Monitoring</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#chat-endpoints">Chat Endpoints</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#memory-endpoints">Memory Endpoints</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#debug-endpoint">Debug Endpoint</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#brain-api-endpoints">Brain API Endpoints</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#endpoint-discovery">Endpoint Discovery</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#key-endpoints">Key Endpoints</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#chat-streaming">Chat &amp; Streaming</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#memory-management">Memory Management</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#health-diagnostics">Health &amp; Diagnostics</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="#request-response-models">Request/Response Models</a><ul>
@@ -77,6 +75,9 @@
 </li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="specialists.html">Specialist System</a></li>
+<li class="toctree-l1"><a class="reference internal" href="testing.html">Testing Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="development.html">Development Tools</a></li>
 <li class="toctree-l1"><a class="reference internal" href="streaming.html">Streaming</a></li>
 <li class="toctree-l1"><a class="reference internal" href="memory.html">Memory</a></li>
 <li class="toctree-l1"><a class="reference internal" href="examples.html">Examples</a></li>
@@ -108,248 +109,58 @@
              
   <section id="api-reference">
 <h1>API Reference<a class="headerlink" href="#api-reference" title="Link to this heading"></a></h1>
-<section id="module-brain.app">
-<span id="brain-api-endpoints"></span><h2>Brain API Endpoints<a class="headerlink" href="#module-brain.app" title="Link to this heading"></a></h2>
-<dl class="py function">
-<dt class="sig sig-object py" id="brain.app.healthz">
-<span class="sig-prename descclassname"><span class="pre">brain.app.</span></span><span class="sig-name descname"><span class="pre">healthz</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/brain/app.html#healthz"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#brain.app.healthz" title="Link to this definition"></a></dt>
-<dd><p>Health check endpoint for the brain service.</p>
-<p>Returns detailed information about service status, dependencies, and configuration.</p>
-<p><strong>HTTP Method:</strong> GET</p>
-<dl>
-<dt><strong>Response (200 OK):</strong></dt><dd><p>JSON object with keys:</p>
-<ul class="simple">
-<li><p>ok (bool): Overall service health status</p></li>
-<li><p>service (str): Service name (“brain”)</p></li>
-<li><p>python (str): Python version</p></li>
-<li><dl class="simple">
-<dt>config (dict): Active configuration including:</dt><dd><ul>
-<li><p>OLLAMA_BASE_URL: LLM backend URL</p></li>
-<li><p>OLLAMA_MODEL: Active LLM model name</p></li>
-<li><p>CHROMA_URL: Vector database URL</p></li>
-<li><p>RAG_ENABLE_*: Feature toggles for Persona, FAQ, Memory, Summary</p></li>
-</ul>
-</dd>
-</dl>
-</li>
-<li><p>persona (dict): Persona status with ‘loaded’ boolean</p></li>
-<li><dl class="simple">
-<dt>chroma (dict): Vector database connectivity status with:</dt><dd><ul>
-<li><p>ok (bool): Connectivity status</p></li>
-<li><p>version (str): Database version if available</p></li>
-<li><p>error (str): Error message if unhealthy</p></li>
-</ul>
-</dd>
-</dl>
-</li>
-</ul>
-</dd>
-<dt><strong>Response (503 Service Unavailable):</strong></dt><dd><p>Returned if critical dependencies are unavailable.</p>
-</dd>
-<dt><strong>Example:</strong></dt><dd><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">curl</span> <span class="n">http</span><span class="p">:</span><span class="o">//</span><span class="n">localhost</span><span class="p">:</span><span class="mi">7000</span><span class="o">/</span><span class="n">v1</span><span class="o">/</span><span class="n">healthz</span>
-<span class="go">{</span>
-<span class="go">    &quot;ok&quot;: true,</span>
-<span class="go">    &quot;service&quot;: &quot;brain&quot;,</span>
-<span class="go">    &quot;python&quot;: &quot;3.13.0&quot;,</span>
-<span class="go">    &quot;config&quot;: {...},</span>
-<span class="go">    &quot;persona&quot;: {&quot;loaded&quot;: true},</span>
-<span class="go">    &quot;chroma&quot;: {&quot;ok&quot;: true, &quot;version&quot;: &quot;0.5.11&quot;, &quot;error&quot;: null}</span>
-<span class="go">}</span>
+<section id="brain-api-endpoints">
+<h2>Brain API Endpoints<a class="headerlink" href="#brain-api-endpoints" title="Link to this heading"></a></h2>
+</section>
+<section id="endpoint-discovery">
+<h2>Endpoint Discovery<a class="headerlink" href="#endpoint-discovery" title="Link to this heading"></a></h2>
+<p><strong>The API is fully self-documenting!</strong> Query these endpoints to discover available functionality:</p>
+<p><strong>GET /v1/info</strong> — System capabilities and complete endpoint list</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>curl<span class="w"> </span>http://localhost:5000/api/info<span class="w"> </span><span class="p">|</span><span class="w"> </span>jq
 </pre></div>
 </div>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="brain.app.chat">
-<span class="sig-prename descclassname"><span class="pre">brain.app.</span></span><span class="sig-name descname"><span class="pre">chat</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/brain/app.html#chat"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#brain.app.chat" title="Link to this definition"></a></dt>
-<dd><p>Non-streaming chat endpoint for generating responses with optional RAG context.</p>
-<p>Accepts a prompt and optional parameters, retrieves relevant context from the RAG system
-(persona, FAQ, memory, conversation history), and returns a complete LLM response.
-Use /v1/chat/stream for real-time token streaming.</p>
-<p><strong>HTTP Method:</strong> POST</p>
-<dl>
-<dt><strong>Request Body (JSON):</strong></dt><dd><ul class="simple">
-<li><p>prompt (str, required): User message/question</p></li>
-<li><p>conversation_id (str, optional): UUID to thread multiple turns. Auto-generated if omitted.</p></li>
-<li><p>include_thinking (bool, optional): Include LLM reasoning in response (default: false)</p></li>
-<li><p>entity (str, optional): Entity/topic scope for memory retrieval (default: null)</p></li>
-<li><p>save_memory (bool, optional): Save assistant response to long-term memory (default: false)</p></li>
-<li><p>memory_text (str, optional): Custom text to save to memory (uses response if omitted)</p></li>
-<li><p>turns_k (int, optional): Number of recent conversation turns to retrieve (default: 3)</p></li>
-<li><p>faq_k (int, optional): Number of FAQ entries to retrieve (default: 3)</p></li>
-<li><p>memory_k (int, optional): Number of memories to retrieve (default: 5)</p></li>
-</ul>
-</dd>
-<dt><strong>Response (200 OK):</strong></dt><dd><p>JSON object with keys:</p>
+<p>Returns:</p>
 <ul class="simple">
-<li><p>response (str): Main assistant response text</p></li>
-<li><p>thinking (str): LLM reasoning/thinking (only if include_thinking=true)</p></li>
-<li><p>conversation_id (str): Conversation thread ID (same as input or generated)</p></li>
-<li><p>user_timestamp (str): ISO 8601 timestamp of user message</p></li>
-<li><p>assistant_timestamp (str): ISO 8601 timestamp of assistant response</p></li>
-<li><p>request_id (str): Unique request identifier for debugging</p></li>
-<li><dl class="simple">
-<dt>used_context (dict): Retrieved context including:</dt><dd><ul>
-<li><p>persona (dict): Persona block metadata if included</p></li>
-<li><p>faqs (list): FAQ snippets used</p></li>
-<li><p>turns (list): Conversation history snippets</p></li>
-<li><p>memories (list): Long-term memories matched</p></li>
-<li><p>summaries (list): Conversation summaries matched</p></li>
-<li><p>entity (str): Entity scope used</p></li>
+<li><p>Service version and Python version</p></li>
+<li><p>Feature flags (RAG, specialists, streaming, etc.)</p></li>
+<li><p>Active models (LLM and embedding)</p></li>
+<li><p>Complete list of all available endpoints</p></li>
+<li><p>Documentation URL</p></li>
 </ul>
-</dd>
-</dl>
-</li>
-</ul>
-</dd>
-<dt><strong>Response (400 Bad Request):</strong></dt><dd><p>Returned if prompt is missing or not a string.</p>
-</dd>
-<dt><strong>Response (500 Internal Server Error):</strong></dt><dd><p>Returned if Ollama or vector database is unavailable.</p>
-</dd>
-<dt><strong>Side Effects:</strong></dt><dd><ul class="simple">
-<li><p>If RAG_ENABLED: Stores conversation turn in vector database for future retrieval</p></li>
-<li><p>If RAG_ENABLE_SUMMARY: May generate conversation summary every N turns</p></li>
-<li><p>If save_memory: Stores response/memory_text in long-term memory store</p></li>
-</ul>
-</dd>
-<dt><strong>Example:</strong></dt><dd><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">curl</span> <span class="o">-</span><span class="n">X</span> <span class="n">POST</span> <span class="n">http</span><span class="p">:</span><span class="o">//</span><span class="n">localhost</span><span class="p">:</span><span class="mi">7000</span><span class="o">/</span><span class="n">v1</span><span class="o">/</span><span class="n">chat</span> \
-<span class="gp">... </span>  <span class="o">-</span><span class="n">H</span> <span class="s2">&quot;Content-Type: application/json&quot;</span> \
-<span class="gp">... </span>  <span class="o">-</span><span class="n">d</span> <span class="s1">&#39;{&quot;prompt&quot;: &quot;What is the weather?&quot;, &quot;include_thinking&quot;: true}&#39;</span>
-<span class="go">{</span>
-<span class="go">    &quot;response&quot;: &quot;I don&#39;t have access to real-time weather data...&quot;,</span>
-<span class="go">    &quot;thinking&quot;: &quot;The user is asking about weather. I should clarify...&quot;,</span>
-<span class="go">    &quot;conversation_id&quot;: &quot;550e8400-e29b-41d4-a716-446655440000&quot;,</span>
-<span class="go">    &quot;user_timestamp&quot;: &quot;2025-12-13T10:30:45.123456+00:00&quot;,</span>
-<span class="go">    &quot;assistant_timestamp&quot;: &quot;2025-12-13T10:30:48.456789+00:00&quot;,</span>
-<span class="go">    &quot;request_id&quot;: &quot;abc12345&quot;,</span>
-<span class="go">    &quot;used_context&quot;: {...}</span>
-<span class="go">}</span>
+<p><strong>GET /v1/specialists</strong> — Available specialist capabilities</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>curl<span class="w"> </span>http://localhost:5000/api/specialists<span class="w"> </span><span class="p">|</span><span class="w"> </span>jq
 </pre></div>
 </div>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="brain.app.chat_stream">
-<span class="sig-prename descclassname"><span class="pre">brain.app.</span></span><span class="sig-name descname"><span class="pre">chat_stream</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/brain/app.html#chat_stream"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#brain.app.chat_stream" title="Link to this definition"></a></dt>
-<dd><p>Streaming chat endpoint using Server-Sent Events (SSE).</p>
-<ul class="simple">
-<li><p><strong>Method:</strong> POST</p></li>
-<li><p><strong>Path:</strong> /v1/chat/stream</p></li>
-<li><p><strong>Request JSON:</strong> prompt (required), conversation_id, include_thinking, entity,
-save_memory, memory_text, turns_k, faq_k, memory_k</p></li>
-<li><p><strong>Content-Type:</strong> text/event-stream</p></li>
-</ul>
-<p>Events (newline-delimited, prefixed with <code class="docutils literal notranslate"><span class="pre">data:</span> <span class="pre">``):</span>
-<span class="pre">-</span> <span class="pre">``token</span></code>: assistant response token
-- <code class="docutils literal notranslate"><span class="pre">thinking</span></code>: reasoning token (only if include_thinking=true)
-- <code class="docutils literal notranslate"><span class="pre">done</span></code>: final metadata (conversation_id, used_context, timestamps, request_id)
-- <code class="docutils literal notranslate"><span class="pre">error</span></code>: error details</p>
-<p>Responses:
-- 200: Stream started
-- 400: Missing prompt
-- 500: Internal error (e.g., Ollama unreachable)</p>
-<p>Side effects: same as /v1/chat (turn upserts, optional memories, summaries).</p>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="brain.app.list_memory">
-<span class="sig-prename descclassname"><span class="pre">brain.app.</span></span><span class="sig-name descname"><span class="pre">list_memory</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/brain/app.html#list_memory"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#brain.app.list_memory" title="Link to this definition"></a></dt>
-<dd><p>Retrieve long-term memories with optional semantic search.</p>
-<ul class="simple">
-<li><p><strong>Method:</strong> GET</p></li>
-<li><p><strong>Path:</strong> /v1/memory</p></li>
-<li><p><strong>Query params:</strong>
-- search (optional): semantic query; if omitted returns empty list
-- scope (optional): memory scope (e.g., <code class="docutils literal notranslate"><span class="pre">global</span></code>, <code class="docutils literal notranslate"><span class="pre">user:123</span></code>)
-- entity (optional): entity/topic scope
-- limit (optional): max results (default 20, capped at 20)</p></li>
-</ul>
-<p>Responses:
-- 200: <code class="docutils literal notranslate"><span class="pre">{&quot;items&quot;:</span> <span class="pre">[...]}</span></code>
-- 200: empty items if RAG disabled
-- 500: retrieval error</p>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="brain.app.create_memory">
-<span class="sig-prename descclassname"><span class="pre">brain.app.</span></span><span class="sig-name descname"><span class="pre">create_memory</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/brain/app.html#create_memory"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#brain.app.create_memory" title="Link to this definition"></a></dt>
-<dd><p>Create a new long-term memory entry.</p>
-<ul class="simple">
-<li><p><strong>Method:</strong> POST</p></li>
-<li><p><strong>Path:</strong> /v1/memory</p></li>
-<li><p><strong>Request JSON:</strong> text (required), importance (1-5, default 3),
-scope (default <code class="docutils literal notranslate"><span class="pre">global</span></code>), entity (optional)</p></li>
-</ul>
-<p>Responses:
-- 201: memory created (id returned)
-- 400: text missing
-- 503: RAG unavailable
-- 500: storage error</p>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="brain.app.delete_memory">
-<span class="sig-prename descclassname"><span class="pre">brain.app.</span></span><span class="sig-name descname"><span class="pre">delete_memory</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mem_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/brain/app.html#delete_memory"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#brain.app.delete_memory" title="Link to this definition"></a></dt>
-<dd><p>Delete a long-term memory entry by ID.</p>
-<ul class="simple">
-<li><p><strong>Method:</strong> DELETE</p></li>
-<li><p><strong>Path:</strong> /v1/memory/&lt;mem_id&gt;</p></li>
-</ul>
-<p>Responses:
-- 200: deleted
-- 503: RAG unavailable
-- 500: delete error (e.g., missing id)</p>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="brain.app.rag_debug">
-<span class="sig-prename descclassname"><span class="pre">brain.app.</span></span><span class="sig-name descname"><span class="pre">rag_debug</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/brain/app.html#rag_debug"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#brain.app.rag_debug" title="Link to this definition"></a></dt>
-<dd><p>Debug information for the RAG system (development only).</p>
-<ul class="simple">
-<li><p><strong>Method:</strong> GET</p></li>
-<li><p><strong>Path:</strong> /v1/debug/rag</p></li>
-<li><p><strong>Query params:</strong> conversation_id (optional)</p></li>
-</ul>
-<p>Responses:
-- 200: RAG stats (persona_count, faq_count, memory_count, summary_count, optional turn_count_for_conversation)
-- 404: debug disabled (RAG_DEBUG!=true or RAG unavailable)
-- 500: error retrieving stats</p>
-</dd></dl>
-
+<p>Returns specialist names, descriptions, schemas, priorities, and enabled status.</p>
+<p><strong>GET /v1/schema</strong> — Data model schemas</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>curl<span class="w"> </span>http://localhost:5000/api/schema<span class="w"> </span><span class="p">|</span><span class="w"> </span>jq
+</pre></div>
+</div>
+<p>Returns JSON Schema definitions for all document types (persona, faq, memory, turn, summary).</p>
+<p>See <a class="reference internal" href="data_model.html"><span class="doc">Data Model Reference</span></a> for complete schema documentation.</p>
 </section>
-<section id="endpoint-summary">
-<h2>Endpoint Summary<a class="headerlink" href="#endpoint-summary" title="Link to this heading"></a></h2>
-<section id="health-monitoring">
-<h3>Health &amp; Monitoring<a class="headerlink" href="#health-monitoring" title="Link to this heading"></a></h3>
-<p><strong>GET /v1/healthz</strong> — Service health status and dependency info.</p>
-<p>Status codes: 200 (healthy), 503 (dependency unavailable).</p>
+<section id="key-endpoints">
+<h2>Key Endpoints<a class="headerlink" href="#key-endpoints" title="Link to this heading"></a></h2>
+<p>The following endpoints are commonly used. For the complete list, query <strong>GET /v1/info</strong>.</p>
+<p>For specialist system endpoints, see <a class="reference internal" href="specialists.html"><span class="doc">Specialist System</span></a>. For data model schemas, see <a class="reference internal" href="data_model.html"><span class="doc">Data Model Reference</span></a>.</p>
+<section id="chat-streaming">
+<h3>Chat &amp; Streaming<a class="headerlink" href="#chat-streaming" title="Link to this heading"></a></h3>
+<p><strong>POST /v1/chat/stream</strong> — Streaming chat via Server-Sent Events</p>
+<p>See <a class="reference internal" href="streaming.html"><span class="doc">Streaming</span></a> for detailed SSE event structure.</p>
 </section>
-<section id="chat-endpoints">
-<h3>Chat Endpoints<a class="headerlink" href="#chat-endpoints" title="Link to this heading"></a></h3>
-<p><strong>POST /v1/chat</strong> — Non-streaming chat with RAG.</p>
-<p>Status codes: 200 (ok), 400 (bad request), 500 (server error).</p>
-<p><strong>POST /v1/chat/stream</strong> — Streaming chat via SSE.</p>
-<p>Status codes: 200 (stream), 400 (bad request), 500 (server error).</p>
+<section id="memory-management">
+<h3>Memory Management<a class="headerlink" href="#memory-management" title="Link to this heading"></a></h3>
+<p><strong>GET /v1/memory</strong> — Search and list memories</p>
+<p><strong>POST /v1/memory</strong> — Create new memory</p>
+<p><strong>DELETE /v1/memory/{id}</strong> — Delete memory</p>
+<p>See <a class="reference internal" href="memory.html"><span class="doc">Memory</span></a> for memory management patterns.</p>
 </section>
-<section id="memory-endpoints">
-<h3>Memory Endpoints<a class="headerlink" href="#memory-endpoints" title="Link to this heading"></a></h3>
-<p><strong>GET /v1/memory</strong> — Semantic search over memories.</p>
-<p>Query params: search, entity, limit.
-Status codes: 200 (ok), 500 (query error).</p>
-<p><strong>POST /v1/memory</strong> — Create memory entry.</p>
-<p>Status codes: 201 (created), 400 (bad request), 503 (RAG unavailable).</p>
-<p><strong>DELETE /v1/memory/&lt;mem_id&gt;</strong> — Delete memory entry.</p>
-<p>Status codes: 200 (ok), 503 (RAG unavailable), 500 (delete error).</p>
-</section>
-<section id="debug-endpoint">
-<h3>Debug Endpoint<a class="headerlink" href="#debug-endpoint" title="Link to this heading"></a></h3>
-<p><strong>GET /v1/debug/rag</strong> — RAG statistics (RAG_DEBUG=true).</p>
-<p>Query params: conversation_id (optional).
-Status codes: 200 (ok), 404 (debug disabled), 500 (error).</p>
+<section id="health-diagnostics">
+<h3>Health &amp; Diagnostics<a class="headerlink" href="#health-diagnostics" title="Link to this heading"></a></h3>
+<p><strong>GET /v1/healthz</strong> — Service health and dependency status</p>
+<p><strong>GET /v1/debug/rag</strong> — RAG system diagnostics (when RAG_DEBUG=true)</p>
+<p><strong>GET /v1/debug/prompt</strong> — Inspect prompt construction</p>
+<p>See <a class="reference internal" href="configuration.html"><span class="doc">Configuration Reference</span></a> for debug configuration and <a class="reference internal" href="testing.html"><span class="doc">Testing Guide</span></a> for testing strategies.</p>
 </section>
 </section>
 <section id="request-response-models">
@@ -519,14 +330,14 @@ Status codes: 200 (ok), 404 (debug disabled), 500 (error).</p>
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="getting_started.html" class="btn btn-neutral float-left" title="Getting Started" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="streaming.html" class="btn btn-neutral float-right" title="Streaming" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="api_usage.html" class="btn btn-neutral float-left" title="API Usage Guide" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="specialists.html" class="btn btn-neutral float-right" title="Specialist System" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>
 
   <div role="contentinfo">
-    <p>&#169; Copyright 2025, Luna Team.</p>
+    <p>&#169; Copyright CC0 1.0 Universal - Public Domain.</p>
   </div>
 
   Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a

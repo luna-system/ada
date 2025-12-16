@@ -7,9 +7,6 @@ import asyncio
 import sys
 import os
 
-# Add brain to path
-sys.path.insert(0, '/app')
-
 from brain.specialists import get_registry, list_specialists
 
 

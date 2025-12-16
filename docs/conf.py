@@ -7,7 +7,7 @@
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
 
 project = 'Ada v1 Brain API'
-copyright = '2025, Luna Team'
+copyright = 'CC0 1.0 Universal - Public Domain'
 author = 'Luna Team'
 release = '0.1.0'
 
@@ -24,6 +24,7 @@ extensions = [
     'sphinx.ext.autodoc',
     'sphinx.ext.napoleon',
     'sphinx.ext.viewcode',
+    'sphinx.ext.graphviz',
 ]
 
 templates_path = ['_templates']

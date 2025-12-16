@@ -8,6 +8,18 @@ server {
     resolver 127.0.0.11 ipv6=off valid=10s;
     set $brain_upstream ${BRAIN_URL};
 
+    # Serve Sphinx documentation (must come before / to avoid SPA catch-all)
+    location /docs/ {
+        alias /usr/share/nginx/html/docs/;
+        index index.html;
+        try_files $uri $uri/ $uri.html =404;
+    }
+
+    # Redirect /docs to /docs/
+    location = /docs {
+        return 301 /docs/;
+    }
+
     # Serve the SPA and fall back to index.html for client routing
     location / {
         try_files $uri $uri/ /index.html;

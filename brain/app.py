@@ -251,14 +251,249 @@ async def lifespan(app: FastAPI):
     # Shutdown
     print("[BRAIN] Server shutting down")
 
-app = FastAPI(lifespan=lifespan)
+app = FastAPI(
+    lifespan=lifespan,
+    title="Ada Brain API",
+    description="""
+    Ada Brain Service - LLM orchestration with RAG and specialist capabilities.
+    
+    ## Features
+    
+    - **Streaming Chat**: Real-time responses via Server-Sent Events
+    - **RAG Context**: Persona, FAQ, memories, and conversation history
+    - **Specialist System**: Pluggable capabilities (web search, OCR, vision, media)
+    - **Memory Management**: Long-term context storage with importance ranking
+    - **Self-Documenting**: Introspectable schemas, specialists, and system info
+    
+    ## Key Endpoints
+    
+    - `/v1/chat` - Streaming chat with RAG context
+    - `/v1/schema` - Data model schemas (Pydantic/JSON Schema)
+    - `/v1/specialists` - Available specialist capabilities
+    - `/v1/info` - System information and features
+    - `/v1/memory` - Memory management
+    - `/v1/healthz` - Health check and diagnostics
+    
+    ## Documentation
+    
+    Full documentation available at `/docs/index.html`
+    """,
+    version="1.0.0",
+    contact={
+        "name": "Ada Project",
+        "url": "https://github.com/your-repo/ada-v1",
+    },
+    license_info={
+        "name": "CC0 1.0 Universal (Public Domain)",
+        "url": "https://creativecommons.org/publicdomain/zero/1.0/",
+    },
+    openapi_tags=[
+        {
+            "name": "chat",
+            "description": "Chat and streaming endpoints",
+        },
+        {
+            "name": "introspection",
+            "description": "Self-documenting endpoints (schema, specialists, info)",
+        },
+        {
+            "name": "memory",
+            "description": "Long-term memory management",
+        },
+        {
+            "name": "health",
+            "description": "Health checks and diagnostics",
+        },
+        {
+            "name": "debug",
+            "description": "Debug and inspection tools",
+        },
+    ],
+)
 
 # Include system notice router
 app.include_router(router)
 
 
 
-@app.get('/v1/healthz')
+@app.get('/v1/schema', tags=['introspection'])
+async def get_schemas(doc_type: Optional[str] = Query(None, description="Specific document type (persona, faq, memory, turn, summary)")):
+    """
+    Get JSON Schema definitions for Chroma document metadata.
+    
+    Returns JSON Schema for all document types or a specific type.
+    Use this endpoint to understand the structure of documents in the vector database.
+    
+    **Query Parameters:**
+        - doc_type (optional): Specific document type to retrieve schema for
+    
+    **Response (200 OK):**
+        JSON Schema definition(s) for document metadata
+    
+    **Example Requests:**
+        - GET /v1/schema - All schemas
+        - GET /v1/schema?doc_type=memory - Memory schema only
+    """
+    from brain.schemas import get_all_schemas, get_schema_by_type, get_metadata_fields_by_type, get_required_fields_by_type
+    
+    try:
+        if doc_type:
+            schema = get_schema_by_type(doc_type)
+            return {
+                "document_type": doc_type,
+                "schema": schema,
+                "fields": get_metadata_fields_by_type()[doc_type],
+                "required_fields": get_required_fields_by_type()[doc_type]
+            }
+        else:
+            return {
+                "schemas": get_all_schemas(),
+                "document_types": ["persona", "faq", "memory", "turn", "summary"],
+                "fields_by_type": get_metadata_fields_by_type(),
+                "required_fields_by_type": get_required_fields_by_type()
+            }
+    except ValueError as e:
+        return JSONResponse(
+            status_code=400,
+            content={"error": str(e)}
+        )
+
+
+@app.get('/v1/specialists', tags=['introspection'])
+async def get_specialists():
+    """
+    List all available specialist capabilities.
+    
+    Returns information about registered specialists including their names,
+    descriptions, parameters, priorities, and enabled status. This endpoint
+    makes the specialist system self-documenting.
+    
+    **Response (200 OK):**
+        JSON array of specialist capability objects
+    
+    **Example Response:**
+        .. code-block:: json
+        
+            {
+              "specialists": [
+                {
+                  "name": "web_search",
+                  "description": "Search the web for current information",
+                  "icon": "🔍",
+                  "version": "1.0.0",
+                  "priority": "medium",
+                  "enabled": true,
+                  "tags": ["search", "web", "information"],
+                  "input_schema": {
+                    "type": "object",
+                    "properties": {
+                      "query": {"type": "string"}
+                    },
+                    "required": ["query"]
+                  },
+                  "output_schema": {}
+                }
+              ],
+              "count": 3
+            }
+    """
+    from brain.specialists import list_specialists
+    
+    specialists = list_specialists()
+    
+    return {
+        "specialists": [
+            {
+                "name": spec.capability.name,
+                "description": spec.capability.description,
+                "icon": spec.capability.context_icon,
+                "version": spec.capability.version,
+                "priority": spec.capability.context_priority.name.lower(),
+                "enabled": spec.capability.enabled,
+                "tags": spec.capability.tags,
+                "input_schema": spec.capability.input_schema,
+                "output_schema": spec.capability.output_schema,
+            }
+            for spec in specialists
+        ],
+        "count": len(specialists)
+    }
+
+
+@app.get('/v1/info', tags=['introspection'])
+async def get_system_info():
+    """
+    Get system information and capabilities.
+    
+    Returns version information, feature flags, active configuration,
+    and available capabilities. Makes the system self-describing.
+    
+    **Response (200 OK):**
+        JSON object with system information
+    
+    **Example Response:**
+        .. code-block:: json
+        
+            {
+              "service": "ada-brain",
+              "version": "1.0.0",
+              "python_version": "3.13.1",
+              "features": {
+                "rag": true,
+                "specialists": true,
+                "streaming": true,
+                "memory": true
+              },
+              "endpoints": ["/v1/chat", "/v1/schema", ...],
+              "models": {
+                "llm": "deepseek-r1",
+                "embedding": "nomic-embed-text"
+              }
+            }
+    """
+    import sys
+    from brain.specialists import list_specialists
+    
+    # Get all registered routes
+    endpoints = sorted([route.path for route in app.routes if hasattr(route, 'path')])
+    
+    # Count specialists
+    specialists = list_specialists()
+    enabled_specialists = [s for s in specialists if s.capability.enabled]
+    
+    return {
+        "service": "ada-brain",
+        "version": "1.0.0",
+        "python_version": f"{sys.version_info.major}.{sys.version_info.minor}.{sys.version_info.micro}",
+        "features": {
+            "rag": config.RAG_ENABLED,
+            "specialists": len(enabled_specialists) > 0,
+            "streaming": True,
+            "memory": config.RAG_ENABLE_MEMORY,
+            "pause_resume": config.SPECIALIST_PAUSE_RESUME,
+        },
+        "capabilities": {
+            "specialist_count": len(specialists),
+            "enabled_specialists": len(enabled_specialists),
+            "specialist_names": [s.capability.name for s in enabled_specialists],
+            "rag_features": {
+                "persona": config.RAG_ENABLE_PERSONA,
+                "faq": config.RAG_ENABLE_FAQ,
+                "memory": config.RAG_ENABLE_MEMORY,
+                "summary": config.RAG_ENABLE_SUMMARY,
+                "turn": config.RAG_ENABLE_TURN,
+            }
+        },
+        "models": {
+            "llm": config.OLLAMA_MODEL,
+            "embedding": config.EMBED_MODEL,
+        },
+        "endpoints": endpoints,
+        "documentation": "/docs/index.html"
+    }
+
+
+@app.get('/v1/healthz', tags=['health'])
 async def healthz():
     """
     Health check endpoint for the brain service.
@@ -356,7 +591,7 @@ async def media_listenbrainz():
     return data
 
 
-@app.post('/v1/chat/stream')
+@app.post('/v1/chat/stream', tags=['chat'])
 async def chat_stream(request: Request):
     """
     Streaming chat endpoint using Server-Sent Events (SSE).
@@ -526,7 +761,7 @@ async def chat_stream(request: Request):
     return StreamingResponse(generate(), media_type='text/event-stream')
 
 
-@app.get('/v1/memory')
+@app.get('/v1/memory', tags=['memory'])
 async def list_memory(
     search: Optional[str] = Query(None),
     query: Optional[str] = Query(None),
@@ -580,7 +815,7 @@ async def list_memory(
     return {'items': items}
 
 
-@app.post('/v1/memory')
+@app.post('/v1/memory', tags=['memory'])
 async def create_memory(request: Request):
     """
     Create a new long-term memory entry.
@@ -645,7 +880,7 @@ async def delete_memory(mem_id: str):
         return JSONResponse(status_code=500, content={'error': str(err)})
 
 
-@app.get('/v1/debug/rag')
+@app.get('/v1/debug/rag', tags=['debug'])
 async def rag_debug(conversation_id: Optional[str] = Query(None)):
     """
     Debug information for the RAG system (development only).
@@ -709,7 +944,7 @@ async def rag_debug(conversation_id: Optional[str] = Query(None)):
         return JSONResponse(status_code=500, content={'error': str(e)})
 
 
-@app.get('/v1/debug/prompt')
+@app.get('/v1/debug/prompt', tags=['debug'])
 async def prompt_debug(
     conversation_id: Optional[str] = Query(None),
     entity: Optional[str] = Query(None),

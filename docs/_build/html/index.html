@@ -1,5 +1,3 @@
-
-
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" data-content_root="./">
 <head>
@@ -8,14 +6,19 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Ada v1 Brain API Docs &mdash; Ada v1 Brain API 0.1.0 documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
-      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=19f00094" />
+      <link rel="stylesheet" type="text/css" href="_static/graphviz.css?v=4ae1632d" />
 
   
-      <script src="_static/jquery.js?v=5d32c60e"></script>
-      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="_static/documentation_options.js?v=01f34227"></script>
-      <script src="_static/doctools.js?v=9bcbadda"></script>
-      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="_static/jquery.js?v=5d32c60e"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="_static/documentation_options.js?v=01f34227"></script>
+        <script src="_static/doctools.js?v=9bcbadda"></script>
+        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -44,7 +47,14 @@
               <p class="caption" role="heading"><span class="caption-text">Documentation:</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="getting_started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="configuration.html">Configuration Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="architecture.html">Architecture</a></li>
+<li class="toctree-l1"><a class="reference internal" href="data_model.html">Data Model Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api_usage.html">API Usage Guide</a></li>
 <li class="toctree-l1"><a class="reference internal" href="api_reference.html">API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="specialists.html">Specialist System</a></li>
+<li class="toctree-l1"><a class="reference internal" href="testing.html">Testing Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="development.html">Development Tools</a></li>
 <li class="toctree-l1"><a class="reference internal" href="streaming.html">Streaming</a></li>
 <li class="toctree-l1"><a class="reference internal" href="memory.html">Memory</a></li>
 <li class="toctree-l1"><a class="reference internal" href="examples.html">Examples</a></li>
@@ -90,11 +100,105 @@
 <li class="toctree-l2"><a class="reference internal" href="getting_started.html#next-steps">Next Steps</a></li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="configuration.html">Configuration Reference</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="configuration.html#quick-start">Quick Start</a></li>
+<li class="toctree-l2"><a class="reference internal" href="configuration.html#configuration-file">Configuration File</a></li>
+<li class="toctree-l2"><a class="reference internal" href="configuration.html#core-services">Core Services</a></li>
+<li class="toctree-l2"><a class="reference internal" href="configuration.html#rag-configuration">RAG Configuration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="configuration.html#specialist-system">Specialist System</a></li>
+<li class="toctree-l2"><a class="reference internal" href="configuration.html#integrations">Integrations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="configuration.html#backup-configuration">Backup Configuration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="configuration.html#configuration-validation">Configuration Validation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="configuration.html#best-practices">Best Practices</a></li>
+<li class="toctree-l2"><a class="reference internal" href="configuration.html#environment-specific-configuration">Environment-Specific Configuration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="configuration.html#troubleshooting">Troubleshooting</a></li>
+<li class="toctree-l2"><a class="reference internal" href="configuration.html#see-also">See Also</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="architecture.html">Architecture</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="architecture.html#system-overview">System Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="architecture.html#request-flow">Request Flow</a></li>
+<li class="toctree-l2"><a class="reference internal" href="architecture.html#specialist-system-architecture">Specialist System Architecture</a></li>
+<li class="toctree-l2"><a class="reference internal" href="architecture.html#rag-system-components">RAG System Components</a></li>
+<li class="toctree-l2"><a class="reference internal" href="architecture.html#bidirectional-specialist-flow">Bidirectional Specialist Flow</a></li>
+<li class="toctree-l2"><a class="reference internal" href="architecture.html#testing-infrastructure">Testing Infrastructure</a></li>
+<li class="toctree-l2"><a class="reference internal" href="architecture.html#data-flow-conversation-turn">Data Flow: Conversation Turn</a></li>
+<li class="toctree-l2"><a class="reference internal" href="architecture.html#deployment-architecture">Deployment Architecture</a></li>
+<li class="toctree-l2"><a class="reference internal" href="architecture.html#resources">Resources</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="data_model.html">Data Model Reference</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="data_model.html#overview">Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="data_model.html#schema-introspection">Schema Introspection</a></li>
+<li class="toctree-l2"><a class="reference internal" href="data_model.html#document-schemas">Document Schemas</a></li>
+<li class="toctree-l2"><a class="reference internal" href="data_model.html#retrieval-strategies">Retrieval Strategies</a></li>
+<li class="toctree-l2"><a class="reference internal" href="data_model.html#usage-examples">Usage Examples</a></li>
+<li class="toctree-l2"><a class="reference internal" href="data_model.html#configuration">Configuration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="data_model.html#see-also">See Also</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="api_usage.html">API Usage Guide</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="api_usage.html#quick-start">Quick Start</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api_usage.html#api-architecture">API Architecture</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api_usage.html#api-endpoints">API Endpoints</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api_usage.html#quick-reference">Quick Reference</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api_usage.html#environment-variables">Environment Variables</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api_usage.html#code-structure">Code Structure</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api_usage.html#error-handling">Error Handling</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api_usage.html#deployment">Deployment</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api_usage.html#integration-with-frontend">Integration with Frontend</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api_usage.html#adding-new-endpoints">Adding New Endpoints</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api_usage.html#resources">Resources</a></li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="api_reference.html">API Reference</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="api_reference.html#module-brain.app">Brain API Endpoints</a></li>
-<li class="toctree-l2"><a class="reference internal" href="api_reference.html#endpoint-summary">Endpoint Summary</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api_reference.html#brain-api-endpoints">Brain API Endpoints</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api_reference.html#endpoint-discovery">Endpoint Discovery</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api_reference.html#key-endpoints">Key Endpoints</a></li>
 <li class="toctree-l2"><a class="reference internal" href="api_reference.html#request-response-models">Request/Response Models</a></li>
 <li class="toctree-l2"><a class="reference internal" href="api_reference.html#status-codes">Status Codes</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="specialists.html">Specialist System</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="specialists.html#overview">Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="specialists.html#creating-a-new-specialist">Creating a New Specialist</a></li>
+<li class="toctree-l2"><a class="reference internal" href="specialists.html#discovering-available-specialists">Discovering Available Specialists</a></li>
+<li class="toctree-l2"><a class="reference internal" href="specialists.html#currently-available-specialists">Currently Available Specialists</a></li>
+<li class="toctree-l2"><a class="reference internal" href="specialists.html#request-context-structure">Request Context Structure</a></li>
+<li class="toctree-l2"><a class="reference internal" href="specialists.html#priority-system">Priority System</a></li>
+<li class="toctree-l2"><a class="reference internal" href="specialists.html#bidirectional-specialists">Bidirectional Specialists</a></li>
+<li class="toctree-l2"><a class="reference internal" href="specialists.html#web-search-specialist">Web Search Specialist</a></li>
+<li class="toctree-l2"><a class="reference internal" href="specialists.html#rag-based-documentation">RAG-Based Documentation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="specialists.html#testing-specialists">Testing Specialists</a></li>
+<li class="toctree-l2"><a class="reference internal" href="specialists.html#future-enhancements">Future Enhancements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="specialists.html#best-practices">Best Practices</a></li>
+<li class="toctree-l2"><a class="reference internal" href="specialists.html#debugging">Debugging</a></li>
+<li class="toctree-l2"><a class="reference internal" href="specialists.html#resources">Resources</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="testing.html">Testing Guide</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="testing.html#running-services-for-testing">Running Services for Testing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="testing.html#manual-testing">Manual Testing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="testing.html#automated-testing-with-pytest">Automated Testing with Pytest</a></li>
+<li class="toctree-l2"><a class="reference internal" href="testing.html#health-check-script">Health Check Script</a></li>
+<li class="toctree-l2"><a class="reference internal" href="testing.html#ci-cd-integration">CI/CD Integration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="testing.html#interactive-debugging">Interactive Debugging</a></li>
+<li class="toctree-l2"><a class="reference internal" href="testing.html#test-coverage-priorities">Test Coverage Priorities</a></li>
+<li class="toctree-l2"><a class="reference internal" href="testing.html#troubleshooting-tests">Troubleshooting Tests</a></li>
+<li class="toctree-l2"><a class="reference internal" href="testing.html#best-practices">Best Practices</a></li>
+<li class="toctree-l2"><a class="reference internal" href="testing.html#resources">Resources</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="development.html">Development Tools</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="development.html#scripts-tooling-container">Scripts Tooling Container</a></li>
+<li class="toctree-l2"><a class="reference internal" href="development.html#available-scripts">Available Scripts</a></li>
+<li class="toctree-l2"><a class="reference internal" href="development.html#development-patterns">Development Patterns</a></li>
+<li class="toctree-l2"><a class="reference internal" href="development.html#troubleshooting">Troubleshooting</a></li>
+<li class="toctree-l2"><a class="reference internal" href="development.html#architecture">Architecture</a></li>
+<li class="toctree-l2"><a class="reference internal" href="development.html#best-practices">Best Practices</a></li>
+<li class="toctree-l2"><a class="reference internal" href="development.html#development-workflow">Development Workflow</a></li>
+<li class="toctree-l2"><a class="reference internal" href="development.html#code-quality">Code Quality</a></li>
+<li class="toctree-l2"><a class="reference internal" href="development.html#resources">Resources</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="streaming.html">Streaming</a><ul>
@@ -106,6 +210,7 @@
 <li class="toctree-l2"><a class="reference internal" href="streaming.html#python-requests">Python (requests)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="streaming.html#javascript-fetch-readablestream">JavaScript (fetch + ReadableStream)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="streaming.html#best-practices">Best Practices</a></li>
+<li class="toctree-l2"><a class="reference internal" href="streaming.html#related-documentation">Related Documentation</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="memory.html">Memory</a><ul>
@@ -114,6 +219,7 @@
 <li class="toctree-l2"><a class="reference internal" href="memory.html#create-memory">Create Memory</a></li>
 <li class="toctree-l2"><a class="reference internal" href="memory.html#delete-memory">Delete Memory</a></li>
 <li class="toctree-l2"><a class="reference internal" href="memory.html#notes">Notes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="memory.html#related-documentation">Related Documentation</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="examples.html">Examples</a><ul>
@@ -121,6 +227,7 @@
 <li class="toctree-l2"><a class="reference internal" href="examples.html#python">Python</a></li>
 <li class="toctree-l2"><a class="reference internal" href="examples.html#javascript-fetch">JavaScript (fetch)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="examples.html#javascript-stream">JavaScript (stream)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="examples.html#related-documentation">Related Documentation</a></li>
 </ul>
 </li>
 </ul>
@@ -136,12 +243,13 @@
 <li><p><strong>Debug Tools</strong> - Inspect RAG system state</p></li>
 </ul>
 <p>Key Features:</p>
-<p>✓ Non-blocking streaming responses
-✓ Semantic search on memories
+<p>✓ Non-blocking streaming responses (see <a class="reference internal" href="streaming.html"><span class="doc">Streaming</span></a>)
+✓ Semantic search on memories (see <a class="reference internal" href="memory.html"><span class="doc">Memory</span></a>)
 ✓ Automatic conversation threading
 ✓ Thinking/reasoning visibility
-✓ Entity-scoped context retrieval
-✓ Conversation summarization</p>
+✓ Entity-scoped context retrieval (see <a class="reference internal" href="data_model.html"><span class="doc">Data Model Reference</span></a>)
+✓ Conversation summarization
+✓ Specialist plugin system (see <a class="reference internal" href="specialists.html"><span class="doc">Specialist System</span></a>)</p>
 </section>
 <section id="quick-start">
 <h2>Quick Start<a class="headerlink" href="#quick-start" title="Link to this heading"></a></h2>
@@ -186,7 +294,7 @@
   <hr/>
 
   <div role="contentinfo">
-    <p>&#169; Copyright 2025, Luna Team.</p>
+    <p>&#169; Copyright CC0 1.0 Universal - Public Domain.</p>
   </div>
 
   Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a

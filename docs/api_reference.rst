@@ -11,50 +11,78 @@ Brain API Endpoints
    :show-inheritance:
 
 
-Endpoint Summary
-================
+Endpoint Discovery
+==================
 
-Health & Monitoring
--------------------
+**The API is fully self-documenting!** Query these endpoints to discover available functionality:
 
-**GET /v1/healthz** — Service health status and dependency info.
+**GET /v1/info** — System capabilities and complete endpoint list
 
-Status codes: 200 (healthy), 503 (dependency unavailable).
+.. code-block:: bash
 
-Chat Endpoints
---------------
+   curl http://localhost:5000/api/info | jq
 
-**POST /v1/chat** — Non-streaming chat with RAG.
+Returns:
 
-Status codes: 200 (ok), 400 (bad request), 500 (server error).
+- Service version and Python version
+- Feature flags (RAG, specialists, streaming, etc.)
+- Active models (LLM and embedding)
+- Complete list of all available endpoints
+- Documentation URL
 
-**POST /v1/chat/stream** — Streaming chat via SSE.
+**GET /v1/specialists** — Available specialist capabilities
 
-Status codes: 200 (stream), 400 (bad request), 500 (server error).
+.. code-block:: bash
 
-Memory Endpoints
+   curl http://localhost:5000/api/specialists | jq
+
+Returns specialist names, descriptions, schemas, priorities, and enabled status.
+
+**GET /v1/schema** — Data model schemas
+
+.. code-block:: bash
+
+   curl http://localhost:5000/api/schema | jq
+
+Returns JSON Schema definitions for all document types (persona, faq, memory, turn, summary).
+
+See :doc:`data_model` for complete schema documentation.
+
+Key Endpoints
+=============
+
+The following endpoints are commonly used. For the complete list, query **GET /v1/info**.
+
+For specialist system endpoints, see :doc:`specialists`. For data model schemas, see :doc:`data_model`.
+
+Chat & Streaming
 ----------------
 
-**GET /v1/memory** — Semantic search over memories.
+**POST /v1/chat/stream** — Streaming chat via Server-Sent Events
 
-Query params: search, entity, limit.
-Status codes: 200 (ok), 500 (query error).
+See :doc:`streaming` for detailed SSE event structure.
 
-**POST /v1/memory** — Create memory entry.
+Memory Management
+-----------------
 
-Status codes: 201 (created), 400 (bad request), 503 (RAG unavailable).
+**GET /v1/memory** — Search and list memories
 
-**DELETE /v1/memory/<mem_id>** — Delete memory entry.
+**POST /v1/memory** — Create new memory
 
-Status codes: 200 (ok), 503 (RAG unavailable), 500 (delete error).
+**DELETE /v1/memory/{id}** — Delete memory
 
-Debug Endpoint
---------------
+See :doc:`memory` for memory management patterns.
 
-**GET /v1/debug/rag** — RAG statistics (RAG_DEBUG=true).
+Health & Diagnostics
+--------------------
 
-Query params: conversation_id (optional).
-Status codes: 200 (ok), 404 (debug disabled), 500 (error).
+**GET /v1/healthz** — Service health and dependency status
+
+**GET /v1/debug/rag** — RAG system diagnostics (when RAG_DEBUG=true)
+
+**GET /v1/debug/prompt** — Inspect prompt construction
+
+See :doc:`configuration` for debug configuration and :doc:`testing` for testing strategies.
 
 
 Request/Response Models
