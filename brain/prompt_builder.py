@@ -33,6 +33,7 @@ def build_prompt(
     turns_k: Optional[int] = None,
     faq_k: Optional[int] = None,
     memory_k: Optional[int] = None,
+    ocr_context: Optional[Dict[str, Any]] = None,
 ) -> Tuple[str, Dict[str, Any]]:
     """
     Assemble a complete prompt from all available context.
@@ -76,6 +77,17 @@ def build_prompt(
         if media_line:
             sections.append(media_line)
             used_context['media'] = media_info
+    
+    # OCR context (extracted text from images)
+    if ocr_context and isinstance(ocr_context, dict):
+        ocr_text = ocr_context.get('text', '').strip()
+        if ocr_text:
+            filename = ocr_context.get('filename', 'image')
+            char_count = ocr_context.get('char_count', len(ocr_text))
+            confidence = ocr_context.get('confidence')
+            conf_str = f" (confidence: {confidence:.1f}%)" if confidence else ""
+            sections.append(f"📄 OCR EXTRACTED TEXT from '{filename}' ({char_count} chars{conf_str}):\n{ocr_text}")
+            used_context['ocr'] = {'filename': filename, 'char_count': char_count, 'confidence': confidence}
     
     # Persona block
     if RAG_ENABLE_PERSONA and rag_store is not None:
