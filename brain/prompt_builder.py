@@ -20,6 +20,7 @@ from config import (
 )
 from rag_store import RagStore
 from media import format_media_for_prompt
+from notices_client import get_active_notices
 
 
 def build_prompt(
@@ -45,6 +46,17 @@ def build_prompt(
     memory_k = memory_k or RAG_MEMORY_TOP_K
     
     sections: List[str] = []
+
+    # --- System Notices Injection ---
+    notices = get_active_notices()
+    if notices:
+        # Only show up to 3, truncate message to 200 chars each
+        notice_lines = []
+        for n in notices[:3]:
+            msg = n['message'][:200] + ("..." if len(n['message']) > 200 else "")
+            severity_label = n['severity'].upper()
+            notice_lines.append(f"⚠️ {severity_label} ALERT [{n['component']}.{n['code']}]: {msg}")
+        sections.append("🔔 SYSTEM NOTICES — Acknowledge these immediately before responding to the user:\n" + "\n".join(notice_lines))
     used_context: Dict[str, Any] = {
         'persona': None,
         'faqs': [],

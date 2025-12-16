@@ -7,6 +7,8 @@ from dotenv import load_dotenv
 import boto3
 from botocore.config import Config
 from botocore.exceptions import ClientError
+import urllib.request
+import json
 
 load_dotenv()
 """
@@ -74,6 +76,34 @@ def sha256sum(path: Path) -> str:
     return h.hexdigest()
 
 
+def emit_notice(severity: str, component: str, code: str, message: str) -> None:
+    """Send a notice to the brain service."""
+    brain_url = get_env("BRAIN_URL", "http://brain:7000")
+    notice_url = f"{brain_url}/v1/notices"
+    
+    payload = {
+        "severity": severity,
+        "component": component,
+        "code": code,
+        "message": message,
+    }
+    
+    try:
+        req = urllib.request.Request(
+            notice_url,
+            data=json.dumps(payload).encode('utf-8'),
+            headers={'Content-Type': 'application/json'},
+            method='POST'
+        )
+        with urllib.request.urlopen(req, timeout=5) as response:
+            if response.status == 200:
+                print(f"Notice emitted: [{component}.{code}] {message[:50]}...")
+            else:
+                print(f"Failed to emit notice: HTTP {response.status}", file=sys.stderr)
+    except Exception as e:
+        print(f"Failed to emit notice: {e}", file=sys.stderr)
+
+
 def check_duplicates(backups: list[Path], check_count: int) -> None:
     """Warn if the most-recent backups are identical (size + hash)."""
     subset = backups[:check_count]
@@ -86,10 +116,17 @@ def check_duplicates(backups: list[Path], check_count: int) -> None:
 
     unique = set(fingerprints)
     if len(unique) == 1:
-        print(
-            f"WARNING: {len(subset)} newest backups are identical (size + hash). "
-            "DB may not be changing or backups may be misconfigured.",
-            file=sys.stderr,
+        msg = (
+            f"The last {len(subset)} backups are identical (size + hash). "
+            "The database may not be changing or backups may be misconfigured. "
+            "Please investigate backup integrity."
+        )
+        print(f"WARNING: {msg}", file=sys.stderr)
+        emit_notice(
+            severity="warning",
+            component="backup",
+            code="duplicate_detected",
+            message=f"ACTION REQUIRED: {msg}"
         )
 
 
