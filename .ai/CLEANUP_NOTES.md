@@ -1,43 +1,51 @@
 # Documentation Cleanup Notes
 
-## Status: 2025-12-16
+## Status: 2025-12-16 (Updated Evening)
 
-### Markdown Files in docs/
+### ✅ COMPLETED: Markdown → RST Migration
 
-The following Markdown files exist in `docs/` but should ideally be RST for Sphinx consistency:
+All documentation successfully migrated to ReStructuredText format for Sphinx:
 
-- `SPECIALISTS.md` → Should be `specialists.rst` (already exists!)
-- `BIDIRECTIONAL_SPECIALISTS.md` → Content should be in `specialists.rst`
-- `SPECIALIST_RAG_DOCS.md` → Content should be in `specialists.rst`
-- `WEB_SEARCH_SPECIALIST.md` → Content should be in `specialists.rst`
+**Converted Files (8 total):**
+- ✅ `HARDWARE_GUIDE.md` → `hardware.rst` (420 lines)
+- ✅ `SBC_GUIDE.md` → `sbc.rst` (516 lines) 
+- ✅ `BIDIRECTIONAL_SPECIALISTS.md` → `bidirectional.rst`
+- ✅ `SPECIALIST_RAG_DOCS.md` → `specialist_rag.rst`
+- ✅ `WEB_SEARCH_SPECIALIST.md` → `web_search.rst`
+- ✅ `SPECIALISTS.md` → Removed (content already in `specialists.rst`)
+- ✅ `BUILD_YOUR_FIRST_SPECIALIST.md` → `build_specialist.rst` (521 lines)
+- ✅ `GETTING_STARTED_FROM_SCRATCH.md` → `getting_started_scratch.rst` (295 lines)
 
-**Recommendation:** These appear to be working notes that have been superseded by the proper `specialists.rst` file. Consider:
-1. Consolidating unique content into `specialists.rst`
-2. Removing the `.md` files
-3. Or moving them to a `docs/notes/` directory if they're drafts
+**Additional Improvements:**
+- ✅ Deduplicated `specialists.rst` (~370 lines removed, replaced with `:doc:` cross-references)
+- ✅ Organized `index.rst` into 7 logical sections (Getting Started, Hardware Setup, Core Architecture, API Documentation, Specialist System, Development, Philosophy)
+- ✅ Updated all internal links to use `:doc:` directive
+- ✅ Added `docs/_build/` to `.gitignore`
+- ✅ Updated author attribution to "luna system"
 
 ### Current State
 
-✅ **Well-Organized:**
-- Main Sphinx docs are in `.rst` format
+✅ **Fully Organized:**
+- All docs in `.rst` format with proper Sphinx structure
 - Machine docs properly in `.ai/`
-- Source annotations in place
-- Testing infrastructure complete
+- No duplicate content in documentation
+- Clear navigation with sectioned toctrees
+- All cross-references working
 
-⚠️  **Minor Cleanup:**
-- Duplicate content in `.md` files in `docs/`
-- Could consolidate specialist documentation
+🎉 **No Cleanup Needed:**
+- All `.md` files removed from `docs/`
+- Documentation is DRY (Don't Repeat Yourself)
+- Sphinx builds cleanly
 
-### Action Items (Optional)
+### Version Tracking
 
-**Low Priority:**
-1. Review `.md` files in `docs/` for unique content
-2. Merge into appropriate `.rst` files
-3. Remove duplicates
-4. Update any internal references
-
-**No Rush:** The existing `.rst` files are comprehensive. The `.md` files appear to be historical drafts.
+**v1.1.4 (2025-12-16):**
+- Complete documentation migration to RST
+- Hardware and SBC guides added
+- Documentation organization into sections
+- Deduplication cleanup
+- README streamlined with AI provenance disclosure
 
 ---
 
-**Note:** This is informational only. System is fully functional as-is. Cleanup is for consistency, not correctness.
+**Note:** Documentation cleanup is COMPLETE. No further action items.

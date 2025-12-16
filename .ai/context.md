@@ -50,7 +50,8 @@ frontend (nginx:5000) → brain (fastapi:7000) ⇄ chroma (vector db:8000)
 ### Naming Patterns
 - `*_specialist.py` - Auto-discovered specialist plugins
 - `test_*.py` - Pytest test modules
-- `*.rst` - Sphinx documentation (RST format)
+- `docs/*.rst` - Sphinx documentation (ReStructuredText format, organized into sections)
+- `.ai/*.{md,json}` - Machine-readable documentation for AI assistants
 
 ### Import Structure
 - Absolute imports from `brain.*` namespace
@@ -96,6 +97,26 @@ frontend (nginx:5000) → brain (fastapi:7000) ⇄ chroma (vector db:8000)
 - Chat request → `app.py` → `prompt_builder.py` → `llm.py` → streaming response
 - Memory storage → `app.py` → `rag_store.py` → ChromaDB
 - Specialist execution → `prompt_builder.py` → `specialists/*` → context injection
+
+## Documentation Structure
+
+### Sphinx Docs (docs/*.rst)
+- **Getting Started:** `getting_started.rst`, `getting_started_scratch.rst`, `configuration.rst`, `examples.rst`
+- **Hardware Setup:** `hardware.rst` (GPU: CUDA/ROCm/Metal/Vulkan/CPU), `sbc.rst` (Raspberry Pi, Orange Pi, ARM boards)
+- **Core Architecture:** `architecture.rst`, `data_model.rst`, `streaming.rst`, `memory.rst`
+- **API Documentation:** `api_usage.rst`, `api_reference.rst`
+- **Specialist System:** `specialists.rst`, `build_specialist.rst`, `bidirectional.rst`, `specialist_rag.rst`, `web_search.rst`
+- **Development:** `development.rst`, `testing.rst`
+- **Philosophy:** `documentation_philosophy.rst`, `empathetic_documentation.rst`, `xenofeminism.rst`
+
+### Machine Documentation (.ai/)
+- `context.md` - High-level architecture and conventions (this file)
+- `codebase-map.json` - Detailed module dependency graph
+- `specialist-registry.json` - Auto-generated specialist metadata
+- `CONVENTIONS.md` - Documentation strategy and where things go
+- `QUICKSTART.md` - Quick reference for AI assistants
+- `GOTCHAS.md` - Common pitfalls and their solutions
+- `TESTING.md` - Testing strategies and patterns
 
 ## Configuration
 
