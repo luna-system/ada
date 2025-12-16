@@ -50,6 +50,8 @@ jobs:
           path: 'docs/_build/html'
   
   deploy:
+    # Only deploy from trunk branch
+    if: github.ref == 'refs/heads/trunk'
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
