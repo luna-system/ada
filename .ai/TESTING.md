@@ -84,7 +84,7 @@ pytest tests/test_ai_documentation.py -v
 ### GitHub Actions Workflow
 
 The workflow at `.github/workflows/validate-ai-docs.yml` runs on:
-- Push to main/develop branches
+- Push to trunk/develop branches
 - Pull requests affecting brain modules or `.ai/` directory
 
 **What it does:**
