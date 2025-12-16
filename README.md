@@ -190,6 +190,8 @@ ada/
 
 **Quick links:**
 - [Getting Started from Scratch](/docs/GETTING_STARTED_FROM_SCRATCH.md) - Customize your AI
+- [Hardware Guide](/docs/HARDWARE_GUIDE.md) - GPU setup, hardware recommendations
+- [SBC Guide](/docs/SBC_GUIDE.md) - Running Ada on Raspberry Pi, Orange Pi, etc.
 - [Build Your First Specialist](/docs/BUILD_YOUR_FIRST_SPECIALIST.md) - Extend capabilities
 - [Architecture Guide](/docs/architecture.rst) - How it all works
 - [API Reference](/docs/api_reference.rst) - Complete API docs
