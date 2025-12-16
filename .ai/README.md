@@ -1,14 +1,20 @@
-# .ai Directory - Machine-Readable Documentation
+# Machine Documentation for AI Assistants
 
-This directory contains structured metadata for AI code analysis and understanding.
+This folder contains **structured documentation designed for AI assistants** working with the Ada codebase.
 
-## Purpose
+## Quick Start for AI Assistants
 
-Enhance AI model comprehension of the codebase through:
-- High-level architecture maps
-- Module dependency graphs
-- Structured annotations in source code
-- Plugin/extension registries
+**New here?** Start with [context.md](context.md) for architecture overview, then check [CONVENTIONS.md](CONVENTIONS.md) to understand where things go.
+
+**Looking for specifics?** Use [codebase-map.json](codebase-map.json) to navigate modules and dependencies.
+
+## Philosophy
+
+**Machine-First Documentation:** Unlike human docs in `docs/*.rst`, these files prioritize:
+- **Structure over narrative** - JSON when appropriate, concise Markdown
+- **Relationships over explanation** - Dependency graphs, import chains  
+- **Context over tutorial** - Architectural patterns, not step-by-step guides
+- **Currency over completeness** - Quick updates, living documents
 
 ## Files
 
@@ -47,6 +53,9 @@ Validation and testing guide:
 - Pre-commit hooks
 - Maintenance procedures
 
+### `CLEANUP_NOTES.md`
+Current status, recent changes, completed work. Check here to see what's been done recently.
+
 ### `GOTCHAS.md`
 Common mistakes and anti-patterns:
 - Things that look right but are wrong for THIS codebase
@@ -78,12 +87,54 @@ Look for structured comments in Python files:
 # @ai-data-flow: How data moves through this module
 ```
 
+## Reading Order for New AI Assistants
+
+1. **[context.md](context.md)** - Big picture: architecture, service topology, key modules
+2. **[CONVENTIONS.md](CONVENTIONS.md)** - Where things go and why
+3. **[codebase-map.json](codebase-map.json)** - Navigate modules and dependencies
+4. **[GOTCHAS.md](GOTCHAS.md)** - Avoid common mistakes
+5. **[QUICKSTART.md](QUICKSTART.md)** - Quick reference for specific tasks
+
+## What This Is (and Isn't)
+
+**✅ This folder is:**
+- Machine-first documentation for AI assistants
+- Structured metadata (JSON + concise Markdown)
+- Architecture and relationship focused
+- Living documents, updated frequently
+
+**❌ This folder is not:**
+- A replacement for human docs (see `docs/`)
+- Automatically generated (except specialist-registry.json)
+- Comprehensive - focuses on patterns, not details
+- A standard - an emerging pattern you can adapt
+
+## Pattern Origins
+
+This `.ai/` folder pattern emerged during Ada's development (2025) from practical need:
+- Single instruction files (`.cursorrules`) don't scale for complex projects
+- Human documentation isn't optimized for AI parsing
+- Separation of concerns helps both humans and AIs
+
+**Not Yet Standard:** This is an emerging pattern. We're sharing it as an example, not prescribing it as a rule. Adapt freely!
+
 ## Maintenance
 
-These files should be updated when:
-- New modules/specialists are added
-- Major architectural changes occur
-- API contracts change significantly
-- Extension patterns evolve
+**When to Update:**
+- Adding/removing major modules → Update `codebase-map.json`
+- Architecture changes → Update `context.md`
+- New conventions → Update `CONVENTIONS.md`
+- Completing work → Update `CLEANUP_NOTES.md`
+- New gotchas discovered → Add to `GOTCHAS.md`
+
+**Keep It Lean:**
+- Avoid duplication with human docs
+- Focus on what AIs need to know
+- Prefer structure (JSON) over prose when possible
+- Link to source code for details
+
+---
+
+**Questions about this pattern?** See [AI.md](../AI.md) in the repository root.
 
 Current as of: 2025-12-16
