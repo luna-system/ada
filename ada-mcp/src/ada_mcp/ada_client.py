@@ -17,9 +17,9 @@ class AdaClient:
 
     async def health(self) -> dict[str, Any]:
         """Check Ada Brain health status."""
-        response = await self.client.get(f"{self.base_url}/health")
+        response = await self.client.get(f"{self.base_url}/v1/healthz")
         response.raise_for_status()
-        return await response.json()
+        return response.json()
 
     async def chat(
         self,
@@ -45,16 +45,30 @@ class AdaClient:
 
         if stream:
             response = await self.client.post(
-                f"{self.base_url}/chat/stream",
+                f"{self.base_url}/v1/chat/stream",
                 json=payload,
                 headers={"Accept": "text/event-stream"},
             )
             response.raise_for_status()
             return response
         else:
-            response = await self.client.post(f"{self.base_url}/chat", json=payload)
+            # Ada Brain only has streaming chat, so we need to handle non-streaming differently
+            response = await self.client.post(
+                f"{self.base_url}/v1/chat/stream",
+                json=payload,
+                headers={"Accept": "text/event-stream"},
+            )
             response.raise_for_status()
-            return await response.json()
+            
+            # For non-streaming, collect all SSE events
+            full_response = ""
+            async for line in response.aiter_lines():
+                if line.startswith("data: "):
+                    chunk = line[6:]  # Remove "data: " prefix
+                    if chunk.strip() and chunk != "[DONE]":
+                        full_response += chunk
+            
+            return {"response": full_response, "conversation_id": conversation_id}
 
     async def search_memories(
         self,
@@ -84,9 +98,9 @@ class AdaClient:
         if type:
             params["type"] = type
 
-        response = await self.client.get(f"{self.base_url}/memories/search", params=params)
+        response = await self.client.get(f"{self.base_url}/v1/memory", params=params)
         response.raise_for_status()
-        data = await response.json()
+        data = response.json()
         return data.get("memories", [])
 
     async def add_memory(
@@ -115,6 +129,6 @@ class AdaClient:
             "scope": scope,
         }
 
-        response = await self.client.post(f"{self.base_url}/memories", json=payload)
+        response = await self.client.post(f"{self.base_url}/v1/memory", json=payload)
         response.raise_for_status()
-        return await response.json()
+        return response.json()
