@@ -1,8 +1,7 @@
 """MCP tool definitions for Ada."""
 
 from typing import Any
-from mcp.server.models import Tool
-from mcp.types import TextContent
+from mcp.types import Tool, TextContent
 from .ada_client import AdaClient
 
 
