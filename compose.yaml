@@ -126,6 +126,8 @@ services:
       dockerfile: brain/Dockerfile
     env_file:
       - .env
+    ports:
+      - "8000:7000"
     environment:
       # Core services
       - OLLAMA_BASE_URL
