@@ -157,6 +157,42 @@ services:
       timeout: 3s
       retries: 5
 
+  # Matrix bridge - connects Ada to Matrix chat rooms
+  matrix-bridge:
+    build:
+      context: ./matrix-bridge
+    container_name: ada-matrix-bridge
+    restart: unless-stopped
+    env_file:
+      - .env
+    environment:
+      # Matrix connection
+      - MATRIX_HOMESERVER
+      - MATRIX_USER_ID
+      - MATRIX_ACCESS_TOKEN
+      - MATRIX_PASSWORD
+      # Bot identity
+      - DISPLAY_NAME=Ada [Bot]
+      # Ada brain connection
+      - ADA_BRAIN_URL=http://brain:7000
+      # Behavior
+      - SEND_INTRO_ON_JOIN=true
+      - AUTO_ACCEPT_INVITES=true
+      - TYPING_INDICATOR=true
+      # Privacy
+      - ALLOW_PRIVACY_OPT_OUT=true
+      - STORE_IN_RAG=true
+      - DATA_RETENTION_DAYS=90
+      # Logging
+      - LOG_LEVEL=INFO
+    volumes:
+      - ./data/matrix:/data
+    depends_on:
+      - brain
+    # Uncomment to disable Matrix bridge
+    # profiles:
+    #   - matrix
+
   # Ollama LLM server (CPU-only by default)
   # For GPU: docker compose --profile cuda up  (NVIDIA)
   #          docker compose --profile rocm up  (AMD)
