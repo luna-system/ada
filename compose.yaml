@@ -4,6 +4,13 @@
 include:
   - compose.profiles.yaml
 
+# Default logging configuration for all services
+x-logging: &default-logging
+  driver: "json-file"
+  options:
+    max-size: "10m"
+    max-file: "3"
+
 services:
   web:
     build:
@@ -17,6 +24,7 @@ services:
       - BRAIN_URL
     depends_on:
       - brain
+    logging: *default-logging
     healthcheck:
       test: ["CMD-SHELL", "curl -fsS http://localhost:80/api/health || exit 1"]
       interval: 10s
@@ -26,6 +34,7 @@ services:
   chroma:
     image: chromadb/chroma:latest
     restart: unless-stopped
+    logging: *default-logging
     environment:
       - CHROMA_SERVER_HOST=0.0.0.0
       - CHROMA_SERVER_HTTP_PORT=8000
@@ -132,6 +141,7 @@ services:
       dockerfile: brain/Dockerfile
     env_file:
       - .env
+    logging: *default-logging
     ports:
       - "8000:7000"
     environment:
@@ -163,6 +173,7 @@ services:
       context: ./matrix-bridge
     container_name: ada-matrix-bridge
     restart: unless-stopped
+    logging: *default-logging
     env_file:
       - .env
     environment:
@@ -200,6 +211,7 @@ services:
   ollama:
     image: ollama/ollama:latest
     restart: unless-stopped
+    logging: *default-logging
     env_file:
       - .env
     environment:
