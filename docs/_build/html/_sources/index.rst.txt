@@ -21,6 +21,7 @@ Welcome to the Ada v1 Brain API documentation. This is the REST API backend for 
    development
    streaming
    memory
+   empathetic_documentation
    examples
 
 

@@ -4,6 +4,14 @@ Prompt assembly and context building for Ada brain.
 Combines persona, memories, FAQs, recent turns, and other context into a coherent prompt.
 Now with specialist plugin support for extensible context injection.
 """
+# @ai-indexable: core-functionality
+# @ai-purpose: Central orchestration point for RAG context assembly and specialist coordination
+# @ai-dependencies: brain.rag_store, brain.specialists, brain.notices_client, brain.config
+# @ai-related: brain/app.py, brain/llm.py, brain/specialists/protocol.py
+# @ai-key-functions: build_prompt, execute_specialists, inject_context_by_priority
+# @ai-data-flow: User prompt → RAG search (persona/FAQ/memory/turns) → specialist activation → context injection → final prompt
+# @ai-extension-point: Add new specialists to brain/specialists/ directory for auto-discovery
+
 import asyncio
 import datetime
 import logging
@@ -21,6 +29,8 @@ from config import (
     RAG_SUMMARY_TOP_K,
     PERSONA_MAX_CHARS,
     SPECIALIST_RAG_DOCS,
+    AI_NAME,
+    AI_USER_NAME,
 )
 from rag_store import RagStore
 from media import format_media_for_prompt
@@ -199,7 +209,7 @@ async def build_prompt(
         "conversation memory when relevant. If the user asks about times or durations, use the provided "
         "UTC ISO timestamps to compute precise differences and express them in human-friendly units."
     )
-    reminder = "Reminder: You are Ada, Luna's assistant. Always identify as Ada."
+    reminder = f"Reminder: You are {AI_NAME}, {AI_USER_NAME}'s assistant. Always identify as {AI_NAME}."
     current_ts_line = f"Current user message timestamp (UTC): {user_timestamp}"
     
     # Assemble final prompt

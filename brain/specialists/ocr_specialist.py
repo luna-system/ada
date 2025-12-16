@@ -4,6 +4,14 @@ OCR Specialist - Optical Character Recognition plugin.
 Extracts text from images using Tesseract OCR.
 No GPU required - runs on CPU.
 """
+# @ai-indexable: specialist-plugin
+# @ai-purpose: Extract text from uploaded images using Tesseract OCR
+# @ai-activation-trigger: ocr_context present in request (from /v1/ocr/extract endpoint)
+# @ai-priority: HIGH (injected early in prompt after system notices)
+# @ai-dependencies: pytesseract, PIL, brain.ocr
+# @ai-related: brain/ocr.py, brain/prompt_builder.py, brain/app.py
+# @ai-extension-pattern: Inherit from BaseSpecialist, implement should_activate() and process()
+
 import logging
 from typing import Any
 

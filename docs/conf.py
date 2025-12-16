@@ -6,7 +6,7 @@
 # -- Project information -----------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
 
-project = 'Ada v1 Brain API'
+project = 'Ada Brain API'
 copyright = 'CC0 1.0 Universal - Public Domain'
 author = 'Luna Team'
 release = '0.1.0'
@@ -39,6 +39,7 @@ html_theme = 'sphinx_rtd_theme'
 html_static_path = ['_static']
 html_logo = None
 html_favicon = None
+html_show_copyright = False
 
 # -- Options for autodoc ---------------------------------------------------
 autodoc_default_options = {

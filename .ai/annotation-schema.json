@@ -1,0 +1,167 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "AI Code Annotation Schema",
+  "description": "Standardized annotation format for enhancing AI code understanding",
+  "version": "1.0.0",
+  "annotation_format": {
+    "comment_style": "Language-appropriate comments at top of file",
+    "prefix": "@ai-",
+    "examples": {
+      "python": "# @ai-indexable: core-functionality",
+      "javascript": "// @ai-indexable: core-functionality",
+      "typescript": "// @ai-indexable: core-functionality"
+    }
+  },
+  "annotations": {
+    "@ai-indexable": {
+      "required": true,
+      "type": "string",
+      "description": "Primary categorization for the module",
+      "allowed_values": [
+        "core-functionality",
+        "specialist-plugin",
+        "plugin",
+        "interface",
+        "data-model",
+        "configuration",
+        "utility",
+        "support",
+        "entrypoint",
+        "client",
+        "test-infrastructure",
+        "maintenance",
+        "framework"
+      ],
+      "example": "@ai-indexable: core-functionality"
+    },
+    "@ai-purpose": {
+      "required": true,
+      "type": "string",
+      "description": "One-line description of module's primary responsibility",
+      "guidelines": [
+        "Start with action verb",
+        "Focus on WHAT it does, not HOW",
+        "Keep under 100 characters"
+      ],
+      "example": "@ai-purpose: Vector storage interface for semantic search over memories"
+    },
+    "@ai-dependencies": {
+      "required": false,
+      "type": "string",
+      "description": "Comma-separated list of external dependencies (packages, services, databases)",
+      "format": "package1, package2, external-service",
+      "example": "@ai-dependencies: chromadb, requests, ollama (for embeddings)"
+    },
+    "@ai-related": {
+      "required": false,
+      "type": "string",
+      "description": "Comma-separated list of related module paths",
+      "format": "path/to/module1.py, path/to/module2.py",
+      "example": "@ai-related: brain/app.py, brain/prompt_builder.py, scripts/consolidate_memories.py"
+    },
+    "@ai-key-functions": {
+      "required": false,
+      "type": "string",
+      "description": "Comma-separated list of most important functions/classes",
+      "example": "@ai-key-functions: build_prompt, execute_specialists, inject_context_by_priority"
+    },
+    "@ai-key-classes": {
+      "required": false,
+      "type": "string",
+      "description": "Comma-separated list of important classes",
+      "example": "@ai-key-classes: RagStore, OllamaEmbeddingFunction"
+    },
+    "@ai-data-flow": {
+      "required": false,
+      "type": "string",
+      "description": "High-level description of how data moves through this module",
+      "format": "input → processing → output",
+      "example": "@ai-data-flow: User prompt → RAG search → specialist activation → context injection → final prompt"
+    },
+    "@ai-extension-point": {
+      "required": false,
+      "type": "string",
+      "description": "How developers can extend or modify this module",
+      "example": "@ai-extension-point: Add new specialists to brain/specialists/ directory for auto-discovery"
+    },
+    "@ai-activation-trigger": {
+      "required": false,
+      "type": "string",
+      "description": "For specialists: what condition triggers activation",
+      "applies_to": ["specialist-plugin"],
+      "example": "@ai-activation-trigger: ocr_context present in request (from /v1/ocr/extract endpoint)"
+    },
+    "@ai-priority": {
+      "required": false,
+      "type": "string",
+      "description": "For specialists: context injection priority (CRITICAL, HIGH, MEDIUM, LOW)",
+      "applies_to": ["specialist-plugin"],
+      "allowed_values": ["CRITICAL", "HIGH", "MEDIUM", "LOW"],
+      "example": "@ai-priority: HIGH (injected early in prompt after system notices)"
+    },
+    "@ai-tool-use-pattern": {
+      "required": false,
+      "type": "string",
+      "description": "For bidirectional specialists: how LLM invokes the tool",
+      "applies_to": ["specialist-plugin with bidirectional capability"],
+      "example": "@ai-tool-use-pattern: LLM emits XML tag mid-response → specialist executes → results injected → LLM continues"
+    },
+    "@ai-warning": {
+      "required": false,
+      "type": "string",
+      "description": "Warns against common mistakes or anti-patterns specific to this codebase",
+      "format": "Don't [common mistake]. Instead, [correct approach].",
+      "example": "@ai-warning: Don't run 'make html' manually - docs build automatically in Docker (frontend/Dockerfile)"
+    },
+    "@ai-endpoints": {
+      "required": false,
+      "type": "string",
+      "description": "For API modules: comma-separated list of exposed endpoints",
+      "example": "@ai-endpoints: POST /v1/chat/stream, GET /v1/specialists, GET /v1/schema"
+    }
+  },
+  "best_practices": {
+    "placement": "Add annotations immediately after docstring, before imports",
+    "ordering": [
+      "@ai-indexable",
+      "@ai-purpose",
+      "@ai-dependencies",
+      "@ai-related",
+      "@ai-key-functions or @ai-key-classes",
+      "@ai-data-flow",
+      "Specialized annotations (@ai-activation-trigger, @ai-priority, etc.)"
+    ],
+    "maintenance": [
+      "Update when module purpose changes",
+      "Update when dependencies change",
+      "Update when data flow changes",
+      "Review quarterly for accuracy"
+    ]
+  },
+  "template_examples": {
+    "core_module": [
+      "# @ai-indexable: core-functionality",
+      "# @ai-purpose: Brief description of primary responsibility",
+      "# @ai-dependencies: package1, package2, external-service",
+      "# @ai-related: path/to/related1.py, path/to/related2.py",
+      "# @ai-key-functions: function1, function2, function3",
+      "# @ai-data-flow: input → processing steps → output"
+    ],
+    "specialist_plugin": [
+      "# @ai-indexable: specialist-plugin",
+      "# @ai-purpose: Brief description of specialist capability",
+      "# @ai-activation-trigger: Condition that triggers activation",
+      "# @ai-priority: HIGH/MEDIUM/LOW",
+      "# @ai-dependencies: packages and services used",
+      "# @ai-related: brain/specialists/protocol.py, brain/prompt_builder.py",
+      "# @ai-extension-pattern: How this follows the plugin architecture"
+    ],
+    "utility_module": [
+      "# @ai-indexable: utility",
+      "# @ai-purpose: Brief description of utility functions",
+      "# @ai-dependencies: external packages",
+      "# @ai-related: modules that use this utility",
+      "# @ai-key-functions: utility1, utility2"
+    ]
+  }
+}
