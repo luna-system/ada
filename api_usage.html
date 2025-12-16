@@ -1,0 +1,817 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>API Usage Guide &mdash; Ada Brain API 0.1.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=19f00094" />
+      <link rel="stylesheet" type="text/css" href="_static/graphviz.css?v=4ae1632d" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="_static/jquery.js?v=5d32c60e"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="_static/documentation_options.js?v=01f34227"></script>
+        <script src="_static/doctools.js?v=9bcbadda"></script>
+        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="API Reference" href="api_reference.html" />
+    <link rel="prev" title="Data Model Reference" href="data_model.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            Ada Brain API
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Documentation:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="getting_started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="configuration.html">Configuration Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="architecture.html">Architecture</a></li>
+<li class="toctree-l1"><a class="reference internal" href="data_model.html">Data Model Reference</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">API Usage Guide</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#quick-start">Quick Start</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#viewing-api-documentation">Viewing API Documentation</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#api-architecture">API Architecture</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#framework">Framework</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#base-url">Base URL</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#request-response-format">Request/Response Format</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#api-endpoints">API Endpoints</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#health-status">Health &amp; Status</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#media-integration">Media Integration</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#chat-streaming-recommended">Chat - Streaming (Recommended)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#memory-management">Memory Management</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#conversation-history">Conversation History</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#quick-reference">Quick Reference</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#common-operations">Common Operations</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#health-check">Health Check</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#streaming-chat">Streaming Chat</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#search-memories">Search Memories</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#add-memory">Add Memory</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#response-status-codes">Response Status Codes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#python-examples">Python Examples</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#non-streaming-request">Non-Streaming Request</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#streaming-request">Streaming Request</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#javascript-examples">JavaScript Examples</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#using-fetch-eventsource">Using Fetch + EventSource</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#using-fetch-readablestream">Using Fetch + ReadableStream</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#environment-variables">Environment Variables</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#code-structure">Code Structure</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#main-files">Main Files</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#modular-components">Modular Components</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#type-hints-documentation">Type Hints &amp; Documentation</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#error-handling">Error Handling</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#deployment">Deployment</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#docker-compose-recommended">Docker Compose (Recommended)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#local-development">Local Development</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#production-deployment">Production Deployment</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#integration-with-frontend">Integration with Frontend</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#adding-new-endpoints">Adding New Endpoints</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#resources">Resources</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="api_reference.html">API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="specialists.html">Specialist System</a></li>
+<li class="toctree-l1"><a class="reference internal" href="testing.html">Testing Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="development.html">Development Tools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="streaming.html">Streaming</a></li>
+<li class="toctree-l1"><a class="reference internal" href="memory.html">Memory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="documentation_philosophy.html">Documentation Philosophy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="empathetic_documentation.html">Empathetic Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="examples.html">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="xenofeminism.html">Xenofeminism and Ada</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Ada Brain API</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">API Usage Guide</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/api_usage.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="api-usage-guide">
+<h1>API Usage Guide<a class="headerlink" href="#api-usage-guide" title="Link to this heading"></a></h1>
+<p>The Brain service is a pure <strong>FastAPI</strong> REST API service fully documented with docstrings and OpenAPI/Swagger specifications. The API handles LLM orchestration with retrieval-augmented generation (RAG).</p>
+<section id="quick-start">
+<h2>Quick Start<a class="headerlink" href="#quick-start" title="Link to this heading"></a></h2>
+<p>This guide covers API usage patterns and integration. For setup instructions, see <a class="reference internal" href="getting_started.html"><span class="doc">Getting Started</span></a>. For configuration options, see <a class="reference internal" href="configuration.html"><span class="doc">Configuration Reference</span></a>.</p>
+<section id="viewing-api-documentation">
+<h3>Viewing API Documentation<a class="headerlink" href="#viewing-api-documentation" title="Link to this heading"></a></h3>
+<p><strong>Option 1: Interactive API Docs (Recommended)</strong></p>
+<p>Start the service and open the interactive docs in your browser:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span><span class="w"> </span>/home/luna/Code/ada-v1
+
+<span class="c1"># Option A: Docker Compose (all services)</span>
+docker<span class="w"> </span>compose<span class="w"> </span>up
+<span class="c1"># Then visit: http://localhost:7000/docs</span>
+
+<span class="c1"># Option B: Local development</span>
+<span class="nb">source</span><span class="w"> </span>.venv/bin/activate
+python<span class="w"> </span>-m<span class="w"> </span>uvicorn<span class="w"> </span>brain.app:app<span class="w"> </span>--host<span class="w"> </span><span class="m">0</span>.0.0.0<span class="w"> </span>--port<span class="w"> </span><span class="m">7000</span>
+<span class="c1"># Then visit: http://localhost:7000/docs</span>
+</pre></div>
+</div>
+<p>The <code class="docutils literal notranslate"><span class="pre">/docs</span></code> endpoint provides:</p>
+<ul class="simple">
+<li><p><strong>Swagger UI</strong> - Interactive endpoint testing</p></li>
+<li><p><strong>OpenAPI 3.0 schema</strong> - Auto-generated from FastAPI decorators and type hints</p></li>
+<li><p><strong>Request/response examples</strong> - With actual JSON schemas</p></li>
+<li><p><strong>Try it out</strong> - Send real requests directly from the UI</p></li>
+</ul>
+<p><strong>Option 2: Using pydoc (Built-in)</strong></p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span><span class="w"> </span>/home/luna/Code/ada-v1
+python<span class="w"> </span>-m<span class="w"> </span>pydoc<span class="w"> </span>brain.app<span class="w"> </span><span class="p">|</span><span class="w"> </span>less
+</pre></div>
+</div>
+<p><strong>Option 3: VS Code Pylance Hover Tooltips</strong></p>
+<p>Hover over any function/endpoint name in <code class="docutils literal notranslate"><span class="pre">brain/app.py</span></code> to see full documentation inline.</p>
+</section>
+</section>
+<section id="api-architecture">
+<h2>API Architecture<a class="headerlink" href="#api-architecture" title="Link to this heading"></a></h2>
+<section id="framework">
+<h3>Framework<a class="headerlink" href="#framework" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p><strong>Framework:</strong> FastAPI 0.109.0+</p></li>
+<li><p><strong>Server:</strong> Gunicorn + Uvicorn workers (async ASGI)</p></li>
+<li><p><strong>Port:</strong> 7000 (direct) / 5000 (via Nginx proxy)</p></li>
+<li><p><strong>Workers:</strong> 25 Uvicorn workers (CPU × 2 + 1)</p></li>
+<li><p><strong>Timeout:</strong> 300 seconds (for long LLM operations)</p></li>
+</ul>
+</section>
+<section id="base-url">
+<h3>Base URL<a class="headerlink" href="#base-url" title="Link to this heading"></a></h3>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Direct</span><span class="p">:</span>  <span class="n">http</span><span class="p">:</span><span class="o">//</span><span class="n">localhost</span><span class="p">:</span><span class="mi">7000</span><span class="o">/</span><span class="n">v1</span>
+<span class="n">Proxied</span><span class="p">:</span> <span class="n">http</span><span class="p">:</span><span class="o">//</span><span class="n">localhost</span><span class="p">:</span><span class="mi">5000</span><span class="o">/</span><span class="n">api</span>  <span class="p">(</span><span class="n">via</span> <span class="n">Nginx</span><span class="p">,</span> <span class="n">remapped</span> <span class="n">to</span> <span class="o">/</span><span class="n">v1</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="request-response-format">
+<h3>Request/Response Format<a class="headerlink" href="#request-response-format" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p><strong>Content-Type:</strong> <code class="docutils literal notranslate"><span class="pre">application/json</span></code></p></li>
+<li><p><strong>Streaming:</strong> Server-Sent Events (SSE) for <code class="docutils literal notranslate"><span class="pre">/v1/chat/stream</span></code> (see <a class="reference internal" href="streaming.html"><span class="doc">Streaming</span></a>)</p></li>
+<li><p><strong>Error Handling:</strong> JSON with HTTP status codes and error messages</p></li>
+</ul>
+</section>
+</section>
+<section id="api-endpoints">
+<h2>API Endpoints<a class="headerlink" href="#api-endpoints" title="Link to this heading"></a></h2>
+<p>All endpoints are fully documented in <code class="docutils literal notranslate"><span class="pre">brain/app.py</span></code> with docstrings. Below is a summary:</p>
+<section id="health-status">
+<h3>Health &amp; Status<a class="headerlink" href="#health-status" title="Link to this heading"></a></h3>
+<p><code class="docutils literal notranslate"><span class="pre">GET</span> <span class="pre">/v1/healthz</span></code></p>
+<ul class="simple">
+<li><p><strong>Purpose:</strong> Service health check with dependency status</p></li>
+<li><p><strong>Returns:</strong> JSON with service status, config, persona, Chroma connectivity</p></li>
+<li><p><strong>Example:</strong></p></li>
+</ul>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>curl<span class="w"> </span>http://localhost:7000/v1/healthz
+</pre></div>
+</div>
+</section>
+<section id="media-integration">
+<h3>Media Integration<a class="headerlink" href="#media-integration" title="Link to this heading"></a></h3>
+<p><code class="docutils literal notranslate"><span class="pre">GET</span> <span class="pre">/v1/media/listenbrainz</span></code></p>
+<ul class="simple">
+<li><p><strong>Purpose:</strong> Get user’s recent listening context from ListenBrainz</p></li>
+<li><p><strong>Returns:</strong> User listening data or empty dict if not configured</p></li>
+<li><p><strong>Example:</strong></p></li>
+</ul>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>curl<span class="w"> </span>http://localhost:7000/v1/media/listenbrainz
+</pre></div>
+</div>
+</section>
+<section id="chat-streaming-recommended">
+<h3>Chat - Streaming (Recommended)<a class="headerlink" href="#chat-streaming-recommended" title="Link to this heading"></a></h3>
+<p><code class="docutils literal notranslate"><span class="pre">POST</span> <span class="pre">/v1/chat/stream</span></code></p>
+<ul class="simple">
+<li><p><strong>Purpose:</strong> Stream LLM responses token-by-token via Server-Sent Events (SSE)</p></li>
+<li><p><strong>Request Body:</strong></p></li>
+</ul>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+<span class="w">  </span><span class="nt">&quot;message&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Your question here&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;conversation_id&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;optional-id&quot;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><p><strong>Response:</strong> Server-Sent Events stream (each line is a JSON event)</p></li>
+<li><p><strong>Events:</strong></p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">data:</span> <span class="pre">{&quot;token&quot;:</span> <span class="pre">&quot;string&quot;}</span></code> - Streamed token</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">data:</span> <span class="pre">{&quot;done&quot;:</span> <span class="pre">true}</span></code> - Stream complete</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">data:</span> <span class="pre">{&quot;error&quot;:</span> <span class="pre">&quot;message&quot;}</span></code> - Error occurred</p></li>
+</ul>
+</li>
+<li><p><strong>Example:</strong></p></li>
+</ul>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>curl<span class="w"> </span>http://localhost:7000/v1/chat/stream<span class="w"> </span>-X<span class="w"> </span>POST<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>-H<span class="w"> </span><span class="s2">&quot;Content-Type: application/json&quot;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>-d<span class="w"> </span><span class="s1">&#39;{&quot;message&quot;: &quot;Hello&quot;, &quot;conversation_id&quot;: &quot;chat-1&quot;}&#39;</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Nginx reverse proxy configured with <code class="docutils literal notranslate"><span class="pre">proxy_buffering</span> <span class="pre">off</span></code> for real-time SSE</p>
+</div>
+</section>
+<section id="memory-management">
+<h3>Memory Management<a class="headerlink" href="#memory-management" title="Link to this heading"></a></h3>
+<p><strong>List Memories</strong></p>
+<p><code class="docutils literal notranslate"><span class="pre">GET</span> <span class="pre">/v1/memory?query=string&amp;limit=10&amp;conversation_id=id</span></code></p>
+<ul class="simple">
+<li><p><strong>Purpose:</strong> Search long-term memories with semantic query</p></li>
+<li><p><strong>Query Parameters:</strong></p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">query</span></code> (string, required): Search text</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">limit</span></code> (int, optional): Max results (default: 10)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">conversation_id</span></code> (string, optional): Filter by conversation</p></li>
+</ul>
+</li>
+<li><p><strong>Returns:</strong> List of memory objects with embeddings and metadata</p></li>
+<li><p><strong>Example:</strong></p></li>
+</ul>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>curl<span class="w"> </span><span class="s2">&quot;http://localhost:7000/v1/memory?query=previous%20topic&amp;limit=5&quot;</span>
+</pre></div>
+</div>
+<p><strong>Create Memory</strong></p>
+<p><code class="docutils literal notranslate"><span class="pre">POST</span> <span class="pre">/v1/memory</span></code></p>
+<ul class="simple">
+<li><p><strong>Purpose:</strong> Create new long-term memory entry</p></li>
+<li><p><strong>Request Body:</strong></p></li>
+</ul>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+<span class="w">  </span><span class="nt">&quot;content&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Memory text&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;memory_type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;important|context|fact&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;conversation_id&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;optional-conversation-id&quot;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><p><strong>Returns:</strong> Memory object with ID, embeddings, metadata</p></li>
+<li><p><strong>Status:</strong> 201 Created</p></li>
+<li><p><strong>Example:</strong></p></li>
+</ul>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>curl<span class="w"> </span>-X<span class="w"> </span>POST<span class="w"> </span>http://localhost:7000/v1/memory<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>-H<span class="w"> </span><span class="s2">&quot;Content-Type: application/json&quot;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>-d<span class="w"> </span><span class="s1">&#39;{&quot;content&quot;: &quot;User likes Python&quot;, &quot;memory_type&quot;: &quot;fact&quot;}&#39;</span>
+</pre></div>
+</div>
+<p><strong>Delete Memory</strong></p>
+<p><code class="docutils literal notranslate"><span class="pre">DELETE</span> <span class="pre">/v1/memory/{mem_id}</span></code></p>
+<ul class="simple">
+<li><p><strong>Purpose:</strong> Delete a specific memory entry</p></li>
+<li><p><strong>Path Parameter:</strong> <code class="docutils literal notranslate"><span class="pre">mem_id</span></code> (string): Memory UUID</p></li>
+<li><p><strong>Returns:</strong> Confirmation message</p></li>
+<li><p><strong>Example:</strong></p></li>
+</ul>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>curl<span class="w"> </span>-X<span class="w"> </span>DELETE<span class="w"> </span>http://localhost:7000/v1/memory/abc-123-def
+</pre></div>
+</div>
+<p>For detailed memory patterns and best practices, see <a class="reference internal" href="memory.html"><span class="doc">Memory</span></a>. For memory schema definitions, see <a class="reference internal" href="data_model.html"><span class="doc">Data Model Reference</span></a>.
+Debug Endpoints
+~~~~~~~~~~~~~~~</p>
+<p><strong>RAG System Stats</strong></p>
+<p><code class="docutils literal notranslate"><span class="pre">GET</span> <span class="pre">/v1/debug/rag</span></code></p>
+<ul class="simple">
+<li><p><strong>Purpose:</strong> Get information about RAG system (Chroma vector DB)</p></li>
+<li><p><strong>Returns:</strong> Database stats, indexed document count, embedding model info</p></li>
+<li><p><strong>Requires:</strong> <code class="docutils literal notranslate"><span class="pre">RAG_DEBUG=true</span></code> environment variable</p></li>
+<li><p><strong>Example:</strong></p></li>
+</ul>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>curl<span class="w"> </span>http://localhost:7000/v1/debug/rag
+</pre></div>
+</div>
+<p><strong>Assembled Prompt Debug</strong></p>
+<p><code class="docutils literal notranslate"><span class="pre">GET</span> <span class="pre">/v1/debug/prompt</span></code></p>
+<ul class="simple">
+<li><p><strong>Purpose:</strong> See the final prompt that will be sent to the LLM</p></li>
+<li><p><strong>Returns:</strong> Full prompt text with context, persona, memory, etc.</p></li>
+<li><p><strong>Requires:</strong> <code class="docutils literal notranslate"><span class="pre">RAG_DEBUG=true</span></code> environment variable</p></li>
+<li><p><strong>Example:</strong></p></li>
+</ul>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>curl<span class="w"> </span>http://localhost:7000/v1/debug/prompt
+</pre></div>
+</div>
+</section>
+<section id="conversation-history">
+<h3>Conversation History<a class="headerlink" href="#conversation-history" title="Link to this heading"></a></h3>
+<p><strong>Recent Conversations</strong></p>
+<p><code class="docutils literal notranslate"><span class="pre">GET</span> <span class="pre">/v1/conversations/recent?limit=10</span></code></p>
+<ul class="simple">
+<li><p><strong>Purpose:</strong> Get list of recent conversations</p></li>
+<li><p><strong>Query Parameters:</strong></p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">limit</span></code> (int, optional): Max results (default: 10)</p></li>
+</ul>
+</li>
+<li><p><strong>Returns:</strong> List of conversation summaries</p></li>
+<li><p><strong>Example:</strong></p></li>
+</ul>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>curl<span class="w"> </span><span class="s2">&quot;http://localhost:7000/v1/conversations/recent?limit=5&quot;</span>
+</pre></div>
+</div>
+<p><strong>Get Conversation Turns</strong></p>
+<p><code class="docutils literal notranslate"><span class="pre">GET</span> <span class="pre">/v1/conversations/{conversation_id}</span></code></p>
+<ul class="simple">
+<li><p><strong>Purpose:</strong> Get all turns (messages) in a specific conversation</p></li>
+<li><p><strong>Path Parameter:</strong> <code class="docutils literal notranslate"><span class="pre">conversation_id</span></code> (string): Conversation UUID</p></li>
+<li><p><strong>Returns:</strong> List of turns with timestamps, roles (user/assistant), content</p></li>
+<li><p><strong>Example:</strong></p></li>
+</ul>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>curl<span class="w"> </span>http://localhost:7000/v1/conversations/chat-session-001
+</pre></div>
+</div>
+</section>
+</section>
+<section id="quick-reference">
+<h2>Quick Reference<a class="headerlink" href="#quick-reference" title="Link to this heading"></a></h2>
+<section id="common-operations">
+<h3>Common Operations<a class="headerlink" href="#common-operations" title="Link to this heading"></a></h3>
+<section id="health-check">
+<h4>Health Check<a class="headerlink" href="#health-check" title="Link to this heading"></a></h4>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>curl<span class="w"> </span>http://localhost:7000/v1/healthz
+</pre></div>
+</div>
+</section>
+<section id="streaming-chat">
+<h4>Streaming Chat<a class="headerlink" href="#streaming-chat" title="Link to this heading"></a></h4>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>curl<span class="w"> </span>-N<span class="w"> </span>-X<span class="w"> </span>POST<span class="w"> </span>http://localhost:7000/v1/chat/stream<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>-H<span class="w"> </span><span class="s2">&quot;Content-Type: application/json&quot;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>-d<span class="w"> </span><span class="s1">&#39;{&quot;prompt&quot;: &quot;Hello!&quot;, &quot;conversation_id&quot;: &quot;chat-123&quot;}&#39;</span>
+</pre></div>
+</div>
+</section>
+<section id="search-memories">
+<h4>Search Memories<a class="headerlink" href="#search-memories" title="Link to this heading"></a></h4>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>curl<span class="w"> </span><span class="s2">&quot;http://localhost:7000/v1/memory?search=preferences&amp;limit=5&quot;</span>
+</pre></div>
+</div>
+</section>
+<section id="add-memory">
+<h4>Add Memory<a class="headerlink" href="#add-memory" title="Link to this heading"></a></h4>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>curl<span class="w"> </span>-X<span class="w"> </span>POST<span class="w"> </span>http://localhost:7000/v1/memory<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>-H<span class="w"> </span><span class="s2">&quot;Content-Type: application/json&quot;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>-d<span class="w"> </span><span class="s1">&#39;{&quot;text&quot;: &quot;User prefers concise answers&quot;, &quot;importance&quot;: 4}&#39;</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="response-status-codes">
+<h3>Response Status Codes<a class="headerlink" href="#response-status-codes" title="Link to this heading"></a></h3>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Code</p></th>
+<th class="head"><p>Endpoint</p></th>
+<th class="head"><p>Meaning</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>200</p></td>
+<td><p>All</p></td>
+<td><p>Success</p></td>
+</tr>
+<tr class="row-odd"><td><p>201</p></td>
+<td><p>/memory</p></td>
+<td><p>Created</p></td>
+</tr>
+<tr class="row-even"><td><p>400</p></td>
+<td><p>/chat*</p></td>
+<td><p>Invalid parameters</p></td>
+</tr>
+<tr class="row-odd"><td><p>404</p></td>
+<td><p>/debug/*</p></td>
+<td><p>Debug disabled</p></td>
+</tr>
+<tr class="row-even"><td><p>500</p></td>
+<td><p>All</p></td>
+<td><p>Server error (Ollama/DB issue)</p></td>
+</tr>
+<tr class="row-odd"><td><p>503</p></td>
+<td><p>/memory*</p></td>
+<td><p>RAG not available</p></td>
+</tr>
+<tr class="row-even"><td><p>503</p></td>
+<td><p>/healthz</p></td>
+<td><p>Critical dependency unavailable</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="python-examples">
+<h3>Python Examples<a class="headerlink" href="#python-examples" title="Link to this heading"></a></h3>
+<section id="non-streaming-request">
+<h4>Non-Streaming Request<a class="headerlink" href="#non-streaming-request" title="Link to this heading"></a></h4>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">requests</span>
+
+<span class="n">response</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">post</span><span class="p">(</span>
+    <span class="s1">&#39;http://localhost:7000/v1/chat&#39;</span><span class="p">,</span>
+    <span class="n">json</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;prompt&#39;</span><span class="p">:</span> <span class="s1">&#39;Hello!&#39;</span><span class="p">,</span> <span class="s1">&#39;include_thinking&#39;</span><span class="p">:</span> <span class="kc">True</span><span class="p">}</span>
+<span class="p">)</span>
+<span class="n">data</span> <span class="o">=</span> <span class="n">response</span><span class="o">.</span><span class="n">json</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;response&#39;</span><span class="p">])</span>
+</pre></div>
+</div>
+</section>
+<section id="streaming-request">
+<h4>Streaming Request<a class="headerlink" href="#streaming-request" title="Link to this heading"></a></h4>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">requests</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">json</span>
+
+<span class="n">response</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">post</span><span class="p">(</span>
+    <span class="s1">&#39;http://localhost:7000/v1/chat/stream&#39;</span><span class="p">,</span>
+    <span class="n">json</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;prompt&#39;</span><span class="p">:</span> <span class="s1">&#39;Hello!&#39;</span><span class="p">},</span>
+    <span class="n">stream</span><span class="o">=</span><span class="kc">True</span>
+<span class="p">)</span>
+
+<span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">response</span><span class="o">.</span><span class="n">iter_lines</span><span class="p">():</span>
+    <span class="k">if</span> <span class="n">line</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="sa">b</span><span class="s1">&#39;data: &#39;</span><span class="p">):</span>
+        <span class="n">event</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">line</span><span class="p">[</span><span class="mi">6</span><span class="p">:])</span>
+        <span class="k">if</span> <span class="n">event</span><span class="p">[</span><span class="s1">&#39;type&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;token&#39;</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="n">event</span><span class="p">[</span><span class="s1">&#39;content&#39;</span><span class="p">],</span> <span class="n">end</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">flush</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="javascript-examples">
+<h3>JavaScript Examples<a class="headerlink" href="#javascript-examples" title="Link to this heading"></a></h3>
+<section id="using-fetch-eventsource">
+<h4>Using Fetch + EventSource<a class="headerlink" href="#using-fetch-eventsource" title="Link to this heading"></a></h4>
+<div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="c1">// Using EventSource (simpler)</span>
+<span class="kd">const</span><span class="w"> </span><span class="nx">es</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="ow">new</span><span class="w"> </span><span class="nx">EventSource</span><span class="p">(</span><span class="s1">&#39;/api/chat/stream&#39;</span><span class="p">);</span>
+<span class="nx">es</span><span class="p">.</span><span class="nx">addEventListener</span><span class="p">(</span><span class="s1">&#39;message&#39;</span><span class="p">,</span><span class="w"> </span><span class="p">(</span><span class="nx">e</span><span class="p">)</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="kd">const</span><span class="w"> </span><span class="nx">data</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">JSON</span><span class="p">.</span><span class="nx">parse</span><span class="p">(</span><span class="nx">e</span><span class="p">.</span><span class="nx">data</span><span class="p">);</span>
+<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="nx">data</span><span class="p">.</span><span class="nx">type</span><span class="w"> </span><span class="o">===</span><span class="w"> </span><span class="s1">&#39;token&#39;</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nb">document</span><span class="p">.</span><span class="nx">body</span><span class="p">.</span><span class="nx">innerHTML</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="nx">data</span><span class="p">.</span><span class="nx">content</span><span class="p">;</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="nx">data</span><span class="p">.</span><span class="nx">type</span><span class="w"> </span><span class="o">===</span><span class="w"> </span><span class="s1">&#39;done&#39;</span><span class="p">)</span><span class="w"> </span><span class="nx">es</span><span class="p">.</span><span class="nx">close</span><span class="p">();</span>
+<span class="p">});</span>
+</pre></div>
+</div>
+</section>
+<section id="using-fetch-readablestream">
+<h4>Using Fetch + ReadableStream<a class="headerlink" href="#using-fetch-readablestream" title="Link to this heading"></a></h4>
+<div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="kd">const</span><span class="w"> </span><span class="nx">res</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="nx">fetch</span><span class="p">(</span><span class="s1">&#39;/api/chat/stream&#39;</span><span class="p">,</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="nx">method</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;POST&#39;</span><span class="p">,</span>
+<span class="w">  </span><span class="nx">body</span><span class="o">:</span><span class="w"> </span><span class="nb">JSON</span><span class="p">.</span><span class="nx">stringify</span><span class="p">({</span><span class="nx">prompt</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;Hello!&#39;</span><span class="p">})</span>
+<span class="p">});</span>
+
+<span class="kd">const</span><span class="w"> </span><span class="nx">reader</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">res</span><span class="p">.</span><span class="nx">body</span><span class="p">.</span><span class="nx">getReader</span><span class="p">();</span>
+<span class="kd">const</span><span class="w"> </span><span class="nx">decoder</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="ow">new</span><span class="w"> </span><span class="nx">TextDecoder</span><span class="p">();</span>
+<span class="kd">let</span><span class="w"> </span><span class="nx">buffer</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;&#39;</span><span class="p">;</span>
+
+<span class="k">while</span><span class="w"> </span><span class="p">(</span><span class="kc">true</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="kd">const</span><span class="w"> </span><span class="p">{</span><span class="nx">done</span><span class="p">,</span><span class="w"> </span><span class="nx">value</span><span class="p">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="nx">reader</span><span class="p">.</span><span class="nx">read</span><span class="p">();</span>
+<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="nx">done</span><span class="p">)</span><span class="w"> </span><span class="k">break</span><span class="p">;</span>
+
+<span class="w">  </span><span class="nx">buffer</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="nx">decoder</span><span class="p">.</span><span class="nx">decode</span><span class="p">(</span><span class="nx">value</span><span class="p">);</span>
+<span class="w">  </span><span class="kd">const</span><span class="w"> </span><span class="nx">lines</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">buffer</span><span class="p">.</span><span class="nx">split</span><span class="p">(</span><span class="s1">&#39;\n&#39;</span><span class="p">);</span>
+<span class="w">  </span><span class="nx">buffer</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">lines</span><span class="p">.</span><span class="nx">pop</span><span class="p">();</span>
+
+<span class="w">  </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kd">const</span><span class="w"> </span><span class="nx">line</span><span class="w"> </span><span class="k">of</span><span class="w"> </span><span class="nx">lines</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="nx">line</span><span class="p">.</span><span class="nx">startsWith</span><span class="p">(</span><span class="s1">&#39;data: &#39;</span><span class="p">))</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="kd">const</span><span class="w"> </span><span class="nx">data</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">JSON</span><span class="p">.</span><span class="nx">parse</span><span class="p">(</span><span class="nx">line</span><span class="p">.</span><span class="nx">slice</span><span class="p">(</span><span class="mf">6</span><span class="p">));</span>
+<span class="w">      </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="nx">data</span><span class="p">.</span><span class="nx">type</span><span class="w"> </span><span class="o">===</span><span class="w"> </span><span class="s1">&#39;token&#39;</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="nb">document</span><span class="p">.</span><span class="nx">body</span><span class="p">.</span><span class="nx">innerHTML</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="nx">data</span><span class="p">.</span><span class="nx">content</span><span class="p">;</span>
+<span class="w">      </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</section>
+</section>
+</section>
+<section id="environment-variables">
+<h2>Environment Variables<a class="headerlink" href="#environment-variables" title="Link to this heading"></a></h2>
+<p>Key environment variables affecting the API:</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Variable</p></th>
+<th class="head"><p>Default</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">OLLAMA_BASE_URL</span></code></p></td>
+<td><p><a class="reference external" href="http://localhost:11434">http://localhost:11434</a></p></td>
+<td><p>LLM backend</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">CHROMA_HOST</span></code></p></td>
+<td><p><a class="reference external" href="http://chroma:8000">http://chroma:8000</a></p></td>
+<td><p>Vector database</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">PERSONA_FILE</span></code></p></td>
+<td><p>/app/persona.md</p></td>
+<td><p>Persona configuration</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">RAG_DEBUG</span></code></p></td>
+<td><p>false</p></td>
+<td><p>Enable debug endpoints</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">LISTENBRAINZ_USER</span></code></p></td>
+<td><ul class="simple">
+<li></li>
+</ul>
+</td>
+<td><p>ListenBrainz username</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">LISTENBRAINZ_TOKEN</span></code></p></td>
+<td><ul class="simple">
+<li></li>
+</ul>
+</td>
+<td><p>ListenBrainz API token</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">SEARXNG_URL</span></code></p></td>
+<td><ul class="simple">
+<li></li>
+</ul>
+</td>
+<td><p>Web search service URL</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="code-structure">
+<h2>Code Structure<a class="headerlink" href="#code-structure" title="Link to this heading"></a></h2>
+<section id="main-files">
+<h3>Main Files<a class="headerlink" href="#main-files" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">brain/app.py</span></code> - Main FastAPI application (850+ lines)</p>
+<ul>
+<li><p>All 10 endpoints with async handlers</p></li>
+<li><p>Type hints throughout</p></li>
+<li><p>Full docstrings for each endpoint</p></li>
+<li><p>Lifespan context manager for startup/shutdown</p></li>
+</ul>
+</li>
+</ul>
+</section>
+<section id="modular-components">
+<h3>Modular Components<a class="headerlink" href="#modular-components" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">brain/config.py</span></code> - Configuration management (60 lines)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">brain/rag_store.py</span></code> - RAG system integration (600+ lines)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">brain/llm.py</span></code> - LLM provider interface (60 lines)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">brain/media.py</span></code> - External media integration (100 lines)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">brain/prompt_builder.py</span></code> - Prompt assembly (150+ lines)</p></li>
+</ul>
+</section>
+<section id="type-hints-documentation">
+<h3>Type Hints &amp; Documentation<a class="headerlink" href="#type-hints-documentation" title="Link to this heading"></a></h3>
+<p>All endpoints use FastAPI type hints:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">fastapi</span><span class="w"> </span><span class="kn">import</span> <span class="n">FastAPI</span><span class="p">,</span> <span class="n">Query</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">fastapi.responses</span><span class="w"> </span><span class="kn">import</span> <span class="n">StreamingResponse</span>
+
+<span class="nd">@app</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;/v1/memory&#39;</span><span class="p">)</span>
+<span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">list_memory</span><span class="p">(</span>
+    <span class="n">query</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">Query</span><span class="p">(</span><span class="o">...</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Search query text&quot;</span><span class="p">),</span>
+    <span class="n">limit</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">Query</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Max results&quot;</span><span class="p">),</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Search long-term memories with semantic query.</span>
+
+<span class="sd">    Full docstring with details...</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+</pre></div>
+</div>
+<p>This enables:</p>
+<p>✅ Automatic request validation
+✅ Type checking with Pylance
+✅ Interactive API docs at <code class="docutils literal notranslate"><span class="pre">/docs</span></code>
+✅ OpenAPI 3.0 schema export</p>
+</section>
+</section>
+<section id="error-handling">
+<h2>Error Handling<a class="headerlink" href="#error-handling" title="Link to this heading"></a></h2>
+<p>All errors return JSON with HTTP status codes:</p>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+<span class="w">  </span><span class="nt">&quot;detail&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Error message describing what went wrong&quot;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>Common status codes:</p>
+<ul class="simple">
+<li><p><strong>200</strong> - Success</p></li>
+<li><p><strong>201</strong> - Created</p></li>
+<li><p><strong>400</strong> - Bad request (invalid parameters)</p></li>
+<li><p><strong>404</strong> - Not found</p></li>
+<li><p><strong>500</strong> - Server error</p></li>
+</ul>
+</section>
+<section id="deployment">
+<h2>Deployment<a class="headerlink" href="#deployment" title="Link to this heading"></a></h2>
+<section id="docker-compose-recommended">
+<h3>Docker Compose (Recommended)<a class="headerlink" href="#docker-compose-recommended" title="Link to this heading"></a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span><span class="w"> </span>/home/luna/Code/ada-v1
+docker<span class="w"> </span>compose<span class="w"> </span>up
+</pre></div>
+</div>
+<p>Services:</p>
+<ul class="simple">
+<li><p><strong>web</strong> (port 5000): Nginx reverse proxy + static frontend</p></li>
+<li><p><strong>brain</strong> (port 7000): FastAPI backend with Gunicorn + Uvicorn workers</p></li>
+<li><p><strong>chroma</strong> (port 8000): Vector database</p></li>
+<li><p><strong>ollama</strong> (port 11434): LLM inference server</p></li>
+</ul>
+</section>
+<section id="local-development">
+<h3>Local Development<a class="headerlink" href="#local-development" title="Link to this heading"></a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span><span class="w"> </span>/home/luna/Code/ada-v1
+<span class="nb">source</span><span class="w"> </span>.venv/bin/activate
+
+<span class="c1"># Install dependencies</span>
+uv<span class="w"> </span>sync
+
+<span class="c1"># Run development server</span>
+python<span class="w"> </span>-m<span class="w"> </span>uvicorn<span class="w"> </span>brain.app:app<span class="w"> </span>--host<span class="w"> </span><span class="m">0</span>.0.0.0<span class="w"> </span>--port<span class="w"> </span><span class="m">7000</span><span class="w"> </span>--reload
+</pre></div>
+</div>
+<p>The <code class="docutils literal notranslate"><span class="pre">--reload</span></code> flag auto-restarts on code changes.</p>
+</section>
+<section id="production-deployment">
+<h3>Production Deployment<a class="headerlink" href="#production-deployment" title="Link to this heading"></a></h3>
+<p>The <code class="docutils literal notranslate"><span class="pre">brain/gunicorn_config.py</span></code> file is configured for production:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>gunicorn<span class="w"> </span>-c<span class="w"> </span>brain/gunicorn_config.py<span class="w"> </span>brain.wsgi:app
+</pre></div>
+</div>
+<p>Configuration:</p>
+<ul class="simple">
+<li><p>Uvicorn workers (ASGI)</p></li>
+<li><p>25 worker processes</p></li>
+<li><p>300-second timeout (for LLM calls)</p></li>
+<li><p>Access logging</p></li>
+<li><p>Graceful shutdown</p></li>
+</ul>
+</section>
+</section>
+<section id="integration-with-frontend">
+<h2>Integration with Frontend<a class="headerlink" href="#integration-with-frontend" title="Link to this heading"></a></h2>
+<p>The Nginx reverse proxy (<code class="docutils literal notranslate"><span class="pre">frontend/nginx.conf.template</span></code>) maps:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>/api/*  →  http://brain:7000/v1/*
+</pre></div>
+</div>
+<p>So frontend calls to <code class="docutils literal notranslate"><span class="pre">http://localhost:5000/api/chat/stream</span></code> are proxied to the backend at <code class="docutils literal notranslate"><span class="pre">http://brain:7000/v1/chat/stream</span></code>.</p>
+<p>Special handling:</p>
+<ul class="simple">
+<li><p><strong>SSE streaming:</strong> <code class="docutils literal notranslate"><span class="pre">proxy_buffering</span> <span class="pre">off</span></code> for real-time events</p></li>
+<li><p><strong>Headers:</strong> X-Forwarded-* headers preserved for logging</p></li>
+</ul>
+</section>
+<section id="adding-new-endpoints">
+<h2>Adding New Endpoints<a class="headerlink" href="#adding-new-endpoints" title="Link to this heading"></a></h2>
+<p>When adding new routes, follow this template:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">fastapi</span><span class="w"> </span><span class="kn">import</span> <span class="n">FastAPI</span><span class="p">,</span> <span class="n">Query</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">fastapi.responses</span><span class="w"> </span><span class="kn">import</span> <span class="n">JSONResponse</span>
+
+<span class="nd">@app</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;/v1/new-endpoint&#39;</span><span class="p">,</span> <span class="n">tags</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;category&#39;</span><span class="p">])</span>
+<span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">new_endpoint</span><span class="p">(</span>
+    <span class="n">param1</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">Query</span><span class="p">(</span><span class="o">...</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Parameter description&quot;</span><span class="p">),</span>
+    <span class="n">param2</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">Query</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Optional param&quot;</span><span class="p">),</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Brief one-line description.</span>
+
+<span class="sd">    Longer explanation of what this endpoint does and when to use it.</span>
+
+<span class="sd">    **Parameters:**</span>
+<span class="sd">    - param1 (str): Required parameter</span>
+<span class="sd">    - param2 (int): Optional parameter (default: 10)</span>
+
+<span class="sd">    **Returns:**</span>
+<span class="sd">    - dict with keys: result_key1, result_key2</span>
+
+<span class="sd">    **Raises:**</span>
+<span class="sd">    - ValueError: If param1 is empty</span>
+
+<span class="sd">    **Example:**</span>
+
+<span class="sd">    .. code-block:: bash</span>
+
+<span class="sd">       curl http://localhost:7000/v1/new-endpoint?param1=value&amp;param2=20</span>
+
+<span class="sd">    Response:</span>
+
+<span class="sd">    .. code-block:: json</span>
+
+<span class="sd">       {&quot;result&quot;: &quot;value&quot;}</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="c1"># Your implementation</span>
+        <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;result&quot;</span><span class="p">:</span> <span class="s2">&quot;value&quot;</span><span class="p">}</span>
+    <span class="k">except</span> <span class="ne">ValueError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">JSONResponse</span><span class="p">(</span>
+            <span class="n">status_code</span><span class="o">=</span><span class="mi">400</span><span class="p">,</span>
+            <span class="n">content</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;detail&quot;</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)}</span>
+        <span class="p">)</span>
+</pre></div>
+</div>
+<p>The docstring will automatically appear in:</p>
+<ul class="simple">
+<li><p>FastAPI <code class="docutils literal notranslate"><span class="pre">/docs</span></code> (Swagger UI)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">python</span> <span class="pre">-m</span> <span class="pre">pydoc</span> <span class="pre">brain.app</span></code></p></li>
+<li><p>VS Code Pylance tooltips</p></li>
+</ul>
+</section>
+<section id="resources">
+<h2>Resources<a class="headerlink" href="#resources" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p><a class="reference external" href="https://fastapi.tiangolo.com/">FastAPI Documentation</a></p></li>
+<li><p><a class="reference external" href="https://www.uvicorn.org/">Uvicorn Documentation</a></p></li>
+<li><p><a class="reference external" href="https://spec.openapis.org/oas/v3.0.0">OpenAPI 3.0 Specification</a></p></li>
+<li><p><a class="reference external" href="https://html.spec.whatwg.org/multipage/server-sent-events.html">Server-Sent Events (SSE)</a></p></li>
+</ul>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="data_model.html" class="btn btn-neutral float-left" title="Data Model Reference" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="api_reference.html" class="btn btn-neutral float-right" title="API Reference" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p></p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

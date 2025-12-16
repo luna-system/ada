@@ -1,0 +1,844 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Specialist System &mdash; Ada Brain API 0.1.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=19f00094" />
+      <link rel="stylesheet" type="text/css" href="_static/graphviz.css?v=4ae1632d" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="_static/jquery.js?v=5d32c60e"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="_static/documentation_options.js?v=01f34227"></script>
+        <script src="_static/doctools.js?v=9bcbadda"></script>
+        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Testing Guide" href="testing.html" />
+    <link rel="prev" title="API Reference" href="api_reference.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            Ada Brain API
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Documentation:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="getting_started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="configuration.html">Configuration Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="architecture.html">Architecture</a></li>
+<li class="toctree-l1"><a class="reference internal" href="data_model.html">Data Model Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api_usage.html">API Usage Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api_reference.html">API Reference</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Specialist System</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#overview">Overview</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#architecture">Architecture</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#data-flow">Data Flow</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#creating-a-new-specialist">Creating a New Specialist</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#step-1-create-the-file">Step 1: Create the File</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#step-2-that-s-it">Step 2: That’s It!</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#discovering-available-specialists">Discovering Available Specialists</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#currently-available-specialists">Currently Available Specialists</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#request-context-structure">Request Context Structure</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#priority-system">Priority System</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#bidirectional-specialists">Bidirectional Specialists</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id1">Overview</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#flow-diagram">Flow Diagram</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#key-components">Key Components</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#request-syntax">Request Syntax</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#usage-examples">Usage Examples</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#safety-limits">Safety &amp; Limits</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#web-search-specialist">Web Search Specialist</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id2">Overview</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#features">Features</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#configuration">Configuration</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#usage-pattern">Usage Pattern</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#request-schema">Request Schema</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#example-interactions">Example Interactions</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#rag-based-documentation">RAG-Based Documentation</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id3">Overview</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#how-it-works">How It Works</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id4">Configuration</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#benefits">Benefits</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#implementation-files">Implementation Files</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#example-workflow">Example Workflow</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#testing-specialists">Testing Specialists</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#test-discovery">Test Discovery</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#test-execution">Test Execution</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#future-enhancements">Future Enhancements</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#phase-2-pause-resume">Phase 2: Pause &amp; Resume</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#phase-3-multi-turn-planning">Phase 3: Multi-turn Planning</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#phase-4-function-calling-api">Phase 4: Function Calling API</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#service-based-specialists">Service-Based Specialists</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#best-practices">Best Practices</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#debugging">Debugging</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#check-synced-faqs">Check Synced FAQs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#test-retrieval">Test Retrieval</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#resources">Resources</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="testing.html">Testing Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="development.html">Development Tools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="streaming.html">Streaming</a></li>
+<li class="toctree-l1"><a class="reference internal" href="memory.html">Memory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="documentation_philosophy.html">Documentation Philosophy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="empathetic_documentation.html">Empathetic Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="examples.html">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="xenofeminism.html">Xenofeminism and Ada</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Ada Brain API</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Specialist System</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/specialists.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="specialist-system">
+<h1>Specialist System<a class="headerlink" href="#specialist-system" title="Link to this heading"></a></h1>
+<p>The specialist plugin system provides extensible AI capabilities through a standardized interface. Drop a new <code class="docutils literal notranslate"><span class="pre">*_specialist.py</span></code> file into <code class="docutils literal notranslate"><span class="pre">brain/specialists/</span></code> and it’s automatically discovered and integrated.</p>
+<section id="overview">
+<h2>Overview<a class="headerlink" href="#overview" title="Link to this heading"></a></h2>
+<section id="architecture">
+<h3>Architecture<a class="headerlink" href="#architecture" title="Link to this heading"></a></h3>
+<p><strong>Core Components:</strong></p>
+<ol class="arabic simple">
+<li><p><strong>Protocol</strong> (<code class="docutils literal notranslate"><span class="pre">protocol.py</span></code>): Defines the <code class="docutils literal notranslate"><span class="pre">Specialist</span></code> interface and base types</p></li>
+<li><p><strong>Registry</strong> (<code class="docutils literal notranslate"><span class="pre">__init__.py</span></code>): Auto-discovers and manages specialist plugins</p></li>
+<li><p><strong>Specialists</strong> (<code class="docutils literal notranslate"><span class="pre">*_specialist.py</span></code>): Individual capability modules</p></li>
+</ol>
+</section>
+<section id="data-flow">
+<h3>Data Flow<a class="headerlink" href="#data-flow" title="Link to this heading"></a></h3>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>User Request → Registry.execute_for_context() → Specialists (filtered by should_activate)
+                                              ↓
+                                    Parallel execution
+                                              ↓
+                               Results sorted by priority
+                                              ↓
+                              prompt_builder injects contexts
+                                              ↓
+                                    LLM receives enriched prompt
+</pre></div>
+</div>
+</section>
+</section>
+<section id="creating-a-new-specialist">
+<h2>Creating a New Specialist<a class="headerlink" href="#creating-a-new-specialist" title="Link to this heading"></a></h2>
+<section id="step-1-create-the-file">
+<h3>Step 1: Create the File<a class="headerlink" href="#step-1-create-the-file" title="Link to this heading"></a></h3>
+<p>Create <code class="docutils literal notranslate"><span class="pre">brain/specialists/your_name_specialist.py</span></code>:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">.protocol</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
+    <span class="n">BaseSpecialist</span><span class="p">,</span>
+    <span class="n">SpecialistCapability</span><span class="p">,</span>
+    <span class="n">SpecialistResult</span><span class="p">,</span>
+    <span class="n">SpecialistPriority</span>
+<span class="p">)</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">YourSpecialist</span><span class="p">(</span><span class="n">BaseSpecialist</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Your specialist description.&quot;&quot;&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">capability</span> <span class="o">=</span> <span class="n">SpecialistCapability</span><span class="p">(</span>
+            <span class="n">name</span><span class="o">=</span><span class="s2">&quot;your_name&quot;</span><span class="p">,</span>
+            <span class="n">description</span><span class="o">=</span><span class="s2">&quot;What your specialist does&quot;</span><span class="p">,</span>
+            <span class="n">version</span><span class="o">=</span><span class="s2">&quot;1.0.0&quot;</span><span class="p">,</span>
+            <span class="n">context_priority</span><span class="o">=</span><span class="n">SpecialistPriority</span><span class="o">.</span><span class="n">MEDIUM</span><span class="p">,</span>
+            <span class="n">context_icon</span><span class="o">=</span><span class="s2">&quot;🔧&quot;</span><span class="p">,</span>
+            <span class="n">tags</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;tag1&quot;</span><span class="p">,</span> <span class="s2">&quot;tag2&quot;</span><span class="p">],</span>
+        <span class="p">)</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">capability</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">should_activate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">request_context</span><span class="p">:</span> <span class="nb">dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return True if your specialist should process this request&quot;&quot;&quot;</span>
+        <span class="c1"># Check request_context for relevant data</span>
+        <span class="k">return</span> <span class="n">request_context</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;your_key&#39;</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+
+    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">process</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">SpecialistResult</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Execute your specialist logic&quot;&quot;&quot;</span>
+        <span class="n">your_data</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;your_key&#39;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">your_data</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">error_result</span><span class="p">(</span><span class="s2">&quot;Missing data&quot;</span><span class="p">,</span> <span class="s2">&quot;missing_data&quot;</span><span class="p">)</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="c1"># Your processing logic here</span>
+            <span class="n">result_text</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;Processed: </span><span class="si">{</span><span class="n">your_data</span><span class="si">}</span><span class="s2">&quot;</span>
+
+            <span class="c1"># Format for LLM</span>
+            <span class="n">context_text</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">format_context</span><span class="p">(</span>
+                <span class="n">title</span><span class="o">=</span><span class="s2">&quot;Your Specialist Output&quot;</span><span class="p">,</span>
+                <span class="n">content</span><span class="o">=</span><span class="n">result_text</span><span class="p">,</span>
+                <span class="n">metadata</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;key&#39;</span><span class="p">:</span> <span class="s1">&#39;value&#39;</span><span class="p">}</span>
+            <span class="p">)</span>
+
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">success_result</span><span class="p">(</span>
+                <span class="n">context_text</span><span class="o">=</span><span class="n">context_text</span><span class="p">,</span>
+                <span class="n">data</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;raw&#39;</span><span class="p">:</span> <span class="n">your_data</span><span class="p">},</span>
+                <span class="n">metadata</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;processed&#39;</span><span class="p">:</span> <span class="kc">True</span><span class="p">}</span>
+            <span class="p">)</span>
+
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">error_result</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Error: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="s2">&quot;processing_error&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="step-2-that-s-it">
+<h3>Step 2: That’s It!<a class="headerlink" href="#step-2-that-s-it" title="Link to this heading"></a></h3>
+<p>The registry automatically discovers your specialist on next startup. No registration code needed.</p>
+</section>
+</section>
+<section id="discovering-available-specialists">
+<h2>Discovering Available Specialists<a class="headerlink" href="#discovering-available-specialists" title="Link to this heading"></a></h2>
+<p><strong>The specialist system is self-documenting!</strong> Query the introspection endpoint:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>curl<span class="w"> </span>http://localhost:5000/api/specialists<span class="w"> </span><span class="p">|</span><span class="w"> </span>jq
+</pre></div>
+</div>
+<p><strong>Returns for each specialist:</strong></p>
+<ul class="simple">
+<li><p>Name and description</p></li>
+<li><p>Icon (for UI display)</p></li>
+<li><p>Version</p></li>
+<li><p>Priority level (critical/high/medium/low)</p></li>
+<li><p>Enabled status</p></li>
+<li><p>Tags for categorization</p></li>
+<li><p>Input/output JSON schemas</p></li>
+</ul>
+<p><strong>Example Response:</strong></p>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+<span class="w">  </span><span class="nt">&quot;specialists&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">      </span><span class="nt">&quot;name&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;web_search&quot;</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">&quot;description&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Search the web for current information&quot;</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">&quot;icon&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;🔍&quot;</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">&quot;version&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;1.0.0&quot;</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">&quot;priority&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;high&quot;</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">&quot;enabled&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">&quot;tags&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;web&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;search&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;current-events&quot;</span><span class="p">],</span>
+<span class="w">      </span><span class="nt">&quot;input_schema&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;object&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;properties&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">          </span><span class="nt">&quot;query&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;string&quot;</span><span class="p">}</span>
+<span class="w">        </span><span class="p">},</span>
+<span class="w">        </span><span class="nt">&quot;required&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;query&quot;</span><span class="p">]</span>
+<span class="w">      </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">  </span><span class="p">],</span>
+<span class="w">  </span><span class="nt">&quot;count&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">3</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</section>
+<section id="currently-available-specialists">
+<h2>Currently Available Specialists<a class="headerlink" href="#currently-available-specialists" title="Link to this heading"></a></h2>
+<p>As of this writing, Ada includes:</p>
+<ul class="simple">
+<li><p><strong>OCR</strong> (📄) - Text extraction from images via Tesseract</p></li>
+<li><p><strong>Media</strong> (🎧) - ListenBrainz music context integration</p></li>
+<li><p><strong>Web Search</strong> (🔍) - Real-time web search via SearxNG</p></li>
+</ul>
+<p>Use <strong>GET /v1/specialists</strong> for the current list and their schemas.</p>
+</section>
+<section id="request-context-structure">
+<h2>Request Context Structure<a class="headerlink" href="#request-context-structure" title="Link to this heading"></a></h2>
+<p>When specialists execute, they receive a <code class="docutils literal notranslate"><span class="pre">request_context</span></code> dict:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="s1">&#39;prompt&#39;</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>              <span class="c1"># User&#39;s message</span>
+    <span class="s1">&#39;conversation_id&#39;</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>     <span class="c1"># Current conversation</span>
+    <span class="s1">&#39;entity&#39;</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span><span class="p">,</span>       <span class="c1"># Optional entity filter</span>
+    <span class="s1">&#39;media&#39;</span><span class="p">:</span> <span class="nb">dict</span> <span class="o">|</span> <span class="kc">None</span><span class="p">,</span>       <span class="c1"># ListenBrainz data</span>
+    <span class="s1">&#39;ocr_context&#39;</span><span class="p">:</span> <span class="nb">dict</span> <span class="o">|</span> <span class="kc">None</span><span class="p">,</span> <span class="c1"># OCR extraction result</span>
+    <span class="s1">&#39;user_timestamp&#39;</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>      <span class="c1"># Request timestamp</span>
+    <span class="c1"># ... extensible</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>Specialists check this context in <code class="docutils literal notranslate"><span class="pre">should_activate()</span></code> to determine if they’re relevant.</p>
+</section>
+<section id="priority-system">
+<h2>Priority System<a class="headerlink" href="#priority-system" title="Link to this heading"></a></h2>
+<p>Controls injection order in the prompt:</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Priority</p></th>
+<th class="head"><p>Value</p></th>
+<th class="head"><p>Usage</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>CRITICAL</p></td>
+<td><p>0</p></td>
+<td><p>System notices, identity</p></td>
+</tr>
+<tr class="row-odd"><td><p>HIGH</p></td>
+<td><p>10</p></td>
+<td><p>User-provided context (OCR, vision)</p></td>
+</tr>
+<tr class="row-even"><td><p>MEDIUM</p></td>
+<td><p>50</p></td>
+<td><p>External data (media, APIs)</p></td>
+</tr>
+<tr class="row-odd"><td><p>LOW</p></td>
+<td><p>100</p></td>
+<td><p>Supplementary info</p></td>
+</tr>
+</tbody>
+</table>
+<p>Lower numbers appear earlier in the prompt.</p>
+</section>
+<section id="bidirectional-specialists">
+<h2>Bidirectional Specialists<a class="headerlink" href="#bidirectional-specialists" title="Link to this heading"></a></h2>
+<section id="id1">
+<h3>Overview<a class="headerlink" href="#id1" title="Link to this heading"></a></h3>
+<p>Bidirectional specialists enable <strong>LLM ↔ Specialist</strong> communication during inference. Unlike one-way specialists (OCR, media) that only inject context upfront, bidirectional specialists can be requested by the LLM mid-response.</p>
+</section>
+<section id="flow-diagram">
+<h3>Flow Diagram<a class="headerlink" href="#flow-diagram" title="Link to this heading"></a></h3>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>User Message → Prompt Assembly (with upfront specialists)
+                      ↓
+              LLM starts generating
+                      ↓
+         Streaming tokens to frontend
+                      ↓
+    [LLM emits SPECIALIST_REQUEST[...]]
+                      ↓
+       Handler detects request syntax
+                      ↓
+          Execute requested specialist
+                      ↓
+       Inject result back into stream
+                      ↓
+      LLM continues with new context
+</pre></div>
+</div>
+</section>
+<section id="key-components">
+<h3>Key Components<a class="headerlink" href="#key-components" title="Link to this heading"></a></h3>
+<p><strong>1. Bidirectional Handler</strong> (<code class="docutils literal notranslate"><span class="pre">brain/specialists/bidirectional.py</span></code>)</p>
+<ul class="simple">
+<li><p>Monitors streaming output for specialist requests</p></li>
+<li><p>Parses request syntax and parameters</p></li>
+<li><p>Executes specialists on-demand</p></li>
+<li><p>Injects results back into token stream</p></li>
+<li><p>Safety limits (max 5 calls per turn)</p></li>
+</ul>
+<p><strong>2. System Prompt</strong> (<code class="docutils literal notranslate"><span class="pre">brain/config.py</span></code>)</p>
+<ul class="simple">
+<li><p>Teaches LLM the specialist request syntax</p></li>
+<li><p>Documents available specialists</p></li>
+<li><p>Provides usage examples</p></li>
+<li><p>Sets expectations (results format, limits)</p></li>
+</ul>
+<p><strong>3. Stream Wrapper</strong> (<code class="docutils literal notranslate"><span class="pre">brain/app.py</span></code>)</p>
+<ul class="simple">
+<li><p>Wraps base LLM stream with specialist handler</p></li>
+<li><p>Passes request context for specialist execution</p></li>
+<li><p>Seamlessly integrates with existing SSE streaming</p></li>
+</ul>
+</section>
+<section id="request-syntax">
+<h3>Request Syntax<a class="headerlink" href="#request-syntax" title="Link to this heading"></a></h3>
+<p><strong>Primary Syntax:</strong></p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">SPECIALIST_REQUEST</span><span class="p">[</span><span class="n">specialist_name</span><span class="p">:{</span><span class="s2">&quot;param&quot;</span><span class="p">:</span><span class="s2">&quot;value&quot;</span><span class="p">,</span><span class="s2">&quot;another&quot;</span><span class="p">:</span><span class="s2">&quot;param&quot;</span><span class="p">}]</span>
+</pre></div>
+</div>
+<p><strong>Example:</strong></p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">SPECIALIST_REQUEST</span><span class="p">[</span><span class="n">vision</span><span class="p">:{</span><span class="s2">&quot;focus&quot;</span><span class="p">:</span><span class="s2">&quot;technical_diagrams&quot;</span><span class="p">}]</span>
+</pre></div>
+</div>
+<p><strong>Alternative Mention Syntax (future):</strong></p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nd">@vision_specialist</span><span class="p">(</span><span class="n">focus</span><span class="o">=</span><span class="n">architecture</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="usage-examples">
+<h3>Usage Examples<a class="headerlink" href="#usage-examples" title="Link to this heading"></a></h3>
+<p><strong>Example 1: Vision Analysis</strong></p>
+<p><strong>User:</strong> “What’s in this image?”</p>
+<p><strong>LLM Response:</strong></p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Let me analyze the image in detail.
+
+SPECIALIST_REQUEST[vision:{&quot;focus&quot;:&quot;content_description&quot;}]
+
+[SPECIALIST_RESULT: vision]
+👁️ VISUAL ANALYSIS from &#39;diagram.png&#39;
+The image contains a system architecture diagram showing microservices...
+[/SPECIALIST_RESULT]
+
+Based on the visual analysis, this is a microservices architecture with...
+</pre></div>
+</div>
+<p><strong>Example 2: Web Search</strong></p>
+<p><strong>User:</strong> “What happened in AI today?”</p>
+<p><strong>LLM Response:</strong></p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>SPECIALIST_REQUEST[web_search:{&quot;query&quot;:&quot;AI news today&quot;}]
+
+[Results injected]
+
+Based on the search results, here&#39;s what&#39;s happening in AI today:
+- OpenAI released...
+- Google announced...
+</pre></div>
+</div>
+</section>
+<section id="safety-limits">
+<h3>Safety &amp; Limits<a class="headerlink" href="#safety-limits" title="Link to this heading"></a></h3>
+<p><strong>Built-in Protections:</strong></p>
+<ol class="arabic simple">
+<li><p><strong>Max Calls Per Turn:</strong> 5 specialist requests maximum</p></li>
+<li><p><strong>Error Handling:</strong> Graceful failures don’t crash the stream</p></li>
+<li><p><strong>Timeout Protection:</strong> Specialists should complete quickly</p></li>
+<li><p><strong>Validation:</strong> Only registered specialists can be invoked</p></li>
+</ol>
+<p><strong>Error Messages:</strong></p>
+<p>When specialists fail, the LLM sees:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">[</span><span class="n">SPECIALIST_ERROR</span><span class="p">:</span> <span class="n">specialist_name</span> <span class="n">failed</span> <span class="o">-</span> <span class="n">reason</span><span class="p">]</span>
+</pre></div>
+</div>
+<p>The LLM can acknowledge this and handle gracefully.</p>
+</section>
+</section>
+<section id="web-search-specialist">
+<h2>Web Search Specialist<a class="headerlink" href="#web-search-specialist" title="Link to this heading"></a></h2>
+<section id="id2">
+<h3>Overview<a class="headerlink" href="#id2" title="Link to this heading"></a></h3>
+<p>The web search specialist provides Ada with real-time access to current information via your self-hosted SearxNG instance at <a class="reference external" href="https://hunt.airsi.de">https://hunt.airsi.de</a>.</p>
+</section>
+<section id="features">
+<h3>Features<a class="headerlink" href="#features" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p><strong>Bidirectional only:</strong> LLM must explicitly request search (not auto-activated)</p></li>
+<li><p><strong>SearxNG integration:</strong> Privacy-respecting metasearch aggregating multiple sources</p></li>
+<li><p><strong>Context injection:</strong> Search results formatted and injected into prompt</p></li>
+<li><p><strong>Rate limit aware:</strong> Handles 429 errors gracefully</p></li>
+</ul>
+</section>
+<section id="configuration">
+<h3>Configuration<a class="headerlink" href="#configuration" title="Link to this heading"></a></h3>
+<p>Set in <code class="docutils literal notranslate"><span class="pre">.env</span></code>:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nv">SEARXNG_URL</span><span class="o">=</span>https://hunt.airsi.de
+</pre></div>
+</div>
+<p>The specialist auto-discovers when <code class="docutils literal notranslate"><span class="pre">SEARXNG_URL</span></code> is set.</p>
+</section>
+<section id="usage-pattern">
+<h3>Usage Pattern<a class="headerlink" href="#usage-pattern" title="Link to this heading"></a></h3>
+<p><strong>LLM Detection:</strong></p>
+<p>When Ada realizes she needs current information:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>User: What&#39;s the weather in Portland today?
+Ada: I don&#39;t have access to real-time weather data in my training.
+     Let me search for current information.
+     SPECIALIST_REQUEST[web_search:{&quot;query&quot;:&quot;Portland weather today&quot;}]
+</pre></div>
+</div>
+<p><strong>Specialist Execution (Pause/Resume):</strong></p>
+<ol class="arabic simple">
+<li><p>Generation <strong>pauses</strong> when request detected</p></li>
+<li><p>Web search executes via SearxNG</p></li>
+<li><p>Results formatted and injected into context</p></li>
+<li><p>Generation <strong>resumes</strong> with enriched prompt</p></li>
+</ol>
+<p><strong>Result Format:</strong></p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>🔍 Web Search Results for &#39;Portland weather today&#39;:
+
+1. Portland Weather - National Weather Service
+   URL: https://weather.gov/portland
+   Partly cloudy with high of 55°F. Rain expected this evening...
+
+2. Weather.com - Portland, OR
+   URL: https://weather.com/weather/today/l/Portland+OR
+   Current conditions: 52°F, mostly cloudy. Chance of rain 60%...
+</pre></div>
+</div>
+</section>
+<section id="request-schema">
+<h3>Request Schema<a class="headerlink" href="#request-schema" title="Link to this heading"></a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="s2">&quot;query&quot;</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>           <span class="c1"># Search terms (required)</span>
+    <span class="s2">&quot;num_results&quot;</span><span class="p">:</span> <span class="nb">int</span>      <span class="c1"># Number of results (default: 5)</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</section>
+<section id="example-interactions">
+<h3>Example Interactions<a class="headerlink" href="#example-interactions" title="Link to this heading"></a></h3>
+<p><strong>News Query:</strong></p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>User: What happened in AI today?
+Ada: SPECIALIST_REQUEST[web_search:{&quot;query&quot;:&quot;AI news today&quot;}]
+
+[Results injected]
+
+Based on the search results, here&#39;s what&#39;s happening in AI today:
+- OpenAI released...
+- Google announced...
+</pre></div>
+</div>
+<p><strong>Fact Checking:</strong></p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>User: Is Python 3.13 released yet?
+Ada: Let me check the latest information.
+     SPECIALIST_REQUEST[web_search:{&quot;query&quot;:&quot;Python 3.13 release&quot;}]
+
+[Results show release date]
+
+Yes! Python 3.13 was released on October 7, 2024...
+</pre></div>
+</div>
+</section>
+</section>
+<section id="rag-based-documentation">
+<h2>RAG-Based Documentation<a class="headerlink" href="#rag-based-documentation" title="Link to this heading"></a></h2>
+<section id="id3">
+<h3>Overview<a class="headerlink" href="#id3" title="Link to this heading"></a></h3>
+<p>Instead of using static specialist instructions in the system prompt, Ada uses <strong>RAG-based dynamic documentation</strong> that retrieves relevant specialist guidance based on the user’s query context.</p>
+</section>
+<section id="how-it-works">
+<h3>How It Works<a class="headerlink" href="#how-it-works" title="Link to this heading"></a></h3>
+<p><strong>1. Automatic Sync on Startup</strong></p>
+<p>When the brain service starts:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>[BRAIN] Discovered 2 specialists: 🎧 media, 📄 ocr
+[BRAIN] Synced 8 specialist FAQ entries to RAG
+</pre></div>
+</div>
+<p>The system:</p>
+<ul class="simple">
+<li><p>Discovers all registered specialists via the plugin registry</p></li>
+<li><p>Generates FAQ entries from specialist capabilities</p></li>
+<li><p>Stores them in Chroma with <code class="docutils literal notranslate"><span class="pre">type=&quot;faq&quot;</span></code> and <code class="docutils literal notranslate"><span class="pre">topic=&quot;specialists&quot;</span></code></p></li>
+<li><p>Removes old entries to ensure idempotency</p></li>
+</ul>
+<p><strong>2. Context-Aware Retrieval</strong></p>
+<p>During prompt building (<code class="docutils literal notranslate"><span class="pre">build_prompt()</span></code> in <code class="docutils literal notranslate"><span class="pre">prompt_builder.py</span></code>):</p>
+<ul class="simple">
+<li><p>User’s query is embedded</p></li>
+<li><p>RAG retrieves the top K most relevant specialist FAQs</p></li>
+<li><p>Retrieved docs are injected into the prompt before specialist execution</p></li>
+<li><p>This provides <strong>just-in-time</strong> specialist guidance instead of static instructions</p></li>
+</ul>
+<p><strong>3. FAQ Entry Types</strong></p>
+<p>The system generates multiple FAQ types:</p>
+<p><strong>Overview FAQ:</strong></p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Q: What specialist capabilities are available?
+A: Ada has 2 specialist capabilities integrated: 🎧 media, 📄 ocr.
+   These can be invoked mid-conversation using SPECIALIST_REQUEST[name:{params}] syntax...
+</pre></div>
+</div>
+<p><strong>Per-Specialist Capability FAQ:</strong></p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Q: What does the ocr specialist do?
+A: Extract text from images using Tesseract OCR (Priority: HIGH, Icon: 📄)
+</pre></div>
+</div>
+<p><strong>Per-Specialist Syntax FAQ:</strong></p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Q: How do I invoke the ocr specialist?
+A: Use the syntax SPECIALIST_REQUEST[ocr:{}] in your response. I will detect this pattern,
+   pause generation, execute the specialist, and resume with enriched context.
+</pre></div>
+</div>
+</section>
+<section id="id4">
+<h3>Configuration<a class="headerlink" href="#id4" title="Link to this heading"></a></h3>
+<p>Enable/Disable RAG Docs:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nv">SPECIALIST_RAG_DOCS</span><span class="o">=</span><span class="nb">true</span><span class="w">  </span><span class="c1"># Use dynamic RAG retrieval (default)</span>
+<span class="nv">SPECIALIST_RAG_DOCS</span><span class="o">=</span><span class="nb">false</span><span class="w"> </span><span class="c1"># Use static SPECIALIST_INSTRUCTIONS only</span>
+</pre></div>
+</div>
+<p>Set in <code class="docutils literal notranslate"><span class="pre">brain/config.py</span></code>:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">SPECIALIST_RAG_DOCS</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s2">&quot;SPECIALIST_RAG_DOCS&quot;</span><span class="p">,</span> <span class="s2">&quot;true&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s2">&quot;true&quot;</span>
+</pre></div>
+</div>
+</section>
+<section id="benefits">
+<h3>Benefits<a class="headerlink" href="#benefits" title="Link to this heading"></a></h3>
+<ol class="arabic simple">
+<li><p><strong>Context-Aware Guidance</strong></p>
+<ul class="simple">
+<li><p>User asks “can you analyze this image?” → OCR/vision docs retrieved</p></li>
+<li><p>User asks “what’s playing?” → Media specialist docs retrieved</p></li>
+<li><p>Irrelevant specialists don’t clutter the prompt</p></li>
+</ul>
+</li>
+<li><p><strong>Automatic Updates</strong></p>
+<ul class="simple">
+<li><p>Add a new specialist → FAQ entries auto-generated on next startup</p></li>
+<li><p>Modify specialist capability → Updated in RAG automatically</p></li>
+<li><p>No manual prompt engineering required</p></li>
+</ul>
+</li>
+<li><p><strong>Token Efficiency</strong></p>
+<ul class="simple">
+<li><p>Static <code class="docutils literal notranslate"><span class="pre">SPECIALIST_INSTRUCTIONS</span></code> = ~300 tokens always present</p></li>
+<li><p>Dynamic RAG retrieval = ~100-200 tokens only when relevant</p></li>
+<li><p>Reduces prompt bloat for non-specialist queries</p></li>
+</ul>
+</li>
+<li><p><strong>Semantic Matching</strong></p>
+<ul class="simple">
+<li><p>User query: “What can you see in this photo?”</p></li>
+<li><p>RAG retrieves: OCR + vision specialist documentation</p></li>
+<li><p>LLM learns specialist syntax contextually</p></li>
+</ul>
+</li>
+</ol>
+</section>
+<section id="implementation-files">
+<h3>Implementation Files<a class="headerlink" href="#implementation-files" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">brain/specialists/specialist_docs.py</span></code> - Generate and retrieve FAQ entries</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">brain/app.py</span></code> - Sync on startup</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">brain/prompt_builder.py</span></code> - Retrieve and inject relevant docs</p></li>
+</ul>
+</section>
+<section id="example-workflow">
+<h3>Example Workflow<a class="headerlink" href="#example-workflow" title="Link to this heading"></a></h3>
+<p><strong>User Query:</strong> “Can you read the text in this image?”</p>
+<ol class="arabic simple">
+<li><p><strong>Prompt Building Phase:</strong></p>
+<ul class="simple">
+<li><p>Embed query: “Can you read the text in this image?”</p></li>
+<li><p>RAG retrieves from <code class="docutils literal notranslate"><span class="pre">type=&quot;faq&quot;,</span> <span class="pre">topic=&quot;specialists&quot;</span></code>:
+- “How do I invoke the ocr specialist?”
+- “What does the ocr specialist do?”</p></li>
+<li><p>Format and inject into prompt</p></li>
+</ul>
+</li>
+<li><p><strong>LLM Generation:</strong></p>
+<ul class="simple">
+<li><p>Ada sees relevant OCR documentation in context</p></li>
+<li><p>Generates: “I can extract the text using OCR. SPECIALIST_REQUEST[ocr:{}]”</p></li>
+</ul>
+</li>
+<li><p><strong>Specialist Execution (Pause/Resume):</strong></p>
+<ul class="simple">
+<li><p>Generation pauses</p></li>
+<li><p>OCR specialist extracts: “Annual Report 2024…”</p></li>
+<li><p>Generation resumes with OCR result injected</p></li>
+</ul>
+</li>
+<li><p><strong>Final Response:</strong></p>
+<ul class="simple">
+<li><p>“The image contains: Annual Report 2024…”</p></li>
+</ul>
+</li>
+</ol>
+</section>
+</section>
+<section id="testing-specialists">
+<h2>Testing Specialists<a class="headerlink" href="#testing-specialists" title="Link to this heading"></a></h2>
+<section id="test-discovery">
+<h3>Test Discovery<a class="headerlink" href="#test-discovery" title="Link to this heading"></a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">brain.specialists</span><span class="w"> </span><span class="kn">import</span> <span class="n">get_registry</span><span class="p">,</span> <span class="n">list_specialists</span>
+
+<span class="n">registry</span> <span class="o">=</span> <span class="n">get_registry</span><span class="p">()</span>
+<span class="n">specialists</span> <span class="o">=</span> <span class="n">list_specialists</span><span class="p">()</span>
+
+<span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">specialists</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">s</span><span class="o">.</span><span class="n">capability</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">s</span><span class="o">.</span><span class="n">capability</span><span class="o">.</span><span class="n">description</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="test-execution">
+<h3>Test Execution<a class="headerlink" href="#test-execution" title="Link to this heading"></a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">asyncio</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">brain.specialists</span><span class="w"> </span><span class="kn">import</span> <span class="n">execute_specialists</span>
+
+<span class="n">context</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;ocr_context&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;text&#39;</span><span class="p">:</span> <span class="s1">&#39;Hello&#39;</span><span class="p">}}</span>
+<span class="n">results</span> <span class="o">=</span> <span class="k">await</span> <span class="n">execute_specialists</span><span class="p">(</span><span class="n">context</span><span class="p">)</span>
+
+<span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">results</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">r</span><span class="o">.</span><span class="n">specialist_name</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">r</span><span class="o">.</span><span class="n">success</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="future-enhancements">
+<h2>Future Enhancements<a class="headerlink" href="#future-enhancements" title="Link to this heading"></a></h2>
+<section id="phase-2-pause-resume">
+<h3>Phase 2: Pause &amp; Resume<a class="headerlink" href="#phase-2-pause-resume" title="Link to this heading"></a></h3>
+<p>Currently, specialists inject mid-stream. For better quality:</p>
+<ol class="arabic simple">
+<li><p>Detect specialist request</p></li>
+<li><p><strong>Pause</strong> LLM generation</p></li>
+<li><p>Execute specialist</p></li>
+<li><p>Build <strong>new prompt</strong> with result</p></li>
+<li><p><strong>Resume</strong> generation from enriched context</p></li>
+</ol>
+</section>
+<section id="phase-3-multi-turn-planning">
+<h3>Phase 3: Multi-turn Planning<a class="headerlink" href="#phase-3-multi-turn-planning" title="Link to this heading"></a></h3>
+<p>Enable agentic workflows:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>User: Analyze these 3 images
+LLM: I&#39;ll analyze each image systematically.
+
+     Image 1: SPECIALIST_REQUEST[vision:{&quot;image_id&quot;:1}]
+     [Result 1...]
+
+     Image 2: SPECIALIST_REQUEST[vision:{&quot;image_id&quot;:2}]
+     [Result 2...]
+
+     Comparing the three images, I notice...
+</pre></div>
+</div>
+</section>
+<section id="phase-4-function-calling-api">
+<h3>Phase 4: Function Calling API<a class="headerlink" href="#phase-4-function-calling-api" title="Link to this heading"></a></h3>
+<p>If DeepSeek gains native tool calling:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Auto-generate tool definitions from specialists</span>
+<span class="n">tools</span> <span class="o">=</span> <span class="p">[</span><span class="n">specialist</span><span class="o">.</span><span class="n">capability</span><span class="o">.</span><span class="n">to_openai_tool</span><span class="p">()</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">specialists</span><span class="p">]</span>
+
+<span class="n">response</span> <span class="o">=</span> <span class="n">ollama</span><span class="o">.</span><span class="n">chat</span><span class="p">(</span>
+    <span class="n">model</span><span class="o">=</span><span class="s2">&quot;deepseek-r1&quot;</span><span class="p">,</span>
+    <span class="n">messages</span><span class="o">=</span><span class="n">messages</span><span class="p">,</span>
+    <span class="n">tools</span><span class="o">=</span><span class="n">tools</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="service-based-specialists">
+<h3>Service-Based Specialists<a class="headerlink" href="#service-based-specialists" title="Link to this heading"></a></h3>
+<p>For GPU-intensive models (Phi-3.5-Vision), the same protocol supports remote specialists:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">RemoteVisionSpecialist</span><span class="p">(</span><span class="n">BaseSpecialist</span><span class="p">):</span>
+    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">process</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="c1"># Call separate service via HTTP/gRPC</span>
+        <span class="n">response</span> <span class="o">=</span> <span class="k">await</span> <span class="n">http_client</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="s1">&#39;http://vision-service:8080/analyze&#39;</span><span class="p">,</span> <span class="o">...</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">success_result</span><span class="p">(</span><span class="o">...</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>No changes to registry or prompt_builder needed!</p>
+</section>
+</section>
+<section id="best-practices">
+<h2>Best Practices<a class="headerlink" href="#best-practices" title="Link to this heading"></a></h2>
+<ol class="arabic simple">
+<li><p><strong>Single Responsibility:</strong> Each specialist does one thing well</p></li>
+<li><p><strong>Fail Gracefully:</strong> Return error results, don’t raise exceptions</p></li>
+<li><p><strong>Metadata Rich:</strong> Include useful metadata for debugging/logging</p></li>
+<li><p><strong>Format Consistently:</strong> Use <code class="docutils literal notranslate"><span class="pre">format_context()</span></code> for prompt injection</p></li>
+<li><p><strong>Document Activation:</strong> Clearly state when specialist activates</p></li>
+<li><p><strong>Version Carefully:</strong> Bump version on breaking changes</p></li>
+</ol>
+</section>
+<section id="debugging">
+<h2>Debugging<a class="headerlink" href="#debugging" title="Link to this heading"></a></h2>
+<section id="check-synced-faqs">
+<h3>Check Synced FAQs<a class="headerlink" href="#check-synced-faqs" title="Link to this heading"></a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># View all specialist FAQs</span>
+docker<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>ada-v1-brain-1<span class="w"> </span>python<span class="w"> </span>-c<span class="w"> </span><span class="s2">&quot;</span>
+<span class="s2">from brain.rag_store import RagStore</span>
+<span class="s2">store = RagStore()</span>
+<span class="s2">result = store.col.query(</span>
+<span class="s2">    query_texts=[&#39;specialists&#39;],</span>
+<span class="s2">    n_results=10,</span>
+<span class="s2">    where={&#39;type&#39;: &#39;faq&#39;, &#39;topic&#39;: &#39;specialists&#39;}</span>
+<span class="s2">)</span>
+<span class="s2">for doc in result[&#39;documents&#39;][0]:</span>
+<span class="s2">    print(doc)</span>
+<span class="s2">    print(&#39;---&#39;)</span>
+<span class="s2">&quot;</span>
+</pre></div>
+</div>
+</section>
+<section id="test-retrieval">
+<h3>Test Retrieval<a class="headerlink" href="#test-retrieval" title="Link to this heading"></a></h3>
+<p>Query the debug endpoint (if <code class="docutils literal notranslate"><span class="pre">RAG_DEBUG=true</span></code>):</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>curl<span class="w"> </span><span class="s2">&quot;http://localhost:7000/v1/debug/prompt?prompt=analyze%20image&amp;faq_k=5&quot;</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="resources">
+<h2>Resources<a class="headerlink" href="#resources" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>See <a class="reference internal" href="api_usage.html"><span class="doc">API Usage Guide</span></a> for API integration details</p></li>
+<li><p>See <a class="reference internal" href="testing.html"><span class="doc">Testing Guide</span></a> for specialist testing patterns</p></li>
+<li><p>See <a class="reference internal" href="development.html"><span class="doc">Development Tools</span></a> for adding new specialists</p></li>
+</ul>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="api_reference.html" class="btn btn-neutral float-left" title="API Reference" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="testing.html" class="btn btn-neutral float-right" title="Testing Guide" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p></p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

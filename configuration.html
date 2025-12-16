@@ -1,0 +1,829 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Configuration Reference &mdash; Ada Brain API 0.1.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=19f00094" />
+      <link rel="stylesheet" type="text/css" href="_static/graphviz.css?v=4ae1632d" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="_static/jquery.js?v=5d32c60e"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="_static/documentation_options.js?v=01f34227"></script>
+        <script src="_static/doctools.js?v=9bcbadda"></script>
+        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Architecture" href="architecture.html" />
+    <link rel="prev" title="Getting Started" href="getting_started.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            Ada Brain API
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Documentation:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="getting_started.html">Getting Started</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Configuration Reference</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#quick-start">Quick Start</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#configuration-file">Configuration File</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#core-services">Core Services</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#ollama-base-url">OLLAMA_BASE_URL</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#ollama-model">OLLAMA_MODEL</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#ollama-embed-model">OLLAMA_EMBED_MODEL</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#chroma-url">CHROMA_URL</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#brain-url">BRAIN_URL</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#rag-configuration">RAG Configuration</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#rag-enabled">RAG_ENABLED</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#feature-toggles">Feature Toggles</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#retrieval-parameters-top-k">Retrieval Parameters (Top-K)</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#rag-turn-top-k">RAG_TURN_TOP_K</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#rag-summary-top-k">RAG_SUMMARY_TOP_K</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#rag-faq-top-k">RAG_FAQ_TOP_K</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#rag-memory-top-k">RAG_MEMORY_TOP_K</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#processing-parameters">Processing Parameters</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#rag-memory-importance-weight">RAG_MEMORY_IMPORTANCE_WEIGHT</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#rag-summary-every-n">RAG_SUMMARY_EVERY_N</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#rag-summary-turns-window">RAG_SUMMARY_TURNS_WINDOW</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#rag-persona-max-chars">RAG_PERSONA_MAX_CHARS</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#data-loading">Data Loading</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#rag-autoload-persona">RAG_AUTOLOAD_PERSONA</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#rag-persona-path">RAG_PERSONA_PATH</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#rag-autoload-faq">RAG_AUTOLOAD_FAQ</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#rag-faq-path">RAG_FAQ_PATH</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#debug-mode">Debug Mode</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#rag-debug">RAG_DEBUG</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#specialist-system">Specialist System</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#specialist-pause-resume">SPECIALIST_PAUSE_RESUME</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#specialist-max-turns">SPECIALIST_MAX_TURNS</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#specialist-rag-docs">SPECIALIST_RAG_DOCS</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#integrations">Integrations</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#web-search-searxng">Web Search (SearxNG)</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#searxng-url">SEARXNG_URL</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#listenbrainz-music-context">ListenBrainz (Music Context)</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#listenbrainz-user">LISTENBRAINZ_USER</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#listenbrainz-token">LISTENBRAINZ_TOKEN</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#backup-configuration">Backup Configuration</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#backblaze-b2-credentials">Backblaze B2 Credentials</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#b2-endpoint-url">B2_ENDPOINT_URL</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#b2-key-id">B2_KEY_ID</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#b2-application-key">B2_APPLICATION_KEY</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#b2-bucket-name">B2_BUCKET_NAME</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#backup-options">Backup Options</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#b2-bucket-prefix">B2_BUCKET_PREFIX</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#upload-mode">UPLOAD_MODE</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#backups-dir">BACKUPS_DIR</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#configuration-validation">Configuration Validation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#best-practices">Best Practices</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#environment-specific-configuration">Environment-Specific Configuration</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#development">Development</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#production">Production</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#troubleshooting">Troubleshooting</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#configuration-not-loading">Configuration not loading</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#services-can-t-connect">Services can’t connect</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#models-not-found">Models not found</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#see-also">See Also</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="architecture.html">Architecture</a></li>
+<li class="toctree-l1"><a class="reference internal" href="data_model.html">Data Model Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api_usage.html">API Usage Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api_reference.html">API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="specialists.html">Specialist System</a></li>
+<li class="toctree-l1"><a class="reference internal" href="testing.html">Testing Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="development.html">Development Tools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="streaming.html">Streaming</a></li>
+<li class="toctree-l1"><a class="reference internal" href="memory.html">Memory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="documentation_philosophy.html">Documentation Philosophy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="empathetic_documentation.html">Empathetic Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="examples.html">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="xenofeminism.html">Xenofeminism and Ada</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Ada Brain API</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Configuration Reference</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/configuration.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="configuration-reference">
+<h1>Configuration Reference<a class="headerlink" href="#configuration-reference" title="Link to this heading"></a></h1>
+<p>Ada uses environment variables for configuration, providing flexibility across development and production environments.</p>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p><strong>Runtime Configuration Discovery:</strong> Once Ada is running, query <strong>GET /v1/info</strong> to see the current active configuration:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>curl<span class="w"> </span>http://localhost:5000/api/info<span class="w"> </span><span class="p">|</span><span class="w"> </span>jq
+</pre></div>
+</div>
+<p>This shows enabled features, active models, specialist count, and all available endpoints.</p>
+</div>
+<section id="quick-start">
+<h2>Quick Start<a class="headerlink" href="#quick-start" title="Link to this heading"></a></h2>
+<ol class="arabic">
+<li><p>Copy the example configuration:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>cp<span class="w"> </span>.env.example<span class="w"> </span>.env
+</pre></div>
+</div>
+</li>
+<li><p>Edit <code class="docutils literal notranslate"><span class="pre">.env</span></code> with your preferred settings</p></li>
+<li><p>Restart services: <code class="docutils literal notranslate"><span class="pre">docker</span> <span class="pre">compose</span> <span class="pre">up</span> <span class="pre">-d</span></code></p></li>
+</ol>
+</section>
+<section id="configuration-file">
+<h2>Configuration File<a class="headerlink" href="#configuration-file" title="Link to this heading"></a></h2>
+<p>Ada loads configuration from <code class="docutils literal notranslate"><span class="pre">.env</span></code> in the project root. The file uses standard <code class="docutils literal notranslate"><span class="pre">KEY=VALUE</span></code> format:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Core Services</span>
+<span class="nv">OLLAMA_BASE_URL</span><span class="o">=</span>http://ollama:11434
+<span class="nv">OLLAMA_MODEL</span><span class="o">=</span>deepseek-r1:14b
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Docker Compose warnings about <code class="docutils literal notranslate"><span class="pre">$ts</span></code>, <code class="docutils literal notranslate"><span class="pre">$pid1</span></code>, <code class="docutils literal notranslate"><span class="pre">$pid2</span></code> are harmless - these are shell variables used in command blocks, not environment variables.</p>
+</div>
+</section>
+<section id="core-services">
+<h2>Core Services<a class="headerlink" href="#core-services" title="Link to this heading"></a></h2>
+<p>These settings define essential services Ada needs to function.</p>
+<section id="ollama-base-url">
+<h3>OLLAMA_BASE_URL<a class="headerlink" href="#ollama-base-url" title="Link to this heading"></a></h3>
+<dl class="field-list simple">
+<dt class="field-odd">Default<span class="colon">:</span></dt>
+<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">http://localhost:11434</span></code></p>
+</dd>
+<dt class="field-even">Required<span class="colon">:</span></dt>
+<dd class="field-even"><p>No</p>
+</dd>
+<dt class="field-odd">Examples<span class="colon">:</span></dt>
+<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">http://ollama:11434</span></code>, <code class="docutils literal notranslate"><span class="pre">http://localhost:11434</span></code></p>
+</dd>
+</dl>
+<p>Base URL for the Ollama API server. In Docker Compose, use the service name (<code class="docutils literal notranslate"><span class="pre">ollama</span></code>). For local development, use <code class="docutils literal notranslate"><span class="pre">localhost</span></code>.</p>
+</section>
+<section id="ollama-model">
+<h3>OLLAMA_MODEL<a class="headerlink" href="#ollama-model" title="Link to this heading"></a></h3>
+<dl class="field-list simple">
+<dt class="field-odd">Default<span class="colon">:</span></dt>
+<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">deepseek-r1</span></code></p>
+</dd>
+<dt class="field-even">Required<span class="colon">:</span></dt>
+<dd class="field-even"><p>No</p>
+</dd>
+<dt class="field-odd">Examples<span class="colon">:</span></dt>
+<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">deepseek-r1</span></code>, <code class="docutils literal notranslate"><span class="pre">deepseek-r1:14b</span></code>, <code class="docutils literal notranslate"><span class="pre">llama3.2:3b</span></code>, <code class="docutils literal notranslate"><span class="pre">qwen2.5:7b</span></code></p>
+</dd>
+</dl>
+<p>The Ollama model to use for chat completions. Must be pulled before use:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>docker<span class="w"> </span>compose<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>ollama<span class="w"> </span>ollama<span class="w"> </span>pull<span class="w"> </span>deepseek-r1:14b
+</pre></div>
+</div>
+</section>
+<section id="ollama-embed-model">
+<h3>OLLAMA_EMBED_MODEL<a class="headerlink" href="#ollama-embed-model" title="Link to this heading"></a></h3>
+<dl class="field-list simple">
+<dt class="field-odd">Default<span class="colon">:</span></dt>
+<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">nomic-embed-text</span></code></p>
+</dd>
+<dt class="field-even">Required<span class="colon">:</span></dt>
+<dd class="field-even"><p>No</p>
+</dd>
+<dt class="field-odd">Examples<span class="colon">:</span></dt>
+<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">nomic-embed-text</span></code>, <code class="docutils literal notranslate"><span class="pre">mxbai-embed-large</span></code></p>
+</dd>
+</dl>
+<p>The embedding model for vector operations (RAG). Must be pulled separately:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>docker<span class="w"> </span>compose<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>ollama<span class="w"> </span>ollama<span class="w"> </span>pull<span class="w"> </span>nomic-embed-text
+</pre></div>
+</div>
+</section>
+<section id="chroma-url">
+<h3>CHROMA_URL<a class="headerlink" href="#chroma-url" title="Link to this heading"></a></h3>
+<dl class="field-list simple">
+<dt class="field-odd">Default<span class="colon">:</span></dt>
+<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">http://chroma:8000</span></code> (in Docker)</p>
+</dd>
+<dt class="field-even">Required<span class="colon">:</span></dt>
+<dd class="field-even"><p>No</p>
+</dd>
+<dt class="field-odd">Examples<span class="colon">:</span></dt>
+<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">http://chroma:8000</span></code>, <code class="docutils literal notranslate"><span class="pre">http://localhost:8000</span></code></p>
+</dd>
+</dl>
+<p>Chroma vector database URL. Leave unset to use the Docker service default.</p>
+</section>
+<section id="brain-url">
+<h3>BRAIN_URL<a class="headerlink" href="#brain-url" title="Link to this heading"></a></h3>
+<dl class="field-list simple">
+<dt class="field-odd">Default<span class="colon">:</span></dt>
+<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">http://brain:7000</span></code></p>
+</dd>
+<dt class="field-even">Required<span class="colon">:</span></dt>
+<dd class="field-even"><p>No</p>
+</dd>
+</dl>
+<p>Internal URL for the brain service. Used by the web frontend to proxy API requests.</p>
+</section>
+</section>
+<section id="rag-configuration">
+<h2>RAG Configuration<a class="headerlink" href="#rag-configuration" title="Link to this heading"></a></h2>
+<p>These settings control Ada’s Retrieval-Augmented Generation system.</p>
+<section id="rag-enabled">
+<h3>RAG_ENABLED<a class="headerlink" href="#rag-enabled" title="Link to this heading"></a></h3>
+<dl class="field-list simple">
+<dt class="field-odd">Default<span class="colon">:</span></dt>
+<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">true</span></code></p>
+</dd>
+<dt class="field-even">Type<span class="colon">:</span></dt>
+<dd class="field-even"><p>Boolean (<code class="docutils literal notranslate"><span class="pre">true</span></code>/<code class="docutils literal notranslate"><span class="pre">false</span></code>)</p>
+</dd>
+</dl>
+<p>Master toggle for the entire RAG system. When <code class="docutils literal notranslate"><span class="pre">false</span></code>, Ada uses only the base model without context retrieval.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Disabling RAG significantly reduces Ada’s ability to remember context and use your custom persona.</p>
+</div>
+</section>
+<section id="feature-toggles">
+<h3>Feature Toggles<a class="headerlink" href="#feature-toggles" title="Link to this heading"></a></h3>
+<p>Enable or disable specific retrieval types. All default to <code class="docutils literal notranslate"><span class="pre">true</span></code>.</p>
+<ul class="simple">
+<li><p><strong>RAG_ENABLE_PERSONA</strong>: Retrieve persona/identity context</p></li>
+<li><p><strong>RAG_ENABLE_FAQ</strong>: Retrieve FAQ entries</p></li>
+<li><p><strong>RAG_ENABLE_MEMORY</strong>: Retrieve long-term memories</p></li>
+<li><p><strong>RAG_ENABLE_SUMMARY</strong>: Retrieve conversation summaries</p></li>
+<li><p><strong>RAG_ENABLE_TURN</strong>: Retrieve recent conversation turns</p></li>
+</ul>
+<p>Example:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Disable memory retrieval</span>
+<span class="nv">RAG_ENABLE_MEMORY</span><span class="o">=</span><span class="nb">false</span>
+</pre></div>
+</div>
+</section>
+<section id="retrieval-parameters-top-k">
+<h3>Retrieval Parameters (Top-K)<a class="headerlink" href="#retrieval-parameters-top-k" title="Link to this heading"></a></h3>
+<p>Control how many results to retrieve for each query. Higher values provide more context but use more tokens.</p>
+<section id="rag-turn-top-k">
+<h4>RAG_TURN_TOP_K<a class="headerlink" href="#rag-turn-top-k" title="Link to this heading"></a></h4>
+<dl class="field-list simple">
+<dt class="field-odd">Default<span class="colon">:</span></dt>
+<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">4</span></code></p>
+</dd>
+<dt class="field-even">Range<span class="colon">:</span></dt>
+<dd class="field-even"><p>1-20</p>
+</dd>
+</dl>
+<p>Number of recent conversation turns to retrieve. Higher values give Ada more conversational context.</p>
+</section>
+<section id="rag-summary-top-k">
+<h4>RAG_SUMMARY_TOP_K<a class="headerlink" href="#rag-summary-top-k" title="Link to this heading"></a></h4>
+<dl class="field-list simple">
+<dt class="field-odd">Default<span class="colon">:</span></dt>
+<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">2</span></code></p>
+</dd>
+<dt class="field-even">Range<span class="colon">:</span></dt>
+<dd class="field-even"><p>1-10</p>
+</dd>
+</dl>
+<p>Number of conversation summaries to retrieve. Summaries compress multiple turns into key points.</p>
+</section>
+<section id="rag-faq-top-k">
+<h4>RAG_FAQ_TOP_K<a class="headerlink" href="#rag-faq-top-k" title="Link to this heading"></a></h4>
+<dl class="field-list simple">
+<dt class="field-odd">Default<span class="colon">:</span></dt>
+<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">2</span></code></p>
+</dd>
+<dt class="field-even">Range<span class="colon">:</span></dt>
+<dd class="field-even"><p>1-10</p>
+</dd>
+</dl>
+<p>Number of FAQ entries to retrieve. Useful for specialist documentation and common questions.</p>
+</section>
+<section id="rag-memory-top-k">
+<h4>RAG_MEMORY_TOP_K<a class="headerlink" href="#rag-memory-top-k" title="Link to this heading"></a></h4>
+<dl class="field-list simple">
+<dt class="field-odd">Default<span class="colon">:</span></dt>
+<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">3</span></code></p>
+</dd>
+<dt class="field-even">Range<span class="colon">:</span></dt>
+<dd class="field-even"><p>1-20</p>
+</dd>
+</dl>
+<p>Number of long-term memories to retrieve. These persist across conversation sessions.</p>
+</section>
+</section>
+<section id="processing-parameters">
+<h3>Processing Parameters<a class="headerlink" href="#processing-parameters" title="Link to this heading"></a></h3>
+<section id="rag-memory-importance-weight">
+<h4>RAG_MEMORY_IMPORTANCE_WEIGHT<a class="headerlink" href="#rag-memory-importance-weight" title="Link to this heading"></a></h4>
+<dl class="field-list simple">
+<dt class="field-odd">Default<span class="colon">:</span></dt>
+<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">0.5</span></code></p>
+</dd>
+<dt class="field-even">Range<span class="colon">:</span></dt>
+<dd class="field-even"><p>0.0-1.0</p>
+</dd>
+</dl>
+<p>Weight for memory importance scoring when ranking memories. Higher values prioritize “important” memories over recent ones.</p>
+</section>
+<section id="rag-summary-every-n">
+<h4>RAG_SUMMARY_EVERY_N<a class="headerlink" href="#rag-summary-every-n" title="Link to this heading"></a></h4>
+<dl class="field-list simple">
+<dt class="field-odd">Default<span class="colon">:</span></dt>
+<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">8</span></code></p>
+</dd>
+<dt class="field-even">Range<span class="colon">:</span></dt>
+<dd class="field-even"><p>1+</p>
+</dd>
+</dl>
+<p>Generate a conversation summary every N turns. Summaries help compress long conversations.</p>
+</section>
+<section id="rag-summary-turns-window">
+<h4>RAG_SUMMARY_TURNS_WINDOW<a class="headerlink" href="#rag-summary-turns-window" title="Link to this heading"></a></h4>
+<dl class="field-list simple">
+<dt class="field-odd">Default<span class="colon">:</span></dt>
+<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">12</span></code></p>
+</dd>
+<dt class="field-even">Range<span class="colon">:</span></dt>
+<dd class="field-even"><p>1+</p>
+</dd>
+</dl>
+<p>Number of conversation turns to include when generating a summary.</p>
+</section>
+<section id="rag-persona-max-chars">
+<h4>RAG_PERSONA_MAX_CHARS<a class="headerlink" href="#rag-persona-max-chars" title="Link to this heading"></a></h4>
+<dl class="field-list simple">
+<dt class="field-odd">Default<span class="colon">:</span></dt>
+<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">2000</span></code></p>
+</dd>
+<dt class="field-even">Range<span class="colon">:</span></dt>
+<dd class="field-even"><p>100+</p>
+</dd>
+</dl>
+<p>Maximum characters to retrieve from the persona document. Truncates long personas to fit token budget.</p>
+</section>
+</section>
+<section id="data-loading">
+<h3>Data Loading<a class="headerlink" href="#data-loading" title="Link to this heading"></a></h3>
+<section id="rag-autoload-persona">
+<h4>RAG_AUTOLOAD_PERSONA<a class="headerlink" href="#rag-autoload-persona" title="Link to this heading"></a></h4>
+<dl class="field-list simple">
+<dt class="field-odd">Default<span class="colon">:</span></dt>
+<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">true</span></code></p>
+</dd>
+<dt class="field-even">Type<span class="colon">:</span></dt>
+<dd class="field-even"><p>Boolean</p>
+</dd>
+</dl>
+<p>Automatically load <code class="docutils literal notranslate"><span class="pre">persona.md</span></code> into the vector database on startup.</p>
+</section>
+<section id="rag-persona-path">
+<h4>RAG_PERSONA_PATH<a class="headerlink" href="#rag-persona-path" title="Link to this heading"></a></h4>
+<dl class="field-list simple">
+<dt class="field-odd">Default<span class="colon">:</span></dt>
+<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">/app/persona.md</span></code></p>
+</dd>
+</dl>
+<p>Path to the persona markdown file to load on startup.</p>
+</section>
+<section id="rag-autoload-faq">
+<h4>RAG_AUTOLOAD_FAQ<a class="headerlink" href="#rag-autoload-faq" title="Link to this heading"></a></h4>
+<dl class="field-list simple">
+<dt class="field-odd">Default<span class="colon">:</span></dt>
+<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">false</span></code></p>
+</dd>
+<dt class="field-even">Type<span class="colon">:</span></dt>
+<dd class="field-even"><p>Boolean</p>
+</dd>
+</dl>
+<p>Automatically load FAQ entries from JSONL on startup.</p>
+</section>
+<section id="rag-faq-path">
+<h4>RAG_FAQ_PATH<a class="headerlink" href="#rag-faq-path" title="Link to this heading"></a></h4>
+<dl class="field-list simple">
+<dt class="field-odd">Default<span class="colon">:</span></dt>
+<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">/app/seed/faqs.jsonl</span></code></p>
+</dd>
+</dl>
+<p>Path to the FAQ JSONL file.</p>
+</section>
+</section>
+<section id="debug-mode">
+<h3>Debug Mode<a class="headerlink" href="#debug-mode" title="Link to this heading"></a></h3>
+<section id="rag-debug">
+<h4>RAG_DEBUG<a class="headerlink" href="#rag-debug" title="Link to this heading"></a></h4>
+<dl class="field-list simple">
+<dt class="field-odd">Default<span class="colon">:</span></dt>
+<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">false</span></code></p>
+</dd>
+<dt class="field-even">Type<span class="colon">:</span></dt>
+<dd class="field-even"><p>Boolean</p>
+</dd>
+</dl>
+<p>Enable debug endpoints at <code class="docutils literal notranslate"><span class="pre">/v1/debug/*</span></code> for inspecting RAG behavior.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Only enable in development. Debug endpoints expose internal state.</p>
+</div>
+</section>
+</section>
+</section>
+<section id="specialist-system">
+<h2>Specialist System<a class="headerlink" href="#specialist-system" title="Link to this heading"></a></h2>
+<p>Controls how Ada uses external capabilities (web search, OCR, vision).</p>
+<p>For detailed information on the specialist plugin system, see <a class="reference internal" href="specialists.html"><span class="doc">Specialist System</span></a>.</p>
+<section id="specialist-pause-resume">
+<h3>SPECIALIST_PAUSE_RESUME<a class="headerlink" href="#specialist-pause-resume" title="Link to this heading"></a></h3>
+<dl class="field-list simple">
+<dt class="field-odd">Default<span class="colon">:</span></dt>
+<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">true</span></code></p>
+</dd>
+<dt class="field-even">Type<span class="colon">:</span></dt>
+<dd class="field-even"><p>Boolean</p>
+</dd>
+</dl>
+<p>Enable bidirectional pause/resume for specialists (Phase 2). When <code class="docutils literal notranslate"><span class="pre">true</span></code>, LLM generation pauses while the specialist executes, then resumes with enriched context. This produces higher-quality integration than mid-stream injection.</p>
+</section>
+<section id="specialist-max-turns">
+<h3>SPECIALIST_MAX_TURNS<a class="headerlink" href="#specialist-max-turns" title="Link to this heading"></a></h3>
+<dl class="field-list simple">
+<dt class="field-odd">Default<span class="colon">:</span></dt>
+<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">5</span></code></p>
+</dd>
+<dt class="field-even">Range<span class="colon">:</span></dt>
+<dd class="field-even"><p>1-20</p>
+</dd>
+</dl>
+<p>Maximum number of specialist calls allowed per conversation turn. Prevents infinite loops.</p>
+</section>
+<section id="specialist-rag-docs">
+<h3>SPECIALIST_RAG_DOCS<a class="headerlink" href="#specialist-rag-docs" title="Link to this heading"></a></h3>
+<dl class="field-list simple">
+<dt class="field-odd">Default<span class="colon">:</span></dt>
+<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">true</span></code></p>
+</dd>
+<dt class="field-even">Type<span class="colon">:</span></dt>
+<dd class="field-even"><p>Boolean</p>
+</dd>
+</dl>
+<p>Use RAG to dynamically retrieve relevant specialist documentation from the FAQ system. When <code class="docutils literal notranslate"><span class="pre">false</span></code>, uses only static system prompt instructions.</p>
+</section>
+</section>
+<section id="integrations">
+<h2>Integrations<a class="headerlink" href="#integrations" title="Link to this heading"></a></h2>
+<p>All integrations are optional. Leave unset to disable.</p>
+<section id="web-search-searxng">
+<h3>Web Search (SearxNG)<a class="headerlink" href="#web-search-searxng" title="Link to this heading"></a></h3>
+<section id="searxng-url">
+<h4>SEARXNG_URL<a class="headerlink" href="#searxng-url" title="Link to this heading"></a></h4>
+<dl class="field-list simple">
+<dt class="field-odd">Default<span class="colon">:</span></dt>
+<dd class="field-odd"><p>(none)</p>
+</dd>
+<dt class="field-even">Required<span class="colon">:</span></dt>
+<dd class="field-even"><p>No</p>
+</dd>
+<dt class="field-odd">Example<span class="colon">:</span></dt>
+<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">https://hunt.airsi.de</span></code></p>
+</dd>
+</dl>
+<p>SearxNG instance URL for the web search specialist. When set, Ada can search the web for current information.</p>
+<p>Setup:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># In .env</span>
+<span class="nv">SEARXNG_URL</span><span class="o">=</span>https://your-searxng-instance.com
+</pre></div>
+</div>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>You can use a public SearxNG instance or host your own. See <a class="reference external" href="https://docs.searxng.org/">SearxNG documentation</a> for self-hosting.</p>
+</div>
+</section>
+</section>
+<section id="listenbrainz-music-context">
+<h3>ListenBrainz (Music Context)<a class="headerlink" href="#listenbrainz-music-context" title="Link to this heading"></a></h3>
+<section id="listenbrainz-user">
+<h4>LISTENBRAINZ_USER<a class="headerlink" href="#listenbrainz-user" title="Link to this heading"></a></h4>
+<dl class="field-list simple">
+<dt class="field-odd">Default<span class="colon">:</span></dt>
+<dd class="field-odd"><p>(none)</p>
+</dd>
+<dt class="field-even">Required<span class="colon">:</span></dt>
+<dd class="field-even"><p>No</p>
+</dd>
+<dt class="field-odd">Example<span class="colon">:</span></dt>
+<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">your_username</span></code></p>
+</dd>
+</dl>
+<p>ListenBrainz username for music context integration.</p>
+</section>
+<section id="listenbrainz-token">
+<h4>LISTENBRAINZ_TOKEN<a class="headerlink" href="#listenbrainz-token" title="Link to this heading"></a></h4>
+<dl class="field-list simple">
+<dt class="field-odd">Default<span class="colon">:</span></dt>
+<dd class="field-odd"><p>(none)</p>
+</dd>
+<dt class="field-even">Required<span class="colon">:</span></dt>
+<dd class="field-even"><p>No</p>
+</dd>
+</dl>
+<p>ListenBrainz API token. Get yours at <a class="reference external" href="https://listenbrainz.org/settings/">ListenBrainz settings</a>.</p>
+<p>Setup:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># In .env</span>
+<span class="nv">LISTENBRAINZ_USER</span><span class="o">=</span>your_username
+<span class="nv">LISTENBRAINZ_TOKEN</span><span class="o">=</span>your_api_token
+</pre></div>
+</div>
+</section>
+</section>
+</section>
+<section id="backup-configuration">
+<h2>Backup Configuration<a class="headerlink" href="#backup-configuration" title="Link to this heading"></a></h2>
+<p>Settings for automated Chroma database backups to Backblaze B2.</p>
+<section id="backblaze-b2-credentials">
+<h3>Backblaze B2 Credentials<a class="headerlink" href="#backblaze-b2-credentials" title="Link to this heading"></a></h3>
+<section id="b2-endpoint-url">
+<h4>B2_ENDPOINT_URL<a class="headerlink" href="#b2-endpoint-url" title="Link to this heading"></a></h4>
+<dl class="field-list simple">
+<dt class="field-odd">Default<span class="colon">:</span></dt>
+<dd class="field-odd"><p>(none)</p>
+</dd>
+<dt class="field-even">Required<span class="colon">:</span></dt>
+<dd class="field-even"><p>For backups</p>
+</dd>
+<dt class="field-odd">Example<span class="colon">:</span></dt>
+<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">s3.us-east-005.backblazeb2.com</span></code></p>
+</dd>
+</dl>
+<p>S3-compatible endpoint URL from your Backblaze B2 bucket settings.</p>
+</section>
+<section id="b2-key-id">
+<h4>B2_KEY_ID<a class="headerlink" href="#b2-key-id" title="Link to this heading"></a></h4>
+<dl class="field-list simple">
+<dt class="field-odd">Default<span class="colon">:</span></dt>
+<dd class="field-odd"><p>(none)</p>
+</dd>
+<dt class="field-even">Required<span class="colon">:</span></dt>
+<dd class="field-even"><p>For backups</p>
+</dd>
+</dl>
+<p>Backblaze B2 key ID (starts with <code class="docutils literal notranslate"><span class="pre">005...</span></code>).</p>
+</section>
+<section id="b2-application-key">
+<h4>B2_APPLICATION_KEY<a class="headerlink" href="#b2-application-key" title="Link to this heading"></a></h4>
+<dl class="field-list simple">
+<dt class="field-odd">Default<span class="colon">:</span></dt>
+<dd class="field-odd"><p>(none)</p>
+</dd>
+<dt class="field-even">Required<span class="colon">:</span></dt>
+<dd class="field-even"><p>For backups</p>
+</dd>
+</dl>
+<p>Backblaze B2 application key (secret).</p>
+</section>
+<section id="b2-bucket-name">
+<h4>B2_BUCKET_NAME<a class="headerlink" href="#b2-bucket-name" title="Link to this heading"></a></h4>
+<dl class="field-list simple">
+<dt class="field-odd">Default<span class="colon">:</span></dt>
+<dd class="field-odd"><p>(none)</p>
+</dd>
+<dt class="field-even">Required<span class="colon">:</span></dt>
+<dd class="field-even"><p>For backups</p>
+</dd>
+</dl>
+<p>Name of the B2 bucket to store backups.</p>
+</section>
+</section>
+<section id="backup-options">
+<h3>Backup Options<a class="headerlink" href="#backup-options" title="Link to this heading"></a></h3>
+<section id="b2-bucket-prefix">
+<h4>B2_BUCKET_PREFIX<a class="headerlink" href="#b2-bucket-prefix" title="Link to this heading"></a></h4>
+<dl class="field-list simple">
+<dt class="field-odd">Default<span class="colon">:</span></dt>
+<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">chroma-backups</span></code></p>
+</dd>
+</dl>
+<p>Folder prefix inside the bucket where backups are stored.</p>
+</section>
+<section id="upload-mode">
+<h4>UPLOAD_MODE<a class="headerlink" href="#upload-mode" title="Link to this heading"></a></h4>
+<dl class="field-list simple">
+<dt class="field-odd">Default<span class="colon">:</span></dt>
+<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">latest</span></code></p>
+</dd>
+<dt class="field-even">Options<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">latest</span></code>, <code class="docutils literal notranslate"><span class="pre">all</span></code></p>
+</dd>
+</dl>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">latest</span></code>: Only upload the most recent backup</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">all</span></code>: Upload all local backups</p></li>
+</ul>
+</section>
+<section id="backups-dir">
+<h4>BACKUPS_DIR<a class="headerlink" href="#backups-dir" title="Link to this heading"></a></h4>
+<dl class="field-list simple">
+<dt class="field-odd">Default<span class="colon">:</span></dt>
+<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">/data/backups</span></code></p>
+</dd>
+</dl>
+<p>Local directory where backups are stored before upload.</p>
+</section>
+</section>
+</section>
+<section id="configuration-validation">
+<h2>Configuration Validation<a class="headerlink" href="#configuration-validation" title="Link to this heading"></a></h2>
+<p>Ada validates configuration at startup. Check the logs for warnings:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>docker<span class="w"> </span>compose<span class="w"> </span>logs<span class="w"> </span>brain<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>-i<span class="w"> </span>config
+</pre></div>
+</div>
+<p>Common validation issues:</p>
+<ul class="simple">
+<li><p><strong>Missing required values</strong>: Ada uses defaults, but may not work as expected</p></li>
+<li><p><strong>Invalid ranges</strong>: Values outside allowed ranges are clamped</p></li>
+<li><p><strong>Type errors</strong>: Non-boolean values for boolean settings</p></li>
+</ul>
+</section>
+<section id="best-practices">
+<h2>Best Practices<a class="headerlink" href="#best-practices" title="Link to this heading"></a></h2>
+<ol class="arabic simple">
+<li><p><strong>Use .env for secrets</strong>: Never commit <code class="docutils literal notranslate"><span class="pre">.env</span></code> to version control</p></li>
+<li><p><strong>Document changes</strong>: Comment your <code class="docutils literal notranslate"><span class="pre">.env</span></code> when deviating from defaults</p></li>
+<li><p><strong>Test in development</strong>: Verify configuration changes in dev before production</p></li>
+<li><p><strong>Backup .env</strong>: Include <code class="docutils literal notranslate"><span class="pre">.env</span></code> in your backup strategy</p></li>
+<li><p><strong>Use .env.example</strong>: Keep <code class="docutils literal notranslate"><span class="pre">.env.example</span></code> updated as a template</p></li>
+</ol>
+</section>
+<section id="environment-specific-configuration">
+<h2>Environment-Specific Configuration<a class="headerlink" href="#environment-specific-configuration" title="Link to this heading"></a></h2>
+<section id="development">
+<h3>Development<a class="headerlink" href="#development" title="Link to this heading"></a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># .env.development</span>
+<span class="nv">RAG_DEBUG</span><span class="o">=</span><span class="nb">true</span>
+<span class="nv">OLLAMA_BASE_URL</span><span class="o">=</span>http://localhost:11434
+<span class="nv">CHROMA_URL</span><span class="o">=</span>http://localhost:8000
+</pre></div>
+</div>
+</section>
+<section id="production">
+<h3>Production<a class="headerlink" href="#production" title="Link to this heading"></a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># .env.production</span>
+<span class="nv">RAG_DEBUG</span><span class="o">=</span><span class="nb">false</span>
+<span class="nv">OLLAMA_BASE_URL</span><span class="o">=</span>http://ollama:11434
+<span class="nv">CHROMA_URL</span><span class="o">=</span>http://chroma:8000
+<span class="c1"># Add Backblaze credentials for backups</span>
+<span class="nv">B2_ENDPOINT_URL</span><span class="o">=</span>s3.us-east-005.backblazeb2.com
+<span class="nv">B2_KEY_ID</span><span class="o">=</span>&lt;your-key-id&gt;
+<span class="nv">B2_APPLICATION_KEY</span><span class="o">=</span>&lt;your-secret&gt;
+<span class="nv">B2_BUCKET_NAME</span><span class="o">=</span>&lt;your-bucket&gt;
+</pre></div>
+</div>
+</section>
+</section>
+<section id="troubleshooting">
+<h2>Troubleshooting<a class="headerlink" href="#troubleshooting" title="Link to this heading"></a></h2>
+<section id="configuration-not-loading">
+<h3>Configuration not loading<a class="headerlink" href="#configuration-not-loading" title="Link to this heading"></a></h3>
+<p><strong>Symptom</strong>: Changes to <code class="docutils literal notranslate"><span class="pre">.env</span></code> don’t take effect</p>
+<p><strong>Solutions</strong>:</p>
+<ol class="arabic simple">
+<li><p>Rebuild containers: <code class="docutils literal notranslate"><span class="pre">docker</span> <span class="pre">compose</span> <span class="pre">build</span> <span class="pre">brain</span></code></p></li>
+<li><p>Restart services: <code class="docutils literal notranslate"><span class="pre">docker</span> <span class="pre">compose</span> <span class="pre">up</span> <span class="pre">-d</span></code></p></li>
+<li><p>Verify <code class="docutils literal notranslate"><span class="pre">.env</span></code> location (must be in project root)</p></li>
+<li><p>Check for syntax errors in <code class="docutils literal notranslate"><span class="pre">.env</span></code></p></li>
+</ol>
+</section>
+<section id="services-can-t-connect">
+<h3>Services can’t connect<a class="headerlink" href="#services-can-t-connect" title="Link to this heading"></a></h3>
+<p><strong>Symptom</strong>: <code class="docutils literal notranslate"><span class="pre">Connection</span> <span class="pre">refused</span></code> errors</p>
+<p><strong>Solutions</strong>:</p>
+<ol class="arabic simple">
+<li><p>In Docker Compose, use service names (<code class="docutils literal notranslate"><span class="pre">http://ollama:11434</span></code> not <code class="docutils literal notranslate"><span class="pre">localhost</span></code>)</p></li>
+<li><p>Check services are running: <code class="docutils literal notranslate"><span class="pre">docker</span> <span class="pre">compose</span> <span class="pre">ps</span></code></p></li>
+<li><p>Verify network connectivity: <code class="docutils literal notranslate"><span class="pre">docker</span> <span class="pre">compose</span> <span class="pre">exec</span> <span class="pre">brain</span> <span class="pre">ping</span> <span class="pre">ollama</span></code></p></li>
+</ol>
+</section>
+<section id="models-not-found">
+<h3>Models not found<a class="headerlink" href="#models-not-found" title="Link to this heading"></a></h3>
+<p><strong>Symptom</strong>: <code class="docutils literal notranslate"><span class="pre">model</span> <span class="pre">'deepseek-r1'</span> <span class="pre">not</span> <span class="pre">found</span></code></p>
+<p><strong>Solutions</strong>:</p>
+<ol class="arabic simple">
+<li><p>Pull the model: <code class="docutils literal notranslate"><span class="pre">docker</span> <span class="pre">compose</span> <span class="pre">exec</span> <span class="pre">ollama</span> <span class="pre">ollama</span> <span class="pre">pull</span> <span class="pre">deepseek-r1</span></code></p></li>
+<li><p>List available models: <code class="docutils literal notranslate"><span class="pre">docker</span> <span class="pre">compose</span> <span class="pre">exec</span> <span class="pre">ollama</span> <span class="pre">ollama</span> <span class="pre">list</span></code></p></li>
+<li><p>Update <code class="docutils literal notranslate"><span class="pre">OLLAMA_MODEL</span></code> to match an installed model</p></li>
+</ol>
+</section>
+</section>
+<section id="see-also">
+<h2>See Also<a class="headerlink" href="#see-also" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p><a class="reference internal" href="getting_started.html"><span class="doc">Getting Started</span></a> - Initial setup guide</p></li>
+<li><p><a class="reference internal" href="testing.html"><span class="doc">Testing Guide</span></a> - Testing your configuration</p></li>
+<li><p><a class="reference internal" href="development.html"><span class="doc">Development Tools</span></a> - Development workflows</p></li>
+<li><p><a class="reference internal" href="api_usage.html"><span class="doc">API Usage Guide</span></a> - API reference</p></li>
+</ul>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="getting_started.html" class="btn btn-neutral float-left" title="Getting Started" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="architecture.html" class="btn btn-neutral float-right" title="Architecture" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p></p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

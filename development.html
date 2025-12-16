@@ -1,0 +1,679 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Development Tools &mdash; Ada Brain API 0.1.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=19f00094" />
+      <link rel="stylesheet" type="text/css" href="_static/graphviz.css?v=4ae1632d" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="_static/jquery.js?v=5d32c60e"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="_static/documentation_options.js?v=01f34227"></script>
+        <script src="_static/doctools.js?v=9bcbadda"></script>
+        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Streaming" href="streaming.html" />
+    <link rel="prev" title="Testing Guide" href="testing.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            Ada Brain API
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Documentation:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="getting_started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="configuration.html">Configuration Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="architecture.html">Architecture</a></li>
+<li class="toctree-l1"><a class="reference internal" href="data_model.html">Data Model Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api_usage.html">API Usage Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api_reference.html">API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="specialists.html">Specialist System</a></li>
+<li class="toctree-l1"><a class="reference internal" href="testing.html">Testing Guide</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Development Tools</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#scripts-tooling-container">Scripts Tooling Container</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#overview">Overview</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#why-use-the-container">Why Use the Container?</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#usage-pattern">Usage Pattern</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#quick-way-recommended">Quick Way (Recommended)</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#direct-way-full-control">Direct Way (Full Control)</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#available-scripts">Available Scripts</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#health-testing">Health &amp; Testing</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#pytest-test-suite">Pytest Test Suite</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#health-check-script">Health Check Script</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#data-management">Data Management</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#migrate-chroma-collection">Migrate Chroma Collection</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#import-faq">Import FAQ</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#import-conversation-turns">Import Conversation Turns</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#load-persona">Load Persona</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#consolidate-memories">Consolidate Memories</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#backup-management">Backup Management</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#upload-backups-to-b2">Upload Backups to B2</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#development-patterns">Development Patterns</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#similar-tools-in-other-ecosystems">Similar Tools in Other Ecosystems</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#when-to-use-the-scripts-container">When to Use the Scripts Container</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#running-tests-in-ci-cd">Running Tests in CI/CD</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pre-deployment-health-check">Pre-Deployment Health Check</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#interactive-debugging">Interactive Debugging</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#adding-new-scripts">Adding New Scripts</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#troubleshooting">Troubleshooting</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#script-not-found">Script Not Found</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#import-errors">Import Errors</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#can-t-reach-chroma-ollama">Can’t Reach Chroma/Ollama</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#permission-errors">Permission Errors</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#architecture">Architecture</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#container-configuration">Container Configuration</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#dockerfile-structure">Dockerfile Structure</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#volume-mounts">Volume Mounts</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#best-practices">Best Practices</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#development-workflow">Development Workflow</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#typical-development-cycle">Typical Development Cycle</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#adding-new-features">Adding New Features</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#debugging-issues">Debugging Issues</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#code-quality">Code Quality</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#linting-and-formatting">Linting and Formatting</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pre-commit-hooks">Pre-commit Hooks</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#resources">Resources</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="streaming.html">Streaming</a></li>
+<li class="toctree-l1"><a class="reference internal" href="memory.html">Memory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="documentation_philosophy.html">Documentation Philosophy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="empathetic_documentation.html">Empathetic Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="examples.html">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="xenofeminism.html">Xenofeminism and Ada</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Ada Brain API</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Development Tools</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/development.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="development-tools">
+<h1>Development Tools<a class="headerlink" href="#development-tools" title="Link to this heading"></a></h1>
+<p>This guide covers Ada’s utility scripts, the scripts tooling container, and development workflows.</p>
+<section id="scripts-tooling-container">
+<h2>Scripts Tooling Container<a class="headerlink" href="#scripts-tooling-container" title="Link to this heading"></a></h2>
+<section id="overview">
+<h3>Overview<a class="headerlink" href="#overview" title="Link to this heading"></a></h3>
+<p>All utility scripts should be run via the dedicated <code class="docutils literal notranslate"><span class="pre">scripts</span></code> Docker service, which provides:</p>
+<ul class="simple">
+<li><p>Consistent Python environment (same as brain service)</p></li>
+<li><p>All dependencies pre-installed</p></li>
+<li><p>Network access to chroma, ollama, etc.</p></li>
+<li><p>Proper module imports (brain, rag modules available)</p></li>
+</ul>
+</section>
+<section id="why-use-the-container">
+<h3>Why Use the Container?<a class="headerlink" href="#why-use-the-container" title="Link to this heading"></a></h3>
+<p><strong>Problem</strong>: Running scripts directly on host causes issues:</p>
+<ul class="simple">
+<li><p>❌ Different Python versions</p></li>
+<li><p>❌ Missing dependencies</p></li>
+<li><p>❌ Can’t reach Docker services (chroma, ollama)</p></li>
+<li><p>❌ Import errors (can’t find brain/rag modules)</p></li>
+<li><p>❌ Environment variable mismatches</p></li>
+</ul>
+<p><strong>Solution</strong>: Scripts container provides:</p>
+<ul class="simple">
+<li><p>✅ Same Python 3.13 as brain</p></li>
+<li><p>✅ All dependencies from pyproject.toml</p></li>
+<li><p>✅ Network access via Docker Compose</p></li>
+<li><p>✅ Clean imports with PYTHONPATH set</p></li>
+<li><p>✅ Consistent environment variables</p></li>
+</ul>
+</section>
+<section id="usage-pattern">
+<h3>Usage Pattern<a class="headerlink" href="#usage-pattern" title="Link to this heading"></a></h3>
+<section id="quick-way-recommended">
+<h4>Quick Way (Recommended)<a class="headerlink" href="#quick-way-recommended" title="Link to this heading"></a></h4>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Use the convenience wrapper</span>
+./scripts/run.sh<span class="w"> </span>health<span class="w">          </span><span class="c1"># Run health check</span>
+./scripts/run.sh<span class="w"> </span><span class="nb">test</span><span class="w">            </span><span class="c1"># Run test suite</span>
+./scripts/run.sh<span class="w"> </span>migrate<span class="w">         </span><span class="c1"># Run migration (with confirmation)</span>
+./scripts/run.sh<span class="w"> </span>consolidate<span class="w">     </span><span class="c1"># Run consolidation</span>
+./scripts/run.sh<span class="w"> </span>shell<span class="w">           </span><span class="c1"># Interactive Python shell</span>
+./scripts/run.sh<span class="w"> </span>bash<span class="w">            </span><span class="c1"># Bash shell in container</span>
+./scripts/run.sh<span class="w"> </span>my_script.py<span class="w">    </span><span class="c1"># Run custom script</span>
+</pre></div>
+</div>
+</section>
+<section id="direct-way-full-control">
+<h4>Direct Way (Full Control)<a class="headerlink" href="#direct-way-full-control" title="Link to this heading"></a></h4>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Run any script directly</span>
+docker<span class="w"> </span>compose<span class="w"> </span>run<span class="w"> </span>--rm<span class="w"> </span>scripts<span class="w"> </span>python<span class="w"> </span>/app/scripts/&lt;script_name&gt;.py
+
+<span class="c1"># Examples</span>
+docker<span class="w"> </span>compose<span class="w"> </span>run<span class="w"> </span>--rm<span class="w"> </span>scripts<span class="w"> </span>python<span class="w"> </span>/app/scripts/health_check_chroma.py
+docker<span class="w"> </span>compose<span class="w"> </span>run<span class="w"> </span>--rm<span class="w"> </span>scripts<span class="w"> </span>python<span class="w"> </span>/app/scripts/migrate_chroma_http.py
+</pre></div>
+</div>
+</section>
+</section>
+</section>
+<section id="available-scripts">
+<h2>Available Scripts<a class="headerlink" href="#available-scripts" title="Link to this heading"></a></h2>
+<section id="health-testing">
+<h3>Health &amp; Testing<a class="headerlink" href="#health-testing" title="Link to this heading"></a></h3>
+<section id="pytest-test-suite">
+<h4>Pytest Test Suite<a class="headerlink" href="#pytest-test-suite" title="Link to this heading"></a></h4>
+<p>Modern test suite using pytest with fixtures and better reporting.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Run all tests</span>
+./scripts/run.sh<span class="w"> </span><span class="nb">test</span>
+<span class="c1"># Or directly:</span>
+docker<span class="w"> </span>compose<span class="w"> </span>run<span class="w"> </span>--rm<span class="w"> </span>scripts<span class="w"> </span>pytest
+
+<span class="c1"># Run specific test file</span>
+docker<span class="w"> </span>compose<span class="w"> </span>run<span class="w"> </span>--rm<span class="w"> </span>scripts<span class="w"> </span>pytest<span class="w"> </span>tests/test_rag.py
+
+<span class="c1"># Run with more verbosity</span>
+docker<span class="w"> </span>compose<span class="w"> </span>run<span class="w"> </span>--rm<span class="w"> </span>scripts<span class="w"> </span>pytest<span class="w"> </span>-vv
+
+<span class="c1"># Run only tests matching a pattern</span>
+docker<span class="w"> </span>compose<span class="w"> </span>run<span class="w"> </span>--rm<span class="w"> </span>scripts<span class="w"> </span>pytest<span class="w"> </span>-k<span class="w"> </span><span class="s2">&quot;memory&quot;</span>
+
+<span class="c1"># Skip slow tests</span>
+docker<span class="w"> </span>compose<span class="w"> </span>run<span class="w"> </span>--rm<span class="w"> </span>scripts<span class="w"> </span>pytest<span class="w"> </span>-m<span class="w"> </span><span class="s2">&quot;not slow&quot;</span>
+</pre></div>
+</div>
+<p><strong>Test files:</strong></p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">tests/test_rag.py</span></code> - RAG store retrieval tests</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">tests/test_prompt_builder.py</span></code> - Prompt building tests</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">tests/test_specialists.py</span></code> - Specialist system tests</p></li>
+</ul>
+</section>
+<section id="health-check-script">
+<h4>Health Check Script<a class="headerlink" href="#health-check-script" title="Link to this heading"></a></h4>
+<p>Comprehensive health check for Chroma database and RAG system (operational tool, not a test).</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>docker<span class="w"> </span>compose<span class="w"> </span>run<span class="w"> </span>--rm<span class="w"> </span>scripts<span class="w"> </span>python<span class="w"> </span>/app/scripts/health_check_chroma.py
+</pre></div>
+</div>
+<p><strong>Checks:</strong></p>
+<ul class="simple">
+<li><p>Chroma server connectivity</p></li>
+<li><p>Collection existence and document count</p></li>
+<li><p>Embedding generation</p></li>
+<li><p>Memory/FAQ/turn query functionality</p></li>
+<li><p>Specialist docs retrieval</p></li>
+<li><p>Query consistency</p></li>
+<li><p>Persona loading</p></li>
+</ul>
+<p><strong>Exit codes:</strong> 0 (healthy), 1 (unhealthy)</p>
+</section>
+</section>
+<section id="data-management">
+<h3>Data Management<a class="headerlink" href="#data-management" title="Link to this heading"></a></h3>
+<section id="migrate-chroma-collection">
+<h4>Migrate Chroma Collection<a class="headerlink" href="#migrate-chroma-collection" title="Link to this heading"></a></h4>
+<p>Migrate Chroma collection to HTTP-compatible format with fresh embeddings.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>docker<span class="w"> </span>compose<span class="w"> </span>run<span class="w"> </span>--rm<span class="w"> </span>scripts<span class="w"> </span>python<span class="w"> </span>/app/scripts/migrate_chroma_http.py
+</pre></div>
+</div>
+<p><strong>What it does:</strong></p>
+<ul class="simple">
+<li><p>Backs up existing collection</p></li>
+<li><p>Deletes old collection</p></li>
+<li><p>Creates fresh collection</p></li>
+<li><p>Re-generates embeddings for all documents</p></li>
+<li><p>Verifies query functionality</p></li>
+</ul>
+<p><strong>When to use:</strong></p>
+<ul class="simple">
+<li><p>After upgrading Chroma</p></li>
+<li><p>When queries return unexpected results</p></li>
+<li><p>When switching from embedded to HTTP mode</p></li>
+</ul>
+</section>
+<section id="import-faq">
+<h4>Import FAQ<a class="headerlink" href="#import-faq" title="Link to this heading"></a></h4>
+<p>Import FAQs from JSONL file into Chroma.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>docker<span class="w"> </span>compose<span class="w"> </span>run<span class="w"> </span>--rm<span class="w"> </span>scripts<span class="w"> </span>python<span class="w"> </span>/app/scripts/import_faq.py
+</pre></div>
+</div>
+</section>
+<section id="import-conversation-turns">
+<h4>Import Conversation Turns<a class="headerlink" href="#import-conversation-turns" title="Link to this heading"></a></h4>
+<p>Import conversation turns from CSV into Chroma.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>docker<span class="w"> </span>compose<span class="w"> </span>run<span class="w"> </span>--rm<span class="w"> </span>scripts<span class="w"> </span>python<span class="w"> </span>/app/scripts/import_turns_csv.py
+</pre></div>
+</div>
+</section>
+<section id="load-persona">
+<h4>Load Persona<a class="headerlink" href="#load-persona" title="Link to this heading"></a></h4>
+<p>Load persona from markdown file into Chroma.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>docker<span class="w"> </span>compose<span class="w"> </span>run<span class="w"> </span>--rm<span class="w"> </span>scripts<span class="w"> </span>python<span class="w"> </span>/app/scripts/load_persona.py
+</pre></div>
+</div>
+</section>
+<section id="consolidate-memories">
+<h4>Consolidate Memories<a class="headerlink" href="#consolidate-memories" title="Link to this heading"></a></h4>
+<p>Run nightly memory consolidation (creates daily/weekly summaries).</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>docker<span class="w"> </span>compose<span class="w"> </span>run<span class="w"> </span>--rm<span class="w"> </span>scripts<span class="w"> </span>python<span class="w"> </span>/app/scripts/consolidate_memories.py
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This runs automatically via <code class="docutils literal notranslate"><span class="pre">memory-consolidation</span></code> service at 02:00 UTC.</p>
+</div>
+</section>
+</section>
+<section id="backup-management">
+<h3>Backup Management<a class="headerlink" href="#backup-management" title="Link to this heading"></a></h3>
+<section id="upload-backups-to-b2">
+<h4>Upload Backups to B2<a class="headerlink" href="#upload-backups-to-b2" title="Link to this heading"></a></h4>
+<p>Upload Chroma backups to Backblaze B2.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>docker<span class="w"> </span>compose<span class="w"> </span>run<span class="w"> </span>--rm<span class="w"> </span>scripts<span class="w"> </span>python<span class="w"> </span>/app/scripts/upload_backups_b2.py
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This runs automatically via <code class="docutils literal notranslate"><span class="pre">sqlite-backup</span></code> service hourly.</p>
+</div>
+</section>
+</section>
+</section>
+<section id="development-patterns">
+<h2>Development Patterns<a class="headerlink" href="#development-patterns" title="Link to this heading"></a></h2>
+<section id="similar-tools-in-other-ecosystems">
+<h3>Similar Tools in Other Ecosystems<a class="headerlink" href="#similar-tools-in-other-ecosystems" title="Link to this heading"></a></h3>
+<p>This pattern is well-established in containerized development:</p>
+<ul class="simple">
+<li><p><strong>Rails</strong>: <code class="docutils literal notranslate"><span class="pre">docker</span> <span class="pre">compose</span> <span class="pre">run</span> <span class="pre">--rm</span> <span class="pre">web</span> <span class="pre">bin/rails</span> <span class="pre">console</span></code></p></li>
+<li><p><strong>Django</strong>: <code class="docutils literal notranslate"><span class="pre">docker</span> <span class="pre">compose</span> <span class="pre">run</span> <span class="pre">--rm</span> <span class="pre">web</span> <span class="pre">python</span> <span class="pre">manage.py</span> <span class="pre">shell</span></code></p></li>
+<li><p><strong>Node.js</strong>: <code class="docutils literal notranslate"><span class="pre">docker</span> <span class="pre">compose</span> <span class="pre">run</span> <span class="pre">--rm</span> <span class="pre">node</span> <span class="pre">npm</span> <span class="pre">test</span></code></p></li>
+<li><p><strong>Kubernetes</strong>: Init containers for migrations/setup</p></li>
+</ul>
+</section>
+<section id="when-to-use-the-scripts-container">
+<h3>When to Use the Scripts Container<a class="headerlink" href="#when-to-use-the-scripts-container" title="Link to this heading"></a></h3>
+<p>✅ <strong>Use the scripts container for:</strong></p>
+<ul class="simple">
+<li><p>Running health checks</p></li>
+<li><p>Running tests</p></li>
+<li><p>Database migrations</p></li>
+<li><p>Data imports/exports</p></li>
+<li><p>One-off maintenance tasks</p></li>
+<li><p>Interactive debugging</p></li>
+</ul>
+<p>❌ <strong>Don’t use for:</strong></p>
+<ul class="simple">
+<li><p>Running the main application (use <code class="docutils literal notranslate"><span class="pre">brain</span></code> service)</p></li>
+<li><p>Anything that needs to stay running (use a regular service)</p></li>
+</ul>
+</section>
+<section id="running-tests-in-ci-cd">
+<h3>Running Tests in CI/CD<a class="headerlink" href="#running-tests-in-ci-cd" title="Link to this heading"></a></h3>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="c1"># .gitlab-ci.yml / .github/workflows/test.yml</span>
+<span class="nt">test</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">script</span><span class="p">:</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">docker compose run --rm scripts pytest</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">docker compose run --rm scripts python /app/scripts/health_check_chroma.py</span>
+</pre></div>
+</div>
+</section>
+<section id="pre-deployment-health-check">
+<h3>Pre-Deployment Health Check<a class="headerlink" href="#pre-deployment-health-check" title="Link to this heading"></a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/bin/bash</span>
+<span class="c1"># pre-deploy.sh</span>
+docker<span class="w"> </span>compose<span class="w"> </span>run<span class="w"> </span>--rm<span class="w"> </span>scripts<span class="w"> </span>python<span class="w"> </span>/app/scripts/health_check_chroma.py
+<span class="k">if</span><span class="w"> </span><span class="o">[</span><span class="w"> </span><span class="nv">$?</span><span class="w"> </span>-eq<span class="w"> </span><span class="m">0</span><span class="w"> </span><span class="o">]</span><span class="p">;</span><span class="w"> </span><span class="k">then</span>
+<span class="w">  </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;Health check passed, proceeding with deployment&quot;</span>
+<span class="w">  </span>docker<span class="w"> </span>compose<span class="w"> </span>up<span class="w"> </span>-d
+<span class="k">else</span>
+<span class="w">  </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;Health check failed, aborting deployment&quot;</span>
+<span class="w">  </span><span class="nb">exit</span><span class="w"> </span><span class="m">1</span>
+<span class="k">fi</span>
+</pre></div>
+</div>
+</section>
+<section id="interactive-debugging">
+<h3>Interactive Debugging<a class="headerlink" href="#interactive-debugging" title="Link to this heading"></a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Start an interactive Python session with all dependencies</span>
+docker<span class="w"> </span>compose<span class="w"> </span>run<span class="w"> </span>--rm<span class="w"> </span>scripts<span class="w"> </span>python
+
+<span class="c1"># Then in Python:</span>
+&gt;&gt;&gt;<span class="w"> </span>from<span class="w"> </span>brain.rag_store<span class="w"> </span>import<span class="w"> </span>RagStore
+&gt;&gt;&gt;<span class="w"> </span><span class="nv">store</span><span class="w"> </span><span class="o">=</span><span class="w"> </span>RagStore<span class="o">()</span>
+&gt;&gt;&gt;<span class="w"> </span><span class="nv">results</span><span class="w"> </span><span class="o">=</span><span class="w"> </span>store.retrieve_memories<span class="o">(</span><span class="s2">&quot;test query&quot;</span>,<span class="w"> </span><span class="nv">k</span><span class="o">=</span><span class="m">5</span><span class="o">)</span>
+&gt;&gt;&gt;<span class="w"> </span>print<span class="o">(</span>results<span class="o">)</span>
+</pre></div>
+</div>
+</section>
+<section id="adding-new-scripts">
+<h3>Adding New Scripts<a class="headerlink" href="#adding-new-scripts" title="Link to this heading"></a></h3>
+<ol class="arabic">
+<li><p>Create script in <code class="docutils literal notranslate"><span class="pre">scripts/</span></code> directory</p></li>
+<li><p>Import brain/rag modules as needed:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">brain.rag_store</span><span class="w"> </span><span class="kn">import</span> <span class="n">RagStore</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">brain</span><span class="w"> </span><span class="kn">import</span> <span class="n">config</span>
+</pre></div>
+</div>
+</li>
+<li><p>Run via scripts container:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>docker<span class="w"> </span>compose<span class="w"> </span>run<span class="w"> </span>--rm<span class="w"> </span>scripts<span class="w"> </span>python<span class="w"> </span>/app/scripts/new_script.py
+</pre></div>
+</div>
+</li>
+</ol>
+<p>No rebuild needed! Scripts are mounted as volumes.</p>
+</section>
+</section>
+<section id="troubleshooting">
+<h2>Troubleshooting<a class="headerlink" href="#troubleshooting" title="Link to this heading"></a></h2>
+<section id="script-not-found">
+<h3>Script Not Found<a class="headerlink" href="#script-not-found" title="Link to this heading"></a></h3>
+<p><strong>Problem:</strong></p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>docker<span class="w"> </span>compose<span class="w"> </span>run<span class="w"> </span>--rm<span class="w"> </span>scripts<span class="w"> </span>python<span class="w"> </span>/app/scripts/my_script.py
+<span class="c1"># Error: No such file</span>
+</pre></div>
+</div>
+<p><strong>Solution:</strong> Check that script exists in <code class="docutils literal notranslate"><span class="pre">scripts/</span></code> directory. Path should be <code class="docutils literal notranslate"><span class="pre">/app/scripts/</span></code>, not <code class="docutils literal notranslate"><span class="pre">./scripts/</span></code>.</p>
+</section>
+<section id="import-errors">
+<h3>Import Errors<a class="headerlink" href="#import-errors" title="Link to this heading"></a></h3>
+<p><strong>Problem:</strong></p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>ModuleNotFoundError: No module named &#39;brain&#39;
+</pre></div>
+</div>
+<p><strong>Solution:</strong> Use the scripts container, not host Python. The PYTHONPATH is set correctly in the container.</p>
+</section>
+<section id="can-t-reach-chroma-ollama">
+<h3>Can’t Reach Chroma/Ollama<a class="headerlink" href="#can-t-reach-chroma-ollama" title="Link to this heading"></a></h3>
+<p><strong>Problem:</strong></p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>httpx.ConnectError: [Errno 111] Connection refused
+</pre></div>
+</div>
+<p><strong>Solution:</strong></p>
+<ol class="arabic simple">
+<li><p>Ensure services are running: <code class="docutils literal notranslate"><span class="pre">docker</span> <span class="pre">compose</span> <span class="pre">ps</span></code></p></li>
+<li><p>Use service names (chroma, ollama), not localhost</p></li>
+<li><p>Check environment variables: <code class="docutils literal notranslate"><span class="pre">CHROMA_URL=http://chroma:8000</span></code></p></li>
+</ol>
+</section>
+<section id="permission-errors">
+<h3>Permission Errors<a class="headerlink" href="#permission-errors" title="Link to this heading"></a></h3>
+<p><strong>Problem:</strong></p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>PermissionError: [Errno 13] Permission denied
+</pre></div>
+</div>
+<p><strong>Solution:</strong> Scripts are mounted read-write. Check file permissions on host or run with appropriate user.</p>
+</section>
+</section>
+<section id="architecture">
+<h2>Architecture<a class="headerlink" href="#architecture" title="Link to this heading"></a></h2>
+<section id="container-configuration">
+<h3>Container Configuration<a class="headerlink" href="#container-configuration" title="Link to this heading"></a></h3>
+<p>The scripts service is defined in <code class="docutils literal notranslate"><span class="pre">compose.yaml</span></code> with:</p>
+<ul class="simple">
+<li><p><strong>Base:</strong> <code class="docutils literal notranslate"><span class="pre">scripts/Dockerfile</span></code> (Python 3.13-slim)</p></li>
+<li><p><strong>Profile:</strong> <code class="docutils literal notranslate"><span class="pre">tools</span></code> (not started by default)</p></li>
+<li><p><strong>Dependencies:</strong> brain, rag, scripts directories mounted</p></li>
+<li><p><strong>Environment:</strong> Same as brain service</p></li>
+<li><p><strong>Network:</strong> Can reach chroma, ollama by service name</p></li>
+<li><p><strong>No ports:</strong> Not a server, just a runner</p></li>
+</ul>
+</section>
+<section id="dockerfile-structure">
+<h3>Dockerfile Structure<a class="headerlink" href="#dockerfile-structure" title="Link to this heading"></a></h3>
+<p><code class="docutils literal notranslate"><span class="pre">scripts/Dockerfile</span></code> includes:</p>
+<div class="highlight-dockerfile notranslate"><div class="highlight"><pre><span></span><span class="k">FROM</span><span class="w"> </span><span class="s">python:3.13-slim</span>
+
+<span class="c"># Install uv package manager</span>
+<span class="k">RUN</span><span class="w"> </span>pip<span class="w"> </span>install<span class="w"> </span>--no-cache-dir<span class="w"> </span>uv
+
+<span class="c"># Copy project files</span>
+<span class="k">COPY</span><span class="w"> </span>pyproject.toml<span class="w"> </span>uv.lock<span class="w"> </span>./
+<span class="k">COPY</span><span class="w"> </span>brain/<span class="w"> </span>/app/brain/
+<span class="k">COPY</span><span class="w"> </span>scripts/<span class="w"> </span>/app/scripts/
+<span class="k">COPY</span><span class="w"> </span>tests/<span class="w"> </span>/app/tests/
+
+<span class="c"># Install dependencies (including dev extras)</span>
+<span class="k">RUN</span><span class="w"> </span>uv<span class="w"> </span>venv<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>uv<span class="w"> </span>sync<span class="w"> </span>--frozen<span class="w"> </span>--extra<span class="w"> </span>dev
+
+<span class="c"># Set PATH and PYTHONPATH</span>
+<span class="k">ENV</span><span class="w"> </span><span class="nv">PATH</span><span class="o">=</span><span class="s2">&quot;/app/.venv/bin:</span><span class="si">${</span><span class="nv">PATH</span><span class="si">}</span><span class="s2">&quot;</span>
+<span class="k">ENV</span><span class="w"> </span><span class="nv">PYTHONPATH</span><span class="o">=</span><span class="s2">&quot;/app:/app/brain&quot;</span>
+
+<span class="k">WORKDIR</span><span class="w"> </span><span class="s">/app</span>
+</pre></div>
+</div>
+</section>
+<section id="volume-mounts">
+<h3>Volume Mounts<a class="headerlink" href="#volume-mounts" title="Link to this heading"></a></h3>
+<p>Scripts and tests are volume-mounted for live updates:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">volumes</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">./brain:/app/brain:ro</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">./scripts:/app/scripts</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">./tests:/app/tests</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">./seed:/app/seed:ro</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">./persona.md:/app/persona.md:ro</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">./data:/data</span>
+</pre></div>
+</div>
+<p>This means you can edit scripts/tests without rebuilding the container.</p>
+</section>
+</section>
+<section id="best-practices">
+<h2>Best Practices<a class="headerlink" href="#best-practices" title="Link to this heading"></a></h2>
+<ol class="arabic simple">
+<li><p><strong>Always use scripts container:</strong> Consistent environment</p></li>
+<li><p><strong>Exit codes matter:</strong> Scripts should return 0 (success) or 1 (failure)</p></li>
+<li><p><strong>Log to stdout:</strong> Docker captures logs automatically</p></li>
+<li><p><strong>Handle errors gracefully:</strong> Use try/except, print clear error messages</p></li>
+<li><p><strong>Document usage:</strong> Add script to this documentation with description</p></li>
+<li><p><strong>Test in container:</strong> Don’t rely on host Python working</p></li>
+<li><p><strong>Use fixtures:</strong> Share common setup in <code class="docutils literal notranslate"><span class="pre">tests/conftest.py</span></code></p></li>
+<li><p><strong>Version control:</strong> Commit scripts and tests to git</p></li>
+</ol>
+</section>
+<section id="development-workflow">
+<h2>Development Workflow<a class="headerlink" href="#development-workflow" title="Link to this heading"></a></h2>
+<section id="typical-development-cycle">
+<h3>Typical Development Cycle<a class="headerlink" href="#typical-development-cycle" title="Link to this heading"></a></h3>
+<ol class="arabic">
+<li><p><strong>Start services:</strong></p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>docker<span class="w"> </span>compose<span class="w"> </span>up<span class="w"> </span>-d
+</pre></div>
+</div>
+</li>
+<li><p><strong>Make changes to code</strong></p></li>
+<li><p><strong>Run tests:</strong></p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>./scripts/run.sh<span class="w"> </span><span class="nb">test</span>
+</pre></div>
+</div>
+</li>
+<li><p><strong>Health check:</strong></p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>./scripts/run.sh<span class="w"> </span>health
+</pre></div>
+</div>
+</li>
+<li><p><strong>Debug if needed:</strong></p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>./scripts/run.sh<span class="w"> </span>shell
+</pre></div>
+</div>
+</li>
+<li><p><strong>Commit and push</strong></p></li>
+</ol>
+</section>
+<section id="adding-new-features">
+<h3>Adding New Features<a class="headerlink" href="#adding-new-features" title="Link to this heading"></a></h3>
+<ol class="arabic simple">
+<li><p><strong>Write the feature code</strong></p></li>
+<li><p><strong>Add tests</strong> in <code class="docutils literal notranslate"><span class="pre">tests/test_&lt;feature&gt;.py</span></code></p></li>
+<li><p><strong>Run tests</strong> to verify: <code class="docutils literal notranslate"><span class="pre">./scripts/run.sh</span> <span class="pre">test</span></code></p></li>
+<li><p><strong>Add documentation</strong> to Sphinx docs</p></li>
+<li><p><strong>Update CHANGELOG</strong> (if applicable)</p></li>
+<li><p><strong>Create pull request</strong></p></li>
+</ol>
+</section>
+<section id="debugging-issues">
+<h3>Debugging Issues<a class="headerlink" href="#debugging-issues" title="Link to this heading"></a></h3>
+<ol class="arabic">
+<li><p><strong>Check logs:</strong></p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>docker<span class="w"> </span>compose<span class="w"> </span>logs<span class="w"> </span>brain
+docker<span class="w"> </span>compose<span class="w"> </span>logs<span class="w"> </span>chroma
+</pre></div>
+</div>
+</li>
+<li><p><strong>Interactive debugging:</strong></p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>./scripts/run.sh<span class="w"> </span>shell
+</pre></div>
+</div>
+</li>
+<li><p><strong>Health check:</strong></p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>./scripts/run.sh<span class="w"> </span>health
+</pre></div>
+</div>
+</li>
+<li><p><strong>Test specific component:</strong></p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>docker<span class="w"> </span>compose<span class="w"> </span>run<span class="w"> </span>--rm<span class="w"> </span>scripts<span class="w"> </span>pytest<span class="w"> </span>tests/test_rag.py<span class="w"> </span>-vv
+</pre></div>
+</div>
+</li>
+</ol>
+</section>
+</section>
+<section id="code-quality">
+<h2>Code Quality<a class="headerlink" href="#code-quality" title="Link to this heading"></a></h2>
+<section id="linting-and-formatting">
+<h3>Linting and Formatting<a class="headerlink" href="#linting-and-formatting" title="Link to this heading"></a></h3>
+<p>(Future) Add code quality tools:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Format code</span>
+docker<span class="w"> </span>compose<span class="w"> </span>run<span class="w"> </span>--rm<span class="w"> </span>scripts<span class="w"> </span>black<span class="w"> </span>brain/<span class="w"> </span>scripts/
+
+<span class="c1"># Lint code</span>
+docker<span class="w"> </span>compose<span class="w"> </span>run<span class="w"> </span>--rm<span class="w"> </span>scripts<span class="w"> </span>ruff<span class="w"> </span>brain/<span class="w"> </span>scripts/
+
+<span class="c1"># Type checking</span>
+docker<span class="w"> </span>compose<span class="w"> </span>run<span class="w"> </span>--rm<span class="w"> </span>scripts<span class="w"> </span>mypy<span class="w"> </span>brain/
+</pre></div>
+</div>
+</section>
+<section id="pre-commit-hooks">
+<h3>Pre-commit Hooks<a class="headerlink" href="#pre-commit-hooks" title="Link to this heading"></a></h3>
+<p>(Future) Set up pre-commit hooks:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="c1"># .pre-commit-config.yaml</span>
+<span class="nt">repos</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">repo</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">https://github.com/psf/black</span>
+<span class="w">    </span><span class="nt">rev</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">23.1.0</span>
+<span class="w">    </span><span class="nt">hooks</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">id</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">black</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">repo</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">https://github.com/charliermarsh/ruff-pre-commit</span>
+<span class="w">    </span><span class="nt">rev</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">v0.0.260</span>
+<span class="w">    </span><span class="nt">hooks</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">id</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ruff</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="resources">
+<h2>Resources<a class="headerlink" href="#resources" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>See <a class="reference internal" href="testing.html"><span class="doc">Testing Guide</span></a> for comprehensive testing guide</p></li>
+<li><p>See <a class="reference internal" href="api_usage.html"><span class="doc">API Usage Guide</span></a> for API documentation</p></li>
+<li><p>See <a class="reference internal" href="api_reference.html"><span class="doc">API Reference</span></a> for code-level API reference</p></li>
+<li><p><a class="reference external" href="https://docs.docker.com/compose/">Docker Compose Documentation</a></p></li>
+<li><p><a class="reference external" href="https://github.com/astral-sh/uv">uv Package Manager</a></p></li>
+</ul>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="testing.html" class="btn btn-neutral float-left" title="Testing Guide" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="streaming.html" class="btn btn-neutral float-right" title="Streaming" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p></p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
