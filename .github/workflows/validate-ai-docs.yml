@@ -27,7 +27,7 @@ jobs:
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
-        pip install pytest pathlib
+        pip install pytest pathlib requests pydantic pydantic-settings
     
     - name: Run AI documentation linter
       run: |
