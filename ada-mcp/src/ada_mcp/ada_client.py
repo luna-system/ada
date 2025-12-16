@@ -39,7 +39,7 @@ class AdaClient:
             Response dict (if not streaming) or Response object (if streaming)
         """
         payload = {
-            "input": message,
+            "prompt": message,
             "conversation_id": conversation_id,
         }
 
