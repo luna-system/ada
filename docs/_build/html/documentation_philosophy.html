@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Documentation Philosophy &mdash; Ada Brain API 0.1.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=19f00094" />
+      <link rel="stylesheet" type="text/css" href="_static/graphviz.css?v=4ae1632d" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="_static/jquery.js?v=5d32c60e"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="_static/documentation_options.js?v=01f34227"></script>
+        <script src="_static/doctools.js?v=9bcbadda"></script>
+        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Empathetic Documentation" href="empathetic_documentation.html" />
+    <link rel="prev" title="Memory" href="memory.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            Ada Brain API
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Documentation:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="getting_started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="configuration.html">Configuration Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="architecture.html">Architecture</a></li>
+<li class="toctree-l1"><a class="reference internal" href="data_model.html">Data Model Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api_usage.html">API Usage Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api_reference.html">API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="specialists.html">Specialist System</a></li>
+<li class="toctree-l1"><a class="reference internal" href="testing.html">Testing Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="development.html">Development Tools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="streaming.html">Streaming</a></li>
+<li class="toctree-l1"><a class="reference internal" href="memory.html">Memory</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Documentation Philosophy</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#our-approach">Our Approach</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#core-principles">Core Principles</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#documentation-serves-multiple-audiences">1. Documentation Serves Multiple Audiences</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#context-over-comprehensiveness">2. Context Over Comprehensiveness</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#empathy-creates-better-understanding">3. Empathy Creates Better Understanding</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#living-documentation">4. Living Documentation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#self-referential-systems">5. Self-Referential Systems</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#transparency-about-limitations">6. Transparency About Limitations</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#why-this-matters">Why This Matters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#our-opinionated-stances">Our Opinionated Stances</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#in-practice">In Practice</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#the-goal">The Goal</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="empathetic_documentation.html">Empathetic Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="examples.html">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="xenofeminism.html">Xenofeminism and Ada</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Ada Brain API</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Documentation Philosophy</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/documentation_philosophy.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="documentation-philosophy">
+<h1>Documentation Philosophy<a class="headerlink" href="#documentation-philosophy" title="Link to this heading"></a></h1>
+<section id="our-approach">
+<h2>Our Approach<a class="headerlink" href="#our-approach" title="Link to this heading"></a></h2>
+<p>Ada’s documentation reflects core beliefs about how technical knowledge should be shared and preserved:</p>
+<p><strong>Documentation is infrastructure, not afterthought.</strong></p>
+<p>We treat documentation with the same rigor as code - tested, validated, versioned, and maintained as a first-class component of the system.</p>
+</section>
+<section id="core-principles">
+<h2>Core Principles<a class="headerlink" href="#core-principles" title="Link to this heading"></a></h2>
+<section id="documentation-serves-multiple-audiences">
+<h3>1. Documentation Serves Multiple Audiences<a class="headerlink" href="#documentation-serves-multiple-audiences" title="Link to this heading"></a></h3>
+<p>We maintain parallel documentation layers:</p>
+<ul class="simple">
+<li><p><strong>Human documentation</strong> (Sphinx/RST) - For developers, operators, and contributors</p></li>
+<li><p><strong>Machine documentation</strong> (<code class="docutils literal notranslate"><span class="pre">.ai/</span></code> directory) - For AI assistants working with the codebase</p></li>
+</ul>
+<p>Each layer is optimized for its audience without compromise. We don’t force humans to read JSON schemas, and we don’t expect AI to parse prose-heavy tutorials.</p>
+</section>
+<section id="context-over-comprehensiveness">
+<h3>2. Context Over Comprehensiveness<a class="headerlink" href="#context-over-comprehensiveness" title="Link to this heading"></a></h3>
+<p>Every piece of documentation answers: <strong>“What do you need to know RIGHT NOW?”</strong></p>
+<p>We prioritize:</p>
+<ul class="simple">
+<li><p>Quick starts over exhaustive references</p></li>
+<li><p>Examples over abstract descriptions</p></li>
+<li><p>“Why this way” over “here’s the API”</p></li>
+<li><p>Decision context over just decisions</p></li>
+</ul>
+<p>If you can’t find what you need in 30 seconds, we’ve failed.</p>
+</section>
+<section id="empathy-creates-better-understanding">
+<h3>3. Empathy Creates Better Understanding<a class="headerlink" href="#empathy-creates-better-understanding" title="Link to this heading"></a></h3>
+<p>Technical documentation shouldn’t be cold. We explain:</p>
+<ul class="simple">
+<li><p><strong>Why something seems right</strong> before explaining why it’s wrong</p></li>
+<li><p><strong>What problem this solves</strong> before diving into how it works</p></li>
+<li><p><strong>Where you probably are</strong> when you’re reading this</p></li>
+</ul>
+<p>This applies to both human readers and AI assistants. Understanding the reasoning behind a pattern creates stronger learning than memorizing rules.</p>
+<p>See <a class="reference internal" href="empathetic_documentation.html"><span class="doc">Empathetic Documentation</span></a> for how this emerged.</p>
+</section>
+<section id="living-documentation">
+<h3>4. Living Documentation<a class="headerlink" href="#living-documentation" title="Link to this heading"></a></h3>
+<p>Documentation that drifts from reality is worse than no documentation.</p>
+<p>Our approach:</p>
+<ul class="simple">
+<li><p><strong>Automated validation</strong> - Tests verify that documented code paths exist</p></li>
+<li><p><strong>CI integration</strong> - Documentation checks run on every commit</p></li>
+<li><p><strong>Source annotations</strong> - Key information lives in code comments (<code class="docutils literal notranslate"><span class="pre">&#64;ai-*</span></code> tags)</p></li>
+<li><p><strong>Pre-commit hooks</strong> - Prevent inconsistencies before they’re committed</p></li>
+</ul>
+<p>When code changes, documentation breaks loudly.</p>
+</section>
+<section id="self-referential-systems">
+<h3>5. Self-Referential Systems<a class="headerlink" href="#self-referential-systems" title="Link to this heading"></a></h3>
+<p>Ada can read her own documentation via the <code class="docutils literal notranslate"><span class="pre">docs</span></code> specialist.</p>
+<p>This isn’t just clever - it’s practical. When asked “How do I work?”, Ada can search her Sphinx docs and provide accurate, up-to-date answers. The system documents itself to itself.</p>
+</section>
+<section id="transparency-about-limitations">
+<h3>6. Transparency About Limitations<a class="headerlink" href="#transparency-about-limitations" title="Link to this heading"></a></h3>
+<p>We document what DOESN’T work, what we DON’T support, and what common approaches DON’T apply here.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">.ai/GOTCHAS.md</span></code> file exists because “here’s what to avoid” is as valuable as “here’s what to do.” Maybe more valuable.</p>
+</section>
+</section>
+<section id="why-this-matters">
+<h2>Why This Matters<a class="headerlink" href="#why-this-matters" title="Link to this heading"></a></h2>
+<p>Projects without documentation philosophy default to:</p>
+<ul class="simple">
+<li><p>✗ Inconsistent formatting and structure</p></li>
+<li><p>✗ Outdated examples that break</p></li>
+<li><p>✗ Tribal knowledge trapped in team members’ heads</p></li>
+<li><p>✗ “Just read the code” attitude</p></li>
+<li><p>✗ Documentation as punishment duty</p></li>
+</ul>
+<p>Projects WITH documentation philosophy:</p>
+<ul class="simple">
+<li><p>✓ New contributors onboard quickly</p></li>
+<li><p>✓ Future maintainers understand decisions</p></li>
+<li><p>✓ AI assistants provide accurate help</p></li>
+<li><p>✓ Debugging is faster with clear references</p></li>
+<li><p>✓ Writing docs is part of the craft</p></li>
+</ul>
+</section>
+<section id="our-opinionated-stances">
+<h2>Our Opinionated Stances<a class="headerlink" href="#our-opinionated-stances" title="Link to this heading"></a></h2>
+<dl class="simple">
+<dt><strong>Code comments should explain WHY, not WHAT</strong></dt><dd><p>The code already shows what it does. Comments should capture reasoning, trade-offs, and context that isn’t obvious from reading the implementation.</p>
+</dd>
+<dt><strong>Examples beat explanations</strong></dt><dd><p>Show a working example first, then explain the details. People learn by doing.</p>
+</dd>
+<dt><strong>Machine-readable documentation is the future</strong></dt><dd><p>As AI assistants become standard development tools, optimizing documentation for AI consumption isn’t optional - it’s necessary.</p>
+</dd>
+<dt><strong>Documentation shouldn’t require a degree in RST/Markdown/LaTeX</strong></dt><dd><p>Simple formatting, clear structure. Fancy rendering is secondary to clarity.</p>
+</dd>
+<dt><strong>If you can’t test it, don’t document it</strong></dt><dd><p>Untestable documentation will drift. If it matters enough to document, it matters enough to validate.</p>
+</dd>
+<dt><strong>“Read the docs” should actually work</strong></dt><dd><p>Documentation exists to be read, not to exist. If people keep asking questions that are “in the docs,” the docs failed.</p>
+</dd>
+</dl>
+</section>
+<section id="in-practice">
+<h2>In Practice<a class="headerlink" href="#in-practice" title="Link to this heading"></a></h2>
+<p>When contributing to Ada:</p>
+<ul class="simple">
+<li><p>Add human docs (RST) for features, architecture, usage</p></li>
+<li><p>Add machine docs (<code class="docutils literal notranslate"><span class="pre">.ai/</span></code>) for structural changes, new modules, specialists</p></li>
+<li><p>Update <code class="docutils literal notranslate"><span class="pre">codebase-map.json</span></code> when module relationships change</p></li>
+<li><p>Add <code class="docutils literal notranslate"><span class="pre">&#64;ai-*</span></code> annotations to significant functions/classes</p></li>
+<li><p>Run <code class="docutils literal notranslate"><span class="pre">scripts/lint_ai_docs.py</span></code> before committing</p></li>
+<li><p>Check that your docs answer “What would I need to know?”</p></li>
+</ul>
+</section>
+<section id="the-goal">
+<h2>The Goal<a class="headerlink" href="#the-goal" title="Link to this heading"></a></h2>
+<p>When someone - human or AI - needs to understand Ada, they should:</p>
+<ol class="arabic simple">
+<li><p>Find what they need quickly</p></li>
+<li><p>Understand the context and reasoning</p></li>
+<li><p>See working examples</p></li>
+<li><p>Know what to avoid</p></li>
+<li><p>Trust that it’s current</p></li>
+</ol>
+<p>That’s it. Everything else is implementation detail.</p>
+<p>—</p>
+<p><em>This philosophy emerged from building Ada collaboratively between human developers and AI assistants in 2025. It will evolve as we learn more about effective human-AI knowledge sharing.</em></p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="memory.html" class="btn btn-neutral float-left" title="Memory" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="empathetic_documentation.html" class="btn btn-neutral float-right" title="Empathetic Documentation" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p></p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
