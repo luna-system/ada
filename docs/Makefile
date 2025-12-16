@@ -1,5 +1,8 @@
 # Minimal makefile for Sphinx documentation
 #
+# @ai-warning: Don't run 'make html' manually in production - docs build 
+# automatically during Docker image build (see frontend/Dockerfile lines 14-15).
+# Only run locally for testing outside containers.
 
 # You can set these variables from the command line, and also
 # from the environment for the first two.

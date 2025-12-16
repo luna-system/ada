@@ -3,6 +3,13 @@ LLM (Ollama) interaction layer for Ada brain.
 
 Handles streaming and non-streaming chat completions.
 """
+# @ai-indexable: core-functionality
+# @ai-purpose: LLM client wrapper for Ollama, manages streaming token generation and thinking mode
+# @ai-dependencies: httpx, requests, ollama-server
+# @ai-related: brain/app.py, brain/prompt_builder.py, scripts/consolidate_memories.py
+# @ai-key-functions: stream_chat_async, stream_chat, extract_thinking_blocks
+# @ai-data-flow: Receives prompt → streams to Ollama /api/generate → yields tokens via async generator
+
 import json
 import requests
 import httpx

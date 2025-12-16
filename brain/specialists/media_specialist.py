@@ -3,6 +3,14 @@ Media Specialist - Music/Media context from ListenBrainz.
 
 Provides currently playing or recently listened music context.
 """
+# @ai-indexable: specialist-plugin
+# @ai-purpose: Inject music/media context from ListenBrainz into LLM prompts
+# @ai-activation-trigger: media_info present in request context
+# @ai-priority: MEDIUM
+# @ai-dependencies: brain.media
+# @ai-related: brain/media.py, brain/prompt_builder.py, brain/specialists/protocol.py
+# @ai-extension-pattern: Inherits from BaseSpecialist, activated by request context keys
+
 import logging
 from typing import Any
 

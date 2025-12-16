@@ -1,0 +1,396 @@
+{
+  "version": "1.0.0",
+  "generated": "2025-12-16",
+  "project": "ada-v1",
+  "modules": {
+    "brain/app.py": {
+      "type": "entrypoint",
+      "purpose": "FastAPI application with all REST API endpoints",
+      "key_functions": [
+        "chat_stream_v1",
+        "list_specialists",
+        "get_schema",
+        "get_info",
+        "healthz"
+      ],
+      "imports": [
+        "fastapi",
+        "brain.llm",
+        "brain.prompt_builder",
+        "brain.rag_store",
+        "brain.schemas",
+        "brain.notices"
+      ],
+      "imported_by": [
+        "brain/wsgi.py"
+      ],
+      "endpoints": [
+        "POST /v1/chat/stream",
+        "GET /v1/specialists",
+        "GET /v1/schema",
+        "GET /v1/info",
+        "GET /v1/healthz",
+        "GET /v1/notices",
+        "POST /v1/notices",
+        "POST /v1/notices/{id}/ack"
+      ],
+      "notes": "Main API surface, coordinates all subsystems"
+    },
+    "brain/llm.py": {
+      "type": "core-service",
+      "purpose": "LLM client wrapper for Ollama, handles streaming generation",
+      "key_functions": [
+        "generate_stream",
+        "extract_thinking",
+        "count_tokens"
+      ],
+      "imports": [
+        "httpx",
+        "brain.config"
+      ],
+      "imported_by": [
+        "brain/app.py",
+        "brain/prompt_builder.py"
+      ],
+      "notes": "Single source of truth for LLM communication, streaming SSE responses"
+    },
+    "brain/prompt_builder.py": {
+      "type": "core-service",
+      "purpose": "Assembles RAG context from multiple sources, coordinates specialists",
+      "key_functions": [
+        "build_prompt",
+        "discover_specialists",
+        "activate_specialists",
+        "process_bidirectional_specialist"
+      ],
+      "imports": [
+        "brain.rag_store",
+        "brain.specialists.protocol",
+        "brain.specialists.bidirectional",
+        "brain.config",
+        "brain.notices"
+      ],
+      "imported_by": [
+        "brain/app.py"
+      ],
+      "notes": "Central orchestration point, context injection order matters"
+    },
+    "brain/rag_store.py": {
+      "type": "core-service",
+      "purpose": "Vector database interface for semantic search over memories",
+      "key_functions": [
+        "add_memory",
+        "search_memories",
+        "get_collection",
+        "healthcheck"
+      ],
+      "imports": [
+        "chromadb",
+        "brain.config"
+      ],
+      "imported_by": [
+        "brain/app.py",
+        "brain/prompt_builder.py",
+        "scripts/consolidate_memories.py"
+      ],
+      "notes": "Wraps ChromaDB, handles persona/FAQ/memories/turns collections"
+    },
+    "brain/schemas.py": {
+      "type": "data-model",
+      "purpose": "All Pydantic models for API contracts and data validation",
+      "key_classes": [
+        "ChatRequest",
+        "ChatChunk",
+        "SpecialistInfo",
+        "SystemInfo",
+        "MemoryDocument",
+        "ConversationTurn"
+      ],
+      "imports": [
+        "pydantic"
+      ],
+      "imported_by": [
+        "brain/app.py",
+        "brain/prompt_builder.py",
+        "brain/rag_store.py"
+      ],
+      "notes": "Self-documenting via /v1/schema endpoint, single source of truth for types"
+    },
+    "brain/config.py": {
+      "type": "configuration",
+      "purpose": "Environment-based configuration using Pydantic Settings",
+      "key_classes": [
+        "Config"
+      ],
+      "imports": [
+        "pydantic_settings",
+        "python-dotenv"
+      ],
+      "imported_by": [
+        "brain/app.py",
+        "brain/llm.py",
+        "brain/rag_store.py",
+        "brain/prompt_builder.py"
+      ],
+      "notes": "All environment variables defined here, singleton pattern"
+    },
+    "brain/specialists/protocol.py": {
+      "type": "interface",
+      "purpose": "Base protocol for specialist plugins, MCP-inspired architecture",
+      "key_classes": [
+        "BaseSpecialist",
+        "SpecialistCapability",
+        "SpecialistResult",
+        "SpecialistPriority"
+      ],
+      "imports": [
+        "typing.Protocol",
+        "dataclasses",
+        "enum"
+      ],
+      "imported_by": [
+        "brain/specialists/*.py",
+        "brain/prompt_builder.py"
+      ],
+      "notes": "Protocol-based design for extensibility, priority controls context order"
+    },
+    "brain/specialists/ocr_specialist.py": {
+      "type": "plugin",
+      "purpose": "Extract text from uploaded images using Tesseract OCR",
+      "key_classes": [
+        "OCRSpecialist"
+      ],
+      "activation_trigger": "uploaded_image_path in request context",
+      "imports": [
+        "brain.specialists.protocol",
+        "brain.ocr",
+        "brain.config"
+      ],
+      "imported_by": [
+        "brain/specialists/__init__.py"
+      ],
+      "priority": "HIGH",
+      "notes": "Auto-activated on image uploads, results injected early in prompt"
+    },
+    "brain/specialists/media_specialist.py": {
+      "type": "plugin",
+      "purpose": "Analyze video files by extracting frames and generating descriptions",
+      "key_classes": [
+        "MediaSpecialist"
+      ],
+      "activation_trigger": "uploaded_video_path in request context",
+      "imports": [
+        "brain.specialists.protocol",
+        "brain.media",
+        "brain.config"
+      ],
+      "imported_by": [
+        "brain/specialists/__init__.py"
+      ],
+      "priority": "MEDIUM",
+      "notes": "Extracts frames from videos for visual analysis"
+    },
+    "brain/specialists/docs_specialist.py": {
+      "type": "plugin",
+      "purpose": "Search and retrieve Ada's own Sphinx documentation for self-reference",
+      "key_classes": [
+        "DocumentationSpecialist",
+        "HTMLTextExtractor"
+      ],
+      "activation_trigger": "LLM uses <docs_lookup> tag (bidirectional)",
+      "imports": [
+        "brain.specialists.protocol",
+        "pathlib",
+        "html.parser",
+        "re"
+      ],
+      "imported_by": [
+        "brain/specialists/__init__.py"
+      ],
+      "priority": "HIGH",
+      "notes": "Meta-capability: Ada can read her own documentation. Searches docs/_build/html"
+    },
+    "brain/specialists/web_search_specialist.py": {
+      "type": "plugin",
+      "purpose": "Perform web searches when LLM requests external information",
+      "key_classes": [
+        "WebSearchSpecialist"
+      ],
+      "activation_trigger": "LLM uses <web_search> tag (bidirectional)",
+      "imports": [
+        "brain.specialists.protocol",
+        "brain.specialists.bidirectional",
+        "requests"
+      ],
+      "imported_by": [
+        "brain/specialists/__init__.py"
+      ],
+      "priority": "MEDIUM",
+      "notes": "Bidirectional specialist, LLM can request searches mid-generation"
+    },
+    "brain/specialists/bidirectional.py": {
+      "type": "framework",
+      "purpose": "Enables LLM to invoke specialists mid-response using XML tags",
+      "key_functions": [
+        "extract_specialist_request",
+        "process_bidirectional_request"
+      ],
+      "imports": [
+        "brain.specialists.protocol",
+        "xml.etree.ElementTree"
+      ],
+      "imported_by": [
+        "brain/prompt_builder.py",
+        "brain/specialists/web_search_specialist.py",
+        "brain/specialists/docs_specialist.py"
+      ],
+      "notes": "Powers tool-use pattern, LLM outputs XML tags to trigger specialists"
+    },
+    "brain/notices.py": {
+      "type": "support",
+      "purpose": "System notification manager for alerts and status messages",
+      "key_classes": [
+        "Notice",
+        "NoticeManager"
+      ],
+      "imports": [],
+      "imported_by": [
+        "brain/app.py",
+        "brain/prompt_builder.py"
+      ],
+      "notes": "Persistent JSON storage, notices injected into prompts with high priority"
+    },
+    "brain/ocr.py": {
+      "type": "utility",
+      "purpose": "Tesseract OCR integration for image text extraction",
+      "key_functions": [
+        "extract_text_from_image"
+      ],
+      "imports": [
+        "pytesseract",
+        "PIL"
+      ],
+      "imported_by": [
+        "brain/specialists/ocr_specialist.py"
+      ],
+      "notes": "Thin wrapper around pytesseract"
+    },
+    "brain/media.py": {
+      "type": "utility",
+      "purpose": "File upload handling and video frame extraction",
+      "key_functions": [
+        "save_uploaded_file",
+        "extract_frames"
+      ],
+      "imports": [
+        "PIL",
+        "opencv-python"
+      ],
+      "imported_by": [
+        "brain/app.py",
+        "brain/specialists/media_specialist.py"
+      ],
+      "notes": "Handles multipart uploads, video processing"
+    },
+    "brain/wsgi.py": {
+      "type": "entrypoint",
+      "purpose": "Gunicorn WSGI entrypoint for production deployment",
+      "imports": [
+        "brain.app"
+      ],
+      "imported_by": [],
+      "notes": "Production server configuration"
+    },
+    "frontend/public/app.js": {
+      "type": "client",
+      "purpose": "Browser client for SSE streaming, handles EventSource",
+      "key_functions": [
+        "sendMessage",
+        "handleStreamChunk",
+        "reconnectStream"
+      ],
+      "imports": [],
+      "imported_by": [],
+      "notes": "Pure JavaScript, no frameworks, EventSource for SSE"
+    },
+    "scripts/consolidate_memories.py": {
+      "type": "maintenance",
+      "purpose": "Nightly memory summarization, reduces vector DB size",
+      "key_functions": [
+        "consolidate_old_memories"
+      ],
+      "imports": [
+        "brain.rag_store",
+        "brain.llm"
+      ],
+      "imported_by": [],
+      "notes": "Runs via cron in Docker Compose, summarizes old conversation turns"
+    },
+    "tests/conftest.py": {
+      "type": "test-infrastructure",
+      "purpose": "Pytest fixtures and test configuration",
+      "key_fixtures": [
+        "client",
+        "test_db"
+      ],
+      "imports": [
+        "pytest",
+        "brain.app"
+      ],
+      "imported_by": [
+        "tests/*.py"
+      ],
+      "notes": "Shared test setup, mocked dependencies"
+    }
+  },
+  "dependency_clusters": {
+    "core_api": [
+      "brain/app.py",
+      "brain/schemas.py",
+      "brain/config.py"
+    ],
+    "llm_orchestration": [
+      "brain/llm.py",
+      "brain/prompt_builder.py",
+      "brain/specialists/bidirectional.py"
+    ],
+    "rag_system": [
+      "brain/rag_store.py",
+      "scripts/consolidate_memories.py"
+    ],
+    "specialist_plugins": [
+      "brain/specialists/protocol.py",
+      "brain/specialists/ocr_specialist.py",
+      "brain/specialists/media_specialist.py",
+      "brain/specialists/web_search_specialist.py",
+      "brain/specialists/docs_specialist.py"
+    ],
+    "support_utilities": [
+      "brain/ocr.py",
+      "brain/media.py",
+      "brain/notices.py"
+    ]
+  },
+  "data_flow": {
+    "chat_request": [
+      "frontend/public/app.js",
+      "brain/app.py::chat_stream_v1",
+      "brain/prompt_builder.py::build_prompt",
+      "brain/rag_store.py::search_memories",
+      "brain/specialists/*::process",
+      "brain/llm.py::generate_stream",
+      "brain/app.py::stream_response"
+    ],
+    "memory_storage": [
+      "brain/app.py::chat_stream_v1",
+      "brain/rag_store.py::add_memory",
+      "chromadb"
+    ],
+    "specialist_activation": [
+      "brain/prompt_builder.py::discover_specialists",
+      "brain/specialists/*::should_activate",
+      "brain/specialists/*::process",
+      "brain/prompt_builder.py::inject_context"
+    ]
+  }
+}

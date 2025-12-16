@@ -1,0 +1,194 @@
+{
+  "version": "1.0.0",
+  "generated": "2025-12-16",
+  "description": "Machine-readable registry of all specialist plugins with activation patterns and capabilities",
+  "discovery_mechanism": "Auto-discovery via brain/specialists/__init__.py",
+  "extension_pattern": "Drop new *_specialist.py in brain/specialists/ implementing BaseSpecialist protocol",
+  "specialists": {
+    "ocr": {
+      "class_name": "OCRSpecialist",
+      "file": "brain/specialists/ocr_specialist.py",
+      "version": "1.0.0",
+      "description": "Extract text from images using Tesseract OCR",
+      "activation_type": "context-triggered",
+      "activation_trigger": {
+        "condition": "ocr_context present in request",
+        "example": "User uploads image via /v1/ocr/extract endpoint"
+      },
+      "context_priority": "HIGH",
+      "context_icon": "📄",
+      "dependencies": [
+        "pytesseract",
+        "PIL",
+        "brain.ocr"
+      ],
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "ocr_context": {
+            "type": "object",
+            "description": "OCR extraction result from /v1/ocr/extract endpoint"
+          }
+        },
+        "required": ["ocr_context"]
+      },
+      "output_format": "Formatted text with metadata about image and extracted content",
+      "tags": ["vision", "text-extraction", "images"],
+      "cpu_only": true,
+      "notes": "Results injected early in prompt (HIGH priority) after system notices"
+    },
+    "media": {
+      "class_name": "MediaSpecialist",
+      "file": "brain/specialists/media_specialist.py",
+      "version": "1.0.0",
+      "description": "Analyze video files by extracting frames and generating descriptions",
+      "activation_type": "context-triggered",
+      "activation_trigger": {
+        "condition": "uploaded_video_path in request media_info",
+        "example": "User uploads video file"
+      },
+      "context_priority": "MEDIUM",
+      "context_icon": "🎬",
+      "dependencies": [
+        "opencv-python",
+        "PIL",
+        "brain.media"
+      ],
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "media": {
+            "type": "object",
+            "properties": {
+              "video_path": {"type": "string"}
+            }
+          }
+        },
+        "required": ["media"]
+      },
+      "output_format": "Extracted frames with timestamps and frame descriptions",
+      "tags": ["video", "frame-extraction", "visual-analysis"],
+      "notes": "Extracts keyframes from videos for visual understanding"
+    },
+    "web_search": {
+      "class_name": "WebSearchSpecialist",
+      "file": "brain/specialists/web_search_specialist.py",
+      "version": "1.0.0",
+      "description": "Execute web searches for current information, news, and real-time data",
+      "activation_type": "bidirectional",
+      "activation_trigger": {
+        "condition": "LLM outputs <web_search>query</web_search> XML tag during generation",
+        "example": "LLM realizes it needs current weather data or recent news"
+      },
+      "context_priority": "MEDIUM",
+      "context_icon": "🌐",
+      "dependencies": [
+        "httpx",
+        "SearxNG (external service)"
+      ],
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "query": {
+            "type": "string",
+            "description": "Search query"
+          },
+          "num_results": {
+            "type": "integer",
+            "description": "Number of results to return",
+            "default": 5
+          }
+        },
+        "required": ["query"]
+      },
+      "output_format": "Formatted search results with titles, URLs, and snippets",
+      "tags": ["web", "search", "current-information", "bidirectional"],
+      "bidirectional": true,
+      "xml_tag": "web_search",
+      "notes": "Unique bidirectional pattern - LLM can request searches mid-response via XML tags"
+    },
+    "docs": {
+      "class_name": "DocumentationSpecialist",
+      "file": "brain/specialists/docs_specialist.py",
+      "version": "1.0.0",
+      "description": "Search and retrieve Ada's own Sphinx documentation for self-reference",
+      "activation_type": "bidirectional",
+      "activation_trigger": {
+        "condition": "LLM outputs <docs_lookup>topic</docs_lookup> XML tag during generation",
+        "example": "Ada needs to reference her own API documentation or feature guides"
+      },
+      "context_priority": "HIGH",
+      "context_icon": "📚",
+      "dependencies": [
+        "pathlib (stdlib)",
+        "html.parser (stdlib)",
+        "docs/_build/html (built Sphinx docs)"
+      ],
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "query": {
+            "type": "string",
+            "description": "Topic or keyword to look up in documentation"
+          },
+          "section": {
+            "type": "string",
+            "description": "Specific documentation section (e.g., 'api_usage', 'specialists')",
+            "default": null
+          }
+        },
+        "required": ["query"]
+      },
+      "output_format": "Formatted documentation excerpts with file names and relevance scores",
+      "tags": ["documentation", "self-reference", "introspection", "bidirectional"],
+      "bidirectional": true,
+      "xml_tag": "docs_lookup",
+      "notes": "Meta-capability: Ada can read her own documentation to answer questions about herself"
+    }
+  },
+  "activation_patterns": {
+    "context-triggered": {
+      "description": "Activated when specific context keys are present in request",
+      "examples": ["ocr", "media"],
+      "detection": "should_activate(request_context) checks for trigger keys"
+    },
+    "bidirectional": {
+      "description": "LLM can invoke specialist mid-response via XML tags",
+      "examples": ["web_search", "docs"],
+      "detection": "LLM output parsed for <specialist_name>args</specialist_name> tags",
+      "flow": "LLM generation → tag detected → specialist executed → results injected → LLM continues"
+    }
+  },
+  "priority_order": {
+    "CRITICAL": 0,
+    "HIGH": 10,
+    "MEDIUM": 50,
+    "LOW": 100,
+    "description": "Lower numbers inject earlier in prompt context. System notices and OCR are HIGH priority."
+  },
+  "protocol_interface": {
+    "base_class": "BaseSpecialist",
+    "file": "brain/specialists/protocol.py",
+    "required_methods": [
+      "should_activate(request_context: dict) -> bool",
+      "process(**kwargs) -> SpecialistResult"
+    ],
+    "return_type": "SpecialistResult dataclass with success, specialist_name, context, data fields"
+  },
+  "extension_guide": {
+    "steps": [
+      "1. Create new file brain/specialists/your_specialist.py",
+      "2. Import BaseSpecialist from brain.specialists.protocol",
+      "3. Define SpecialistCapability with name, description, priority, schemas",
+      "4. Implement should_activate() for trigger detection",
+      "5. Implement async process() method returning SpecialistResult",
+      "6. Specialist auto-discovered at startup via __init__.py"
+    ],
+    "activation_options": [
+      "Context-triggered: Check request_context keys in should_activate()",
+      "Bidirectional: Implement XML tag parsing (see web_search_specialist.py)",
+      "Always-on: Return True from should_activate() for global context injection"
+    ]
+  },
+  "introspection_endpoint": "GET /v1/specialists - Returns runtime specialist metadata with schemas"
+}

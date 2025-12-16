@@ -10,6 +10,13 @@ Pure FastAPI backend service that handles:
 The frontend (Nginx) proxies /api/* requests to /v1/* endpoints here.
 External tools can also hit the API directly at http://brain:7000/v1/*
 """
+# @ai-indexable: entrypoint
+# @ai-purpose: FastAPI REST API for LLM orchestration, chat streaming, and memory management
+# @ai-dependencies: fastapi, uvicorn, brain.llm, brain.prompt_builder, brain.rag_store, brain.schemas
+# @ai-related: brain/llm.py, brain/prompt_builder.py, brain/rag_store.py, brain/wsgi.py
+# @ai-key-functions: chat_stream_v1, list_specialists, get_schema, get_info, healthz
+# @ai-endpoints: POST /v1/chat/stream, GET /v1/specialists, GET /v1/schema, GET /v1/info, GET /v1/healthz
+# @ai-data-flow: HTTP request → route handler → prompt building → LLM streaming → SSE response
 
 import os
 import datetime
@@ -1082,7 +1089,7 @@ async def prompt_debug(
             "conversation memory when relevant. If the user asks about times or durations, use the provided "
             "UTC ISO timestamps to compute precise differences and express them in human-friendly units."
         )
-        reminder = "Reminder: You are Ada, Luna's assistant. Always identify as Ada."
+        reminder = f"Reminder: You are {config.AI_NAME}, {config.AI_USER_NAME}'s assistant. Always identify as {config.AI_NAME}."
         current_ts_line = f"Current user message timestamp (UTC): {user_timestamp}"
         assembled = ("\n\n".join(sections) + "\n\n" if sections else "") + instructions + "\n" + reminder + "\n" + current_ts_line
         final_prompt = f"{assembled}\nUser: {prompt_str}\nAssistant:"

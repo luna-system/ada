@@ -230,14 +230,14 @@ Assistant:"""
         request_context: Dict[str, Any]
     ) -> str:
         """
-        Rebuild full prompt with all context using prompt_builder.
+        FUTURE: Rebuild full prompt with all context using prompt_builder.
         
         This is more sophisticated - reconstructs the entire prompt
         with persona, memories, FAQs, etc. PLUS the specialist result.
+        
+        Currently unused - using simpler _build_resume_prompt instead.
+        This method is reserved for Phase 3 when we implement full context rebuilding.
         """
-        # This would call the actual prompt_builder with additional context
-        # For now, using simpler _build_resume_prompt
-        # TODO: Integrate with actual prompt_builder.build_prompt()
         pass
 
 

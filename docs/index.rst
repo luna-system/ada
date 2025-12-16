@@ -1,10 +1,10 @@
-.. Ada v1 Brain API documentation master file
+.. Ada Brain API documentation master file
 
-======================
-Ada v1 Brain API Docs
-======================
+==================
+Ada Brain API Docs
+==================
 
-Welcome to the Ada v1 Brain API documentation. This is the REST API backend for the conversational LLM system with Retrieval-Augmented Generation (RAG).
+Welcome to the Ada Brain API documentation. This is the REST API backend for the conversational LLM system with Retrieval-Augmented Generation (RAG).
 
 .. toctree::
    :maxdepth: 2
@@ -21,6 +21,8 @@ Welcome to the Ada v1 Brain API documentation. This is the REST API backend for 
    development
    streaming
    memory
+   documentation_philosophy
+   empathetic_documentation
    examples
 
 

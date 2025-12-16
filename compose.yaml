@@ -258,9 +258,13 @@ services:
     volumes:
       - ./brain:/app/brain:ro
       - ./scripts:/app/scripts
+      - ./tests:/app/tests:ro
+      - ./examples:/app/examples:ro
       - ./seed:/app/seed:ro
       - ./persona.md:/app/persona.md:ro
       - ./data:/data
+      - ./.ai:/app/.ai:ro
+      - ./frontend:/app/frontend:ro
     depends_on:
       - chroma
       - ollama

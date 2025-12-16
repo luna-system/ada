@@ -4,6 +4,14 @@ Web Search Specialist - Real-time web search via SearxNG.
 Provides access to current information from the web when the LLM realizes
 it needs up-to-date facts, news, or information not in its training data.
 """
+# @ai-indexable: specialist-plugin
+# @ai-purpose: Execute web searches when LLM requests current information via <web_search> XML tag
+# @ai-activation-trigger: Bidirectional - LLM outputs <web_search>query</web_search> during generation
+# @ai-priority: MEDIUM
+# @ai-dependencies: httpx, SearxNG metasearch engine
+# @ai-related: brain/specialists/bidirectional.py, brain/prompt_builder.py
+# @ai-tool-use-pattern: LLM emits XML tag mid-response → specialist executes → results injected → LLM continues
+
 import logging
 import httpx
 from typing import Dict, Any, Optional

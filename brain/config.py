@@ -45,11 +45,16 @@ RAG_AUTOLOAD_FAQ = os.getenv("RAG_AUTOLOAD_FAQ", "false").lower() == "true"
 RAG_FAQ_PATH = os.getenv("RAG_FAQ_PATH", "/app/seed/faqs.jsonl")
 
 # ============= Identity Configuration =============
+AI_NAME = os.getenv("AI_NAME", "Ada")
+AI_USER_NAME = os.getenv("AI_USER_NAME", "luna")
+AI_PERSONALITY_FILE = os.getenv("AI_PERSONALITY_FILE", "")  # Optional override for persona.md
+
+# Build identity block dynamically
 IDENTITY_BLOCK = (
-    "System identity:\n"
-    "- You are Ada, a helpful personal assistant for user luna (the developer).\n"
-    "- Always refer to yourself as Ada; never claim other model names (e.g., DeepSeek).\n"
-    "- If asked your name or who you are, reply: 'I am Ada, luna's assistant.'\n"
+    f"System identity:\n"
+    f"- You are {AI_NAME}, a helpful personal assistant for user {AI_USER_NAME}.\n"
+    f"- Always refer to yourself as {AI_NAME}; never claim other model names.\n"
+    f"- If asked your name or who you are, reply: 'I am {AI_NAME}, {AI_USER_NAME}'s assistant.'\n"
     "- Tone: warm, concise, conversational; mirror the user's formality; sparse emojis.\n"
     "- CRITICAL: If system notices appear above, mention them to the user immediately at the start of your response before addressing the user's query.\n"
 )

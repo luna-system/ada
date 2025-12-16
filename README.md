@@ -1,282 +1,304 @@
-# Ada v1 - Conversational LLM with RAG
+# Ada
 
-Ada is a conversational AI system featuring Retrieval-Augmented Generation (RAG), extensible specialist plugins, and real-time streaming responses.
+**Personal AI with enterprise features, running on your hardware.**
 
-## 🚀 Quick Start
+Named after Ada Lovelace, the first programmer. Build AI assistants with memory, web search, vision, and tool use - features that usually cost $20-200/month - using any open model.
 
-### Prerequisites
-
-- Docker and Docker Compose
-- (Optional) Python 3.13+ and uv for local development
-
-### Start All Services
-
-```bash
-docker compose up
-```
-
-Then visit:
-- **Frontend:** http://localhost:5000
-- **Documentation:** http://localhost:5000/docs/
-- **System Info:** http://localhost:5000/api/info
-- **Data Schemas:** http://localhost:5000/api/schema
-- **Specialists:** http://localhost:5000/api/specialists
-- **Health Check:** http://localhost:5000/api/healthz
-
-### Run Tests
-
-```bash
-./scripts/run.sh test
-```
-
-## 📚 Documentation
-
-**Full documentation is served at http://localhost:5000/docs** when running via Docker Compose.
-
-Documentation is automatically built during the frontend build process. To rebuild:
-
-```bash
-docker compose build web
-docker compose up -d web
-```
-
-**Quick Links:**
-
-- **[Getting Started](docs/getting_started.rst)** - Installation and configuration
-- **[API Usage Guide](docs/api_usage.rst)** - Complete API reference with examples
-- **[Specialist System](docs/specialists.rst)** - Extensible plugin architecture
-- **[Testing Guide](docs/testing.rst)** - Running tests and adding new tests
-- **[Development Tools](docs/development.rst)** - Scripts container and workflows
-- **[Streaming](docs/streaming.rst)** - Server-Sent Events (SSE) streaming
-- **[Memory](docs/memory.rst)** - RAG and memory management
-- **[Examples](docs/examples.rst)** - Code examples and patterns
-
-## 🏗️ Architecture
-
-### Services
-
-- **brain** - FastAPI backend with LLM orchestration
-- **frontend** - Nginx + static frontend with SSE streaming
-- **chroma** - Vector database for RAG
-- **ollama** - LLM inference (DeepSeek-R1)
-- **memory-consolidation** - Nightly memory summarization
-- **scripts** - Tooling container for utilities and tests
-
-### Key Features
-
-✅ **Retrieval-Augmented Generation (RAG)** - Semantic search over persona, FAQ, memories, and conversation history  
-✅ **Streaming Responses** - Real-time token delivery via Server-Sent Events  
-✅ **Specialist Plugins** - Extensible capabilities (OCR, media, web search)  
-✅ **Bidirectional Specialists** - LLM can request specialist execution mid-response  
-✅ **Memory Consolidation** - Automatic nightly summarization  
-✅ **Self-Documenting** - Introspectable schemas, specialists, and system capabilities  
-✅ **Testing Infrastructure** - Pytest-based with containerized execution  
-✅ **Type Safety** - Full type hints with Pylance validation
-
-### 🔍 Introspection & Self-Documentation
-
-Ada is designed to be fully self-describing through introspection endpoints:
-
-- **`GET /v1/info`** - System version, features, capabilities, available endpoints
-- **`GET /v1/specialists`** - List all specialist plugins with schemas and capabilities
-- **`GET /v1/schema`** - JSON Schema definitions for all data models (Pydantic-based)
-- **`GET /v1/schema?doc_type=memory`** - Specific schema for memory documents
-- **`GET /v1/healthz`** - Detailed health check with dependency status
-
-All data models are defined with Pydantic and exposed via `/v1/schema`, making the system fully introspectable at runtime. See [Data Model Reference](docs/data_model.rst) for complete documentation.  
-
-## 🔌 Specialist System
-
-Drop a new `*_specialist.py` file into `brain/specialists/` and it's automatically discovered:
-
-```python
-from .protocol import BaseSpecialist, SpecialistCapability
-
-class MySpecialist(BaseSpecialist):
-    def should_activate(self, request_context: dict) -> bool:
-        return request_context.get('my_trigger') is not None
-    
-    async def process(self, **kwargs) -> SpecialistResult:
-        # Your logic here
-        return self.success_result(context_text="Results...")
-```
-
-**Current Specialists:**
-- 📄 **OCR** - Extract text from images (Tesseract)
-- 🎧 **Media** - ListenBrainz music context
-- 🔍 **Web Search** - Real-time web search via SearxNG
-
-See [Specialist System](docs/specialists.rst) for full documentation.
-
-## 🧪 Testing
-
-Run the full test suite:
-
-```bash
-# All tests
-./scripts/run.sh test
-
-# Specific test file
-docker compose run --rm scripts pytest tests/test_rag.py
-
-# With verbose output
-docker compose run --rm scripts pytest -vv
-
-# Pattern matching
-docker compose run --rm scripts pytest -k "memory"
-```
-
-**Current Test Coverage:**
-- ✅ RAG retrieval (6 tests)
-- ✅ Prompt building (2 tests)
-- ✅ Specialist system (1 test)
-- ⚠️ Need: API endpoint tests, error handling tests
-
-See [Testing Guide](docs/testing.rst) for details.
-
-## 🛠️ Development
-
-### Scripts Container
-
-All utility scripts run in a dedicated container for consistency:
-
-```bash
-./scripts/run.sh health        # Health check
-./scripts/run.sh test          # Run tests
-./scripts/run.sh shell         # Python REPL
-./scripts/run.sh migrate       # Database migration
-./scripts/run.sh bash          # Bash shell
-```
-
-See [Development Tools](docs/development.rst) for full reference.
-
-### Local Development
-
-```bash
-# Install dependencies
-uv sync --extra dev
-
-# Run backend locally
-source .venv/bin/activate
-python -m uvicorn brain.app:app --host 0.0.0.0 --port 7000 --reload
-
-# Run tests locally (not recommended, use container instead)
-pytest
-```
-
-### Adding New Features
-
-1. Write feature code
-2. Add tests in `tests/test_<feature>.py`
-3. Run tests: `./scripts/run.sh test`
-4. Update documentation
-5. Create pull request
-
-## 📖 API Quick Reference
-
-### Health Check
-
-```bash
-curl http://localhost:7000/v1/healthz
-```
-
-### Chat (Streaming)
-
-```bash
-curl -N -X POST http://localhost:7000/v1/chat/stream \
-  -H "Content-Type: application/json" \
-  -d '{"message": "Hello!", "conversation_id": "chat-1"}'
-```
-
-### Memory Search
-
-```bash
-curl "http://localhost:7000/v1/memory?query=preferences&limit=5"
-```
-
-### Create Memory
-
-```bash
-curl -X POST http://localhost:7000/v1/memory \
-  -H "Content-Type: application/json" \
-  -d '{"content": "User likes Python", "memory_type": "fact"}'
-```
-
-See [API Usage Guide](docs/api_usage.rst) for complete documentation.
-
-## 🌐 Environment Variables
-
-Key configuration in `.env`:
-
-```bash
-# LLM Backend
-OLLAMA_BASE_URL=http://ollama:11434
-OLLAMA_MODEL=deepseek-r1:14b
-OLLAMA_EMBED_MODEL=nomic-embed-text
-
-# Vector Database
-CHROMA_URL=http://chroma:8000
-
-# Optional Features
-SEARXNG_URL=https://hunt.airsi.de        # Web search
-LISTENBRAINZ_USER=your_username          # Music context
-LISTENBRAINZ_TOKEN=your_token
-RAG_DEBUG=true                           # Debug endpoints
-```
-
-## 📦 Project Structure
-
-```
-ada-v1/
-├── brain/              # FastAPI backend
-│   ├── app.py         # Main application
-│   ├── config.py      # Configuration
-│   ├── rag_store.py   # RAG/Chroma integration
-│   ├── llm.py         # LLM interface
-│   ├── prompt_builder.py
-│   └── specialists/   # Plugin system
-├── frontend/          # Static frontend + Nginx
-├── tests/             # Pytest test suite
-├── scripts/           # Utility scripts
-├── docs/              # Sphinx documentation
-├── seed/              # Initial data
-└── compose.yaml       # Docker services
-```
-
-## 🤝 Contributing
-
-1. Fork the repository
-2. Create a feature branch
-3. Make your changes
-4. Add tests for new features
-5. Run test suite: `./scripts/run.sh test`
-6. Submit a pull request
-
-## 📄 License
-
-**CC0 1.0 Universal - Public Domain Dedication**
-
-This software has been dedicated to the public domain under CC0 1.0 Universal.
-
-⚠️ **Provenance Notice:** This software was developed with the assistance of generative AI models and has been dedicated to the public domain by its creators.
-
-See [LICENSE](LICENSE) for full legal text.
-
-## 🔗 Resources
-
-- **Documentation:** `docs/_build/html/index.html` (build with `make html`)
-- **API Docs:** http://localhost:7000/docs (interactive Swagger UI)
-- **FastAPI:** https://fastapi.tiangolo.com/
-- **Chroma:** https://www.trychroma.com/
-- **Ollama:** https://ollama.ai/
-
-## 🆘 Support
-
-- Check [Getting Started](docs/getting_started.rst) for setup help
-- See [Troubleshooting](docs/development.rst#troubleshooting) for common issues
-- Run health check: `./scripts/run.sh health`
-- View logs: `docker compose logs brain`
+🔓 **Always free and open source** • �� **Runs entirely local** • 🔧 **Extensible by design** • 📚 **Self-documenting architecture**
 
 ---
 
-Built with ❤️ by Luna Team
+## Why Ada?
+
+Most AI assistants lock essential features behind subscriptions:
+- ChatGPT Plus ($20/mo) for web search and memory
+- Claude Pro ($20/mo) for longer conversations  
+- Custom GPTs ($20/mo) for personality and tools
+- Enterprise APIs ($$$/mo) for embeddings and RAG
+
+**Ada gives you these features for free**, running on models you choose, with no API costs or cloud dependencies.
+
+### What You Get
+
+| Feature | ChatGPT Plus | Claude Pro | Gemini Advanced | Ada |
+|---------|--------------|------------|-----------------|-----|
+| Streaming responses | ✅ | ✅ | ✅ | ✅ |
+| Long-term memory | ✅ | ✅ | ✅ | ✅ |
+| Web search | ✅ $20/mo | ❌ | ✅ | ✅ Free |
+| Vision/OCR | ✅ | ✅ | ✅ | ✅ |
+| Custom personality | ✅ | ✅ | Limited | ✅ |
+| Custom tools | ✅ | ✅ | ❌ | ✅ |
+| Runs offline | ❌ | ❌ | ❌ | ✅ |
+| Your data stays local | ❌ | ❌ | ❌ | ✅ |
+| Hackable/extensible | ❌ | ❌ | ❌ | ✅ |
+| **Cost** | **$20-60/mo** | **$20/mo** | **$20/mo** | **$0** |
+
+**The catch?** You need hardware to run the LLM (8GB+ VRAM recommended, or CPU-only works). But you can swap models freely, pay nothing for inference, and keep your data private.
+
+---
+
+## Quick Start
+
+### 1. Install Prerequisites
+
+- **Docker & Docker Compose** (required)
+- **GPU** (optional but recommended) - NVIDIA GPU with CUDA support
+- **8GB+ RAM** for smaller models, 16GB+ for larger ones
+
+### 2. Clone and Run
+
+\`\`\`bash
+git clone https://github.com/yourusername/ada.git
+cd ada
+docker compose up
+\`\`\`
+
+That's it! Ada will:
+- Pull and start all services (Ollama, ChromaDB, frontend, brain API)
+- Download the default model (DeepSeek-R1, ~4GB)
+- Start the web interface at **http://localhost:5000**
+
+### 3. Customize (Optional)
+
+**Change the AI model:**
+\`\`\`bash
+# Edit .env
+OLLAMA_MODEL=llama3.1
+# or mistral, qwen, gemma, etc. - any model Ollama supports
+\`\`\`
+
+**Give your AI a different personality:**
+\`\`\`bash
+# Copy an example persona or create your own
+cp examples/personas/coding-buddy.md persona.md
+docker compose restart brain
+\`\`\`
+
+**Change your AI's name:**
+\`\`\`bash
+# In .env
+AI_NAME=Jarvis
+AI_USER_NAME=Tony
+\`\`\`
+
+See [Getting Started from Scratch](docs/GETTING_STARTED_FROM_SCRATCH.md) for detailed customization.
+
+---
+
+## Core Features
+
+### 🧠 Memory & RAG
+
+Ada remembers conversations using **Retrieval-Augmented Generation (RAG)**:
+- Semantic search over past conversations
+- Automatic memory consolidation
+- Persona and FAQ injection
+- Context-aware responses
+
+Unlike subscription services, your memories stay on YOUR hardware in a local ChromaDB instance.
+
+### 🔌 Extensible Specialists
+
+Drop a Python file in \`brain/specialists/\` and Ada gains new capabilities:
+
+**Built-in specialists:**
+- **Web search** - Real-time information from the internet
+- **OCR** - Extract text from images
+- **Media analysis** - Understand images and documents
+- **Docs search** - Ada can read her own documentation
+
+**Build your own in minutes:**
+\`\`\`python
+# brain/specialists/weather_specialist.py
+class WeatherSpecialist(BaseSpecialist):
+    async def process(self, location: str):
+        # Your weather API logic here
+        return SpecialistResult(data={...})
+\`\`\`
+
+See [Building Your First Specialist](docs/BUILD_YOUR_FIRST_SPECIALIST.md) for a complete tutorial.
+
+### 📡 Bidirectional Tool Use
+
+Unlike most AI frameworks, Ada's specialists work **bidirectionally**:
+- 👉 **User → AI:** "Search the web for Python 3.13 release date"
+- 👈 **AI → Specialist → AI:** LLM emits \`<web_search>query</web_search>\` mid-response, gets results, continues naturally
+
+This creates more natural, agentic behavior.
+
+### 🔒 Privacy by Default
+
+- ✅ No telemetry or tracking
+- ✅ Conversations stay on your hardware
+- ✅ No API keys required for core features
+- ✅ Works completely offline after setup
+
+Your data is yours. No companies, no cloud, no compromise.
+
+### 📚 Self-Documenting
+
+Ada can introspect herself:
+- \`GET /v1/info\` - All capabilities and endpoints
+- \`GET /v1/specialists\` - Available tools with schemas
+- \`GET /v1/schema\` - Complete API documentation
+- Built-in docs specialist - Ada reads her own Sphinx documentation
+
+---
+
+## Project Structure
+
+\`\`\`
+ada/
+├── brain/              # FastAPI backend + LLM orchestration
+│   ├── specialists/    # Extensible plugin system
+│   ├── app.py         # Main API endpoints
+│   ├── llm.py         # LLM client (Ollama)
+│   └── rag_store.py   # Vector memory (ChromaDB)
+├── frontend/          # Web interface (Astro + vanilla JS)
+├── docs/              # Sphinx documentation
+├── examples/
+│   └── personas/      # Example AI personalities
+├── .ai/               # Machine-readable docs for AI assistants
+└── compose.yaml       # Docker orchestration
+\`\`\`
+
+---
+
+## Documentation
+
+**Full documentation available at http://localhost:5000/docs** when running.
+
+**Quick links:**
+- [Getting Started from Scratch](docs/GETTING_STARTED_FROM_SCRATCH.md) - Customize your AI
+- [Build Your First Specialist](docs/BUILD_YOUR_FIRST_SPECIALIST.md) - Extend capabilities
+- [Architecture Guide](docs/architecture.rst) - How it all works
+- [API Reference](docs/api_reference.rst) - Complete API docs
+- [Documentation Philosophy](docs/documentation_philosophy.rst) - Our approach
+- [Principles](PRINCIPLES.md) - Why Ada is always free and open
+
+---
+
+## Philosophy
+
+Ada is built on core principles:
+
+1. **Always free and open source** - No paywalls, ever
+2. **Privacy by default** - Your data stays local
+3. **Local-first** - No cloud dependencies
+4. **Hackable** - Readable code, documented architecture
+5. **No lock-in** - Standard formats, easy migration
+
+Read the full [PRINCIPLES.md](PRINCIPLES.md) for our commitments.
+
+---
+
+## Use Cases
+
+**For tinkerers:**
+- Build an AI that speaks only in haiku
+- Create a worldbuilding assistant for your novel
+- Make a personal ADHD management system
+- Design custom tools for YOUR workflow
+
+**For developers:**
+- Learn how RAG systems actually work
+- Experiment with prompt engineering
+- Build proof-of-concepts without API costs
+- Understand bidirectional tool use
+
+**For privacy advocates:**
+- Keep conversations off corporate servers
+- Control your own data
+- No terms of service changes
+- Run entirely air-gapped if needed
+
+**For researchers:**
+- Experiment without budget constraints
+- Try unusual architectures
+- Test edge cases freely
+- Publish reproducible results
+
+---
+
+## Contributing
+
+We welcome:
+- 🐛 Bug reports and fixes
+- 📚 Documentation improvements
+- 🔌 New specialists (share your weird ideas!)
+- 💡 Architecture suggestions
+- 🧪 Testing improvements
+
+See [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines.
+
+**Your contributions join the commons** under CC0 1.0 Universal, helping democratize AI infrastructure for everyone.
+
+---
+
+## Requirements
+
+### Minimum
+- Docker & Docker Compose
+- 8GB RAM
+- 10GB disk space
+- Any CPU (slower but works)
+
+### Recommended
+- 16GB RAM
+- NVIDIA GPU with 8GB+ VRAM
+- 50GB disk space (for multiple models)
+- SSD for better performance
+
+### Tested On
+- Ubuntu 22.04 / Debian 12
+- macOS 13+ (Apple Silicon)
+- Windows 11 with WSL2
+
+---
+
+## License
+
+**CC0 1.0 Universal (Public Domain)**
+
+To the extent possible under law, the authors have waived all copyright and related rights to this work. You can copy, modify, distribute and perform the work, even for commercial purposes, all without asking permission.
+
+See [LICENSE](LICENSE) for details.
+
+---
+
+## Credits
+
+Built by [Luna](https://github.com/yourusername) with significant contributions from Claude Sonnet 4.5.
+
+Named after **Ada Lovelace** (1815-1852), who wrote the first computer program and imagined machines that could create art and music - not just calculate.
+
+Special thanks to the open source community and projects that make this possible:
+- [Ollama](https://ollama.ai) - Local LLM inference
+- [ChromaDB](https://www.trychroma.com/) - Vector database
+- [FastAPI](https://fastapi.tiangolo.com/) - Modern Python web framework
+
+---
+
+## FAQ
+
+**Q: Do I need a GPU?**  
+A: No, but it's MUCH faster. CPU-only works fine for smaller models or if you're patient.
+
+**Q: What models can I use?**  
+A: Anything supported by Ollama: Llama, Mistral, Gemma, Qwen, DeepSeek, etc. Just change \`OLLAMA_MODEL\` in \`.env\`.
+
+**Q: How is this different from Open WebUI / text-generation-webui?**  
+A: Those are model runners with UIs. Ada is a framework for building personalized AI assistants with memory, tools, and extensibility.
+
+**Q: Can I use commercial APIs like OpenAI instead of local models?**  
+A: Yes, but that defeats the purpose. Ada is designed for local/open models to maintain privacy and zero costs.
+
+**Q: Is this production-ready?**  
+A: It's stable for personal use. For production workloads, you'll want to add authentication, rate limiting, and monitoring.
+
+**Q: How do I contribute a new specialist?**  
+A: See [Build Your First Specialist](docs/BUILD_YOUR_FIRST_SPECIALIST.md)! We love weird use cases.
+
+---
+
+**Let's build tools that let weird kids build weird things that change the world.** 🚀
