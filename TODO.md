@@ -5,24 +5,25 @@ Active development tasks and future work.
 ## High Priority
 
 ### Documentation: GPU Support
-- [ ] **Document CUDA setup** - Current docs assume it "just works"
-- [ ] **Document ROCm support** - Ada works with AMD GPUs (we use it!) but README doesn't mention this
-- [ ] **Hardware compatibility matrix** - What actually works?
-  - NVIDIA GPUs (CUDA)
-  - AMD GPUs (ROCm) 
-  - Apple Silicon (Metal)
-  - CPU-only (slow but functional)
-  - Specific models/recommendations per use case
+- [x] **Document CUDA setup** - ✅ Completed in HARDWARE_GUIDE.md (2025-12-16)
+- [x] **Document ROCm support** - ✅ Completed in HARDWARE_GUIDE.md (2025-12-16)
+- [x] **Hardware compatibility matrix** - ✅ Completed in HARDWARE_GUIDE.md (2025-12-16)
+  - ✅ NVIDIA GPUs (CUDA)
+  - ✅ AMD GPUs (ROCm) 
+  - ✅ Apple Silicon (Metal)
+  - ✅ CPU-only documented
+  - ✅ Vulkan experimental support documented
+  - ✅ Model size vs VRAM table
 
 ### Hardware Research
-- [ ] **Investigate hackable hardware options** for Ada
-  - Raspberry Pi 5 with AI HAT?
-  - Orange Pi / Rock Pi with NPUs?
-  - Used gaming laptops (cheap GPUs)?
-  - Cloud instances (Vast.ai, RunPod) - defeats privacy but document anyway
-  - DIY builds (what's the sweet spot for price/performance?)
-- [ ] **Create hardware guide** - "Building an Ada box for $X"
-- [ ] **Power consumption benchmarks** - What does Ada actually cost to run?
+- [x] **Investigate hackable hardware options** - ✅ Completed in HARDWARE_GUIDE.md (2025-12-16)
+  - ✅ Raspberry Pi 5 with AI HAT documented
+  - ✅ Orange Pi options mentioned
+  - ✅ Used gaming laptops covered
+  - ✅ Cloud instances (Vast.ai, RunPod) documented
+  - ✅ DIY builds with price tiers ($500, $1200, $3000)
+- [x] **Create hardware guide** - ✅ "Building an Ada box for $X" sections created (2025-12-16)
+- [x] **Power consumption benchmarks** - ✅ Monthly cost calculations included (2025-12-16)
 
 ## Medium Priority
 

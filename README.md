@@ -47,8 +47,14 @@ Most AI assistants lock essential features behind subscriptions:
 ### 1. Install Prerequisites
 
 - **Docker & Docker Compose** (required)
-- **GPU** (optional but recommended) - NVIDIA GPU with CUDA support
+- **GPU** (optional but recommended)
+  - NVIDIA (CUDA) - Widest support
+  - AMD (ROCm) - Great performance, Ada's default config
+  - Apple Silicon (Metal) - M1/M2/M3/M4 Macs
+  - CPU-only works but is slower
 - **8GB+ RAM** for smaller models, 16GB+ for larger ones
+
+See [Hardware Guide](/docs/HARDWARE_GUIDE.md) for detailed setup and recommendations.
 
 ### 2. Clone and Setup
 
