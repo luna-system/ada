@@ -19,7 +19,7 @@ class AdaClient:
         """Check Ada Brain health status."""
         response = await self.client.get(f"{self.base_url}/health")
         response.raise_for_status()
-        return response.json()
+        return await response.json()
 
     async def chat(
         self,
@@ -54,7 +54,7 @@ class AdaClient:
         else:
             response = await self.client.post(f"{self.base_url}/chat", json=payload)
             response.raise_for_status()
-            return response.json()
+            return await response.json()
 
     async def search_memories(
         self,
@@ -86,7 +86,8 @@ class AdaClient:
 
         response = await self.client.get(f"{self.base_url}/memories/search", params=params)
         response.raise_for_status()
-        return response.json().get("memories", [])
+        data = await response.json()
+        return data.get("memories", [])
 
     async def add_memory(
         self,
@@ -116,4 +117,4 @@ class AdaClient:
 
         response = await self.client.post(f"{self.base_url}/memories", json=payload)
         response.raise_for_status()
-        return response.json()
+        return await response.json()
