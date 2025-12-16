@@ -70,6 +70,38 @@ async def clear_notice(notice_id: str):
     """Remove a notice immediately."""
     ok = notice_manager.clear_notice(notice_id)
     return {"ok": ok}
+
+# --- OCR API ---
+from fastapi import UploadFile, File, HTTPException
+from brain.ocr import get_ocr_processor
+
+@router.post('/v1/ocr/extract')
+async def extract_text_from_image(file: UploadFile = File(...)):
+    """
+    Extract text from uploaded image using OCR.
+    
+    Returns extracted text and metadata.
+    """
+    # Validate file type
+    if not file.content_type or not file.content_type.startswith('image/'):
+        raise HTTPException(status_code=400, detail="File must be an image")
+    
+    try:
+        # Read file bytes
+        image_bytes = await file.read()
+        
+        # Process with OCR
+        ocr_processor = get_ocr_processor()
+        result = ocr_processor.extract_text(image_bytes)
+        
+        # Add filename to result
+        result['filename'] = file.filename
+        
+        return result
+        
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"OCR processing failed: {str(e)}")
+
 import requests
 
 # Ensure brain module is in path for Docker container
@@ -370,6 +402,7 @@ async def chat_stream(request: Request):
 
     # Build prompt using modularized builder
     media_info = data.get('media') if isinstance(data.get('media'), dict) else None
+    ocr_context = data.get('ocr_context') if isinstance(data.get('ocr_context'), dict) else None
     if RAG_ENABLED and rag_store is not None:
         final_prompt, used_context = build_prompt(
             prompt,
@@ -381,10 +414,11 @@ async def chat_stream(request: Request):
             turns_k=turns_k,
             faq_k=faq_k,
             memory_k=memory_k,
+            ocr_context=ocr_context,
         )
     else:
         final_prompt = f"User: {prompt}\nAssistant:"
-        used_context = {'persona': None, 'faqs': [], 'memories': [], 'turns': [], 'summaries': [], 'entity': entity, 'media': media_info}
+        used_context = {'persona': None, 'faqs': [], 'memories': [], 'turns': [], 'summaries': [], 'entity': entity, 'media': media_info, 'ocr': ocr_context}
 
     # Generator function for SSE streaming
     async def generate():

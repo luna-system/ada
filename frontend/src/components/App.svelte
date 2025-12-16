@@ -24,6 +24,7 @@
   import NoticesPanel from './NoticesPanel.svelte';
   import { streamChat, type StreamMessage } from '../services/chat';
   import { panelOpen as panelOpenStore, menuOpen as menuOpenStore } from '../stores/ui';
+  import { extractTextFromImage, type OCRResult } from '../services/ocr';
 
   const uuid = () => crypto.randomUUID ? crypto.randomUUID() : Math.random().toString(36).slice(2);
 
@@ -36,6 +37,8 @@
   let listenBrainzPreview: any = null;
   let listenBrainzLoading = false;
   let entity = '';
+  let ocrContext: OCRResult | null = null;
+  let ocrProcessing = false;
   let panelOpen: 'none' | 'debug' | 'mem' | 'prompt' | 'conversations' | 'notices' = 'none';
   let menuOpen = false;
 
@@ -254,6 +257,7 @@
         conversationId: activeConversationId,
         entity: entity || undefined,
         media,
+        ocrContext,
         onToken: (content) => {
           assistantText += content;
           updateMessage(answerId, { text: assistantText, thinking: thinkingText });
@@ -269,6 +273,8 @@
             activeConversationId = newConvId;
             setConversationId(activeConversationId);
           }
+          // Clear OCR context after successful message
+          ocrContext = null;
         }
       });
     } catch (e: any) {
@@ -276,6 +282,39 @@
     } finally {
       setThinking(false);
     }
+  }
+
+  async function handleFileUpload(event: Event) {
+    const input = event.target as HTMLInputElement;
+    const file = input.files?.[0];
+    if (!file) return;
+
+    // Validate file type
+    if (!file.type.startsWith('image/')) {
+      alert('Please upload an image file');
+      return;
+    }
+
+    ocrProcessing = true;
+    try {
+      const result = await extractTextFromImage(file);
+      ocrContext = result;
+      
+      // Auto-insert prompt suggestion if text area is empty
+      if (!prompt.trim() && result.text) {
+        prompt = 'What does this image say?';
+      }
+    } catch (e: any) {
+      alert(`OCR failed: ${e.message || e}`);
+    } finally {
+      ocrProcessing = false;
+      // Reset input so same file can be re-uploaded
+      input.value = '';
+    }
+  }
+
+  function clearOcrContext() {
+    ocrContext = null;
   }
 
   async function refreshMemList() {
@@ -471,6 +510,12 @@
   <div class="hint">Press Enter to send, Shift+Enter for newline</div>
 
   <form id="composer" on:submit|preventDefault={handleSubmit}>
+    {#if ocrContext}
+      <div class="ocr-pill">
+        📄 OCR: {ocrContext.filename} ({ocrContext.char_count} chars{#if ocrContext.confidence}, {ocrContext.confidence.toFixed(0)}% confidence{/if})
+        <button type="button" class="ocr-clear" on:click={clearOcrContext} title="Remove OCR context">×</button>
+      </div>
+    {/if}
     <div class="input-row">
       <textarea bind:value={prompt} placeholder="Type your message..." autocomplete="off" on:keydown={(e) => {
         if (e.key === 'Enter' && !e.shiftKey) {
@@ -478,6 +523,14 @@
           handleSubmit();
         }
       }}></textarea>
+      <label class="upload-btn" title="Upload image for OCR">
+        <input type="file" accept="image/*" on:change={handleFileUpload} hidden disabled={ocrProcessing || $thinking} />
+        {#if ocrProcessing}
+          <span class="spinner-small"></span>
+        {:else}
+          📷
+        {/if}
+      </label>
       <button type="submit" disabled={$thinking || !prompt.trim()}>Send</button>
     </div>
     <button type="button" class="composer-divider" title="Toggle composer options" on:click={() => showComposerControls = !showComposerControls}>

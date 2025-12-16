@@ -17,9 +17,10 @@ export async function streamChat(params: {
   conversationId: string;
   entity?: string;
   media?: Record<string, any> | null;
+  ocrContext?: Record<string, any> | null;
   signal?: AbortSignal;
 } & StreamCallbacks) {
-  const { prompt, includeThinking, conversationId, entity, media, signal, onToken, onThinking, onDone, onError } = params;
+  const { prompt, includeThinking, conversationId, entity, media, ocrContext, signal, onToken, onThinking, onDone, onError } = params;
 
   const res = await fetch('/api/chat/stream', {
     method: 'POST',
@@ -29,7 +30,8 @@ export async function streamChat(params: {
       include_thinking: includeThinking,
       conversation_id: conversationId,
       entity: entity || undefined,
-      media: media || undefined
+      media: media || undefined,
+      ocr_context: ocrContext || undefined
     }),
     signal
   });
