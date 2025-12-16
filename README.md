@@ -4,6 +4,7 @@
 [![Docker](https://img.shields.io/badge/docker-%230db7ed.svg?logo=docker&logoColor=white)](#quick-start)
 [![Python 3.11+](https://img.shields.io/badge/python-3.11+-blue.svg)](https://www.python.org/downloads/)
 [![MCP](https://img.shields.io/badge/MCP-v1.1-green.svg)](ada-mcp/)
+[![AI-Assisted](https://img.shields.io/badge/built%20with-AI%20assistance-blueviolet.svg)](#provenance)
 
 **Personal AI with enterprise features, running on your hardware.**
 
@@ -92,76 +93,25 @@ docker compose restart brain
 AI_NAME=Jarvis
 AI_USER_NAME=Tony
 ```
-
-See [Getting Started from Scratch](/docs/GETTING_STARTED_FROM_SCRATCH.md) for detailed customization.
+https://ada-docs.readthedocs.io/) for detailed customization.
 
 ---
 
 ## Core Features
 
-### 🧠 Memory & RAG
+**🧠 Memory & RAG** - Semantic search over conversations, automatic consolidation, persona injection. Your memories stay local on YOUR hardware.
 
-Ada remembers conversations using **Retrieval-Augmented Generation (RAG)**:
-- Semantic search over past conversations
-- Automatic memory consolidation
-- Persona and FAQ injection
-- Context-aware responses
+**🔌 Extensible Specialists** - Drop a Python file in `brain/specialists/` for new capabilities. Built-in: web search, OCR, media analysis. [Build your own →](https://ada-docs.readthedocs.io/en/latest/build_specialist.html)
 
-Unlike subscription services, your memories stay on YOUR hardware in a local ChromaDB instance.
+**📡 Bidirectional Tool Use** - LLM can request specialists mid-response for more natural, agentic behavior.
 
-### 🔌 Extensible Specialists
+**🔒 Privacy by Default** - No telemetry, no tracking, no API keys. Works completely offline after setup.
 
-Drop a Python file in \`brain/specialists/\` and Ada gains new capabilities:
+**📚 Self-Documenting** - Query `/v1/info`, `/v1/specialists`, `/v1/schema` for complete introspection.
 
-**Built-in specialists:**
-- **Web search** - Real-time information from the internet
-- **OCR** - Extract text from images
-- **Media analysis** - Understand images and documents
-- **Docs search** - Ada can read her own documentation
+**⌨️ Editor Integration** - Use Ada from VSCode, Neovim, Helix via [Model Context Protocol](ada-mcp/).
 
-**Build your own in minutes:**
-```python
-# brain/specialists/weather_specialist.py
-class WeatherSpecialist(BaseSpecialist):
-    async def process(self, location: str):
-        # Your weather API logic here
-        return SpecialistResult(data={...})
-```
-
-See [Building Your First Specialist](/docs/BUILD_YOUR_FIRST_SPECIALIST.md) for a complete tutorial.
-
-### 📡 Bidirectional Tool Use
-
-Unlike most AI frameworks, Ada's specialists work **bidirectionally**:
-- 👉 **User → AI:** "Search the web for Python 3.13 release date"
-- 👈 **AI → Specialist → AI:** LLM emits \`<web_search>query</web_search>\` mid-response, gets results, continues naturally
-
-This creates more natural, agentic behavior.
-
-### 🔒 Privacy by Default
-
-- ✅ No telemetry or tracking
-- ✅ Conversations stay on your hardware
-- ✅ No API keys required for core features
-- ✅ Works completely offline after setup
-
-Your data is yours. No companies, no cloud, no compromise.
-
-### 📚 Self-Documenting
-
-Ada can introspect herself:
-- \`GET /v1/info\` - All capabilities and endpoints
-- \`GET /v1/specialists\` - Available tools with schemas
-- \`GET /v1/schema\` - Complete API documentation
-- Built-in docs specialist - Ada reads her own Sphinx documentation
-
-### ⌨️ Editor Integration (v1.1+)
-
-Use Ada directly from your editor via Model Context Protocol:
-- **VSCode/GitHub Copilot** - Chat with Ada without leaving your code
-- **Any MCP-compatible editor** - Neovim, Helix, Zed, etc.
-- 4 tools exposed: chat, search memory, add memory, health check
-
+See [full documentation](https://ada-docs.readthedocs.io/) for detail
 See [ada-mcp/](/ada-mcp/) for setup instructions.
 
 ---
@@ -260,22 +210,37 @@ Open an issue or pull request on [GitHub](https://github.com/luna-system/ada).
 
 ## Requirements
 
-### Minimum
-- Docker & Docker Compose
-- 8GB RAM
-- 10GB disk space
-- Any CPU (slower but works)
+**Minimum:** Docker, 8GB RAM, 10GB disk, any CPU  
+**Recommended:** 16GB RAM, 8GB+ VRAM GPU, 50GB SSD  
+**Tested on:** Ubuntu 22.04+, macOS 13+ (Apple Silicon), Windows 11 WSL2
 
-### Recommended
-- 16GB RAM
-- NVIDIA GPU with 8GB+ VRAM
-- 50GB disk space (for multiple models)
-- SSD for better performance
+See [Hardware Guide](https://ada-docs.readthedocs.io/en/latest/hardware.html) for GPU setup and [SBC Guide](https://ada-docs.readthedocs.io/en/latest/sbc.html) for Raspberry Pi/ARM boards.
 
-### Tested On
-- Ubuntu 22.04 / Debian 12
-- macOS 13+ (Apple Silicon)
-- Windows 11 with WSL2
+---
+
+## Provenance
+
+This project is developed collaboratively by [Luna](https://github.com/luna-system) in partnership with **Claude Sonnet 4.5** (Anthropic).
+
+**What this means:**
+- Significant portions of code, documentation, and architecture were generated or co-created with AI assistance
+- All AI-generated content has been reviewed, tested, and refined by human maintainers
+- Design decisions, principles, and project direction remain human-driven
+- This collaborative process is a point of pride, not hidden - it's part of how we build in 2025
+
+**Why we're transparent about this:**
+- Honesty about our tools and methods builds trust
+- AI assistance democratizes software development - this is a feature, not a bug
+- We believe in showing our work, including our collaboration with AI systems
+- Others should know what's possible when humans and AI work together well
+
+**What hasn't changed:**
+- All code is reviewed, tested, and maintained by humans
+- Architecture and design decisions are made with human judgment
+- The project's values and principles are deeply human
+- Quality standards remain high regardless of authorship
+
+This disclosure doesn't diminish the work - it celebrates a new way of building software that we believe makes projects like Ada possible for more people.
 
 ---
 
@@ -291,32 +256,13 @@ See [LICENSE](LICENSE) for details.
 
 ## Credits
 
-Built by [Luna](https://github.com/luna-system) with significant contributions from Claude Sonnet 4.5.
-
 Named after **Ada Lovelace** (1815-1852), who wrote the first computer program and imagined machines that could create art and music - not just calculate.
 
-Special thanks to the open source community and projects that make this possible:
+Built with:
 - [Ollama](https://ollama.ai) - Local LLM inference
 - [ChromaDB](https://www.trychroma.com/) - Vector database
-- [FastAPI](https://fastapi.tiangolo.com/) - Modern Python web framework
-
----
-
-## FAQ
-
-**Q: Do I need a GPU?**  
-A: No, but it's MUCH faster. CPU-only works fine for smaller models or if you're patient.
-
-**Q: What models can I use?**  
-A: Anything supported by Ollama: Llama, Mistral, Gemma, Qwen, DeepSeek, etc. Just change \`OLLAMA_MODEL\` in \`.env\`.
-
-**Q: How is this different from Open WebUI / text-generation-webui?**  
-A: Those are model runners with UIs. Ada is a framework for building personalized AI assistants with memory, tools, and extensibility.
-
-**Q: Can I use commercial APIs like OpenAI instead of local models?**  
-A: Yes, but that defeats the purpose. Ada is designed for local/open models to maintain privacy and zero costs.
-
-**Q: Is this production-ready?**  
+- [FastAPI](https://fastapi.tiangolo.com/) - Python web framework
+- [Claude Sonnet 4.5](https://anthropic.com/claude) - AI development partner
 A: It's stable for personal use. For production workloads, you'll want to add authentication, rate limiting, and monitoring.
 
 **Q: How do I contribute a new specialist?**  
@@ -324,4 +270,7 @@ A: See [Build Your First Specialist](/docs/BUILD_YOUR_FIRST_SPECIALIST.md)! We l
 
 ---
 
-**Let's build tools that let weird kids build weird things that change the world.** 🚀
+**Let's build tools that let weird kihttps://ada-docs.readthedocs.io/en/latest/build_specialist.html)! We love weird use cases.
+
+**Q: Was this really built with AI?**  
+A: Mostly! See [Provenance](#provenance) for full transparency about our human-AI collaboration
