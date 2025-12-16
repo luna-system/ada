@@ -400,11 +400,11 @@ async def chat_stream(request: Request):
     faq_k = int(data.get('faq_k', RAG_FAQ_TOP_K))
     memory_k = int(data.get('memory_k', RAG_MEMORY_TOP_K))
 
-    # Build prompt using modularized builder
+    # Build prompt using modularized builder (now async with specialists)
     media_info = data.get('media') if isinstance(data.get('media'), dict) else None
     ocr_context = data.get('ocr_context') if isinstance(data.get('ocr_context'), dict) else None
     if RAG_ENABLED and rag_store is not None:
-        final_prompt, used_context = build_prompt(
+        final_prompt, used_context = await build_prompt(
             prompt,
             conversation_id,
             entity,
