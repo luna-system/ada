@@ -11,7 +11,14 @@ Welcome to the Ada v1 Brain API documentation. This is the REST API backend for 
    :caption: Documentation:
 
    getting_started
+   configuration
+   architecture
+   data_model
+   api_usage
    api_reference
+   specialists
+   testing
+   development
    streaming
    memory
    examples
@@ -30,12 +37,13 @@ The Brain API provides endpoints for:
 
 Key Features:
 
-✓ Non-blocking streaming responses  
-✓ Semantic search on memories  
+✓ Non-blocking streaming responses (see :doc:`streaming`)  
+✓ Semantic search on memories (see :doc:`memory`)  
 ✓ Automatic conversation threading  
 ✓ Thinking/reasoning visibility  
-✓ Entity-scoped context retrieval  
+✓ Entity-scoped context retrieval (see :doc:`data_model`)  
 ✓ Conversation summarization  
+✓ Specialist plugin system (see :doc:`specialists`)  
 
 
 Quick Start

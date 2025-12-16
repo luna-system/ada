@@ -65,7 +65,11 @@ Key variables:
 - ``RAG_ENABLE_SUMMARY`` - Auto-generate conversation summaries (default: true)
 - ``RAG_DEBUG`` - Enable debug endpoints (default: false)
 
-For complete list, see `.env.example`.
+For complete configuration reference, see :doc:`configuration`.
+
+.. tip::
+   
+   **Runtime Configuration Discovery:** Query **GET /v1/info** to see the current active configuration, enabled features, and models in use.
 
 Running the Service
 ===================
@@ -231,6 +235,8 @@ Service Won't Start
 
       docker compose restart chroma
 
+See :doc:`architecture` for details on the RAG infrastructure.
+
 Health Check Failing
 --------------------
 
@@ -272,7 +278,7 @@ Ensure RAG is enabled in `.env`:
    RAG_ENABLED=true
    CHROMA_URL=http://localhost:8000
 
-Then restart Brain API.
+Then restart Brain API. See :doc:`configuration` for complete RAG configuration options and :doc:`memory` for memory management patterns.
 
 Debugging
 =========
@@ -325,7 +331,13 @@ Verify all dependencies are installed:
 Next Steps
 ==========
 
-- See :doc:`api_reference` for full endpoint documentation
+- :doc:`api_reference` - Complete endpoint documentation
+- :doc:`streaming` - Real-time SSE streaming implementation
+- :doc:`memory` - Long-term memory management
+- :doc:`specialists` - Plugin system for extended capabilities
+- :doc:`configuration` - Full configuration reference
+- :doc:`testing` - Testing guide and best practices
+- :doc:`examples` - Code examples in multiple languages
 - See :doc:`streaming` for real-time response handling
 - See :doc:`memory` for memory management
 - See :doc:`examples` for code examples

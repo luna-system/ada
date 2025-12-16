@@ -24,12 +24,9 @@ import sys
 from typing import Iterable, Dict
 from dotenv import load_dotenv
 
-# Add brain module to path
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', 'brain'))
-
 load_dotenv()
 
-from rag_store import RagStore
+from brain.rag_store import RagStore
 
 
 def iter_jsonl(path: str) -> Iterable[Dict[str, str]]:

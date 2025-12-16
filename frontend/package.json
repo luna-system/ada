@@ -5,7 +5,8 @@
   "type": "module",
   "scripts": {
     "dev": "astro dev",
-    "build": "astro build",
+    "build": "npm run build:docs && astro build",
+    "build:docs": "cd ../docs && make html",
     "preview": "astro preview",
     "check": "astro check"
   },
