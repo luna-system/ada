@@ -2,8 +2,11 @@
 Prompt assembly and context building for Ada brain.
 
 Combines persona, memories, FAQs, recent turns, and other context into a coherent prompt.
+Now with specialist plugin support for extensible context injection.
 """
+import asyncio
 import datetime
+import logging
 from typing import Dict, Any, List, Optional, Tuple
 from config import (
     IDENTITY_BLOCK,
@@ -21,9 +24,12 @@ from config import (
 from rag_store import RagStore
 from media import format_media_for_prompt
 from notices_client import get_active_notices
+from brain.specialists import execute_specialists
+
+logger = logging.getLogger(__name__)
 
 
-def build_prompt(
+async def build_prompt(
     user_prompt: str,
     conversation_id: Optional[str],
     entity: Optional[str],
@@ -37,6 +43,7 @@ def build_prompt(
 ) -> Tuple[str, Dict[str, Any]]:
     """
     Assemble a complete prompt from all available context.
+    Now executes specialist plugins for extensible context injection.
     
     Returns: (final_prompt, used_context)
     
@@ -71,23 +78,40 @@ def build_prompt(
     # Always include identity guardrail
     sections.append(IDENTITY_BLOCK)
     
-    # Media (ListenBrainz) if provided
-    if media_info and isinstance(media_info, dict):
-        media_line = format_media_for_prompt(media_info)
-        if media_line:
-            sections.append(media_line)
-            used_context['media'] = media_info
+    # --- Execute Specialist Plugins ---
+    # Build request context for specialists
+    request_context = {
+        'prompt': user_prompt,
+        'conversation_id': conversation_id,
+        'entity': entity,
+        'media': media_info,
+        'ocr_context': ocr_context,
+        'user_timestamp': user_timestamp,
+    }
     
-    # OCR context (extracted text from images)
-    if ocr_context and isinstance(ocr_context, dict):
-        ocr_text = ocr_context.get('text', '').strip()
-        if ocr_text:
-            filename = ocr_context.get('filename', 'image')
-            char_count = ocr_context.get('char_count', len(ocr_text))
-            confidence = ocr_context.get('confidence')
-            conf_str = f" (confidence: {confidence:.1f}%)" if confidence else ""
-            sections.append(f"📄 OCR EXTRACTED TEXT from '{filename}' ({char_count} chars{conf_str}):\n{ocr_text}")
-            used_context['ocr'] = {'filename': filename, 'char_count': char_count, 'confidence': confidence}
+    # Execute all applicable specialists and collect results
+    try:
+        specialist_results = await execute_specialists(request_context)
+        
+        # Inject specialist contexts (already sorted by priority)
+        for result in specialist_results:
+            if result.success and result.context_text:
+                sections.append(result.context_text)
+                
+                # Track in used_context
+                specialist_name = result.specialist_name
+                if specialist_name not in used_context:
+                    used_context[specialist_name] = []
+                used_context[specialist_name].append({
+                    'success': True,
+                    'metadata': result.metadata
+                })
+            elif not result.success:
+                logger.warning(f"Specialist {result.specialist_name} failed: {result.error}")
+    
+    except Exception as e:
+        logger.error(f"Specialist execution failed: {e}", exc_info=True)
+        # Continue building prompt without specialist context
     
     # Persona block
     if RAG_ENABLE_PERSONA and rag_store is not None:
