@@ -2,6 +2,17 @@
 
 This directory contains utility scripts for Ada's maintenance, debugging, testing, and operations.
 
+## End-to-End Testing
+
+### `test_quickstart_e2e.sh` ⭐
+**Test that the README actually works** - follows quick start instructions exactly.
+
+```bash
+./scripts/test_quickstart_e2e.sh
+```
+
+This is the same test that runs in CI, designed for local development. Perfect for validating changes before committing.
+
 ## Tooling Container
 
 All scripts should be run via the dedicated `scripts` Docker service, which provides:

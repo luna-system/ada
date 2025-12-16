@@ -1,3 +1,10 @@
+# @ai-indexable: core-functionality
+# @ai-purpose: Vector storage interface for semantic search over memories, conversations, persona, and FAQ
+# @ai-dependencies: chromadb, requests, ollama (for embeddings)
+# @ai-related: brain/app.py, brain/prompt_builder.py, scripts/consolidate_memories.py
+# @ai-key-classes: RagStore, OllamaEmbeddingFunction
+# @ai-data-flow: Receives text → generates embeddings via Ollama → stores in ChromaDB → semantic search retrieval
+
 import os
 import uuid
 import datetime

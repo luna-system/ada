@@ -45,8 +45,16 @@ node_modules/
 dist/
 build/
 
-# cached ollama data
+# Runtime data (databases, caches, backups)
 data/ollama
+data/chroma/*.sqlite3
+data/chroma/*/
+data/chroma/backups/*
+!data/chroma/backups/.gitkeep
+data/brain/chroma/*
+!data/brain/chroma/.gitkeep
+data/backups/*
+!data/backups/.gitkeep
 
 # Lock & cache (keep uv.lock tracked if you prefer deterministic builds)
 # Uncomment next line if you do NOT want to track uv.lock

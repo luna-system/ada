@@ -1,4 +1,30 @@
-# Manual Testing for Markdown Rendering
+# Testing Ada
+
+## Quick Start End-to-End Test
+
+**Test that the README actually works:**
+
+```bash
+./scripts/test_quickstart_e2e.sh
+```
+
+This script:
+- Follows the README quick start instructions exactly
+- Tests identity configuration (AI_NAME, AI_USER_NAME)
+- Verifies all services start correctly
+- Tests chat, specialists, and persona swapping
+- Runs the full unit/integration test suite
+- Cleans up when done (restores your `.env`)
+
+**Perfect for:**
+- Validating changes before committing
+- Ensuring documentation stays accurate
+- Testing on your laptop before pushing
+- Reproducing CI failures locally
+
+---
+
+## Manual Testing for Markdown Rendering
 
 The frontend is served via Docker Compose through an Nginx reverse proxy. Testing can be done locally or against the running services.
 
