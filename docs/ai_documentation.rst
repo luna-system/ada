@@ -82,10 +82,23 @@ This pattern emerged organically from our development process. We're sharing it 
 - Keep it current
 - Adapt freely for your context
 
+Integration Points
+~~~~~~~~~~~~~~~~~~
+
+Ada provides **multiple entry points** for AI assistants:
+
+1. **GitHub Copilot** - ``.github/copilot-instructions.md`` forwards to ``.ai/`` folder
+2. **General AIs** - ``AI.md`` in repository root explains the pattern
+3. **MCP clients** - Documentation exposed as MCP resources (``ada://docs/*``)
+4. **Direct access** - Browse ``.ai/`` folder for structured docs
+
+All paths lead to the same source of truth, just through different protocols.
+
 Learn More
 ~~~~~~~~~~
 
 - **For AI assistants:** See `AI.md <https://github.com/luna-system/ada/blob/trunk/AI.md>`_ in the repository root
+- **For GitHub Copilot:** See `.github/copilot-instructions.md <https://github.com/luna-system/ada/blob/trunk/.github/copilot-instructions.md>`_
 - **Pattern details:** See `.ai/PATTERN.md <https://github.com/luna-system/ada/blob/trunk/.ai/PATTERN.md>`_
 - **Our implementation:** Browse the `.ai/ folder <https://github.com/luna-system/ada/tree/trunk/.ai>`_
 
