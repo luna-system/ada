@@ -2,9 +2,9 @@ name: Quick Start End-to-End Test
 
 on:
   push:
-    branches: [ main ]
+    branches: [ trunk ]
   pull_request:
-    branches: [ main ]
+    branches: [ trunk ]
     paths:
       - 'README.md'
       - 'compose.yaml'
