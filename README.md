@@ -45,12 +45,13 @@ Most AI assistants lock essential features behind subscriptions:
 - **GPU** (optional but recommended) - NVIDIA GPU with CUDA support
 - **8GB+ RAM** for smaller models, 16GB+ for larger ones
 
-### 2. Clone and Run
+### 2. Clone and Setup
 
 \`\`\`bash
 git clone https://github.com/yourusername/ada.git
 cd ada
-docker compose up
+./setup.sh          # Creates data directories and checks prerequisites
+docker compose up -d
 \`\`\`
 
 That's it! Ada will:
