@@ -1,0 +1,27 @@
+# Ada MCP Server configuration for Helix
+# Add this to your Helix config (~/.config/helix/languages.toml)
+
+# Note: Helix MCP support is experimental as of 2025.
+# This config assumes future MCP LSP-style integration.
+# Check Helix documentation for current MCP support status.
+
+[[language-server.ada-mcp]]
+command = "uv"
+args = ["run", "--directory", "/path/to/ada-v1/ada-mcp", "ada-mcp"]
+
+[language-server.ada-mcp.environment]
+ADA_BASE_URL = "http://localhost:8000"
+
+# Enable for specific languages (e.g., markdown, python)
+[[language]]
+name = "markdown"
+language-servers = ["marksman", "ada-mcp"]
+
+[[language]]
+name = "python"
+language-servers = ["pylsp", "ada-mcp"]
+
+# Usage:
+# - Ada tools should appear in LSP actions menu
+# - Exact keybindings depend on Helix MCP implementation
+# - Check :lsp-workspace-command for available Ada tools
