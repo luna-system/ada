@@ -51,7 +51,20 @@ jobs:
     
     - name: "Quick Start Step 2: Start services"
       run: |
-        docker compose up -d
+        # Override compose to use CPU-only Ollama in CI (no GPU devices)
+        cat > compose.ci.yaml << 'EOF'
+        include:
+          - compose.yaml
+        
+        services:
+          ollama:
+            image: ollama/ollama:latest  # CPU-only image
+            devices: []  # Remove GPU devices for CI
+            volumes:
+              - ./data/ollama:/root/.ollama
+        EOF
+        
+        docker compose -f compose.yaml -f compose.ci.yaml up -d
         echo "=== Services started ==="
         docker compose ps
     
@@ -201,7 +214,7 @@ jobs:
     - name: "Cleanup"
       if: always()
       run: |
-        docker compose down -v
+        docker compose -f compose.yaml -f compose.ci.yaml down -v || docker compose down -v
         docker system prune -f
 
   unit-and-integration-tests:
@@ -226,4 +239,4 @@ jobs:
     - name: Cleanup
       if: always()
       run: |
-        docker compose down -v
+        docker compose -f compose.yaml -f compose.ci.yaml down -v || docker compose down -v
