@@ -14,6 +14,7 @@ Welcome to the Ada Brain API documentation. This is the REST API backend for the
    getting_started_scratch
    configuration
    examples
+   matrix_integration
 
 .. toctree::
    :maxdepth: 2
