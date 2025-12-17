@@ -2,6 +2,45 @@
 
 This guide explains how to validate and maintain AI documentation consistency.
 
+## 🎯 TDD-First Philosophy (PREFERRED!)
+
+**When adding new features, START with tests!** This is slightly faster and catches issues early.
+
+### TDD Workflow:
+1. **Write failing tests first** - Define behavior before implementation
+2. **Run tests** - Verify they fail for the right reason
+3. **Implement feature** - Write minimal code to pass tests
+4. **Run tests again** - Verify they pass
+5. **Refactor** - Clean up code while tests keep passing
+
+### Why TDD for Ada:
+- ✅ **Faster feedback** - Catch bugs before they exist
+- ✅ **Better design** - Tests force you to think about interfaces
+- ✅ **Pure Python** - Unit tests run in <0.1s (no Docker needed)
+- ✅ **Documentation** - Tests show how to use the code
+- ✅ **Confidence** - Refactor fearlessly with passing tests
+
+### Example (Biomimetic Features):
+```bash
+# 1. Write test (it will fail)
+vim tests/test_memory_decay.py
+
+# 2. Run test (verify failure)
+pytest tests/test_memory_decay.py -v --ignore=tests/conftest.py
+
+# 3. Implement feature
+vim brain/memory_decay.py
+
+# 4. Run test again (now passes!)
+pytest tests/test_memory_decay.py -v --ignore=tests/conftest.py
+
+# 5. Refactor if needed, tests protect you
+```
+
+**See Phase 1-2 biomimetic work for TDD examples - 52 tests, 0.09s runtime!**
+
+---
+
 ## Overview
 
 We've implemented comprehensive testing to ensure machine-readable documentation stays synchronized with code:
