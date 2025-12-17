@@ -4,19 +4,34 @@ This directory contains Nix flake configuration for reproducible development and
 
 ## Quick Start
 
+**First time with Nix?** See [docs/zero_to_ada.rst](docs/zero_to_ada.rst) for complete setup guide!
+
 ```bash
-# Enter development shell
+# 1. Install Nix (one-time)
+curl -L https://nixos.org/nix/install | sh
+
+# 2. Enable flakes (one-time)
+mkdir -p ~/.config/nix
+echo "experimental-features = nix-command flakes" >> ~/.config/nix/nix.conf
+
+# 3. Enter development shell
 nix develop
 
 # Or with automatic activation
 direnv allow
 cd ada-v1  # Environment loads automatically
 
-# Build Ada package
-nix build
+# 4. Run Ada
+ada setup
+ada run
+```
 
-# Run Ada directly
-nix run . -- chat "Hello!"
+## Troubleshooting
+
+**404 error?** Update the flake:
+```bash
+nix flake update
+nix develop
 ```
 
 ## What's Included

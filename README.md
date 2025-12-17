@@ -45,10 +45,12 @@ Most AI assistants lock essential features behind subscriptions:
 
 ## Quick Start
 
-Choose your path:
+**New here?** 👉 See [Zero to Ada](docs/zero_to_ada.rst) for the fastest path from nothing to working Ada!
 
-- **[Local Mode](#local-mode-no-docker)** - Just Python + Ollama (recommended)
-- **[Nix Flake](#nix-flake)** - Declarative, reproducible setup
+Choose your setup method:
+
+- **[Nix](#nix-flake)** - Works on any system, instant Python 3.13 (recommended for most users)
+- **[Local Mode](#local-mode-no-docker)** - If you already have Python 3.13
 - **[Docker Mode](#docker-mode-optional)** - Containerized deployment
 
 ### Local Mode (No Docker!)
