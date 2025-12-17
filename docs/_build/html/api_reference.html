@@ -1,3 +1,5 @@
+
+
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" data-content_root="./">
 <head>
@@ -6,19 +8,16 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>API Reference &mdash; Ada Brain API 0.1.0 documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
-      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=19f00094" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
       <link rel="stylesheet" type="text/css" href="_static/graphviz.css?v=4ae1632d" />
+      <link rel="stylesheet" type="text/css" href="_static/custom.css?v=df0a1c42" />
 
   
-  <!--[if lt IE 9]>
-    <script src="_static/js/html5shiv.min.js"></script>
-  <![endif]-->
-  
-        <script src="_static/jquery.js?v=5d32c60e"></script>
-        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-        <script src="_static/documentation_options.js?v=01f34227"></script>
-        <script src="_static/doctools.js?v=9bcbadda"></script>
-        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=01f34227"></script>
+      <script src="_static/doctools.js?v=9bcbadda"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -49,7 +48,7 @@
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="zero_to_ada.html">Zero to Ada</a></li>
 <li class="toctree-l1"><a class="reference internal" href="getting_started.html">Getting Started</a></li>
-<li class="toctree-l1"><a class="reference internal" href="local_mode.html">Running Ada Locally (No Docker!)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="local_mode.html">Running Ada Locally (No Docker Required!)</a></li>
 <li class="toctree-l1"><a class="reference internal" href="nix.html">Nix &amp; Flakes Support</a></li>
 <li class="toctree-l1"><a class="reference internal" href="getting_started_scratch.html">Getting Started from Scratch</a></li>
 <li class="toctree-l1"><a class="reference internal" href="configuration.html">Configuration Reference</a></li>
@@ -75,8 +74,8 @@
 <li class="toctree-l1"><a class="reference internal" href="matrix_integration.html">Matrix Integration</a></li>
 <li class="toctree-l1"><a class="reference internal" href="api_usage.html">API Usage Guide</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">API Reference</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#brain-api-endpoints">Brain API Endpoints</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#endpoint-discovery">Endpoint Discovery</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#brain-api-endpoints"><span class="autogen-doc">Brain API Endpoints</span></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#endpoint-discovery"><span class="autogen-doc">Endpoint Discovery</span></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#key-endpoints">Key Endpoints</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#chat-streaming">Chat &amp; Streaming</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#memory-management">Memory Management</a></li>
@@ -117,6 +116,7 @@
 <li class="toctree-l1"><a class="reference internal" href="development.html">Development Tools</a></li>
 <li class="toctree-l1"><a class="reference internal" href="testing.html">Testing Guide</a></li>
 <li class="toctree-l1"><a class="reference internal" href="versioning.html">Version Management</a></li>
+<li class="toctree-l1"><a class="reference internal" href="changelog.html">Changelog</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Philosophy &amp; Design</span></p>
 <ul>
@@ -154,10 +154,10 @@
   <section id="api-reference">
 <h1>API Reference<a class="headerlink" href="#api-reference" title="Link to this heading"></a></h1>
 <section id="brain-api-endpoints">
-<h2>Brain API Endpoints<a class="headerlink" href="#brain-api-endpoints" title="Link to this heading"></a></h2>
+<h2><span class="autogen-doc">Brain API Endpoints</span><a class="headerlink" href="#brain-api-endpoints" title="Link to this heading"></a></h2>
 </section>
 <section id="endpoint-discovery">
-<h2>Endpoint Discovery<a class="headerlink" href="#endpoint-discovery" title="Link to this heading"></a></h2>
+<h2><span class="autogen-doc">Endpoint Discovery</span><a class="headerlink" href="#endpoint-discovery" title="Link to this heading"></a></h2>
 <p><strong>The API is fully self-documenting!</strong> Query these endpoints to discover available functionality:</p>
 <p><strong>GET /v1/info</strong> — System capabilities and complete endpoint list</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>curl<span class="w"> </span>http://localhost:5000/api/info<span class="w"> </span><span class="p">|</span><span class="w"> </span>jq
