@@ -4,11 +4,12 @@ requires-python = ">=3.13"
 
 [[package]]
 name = "ada-v1"
-version = "1.2.0"
-source = { virtual = "." }
+version = "1.6.0"
+source = { editable = "." }
 dependencies = [
     { name = "boto3" },
     { name = "chromadb" },
+    { name = "click" },
     { name = "fastapi" },
     { name = "gunicorn" },
     { name = "httpx" },
@@ -36,6 +37,7 @@ docs = [
 requires-dist = [
     { name = "boto3", specifier = ">=1.35.0" },
     { name = "chromadb", specifier = ">=0.5.11" },
+    { name = "click", specifier = ">=8.1.0" },
     { name = "fastapi", specifier = ">=0.109.0" },
     { name = "gunicorn", specifier = ">=23.0.0" },
     { name = "httpx", specifier = ">=0.26.0" },
