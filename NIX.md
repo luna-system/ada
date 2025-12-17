@@ -39,10 +39,20 @@ nix run . -- chat "Hello!"
 
 ## Why Nix?
 
+- **Solves version mismatches**: Python 3.13 not in your distro? Nix provides it instantly!
 - **Reproducible**: Same dependencies everywhere
 - **Declarative**: All deps in `flake.nix`
 - **Cross-platform**: Linux, macOS, WSL
 - **Composable**: Integrate with larger Nix configs
 - **Cutting edge**: Flakes are the future of Nix
+
+### Perfect for Ubuntu Users
+
+Ubuntu 22.04 LTS maxes at Python 3.10, Ubuntu 24.04 LTS at Python 3.12.  
+Rather than compiling Python 3.13 from source, just use Nix:
+
+```bash
+nix develop  # Instant Python 3.13 environment!
+```
 
 Ada + Nix = Reproducible AI for everyone! 🤖❄️
