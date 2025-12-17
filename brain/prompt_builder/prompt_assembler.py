@@ -23,6 +23,7 @@ from brain.prompt_builder.section_builder import SectionBuilder
 from brain.context_cache import MultiTimescaleCache
 from brain.token_monitor import TokenBudgetMonitor
 from brain.context_habituation import ContextHabituation
+from brain.attention_spotlight import AttentionalSpotlight
 from brain.config import config
 
 logger = logging.getLogger(__name__)
@@ -86,6 +87,17 @@ class PromptAssembler:
             logger.info(f"Context habituation enabled (threshold={config.CONTEXT_HABITUATION_THRESHOLD})")
         else:
             self.habituation = None
+        
+        # Initialize attention spotlight (Biomimetic Phase 2)
+        if config.ATTENTION_SPOTLIGHT_ENABLED:
+            self.spotlight = AttentionalSpotlight(
+                spotlight_budget=config.ATTENTION_SPOTLIGHT_BUDGET,
+                periphery_budget=config.ATTENTION_PERIPHERY_BUDGET,
+                spotlight_size=config.ATTENTION_SPOTLIGHT_SIZE
+            )
+            logger.info(f"Attention spotlight enabled (size={config.ATTENTION_SPOTLIGHT_SIZE})")
+        else:
+            self.spotlight = None
     
     def build_prompt(
         self,
@@ -159,9 +171,36 @@ class PromptAssembler:
                 if self.token_monitor:
                     self.token_monitor.track("specialists", specialist_section)
         
-        # Memories (user-specific context)
+        # Memories (user-specific context) - with attention spotlight
         if memories:
-            memory_section = self.builder.format_memories(memories)
+            # Apply attention spotlight if enabled
+            if self.spotlight:
+                # Convert (text, metadata) tuples to dicts for spotlight
+                memory_dicts = [
+                    {
+                        'content': text,
+                        'metadata': metadata,
+                        'distance': metadata.get('distance', 0.5)
+                    }
+                    for text, metadata in memories
+                ]
+                
+                distribution = self.spotlight.apply_attention(memory_dicts)
+                stats = self.spotlight.get_stats(distribution)
+                
+                logger.info(
+                    f"Attention: {stats['spotlight_count']} spotlight, "
+                    f"{stats['periphery_count']} periphery "
+                    f"({stats['total_tokens']} tokens)"
+                )
+                
+                # Format with attention structure
+                memory_section = distribution.format_context()
+            else:
+                # No spotlight - format normally
+                memory_texts = [text for text, _ in memories]
+                memory_section = self.builder.format_memories(memory_texts)
+            
             sections.append(memory_section)
             if self.token_monitor:
                 self.token_monitor.track("memories", memory_section)
