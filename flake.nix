@@ -74,6 +74,10 @@
           ];
 
           shellHook = ''
+            # Fix locale issues (common on some systems)
+            export LC_ALL="C.UTF-8"
+            export LANG="C.UTF-8"
+            
             echo "🤖 Ada development environment"
             echo ""
             echo "Available commands:"
