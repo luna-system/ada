@@ -46,25 +46,33 @@ jobs:
         echo "AI_NAME=TestBot" >> .env
         echo "AI_USER_NAME=tester" >> .env
         
+        # Create matrix-bridge .env (optional service, minimal config for CI)
+        cp matrix-bridge/.env.example matrix-bridge/.env
+        
         echo "=== Environment configured ==="
         cat .env
     
     - name: "Quick Start Step 2: Start services"
       run: |
-        # Override compose to use CPU-only Ollama in CI (no GPU devices)
+        # Override compose to use CPU-only Ollama and skip matrix-bridge in CI
         cat > compose.ci.yaml << 'EOF'
-        include:
-          - compose.yaml
-        
         services:
           ollama:
-            image: ollama/ollama:latest  # CPU-only image
-            devices: []  # Remove GPU devices for CI
+            image: ollama/ollama:latest
+            container_name: ada-ollama-1
+            ports:
+              - "11434:11434"
             volumes:
               - ./data/ollama:/root/.ollama
+            # No GPU devices for CI (CPU-only)
+          
+          # Disable matrix-bridge in CI (not needed for quickstart test)
+          matrix-bridge:
+            profiles:
+              - disabled
         EOF
         
-        docker compose -f compose.yaml -f compose.ci.yaml up -d
+        docker compose -f compose.yaml -f compose.ci.yaml up -d brain chroma ollama frontend
         echo "=== Services started ==="
         docker compose ps
     
