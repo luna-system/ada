@@ -1,0 +1,4 @@
+# file: /home/luna/Code/ada-v1/brain/prompt_builder/prompt_assembler.py
+# hypothesis_version: 6.148.7
+
+['result', 'specialist', 'user_message']
