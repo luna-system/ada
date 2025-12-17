@@ -136,6 +136,32 @@
       "imported_by": [],
       "notes": "Main orchestrator, handles section ordering and specialist coordination. Tested with 10 tests."
     },
+    "brain/context_cache.py": {
+      "type": "core-service",
+      "purpose": "Multi-timescale context caching with TTL and LRU eviction (v2.1 Phase 1)",
+      "key_classes": [
+        "MultiTimescaleCache",
+        "CacheEntry",
+        "CacheStats"
+      ],
+      "key_functions": [
+        "get",
+        "set",
+        "invalidate",
+        "cleanup_expired",
+        "get_stats"
+      ],
+      "imports": [
+        "collections.OrderedDict",
+        "dataclasses",
+        "datetime",
+        "logging"
+      ],
+      "imported_by": [
+        "brain/prompt_builder/context_retriever.py"
+      ],
+      "notes": "Phase 1 implementation: Persona caching with 24hr TTL. Ready for integration into PromptAssembler. Tested with 23 tests (15 basic + 8 integration)."
+    },
     "brain/rag_store.py": {
       "type": "core-service",
       "purpose": "Vector database interface for semantic search over memories",
@@ -665,7 +691,15 @@
       "brain/notices.py"
     ],
     "matrix_bridge": [
-      li_chat_request": [
+      "matrix-bridge/bridge.py",
+      "matrix-bridge/config.py",
+      "matrix-bridge/identity.py",
+      "matrix-bridge/ada_client.py",
+      "matrix-bridge/message_handler.py"
+    ]
+  },
+  "data_flow": {
+    "cli_chat_request": [
       "adapters/cli/ada_cli/cli.py::main",
       "adapters/cli/ada_cli/client.py::chat_stream",
       "brain/app.py::chat_stream_v1",
@@ -683,15 +717,7 @@
       "brain/rag_store.py::search_memories",
       "brain/specialists/*::process",
       "brain/llm.py::generate_stream",
-      "frontend/public/app.js::handleStreamChunk
-    "chat_request": [
-      "frontend/public/app.js",
-      "brain/app.py::chat_stream_v1",
-      "brain/prompt_builder.py::build_prompt",
-      "brain/rag_store.py::search_memories",
-      "brain/specialists/*::process",
-      "brain/llm.py::generate_stream",
-      "brain/app.py::stream_response"
+      "frontend/public/app.js::handleStreamChunk"
     ],
     "matrix_chat_request": [
       "matrix-bridge/bridge.py::on_message",
