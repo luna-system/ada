@@ -252,6 +252,11 @@ def _autoload_seed():
 async def lifespan(app: FastAPI):
     """Manage application lifecycle - init RAG store on startup."""
     # Startup
+    from brain.startup_quotes import get_startup_quote, format_startup_banner
+    
+    quote = get_startup_quote()
+    banner = format_startup_banner(quote)
+    print(banner)
     print("[BRAIN] Server is ready. Spawning workers")
     _init_rag_store()
     yield
