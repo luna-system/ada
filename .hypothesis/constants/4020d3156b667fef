@@ -1,0 +1,4 @@
+# file: /home/luna/Code/ada-v1/brain/notices_client.py
+# hypothesis_version: 6.148.7
+
+[200, 'BRAIN_API_URL']
