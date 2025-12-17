@@ -14,12 +14,16 @@ and produces the final prompt string ready for the LLM.
 # @ai-dependencies: context_retriever, section_builder, specialists
 # @ai-related: brain.prompt_builder
 
+import logging
 from typing import Any
 
 from brain.prompt_builder.context_retriever import ContextRetriever
 from brain.prompt_builder.section_builder import SectionBuilder
 from brain.context_cache import MultiTimescaleCache
+from brain.token_monitor import TokenBudgetMonitor
 from brain.config import config
+
+logger = logging.getLogger(__name__)
 
 
 class PromptAssembler:
@@ -60,6 +64,15 @@ class PromptAssembler:
         # Pass cache to retriever
         self.retriever = retriever or ContextRetriever(cache=self.cache)
         self.builder = builder or SectionBuilder()
+        
+        # Initialize token monitor (v2.0 Phase 2)
+        if config.TOKEN_MONITORING_ENABLED:
+            self.token_monitor = TokenBudgetMonitor(
+                max_tokens=config.LLM_MAX_CONTEXT,
+                warning_threshold=config.TOKEN_WARNING_THRESHOLD
+            )
+        else:
+            self.token_monitor = None
     
     def build_prompt(
         self,
@@ -106,33 +119,78 @@ class PromptAssembler:
             notice_section = self.builder.format_notices(notices)
             if notice_section:
                 sections.append(notice_section)
+                if self.token_monitor:
+                    self.token_monitor.track("system_notices", notice_section)
         
         # Persona (who Ada is)
-        sections.append(self.builder.format_persona(persona))
+        persona_section = self.builder.format_persona(persona)
+        sections.append(persona_section)
+        if self.token_monitor:
+            self.token_monitor.track("persona", persona_section)
         
         # Specialist results (tool outputs - high priority)
         if specialist_results:
             specialist_section = self.builder.format_specialist_results(specialist_results)
             if specialist_section:
                 sections.append(specialist_section)
+                if self.token_monitor:
+                    self.token_monitor.track("specialists", specialist_section)
         
         # Memories (user-specific context)
         if memories:
-            sections.append(self.builder.format_memories(memories))
+            memory_section = self.builder.format_memories(memories)
+            sections.append(memory_section)
+            if self.token_monitor:
+                self.token_monitor.track("memories", memory_section)
         
         # FAQs (reference information)
         if faqs:
-            sections.append(self.builder.format_faqs(faqs))
+            faq_section = self.builder.format_faqs(faqs)
+            sections.append(faq_section)
+            if self.token_monitor:
+                self.token_monitor.track("faqs", faq_section)
         
         # Conversation history (recent turns)
         if turns:
-            sections.append(self.builder.format_conversation_history(turns))
+            history_section = self.builder.format_conversation_history(turns)
+            sections.append(history_section)
+            if self.token_monitor:
+                self.token_monitor.track("conversation_history", history_section)
         
         # 4. Assemble final prompt
         context = "\n\n".join(sections)
         
         # User message comes last as the instruction
-        prompt = f"{context}\n\n# Current Request\n\nUser: {user_message}"
+        user_section = f"# Current Request\n\nUser: {user_message}"
+        prompt = f"{context}\n\n{user_section}"
+        
+        # Track user message
+        if self.token_monitor:
+            self.token_monitor.track("user_message", user_section)
+        
+        # 5. Log token usage breakdown (v2.0 Phase 2 observability)
+        if self.token_monitor:
+            breakdown = self.token_monitor.get_breakdown()
+            logger.info(
+                f"Token usage: {breakdown.total_tokens}/{config.LLM_MAX_CONTEXT} "
+                f"({breakdown.percentage_used:.1f}%)"
+            )
+            
+            # Log top components
+            top_components = self.token_monitor.get_top_components(n=5)
+            if top_components:
+                components_str = ", ".join(
+                    f"{name}={tokens.tokens}" for name, tokens in top_components
+                )
+                logger.debug(f"Top token consumers: {components_str}")
+            
+            # Warn if approaching limit
+            if breakdown.is_warning:
+                logger.warning(
+                    f"Token budget at {breakdown.percentage_used:.1f}% "
+                    f"({breakdown.total_tokens}/{config.LLM_MAX_CONTEXT} tokens). "
+                    "Consider enabling context optimization."
+                )
         
         return prompt
     
