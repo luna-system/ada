@@ -1,0 +1,882 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ada on Single-Board Computers (SBCs) &mdash; Ada Brain API 0.1.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="_static/graphviz.css?v=4ae1632d" />
+      <link rel="stylesheet" type="text/css" href="_static/custom.css?v=df0a1c42" />
+
+  
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=01f34227"></script>
+      <script src="_static/doctools.js?v=9bcbadda"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Architecture" href="architecture.html" />
+    <link rel="prev" title="Hardware &amp; GPU Guide" href="hardware.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            Ada Brain API
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="zero_to_ada.html">Zero to Ada</a></li>
+<li class="toctree-l1"><a class="reference internal" href="getting_started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="local_mode.html">Running Ada Locally (No Docker Required!)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="nix.html">Nix &amp; Flakes Support</a></li>
+<li class="toctree-l1"><a class="reference internal" href="getting_started_scratch.html">Getting Started from Scratch</a></li>
+<li class="toctree-l1"><a class="reference internal" href="configuration.html">Configuration Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="examples.html">Examples</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Hardware Setup</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="hardware.html">Hardware &amp; GPU Guide</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Ada on Single-Board Computers (SBCs)</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#why-sbcs-for-ada">Why SBCs for Ada?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#best-sbcs-for-ada-2025">Best SBCs for Ada (2025)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#top-pick-orange-pi-5-plus-16gb">🏆 Top Pick: Orange Pi 5 Plus (16GB)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#runner-up-raspberry-pi-5-8gb">🥈 Runner Up: Raspberry Pi 5 (8GB)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#hacker-s-choice-radxa-rock-5b">🔧 Hacker’s Choice: Radxa Rock 5B</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#budget-option-orange-pi-5-8gb">💰 Budget Option: Orange Pi 5 (8GB)</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#other-notable-options">Other Notable Options</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#khadas-vim4-16gb">Khadas VIM4 (16GB)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#banana-pi-m7">Banana Pi M7</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pine64-rockpro64">Pine64 RockPro64</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#recommended-configurations">Recommended Configurations</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#tinkerer-s-starter-kit-100">Tinkerer’s Starter Kit (~$100)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#serious-home-server-180">Serious Home Server (~$180)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#ultra-budget-60">Ultra Budget (~$60)</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#performance-comparison">Performance Comparison</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#setup-tips">Setup Tips</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#storage-matters">Storage Matters</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#ram-is-king">RAM Is King</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#cooling">Cooling</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#use-swap-carefully">Use Swap (Carefully)</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#model-recommendations-for-sbcs">Model Recommendations for SBCs</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#b-models-any-4gb-sbc">1B Models (Any 4GB+ SBC)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#b-models-8gb-recommended">3B Models (8GB+ recommended)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#b-models-8gb-required">7B Models (8GB+ required)</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#power-consumption-cost">Power Consumption &amp; Cost</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#npu-acceleration-status">NPU Acceleration Status</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#rockchip-rknn-rk3588">Rockchip RKNN (RK3588)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#hailo-8l-pi-ai-hat">Hailo-8L (Pi AI HAT)</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#real-world-use-cases">Real-World Use Cases</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#personal-knowledge-assistant">1. Personal Knowledge Assistant</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#local-code-assistant">2. Local Code Assistant</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#learning-platform">3. Learning Platform</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#home-automation-brain">4. Home Automation Brain</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#troubleshooting">Troubleshooting</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#model-won-t-load-oom">Model Won’t Load (OOM)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#slow-inference">Slow Inference</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#docker-issues">Docker Issues</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#future-add-on-options">Future: Add-On Options</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#usb-accelerators-experimental">USB Accelerators (Experimental)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pcie-gpus-rock-5b-only">PCIe GPUs (Rock 5B only)</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#community-projects">Community Projects</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#open-source-ada-sbc-builds">Open Source Ada SBC Builds</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#buying-guide-what-to-prioritize">Buying Guide: What to Prioritize</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#conclusion">Conclusion</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Core Architecture</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="architecture.html">Architecture</a></li>
+<li class="toctree-l1"><a class="reference internal" href="data_model.html">Data Model Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="streaming.html">Streaming</a></li>
+<li class="toctree-l1"><a class="reference internal" href="memory.html">Memory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="token_monitoring.html">Token Budget Monitoring</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Interfaces &amp; Adapters</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="adapters.html">Ada Adapters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="adapter_development.html">Adapter Development Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="matrix_integration.html">Matrix Integration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api_usage.html">API Usage Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api_reference.html">API Reference</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Specialist System</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="specialists.html">Specialist System</a></li>
+<li class="toctree-l1"><a class="reference internal" href="build_specialist.html">Build Your First Specialist</a></li>
+<li class="toctree-l1"><a class="reference internal" href="bidirectional.html">Bidirectional Specialist System</a></li>
+<li class="toctree-l1"><a class="reference internal" href="specialist_rag.html">Specialist RAG Documentation System</a></li>
+<li class="toctree-l1"><a class="reference internal" href="web_search.html">Web Search Specialist</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Operations</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="build_system.html">Build System</a></li>
+<li class="toctree-l1"><a class="reference internal" href="buildx_adoption_notes.html">BuildX Adoption Data &amp; Notes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="disk_management.html">Disk Management</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Development</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="development.html">Development Tools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="testing.html">Testing Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="versioning.html">Version Management</a></li>
+<li class="toctree-l1"><a class="reference internal" href="changelog.html">Changelog</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Philosophy &amp; Design</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="project_philosophy.html">Ada Principles</a></li>
+<li class="toctree-l1"><a class="reference internal" href="documentation_philosophy.html">Documentation Philosophy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ai_documentation.html">AI-Readable Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="empathetic_documentation.html">Empathetic Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="xenofeminism.html">Xenofeminism and Ada</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Ada Brain API</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Ada on Single-Board Computers (SBCs)</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/sbc.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="ada-on-single-board-computers-sbcs">
+<h1>Ada on Single-Board Computers (SBCs)<a class="headerlink" href="#ada-on-single-board-computers-sbcs" title="Link to this heading"></a></h1>
+<p>Running Ada on hackable, open-source single-board computers for small form factor deployments.</p>
+<section id="why-sbcs-for-ada">
+<h2>Why SBCs for Ada?<a class="headerlink" href="#why-sbcs-for-ada" title="Link to this heading"></a></h2>
+<p><strong>Pros:</strong></p>
+<ul class="simple">
+<li><p>Low power consumption (5-25W vs 200W+ desktop)</p></li>
+<li><p>Small form factor (fits anywhere)</p></li>
+<li><p>Fanless/silent operation possible</p></li>
+<li><p>Always-on server use case</p></li>
+<li><p>Learning platform ($50-150 vs $500+)</p></li>
+<li><p>ARM architecture exploration</p></li>
+</ul>
+<p><strong>Cons:</strong></p>
+<ul class="simple">
+<li><p>Limited RAM (usually 4-16GB max)</p></li>
+<li><p>Slower inference than desktop GPUs</p></li>
+<li><p>Only small models practical (1B-7B)</p></li>
+<li><p>May need aggressive quantization (Q4)</p></li>
+<li><p>Some require kernel patches for NPU support</p></li>
+</ul>
+</section>
+<hr class="docutils" />
+<section id="best-sbcs-for-ada-2025">
+<h2>Best SBCs for Ada (2025)<a class="headerlink" href="#best-sbcs-for-ada-2025" title="Link to this heading"></a></h2>
+<section id="top-pick-orange-pi-5-plus-16gb">
+<h3>🏆 Top Pick: Orange Pi 5 Plus (16GB)<a class="headerlink" href="#top-pick-orange-pi-5-plus-16gb" title="Link to this heading"></a></h3>
+<p><strong>Specs:</strong></p>
+<ul class="simple">
+<li><p><strong>CPU:</strong> Rockchip RK3588 (4x A76 &#64; 2.4GHz + 4x A55 &#64; 1.8GHz)</p></li>
+<li><p><strong>NPU:</strong> 6 TOPS (Rockchip NPU, RKNN SDK)</p></li>
+<li><p><strong>RAM:</strong> 4GB/8GB/16GB/32GB LPDDR4X</p></li>
+<li><p><strong>Storage:</strong> eMMC + microSD + M.2 NVMe</p></li>
+<li><p><strong>Power:</strong> ~15W under load</p></li>
+<li><p><strong>Price:</strong> ~$80-150 (depending on RAM)</p></li>
+<li><p><strong>Open Source:</strong> Yes, good community support</p></li>
+</ul>
+<p><strong>Ada Performance:</strong></p>
+<ul class="simple">
+<li><p>3B Q4 models: ~3-5 tokens/sec</p></li>
+<li><p>7B Q4 models: ~1-2 tokens/sec (usable!)</p></li>
+<li><p>NPU acceleration: Experimental with RKNN</p></li>
+</ul>
+<p><strong>Setup:</strong></p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Install Armbian (recommended over stock OS)</span>
+<span class="c1"># Flash to microSD: https://www.armbian.com/orange-pi-5-plus/</span>
+
+<span class="c1"># SSH in, install Docker</span>
+curl<span class="w"> </span>-fsSL<span class="w"> </span>https://get.docker.com<span class="w"> </span><span class="p">|</span><span class="w"> </span>sh
+
+<span class="c1"># Clone Ada</span>
+git<span class="w"> </span>clone<span class="w"> </span>https://github.com/luna-system/ada.git
+<span class="nb">cd</span><span class="w"> </span>ada
+./setup.sh
+./configure-gpu.sh<span class="w"> </span>cpu<span class="w">  </span><span class="c1"># No GPU, but NPU support coming</span>
+
+<span class="c1"># Use ARM64 Ollama</span>
+docker<span class="w"> </span>compose<span class="w"> </span>up<span class="w"> </span>-d
+</pre></div>
+</div>
+<p><strong>Why This One:</strong></p>
+<ul class="simple">
+<li><p>Best ARM SBC for LLMs in 2025</p></li>
+<li><p>Up to 32GB RAM option (run 13B models!)</p></li>
+<li><p>M.2 NVMe = fast storage</p></li>
+<li><p>Active community, good Linux support</p></li>
+<li><p>NPU support improving (RKNN 2.0)</p></li>
+</ul>
+<p><strong>Where to Buy:</strong></p>
+<ul class="simple">
+<li><p><a class="reference external" href="https://www.aliexpress.com/item/1005005917370521.html">AliExpress</a> (~$80-150)</p></li>
+<li><p><a class="reference external" href="https://www.amazon.com/s?k=orange+pi+5+plus">Amazon</a> (higher price, faster shipping)</p></li>
+</ul>
+</section>
+<hr class="docutils" />
+<section id="runner-up-raspberry-pi-5-8gb">
+<h3>🥈 Runner Up: Raspberry Pi 5 (8GB)<a class="headerlink" href="#runner-up-raspberry-pi-5-8gb" title="Link to this heading"></a></h3>
+<p><strong>Specs:</strong></p>
+<ul class="simple">
+<li><p><strong>CPU:</strong> Broadcom BCM2712 (4x A76 &#64; 2.4GHz)</p></li>
+<li><p><strong>GPU:</strong> VideoCore VII (no AI acceleration)</p></li>
+<li><p><strong>RAM:</strong> 4GB/8GB LPDDR4X</p></li>
+<li><p><strong>Storage:</strong> microSD + PCIe 2.0 (via HAT)</p></li>
+<li><p><strong>Power:</strong> ~10W under load</p></li>
+<li><p><strong>Price:</strong> ~$80 + HAT</p></li>
+<li><p><strong>Open Source:</strong> Partially (some blobs)</p></li>
+</ul>
+<p><strong>Ada Performance:</strong></p>
+<ul class="simple">
+<li><p>1B Q4 models: ~5-8 tokens/sec</p></li>
+<li><p>3B Q4 models: ~2-3 tokens/sec</p></li>
+<li><p>7B Q4 models: ~0.5-1 token/sec (slow but works)</p></li>
+</ul>
+<p><strong>Setup:</strong></p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Use Raspberry Pi OS 64-bit (Bookworm)</span>
+<span class="c1"># Or Ubuntu Server 24.04 ARM64</span>
+
+<span class="c1"># Install Docker</span>
+curl<span class="w"> </span>-fsSL<span class="w"> </span>https://get.docker.com<span class="w"> </span><span class="p">|</span><span class="w"> </span>sh
+
+<span class="c1"># Clone and run Ada</span>
+git<span class="w"> </span>clone<span class="w"> </span>https://github.com/luna-system/ada.git
+<span class="nb">cd</span><span class="w"> </span>ada
+./setup.sh
+./configure-gpu.sh<span class="w"> </span>cpu
+docker<span class="w"> </span>compose<span class="w"> </span>up<span class="w"> </span>-d
+
+<span class="c1"># Patience: model pulling takes time on microSD!</span>
+<span class="c1"># Highly recommend NVMe HAT for storage</span>
+</pre></div>
+</div>
+<p><strong>With AI HAT (Optional):</strong></p>
+<ul class="simple">
+<li><p><strong>AI HAT+:</strong> 13 TOPS NPU (Hailo-8L)</p></li>
+<li><p><strong>Price:</strong> +$70</p></li>
+<li><p><strong>Support:</strong> Experimental, limited Ollama support</p></li>
+<li><p><strong>Future:</strong> May enable faster inference</p></li>
+</ul>
+<p><strong>Why Consider:</strong></p>
+<ul class="simple">
+<li><p>Best documentation/community</p></li>
+<li><p>Most accessories available</p></li>
+<li><p>Official support</p></li>
+<li><p>Easiest to get started</p></li>
+</ul>
+<p><strong>Limitations:</strong></p>
+<ul class="simple">
+<li><p>Only 8GB RAM max (limits model size)</p></li>
+<li><p>microSD is slow (get NVMe HAT!)</p></li>
+<li><p>AI HAT support still maturing</p></li>
+</ul>
+<p><strong>Where to Buy:</strong></p>
+<ul class="simple">
+<li><p><a class="reference external" href="https://www.raspberrypi.com/products/raspberry-pi-5/">Official</a> (when in stock)</p></li>
+<li><p><a class="reference external" href="https://www.adafruit.com/product/5813">Adafruit</a></p></li>
+<li><p><a class="reference external" href="https://www.sparkfun.com/products/23551">Sparkfun</a></p></li>
+</ul>
+</section>
+<hr class="docutils" />
+<section id="hacker-s-choice-radxa-rock-5b">
+<h3>🔧 Hacker’s Choice: Radxa Rock 5B<a class="headerlink" href="#hacker-s-choice-radxa-rock-5b" title="Link to this heading"></a></h3>
+<p><strong>Specs:</strong></p>
+<ul class="simple">
+<li><p><strong>CPU:</strong> Rockchip RK3588 (same as Orange Pi 5+)</p></li>
+<li><p><strong>NPU:</strong> 6 TOPS (RKNN)</p></li>
+<li><p><strong>RAM:</strong> 4GB/8GB/16GB/32GB LPDDR4X</p></li>
+<li><p><strong>Storage:</strong> eMMC + microSD + M.2 NVMe</p></li>
+<li><p><strong>Special:</strong> M.2 E-key for WiFi/PCIe devices</p></li>
+<li><p><strong>Power:</strong> ~18W under load</p></li>
+<li><p><strong>Price:</strong> ~$100-180</p></li>
+<li><p><strong>Open Source:</strong> Yes, very hacker-friendly</p></li>
+</ul>
+<p><strong>Ada Performance:</strong></p>
+<ul class="simple">
+<li><p>Similar to Orange Pi 5 Plus</p></li>
+<li><p>7B Q4: ~1-2 tokens/sec</p></li>
+<li><p>13B Q4: ~0.5-1 token/sec (with 16GB+ RAM)</p></li>
+</ul>
+<p><strong>Why This One:</strong></p>
+<ul class="simple">
+<li><p>Most hackable (expansion options)</p></li>
+<li><p>PCIe lanes for add-ons</p></li>
+<li><p>Could add external GPU (experimental!)</p></li>
+<li><p>Best for tinkerers</p></li>
+</ul>
+<p><strong>Where to Buy:</strong></p>
+<ul class="simple">
+<li><p><a class="reference external" href="https://shop.allnetchina.cn/">Allnet China</a></p></li>
+<li><p><a class="reference external" href="https://radxa.aliexpress.com/store/1100801045">AliExpress Radxa Store</a></p></li>
+</ul>
+</section>
+<hr class="docutils" />
+<section id="budget-option-orange-pi-5-8gb">
+<h3>💰 Budget Option: Orange Pi 5 (8GB)<a class="headerlink" href="#budget-option-orange-pi-5-8gb" title="Link to this heading"></a></h3>
+<p><strong>Specs:</strong></p>
+<ul class="simple">
+<li><p><strong>CPU:</strong> Rockchip RK3588S (slightly slower than 5+)</p></li>
+<li><p><strong>NPU:</strong> 6 TOPS</p></li>
+<li><p><strong>RAM:</strong> 4GB/8GB/16GB LPDDR4X</p></li>
+<li><p><strong>Storage:</strong> microSD + M.2 NVMe</p></li>
+<li><p><strong>Power:</strong> ~12W under load</p></li>
+<li><p><strong>Price:</strong> ~$60-100</p></li>
+</ul>
+<p><strong>Ada Performance:</strong></p>
+<ul class="simple">
+<li><p>3B Q4: ~2-4 tokens/sec</p></li>
+<li><p>7B Q4: ~1 token/sec</p></li>
+</ul>
+<p><strong>Why Consider:</strong></p>
+<ul class="simple">
+<li><p>Cheapest RK3588 board</p></li>
+<li><p>Still has NPU</p></li>
+<li><p>NVMe support</p></li>
+<li><p>Good performance/price</p></li>
+</ul>
+<p><strong>Trade-offs:</strong></p>
+<ul class="simple">
+<li><p>No PCIe lanes</p></li>
+<li><p>Fewer USB ports</p></li>
+<li><p>Smaller community than Pi 5</p></li>
+</ul>
+</section>
+</section>
+<hr class="docutils" />
+<section id="other-notable-options">
+<h2>Other Notable Options<a class="headerlink" href="#other-notable-options" title="Link to this heading"></a></h2>
+<section id="khadas-vim4-16gb">
+<h3>Khadas VIM4 (16GB)<a class="headerlink" href="#khadas-vim4-16gb" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p><strong>CPU:</strong> Amlogic A311D2</p></li>
+<li><p><strong>NPU:</strong> 3.2 TOPS</p></li>
+<li><p><strong>RAM:</strong> Up to 16GB</p></li>
+<li><p><strong>Price:</strong> ~$200</p></li>
+<li><p><strong>Note:</strong> Expensive, good build quality</p></li>
+</ul>
+</section>
+<section id="banana-pi-m7">
+<h3>Banana Pi M7<a class="headerlink" href="#banana-pi-m7" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p><strong>CPU:</strong> Rockchip RK3588</p></li>
+<li><p><strong>RAM:</strong> Up to 8GB</p></li>
+<li><p><strong>Price:</strong> ~$150</p></li>
+<li><p><strong>Note:</strong> Good alternative to Orange Pi</p></li>
+</ul>
+</section>
+<section id="pine64-rockpro64">
+<h3>Pine64 RockPro64<a class="headerlink" href="#pine64-rockpro64" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p><strong>CPU:</strong> Rockchip RK3399 (older)</p></li>
+<li><p><strong>RAM:</strong> 4GB</p></li>
+<li><p><strong>Price:</strong> ~$80</p></li>
+<li><p><strong>Note:</strong> Dated but still works for small models</p></li>
+</ul>
+</section>
+</section>
+<hr class="docutils" />
+<section id="recommended-configurations">
+<h2>Recommended Configurations<a class="headerlink" href="#recommended-configurations" title="Link to this heading"></a></h2>
+<section id="tinkerer-s-starter-kit-100">
+<h3>Tinkerer’s Starter Kit (~$100)<a class="headerlink" href="#tinkerer-s-starter-kit-100" title="Link to this heading"></a></h3>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Orange Pi 5 (8GB)                    $80
+32GB microSD (fast class)            $10
+5V/4A USB-C power supply            $10
+Case (optional)                      $15
+----------------------------------------
+Total:                          ~$100-115
+</pre></div>
+</div>
+<p><strong>Runs:</strong> 3B models well, 7B Q4 models slowly</p>
+</section>
+<section id="serious-home-server-180">
+<h3>Serious Home Server (~$180)<a class="headerlink" href="#serious-home-server-180" title="Link to this heading"></a></h3>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Orange Pi 5 Plus (16GB)             $130
+256GB M.2 NVMe SSD                  $25
+Heatsink + fan                      $10
+5V/5A USB-C power supply           $15
+Metal case                          $15
+----------------------------------------
+Total:                          ~$195
+</pre></div>
+</div>
+<p><strong>Runs:</strong> 7B models comfortably, 13B Q4 models</p>
+</section>
+<section id="ultra-budget-60">
+<h3>Ultra Budget (~$60)<a class="headerlink" href="#ultra-budget-60" title="Link to this heading"></a></h3>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Raspberry Pi 5 (4GB)                $60
+Reuse old microSD + power supply     $0
+----------------------------------------
+Total:                           ~$60
+</pre></div>
+</div>
+<p><strong>Runs:</strong> 1B-3B models only</p>
+</section>
+</section>
+<hr class="docutils" />
+<section id="performance-comparison">
+<h2>Performance Comparison<a class="headerlink" href="#performance-comparison" title="Link to this heading"></a></h2>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 25.0%" />
+<col style="width: 12.5%" />
+<col style="width: 12.5%" />
+<col style="width: 12.5%" />
+<col style="width: 12.5%" />
+<col style="width: 12.5%" />
+<col style="width: 12.5%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Board</p></th>
+<th class="head"><p>RAM</p></th>
+<th class="head"><p>3B Q4</p></th>
+<th class="head"><p>7B Q4</p></th>
+<th class="head"><p>13B Q4</p></th>
+<th class="head"><p>Power</p></th>
+<th class="head"><p>Price</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Orange Pi 5+ (16GB)</p></td>
+<td><p>16GB</p></td>
+<td><p>3-5 t/s</p></td>
+<td><p>1-2 t/s</p></td>
+<td><p>0.5-1 t/s</p></td>
+<td><p>15W</p></td>
+<td><p>$130</p></td>
+</tr>
+<tr class="row-odd"><td><p>Rock 5B (16GB)</p></td>
+<td><p>16GB</p></td>
+<td><p>3-5 t/s</p></td>
+<td><p>1-2 t/s</p></td>
+<td><p>0.5-1 t/s</p></td>
+<td><p>18W</p></td>
+<td><p>$150</p></td>
+</tr>
+<tr class="row-even"><td><p>Orange Pi 5 (8GB)</p></td>
+<td><p>8GB</p></td>
+<td><p>2-4 t/s</p></td>
+<td><p>1 t/s</p></td>
+<td><p>N/A</p></td>
+<td><p>12W</p></td>
+<td><p>$80</p></td>
+</tr>
+<tr class="row-odd"><td><p>Raspberry Pi 5 (8GB)</p></td>
+<td><p>8GB</p></td>
+<td><p>2-3 t/s</p></td>
+<td><p>0.5-1 t/s</p></td>
+<td><p>N/A</p></td>
+<td><p>10W</p></td>
+<td><p>$80</p></td>
+</tr>
+<tr class="row-even"><td><p>Pi 5 + AI HAT (8GB)</p></td>
+<td><p>8GB</p></td>
+<td><p>5-8 t/s*</p></td>
+<td><p>1-2 t/s*</p></td>
+<td><p>N/A</p></td>
+<td><p>15W</p></td>
+<td><p>$150</p></td>
+</tr>
+</tbody>
+</table>
+<p>*With NPU acceleration (experimental)</p>
+</section>
+<hr class="docutils" />
+<section id="setup-tips">
+<h2>Setup Tips<a class="headerlink" href="#setup-tips" title="Link to this heading"></a></h2>
+<section id="storage-matters">
+<h3>Storage Matters<a class="headerlink" href="#storage-matters" title="Link to this heading"></a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># microSD is SLOW for models (500MB/s+)</span>
+<span class="c1"># Always use NVMe if available</span>
+
+<span class="c1"># Orange Pi 5/5+: Use M.2 NVMe</span>
+<span class="c1"># Pi 5: Get NVMe HAT (Pimoroni, Geekworm)</span>
+
+<span class="c1"># Check speeds:</span>
+dd<span class="w"> </span><span class="k">if</span><span class="o">=</span>/dev/zero<span class="w"> </span><span class="nv">of</span><span class="o">=</span><span class="nb">test</span><span class="w"> </span><span class="nv">bs</span><span class="o">=</span>1M<span class="w"> </span><span class="nv">count</span><span class="o">=</span><span class="m">1000</span>
+</pre></div>
+</div>
+</section>
+<section id="ram-is-king">
+<h3>RAM Is King<a class="headerlink" href="#ram-is-king" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p>4GB: Only 1B models</p></li>
+<li><p>8GB: Up to 7B Q4 models</p></li>
+<li><p>16GB: Up to 13B Q4 models</p></li>
+<li><p>32GB: Up to 30B Q4 models (Orange Pi 5+ only!)</p></li>
+</ul>
+</section>
+<section id="cooling">
+<h3>Cooling<a class="headerlink" href="#cooling" title="Link to this heading"></a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># ARM chips throttle when hot</span>
+<span class="c1"># Get a heatsink + fan for sustained loads</span>
+
+<span class="c1"># Monitor temps:</span>
+watch<span class="w"> </span>-n1<span class="w"> </span><span class="s1">&#39;cat /sys/class/thermal/thermal_zone0/temp&#39;</span>
+</pre></div>
+</div>
+</section>
+<section id="use-swap-carefully">
+<h3>Use Swap (Carefully)<a class="headerlink" href="#use-swap-carefully" title="Link to this heading"></a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># If RAM constrained, enable swap on NVMe (NOT microSD!)</span>
+sudo<span class="w"> </span>dd<span class="w"> </span><span class="k">if</span><span class="o">=</span>/dev/zero<span class="w"> </span><span class="nv">of</span><span class="o">=</span>/swapfile<span class="w"> </span><span class="nv">bs</span><span class="o">=</span>1M<span class="w"> </span><span class="nv">count</span><span class="o">=</span><span class="m">8192</span>
+sudo<span class="w"> </span>chmod<span class="w"> </span><span class="m">600</span><span class="w"> </span>/swapfile
+sudo<span class="w"> </span>mkswap<span class="w"> </span>/swapfile
+sudo<span class="w"> </span>swapon<span class="w"> </span>/swapfile
+
+<span class="c1"># Add to /etc/fstab for persistence</span>
+<span class="nb">echo</span><span class="w"> </span><span class="s1">&#39;/swapfile none swap sw 0 0&#39;</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>sudo<span class="w"> </span>tee<span class="w"> </span>-a<span class="w"> </span>/etc/fstab
+</pre></div>
+</div>
+</section>
+</section>
+<hr class="docutils" />
+<section id="model-recommendations-for-sbcs">
+<h2>Model Recommendations for SBCs<a class="headerlink" href="#model-recommendations-for-sbcs" title="Link to this heading"></a></h2>
+<section id="b-models-any-4gb-sbc">
+<h3>1B Models (Any 4GB+ SBC)<a class="headerlink" href="#b-models-any-4gb-sbc" title="Link to this heading"></a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>ollama<span class="w"> </span>pull<span class="w"> </span>qwen2.5:1b<span class="w">        </span><span class="c1"># Best quality</span>
+ollama<span class="w"> </span>pull<span class="w"> </span>gemma:1b<span class="w">          </span><span class="c1"># Fast</span>
+ollama<span class="w"> </span>pull<span class="w"> </span>tinyllama:1b<span class="w">      </span><span class="c1"># Tiny but capable</span>
+</pre></div>
+</div>
+</section>
+<section id="b-models-8gb-recommended">
+<h3>3B Models (8GB+ recommended)<a class="headerlink" href="#b-models-8gb-recommended" title="Link to this heading"></a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>ollama<span class="w"> </span>pull<span class="w"> </span>phi4-mini:3.8b<span class="w">    </span><span class="c1"># Excellent reasoning</span>
+ollama<span class="w"> </span>pull<span class="w"> </span>llama3.2:3b<span class="w">       </span><span class="c1"># Good general use</span>
+ollama<span class="w"> </span>pull<span class="w"> </span>qwen2.5:3b<span class="w">        </span><span class="c1"># Strong multilingual</span>
+</pre></div>
+</div>
+</section>
+<section id="b-models-8gb-required">
+<h3>7B Models (8GB+ required)<a class="headerlink" href="#b-models-8gb-required" title="Link to this heading"></a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>ollama<span class="w"> </span>pull<span class="w"> </span>llama3.2:7b<span class="w">       </span><span class="c1"># Balanced</span>
+ollama<span class="w"> </span>pull<span class="w"> </span>mistral:7b<span class="w">        </span><span class="c1"># Fast</span>
+ollama<span class="w"> </span>pull<span class="w"> </span>deepseek-r1:7b<span class="w">    </span><span class="c1"># Reasoning</span>
+</pre></div>
+</div>
+<p><strong>Use Q4 quantization for speed!</strong></p>
+</section>
+</section>
+<hr class="docutils" />
+<section id="power-consumption-cost">
+<h2>Power Consumption &amp; Cost<a class="headerlink" href="#power-consumption-cost" title="Link to this heading"></a></h2>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 31.2%" />
+<col style="width: 18.8%" />
+<col style="width: 18.8%" />
+<col style="width: 31.2%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Board</p></th>
+<th class="head"><p>Idle</p></th>
+<th class="head"><p>Load</p></th>
+<th class="head"><p>24/7 Monthly*</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Orange Pi 5+</p></td>
+<td><p>3W</p></td>
+<td><p>15W</p></td>
+<td><p>~$4-5</p></td>
+</tr>
+<tr class="row-odd"><td><p>Rock 5B</p></td>
+<td><p>4W</p></td>
+<td><p>18W</p></td>
+<td><p>~$5-6</p></td>
+</tr>
+<tr class="row-even"><td><p>Orange Pi 5</p></td>
+<td><p>2W</p></td>
+<td><p>12W</p></td>
+<td><p>~$3-4</p></td>
+</tr>
+<tr class="row-odd"><td><p>Raspberry Pi 5</p></td>
+<td><p>2W</p></td>
+<td><p>10W</p></td>
+<td><p>~$3</p></td>
+</tr>
+</tbody>
+</table>
+<p>*At $0.12/kWh, assuming 8h load + 16h idle</p>
+<p><strong>Compare to desktop:</strong> RTX 4090 system = ~$25-35/month</p>
+</section>
+<hr class="docutils" />
+<section id="npu-acceleration-status">
+<h2>NPU Acceleration Status<a class="headerlink" href="#npu-acceleration-status" title="Link to this heading"></a></h2>
+<section id="rockchip-rknn-rk3588">
+<h3>Rockchip RKNN (RK3588)<a class="headerlink" href="#rockchip-rknn-rk3588" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p><strong>Status:</strong> Experimental support in 2025</p></li>
+<li><p><strong>Models:</strong> Limited to RKNN-converted models</p></li>
+<li><p><strong>Performance:</strong> 2-3x speedup when working</p></li>
+<li><p><strong>Setup:</strong> Requires RKNN toolkit, not plug-and-play</p></li>
+<li><p><strong>Future:</strong> Improving, but not stable yet</p></li>
+</ul>
+</section>
+<section id="hailo-8l-pi-ai-hat">
+<h3>Hailo-8L (Pi AI HAT)<a class="headerlink" href="#hailo-8l-pi-ai-hat" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p><strong>Status:</strong> Experimental</p></li>
+<li><p><strong>Support:</strong> Working on object detection, LLM support limited</p></li>
+<li><p><strong>Future:</strong> Community working on Ollama integration</p></li>
+</ul>
+<p><strong>Recommendation:</strong> Don’t buy for NPU yet, consider it a future bonus.</p>
+</section>
+</section>
+<hr class="docutils" />
+<section id="real-world-use-cases">
+<h2>Real-World Use Cases<a class="headerlink" href="#real-world-use-cases" title="Link to this heading"></a></h2>
+<section id="personal-knowledge-assistant">
+<h3>1. Personal Knowledge Assistant<a class="headerlink" href="#personal-knowledge-assistant" title="Link to this heading"></a></h3>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">Board</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Orange Pi 5 (8GB)</span>
+<span class="nt">Model</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">llama3.2:3b-q4</span>
+<span class="nt">Use</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Always-on, answers questions via MCP</span>
+<span class="nt">Power</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">~$3/month</span>
+</pre></div>
+</div>
+</section>
+<section id="local-code-assistant">
+<h3>2. Local Code Assistant<a class="headerlink" href="#local-code-assistant" title="Link to this heading"></a></h3>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">Board</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Orange Pi 5+ (16GB)</span>
+<span class="nt">Model</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">deepseek-r1:7b-q4</span>
+<span class="nt">Use</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Code completion, debugging</span>
+<span class="nt">Power</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">~$4/month</span>
+</pre></div>
+</div>
+</section>
+<section id="learning-platform">
+<h3>3. Learning Platform<a class="headerlink" href="#learning-platform" title="Link to this heading"></a></h3>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">Board</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Raspberry Pi 5 (4GB)</span>
+<span class="nt">Model</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">tinyllama:1b</span>
+<span class="nt">Use</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Experiment, learn AI concepts</span>
+<span class="nt">Power</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">~$2/month</span>
+</pre></div>
+</div>
+</section>
+<section id="home-automation-brain">
+<h3>4. Home Automation Brain<a class="headerlink" href="#home-automation-brain" title="Link to this heading"></a></h3>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">Board</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Rock 5B (8GB)</span>
+<span class="nt">Model</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">phi4-mini:3.8b-q4</span>
+<span class="nt">Use</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Control smart home, voice assistant</span>
+<span class="nt">Power</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">~$4/month</span>
+<span class="l l-Scalar l-Scalar-Plain">+ Add microphone/speaker via USB</span>
+</pre></div>
+</div>
+</section>
+</section>
+<hr class="docutils" />
+<section id="troubleshooting">
+<h2>Troubleshooting<a class="headerlink" href="#troubleshooting" title="Link to this heading"></a></h2>
+<section id="model-won-t-load-oom">
+<h3>Model Won’t Load (OOM)<a class="headerlink" href="#model-won-t-load-oom" title="Link to this heading"></a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Too big for RAM - try smaller/more quantized model</span>
+ollama<span class="w"> </span>pull<span class="w"> </span>llama3.2:3b-q4_0<span class="w">  </span><span class="c1"># More aggressive quantization</span>
+
+<span class="c1"># Or add swap (slow fallback)</span>
+</pre></div>
+</div>
+</section>
+<section id="slow-inference">
+<h3>Slow Inference<a class="headerlink" href="#slow-inference" title="Link to this heading"></a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Check CPU frequency (may be throttling)</span>
+cat<span class="w"> </span>/sys/devices/system/cpu/cpu0/cpufreq/scaling_cur_freq
+
+<span class="c1"># Check temperature</span>
+cat<span class="w"> </span>/sys/class/thermal/thermal_zone0/temp
+
+<span class="c1"># Ensure NVMe, not microSD</span>
+df<span class="w"> </span>-h
+</pre></div>
+</div>
+</section>
+<section id="docker-issues">
+<h3>Docker Issues<a class="headerlink" href="#docker-issues" title="Link to this heading"></a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># ARM64 architecture needs specific images</span>
+docker<span class="w"> </span>pull<span class="w"> </span>--platform<span class="w"> </span>linux/arm64<span class="w"> </span>ollama/ollama
+
+<span class="c1"># Some images don&#39;t have ARM builds</span>
+<span class="c1"># Check Docker Hub for arm64 tags</span>
+</pre></div>
+</div>
+</section>
+</section>
+<hr class="docutils" />
+<section id="future-add-on-options">
+<h2>Future: Add-On Options<a class="headerlink" href="#future-add-on-options" title="Link to this heading"></a></h2>
+<section id="usb-accelerators-experimental">
+<h3>USB Accelerators (Experimental)<a class="headerlink" href="#usb-accelerators-experimental" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p><strong>Google Coral TPU:</strong> $60, requires TensorFlow</p></li>
+<li><p><strong>Intel Neural Compute Stick:</strong> Discontinued</p></li>
+<li><p><strong>Hailo USB:</strong> Not yet available</p></li>
+</ul>
+</section>
+<section id="pcie-gpus-rock-5b-only">
+<h3>PCIe GPUs (Rock 5B only)<a class="headerlink" href="#pcie-gpus-rock-5b-only" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p>PCIe 3.0 x4 lane via M.2 M-key</p></li>
+<li><p>Could theoretically add low-profile GPU</p></li>
+<li><p>Power delivery is the challenge</p></li>
+<li><p>Community experimenting with eGPU setups</p></li>
+</ul>
+</section>
+</section>
+<hr class="docutils" />
+<section id="community-projects">
+<h2>Community Projects<a class="headerlink" href="#community-projects" title="Link to this heading"></a></h2>
+<section id="open-source-ada-sbc-builds">
+<h3>Open Source Ada SBC Builds<a class="headerlink" href="#open-source-ada-sbc-builds" title="Link to this heading"></a></h3>
+<p>Share your build! Open an issue on GitHub with:</p>
+<ul class="simple">
+<li><p>Board model &amp; RAM</p></li>
+<li><p>Storage type (microSD/NVMe)</p></li>
+<li><p>Models you run</p></li>
+<li><p>Performance (tokens/sec)</p></li>
+<li><p>Power consumption</p></li>
+<li><p>Photos of your setup</p></li>
+</ul>
+<p><strong>Tag:</strong> <code class="docutils literal notranslate"><span class="pre">#ada-sbc</span></code></p>
+</section>
+</section>
+<hr class="docutils" />
+<section id="buying-guide-what-to-prioritize">
+<h2>Buying Guide: What to Prioritize<a class="headerlink" href="#buying-guide-what-to-prioritize" title="Link to this heading"></a></h2>
+<ol class="arabic simple">
+<li><p><strong>RAM First:</strong> 8GB minimum, 16GB ideal</p></li>
+<li><p><strong>Storage:</strong> NVMe &gt; eMMC &gt; microSD</p></li>
+<li><p><strong>Community:</strong> Larger community = better support</p></li>
+<li><p><strong>Availability:</strong> Can you actually buy it?</p></li>
+<li><p><strong>Cooling:</strong> Heat management matters</p></li>
+</ol>
+<p><strong>Don’t Buy For:</strong></p>
+<ul class="simple">
+<li><p>NPU (too experimental)</p></li>
+<li><p>Latest CPU (last-gen is fine)</p></li>
+<li><p>Fancy case (optional)</p></li>
+</ul>
+<p><strong>Do Buy:</strong></p>
+<ul class="simple">
+<li><p>Maximum RAM you can afford</p></li>
+<li><p>NVMe storage</p></li>
+<li><p>Active cooling solution</p></li>
+</ul>
+</section>
+<hr class="docutils" />
+<section id="conclusion">
+<h2>Conclusion<a class="headerlink" href="#conclusion" title="Link to this heading"></a></h2>
+<p><strong>Best overall:</strong> Orange Pi 5 Plus (16GB) - $130</p>
+<ul class="simple">
+<li><p>Runs 7B models well</p></li>
+<li><p>M.2 NVMe included</p></li>
+<li><p>Could handle 13B Q4</p></li>
+<li><p>Best price/performance</p></li>
+</ul>
+<p><strong>Best starter:</strong> Raspberry Pi 5 (8GB) - $80</p>
+<ul class="simple">
+<li><p>Easiest to get started</p></li>
+<li><p>Best documentation</p></li>
+<li><p>Good for learning</p></li>
+<li><p>Solid 3B model performance</p></li>
+</ul>
+<p><strong>Most hackable:</strong> Radxa Rock 5B (16GB) - $150</p>
+<ul class="simple">
+<li><p>Expansion options</p></li>
+<li><p>Great community</p></li>
+<li><p>PCIe experimentation</p></li>
+</ul>
+<hr class="docutils" />
+<p><strong>Ready to build?</strong> Check out <a class="reference internal" href="hardware.html"><span class="doc">Hardware &amp; GPU Guide</span></a> for full setup instructions!</p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="hardware.html" class="btn btn-neutral float-left" title="Hardware &amp; GPU Guide" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="architecture.html" class="btn btn-neutral float-right" title="Architecture" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p></p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

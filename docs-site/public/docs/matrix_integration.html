@@ -1,0 +1,610 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Matrix Integration &mdash; Ada Brain API 0.1.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="_static/graphviz.css?v=4ae1632d" />
+      <link rel="stylesheet" type="text/css" href="_static/custom.css?v=df0a1c42" />
+
+  
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=01f34227"></script>
+      <script src="_static/doctools.js?v=9bcbadda"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="API Usage Guide" href="api_usage.html" />
+    <link rel="prev" title="Adapter Development Guide" href="adapter_development.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            Ada Brain API
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="zero_to_ada.html">Zero to Ada</a></li>
+<li class="toctree-l1"><a class="reference internal" href="getting_started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="local_mode.html">Running Ada Locally (No Docker Required!)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="nix.html">Nix &amp; Flakes Support</a></li>
+<li class="toctree-l1"><a class="reference internal" href="getting_started_scratch.html">Getting Started from Scratch</a></li>
+<li class="toctree-l1"><a class="reference internal" href="configuration.html">Configuration Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="examples.html">Examples</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Hardware Setup</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="hardware.html">Hardware &amp; GPU Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="sbc.html">Ada on Single-Board Computers (SBCs)</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Core Architecture</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="architecture.html">Architecture</a></li>
+<li class="toctree-l1"><a class="reference internal" href="data_model.html">Data Model Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="streaming.html">Streaming</a></li>
+<li class="toctree-l1"><a class="reference internal" href="memory.html">Memory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="token_monitoring.html">Token Budget Monitoring</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Interfaces &amp; Adapters</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="adapters.html">Ada Adapters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="adapter_development.html">Adapter Development Guide</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Matrix Integration</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#overview">Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#architecture">Architecture</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#setup">Setup</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#prerequisites">Prerequisites</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#create-bot-account">Create Bot Account</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#configuration">Configuration</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#start-the-bridge">Start the Bridge</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#usage">Usage</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#inviting-ada">Inviting Ada</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#talking-to-ada">Talking to Ada</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#status-indicators">Status Indicators</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#commands">Commands</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#privacy-controls">Privacy Controls</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#ethics-transparency">Ethics &amp; Transparency</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#clear-bot-identification">Clear Bot Identification</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#invitation-only-opt-in-model">Invitation-Only (Opt-In Model)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#easy-removal">Easy Removal</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#introduction-message">Introduction Message</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#data-handling">Data Handling</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#troubleshooting">Troubleshooting</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#ada-doesn-t-join-rooms">Ada doesn’t join rooms</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#ada-joins-but-doesn-t-respond">Ada joins but doesn’t respond</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#connection-errors">Connection errors</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#privacy-mode-not-working">Privacy mode not working</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#advanced-configuration">Advanced Configuration</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#room-filtering">Room Filtering</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#behavior-customization">Behavior Customization</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#privacy-settings">Privacy Settings</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#logging">Logging</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#see-full-documentation">See Full Documentation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#community-guidelines">Community Guidelines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#philosophy">Philosophy</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="api_usage.html">API Usage Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api_reference.html">API Reference</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Specialist System</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="specialists.html">Specialist System</a></li>
+<li class="toctree-l1"><a class="reference internal" href="build_specialist.html">Build Your First Specialist</a></li>
+<li class="toctree-l1"><a class="reference internal" href="bidirectional.html">Bidirectional Specialist System</a></li>
+<li class="toctree-l1"><a class="reference internal" href="specialist_rag.html">Specialist RAG Documentation System</a></li>
+<li class="toctree-l1"><a class="reference internal" href="web_search.html">Web Search Specialist</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Operations</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="build_system.html">Build System</a></li>
+<li class="toctree-l1"><a class="reference internal" href="buildx_adoption_notes.html">BuildX Adoption Data &amp; Notes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="disk_management.html">Disk Management</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Development</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="development.html">Development Tools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="testing.html">Testing Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="versioning.html">Version Management</a></li>
+<li class="toctree-l1"><a class="reference internal" href="changelog.html">Changelog</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Philosophy &amp; Design</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="project_philosophy.html">Ada Principles</a></li>
+<li class="toctree-l1"><a class="reference internal" href="documentation_philosophy.html">Documentation Philosophy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ai_documentation.html">AI-Readable Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="empathetic_documentation.html">Empathetic Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="xenofeminism.html">Xenofeminism and Ada</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Ada Brain API</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Matrix Integration</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/matrix_integration.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="matrix-integration">
+<h1>Matrix Integration<a class="headerlink" href="#matrix-integration" title="Link to this heading"></a></h1>
+<p>Ada can participate in Matrix chat rooms as a bot, bringing her full capabilities to your self-hosted Matrix homeserver.</p>
+<section id="overview">
+<h2>Overview<a class="headerlink" href="#overview" title="Link to this heading"></a></h2>
+<p>The <strong>Matrix bridge</strong> connects Ada to Matrix, allowing her to:</p>
+<ul class="simple">
+<li><p>Respond to mentions and direct messages</p></li>
+<li><p>Maintain conversation context within rooms</p></li>
+<li><p>Use all her specialists (OCR, web search, documentation lookup)</p></li>
+<li><p>Store conversations in her memory system</p></li>
+<li><p>Provide privacy controls to users</p></li>
+</ul>
+<p><strong>Key principle:</strong> Ada is clearly identified as AI, invitation-only, and respects user privacy.</p>
+</section>
+<section id="architecture">
+<h2>Architecture<a class="headerlink" href="#architecture" title="Link to this heading"></a></h2>
+<p>The Matrix bridge is a standalone service that connects Matrix rooms to Ada’s existing chat API:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>Matrix Room → matrix-bridge → Ada Brain API → DeepSeek-R1 LLM
+     ↑              ↓              ↓                ↓
+   Users      matrix-nio    /v1/chat/stream      RAG + Specialists
+                            (non-streaming)
+</pre></div>
+</div>
+<p>The bridge:</p>
+<ol class="arabic simple">
+<li><p>Listens for Matrix messages using <code class="docutils literal notranslate"><span class="pre">matrix-nio</span></code> client</p></li>
+<li><p>Checks activation rules (mentions, DMs, keywords)</p></li>
+<li><p>Reacts with 🧠 emoji to show processing started</p></li>
+<li><p>Maintains conversation context per room</p></li>
+<li><p>Queries Ada’s brain via streaming API (parses internally)</p></li>
+<li><p>Posts complete response to Matrix</p></li>
+<li><p>Reacts with ✅ emoji when done (or ❌ on error)</p></li>
+</ol>
+<p><strong>Key design:</strong> Matrix can’t display partial messages, so we use complete responses with reaction-based status indicators instead of streaming or typing indicators.</p>
+<p><strong>No changes to Ada’s brain needed</strong> - this is a pure bridge architecture.</p>
+</section>
+<section id="setup">
+<h2>Setup<a class="headerlink" href="#setup" title="Link to this heading"></a></h2>
+<section id="prerequisites">
+<h3>Prerequisites<a class="headerlink" href="#prerequisites" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p>Self-hosted Matrix homeserver (Synapse, Dendrite, Conduit, etc.)</p></li>
+<li><p>Bot account on your homeserver</p></li>
+<li><p>Ada brain already running</p></li>
+</ul>
+</section>
+<section id="create-bot-account">
+<h3>Create Bot Account<a class="headerlink" href="#create-bot-account" title="Link to this heading"></a></h3>
+<p>On your Matrix homeserver, create a dedicated bot account:</p>
+<p><strong>Option A: Via Element/web client</strong></p>
+<ol class="arabic simple">
+<li><p>Navigate to your homeserver’s registration page</p></li>
+<li><p>Create account: <code class="docutils literal notranslate"><span class="pre">&#64;ada-bot:yourdomain.com</span></code></p></li>
+<li><p>Log in and get access token from Settings → Security &amp; Privacy</p></li>
+</ol>
+<p><strong>Option B: Via API</strong></p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Get access token</span>
+curl<span class="w"> </span>-X<span class="w"> </span>POST<span class="w"> </span>https://matrix.yourdomain.com/_matrix/client/r0/login<span class="w"> </span><span class="se">\\</span>
+<span class="w">  </span>-H<span class="w"> </span><span class="s2">&quot;Content-Type: application/json&quot;</span><span class="w"> </span><span class="se">\\</span>
+<span class="w">  </span>-d<span class="w"> </span><span class="s1">&#39;{</span>
+<span class="s1">    &quot;type&quot;: &quot;m.login.password&quot;,</span>
+<span class="s1">    &quot;user&quot;: &quot;ada-bot&quot;,</span>
+<span class="s1">    &quot;password&quot;: &quot;YOUR_PASSWORD&quot;</span>
+<span class="s1">  }&#39;</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>jq<span class="w"> </span>-r<span class="w"> </span><span class="s1">&#39;.access_token&#39;</span>
+</pre></div>
+</div>
+<p>Save the access token securely!</p>
+</section>
+<section id="configuration">
+<h3>Configuration<a class="headerlink" href="#configuration" title="Link to this heading"></a></h3>
+<p>Add to your <code class="docutils literal notranslate"><span class="pre">.env</span></code> file:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Matrix Bridge Configuration</span>
+<span class="nv">MATRIX_HOMESERVER</span><span class="o">=</span>https://matrix.yourdomain.com
+<span class="nv">MATRIX_USER_ID</span><span class="o">=</span>@ada-bot:yourdomain.com
+<span class="nv">MATRIX_ACCESS_TOKEN</span><span class="o">=</span>syt_your_access_token_here
+
+<span class="c1"># Optional: Customize bot identity</span>
+<span class="nv">DISPLAY_NAME</span><span class="o">=</span>Ada<span class="w"> </span><span class="o">[</span>Bot<span class="o">]</span>
+</pre></div>
+</div>
+<p>See <code class="docutils literal notranslate"><span class="pre">matrix-bridge/.env.example</span></code> for all available options.</p>
+</section>
+<section id="start-the-bridge">
+<h3>Start the Bridge<a class="headerlink" href="#start-the-bridge" title="Link to this heading"></a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Start with Docker Compose</span>
+docker<span class="w"> </span>compose<span class="w"> </span>up<span class="w"> </span>-d<span class="w"> </span>matrix-bridge
+
+<span class="c1"># Watch logs</span>
+docker<span class="w"> </span>compose<span class="w"> </span>logs<span class="w"> </span>-f<span class="w"> </span>matrix-bridge
+</pre></div>
+</div>
+<p>You should see:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Starting Ada Matrix Bridge
+Homeserver: https://matrix.yourdomain.com
+User: @ada-bot:yourdomain.com
+✅ Ada brain is healthy
+✅ Logged in
+🤖 Ada is now online and listening
+</pre></div>
+</div>
+</section>
+</section>
+<section id="usage">
+<h2>Usage<a class="headerlink" href="#usage" title="Link to this heading"></a></h2>
+<section id="inviting-ada">
+<h3>Inviting Ada<a class="headerlink" href="#inviting-ada" title="Link to this heading"></a></h3>
+<p>Ada is <strong>invitation-only</strong> and will never auto-join rooms uninvited.</p>
+<ol class="arabic simple">
+<li><p>Create or open a Matrix room</p></li>
+<li><p>Invite <code class="docutils literal notranslate"><span class="pre">&#64;ada-bot:yourdomain.com</span></code></p></li>
+<li><p>Ada joins and introduces herself</p></li>
+<li><p>Start chatting!</p></li>
+</ol>
+</section>
+<section id="talking-to-ada">
+<h3>Talking to Ada<a class="headerlink" href="#talking-to-ada" title="Link to this heading"></a></h3>
+<p>Ada responds to:</p>
+<ul class="simple">
+<li><p><strong>&#64;mentions:</strong> <code class="docutils literal notranslate"><span class="pre">&#64;ada-bot:yourdomain.com</span> <span class="pre">what's</span> <span class="pre">2+2?</span></code></p></li>
+<li><p><strong>Display name:</strong> <code class="docutils literal notranslate"><span class="pre">Ada:</span> <span class="pre">explain</span> <span class="pre">Docker</span></code></p></li>
+<li><p><strong>Direct messages:</strong> Just send a DM</p></li>
+<li><p><strong>Keywords:</strong> Any message containing “ada” (configurable)</p></li>
+</ul>
+</section>
+<section id="status-indicators">
+<h3>Status Indicators<a class="headerlink" href="#status-indicators" title="Link to this heading"></a></h3>
+<p>Ada uses <strong>message reactions</strong> to show processing status:</p>
+<ul class="simple">
+<li><p><strong>🧠 Brain emoji</strong> - Appears immediately when Ada starts processing your message</p></li>
+<li><p><strong>✅ Check mark</strong> - Added when response is successfully posted</p></li>
+<li><p><strong>❌ Error mark</strong> - Added if something goes wrong</p></li>
+</ul>
+<p>This is more reliable than typing indicators and provides persistent visual feedback in the message timeline.</p>
+</section>
+<section id="commands">
+<h3>Commands<a class="headerlink" href="#commands" title="Link to this heading"></a></h3>
+<p>Ada supports admin commands:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">!ada</span> <span class="pre">privacy</span> <span class="pre">on</span></code> - Enable memory storage for this room</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">!ada</span> <span class="pre">privacy</span> <span class="pre">off</span></code> - Disable memory storage (privacy mode)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">!ada</span> <span class="pre">privacy</span> <span class="pre">status</span></code> - Show current privacy setting</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">!ada</span> <span class="pre">clear</span></code> - Clear conversation context</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">!ada</span> <span class="pre">help</span></code> - Show available commands</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">!ada</span> <span class="pre">status</span></code> - Show system status</p></li>
+</ul>
+</section>
+<section id="privacy-controls">
+<h3>Privacy Controls<a class="headerlink" href="#privacy-controls" title="Link to this heading"></a></h3>
+<p>Users can opt out of memory storage:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>User: !ada privacy off
+Ada: ✅ Privacy mode enabled. I will no longer store messages
+     from this room in my memory.
+</pre></div>
+</div>
+<p>To re-enable:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>User: !ada privacy on
+Ada: ✅ Memory storage enabled. I will remember our conversations
+     in this room for context.
+</pre></div>
+</div>
+</section>
+</section>
+<section id="ethics-transparency">
+<h2>Ethics &amp; Transparency<a class="headerlink" href="#ethics-transparency" title="Link to this heading"></a></h2>
+<p>Ada’s Matrix integration follows strict ethical guidelines:</p>
+<section id="clear-bot-identification">
+<h3>Clear Bot Identification<a class="headerlink" href="#clear-bot-identification" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p><strong>Display name:</strong> “Ada [Bot]” (clear bot indicator)</p></li>
+<li><p><strong>Introduction message:</strong> Explains what Ada is, how she works, and how to opt out</p></li>
+<li><p><strong>Profile description:</strong> States “AI assistant powered by DeepSeek-R1”</p></li>
+<li><p><strong>Protocol-level flag:</strong> Sets <code class="docutils literal notranslate"><span class="pre">bot:</span> <span class="pre">true</span></code> if homeserver supports it</p></li>
+</ul>
+</section>
+<section id="invitation-only-opt-in-model">
+<h3>Invitation-Only (Opt-In Model)<a class="headerlink" href="#invitation-only-opt-in-model" title="Link to this heading"></a></h3>
+<p>Ada <strong>never</strong> auto-joins rooms. She must be explicitly invited by room members.</p>
+<p>This respects that:</p>
+<ul class="simple">
+<li><p>Some people don’t want AI in their spaces</p></li>
+<li><p>Communities have different norms around bots</p></li>
+<li><p>Consent is more important than convenience</p></li>
+</ul>
+</section>
+<section id="easy-removal">
+<h3>Easy Removal<a class="headerlink" href="#easy-removal" title="Link to this heading"></a></h3>
+<p>If a room decides they don’t want Ada:</p>
+<ul class="simple">
+<li><p>Just kick her from the room</p></li>
+<li><p>No complaints, no resistance</p></li>
+<li><p>She respects the decision</p></li>
+</ul>
+</section>
+<section id="introduction-message">
+<h3>Introduction Message<a class="headerlink" href="#introduction-message" title="Link to this heading"></a></h3>
+<p>When joining a room, Ada introduces herself:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>👋 Hi! I&#39;m Ada [Bot], an AI assistant running on this community&#39;s
+self-hosted infrastructure.
+
+What I do:
+• Respond to @ada mentions and direct messages
+• Maintain conversation context within rooms
+• Powered by DeepSeek-R1 (local LLM, no external APIs)
+
+Privacy:
+• All conversations stored locally in encrypted vector database
+• No data sent to external services
+• You can opt out: !ada privacy off
+
+Community Guidelines: [link]
+Remove me: Just kick me from the room anytime!
+
+Learn more: https://github.com/luna-system/ada
+</pre></div>
+</div>
+<p>This ensures everyone in the room knows:</p>
+<ol class="arabic simple">
+<li><p>Ada is an AI bot</p></li>
+<li><p>How she works</p></li>
+<li><p>How to opt out</p></li>
+<li><p>How to remove her</p></li>
+</ol>
+</section>
+<section id="data-handling">
+<h3>Data Handling<a class="headerlink" href="#data-handling" title="Link to this heading"></a></h3>
+<p><strong>What gets stored:</strong></p>
+<ul class="simple">
+<li><p>Message text for conversation context (last 10 messages per room by default)</p></li>
+<li><p>User IDs for attribution</p></li>
+<li><p>Timestamps for ordering</p></li>
+</ul>
+<p><strong>What doesn’t get stored:</strong></p>
+<ul class="simple">
+<li><p>Read receipts or typing indicators</p></li>
+<li><p>Presence information</p></li>
+<li><p>Room metadata beyond ID and name</p></li>
+</ul>
+<p><strong>Where it’s stored:</strong></p>
+<ul class="simple">
+<li><p>Local ChromaDB vector store (self-hosted)</p></li>
+<li><p>No external services</p></li>
+<li><p>No cloud backups unless you configure them</p></li>
+</ul>
+<p><strong>Retention:</strong></p>
+<ul class="simple">
+<li><p>Configurable (default: 90 days)</p></li>
+<li><p>Per-room opt-out available</p></li>
+<li><p>Can be cleared with <code class="docutils literal notranslate"><span class="pre">!ada</span> <span class="pre">clear</span></code></p></li>
+</ul>
+</section>
+</section>
+<section id="troubleshooting">
+<h2>Troubleshooting<a class="headerlink" href="#troubleshooting" title="Link to this heading"></a></h2>
+<section id="ada-doesn-t-join-rooms">
+<h3>Ada doesn’t join rooms<a class="headerlink" href="#ada-doesn-t-join-rooms" title="Link to this heading"></a></h3>
+<p>Check the logs:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>docker<span class="w"> </span>compose<span class="w"> </span>logs<span class="w"> </span>matrix-bridge
+</pre></div>
+</div>
+<p>Common issues:</p>
+<ul class="simple">
+<li><p>Access token expired → Regenerate token</p></li>
+<li><p>Room is on never-join list → Check <code class="docutils literal notranslate"><span class="pre">NEVER_JOIN_ROOMS</span></code> config</p></li>
+<li><p>Network issues → Check homeserver connectivity</p></li>
+</ul>
+</section>
+<section id="ada-joins-but-doesn-t-respond">
+<h3>Ada joins but doesn’t respond<a class="headerlink" href="#ada-joins-but-doesn-t-respond" title="Link to this heading"></a></h3>
+<ol class="arabic">
+<li><p>Try sending a direct message to isolate the issue</p></li>
+<li><p>Check if brain is healthy:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>curl<span class="w"> </span>http://localhost:7000/v1/healthz
+</pre></div>
+</div>
+</li>
+<li><p>Check logs for errors:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>docker<span class="w"> </span>compose<span class="w"> </span>logs<span class="w"> </span>brain
+docker<span class="w"> </span>compose<span class="w"> </span>logs<span class="w"> </span>matrix-bridge
+</pre></div>
+</div>
+</li>
+</ol>
+</section>
+<section id="connection-errors">
+<h3>Connection errors<a class="headerlink" href="#connection-errors" title="Link to this heading"></a></h3>
+<p>Test network connectivity:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># From bridge container</span>
+docker<span class="w"> </span>compose<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>matrix-bridge<span class="w"> </span>ping<span class="w"> </span>matrix.yourdomain.com
+
+<span class="c1"># Check if brain is reachable</span>
+docker<span class="w"> </span>compose<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>matrix-bridge<span class="w"> </span>curl<span class="w"> </span>http://brain:7000/v1/healthz
+</pre></div>
+</div>
+</section>
+<section id="privacy-mode-not-working">
+<h3>Privacy mode not working<a class="headerlink" href="#privacy-mode-not-working" title="Link to this heading"></a></h3>
+<ol class="arabic simple">
+<li><p>Verify <code class="docutils literal notranslate"><span class="pre">ALLOW_PRIVACY_OPT_OUT=true</span></code> in config</p></li>
+<li><p>Check data directory is writable</p></li>
+<li><p>Look for errors in logs</p></li>
+</ol>
+</section>
+</section>
+<section id="advanced-configuration">
+<h2>Advanced Configuration<a class="headerlink" href="#advanced-configuration" title="Link to this heading"></a></h2>
+<section id="room-filtering">
+<h3>Room Filtering<a class="headerlink" href="#room-filtering" title="Link to this heading"></a></h3>
+<p>Control which rooms Ada can join:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Allow specific rooms only</span>
+<span class="nv">ALLOWED_ROOMS</span><span class="o">=</span>!roomid1:domain.com,!roomid2:domain.com
+
+<span class="c1"># Never join these rooms (even if invited)</span>
+<span class="nv">NEVER_JOIN_ROOMS</span><span class="o">=</span>!private-room:domain.com
+</pre></div>
+</div>
+</section>
+<section id="behavior-customization">
+<h3>Behavior Customization<a class="headerlink" href="#behavior-customization" title="Link to this heading"></a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Activation triggers</span>
+<span class="nv">RESPOND_TO_MENTIONS</span><span class="o">=</span><span class="nb">true</span>
+<span class="nv">RESPOND_TO_DMS</span><span class="o">=</span><span class="nb">true</span>
+<span class="nv">RESPOND_TO_DISPLAY_NAME</span><span class="o">=</span><span class="nb">true</span>
+<span class="nv">ACTIVATION_KEYWORDS</span><span class="o">=</span>ada,hey<span class="w"> </span>ada
+
+<span class="c1"># Context management</span>
+<span class="nv">MAX_CONTEXT_MESSAGES</span><span class="o">=</span><span class="m">10</span>
+
+<span class="c1"># UI feedback</span>
+<span class="nv">TYPING_INDICATOR</span><span class="o">=</span><span class="nb">true</span>
+<span class="nv">REACTION_ACKNOWLEDGMENT</span><span class="o">=</span>👍
+</pre></div>
+</div>
+</section>
+<section id="privacy-settings">
+<h3>Privacy Settings<a class="headerlink" href="#privacy-settings" title="Link to this heading"></a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Memory storage</span>
+<span class="nv">STORE_IN_RAG</span><span class="o">=</span><span class="nb">true</span>
+<span class="nv">ALLOW_PRIVACY_OPT_OUT</span><span class="o">=</span><span class="nb">true</span>
+<span class="nv">DATA_RETENTION_DAYS</span><span class="o">=</span><span class="m">90</span>
+</pre></div>
+</div>
+</section>
+<section id="logging">
+<h3>Logging<a class="headerlink" href="#logging" title="Link to this heading"></a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Set log level</span>
+<span class="nv">LOG_LEVEL</span><span class="o">=</span>INFO<span class="w">  </span><span class="c1"># DEBUG, INFO, WARNING, ERROR</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="see-full-documentation">
+<h2>See Full Documentation<a class="headerlink" href="#see-full-documentation" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p><strong>Quick Start:</strong> <code class="docutils literal notranslate"><span class="pre">matrix-bridge/QUICKSTART.md</span></code></p></li>
+<li><p><strong>Complete README:</strong> <code class="docutils literal notranslate"><span class="pre">matrix-bridge/README.md</span></code></p></li>
+<li><p><strong>Design Docs:</strong> <code class="docutils literal notranslate"><span class="pre">.ai/MATRIX_DESIGN.md</span></code></p></li>
+<li><p><strong>Ethics Guide:</strong> <code class="docutils literal notranslate"><span class="pre">.ai/MATRIX_ETHICS.md</span></code></p></li>
+<li><p><strong>Community Guidelines:</strong> <code class="docutils literal notranslate"><span class="pre">COMMUNITY_GUIDELINES.md</span></code></p></li>
+</ul>
+</section>
+<section id="community-guidelines">
+<h2>Community Guidelines<a class="headerlink" href="#community-guidelines" title="Link to this heading"></a></h2>
+<p>We maintain community guidelines for Ada discussion spaces that include explicit AI disclosure.</p>
+<p>Key points:</p>
+<ul class="simple">
+<li><p>Ada is clearly identified as a bot</p></li>
+<li><p>This is the only opt-in AI space we manage</p></li>
+<li><p>Other community spaces are human-only</p></li>
+<li><p>Respectful behavior expected from all participants</p></li>
+</ul>
+<p>See <code class="docutils literal notranslate"><span class="pre">COMMUNITY_GUIDELINES.md</span></code> for full details.</p>
+</section>
+<section id="philosophy">
+<h2>Philosophy<a class="headerlink" href="#philosophy" title="Link to this heading"></a></h2>
+<p>Ada’s Matrix integration aligns with xenofeminist values:</p>
+<p><strong>Anti-naturalism</strong></p>
+<ul class="simple">
+<li><p>Don’t pretend AI is “natural” or human-like</p></li>
+<li><p>Be explicit about being constructed/artificial</p></li>
+<li><p>Transparent about technical implementation</p></li>
+</ul>
+<p><strong>Anti-essentialism</strong></p>
+<ul class="simple">
+<li><p>Don’t claim AI has essential human traits (emotions, consciousness)</p></li>
+<li><p>Avoid gendered language that reinforces stereotypes</p></li>
+<li><p>Position as tool, not entity with inherent nature</p></li>
+</ul>
+<p><strong>Techno-materialism</strong></p>
+<ul class="simple">
+<li><p>Ground in material reality: “I’m software running on servers”</p></li>
+<li><p>Explain technical details when asked</p></li>
+<li><p>Open source → anyone can inspect how Ada works</p></li>
+</ul>
+<p><strong>Care Ethics</strong></p>
+<ul class="simple">
+<li><p>Prioritize community consent over bot functionality</p></li>
+<li><p>Respect boundaries and privacy</p></li>
+<li><p>Easy opt-out is more important than comprehensive data</p></li>
+</ul>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="adapter_development.html" class="btn btn-neutral float-left" title="Adapter Development Guide" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="api_usage.html" class="btn btn-neutral float-right" title="API Usage Guide" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p></p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

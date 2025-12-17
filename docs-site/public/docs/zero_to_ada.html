@@ -1,0 +1,591 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Zero to Ada &mdash; Ada Brain API 0.1.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="_static/graphviz.css?v=4ae1632d" />
+      <link rel="stylesheet" type="text/css" href="_static/custom.css?v=df0a1c42" />
+
+  
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=01f34227"></script>
+      <script src="_static/doctools.js?v=9bcbadda"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Getting Started" href="getting_started.html" />
+    <link rel="prev" title="Ada Brain API Docs" href="index.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            Ada Brain API
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Zero to Ada</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#step-1-choose-your-path">Step 1: Choose Your Path</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#path-a-yes-i-have-python-3-13">Path A: Yes, I Have Python 3.13+</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#path-b-no-i-have-python-3-12-or-earlier">Path B: No, I Have Python 3.12 or Earlier</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#path-c-i-have-nothing-installed-yet">Path C: I Have Nothing Installed Yet</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#setup-with-nix-recommended-for-most-users">Setup with Nix (Recommended for Most Users)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#step-1-install-nix">Step 1: Install Nix</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#step-2-enable-flakes">Step 2: Enable Flakes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#step-3-clone-ada">Step 3: Clone Ada</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#step-4-enter-nix-environment">Step 4: Enter Nix Environment</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#step-5-install-ollama-model">Step 5: Install Ollama Model</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#step-6-run-ada-setup">Step 6: Run Ada Setup</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#step-7-start-ada">Step 7: Start Ada</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#step-8-test-it">Step 8: Test It</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#step-9-optional-auto-activate-with-direnv">Step 9: Optional - Auto-activate with direnv</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#setup-with-python-3-13-local-mode">Setup with Python 3.13 (Local Mode)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#prerequisites-check">Prerequisites Check</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#step-1-install-ollama">Step 1: Install Ollama</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#step-2-clone-ada">Step 2: Clone Ada</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#step-3-run-setup">Step 3: Run Setup</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#step-4-pull-a-model">Step 4: Pull a Model</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#step-5-start-ada">Step 5: Start Ada</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#step-6-test-it">Step 6: Test It</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#setup-with-docker">Setup with Docker</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#prerequisites">Prerequisites</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#step-1-clone-ada">Step 1: Clone Ada</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#step-2-start-ada">Step 2: Start Ada</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#step-3-pull-a-model">Step 3: Pull a Model</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#step-4-test-it">Step 4: Test It</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#next-steps">Next Steps</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#troubleshooting">Troubleshooting</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#nix-command-not-found">“nix: command not found”</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#python-3-13-not-found">“Python 3.13 not found”</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#ollama-connection-failed">“Ollama connection failed”</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#error-in-nix-develop">“404 error in nix develop”</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#modulenotfounderror">“ModuleNotFoundError”</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#still-stuck">Still Stuck?</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="getting_started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="local_mode.html">Running Ada Locally (No Docker Required!)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="nix.html">Nix &amp; Flakes Support</a></li>
+<li class="toctree-l1"><a class="reference internal" href="getting_started_scratch.html">Getting Started from Scratch</a></li>
+<li class="toctree-l1"><a class="reference internal" href="configuration.html">Configuration Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="examples.html">Examples</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Hardware Setup</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="hardware.html">Hardware &amp; GPU Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="sbc.html">Ada on Single-Board Computers (SBCs)</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Core Architecture</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="architecture.html">Architecture</a></li>
+<li class="toctree-l1"><a class="reference internal" href="data_model.html">Data Model Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="streaming.html">Streaming</a></li>
+<li class="toctree-l1"><a class="reference internal" href="memory.html">Memory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="token_monitoring.html">Token Budget Monitoring</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Interfaces &amp; Adapters</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="adapters.html">Ada Adapters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="adapter_development.html">Adapter Development Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="matrix_integration.html">Matrix Integration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api_usage.html">API Usage Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api_reference.html">API Reference</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Specialist System</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="specialists.html">Specialist System</a></li>
+<li class="toctree-l1"><a class="reference internal" href="build_specialist.html">Build Your First Specialist</a></li>
+<li class="toctree-l1"><a class="reference internal" href="bidirectional.html">Bidirectional Specialist System</a></li>
+<li class="toctree-l1"><a class="reference internal" href="specialist_rag.html">Specialist RAG Documentation System</a></li>
+<li class="toctree-l1"><a class="reference internal" href="web_search.html">Web Search Specialist</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Operations</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="build_system.html">Build System</a></li>
+<li class="toctree-l1"><a class="reference internal" href="buildx_adoption_notes.html">BuildX Adoption Data &amp; Notes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="disk_management.html">Disk Management</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Development</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="development.html">Development Tools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="testing.html">Testing Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="versioning.html">Version Management</a></li>
+<li class="toctree-l1"><a class="reference internal" href="changelog.html">Changelog</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Philosophy &amp; Design</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="project_philosophy.html">Ada Principles</a></li>
+<li class="toctree-l1"><a class="reference internal" href="documentation_philosophy.html">Documentation Philosophy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ai_documentation.html">AI-Readable Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="empathetic_documentation.html">Empathetic Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="xenofeminism.html">Xenofeminism and Ada</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Ada Brain API</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Zero to Ada</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/zero_to_ada.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="zero-to-ada">
+<h1>Zero to Ada<a class="headerlink" href="#zero-to-ada" title="Link to this heading"></a></h1>
+<p><strong>Get Ada running in under 10 minutes - guaranteed!</strong></p>
+<p>This page is your express lane from nothing to a working Ada assistant. Choose your starting point:</p>
+<nav class="contents local" id="quick-navigation">
+<p class="topic-title">Quick Navigation</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#step-1-choose-your-path" id="id1">Step 1: Choose Your Path</a></p>
+<ul>
+<li><p><a class="reference internal" href="#path-a-yes-i-have-python-3-13" id="id2">Path A: Yes, I Have Python 3.13+</a></p></li>
+<li><p><a class="reference internal" href="#path-b-no-i-have-python-3-12-or-earlier" id="id3">Path B: No, I Have Python 3.12 or Earlier</a></p></li>
+<li><p><a class="reference internal" href="#path-c-i-have-nothing-installed-yet" id="id4">Path C: I Have Nothing Installed Yet</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#setup-with-nix-recommended-for-most-users" id="id5">Setup with Nix (Recommended for Most Users)</a></p>
+<ul>
+<li><p><a class="reference internal" href="#step-1-install-nix" id="id6">Step 1: Install Nix</a></p></li>
+<li><p><a class="reference internal" href="#step-2-enable-flakes" id="id7">Step 2: Enable Flakes</a></p></li>
+<li><p><a class="reference internal" href="#step-3-clone-ada" id="id8">Step 3: Clone Ada</a></p></li>
+<li><p><a class="reference internal" href="#step-4-enter-nix-environment" id="id9">Step 4: Enter Nix Environment</a></p></li>
+<li><p><a class="reference internal" href="#step-5-install-ollama-model" id="id10">Step 5: Install Ollama Model</a></p></li>
+<li><p><a class="reference internal" href="#step-6-run-ada-setup" id="id11">Step 6: Run Ada Setup</a></p></li>
+<li><p><a class="reference internal" href="#step-7-start-ada" id="id12">Step 7: Start Ada</a></p></li>
+<li><p><a class="reference internal" href="#step-8-test-it" id="id13">Step 8: Test It</a></p></li>
+<li><p><a class="reference internal" href="#step-9-optional-auto-activate-with-direnv" id="id14">Step 9: Optional - Auto-activate with direnv</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#setup-with-python-3-13-local-mode" id="id15">Setup with Python 3.13 (Local Mode)</a></p>
+<ul>
+<li><p><a class="reference internal" href="#prerequisites-check" id="id16">Prerequisites Check</a></p></li>
+<li><p><a class="reference internal" href="#step-1-install-ollama" id="id17">Step 1: Install Ollama</a></p></li>
+<li><p><a class="reference internal" href="#step-2-clone-ada" id="id18">Step 2: Clone Ada</a></p></li>
+<li><p><a class="reference internal" href="#step-3-run-setup" id="id19">Step 3: Run Setup</a></p></li>
+<li><p><a class="reference internal" href="#step-4-pull-a-model" id="id20">Step 4: Pull a Model</a></p></li>
+<li><p><a class="reference internal" href="#step-5-start-ada" id="id21">Step 5: Start Ada</a></p></li>
+<li><p><a class="reference internal" href="#step-6-test-it" id="id22">Step 6: Test It</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#setup-with-docker" id="id23">Setup with Docker</a></p>
+<ul>
+<li><p><a class="reference internal" href="#prerequisites" id="id24">Prerequisites</a></p></li>
+<li><p><a class="reference internal" href="#step-1-clone-ada" id="id25">Step 1: Clone Ada</a></p></li>
+<li><p><a class="reference internal" href="#step-2-start-ada" id="id26">Step 2: Start Ada</a></p></li>
+<li><p><a class="reference internal" href="#step-3-pull-a-model" id="id27">Step 3: Pull a Model</a></p></li>
+<li><p><a class="reference internal" href="#step-4-test-it" id="id28">Step 4: Test It</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#next-steps" id="id29">Next Steps</a></p></li>
+<li><p><a class="reference internal" href="#troubleshooting" id="id30">Troubleshooting</a></p>
+<ul>
+<li><p><a class="reference internal" href="#nix-command-not-found" id="id31">“nix: command not found”</a></p></li>
+<li><p><a class="reference internal" href="#python-3-13-not-found" id="id32">“Python 3.13 not found”</a></p></li>
+<li><p><a class="reference internal" href="#ollama-connection-failed" id="id33">“Ollama connection failed”</a></p></li>
+<li><p><a class="reference internal" href="#error-in-nix-develop" id="id34">“404 error in nix develop”</a></p></li>
+<li><p><a class="reference internal" href="#modulenotfounderror" id="id35">“ModuleNotFoundError”</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#still-stuck" id="id36">Still Stuck?</a></p></li>
+</ul>
+</nav>
+<section id="step-1-choose-your-path">
+<h2><a class="toc-backref" href="#id1" role="doc-backlink">Step 1: Choose Your Path</a><a class="headerlink" href="#step-1-choose-your-path" title="Link to this heading"></a></h2>
+<p>Answer one question: <strong>Do you have Python 3.13 installed?</strong></p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python3<span class="w"> </span>--version
+</pre></div>
+</div>
+<section id="path-a-yes-i-have-python-3-13">
+<h3><a class="toc-backref" href="#id2" role="doc-backlink">Path A: Yes, I Have Python 3.13+</a><a class="headerlink" href="#path-a-yes-i-have-python-3-13" title="Link to this heading"></a></h3>
+<p>✅ <strong>You’re on the fast track!</strong> Jump to <a class="reference internal" href="#local-setup-fast"><span class="std std-ref">Setup with Python 3.13 (Local Mode)</span></a>.</p>
+</section>
+<section id="path-b-no-i-have-python-3-12-or-earlier">
+<h3><a class="toc-backref" href="#id3" role="doc-backlink">Path B: No, I Have Python 3.12 or Earlier</a><a class="headerlink" href="#path-b-no-i-have-python-3-12-or-earlier" title="Link to this heading"></a></h3>
+<p>No problem! You have three options:</p>
+<dl>
+<dt><strong>Option 1: Nix (Recommended) ⭐</strong></dt><dd><p>Instant Python 3.13 environment, no compilation.</p>
+<p>Jump to <a class="reference internal" href="#nix-setup-fast"><span class="std std-ref">Setup with Nix (Recommended for Most Users)</span></a></p>
+</dd>
+<dt><strong>Option 2: Docker</strong></dt><dd><p>Isolated containers, works with any Python version.</p>
+<p>Jump to <a class="reference internal" href="#docker-setup-fast"><span class="std std-ref">Setup with Docker</span></a></p>
+</dd>
+<dt><strong>Option 3: Build from Source</strong></dt><dd><p>Advanced users only, takes 30+ minutes.</p>
+<p>See <span class="xref std std-doc">installation_advanced</span></p>
+</dd>
+</dl>
+</section>
+<section id="path-c-i-have-nothing-installed-yet">
+<h3><a class="toc-backref" href="#id4" role="doc-backlink">Path C: I Have Nothing Installed Yet</a><a class="headerlink" href="#path-c-i-have-nothing-installed-yet" title="Link to this heading"></a></h3>
+<p><strong>Fresh Ubuntu/Debian/other Linux?</strong> → Use <a class="reference internal" href="#nix-setup-fast"><span class="std std-ref">Setup with Nix (Recommended for Most Users)</span></a> (easiest)</p>
+<p><strong>Fresh macOS?</strong> → Install Ollama, then <a class="reference internal" href="#local-setup-fast"><span class="std std-ref">Setup with Python 3.13 (Local Mode)</span></a></p>
+<p><strong>Windows?</strong> → Use <a class="reference internal" href="#docker-setup-fast"><span class="std std-ref">Setup with Docker</span></a> or WSL + Nix</p>
+</section>
+</section>
+<section id="setup-with-nix-recommended-for-most-users">
+<span id="nix-setup-fast"></span><h2><a class="toc-backref" href="#id5" role="doc-backlink">Setup with Nix (Recommended for Most Users)</a><a class="headerlink" href="#setup-with-nix-recommended-for-most-users" title="Link to this heading"></a></h2>
+<p><strong>Best for:</strong> Ubuntu, Debian, Fedora, any Linux/macOS without Python 3.13</p>
+<p><strong>Time:</strong> 5-10 minutes</p>
+<p><strong>Why Nix?</strong> Provides Python 3.13 instantly without compiling or breaking your system.</p>
+<section id="step-1-install-nix">
+<h3><a class="toc-backref" href="#id6" role="doc-backlink">Step 1: Install Nix</a><a class="headerlink" href="#step-1-install-nix" title="Link to this heading"></a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># One-time Nix installation</span>
+curl<span class="w"> </span>-L<span class="w"> </span>https://nixos.org/nix/install<span class="w"> </span><span class="p">|</span><span class="w"> </span>sh
+
+<span class="c1"># Follow the prompts, then restart your shell</span>
+<span class="nb">exec</span><span class="w"> </span><span class="nv">$SHELL</span>
+</pre></div>
+</div>
+<p><strong>Note:</strong> This installs Nix (a package manager) - it won’t interfere with your system Python.</p>
+</section>
+<section id="step-2-enable-flakes">
+<h3><a class="toc-backref" href="#id7" role="doc-backlink">Step 2: Enable Flakes</a><a class="headerlink" href="#step-2-enable-flakes" title="Link to this heading"></a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Create Nix config directory</span>
+mkdir<span class="w"> </span>-p<span class="w"> </span>~/.config/nix
+
+<span class="c1"># Enable flakes</span>
+<span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;experimental-features = nix-command flakes&quot;</span><span class="w"> </span>&gt;&gt;<span class="w"> </span>~/.config/nix/nix.conf
+</pre></div>
+</div>
+<p><strong>Troubleshooting:</strong> If you get permission errors or need sudo:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Fix 1: Make sure you&#39;re in nix-users group</span>
+sudo<span class="w"> </span>usermod<span class="w"> </span>-aG<span class="w"> </span>nix-users<span class="w"> </span><span class="nv">$USER</span>
+
+<span class="c1"># Fix 2: Start the Nix daemon</span>
+sudo<span class="w"> </span>systemctl<span class="w"> </span><span class="nb">enable</span><span class="w"> </span>--now<span class="w"> </span>nix-daemon
+
+<span class="c1"># Fix 3: Log out and back in (or reload shell)</span>
+<span class="nb">exec</span><span class="w"> </span><span class="nv">$SHELL</span>
+
+<span class="c1"># Test: Should work without sudo now</span>
+nix<span class="w"> </span>--version
+</pre></div>
+</div>
+</section>
+<section id="step-3-clone-ada">
+<h3><a class="toc-backref" href="#id8" role="doc-backlink">Step 3: Clone Ada</a><a class="headerlink" href="#step-3-clone-ada" title="Link to this heading"></a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/luna-system/ada.git
+<span class="nb">cd</span><span class="w"> </span>ada
+</pre></div>
+</div>
+</section>
+<section id="step-4-enter-nix-environment">
+<h3><a class="toc-backref" href="#id9" role="doc-backlink">Step 4: Enter Nix Environment</a><a class="headerlink" href="#step-4-enter-nix-environment" title="Link to this heading"></a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>nix<span class="w"> </span>develop
+</pre></div>
+</div>
+<p><strong>Magic happens!</strong> ✨ You now have:
+- Python 3.13
+- All Ada dependencies
+- Ollama
+- Development tools</p>
+<p>Your shell prompt will change to show you’re in the Nix environment.</p>
+</section>
+<section id="step-5-install-ollama-model">
+<h3><a class="toc-backref" href="#id10" role="doc-backlink">Step 5: Install Ollama Model</a><a class="headerlink" href="#step-5-install-ollama-model" title="Link to this heading"></a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Start Ollama (in background)</span>
+ollama<span class="w"> </span>serve<span class="w"> </span>&gt;<span class="w"> </span>/dev/null<span class="w"> </span><span class="m">2</span>&gt;<span class="p">&amp;</span><span class="m">1</span><span class="w"> </span><span class="p">&amp;</span>
+
+<span class="c1"># Pull a model (choose one)</span>
+ollama<span class="w"> </span>pull<span class="w"> </span>deepseek-r1:14b<span class="w">      </span><span class="c1"># Recommended, needs 12GB VRAM</span>
+ollama<span class="w"> </span>pull<span class="w"> </span>llama3.1:8b<span class="w">          </span><span class="c1"># Good all-rounder, needs 6GB VRAM</span>
+ollama<span class="w"> </span>pull<span class="w"> </span>qwen2.5:3b<span class="w">           </span><span class="c1"># Lightweight, needs 3GB VRAM</span>
+</pre></div>
+</div>
+</section>
+<section id="step-6-run-ada-setup">
+<h3><a class="toc-backref" href="#id11" role="doc-backlink">Step 6: Run Ada Setup</a><a class="headerlink" href="#step-6-run-ada-setup" title="Link to this heading"></a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Now inside nix environment</span>
+ada<span class="w"> </span>setup
+</pre></div>
+</div>
+<p>Follow the interactive prompts to configure Ada.</p>
+</section>
+<section id="step-7-start-ada">
+<h3><a class="toc-backref" href="#id12" role="doc-backlink">Step 7: Start Ada</a><a class="headerlink" href="#step-7-start-ada" title="Link to this heading"></a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>ada<span class="w"> </span>run
+</pre></div>
+</div>
+<p>Ada is now running at <strong>http://localhost:7000</strong>! 🎉</p>
+</section>
+<section id="step-8-test-it">
+<h3><a class="toc-backref" href="#id13" role="doc-backlink">Step 8: Test It</a><a class="headerlink" href="#step-8-test-it" title="Link to this heading"></a></h3>
+<p>Open another terminal:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span><span class="w"> </span>ada
+nix<span class="w"> </span>develop<span class="w">  </span><span class="c1"># Enter Nix environment again</span>
+ada<span class="w"> </span>chat<span class="w"> </span><span class="s2">&quot;Hello! What can you do?&quot;</span>
+</pre></div>
+</div>
+<p><strong>Success!</strong> You’re chatting with Ada.</p>
+</section>
+<section id="step-9-optional-auto-activate-with-direnv">
+<h3><a class="toc-backref" href="#id14" role="doc-backlink">Step 9: Optional - Auto-activate with direnv</a><a class="headerlink" href="#step-9-optional-auto-activate-with-direnv" title="Link to this heading"></a></h3>
+<p>Want the Nix environment to activate automatically when you <code class="docutils literal notranslate"><span class="pre">cd</span></code> into the Ada directory?</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Install direnv (inside nix environment)</span>
+nix<span class="w"> </span>profile<span class="w"> </span>install<span class="w"> </span>nixpkgs#direnv
+
+<span class="c1"># Add to your shell config (~/.bashrc or ~/.zshrc)</span>
+<span class="nb">eval</span><span class="w"> </span><span class="s2">&quot;</span><span class="k">$(</span>direnv<span class="w"> </span>hook<span class="w"> </span>bash<span class="k">)</span><span class="s2">&quot;</span><span class="w">  </span><span class="c1"># or &#39;zsh&#39;, &#39;fish&#39;, etc.</span>
+
+<span class="c1"># Allow direnv in Ada directory</span>
+<span class="nb">cd</span><span class="w"> </span>ada
+direnv<span class="w"> </span>allow
+</pre></div>
+</div>
+<p>Now whenever you <code class="docutils literal notranslate"><span class="pre">cd</span> <span class="pre">ada</span></code>, the environment activates automatically! ✨</p>
+</section>
+</section>
+<section id="setup-with-python-3-13-local-mode">
+<span id="local-setup-fast"></span><h2><a class="toc-backref" href="#id15" role="doc-backlink">Setup with Python 3.13 (Local Mode)</a><a class="headerlink" href="#setup-with-python-3-13-local-mode" title="Link to this heading"></a></h2>
+<p><strong>Best for:</strong> Users who already have Python 3.13 installed</p>
+<p><strong>Time:</strong> 5 minutes</p>
+<section id="prerequisites-check">
+<h3><a class="toc-backref" href="#id16" role="doc-backlink">Prerequisites Check</a><a class="headerlink" href="#prerequisites-check" title="Link to this heading"></a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Verify Python version</span>
+python3<span class="w"> </span>--version<span class="w">  </span><span class="c1"># Should show 3.13.x</span>
+
+<span class="c1"># If not 3.13, go back and use Nix setup instead!</span>
+</pre></div>
+</div>
+</section>
+<section id="step-1-install-ollama">
+<h3><a class="toc-backref" href="#id17" role="doc-backlink">Step 1: Install Ollama</a><a class="headerlink" href="#step-1-install-ollama" title="Link to this heading"></a></h3>
+<p>Download from <a class="reference external" href="https://ollama.ai">https://ollama.ai</a> and install for your platform.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Verify installation</span>
+ollama<span class="w"> </span>--version
+</pre></div>
+</div>
+</section>
+<section id="step-2-clone-ada">
+<h3><a class="toc-backref" href="#id18" role="doc-backlink">Step 2: Clone Ada</a><a class="headerlink" href="#step-2-clone-ada" title="Link to this heading"></a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/luna-system/ada.git
+<span class="nb">cd</span><span class="w"> </span>ada
+</pre></div>
+</div>
+</section>
+<section id="step-3-run-setup">
+<h3><a class="toc-backref" href="#id19" role="doc-backlink">Step 3: Run Setup</a><a class="headerlink" href="#step-3-run-setup" title="Link to this heading"></a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python3<span class="w"> </span>ada_main.py<span class="w"> </span>setup
+</pre></div>
+</div>
+<p>This will:
+- Create a virtual environment
+- Install all Python dependencies
+- Create a <code class="docutils literal notranslate"><span class="pre">.env</span></code> configuration file
+- Set up data directories</p>
+</section>
+<section id="step-4-pull-a-model">
+<h3><a class="toc-backref" href="#id20" role="doc-backlink">Step 4: Pull a Model</a><a class="headerlink" href="#step-4-pull-a-model" title="Link to this heading"></a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Start Ollama if not running</span>
+ollama<span class="w"> </span>serve<span class="w"> </span>&gt;<span class="w"> </span>/dev/null<span class="w"> </span><span class="m">2</span>&gt;<span class="p">&amp;</span><span class="m">1</span><span class="w"> </span><span class="p">&amp;</span>
+
+<span class="c1"># Pull a model</span>
+ollama<span class="w"> </span>pull<span class="w"> </span>deepseek-r1:14b
+</pre></div>
+</div>
+</section>
+<section id="step-5-start-ada">
+<h3><a class="toc-backref" href="#id21" role="doc-backlink">Step 5: Start Ada</a><a class="headerlink" href="#step-5-start-ada" title="Link to this heading"></a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>ada<span class="w"> </span>run
+</pre></div>
+</div>
+<p>Ada is now running at <strong>http://localhost:7000</strong>! 🎉</p>
+</section>
+<section id="step-6-test-it">
+<h3><a class="toc-backref" href="#id22" role="doc-backlink">Step 6: Test It</a><a class="headerlink" href="#step-6-test-it" title="Link to this heading"></a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>ada<span class="w"> </span>chat<span class="w"> </span><span class="s2">&quot;Hello Ada!&quot;</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="setup-with-docker">
+<span id="docker-setup-fast"></span><h2><a class="toc-backref" href="#id23" role="doc-backlink">Setup with Docker</a><a class="headerlink" href="#setup-with-docker" title="Link to this heading"></a></h2>
+<p><strong>Best for:</strong> Users who want isolated containers or can’t use Nix/local mode</p>
+<p><strong>Time:</strong> 10 minutes (includes image download)</p>
+<section id="prerequisites">
+<h3><a class="toc-backref" href="#id24" role="doc-backlink">Prerequisites</a><a class="headerlink" href="#prerequisites" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p>Docker installed (get from <a class="reference external" href="https://docs.docker.com/get-docker/">https://docs.docker.com/get-docker/</a>)</p></li>
+<li><p>Docker Compose installed (usually included with Docker Desktop)</p></li>
+</ul>
+</section>
+<section id="step-1-clone-ada">
+<h3><a class="toc-backref" href="#id25" role="doc-backlink">Step 1: Clone Ada</a><a class="headerlink" href="#step-1-clone-ada" title="Link to this heading"></a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/luna-system/ada.git
+<span class="nb">cd</span><span class="w"> </span>ada
+</pre></div>
+</div>
+</section>
+<section id="step-2-start-ada">
+<h3><a class="toc-backref" href="#id26" role="doc-backlink">Step 2: Start Ada</a><a class="headerlink" href="#step-2-start-ada" title="Link to this heading"></a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>docker<span class="w"> </span>compose<span class="w"> </span>up<span class="w"> </span>-d
+</pre></div>
+</div>
+<p>This starts:
+- Brain (Ada’s API)
+- Ollama (LLM runtime)
+- ChromaDB (vector database)
+- Web UI (optional)</p>
+</section>
+<section id="step-3-pull-a-model">
+<h3><a class="toc-backref" href="#id27" role="doc-backlink">Step 3: Pull a Model</a><a class="headerlink" href="#step-3-pull-a-model" title="Link to this heading"></a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>docker<span class="w"> </span>compose<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>ollama<span class="w"> </span>ollama<span class="w"> </span>pull<span class="w"> </span>deepseek-r1:14b
+</pre></div>
+</div>
+</section>
+<section id="step-4-test-it">
+<h3><a class="toc-backref" href="#id28" role="doc-backlink">Step 4: Test It</a><a class="headerlink" href="#step-4-test-it" title="Link to this heading"></a></h3>
+<p>Open <a class="reference external" href="http://localhost:5000">http://localhost:5000</a> in your browser, or:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>curl<span class="w"> </span>http://localhost:8000/v1/healthz
+</pre></div>
+</div>
+</section>
+</section>
+<section id="next-steps">
+<h2><a class="toc-backref" href="#id29" role="doc-backlink">Next Steps</a><a class="headerlink" href="#next-steps" title="Link to this heading"></a></h2>
+<p>Now that Ada is running, you can:</p>
+<ul class="simple">
+<li><p><strong>Customize personality</strong>: Edit <code class="docutils literal notranslate"><span class="pre">persona.md</span></code> or copy from <code class="docutils literal notranslate"><span class="pre">examples/personas/</span></code></p></li>
+<li><p><strong>Try the web UI</strong>: <a class="reference external" href="http://localhost:5000">http://localhost:5000</a> (if using Docker)</p></li>
+<li><p><strong>Use the CLI</strong>: <code class="docutils literal notranslate"><span class="pre">ada</span> <span class="pre">chat</span> <span class="pre">&quot;your</span> <span class="pre">question&quot;</span></code></p></li>
+<li><p><strong>Interactive mode</strong>: <code class="docutils literal notranslate"><span class="pre">ada-cli</span></code> for a REPL</p></li>
+<li><p><strong>Add specialists</strong>: See <a class="reference internal" href="specialists.html"><span class="doc">Specialist System</span></a></p></li>
+<li><p><strong>Matrix integration</strong>: See <a class="reference internal" href="matrix_integration.html"><span class="doc">Matrix Integration</span></a></p></li>
+<li><p><strong>MCP tools</strong>: See <code class="docutils literal notranslate"><span class="pre">ada-mcp/README.md</span></code></p></li>
+</ul>
+</section>
+<section id="troubleshooting">
+<h2><a class="toc-backref" href="#id30" role="doc-backlink">Troubleshooting</a><a class="headerlink" href="#troubleshooting" title="Link to this heading"></a></h2>
+<section id="nix-command-not-found">
+<h3><a class="toc-backref" href="#id31" role="doc-backlink">“nix: command not found”</a><a class="headerlink" href="#nix-command-not-found" title="Link to this heading"></a></h3>
+<p>You need to install Nix first. See <a class="reference internal" href="#nix-setup-fast"><span class="std std-ref">Setup with Nix (Recommended for Most Users)</span></a> Step 1.</p>
+</section>
+<section id="python-3-13-not-found">
+<h3><a class="toc-backref" href="#id32" role="doc-backlink">“Python 3.13 not found”</a><a class="headerlink" href="#python-3-13-not-found" title="Link to this heading"></a></h3>
+<p>Don’t run <code class="docutils literal notranslate"><span class="pre">python3</span> <span class="pre">ada_main.py</span></code> directly! Use one of these instead:</p>
+<ol class="arabic simple">
+<li><p><strong>Nix</strong>: <code class="docutils literal notranslate"><span class="pre">nix</span> <span class="pre">develop</span></code> then <code class="docutils literal notranslate"><span class="pre">ada</span> <span class="pre">setup</span></code></p></li>
+<li><p><strong>Docker</strong>: <code class="docutils literal notranslate"><span class="pre">docker</span> <span class="pre">compose</span> <span class="pre">up</span></code></p></li>
+</ol>
+</section>
+<section id="ollama-connection-failed">
+<h3><a class="toc-backref" href="#id33" role="doc-backlink">“Ollama connection failed”</a><a class="headerlink" href="#ollama-connection-failed" title="Link to this heading"></a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Start Ollama</span>
+ollama<span class="w"> </span>serve<span class="w"> </span><span class="p">&amp;</span>
+
+<span class="c1"># Verify it&#39;s running</span>
+curl<span class="w"> </span>http://localhost:11434/api/tags
+</pre></div>
+</div>
+</section>
+<section id="error-in-nix-develop">
+<h3><a class="toc-backref" href="#id34" role="doc-backlink">“404 error in nix develop”</a><a class="headerlink" href="#error-in-nix-develop" title="Link to this heading"></a></h3>
+<p>Your nixpkgs might be outdated. Update it:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>nix<span class="w"> </span>flake<span class="w"> </span>update
+nix<span class="w"> </span>develop
+</pre></div>
+</div>
+</section>
+<section id="modulenotfounderror">
+<h3><a class="toc-backref" href="#id35" role="doc-backlink">“ModuleNotFoundError”</a><a class="headerlink" href="#modulenotfounderror" title="Link to this heading"></a></h3>
+<p>Make sure you’re in the virtual environment:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># If using Nix</span>
+nix<span class="w"> </span>develop
+
+<span class="c1"># If using local mode</span>
+<span class="nb">source</span><span class="w"> </span>.venv/bin/activate
+</pre></div>
+</div>
+</section>
+</section>
+<section id="still-stuck">
+<h2><a class="toc-backref" href="#id36" role="doc-backlink">Still Stuck?</a><a class="headerlink" href="#still-stuck" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>Check full docs: <a class="reference internal" href="getting_started.html"><span class="doc">Getting Started</span></a></p></li>
+<li><p>See detailed troubleshooting: <span class="xref std std-doc">troubleshooting</span> (if it exists)</p></li>
+<li><p>Ask in GitHub Discussions: <a class="reference external" href="https://github.com/luna-system/ada/discussions">https://github.com/luna-system/ada/discussions</a></p></li>
+</ul>
+<p>—</p>
+<p><strong>You made it!</strong> Welcome to Ada. Now go make something amazing. 🤖💙</p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="index.html" class="btn btn-neutral float-left" title="Ada Brain API Docs" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="getting_started.html" class="btn btn-neutral float-right" title="Getting Started" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p></p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

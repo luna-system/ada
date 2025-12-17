@@ -1,0 +1,666 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Adapter Development Guide &mdash; Ada Brain API 0.1.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="_static/graphviz.css?v=4ae1632d" />
+      <link rel="stylesheet" type="text/css" href="_static/custom.css?v=df0a1c42" />
+
+  
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=01f34227"></script>
+      <script src="_static/doctools.js?v=9bcbadda"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Matrix Integration" href="matrix_integration.html" />
+    <link rel="prev" title="Ada Adapters" href="adapters.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            Ada Brain API
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="zero_to_ada.html">Zero to Ada</a></li>
+<li class="toctree-l1"><a class="reference internal" href="getting_started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="local_mode.html">Running Ada Locally (No Docker Required!)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="nix.html">Nix &amp; Flakes Support</a></li>
+<li class="toctree-l1"><a class="reference internal" href="getting_started_scratch.html">Getting Started from Scratch</a></li>
+<li class="toctree-l1"><a class="reference internal" href="configuration.html">Configuration Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="examples.html">Examples</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Hardware Setup</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="hardware.html">Hardware &amp; GPU Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="sbc.html">Ada on Single-Board Computers (SBCs)</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Core Architecture</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="architecture.html">Architecture</a></li>
+<li class="toctree-l1"><a class="reference internal" href="data_model.html">Data Model Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="streaming.html">Streaming</a></li>
+<li class="toctree-l1"><a class="reference internal" href="memory.html">Memory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="token_monitoring.html">Token Budget Monitoring</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Interfaces &amp; Adapters</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="adapters.html">Ada Adapters</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Adapter Development Guide</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#overview">Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#architecture-pattern">Architecture Pattern</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#reference-implementation">Reference Implementation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#standard-http-client">Standard HTTP Client</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#required-components">Required Components</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#required-methods">Required Methods</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#exception-handling">Exception Handling</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#example-cli-adapter">Example: CLI Adapter</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#file-structure">File Structure</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#key-files">Key Files</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#client-py-http-client"><strong>client.py</strong> - HTTP Client</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#cli-py-user-interface"><strong>cli.py</strong> - User Interface</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#example-matrix-bridge-adapter">Example: Matrix Bridge Adapter</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#example-mcp-server-adapter">Example: MCP Server Adapter</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#building-your-adapter">Building Your Adapter</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#step-1-choose-your-pattern">Step 1: Choose Your Pattern</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#step-2-copy-the-reference-implementation">Step 2: Copy the Reference Implementation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#step-3-implement-protocol-translation">Step 3: Implement Protocol Translation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#step-4-handle-errors-gracefully">Step 4: Handle Errors Gracefully</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#step-5-test-integration">Step 5: Test Integration</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#step-6-document-usage">Step 6: Document Usage</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#best-practices">Best Practices</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#do">DO ✅</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#don-t">DON’T ❌</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#deployment-patterns">Deployment Patterns</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#standalone-process">Standalone Process</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#embedded-in-application">Embedded in Application</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#on-demand-tool">On-Demand Tool</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#troubleshooting">Troubleshooting</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#cannot-connect-to-ada-brain">“Cannot connect to Ada Brain”</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#api-returned-error">“API returned error”</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#response-format-unexpected">“Response format unexpected”</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#next-steps">Next Steps</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="matrix_integration.html">Matrix Integration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api_usage.html">API Usage Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api_reference.html">API Reference</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Specialist System</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="specialists.html">Specialist System</a></li>
+<li class="toctree-l1"><a class="reference internal" href="build_specialist.html">Build Your First Specialist</a></li>
+<li class="toctree-l1"><a class="reference internal" href="bidirectional.html">Bidirectional Specialist System</a></li>
+<li class="toctree-l1"><a class="reference internal" href="specialist_rag.html">Specialist RAG Documentation System</a></li>
+<li class="toctree-l1"><a class="reference internal" href="web_search.html">Web Search Specialist</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Operations</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="build_system.html">Build System</a></li>
+<li class="toctree-l1"><a class="reference internal" href="buildx_adoption_notes.html">BuildX Adoption Data &amp; Notes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="disk_management.html">Disk Management</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Development</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="development.html">Development Tools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="testing.html">Testing Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="versioning.html">Version Management</a></li>
+<li class="toctree-l1"><a class="reference internal" href="changelog.html">Changelog</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Philosophy &amp; Design</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="project_philosophy.html">Ada Principles</a></li>
+<li class="toctree-l1"><a class="reference internal" href="documentation_philosophy.html">Documentation Philosophy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ai_documentation.html">AI-Readable Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="empathetic_documentation.html">Empathetic Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="xenofeminism.html">Xenofeminism and Ada</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Ada Brain API</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Adapter Development Guide</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/adapter_development.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="adapter-development-guide">
+<h1>Adapter Development Guide<a class="headerlink" href="#adapter-development-guide" title="Link to this heading"></a></h1>
+<p>This guide walks you through building a new adapter for Ada using the <strong>CLI adapter as the reference implementation</strong>.</p>
+<nav class="contents local" id="on-this-page">
+<p class="topic-title">On this page</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#overview" id="id3">Overview</a></p></li>
+<li><p><a class="reference internal" href="#architecture-pattern" id="id4">Architecture Pattern</a></p></li>
+<li><p><a class="reference internal" href="#reference-implementation" id="id5">Reference Implementation</a></p></li>
+<li><p><a class="reference internal" href="#standard-http-client" id="id6">Standard HTTP Client</a></p>
+<ul>
+<li><p><a class="reference internal" href="#required-components" id="id7">Required Components</a></p></li>
+<li><p><a class="reference internal" href="#required-methods" id="id8">Required Methods</a></p></li>
+<li><p><a class="reference internal" href="#exception-handling" id="id9">Exception Handling</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#example-cli-adapter" id="id10">Example: CLI Adapter</a></p>
+<ul>
+<li><p><a class="reference internal" href="#file-structure" id="id11">File Structure</a></p></li>
+<li><p><a class="reference internal" href="#key-files" id="id12">Key Files</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#example-matrix-bridge-adapter" id="id13">Example: Matrix Bridge Adapter</a></p></li>
+<li><p><a class="reference internal" href="#example-mcp-server-adapter" id="id14">Example: MCP Server Adapter</a></p></li>
+<li><p><a class="reference internal" href="#building-your-adapter" id="id15">Building Your Adapter</a></p>
+<ul>
+<li><p><a class="reference internal" href="#step-1-choose-your-pattern" id="id16">Step 1: Choose Your Pattern</a></p></li>
+<li><p><a class="reference internal" href="#step-2-copy-the-reference-implementation" id="id17">Step 2: Copy the Reference Implementation</a></p></li>
+<li><p><a class="reference internal" href="#step-3-implement-protocol-translation" id="id18">Step 3: Implement Protocol Translation</a></p></li>
+<li><p><a class="reference internal" href="#step-4-handle-errors-gracefully" id="id19">Step 4: Handle Errors Gracefully</a></p></li>
+<li><p><a class="reference internal" href="#step-5-test-integration" id="id20">Step 5: Test Integration</a></p></li>
+<li><p><a class="reference internal" href="#step-6-document-usage" id="id21">Step 6: Document Usage</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#best-practices" id="id22">Best Practices</a></p>
+<ul>
+<li><p><a class="reference internal" href="#do" id="id23">DO ✅</a></p></li>
+<li><p><a class="reference internal" href="#don-t" id="id24">DON’T ❌</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#deployment-patterns" id="id25">Deployment Patterns</a></p>
+<ul>
+<li><p><a class="reference internal" href="#standalone-process" id="id26">Standalone Process</a></p></li>
+<li><p><a class="reference internal" href="#embedded-in-application" id="id27">Embedded in Application</a></p></li>
+<li><p><a class="reference internal" href="#on-demand-tool" id="id28">On-Demand Tool</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#troubleshooting" id="id29">Troubleshooting</a></p>
+<ul>
+<li><p><a class="reference internal" href="#cannot-connect-to-ada-brain" id="id30">“Cannot connect to Ada Brain”</a></p></li>
+<li><p><a class="reference internal" href="#api-returned-error" id="id31">“API returned error”</a></p></li>
+<li><p><a class="reference internal" href="#response-format-unexpected" id="id32">“Response format unexpected”</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#next-steps" id="id33">Next Steps</a></p></li>
+</ul>
+</nav>
+<section id="overview">
+<h2><a class="toc-backref" href="#id3" role="doc-backlink">Overview</a><a class="headerlink" href="#overview" title="Link to this heading"></a></h2>
+<p>An <strong>adapter</strong> translates between an interface (web browser, chat app, IDE, terminal) and Ada’s REST API. All adapters are equal peers - there’s no “primary” interface.</p>
+<p><strong>Core principle:</strong> Keep adapters simple. Complex logic belongs in the brain, not in adapters.</p>
+</section>
+<section id="architecture-pattern">
+<h2><a class="toc-backref" href="#id4" role="doc-backlink">Architecture Pattern</a><a class="headerlink" href="#architecture-pattern" title="Link to this heading"></a></h2>
+<p>All adapters follow this pattern:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>User Interface → Adapter → HTTP Client → Ada Brain API (/v1/chat/stream)
+                                                 ↓
+                                      RAG + Specialists + LLM
+                                                 ↓
+                                      SSE Stream Response
+                                                 ↓
+                 Display to User ← Adapter ← HTTP Client
+</pre></div>
+</div>
+<p>The adapter has two responsibilities:</p>
+<ol class="arabic simple">
+<li><p><strong>Protocol Translation</strong> - Convert interface messages to HTTP requests</p></li>
+<li><p><strong>User Experience</strong> - Present responses in the interface’s native format</p></li>
+</ol>
+</section>
+<section id="reference-implementation">
+<h2><a class="toc-backref" href="#id5" role="doc-backlink">Reference Implementation</a><a class="headerlink" href="#reference-implementation" title="Link to this heading"></a></h2>
+<p>The <strong>CLI adapter</strong> in <code class="docutils literal notranslate"><span class="pre">adapters/cli/</span></code> is the reference implementation. It demonstrates:</p>
+<ul class="simple">
+<li><p>Simplest possible adapter architecture</p></li>
+<li><p>Both streaming and non-streaming patterns</p></li>
+<li><p>Standard exception handling</p></li>
+<li><p>Type hints throughout</p></li>
+<li><p>Minimal dependencies</p></li>
+</ul>
+<p><strong>Start here</strong> when building a new adapter!</p>
+</section>
+<section id="standard-http-client">
+<h2><a class="toc-backref" href="#id6" role="doc-backlink">Standard HTTP Client</a><a class="headerlink" href="#standard-http-client" title="Link to this heading"></a></h2>
+<p>All Python adapters use a standardized HTTP client pattern. See <code class="docutils literal notranslate"><span class="pre">.ai/ADAPTER_STANDARDIZATION.md</span></code> for details.</p>
+<section id="required-components">
+<h3><a class="toc-backref" href="#id7" role="doc-backlink">Required Components</a><a class="headerlink" href="#required-components" title="Link to this heading"></a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">AsyncIterator</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">httpx</span>
+
+<span class="c1"># Standard exception hierarchy</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">AdaBrainError</span><span class="p">(</span><span class="ne">Exception</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Base exception for Ada Brain API errors.&quot;&quot;&quot;</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">AdaBrainConnectionError</span><span class="p">(</span><span class="n">AdaBrainError</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Cannot connect to Ada Brain API.&quot;&quot;&quot;</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">AdaBrainResponseError</span><span class="p">(</span><span class="n">AdaBrainError</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Ada Brain API returned an error.&quot;&quot;&quot;</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">AdaClient</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;HTTP client for Ada Brain API.&quot;&quot;&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">base_url</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;http://localhost:8000&quot;</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">base_url</span> <span class="o">=</span> <span class="n">base_url</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">client</span> <span class="o">=</span> <span class="n">httpx</span><span class="o">.</span><span class="n">AsyncClient</span><span class="p">(</span><span class="n">timeout</span><span class="o">=</span><span class="mf">300.0</span><span class="p">)</span>
+
+    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">chat_stream</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">message</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">conversation_id</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">AsyncIterator</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Stream chat response chunks (SSE).&quot;&quot;&quot;</span>
+        <span class="c1"># Implementation: yield chunks from /v1/chat/stream</span>
+
+    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">chat</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">message</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">conversation_id</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Non-streaming chat (collects full response).&quot;&quot;&quot;</span>
+        <span class="c1"># Implementation: collect chunks from chat_stream()</span>
+
+    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">health</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Check API health status.&quot;&quot;&quot;</span>
+        <span class="c1"># Implementation: GET /v1/healthz</span>
+</pre></div>
+</div>
+</section>
+<section id="required-methods">
+<h3><a class="toc-backref" href="#id8" role="doc-backlink">Required Methods</a><a class="headerlink" href="#required-methods" title="Link to this heading"></a></h3>
+<ol class="arabic simple">
+<li><p><strong>chat_stream()</strong> - Yields SSE chunks as they arrive</p></li>
+<li><p><strong>chat()</strong> - Collects full response (uses chat_stream internally)</p></li>
+<li><p><strong>health()</strong> - Returns health status dict</p></li>
+</ol>
+</section>
+<section id="exception-handling">
+<h3><a class="toc-backref" href="#id9" role="doc-backlink">Exception Handling</a><a class="headerlink" href="#exception-handling" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p>Raise <code class="docutils literal notranslate"><span class="pre">AdaBrainConnectionError</span></code> for network failures</p></li>
+<li><p>Raise <code class="docutils literal notranslate"><span class="pre">AdaBrainResponseError</span></code> for API errors</p></li>
+<li><p>Let unexpected exceptions propagate (they’re bugs!)</p></li>
+</ul>
+</section>
+</section>
+<section id="example-cli-adapter">
+<h2><a class="toc-backref" href="#id10" role="doc-backlink">Example: CLI Adapter</a><a class="headerlink" href="#example-cli-adapter" title="Link to this heading"></a></h2>
+<section id="file-structure">
+<h3><a class="toc-backref" href="#id11" role="doc-backlink">File Structure</a><a class="headerlink" href="#file-structure" title="Link to this heading"></a></h3>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>adapters/cli/
+├── ada_cli/
+│   ├── __init__.py
+│   ├── client.py      # HTTP client (standardized)
+│   └── cli.py         # User interface (Click + Rich)
+├── pyproject.toml     # Package metadata
+└── README.md          # Usage instructions
+</pre></div>
+</div>
+</section>
+<section id="key-files">
+<h3><a class="toc-backref" href="#id12" role="doc-backlink">Key Files</a><a class="headerlink" href="#key-files" title="Link to this heading"></a></h3>
+<section id="client-py-http-client">
+<h4><strong>client.py</strong> - HTTP Client<a class="headerlink" href="#client-py-http-client" title="Link to this heading"></a></h4>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># See adapters/cli/ada_cli/client.py for full implementation</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">AdaClient</span><span class="p">:</span>
+    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">chat_stream</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">message</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">AsyncIterator</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Stream chat response from Ada Brain API.&quot;&quot;&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">async</span> <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">stream</span><span class="p">(</span>
+                <span class="s2">&quot;POST&quot;</span><span class="p">,</span>
+                <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">base_url</span><span class="si">}</span><span class="s2">/v1/chat/stream&quot;</span><span class="p">,</span>
+                <span class="n">json</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;message&quot;</span><span class="p">:</span> <span class="n">message</span><span class="p">},</span>
+                <span class="n">headers</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;Accept&quot;</span><span class="p">:</span> <span class="s2">&quot;text/event-stream&quot;</span><span class="p">}</span>
+            <span class="p">)</span> <span class="k">as</span> <span class="n">response</span><span class="p">:</span>
+                <span class="n">response</span><span class="o">.</span><span class="n">raise_for_status</span><span class="p">()</span>
+                <span class="k">async</span> <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">response</span><span class="o">.</span><span class="n">aiter_lines</span><span class="p">():</span>
+                    <span class="k">if</span> <span class="n">line</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;data: &quot;</span><span class="p">):</span>
+                        <span class="n">chunk</span> <span class="o">=</span> <span class="n">line</span><span class="p">[</span><span class="mi">6</span><span class="p">:]</span>  <span class="c1"># Remove &quot;data: &quot; prefix</span>
+                        <span class="k">if</span> <span class="n">chunk</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span> <span class="ow">and</span> <span class="n">chunk</span> <span class="o">!=</span> <span class="s2">&quot;[DONE]&quot;</span><span class="p">:</span>
+                            <span class="k">yield</span> <span class="n">chunk</span>
+        <span class="k">except</span> <span class="n">httpx</span><span class="o">.</span><span class="n">ConnectError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">AdaBrainConnectionError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Cannot connect: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="k">except</span> <span class="n">httpx</span><span class="o">.</span><span class="n">HTTPStatusError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">AdaBrainResponseError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;API error: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="cli-py-user-interface">
+<h4><strong>cli.py</strong> - User Interface<a class="headerlink" href="#cli-py-user-interface" title="Link to this heading"></a></h4>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">click</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">rich.console</span><span class="w"> </span><span class="kn">import</span> <span class="n">Console</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.client</span><span class="w"> </span><span class="kn">import</span> <span class="n">AdaClient</span>
+
+<span class="nd">@click</span><span class="o">.</span><span class="n">command</span><span class="p">()</span>
+<span class="nd">@click</span><span class="o">.</span><span class="n">argument</span><span class="p">(</span><span class="s2">&quot;message&quot;</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="nd">@click</span><span class="o">.</span><span class="n">option</span><span class="p">(</span><span class="s2">&quot;--api-url&quot;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="s2">&quot;http://localhost:8000&quot;</span><span class="p">)</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">main</span><span class="p">(</span><span class="n">message</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span><span class="p">,</span> <span class="n">api_url</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Ada CLI - Chat with Ada from your terminal.&quot;&quot;&quot;</span>
+    <span class="n">client</span> <span class="o">=</span> <span class="n">AdaClient</span><span class="p">(</span><span class="n">base_url</span><span class="o">=</span><span class="n">api_url</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">message</span><span class="p">:</span>
+        <span class="c1"># One-shot mode</span>
+        <span class="n">asyncio</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">oneshot_mode</span><span class="p">(</span><span class="n">client</span><span class="p">,</span> <span class="n">message</span><span class="p">))</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="c1"># Interactive REPL</span>
+        <span class="n">asyncio</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">interactive_mode</span><span class="p">(</span><span class="n">client</span><span class="p">))</span>
+</pre></div>
+</div>
+</section>
+</section>
+</section>
+<section id="example-matrix-bridge-adapter">
+<h2><a class="toc-backref" href="#id13" role="doc-backlink">Example: Matrix Bridge Adapter</a><a class="headerlink" href="#example-matrix-bridge-adapter" title="Link to this heading"></a></h2>
+<p>The Matrix bridge demonstrates a more complex adapter that:</p>
+<ul class="simple">
+<li><p>Maintains per-room conversation context</p></li>
+<li><p>Handles asynchronous events (messages, invites, reactions)</p></li>
+<li><p>Uses non-streaming API (collects full response before sending)</p></li>
+<li><p>Implements privacy controls</p></li>
+</ul>
+<p><strong>Key differences from CLI:</strong></p>
+<ul class="simple">
+<li><p><strong>Event-driven</strong> - Matrix sends events, adapter reacts</p></li>
+<li><p><strong>Stateful</strong> - Tracks conversation context per room</p></li>
+<li><p><strong>Non-streaming</strong> - Collects full response before replying (uses <code class="docutils literal notranslate"><span class="pre">chat()</span></code> not <code class="docutils literal notranslate"><span class="pre">chat_stream()</span></code>)</p></li>
+<li><p><strong>Bot identity</strong> - Clear transparency about being AI</p></li>
+</ul>
+<p>See <code class="docutils literal notranslate"><span class="pre">matrix-bridge/</span></code> and <code class="docutils literal notranslate"><span class="pre">docs/matrix_integration.rst</span></code> for details.</p>
+</section>
+<section id="example-mcp-server-adapter">
+<h2><a class="toc-backref" href="#id14" role="doc-backlink">Example: MCP Server Adapter</a><a class="headerlink" href="#example-mcp-server-adapter" title="Link to this heading"></a></h2>
+<p>The MCP server demonstrates IDE integration:</p>
+<ul class="simple">
+<li><p><strong>stdio protocol</strong> - Communicates via JSON-RPC over stdin/stdout</p></li>
+<li><p><strong>Tool pattern</strong> - Exposes Ada as tools (<code class="docutils literal notranslate"><span class="pre">ada_chat</span></code>, <code class="docutils literal notranslate"><span class="pre">ada_search_memory</span></code>, etc.)</p></li>
+<li><p><strong>Resource pattern</strong> - Exposes documentation as MCP resources</p></li>
+<li><p><strong>Synchronous to async</strong> - Bridges sync MCP calls to async HTTP client</p></li>
+</ul>
+<p>See <code class="docutils literal notranslate"><span class="pre">ada-mcp/</span></code> for implementation details.</p>
+</section>
+<section id="building-your-adapter">
+<h2><a class="toc-backref" href="#id15" role="doc-backlink">Building Your Adapter</a><a class="headerlink" href="#building-your-adapter" title="Link to this heading"></a></h2>
+<section id="step-1-choose-your-pattern">
+<h3><a class="toc-backref" href="#id16" role="doc-backlink">Step 1: Choose Your Pattern</a><a class="headerlink" href="#step-1-choose-your-pattern" title="Link to this heading"></a></h3>
+<p><strong>Streaming vs Non-Streaming:</strong></p>
+<ul class="simple">
+<li><p><strong>Streaming</strong> (<code class="docutils literal notranslate"><span class="pre">chat_stream()</span></code>): Best for interactive UIs (CLI, web browser)</p></li>
+<li><p><strong>Non-streaming</strong> (<code class="docutils literal notranslate"><span class="pre">chat()</span></code>): Best for chat apps (Matrix, Discord) and tools (MCP)</p></li>
+</ul>
+<p><strong>Stateful vs Stateless:</strong></p>
+<ul class="simple">
+<li><p><strong>Stateful</strong>: Adapter manages conversation context (Matrix bridge, web UI)</p></li>
+<li><p><strong>Stateless</strong>: Brain manages context via <code class="docutils literal notranslate"><span class="pre">conversation_id</span></code> (CLI, MCP)</p></li>
+</ul>
+</section>
+<section id="step-2-copy-the-reference-implementation">
+<h3><a class="toc-backref" href="#id17" role="doc-backlink">Step 2: Copy the Reference Implementation</a><a class="headerlink" href="#step-2-copy-the-reference-implementation" title="Link to this heading"></a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Start with CLI adapter structure</span>
+cp<span class="w"> </span>-r<span class="w"> </span>adapters/cli/<span class="w"> </span>adapters/your-adapter/
+<span class="nb">cd</span><span class="w"> </span>adapters/your-adapter/
+
+<span class="c1"># Rename the module</span>
+mv<span class="w"> </span>ada_cli<span class="w"> </span>your_adapter_name
+
+<span class="c1"># Update pyproject.toml with your adapter name/description</span>
+</pre></div>
+</div>
+</section>
+<section id="step-3-implement-protocol-translation">
+<h3><a class="toc-backref" href="#id18" role="doc-backlink">Step 3: Implement Protocol Translation</a><a class="headerlink" href="#step-3-implement-protocol-translation" title="Link to this heading"></a></h3>
+<p>Keep the standard HTTP client (<code class="docutils literal notranslate"><span class="pre">client.py</span></code>), replace the UI layer:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># your_adapter_name/interface.py</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.client</span><span class="w"> </span><span class="kn">import</span> <span class="n">AdaClient</span><span class="p">,</span> <span class="n">AdaBrainConnectionError</span>
+
+<span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">your_interface_main</span><span class="p">():</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Your adapter&#39;s main loop/entry point.&quot;&quot;&quot;</span>
+    <span class="n">client</span> <span class="o">=</span> <span class="n">AdaClient</span><span class="p">(</span><span class="n">base_url</span><span class="o">=</span><span class="s2">&quot;http://localhost:8000&quot;</span><span class="p">)</span>
+
+    <span class="c1"># Check health</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">status</span> <span class="o">=</span> <span class="k">await</span> <span class="n">client</span><span class="o">.</span><span class="n">health</span><span class="p">()</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">status</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;ok&quot;</span><span class="p">):</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Warning: Ada Brain not fully ready&quot;</span><span class="p">)</span>
+    <span class="k">except</span> <span class="n">AdaBrainConnectionError</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Error: Cannot connect to Ada Brain&quot;</span><span class="p">)</span>
+        <span class="k">return</span>
+
+    <span class="c1"># Your protocol-specific logic here</span>
+    <span class="c1"># - Listen for messages from your interface</span>
+    <span class="c1"># - Call client.chat_stream() or client.chat()</span>
+    <span class="c1"># - Format and send responses back to interface</span>
+</pre></div>
+</div>
+</section>
+<section id="step-4-handle-errors-gracefully">
+<h3><a class="toc-backref" href="#id19" role="doc-backlink">Step 4: Handle Errors Gracefully</a><a class="headerlink" href="#step-4-handle-errors-gracefully" title="Link to this heading"></a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">.client</span><span class="w"> </span><span class="kn">import</span> <span class="n">AdaBrainConnectionError</span><span class="p">,</span> <span class="n">AdaBrainResponseError</span>
+
+<span class="k">try</span><span class="p">:</span>
+    <span class="k">async</span> <span class="k">for</span> <span class="n">chunk</span> <span class="ow">in</span> <span class="n">client</span><span class="o">.</span><span class="n">chat_stream</span><span class="p">(</span><span class="n">message</span><span class="p">):</span>
+        <span class="c1"># Display chunk in your interface</span>
+        <span class="k">pass</span>
+<span class="k">except</span> <span class="n">AdaBrainConnectionError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+    <span class="c1"># Network/connection failure - show user-friendly error</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Cannot reach Ada: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="k">except</span> <span class="n">AdaBrainResponseError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+    <span class="c1"># API returned error - show details</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Ada error: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+    <span class="c1"># Unexpected error - this is a bug!</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Internal error (please report): </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="k">raise</span>
+</pre></div>
+</div>
+</section>
+<section id="step-5-test-integration">
+<h3><a class="toc-backref" href="#id20" role="doc-backlink">Step 5: Test Integration</a><a class="headerlink" href="#step-5-test-integration" title="Link to this heading"></a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Ensure Ada Brain is running</span>
+docker<span class="w"> </span>compose<span class="w"> </span>up<span class="w"> </span>-d<span class="w"> </span>brain
+
+<span class="c1"># Test health check</span>
+curl<span class="w"> </span>http://localhost:8000/v1/healthz
+
+<span class="c1"># Test your adapter</span>
+<span class="c1"># (depends on your interface)</span>
+</pre></div>
+</div>
+</section>
+<section id="step-6-document-usage">
+<h3><a class="toc-backref" href="#id21" role="doc-backlink">Step 6: Document Usage</a><a class="headerlink" href="#step-6-document-usage" title="Link to this heading"></a></h3>
+<p>Add a <code class="docutils literal notranslate"><span class="pre">README.md</span></code> to your adapter directory with:</p>
+<ul class="simple">
+<li><p>Installation instructions</p></li>
+<li><p>Configuration options</p></li>
+<li><p>Usage examples</p></li>
+<li><p>Troubleshooting tips</p></li>
+</ul>
+</section>
+</section>
+<section id="best-practices">
+<h2><a class="toc-backref" href="#id22" role="doc-backlink">Best Practices</a><a class="headerlink" href="#best-practices" title="Link to this heading"></a></h2>
+<section id="do">
+<h3><a class="toc-backref" href="#id23" role="doc-backlink">DO ✅</a><a class="headerlink" href="#do" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p><strong>Keep it simple</strong> - Adapters are thin translation layers</p></li>
+<li><p><strong>Use the standard client</strong> - Don’t reimplement HTTP logic</p></li>
+<li><p><strong>Handle exceptions</strong> - Network failures are normal</p></li>
+<li><p><strong>Add type hints</strong> - Makes code self-documenting</p></li>
+<li><p><strong>Test health checks</strong> - Ensure Ada is ready before use</p></li>
+<li><p><strong>Document clearly</strong> - Help others use your adapter</p></li>
+</ul>
+</section>
+<section id="don-t">
+<h3><a class="toc-backref" href="#id24" role="doc-backlink">DON’T ❌</a><a class="headerlink" href="#don-t" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p><strong>Add business logic</strong> - That belongs in the brain</p></li>
+<li><p><strong>Implement RAG/LLM</strong> - The brain does this</p></li>
+<li><p><strong>Manage specialists</strong> - The brain handles plugins</p></li>
+<li><p><strong>Parse responses</strong> - Trust the SSE format</p></li>
+<li><p><strong>Swallow exceptions</strong> - Let bugs surface during development</p></li>
+<li><p><strong>Skip health checks</strong> - Always verify connectivity</p></li>
+</ul>
+</section>
+</section>
+<section id="deployment-patterns">
+<h2><a class="toc-backref" href="#id25" role="doc-backlink">Deployment Patterns</a><a class="headerlink" href="#deployment-patterns" title="Link to this heading"></a></h2>
+<section id="standalone-process">
+<h3><a class="toc-backref" href="#id26" role="doc-backlink">Standalone Process</a><a class="headerlink" href="#standalone-process" title="Link to this heading"></a></h3>
+<p><strong>Good for:</strong> Chat bots (Matrix, Discord), background services</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Run as separate service</span>
+docker<span class="w"> </span>compose<span class="w"> </span>up<span class="w"> </span>-d<span class="w"> </span>brain<span class="w"> </span>your-adapter
+</pre></div>
+</div>
+</section>
+<section id="embedded-in-application">
+<h3><a class="toc-backref" href="#id27" role="doc-backlink">Embedded in Application</a><a class="headerlink" href="#embedded-in-application" title="Link to this heading"></a></h3>
+<p><strong>Good for:</strong> Web applications, desktop apps</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">your_adapter.client</span><span class="w"> </span><span class="kn">import</span> <span class="n">AdaClient</span>
+
+<span class="c1"># Use within your application</span>
+<span class="n">client</span> <span class="o">=</span> <span class="n">AdaClient</span><span class="p">()</span>
+<span class="n">response</span> <span class="o">=</span> <span class="k">await</span> <span class="n">client</span><span class="o">.</span><span class="n">chat</span><span class="p">(</span><span class="s2">&quot;Hello!&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="on-demand-tool">
+<h3><a class="toc-backref" href="#id28" role="doc-backlink">On-Demand Tool</a><a class="headerlink" href="#on-demand-tool" title="Link to this heading"></a></h3>
+<p><strong>Good for:</strong> CLI tools, scripts, IDE extensions</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># CLI tool</span>
+ada-cli<span class="w"> </span><span class="s2">&quot;What&#39;s the weather?&quot;</span>
+
+<span class="c1"># IDE extension (MCP)</span>
+<span class="c1"># Invoked by IDE when user asks question</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="troubleshooting">
+<h2><a class="toc-backref" href="#id29" role="doc-backlink">Troubleshooting</a><a class="headerlink" href="#troubleshooting" title="Link to this heading"></a></h2>
+<section id="cannot-connect-to-ada-brain">
+<h3><a class="toc-backref" href="#id30" role="doc-backlink">“Cannot connect to Ada Brain”</a><a class="headerlink" href="#cannot-connect-to-ada-brain" title="Link to this heading"></a></h3>
+<p><strong>Symptom:</strong> <code class="docutils literal notranslate"><span class="pre">AdaBrainConnectionError</span></code></p>
+<p><strong>Solutions:</strong></p>
+<ol class="arabic simple">
+<li><p>Check if brain is running: <code class="docutils literal notranslate"><span class="pre">docker</span> <span class="pre">compose</span> <span class="pre">ps</span> <span class="pre">brain</span></code></p></li>
+<li><p>Verify URL: <code class="docutils literal notranslate"><span class="pre">curl</span> <span class="pre">http://localhost:8000/v1/healthz</span></code></p></li>
+<li><p>Check network: <code class="docutils literal notranslate"><span class="pre">docker</span> <span class="pre">compose</span> <span class="pre">logs</span> <span class="pre">brain</span></code></p></li>
+</ol>
+</section>
+<section id="api-returned-error">
+<h3><a class="toc-backref" href="#id31" role="doc-backlink">“API returned error”</a><a class="headerlink" href="#api-returned-error" title="Link to this heading"></a></h3>
+<p><strong>Symptom:</strong> <code class="docutils literal notranslate"><span class="pre">AdaBrainResponseError</span></code> with HTTP status</p>
+<p><strong>Solutions:</strong></p>
+<ol class="arabic simple">
+<li><p>Check brain logs: <code class="docutils literal notranslate"><span class="pre">docker</span> <span class="pre">compose</span> <span class="pre">logs</span> <span class="pre">brain</span></code></p></li>
+<li><p>Verify request format (JSON schema)</p></li>
+<li><p>Ensure dependencies ready (Ollama, ChromaDB)</p></li>
+</ol>
+</section>
+<section id="response-format-unexpected">
+<h3><a class="toc-backref" href="#id32" role="doc-backlink">“Response format unexpected”</a><a class="headerlink" href="#response-format-unexpected" title="Link to this heading"></a></h3>
+<p><strong>Symptom:</strong> Parsing errors, unexpected data</p>
+<p><strong>Solutions:</strong></p>
+<ol class="arabic simple">
+<li><p>Check SSE format: Lines start with <a href="#id1"><span class="problematic" id="id2">``</span></a>data: ``</p></li>
+<li><p>Handle <code class="docutils literal notranslate"><span class="pre">[DONE]</span></code> marker (end of stream)</p></li>
+<li><p>Verify you’re using <code class="docutils literal notranslate"><span class="pre">Accept:</span> <span class="pre">text/event-stream</span></code> header</p></li>
+</ol>
+</section>
+</section>
+<section id="next-steps">
+<h2><a class="toc-backref" href="#id33" role="doc-backlink">Next Steps</a><a class="headerlink" href="#next-steps" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>See <code class="docutils literal notranslate"><span class="pre">docs/adapters.rst</span></code> for adapter overview</p></li>
+<li><p>Check <code class="docutils literal notranslate"><span class="pre">.ai/ADAPTER_STANDARDIZATION.md</span></code> for implementation details</p></li>
+<li><p>Review existing adapters in <code class="docutils literal notranslate"><span class="pre">adapters/</span></code>, <code class="docutils literal notranslate"><span class="pre">matrix-bridge/</span></code>, <code class="docutils literal notranslate"><span class="pre">ada-mcp/</span></code></p></li>
+<li><p>Read <code class="docutils literal notranslate"><span class="pre">docs/api_reference.rst</span></code> for complete API documentation</p></li>
+</ul>
+<p>Happy building! 🚀</p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="adapters.html" class="btn btn-neutral float-left" title="Ada Adapters" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="matrix_integration.html" class="btn btn-neutral float-right" title="Matrix Integration" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p></p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

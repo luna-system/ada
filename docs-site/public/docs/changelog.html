@@ -1,0 +1,487 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Changelog &mdash; Ada Brain API 0.1.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="_static/graphviz.css?v=4ae1632d" />
+      <link rel="stylesheet" type="text/css" href="_static/custom.css?v=df0a1c42" />
+
+  
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=01f34227"></script>
+      <script src="_static/doctools.js?v=9bcbadda"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Ada Principles" href="project_philosophy.html" />
+    <link rel="prev" title="Version Management" href="versioning.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            Ada Brain API
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="zero_to_ada.html">Zero to Ada</a></li>
+<li class="toctree-l1"><a class="reference internal" href="getting_started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="local_mode.html">Running Ada Locally (No Docker Required!)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="nix.html">Nix &amp; Flakes Support</a></li>
+<li class="toctree-l1"><a class="reference internal" href="getting_started_scratch.html">Getting Started from Scratch</a></li>
+<li class="toctree-l1"><a class="reference internal" href="configuration.html">Configuration Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="examples.html">Examples</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Hardware Setup</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="hardware.html">Hardware &amp; GPU Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="sbc.html">Ada on Single-Board Computers (SBCs)</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Core Architecture</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="architecture.html">Architecture</a></li>
+<li class="toctree-l1"><a class="reference internal" href="data_model.html">Data Model Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="streaming.html">Streaming</a></li>
+<li class="toctree-l1"><a class="reference internal" href="memory.html">Memory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="token_monitoring.html">Token Budget Monitoring</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Interfaces &amp; Adapters</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="adapters.html">Ada Adapters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="adapter_development.html">Adapter Development Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="matrix_integration.html">Matrix Integration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api_usage.html">API Usage Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api_reference.html">API Reference</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Specialist System</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="specialists.html">Specialist System</a></li>
+<li class="toctree-l1"><a class="reference internal" href="build_specialist.html">Build Your First Specialist</a></li>
+<li class="toctree-l1"><a class="reference internal" href="bidirectional.html">Bidirectional Specialist System</a></li>
+<li class="toctree-l1"><a class="reference internal" href="specialist_rag.html">Specialist RAG Documentation System</a></li>
+<li class="toctree-l1"><a class="reference internal" href="web_search.html">Web Search Specialist</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Operations</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="build_system.html">Build System</a></li>
+<li class="toctree-l1"><a class="reference internal" href="buildx_adoption_notes.html">BuildX Adoption Data &amp; Notes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="disk_management.html">Disk Management</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Development</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="development.html">Development Tools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="testing.html">Testing Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="versioning.html">Version Management</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Changelog</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#unreleased">[Unreleased]</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#in-progress">In Progress</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#id1">[2.1.0] - 2025-12-17</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#performance">⚡ Performance</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#features">✨ Features</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#removed-breaking-changes">🗑️ Removed (Breaking Changes)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#fixes">🔧 Fixes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#documentation">📚 Documentation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#testing">🧪 Testing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#dependencies">📦 Dependencies</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#impact">Impact</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#id2">[1.8.0] - 2025-12-16</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id3">✨ Features</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id4">📚 Documentation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#maintenance">🔧 Maintenance</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id5">Impact</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#id6">[1.7.0] - 2025-12-16</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id7">✨ Features</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id8">📚 Documentation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id9">🔧 Maintenance</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id10">Impact</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#id11">[1.6.0] - 2025-12-15</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id12">✨ Features</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#bug-fixes">🐛 Bug Fixes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id13">📚 Documentation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id14">🔧 Maintenance</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#id15">[1.5.0] - 2025-12-10</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id16">✨ Features</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id17">📚 Documentation</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#earlier-versions">Earlier Versions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#version-format">Version Format</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Philosophy &amp; Design</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="project_philosophy.html">Ada Principles</a></li>
+<li class="toctree-l1"><a class="reference internal" href="documentation_philosophy.html">Documentation Philosophy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ai_documentation.html">AI-Readable Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="empathetic_documentation.html">Empathetic Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="xenofeminism.html">Xenofeminism and Ada</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Ada Brain API</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Changelog</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/changelog.md.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="changelog">
+<h1>Changelog<a class="headerlink" href="#changelog" title="Link to this heading"></a></h1>
+<p>All notable changes to Ada will be documented in this file.</p>
+<p>The format is based on <a class="reference external" href="https://keepachangelog.com/en/1.0.0/">Keep a Changelog</a>,
+and this project adheres to <a class="reference external" href="https://semver.org/spec/v2.0.0.html">Semantic Versioning</a>.</p>
+<section id="unreleased">
+<h2>[Unreleased]<a class="headerlink" href="#unreleased" title="Link to this heading"></a></h2>
+<section id="in-progress">
+<h3>In Progress<a class="headerlink" href="#in-progress" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p>Changelog automation with Conventional Commits</p></li>
+</ul>
+</section>
+</section>
+<hr class="docutils" />
+<section id="id1">
+<h2>[2.1.0] - 2025-12-17<a class="headerlink" href="#id1" title="Link to this heading"></a></h2>
+<section id="performance">
+<h3>⚡ Performance<a class="headerlink" href="#performance" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p><strong>Multi-timescale context caching system</strong> - Dramatically reduces redundant RAG queries</p>
+<ul>
+<li><p>Personas cached for 24 hours (identity rarely changes)</p></li>
+<li><p>FAQs cached for 24 hours (knowledge base updates infrequently)</p></li>
+<li><p>Memories cached for 5 minutes (balance freshness vs performance)</p></li>
+<li><p>Conversation turns cached for 1 hour (recent context preserved)</p></li>
+</ul>
+</li>
+<li><p>LRU eviction prevents unbounded memory growth</p></li>
+<li><p>Cache stats logged per request for observability</p></li>
+<li><p>Expected ~70% reduction in ChromaDB queries for repeated context</p></li>
+</ul>
+</section>
+<section id="features">
+<h3>✨ Features<a class="headerlink" href="#features" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p><strong>New modular prompt building architecture</strong></p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">PromptAssembler</span></code> - Clean orchestration with automatic caching</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">ContextRetriever</span></code> - Cache-aware RAG data retrieval</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">SectionBuilder</span></code> - Structured section formatting</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">MultiTimescaleCache</span></code> - Production-ready caching implementation</p></li>
+</ul>
+</li>
+<li><p>Cache integration transparent to specialists and adapters</p></li>
+<li><p>Per-request cache statistics in logs</p></li>
+</ul>
+</section>
+<section id="removed-breaking-changes">
+<h3>🗑️ Removed (Breaking Changes)<a class="headerlink" href="#removed-breaking-changes" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p><strong>Deleted legacy <code class="docutils literal notranslate"><span class="pre">brain/_legacy_prompt_builder.py</span></code></strong> (266 lines)</p></li>
+<li><p><strong>Removed backward-compatible <code class="docutils literal notranslate"><span class="pre">build_prompt()</span></code> shim</strong></p></li>
+<li><p>New code must use <code class="docutils literal notranslate"><span class="pre">PromptAssembler</span></code> API directly</p></li>
+<li><p>Technical debt eliminated: -299 net lines across the codebase</p></li>
+</ul>
+</section>
+<section id="fixes">
+<h3>🔧 Fixes<a class="headerlink" href="#fixes" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p><strong>Corrected default port from 7000 to 8000</strong> in ada-client and ada-cli</p>
+<ul>
+<li><p>Brain runs internally on 7000, exposed via Docker on 8000</p></li>
+<li><p>Clients now default to correct external port</p></li>
+</ul>
+</li>
+<li><p>Updated CLI Python requirement to &gt;=3.13 for consistency</p></li>
+</ul>
+</section>
+<section id="documentation">
+<h3>📚 Documentation<a class="headerlink" href="#documentation" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p>Updated architecture.rst with caching system overview</p></li>
+<li><p>Refreshed API usage examples for new PromptAssembler</p></li>
+<li><p>Updated specialist RAG documentation</p></li>
+<li><p>Token monitoring examples modernized</p></li>
+<li><p>AI documentation (codebase-map.json) fully updated</p></li>
+<li><p>Marked TODO-CACHE-INTEGRATION.md as complete</p></li>
+</ul>
+</section>
+<section id="testing">
+<h3>🧪 Testing<a class="headerlink" href="#testing" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p>23 new comprehensive cache tests (15 basic + 8 integration)</p></li>
+<li><p>Tests cover TTL expiration, LRU eviction, cache stats, and retriever integration</p></li>
+<li><p>All tests passing, cache validated in production</p></li>
+</ul>
+</section>
+<section id="dependencies">
+<h3>📦 Dependencies<a class="headerlink" href="#dependencies" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p>No new external dependencies (pure Python implementation)</p></li>
+</ul>
+</section>
+<section id="impact">
+<h3>Impact<a class="headerlink" href="#impact" title="Link to this heading"></a></h3>
+<p><strong>Massive performance win:</strong> Caching reduces latency on repeated queries from seconds to milliseconds. Cleaner codebase with 300 fewer lines of legacy code. Modern modular architecture ready for future optimization phases (FAQ caching, memory caching expansion).</p>
+<p><strong>Migration Guide:</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Old (removed):</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">brain.prompt_builder</span><span class="w"> </span><span class="kn">import</span> <span class="n">build_prompt</span>
+<span class="n">prompt</span><span class="p">,</span> <span class="n">context</span> <span class="o">=</span> <span class="k">await</span> <span class="n">build_prompt</span><span class="p">(</span><span class="o">...</span><span class="p">)</span>
+
+<span class="c1"># New (required):</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">brain.prompt_builder</span><span class="w"> </span><span class="kn">import</span> <span class="n">PromptAssembler</span>
+<span class="n">assembler</span> <span class="o">=</span> <span class="n">PromptAssembler</span><span class="p">()</span>
+<span class="n">prompt</span> <span class="o">=</span> <span class="n">assembler</span><span class="o">.</span><span class="n">build_prompt</span><span class="p">(</span>
+    <span class="n">user_message</span><span class="o">=</span><span class="s2">&quot;...&quot;</span><span class="p">,</span>
+    <span class="n">conversation_id</span><span class="o">=</span><span class="s2">&quot;...&quot;</span><span class="p">,</span>
+    <span class="n">notices</span><span class="o">=</span><span class="n">get_active_notices</span><span class="p">()</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</section>
+</section>
+<hr class="docutils" />
+<section id="id2">
+<h2>[1.8.0] - 2025-12-16<a class="headerlink" href="#id2" title="Link to this heading"></a></h2>
+<section id="id3">
+<h3>✨ Features<a class="headerlink" href="#id3" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p>Complete Nix flake with development shell, package build, and NixOS module</p></li>
+<li><p>Python version fallback (python313 → python312 → python3) for compatibility</p></li>
+<li><p>Automatic locale fixes (LC_ALL=C.UTF-8) in Nix environment</p></li>
+<li><p>direnv integration for automatic environment activation</p></li>
+<li><p>Validation script (scripts/test_nix_setup.sh) with 10-point health check</p></li>
+<li><p>ada doctor command now detects Python version mismatches and suggests Nix</p></li>
+</ul>
+</section>
+<section id="id4">
+<h3>📚 Documentation<a class="headerlink" href="#id4" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p>New primary entry point: docs/zero_to_ada.rst with decision tree</p></li>
+<li><p>Comprehensive Nix guide: docs/nix.rst (537 lines)</p></li>
+<li><p>Real-world troubleshooting: docs/nix_troubleshooting.md</p></li>
+<li><p>Updated README.md to prioritize Nix for users without Python 3.13</p></li>
+</ul>
+</section>
+<section id="maintenance">
+<h3>🔧 Maintenance<a class="headerlink" href="#maintenance" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p>Version management automation (scripts/version.sh)</p></li>
+<li><p>Updated .gitignore for Nix artifacts</p></li>
+</ul>
+</section>
+<section id="id5">
+<h3>Impact<a class="headerlink" href="#id5" title="Link to this heading"></a></h3>
+<p>Solves Python 3.13 availability on Ubuntu/Debian. Makes Ada accessible to users
+on older distros without requiring Docker or building Python from source.</p>
+</section>
+</section>
+<hr class="docutils" />
+<section id="id6">
+<h2>[1.7.0] - 2025-12-16<a class="headerlink" href="#id6" title="Link to this heading"></a></h2>
+<section id="id7">
+<h3>✨ Features<a class="headerlink" href="#id7" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p>Kubernetes deployment manifests (k8s/deployment.yaml, service.yaml, configmap.yaml)</p></li>
+<li><p>Helm chart for one-command deployment (helm/)</p></li>
+<li><p>Nomad job specification for HashiCorp Nomad (nomad/ada.nomad)</p></li>
+<li><p>Multi-cloud deployment support (AWS EKS, GCP GKE, Azure AKS, local k3s/k0s)</p></li>
+</ul>
+</section>
+<section id="id8">
+<h3>📚 Documentation<a class="headerlink" href="#id8" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p>Comprehensive orchestration guides (docs/k8s.rst, docs/helm.rst, docs/nomad.rst)</p></li>
+<li><p>Hardware requirements and scaling guidance</p></li>
+<li><p>Multi-cloud deployment strategies</p></li>
+<li><p>Production deployment checklist</p></li>
+</ul>
+</section>
+<section id="id9">
+<h3>🔧 Maintenance<a class="headerlink" href="#id9" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p>Updated README.md with orchestration quick links</p></li>
+<li><p>Fixed markdown formatting in documentation</p></li>
+</ul>
+</section>
+<section id="id10">
+<h3>Impact<a class="headerlink" href="#id10" title="Link to this heading"></a></h3>
+<p>Enterprise-ready deployment options. Ada can now run in production Kubernetes
+clusters, scale horizontally, and integrate with cloud infrastructure.</p>
+</section>
+</section>
+<hr class="docutils" />
+<section id="id11">
+<h2>[1.6.0] - 2025-12-15<a class="headerlink" href="#id11" title="Link to this heading"></a></h2>
+<section id="id12">
+<h3>✨ Features<a class="headerlink" href="#id12" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p>Matrix bridge for chat integration (matrix-bridge/)</p></li>
+<li><p>Multiple interface adapters (CLI, Web, Matrix, MCP)</p></li>
+<li><p>Bidirectional specialists (LLM can invoke tools mid-response)</p></li>
+<li><p>Wikipedia and Fandom wiki lookup specialist</p></li>
+<li><p>Documentation specialist (Ada can read her own docs)</p></li>
+<li><p>Web search specialist with DuckDuckGo integration</p></li>
+</ul>
+</section>
+<section id="bug-fixes">
+<h3>🐛 Bug Fixes<a class="headerlink" href="#bug-fixes" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p>Fixed OCR specialist activation</p></li>
+<li><p>Improved memory consolidation reliability</p></li>
+<li><p>Fixed streaming response handling</p></li>
+</ul>
+</section>
+<section id="id13">
+<h3>📚 Documentation<a class="headerlink" href="#id13" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p>Architecture documentation overhaul</p></li>
+<li><p>Adapter pattern documentation</p></li>
+<li><p>Specialist system documentation</p></li>
+<li><p>Matrix integration guide</p></li>
+</ul>
+</section>
+<section id="id14">
+<h3>🔧 Maintenance<a class="headerlink" href="#id14" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p>Improved error handling in specialists</p></li>
+<li><p>Better logging throughout system</p></li>
+<li><p>Code cleanup and refactoring</p></li>
+</ul>
+</section>
+</section>
+<hr class="docutils" />
+<section id="id15">
+<h2>[1.5.0] - 2025-12-10<a class="headerlink" href="#id15" title="Link to this heading"></a></h2>
+<section id="id16">
+<h3>✨ Features<a class="headerlink" href="#id16" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p>MCP (Model Context Protocol) server implementation</p></li>
+<li><p>Ada CLI tool (ada-cli) for terminal interaction</p></li>
+<li><p>Streaming chat responses via Server-Sent Events</p></li>
+<li><p>RAG-based memory system with ChromaDB</p></li>
+</ul>
+</section>
+<section id="id17">
+<h3>📚 Documentation<a class="headerlink" href="#id17" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p>Getting started guide</p></li>
+<li><p>API documentation</p></li>
+<li><p>Specialist development guide</p></li>
+</ul>
+</section>
+</section>
+<hr class="docutils" />
+<section id="earlier-versions">
+<h2>Earlier Versions<a class="headerlink" href="#earlier-versions" title="Link to this heading"></a></h2>
+<p>See git history for changes before v1.5.0.</p>
+</section>
+<hr class="docutils" />
+<section id="version-format">
+<h2>Version Format<a class="headerlink" href="#version-format" title="Link to this heading"></a></h2>
+<p><strong>Major.Minor.Patch</strong> (Semantic Versioning)</p>
+<ul class="simple">
+<li><p><strong>Major</strong>: Breaking changes, architectural shifts</p></li>
+<li><p><strong>Minor</strong>: New features, backwards-compatible changes</p></li>
+<li><p><strong>Patch</strong>: Bug fixes, documentation updates</p></li>
+</ul>
+<p><strong>Commit Types</strong> (Conventional Commits):</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">feat</span></code>: New feature → Minor version bump</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">fix</span></code>: Bug fix → Patch version bump</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">docs</span></code>: Documentation → Patch version bump</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">perf</span></code>: Performance improvement → Minor version bump</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">refactor</span></code>: Code refactoring → Patch version bump</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">test</span></code>: Test changes → Patch version bump</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">chore</span></code>: Maintenance → Patch version bump</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">BREAKING</span> <span class="pre">CHANGE</span></code>: in commit body → Major version bump</p></li>
+</ul>
+<p><strong>Example</strong>:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>feat<span class="o">(</span>specialists<span class="o">)</span>:<span class="w"> </span>add<span class="w"> </span>Wikipedia<span class="w"> </span>search
+fix<span class="o">(</span>matrix<span class="o">)</span>:<span class="w"> </span>handle<span class="w"> </span>rate<span class="w"> </span>limiting<span class="w"> </span>errors
+docs:<span class="w"> </span>update<span class="w"> </span>changelog<span class="w"> </span>automation<span class="w"> </span>guide
+</pre></div>
+</div>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="versioning.html" class="btn btn-neutral float-left" title="Version Management" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="project_philosophy.html" class="btn btn-neutral float-right" title="Ada Principles" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p></p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

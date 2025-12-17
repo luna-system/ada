@@ -1,0 +1,755 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Version Management &mdash; Ada Brain API 0.1.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="_static/graphviz.css?v=4ae1632d" />
+      <link rel="stylesheet" type="text/css" href="_static/custom.css?v=df0a1c42" />
+
+  
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=01f34227"></script>
+      <script src="_static/doctools.js?v=9bcbadda"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Changelog" href="changelog.html" />
+    <link rel="prev" title="Testing Guide" href="testing.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            Ada Brain API
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="zero_to_ada.html">Zero to Ada</a></li>
+<li class="toctree-l1"><a class="reference internal" href="getting_started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="local_mode.html">Running Ada Locally (No Docker Required!)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="nix.html">Nix &amp; Flakes Support</a></li>
+<li class="toctree-l1"><a class="reference internal" href="getting_started_scratch.html">Getting Started from Scratch</a></li>
+<li class="toctree-l1"><a class="reference internal" href="configuration.html">Configuration Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="examples.html">Examples</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Hardware Setup</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="hardware.html">Hardware &amp; GPU Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="sbc.html">Ada on Single-Board Computers (SBCs)</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Core Architecture</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="architecture.html">Architecture</a></li>
+<li class="toctree-l1"><a class="reference internal" href="data_model.html">Data Model Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="streaming.html">Streaming</a></li>
+<li class="toctree-l1"><a class="reference internal" href="memory.html">Memory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="token_monitoring.html">Token Budget Monitoring</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Interfaces &amp; Adapters</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="adapters.html">Ada Adapters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="adapter_development.html">Adapter Development Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="matrix_integration.html">Matrix Integration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api_usage.html">API Usage Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api_reference.html">API Reference</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Specialist System</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="specialists.html">Specialist System</a></li>
+<li class="toctree-l1"><a class="reference internal" href="build_specialist.html">Build Your First Specialist</a></li>
+<li class="toctree-l1"><a class="reference internal" href="bidirectional.html">Bidirectional Specialist System</a></li>
+<li class="toctree-l1"><a class="reference internal" href="specialist_rag.html">Specialist RAG Documentation System</a></li>
+<li class="toctree-l1"><a class="reference internal" href="web_search.html">Web Search Specialist</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Operations</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="build_system.html">Build System</a></li>
+<li class="toctree-l1"><a class="reference internal" href="buildx_adoption_notes.html">BuildX Adoption Data &amp; Notes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="disk_management.html">Disk Management</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Development</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="development.html">Development Tools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="testing.html">Testing Guide</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Version Management</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#overview">Overview</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#version-format">Version Format</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#conventional-commits">Conventional Commits</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#examples">Examples</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#version-management-tools">Version Management Tools</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#version-sh">version.sh</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#changelog-sh">changelog.sh</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#validate-commit-sh">validate-commit.sh</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#workflow">Workflow</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#complete-release-workflow">Complete Release Workflow</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#quick-release-automated">Quick Release (Automated)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#git-hook-setup">Git Hook Setup</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#best-practices">Best Practices</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#commit-messages">Commit Messages</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#version-bumps">Version Bumps</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#scopes">Scopes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#breaking-changes">Breaking Changes</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#automation">Automation</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#ci-cd-integration">CI/CD Integration</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pre-commit-hook">Pre-commit Hook</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#troubleshooting">Troubleshooting</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#no-tags-found">“No tags found”</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#wrong-version-suggested">Wrong version suggested</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#can-t-push-tags">Can’t push tags</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#want-to-change-last-tag">Want to change last tag</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#forgot-to-use-conventional-commits">Forgot to use conventional commits</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#reference">Reference</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#links">Links</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#ada-scripts">Ada Scripts</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#files">Files</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="changelog.html">Changelog</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Philosophy &amp; Design</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="project_philosophy.html">Ada Principles</a></li>
+<li class="toctree-l1"><a class="reference internal" href="documentation_philosophy.html">Documentation Philosophy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ai_documentation.html">AI-Readable Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="empathetic_documentation.html">Empathetic Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="xenofeminism.html">Xenofeminism and Ada</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Ada Brain API</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Version Management</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/versioning.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="version-management">
+<h1>Version Management<a class="headerlink" href="#version-management" title="Link to this heading"></a></h1>
+<p>Ada uses <strong>Semantic Versioning</strong> with <strong>Conventional Commits</strong> for automated changelog generation and version management.</p>
+<nav class="contents local" id="table-of-contents">
+<p class="topic-title">Table of Contents</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#overview" id="id3">Overview</a></p>
+<ul>
+<li><p><a class="reference internal" href="#version-format" id="id4">Version Format</a></p></li>
+<li><p><a class="reference internal" href="#conventional-commits" id="id5">Conventional Commits</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#version-management-tools" id="id6">Version Management Tools</a></p>
+<ul>
+<li><p><a class="reference internal" href="#version-sh" id="id7">version.sh</a></p></li>
+<li><p><a class="reference internal" href="#changelog-sh" id="id8">changelog.sh</a></p></li>
+<li><p><a class="reference internal" href="#validate-commit-sh" id="id9">validate-commit.sh</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#workflow" id="id10">Workflow</a></p>
+<ul>
+<li><p><a class="reference internal" href="#complete-release-workflow" id="id11">Complete Release Workflow</a></p></li>
+<li><p><a class="reference internal" href="#quick-release-automated" id="id12">Quick Release (Automated)</a></p></li>
+<li><p><a class="reference internal" href="#git-hook-setup" id="id13">Git Hook Setup</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#best-practices" id="id14">Best Practices</a></p>
+<ul>
+<li><p><a class="reference internal" href="#commit-messages" id="id15">Commit Messages</a></p></li>
+<li><p><a class="reference internal" href="#version-bumps" id="id16">Version Bumps</a></p></li>
+<li><p><a class="reference internal" href="#scopes" id="id17">Scopes</a></p></li>
+<li><p><a class="reference internal" href="#breaking-changes" id="id18">Breaking Changes</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#automation" id="id19">Automation</a></p>
+<ul>
+<li><p><a class="reference internal" href="#ci-cd-integration" id="id20">CI/CD Integration</a></p></li>
+<li><p><a class="reference internal" href="#pre-commit-hook" id="id21">Pre-commit Hook</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#troubleshooting" id="id22">Troubleshooting</a></p>
+<ul>
+<li><p><a class="reference internal" href="#no-tags-found" id="id23">“No tags found”</a></p></li>
+<li><p><a class="reference internal" href="#wrong-version-suggested" id="id24">Wrong version suggested</a></p></li>
+<li><p><a class="reference internal" href="#can-t-push-tags" id="id25">Can’t push tags</a></p></li>
+<li><p><a class="reference internal" href="#want-to-change-last-tag" id="id26">Want to change last tag</a></p></li>
+<li><p><a class="reference internal" href="#forgot-to-use-conventional-commits" id="id27">Forgot to use conventional commits</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#reference" id="id28">Reference</a></p>
+<ul>
+<li><p><a class="reference internal" href="#links" id="id29">Links</a></p></li>
+<li><p><a class="reference internal" href="#ada-scripts" id="id30">Ada Scripts</a></p></li>
+<li><p><a class="reference internal" href="#files" id="id31">Files</a></p></li>
+</ul>
+</li>
+</ul>
+</nav>
+<section id="overview">
+<h2><a class="toc-backref" href="#id3" role="doc-backlink">Overview</a><a class="headerlink" href="#overview" title="Link to this heading"></a></h2>
+<section id="version-format">
+<h3><a class="toc-backref" href="#id4" role="doc-backlink">Version Format</a><a class="headerlink" href="#version-format" title="Link to this heading"></a></h3>
+<p>Ada follows <a class="reference external" href="https://semver.org/">Semantic Versioning 2.0.0</a>:</p>
+<p><strong>MAJOR.MINOR.PATCH</strong></p>
+<ul class="simple">
+<li><p><strong>MAJOR</strong>: Breaking changes (API incompatibility)</p></li>
+<li><p><strong>MINOR</strong>: New features (backwards compatible)</p></li>
+<li><p><strong>PATCH</strong>: Bug fixes (backwards compatible)</p></li>
+</ul>
+<p>Examples: <code class="docutils literal notranslate"><span class="pre">1.8.0</span></code>, <code class="docutils literal notranslate"><span class="pre">2.0.1</span></code>, <code class="docutils literal notranslate"><span class="pre">1.9.12</span></code></p>
+</section>
+<section id="conventional-commits">
+<h3><a class="toc-backref" href="#id5" role="doc-backlink">Conventional Commits</a><a class="headerlink" href="#conventional-commits" title="Link to this heading"></a></h3>
+<p>Commit messages follow <a class="reference external" href="https://www.conventionalcommits.org/">Conventional Commits</a>:</p>
+<p><strong>Format</strong>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nb">type</span><span class="p">(</span><span class="n">scope</span><span class="p">):</span> <span class="n">subject</span>
+
+<span class="n">Optional</span> <span class="n">body</span> <span class="k">with</span> <span class="n">more</span> <span class="n">details</span><span class="o">.</span>
+
+<span class="n">Optional</span> <span class="n">footer</span> <span class="k">with</span> <span class="n">BREAKING</span> <span class="n">CHANGE</span><span class="p">:</span> <span class="n">description</span>
+</pre></div>
+</div>
+<p><strong>Types</strong>:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">feat</span></code>: New feature → MINOR bump</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">fix</span></code>: Bug fix → PATCH bump</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">docs</span></code>: Documentation → PATCH bump</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">style</span></code>: Code style (formatting) → PATCH bump</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">refactor</span></code>: Code refactoring → PATCH bump</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">perf</span></code>: Performance improvement → MINOR bump</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">test</span></code>: Test changes → PATCH bump</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">chore</span></code>: Maintenance → PATCH bump</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">ci</span></code>: CI/CD changes → PATCH bump</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">build</span></code>: Build system → PATCH bump</p></li>
+</ul>
+<p><strong>BREAKING CHANGE</strong> in commit body → MAJOR bump</p>
+<section id="examples">
+<h4>Examples<a class="headerlink" href="#examples" title="Link to this heading"></a></h4>
+<p>Good commit messages:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>feat: add Nix flake support
+fix(matrix): handle rate limiting errors
+docs: update getting started guide
+feat(specialists)!: change specialist API
+
+BREAKING CHANGE: SpecialistProtocol now requires async methods
+chore: bump version to v1.9.0
+</pre></div>
+</div>
+<p>Bad commit messages:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">updated</span> <span class="n">stuff</span>
+<span class="n">Fix</span> <span class="n">bug</span>
+<span class="n">WIP</span>
+<span class="n">asdf</span>
+</pre></div>
+</div>
+</section>
+</section>
+</section>
+<section id="version-management-tools">
+<h2><a class="toc-backref" href="#id6" role="doc-backlink">Version Management Tools</a><a class="headerlink" href="#version-management-tools" title="Link to this heading"></a></h2>
+<p>Ada provides three scripts for version management:</p>
+<section id="version-sh">
+<h3><a class="toc-backref" href="#id7" role="doc-backlink">version.sh</a><a class="headerlink" href="#version-sh" title="Link to this heading"></a></h3>
+<p>Main version management tool.</p>
+<p><strong>Commands</strong>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">./</span><span class="n">scripts</span><span class="o">/</span><span class="n">version</span><span class="o">.</span><span class="n">sh</span> <span class="n">current</span>        <span class="c1"># Show current version</span>
+<span class="o">./</span><span class="n">scripts</span><span class="o">/</span><span class="n">version</span><span class="o">.</span><span class="n">sh</span> <span class="n">suggest</span>        <span class="c1"># Suggest next version based on commits</span>
+<span class="o">./</span><span class="n">scripts</span><span class="o">/</span><span class="n">version</span><span class="o">.</span><span class="n">sh</span> <span class="n">changelog</span>      <span class="c1"># Generate changelog preview</span>
+<span class="o">./</span><span class="n">scripts</span><span class="o">/</span><span class="n">version</span><span class="o">.</span><span class="n">sh</span> <span class="n">bump</span> <span class="o">&lt;</span><span class="nb">type</span><span class="o">&gt;</span>    <span class="c1"># Bump version and create tag</span>
+<span class="o">./</span><span class="n">scripts</span><span class="o">/</span><span class="n">version</span><span class="o">.</span><span class="n">sh</span> <span class="n">check</span>          <span class="c1"># Check for untagged commits</span>
+<span class="o">./</span><span class="n">scripts</span><span class="o">/</span><span class="n">version</span><span class="o">.</span><span class="n">sh</span> <span class="n">tag</span> <span class="o">&lt;</span><span class="n">version</span><span class="o">&gt;</span>  <span class="c1"># Create tag without bumping files</span>
+</pre></div>
+</div>
+<p><strong>Examples</strong>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span># Check what version we&#39;re at
+$ ./scripts/version.sh current
+1.8.0
+
+# Analyze commits and suggest next version
+$ ./scripts/version.sh suggest
+Analyzing commits to suggest next version...
+
+Current version: 1.8.0
+Latest tag: v1.8.0
+
+Commit analysis:
+  Breaking changes: 0
+  Features: 1
+  Fixes: 0
+  Performance: 0
+
+Suggestion: MINOR bump → 1.9.0
+Reason: New features or performance improvements
+
+To apply:
+  ./scripts/version.sh bump minor &quot;Version 1.9.0&quot;
+
+# Preview changelog for next release
+$ ./scripts/version.sh changelog
+
+# Bump version and create tag
+$ ./scripts/version.sh bump minor &quot;Changelog Automation&quot;
+Bumping version: 1.8.0 → 1.9.0
+✓ Updated version to 1.9.0 in:
+  - pyproject.toml
+  - ada_main.py
+✓ Created tag v1.9.0
+
+Done! Version bumped to v1.9.0
+Push with: git push origin trunk --tags
+</pre></div>
+</div>
+</section>
+<section id="changelog-sh">
+<h3><a class="toc-backref" href="#id8" role="doc-backlink">changelog.sh</a><a class="headerlink" href="#changelog-sh" title="Link to this heading"></a></h3>
+<p>Generate formatted changelog from git commits.</p>
+<p><strong>Usage</strong>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">./</span><span class="n">scripts</span><span class="o">/</span><span class="n">changelog</span><span class="o">.</span><span class="n">sh</span> <span class="p">[</span><span class="n">from_version</span><span class="p">]</span> <span class="p">[</span><span class="n">to_version</span><span class="p">]</span>
+</pre></div>
+</div>
+<p><strong>Examples</strong>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span># Generate changelog since last tag
+$ ./scripts/changelog.sh v1.8.0 HEAD
+
+## [HEAD] - 2025-12-16
+
+### ✨ Features
+- add changelog automation with Conventional Commits
+
+### 📚 Documentation
+- create version management guide
+
+---
+Total commits: 2
+  Features: 1 | Fixes: 0 | Docs: 1
+
+# Update CHANGELOG.md with new section
+$ ./scripts/changelog.sh v1.8.0 v1.9.0 | cat - CHANGELOG.md &gt; CHANGELOG.md.tmp
+$ mv CHANGELOG.md.tmp CHANGELOG.md
+</pre></div>
+</div>
+</section>
+<section id="validate-commit-sh">
+<h3><a class="toc-backref" href="#id9" role="doc-backlink">validate-commit.sh</a><a class="headerlink" href="#validate-commit-sh" title="Link to this heading"></a></h3>
+<p>Validate commit messages follow Conventional Commits format.</p>
+<p><strong>Usage</strong>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># Validate a commit message file</span>
+<span class="o">./</span><span class="n">scripts</span><span class="o">/</span><span class="n">validate</span><span class="o">-</span><span class="n">commit</span><span class="o">.</span><span class="n">sh</span> <span class="o">.</span><span class="n">git</span><span class="o">/</span><span class="n">COMMIT_EDITMSG</span>
+
+<span class="c1"># Install as git hook</span>
+<span class="n">ln</span> <span class="o">-</span><span class="n">sf</span> <span class="o">../../</span><span class="n">scripts</span><span class="o">/</span><span class="n">validate</span><span class="o">-</span><span class="n">commit</span><span class="o">.</span><span class="n">sh</span> <span class="o">.</span><span class="n">git</span><span class="o">/</span><span class="n">hooks</span><span class="o">/</span><span class="n">commit</span><span class="o">-</span><span class="n">msg</span>
+</pre></div>
+</div>
+<p><strong>What it checks</strong>:</p>
+<ul class="simple">
+<li><p>✅ Type is valid (feat, fix, docs, etc.)</p></li>
+<li><p>✅ Format is correct (type: subject or type(scope): subject)</p></li>
+<li><p>⚠️ Subject isn’t too long (warns &gt;72 chars)</p></li>
+<li><p>⚠️ Subject doesn’t end with period</p></li>
+<li><p>⚠️ Subject uses imperative mood (lowercase start)</p></li>
+<li><p>✅ Allows merge commits and reverts</p></li>
+</ul>
+<p><strong>Example validation</strong>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ echo &quot;feat: add new feature&quot; &gt; /tmp/msg
+$ ./scripts/validate-commit.sh /tmp/msg
+✓ Valid!
+
+$ echo &quot;Added new feature&quot; &gt; /tmp/msg
+$ ./scripts/validate-commit.sh /tmp/msg
+❌ Invalid commit message format!
+
+Your commit message must follow Conventional Commits:
+  type(scope): subject
+
+Examples:
+  feat: add Nix flake support
+  fix(matrix): handle rate limiting
+  docs: update getting started guide
+</pre></div>
+</div>
+</section>
+</section>
+<section id="workflow">
+<h2><a class="toc-backref" href="#id10" role="doc-backlink">Workflow</a><a class="headerlink" href="#workflow" title="Link to this heading"></a></h2>
+<section id="complete-release-workflow">
+<h3><a class="toc-backref" href="#id11" role="doc-backlink">Complete Release Workflow</a><a class="headerlink" href="#complete-release-workflow" title="Link to this heading"></a></h3>
+<ol class="arabic">
+<li><p><strong>Develop features with conventional commits</strong>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">git</span> <span class="n">checkout</span> <span class="o">-</span><span class="n">b</span> <span class="n">feature</span><span class="o">/</span><span class="n">new</span><span class="o">-</span><span class="n">thing</span>
+<span class="n">git</span> <span class="n">commit</span> <span class="o">-</span><span class="n">m</span> <span class="s2">&quot;feat: add amazing new feature&quot;</span>
+<span class="n">git</span> <span class="n">commit</span> <span class="o">-</span><span class="n">m</span> <span class="s2">&quot;fix: handle edge case&quot;</span>
+<span class="n">git</span> <span class="n">commit</span> <span class="o">-</span><span class="n">m</span> <span class="s2">&quot;docs: update API reference&quot;</span>
+</pre></div>
+</div>
+</li>
+<li><p><strong>Check status before release</strong>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># What untagged commits do we have?</span>
+<span class="o">./</span><span class="n">scripts</span><span class="o">/</span><span class="n">version</span><span class="o">.</span><span class="n">sh</span> <span class="n">check</span>
+
+<span class="c1"># What version should we bump to?</span>
+<span class="o">./</span><span class="n">scripts</span><span class="o">/</span><span class="n">version</span><span class="o">.</span><span class="n">sh</span> <span class="n">suggest</span>
+</pre></div>
+</div>
+</li>
+<li><p><strong>Preview changelog</strong>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">./</span><span class="n">scripts</span><span class="o">/</span><span class="n">version</span><span class="o">.</span><span class="n">sh</span> <span class="n">changelog</span>
+</pre></div>
+</div>
+</li>
+<li><p><strong>Bump version and create tag</strong>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># Automatically suggests minor for features</span>
+<span class="o">./</span><span class="n">scripts</span><span class="o">/</span><span class="n">version</span><span class="o">.</span><span class="n">sh</span> <span class="n">bump</span> <span class="n">minor</span> <span class="s2">&quot;Amazing New Feature&quot;</span>
+</pre></div>
+</div>
+</li>
+<li><p><strong>Update CHANGELOG.md</strong>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># Generate and prepend to changelog</span>
+<span class="o">./</span><span class="n">scripts</span><span class="o">/</span><span class="n">changelog</span><span class="o">.</span><span class="n">sh</span> <span class="n">v1</span><span class="mf">.8.0</span> <span class="n">v1</span><span class="mf">.9.0</span> <span class="o">&gt;</span> <span class="o">/</span><span class="n">tmp</span><span class="o">/</span><span class="n">new_section</span><span class="o">.</span><span class="n">md</span>
+<span class="n">cat</span> <span class="o">/</span><span class="n">tmp</span><span class="o">/</span><span class="n">new_section</span><span class="o">.</span><span class="n">md</span> <span class="n">CHANGELOG</span><span class="o">.</span><span class="n">md</span> <span class="o">&gt;</span> <span class="n">CHANGELOG</span><span class="o">.</span><span class="n">md</span><span class="o">.</span><span class="n">tmp</span>
+<span class="n">mv</span> <span class="n">CHANGELOG</span><span class="o">.</span><span class="n">md</span><span class="o">.</span><span class="n">tmp</span> <span class="n">CHANGELOG</span><span class="o">.</span><span class="n">md</span>
+<span class="n">git</span> <span class="n">add</span> <span class="n">CHANGELOG</span><span class="o">.</span><span class="n">md</span>
+<span class="n">git</span> <span class="n">commit</span> <span class="o">-</span><span class="n">m</span> <span class="s2">&quot;docs: update CHANGELOG for v1.9.0&quot;</span>
+</pre></div>
+</div>
+</li>
+<li><p><strong>Push release</strong>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">git</span> <span class="n">push</span> <span class="n">origin</span> <span class="n">trunk</span> <span class="o">--</span><span class="n">tags</span>
+</pre></div>
+</div>
+</li>
+<li><p><strong>Create GitHub release</strong> (optional):</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># Use changelog content as release notes</span>
+<span class="n">gh</span> <span class="n">release</span> <span class="n">create</span> <span class="n">v1</span><span class="mf">.9.0</span> <span class="o">--</span><span class="n">title</span> <span class="s2">&quot;v1.9.0&quot;</span> <span class="o">--</span><span class="n">notes</span><span class="o">-</span><span class="n">file</span> <span class="o">/</span><span class="n">tmp</span><span class="o">/</span><span class="n">new_section</span><span class="o">.</span><span class="n">md</span>
+</pre></div>
+</div>
+</li>
+</ol>
+</section>
+<section id="quick-release-automated">
+<h3><a class="toc-backref" href="#id12" role="doc-backlink">Quick Release (Automated)</a><a class="headerlink" href="#quick-release-automated" title="Link to this heading"></a></h3>
+<p>For simple releases with good commit messages:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span># One-liner: suggest, bump, and update changelog
+VERSION=$(./scripts/version.sh suggest | grep &quot;Suggestion&quot; | cut -d→ -f2 | xargs)
+./scripts/version.sh bump minor &quot;Version $VERSION&quot;
+./scripts/changelog.sh v1.8.0 v$VERSION | cat - CHANGELOG.md &gt; CHANGELOG.md.tmp
+mv CHANGELOG.md.tmp CHANGELOG.md
+git add CHANGELOG.md
+git commit --amend --no-edit
+git push origin trunk --tags
+</pre></div>
+</div>
+</section>
+<section id="git-hook-setup">
+<h3><a class="toc-backref" href="#id13" role="doc-backlink">Git Hook Setup</a><a class="headerlink" href="#git-hook-setup" title="Link to this heading"></a></h3>
+<p>Automatically validate commit messages:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span># Install commit-msg hook
+ln -sf ../../scripts/validate-commit.sh .git/hooks/commit-msg
+
+# Now invalid commits will be rejected:
+$ git commit -m &quot;fixed bug&quot;
+❌ Invalid commit message format!
+
+$ git commit -m &quot;fix: correct handling of edge case&quot;
+✓ Success!
+</pre></div>
+</div>
+<p>Skip validation when needed:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">git</span> <span class="n">commit</span> <span class="o">--</span><span class="n">no</span><span class="o">-</span><span class="n">verify</span> <span class="o">-</span><span class="n">m</span> <span class="s2">&quot;WIP: experimenting&quot;</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="best-practices">
+<h2><a class="toc-backref" href="#id14" role="doc-backlink">Best Practices</a><a class="headerlink" href="#best-practices" title="Link to this heading"></a></h2>
+<section id="commit-messages">
+<h3><a class="toc-backref" href="#id15" role="doc-backlink">Commit Messages</a><a class="headerlink" href="#commit-messages" title="Link to this heading"></a></h3>
+<p><strong>Do</strong>:</p>
+<ul class="simple">
+<li><p>Start with lowercase: <code class="docutils literal notranslate"><span class="pre">feat:</span> <span class="pre">add</span> <span class="pre">feature</span></code> ✅</p></li>
+<li><p>Use imperative mood: <code class="docutils literal notranslate"><span class="pre">fix:</span> <span class="pre">resolve</span> <span class="pre">issue</span></code> ✅</p></li>
+<li><p>Be specific: <code class="docutils literal notranslate"><span class="pre">fix(rag):</span> <span class="pre">improve</span> <span class="pre">memory</span> <span class="pre">retrieval</span></code> ✅</p></li>
+<li><p>Include scope: <code class="docutils literal notranslate"><span class="pre">feat(specialists):</span> <span class="pre">add</span> <span class="pre">wiki</span> <span class="pre">lookup</span></code> ✅</p></li>
+<li><p>Keep subject &lt;72 chars ✅</p></li>
+</ul>
+<p><strong>Don’t</strong>:</p>
+<ul class="simple">
+<li><p>Start with uppercase: <code class="docutils literal notranslate"><span class="pre">feat:</span> <span class="pre">Add</span> <span class="pre">feature</span></code> ❌</p></li>
+<li><p>Use past tense: <code class="docutils literal notranslate"><span class="pre">feat:</span> <span class="pre">added</span> <span class="pre">feature</span></code> ❌</p></li>
+<li><p>Be vague: <code class="docutils literal notranslate"><span class="pre">fix:</span> <span class="pre">fixed</span> <span class="pre">bug</span></code> ❌</p></li>
+<li><p>End with period: <code class="docutils literal notranslate"><span class="pre">feat:</span> <span class="pre">add</span> <span class="pre">feature.</span></code> ❌</p></li>
+<li><p>Write novels: <code class="docutils literal notranslate"><span class="pre">feat:</span> <span class="pre">this</span> <span class="pre">adds</span> <span class="pre">a</span> <span class="pre">really</span> <span class="pre">long</span> <span class="pre">feature</span> <span class="pre">description...</span></code> ❌</p></li>
+</ul>
+</section>
+<section id="version-bumps">
+<h3><a class="toc-backref" href="#id16" role="doc-backlink">Version Bumps</a><a class="headerlink" href="#version-bumps" title="Link to this heading"></a></h3>
+<p><strong>When to bump MAJOR</strong> (breaking changes):</p>
+<ul class="simple">
+<li><p>API changes requiring code updates</p></li>
+<li><p>Removing features</p></li>
+<li><p>Changing behavior incompatibly</p></li>
+<li><p>Architectural shifts</p></li>
+</ul>
+<p><strong>When to bump MINOR</strong> (new features):</p>
+<ul class="simple">
+<li><p>New features (backwards compatible)</p></li>
+<li><p>New specialists</p></li>
+<li><p>Performance improvements</p></li>
+<li><p>Deprecations (not removals)</p></li>
+</ul>
+<p><strong>When to bump PATCH</strong> (bug fixes):</p>
+<ul class="simple">
+<li><p>Bug fixes</p></li>
+<li><p>Documentation updates</p></li>
+<li><p>Code refactoring (no behavior change)</p></li>
+<li><p>Security patches</p></li>
+</ul>
+</section>
+<section id="scopes">
+<h3><a class="toc-backref" href="#id17" role="doc-backlink">Scopes</a><a class="headerlink" href="#scopes" title="Link to this heading"></a></h3>
+<p>Common scopes in Ada:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">specialists</span></code>: Specialist system changes</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">rag</span></code>: RAG/memory system</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">matrix</span></code>: Matrix bridge</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">cli</span></code>: CLI interface</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">web</span></code>: Web UI</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">api</span></code>: API changes</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">llm</span></code>: LLM integration</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">docs</span></code>: Documentation</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">build</span></code>: Build system</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">ci</span></code>: CI/CD</p></li>
+</ul>
+<p>Example: <code class="docutils literal notranslate"><span class="pre">feat(specialists):</span> <span class="pre">add</span> <span class="pre">Wikipedia</span> <span class="pre">lookup</span></code></p>
+</section>
+<section id="breaking-changes">
+<h3><a class="toc-backref" href="#id18" role="doc-backlink">Breaking Changes</a><a class="headerlink" href="#breaking-changes" title="Link to this heading"></a></h3>
+<p>Mark breaking changes explicitly:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>feat(api)!: change chat endpoint response format
+
+BREAKING CHANGE: ChatResponse now returns &#39;messages&#39; array
+instead of &#39;text&#39; string. Update all API clients.
+
+Migration:
+  Before: response.text
+  After: response.messages[0].content
+</pre></div>
+</div>
+<p>This triggers a MAJOR version bump.</p>
+</section>
+</section>
+<section id="automation">
+<h2><a class="toc-backref" href="#id19" role="doc-backlink">Automation</a><a class="headerlink" href="#automation" title="Link to this heading"></a></h2>
+<section id="ci-cd-integration">
+<h3><a class="toc-backref" href="#id20" role="doc-backlink">CI/CD Integration</a><a class="headerlink" href="#ci-cd-integration" title="Link to this heading"></a></h3>
+<p>Validate commits in CI:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># .github/workflows/validate.yml</span>
+<span class="o">-</span> <span class="n">name</span><span class="p">:</span> <span class="n">Validate</span> <span class="n">Commit</span> <span class="n">Messages</span>
+  <span class="n">run</span><span class="p">:</span> <span class="o">|</span>
+    <span class="n">git</span> <span class="n">log</span> <span class="o">--</span><span class="n">pretty</span><span class="o">=</span><span class="nb">format</span><span class="p">:</span><span class="s2">&quot;</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="n">origin</span><span class="o">/</span><span class="n">trunk</span><span class="o">..</span><span class="n">HEAD</span> <span class="o">|</span> \
+    <span class="k">while</span> <span class="n">read</span> <span class="n">msg</span><span class="p">;</span> <span class="n">do</span>
+      <span class="n">echo</span> <span class="s2">&quot;$msg&quot;</span> <span class="o">|</span> <span class="o">./</span><span class="n">scripts</span><span class="o">/</span><span class="n">validate</span><span class="o">-</span><span class="n">commit</span><span class="o">.</span><span class="n">sh</span> <span class="o">/</span><span class="n">dev</span><span class="o">/</span><span class="n">stdin</span> <span class="o">||</span> <span class="n">exit</span> <span class="mi">1</span>
+    <span class="n">done</span>
+</pre></div>
+</div>
+<p>Auto-suggest version on PR:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># .github/workflows/suggest-version.yml</span>
+<span class="o">-</span> <span class="n">name</span><span class="p">:</span> <span class="n">Suggest</span> <span class="n">Version</span>
+  <span class="n">run</span><span class="p">:</span> <span class="o">./</span><span class="n">scripts</span><span class="o">/</span><span class="n">version</span><span class="o">.</span><span class="n">sh</span> <span class="n">suggest</span>
+</pre></div>
+</div>
+</section>
+<section id="pre-commit-hook">
+<h3><a class="toc-backref" href="#id21" role="doc-backlink">Pre-commit Hook</a><a class="headerlink" href="#pre-commit-hook" title="Link to this heading"></a></h3>
+<p>Install for all developers:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># In repository</span>
+<span class="n">echo</span> <span class="s1">&#39;#!/bin/sh&#39;</span> <span class="o">&gt;</span> <span class="o">.</span><span class="n">git</span><span class="o">/</span><span class="n">hooks</span><span class="o">/</span><span class="n">commit</span><span class="o">-</span><span class="n">msg</span>
+<span class="n">echo</span> <span class="s1">&#39;exec ./scripts/validate-commit.sh &quot;$1&quot;&#39;</span> <span class="o">&gt;&gt;</span> <span class="o">.</span><span class="n">git</span><span class="o">/</span><span class="n">hooks</span><span class="o">/</span><span class="n">commit</span><span class="o">-</span><span class="n">msg</span>
+<span class="n">chmod</span> <span class="o">+</span><span class="n">x</span> <span class="o">.</span><span class="n">git</span><span class="o">/</span><span class="n">hooks</span><span class="o">/</span><span class="n">commit</span><span class="o">-</span><span class="n">msg</span>
+</pre></div>
+</div>
+<p>Or use <a class="reference external" href="https://pre-commit.com/">pre-commit</a> framework:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># .pre-commit-config.yaml</span>
+<span class="n">repos</span><span class="p">:</span>
+  <span class="o">-</span> <span class="n">repo</span><span class="p">:</span> <span class="n">local</span>
+    <span class="n">hooks</span><span class="p">:</span>
+      <span class="o">-</span> <span class="nb">id</span><span class="p">:</span> <span class="n">validate</span><span class="o">-</span><span class="n">commit</span>
+        <span class="n">name</span><span class="p">:</span> <span class="n">Validate</span> <span class="n">Commit</span> <span class="n">Message</span>
+        <span class="n">entry</span><span class="p">:</span> <span class="o">./</span><span class="n">scripts</span><span class="o">/</span><span class="n">validate</span><span class="o">-</span><span class="n">commit</span><span class="o">.</span><span class="n">sh</span>
+        <span class="n">language</span><span class="p">:</span> <span class="n">script</span>
+        <span class="n">stages</span><span class="p">:</span> <span class="p">[</span><span class="n">commit</span><span class="o">-</span><span class="n">msg</span><span class="p">]</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="troubleshooting">
+<h2><a class="toc-backref" href="#id22" role="doc-backlink">Troubleshooting</a><a class="headerlink" href="#troubleshooting" title="Link to this heading"></a></h2>
+<section id="no-tags-found">
+<h3><a class="toc-backref" href="#id23" role="doc-backlink">“No tags found”</a><a class="headerlink" href="#no-tags-found" title="Link to this heading"></a></h3>
+<p>If you see “No tags found” errors:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># Create initial tag</span>
+<span class="n">git</span> <span class="n">tag</span> <span class="o">-</span><span class="n">a</span> <span class="n">v1</span><span class="mf">.0.0</span> <span class="o">-</span><span class="n">m</span> <span class="s2">&quot;Initial version&quot;</span>
+<span class="n">git</span> <span class="n">push</span> <span class="n">origin</span> <span class="n">v1</span><span class="mf">.0.0</span>
+</pre></div>
+</div>
+</section>
+<section id="wrong-version-suggested">
+<h3><a class="toc-backref" href="#id24" role="doc-backlink">Wrong version suggested</a><a class="headerlink" href="#wrong-version-suggested" title="Link to this heading"></a></h3>
+<p>The script analyzes commits since last tag. If suggestion is wrong:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># Check what commits it&#39;s seeing</span>
+<span class="o">./</span><span class="n">scripts</span><span class="o">/</span><span class="n">version</span><span class="o">.</span><span class="n">sh</span> <span class="n">check</span>
+
+<span class="c1"># Manually specify version</span>
+<span class="o">./</span><span class="n">scripts</span><span class="o">/</span><span class="n">version</span><span class="o">.</span><span class="n">sh</span> <span class="n">bump</span> <span class="n">patch</span> <span class="s2">&quot;Fix version&quot;</span>
+</pre></div>
+</div>
+</section>
+<section id="can-t-push-tags">
+<h3><a class="toc-backref" href="#id25" role="doc-backlink">Can’t push tags</a><a class="headerlink" href="#can-t-push-tags" title="Link to this heading"></a></h3>
+<p>If <code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">push</span> <span class="pre">--tags</span></code> fails:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># Push branch and tags separately</span>
+<span class="n">git</span> <span class="n">push</span> <span class="n">origin</span> <span class="n">trunk</span>
+<span class="n">git</span> <span class="n">push</span> <span class="n">origin</span> <span class="o">--</span><span class="n">tags</span>
+
+<span class="c1"># Or force if needed (careful!)</span>
+<span class="n">git</span> <span class="n">push</span> <span class="n">origin</span> <span class="n">v1</span><span class="mf">.9.0</span> <span class="o">--</span><span class="n">force</span>
+</pre></div>
+</div>
+</section>
+<section id="want-to-change-last-tag">
+<h3><a class="toc-backref" href="#id26" role="doc-backlink">Want to change last tag</a><a class="headerlink" href="#want-to-change-last-tag" title="Link to this heading"></a></h3>
+<p>If you tagged wrong version:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># Delete tag locally and remotely</span>
+<span class="n">git</span> <span class="n">tag</span> <span class="o">-</span><span class="n">d</span> <span class="n">v1</span><span class="mf">.9.0</span>
+<span class="n">git</span> <span class="n">push</span> <span class="n">origin</span> <span class="p">:</span><span class="n">refs</span><span class="o">/</span><span class="n">tags</span><span class="o">/</span><span class="n">v1</span><span class="mf">.9.0</span>
+
+<span class="c1"># Create correct tag</span>
+<span class="o">./</span><span class="n">scripts</span><span class="o">/</span><span class="n">version</span><span class="o">.</span><span class="n">sh</span> <span class="n">tag</span> <span class="mf">1.9.0</span> <span class="s2">&quot;Correct version&quot;</span>
+<span class="n">git</span> <span class="n">push</span> <span class="n">origin</span> <span class="n">v1</span><span class="mf">.9.0</span>
+</pre></div>
+</div>
+</section>
+<section id="forgot-to-use-conventional-commits">
+<h3><a class="toc-backref" href="#id27" role="doc-backlink">Forgot to use conventional commits</a><a class="headerlink" href="#forgot-to-use-conventional-commits" title="Link to this heading"></a></h3>
+<p>It’s okay! You can:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>1. Use ``suggest`` command anyway (will suggest patch bump)
+2. Manually specify version: ``./scripts/version.sh bump minor &quot;Summary&quot;``
+3. Start using conventional commits going forward
+</pre></div>
+</div>
+</section>
+</section>
+<section id="reference">
+<h2><a class="toc-backref" href="#id28" role="doc-backlink">Reference</a><a class="headerlink" href="#reference" title="Link to this heading"></a></h2>
+<section id="links">
+<h3><a class="toc-backref" href="#id29" role="doc-backlink">Links</a><a class="headerlink" href="#links" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p><a class="reference external" href="https://semver.org/">Semantic Versioning</a></p></li>
+<li><p><a class="reference external" href="https://www.conventionalcommits.org/">Conventional Commits</a></p></li>
+<li><p><a class="reference external" href="https://keepachangelog.com/">Keep a Changelog</a></p></li>
+</ul>
+</section>
+<section id="ada-scripts">
+<h3><a class="toc-backref" href="#id30" role="doc-backlink">Ada Scripts</a><a class="headerlink" href="#ada-scripts" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">scripts/version.sh</span></code> - Version management</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">scripts/changelog.sh</span></code> - Changelog generation</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">scripts/validate-commit.sh</span></code> - Commit message validation</p></li>
+</ul>
+</section>
+<section id="files">
+<h3><a class="toc-backref" href="#id31" role="doc-backlink">Files</a><a class="headerlink" href="#files" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">pyproject.toml</span></code> - Contains <code class="docutils literal notranslate"><span class="pre">version</span> <span class="pre">=</span> <span class="pre">&quot;X.Y.Z&quot;</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">ada_main.py</span></code> - Contains <code class="docutils literal notranslate"><span class="pre">&#64;click.version_option(version=&quot;X.Y.Z&quot;)</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">CHANGELOG.md</span></code> - Human-readable changelog</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">.git/hooks/commit-msg</span></code> - Optional commit validation hook</p></li>
+</ul>
+<p>—</p>
+<p><strong>Last Updated:</strong> 2025-12-16
+<strong>Ada Version:</strong> 1.8.0</p>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="testing.html" class="btn btn-neutral float-left" title="Testing Guide" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="changelog.html" class="btn btn-neutral float-right" title="Changelog" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p></p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

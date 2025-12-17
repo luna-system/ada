@@ -1,0 +1,542 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Build System &mdash; Ada Brain API 0.1.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="_static/graphviz.css?v=4ae1632d" />
+      <link rel="stylesheet" type="text/css" href="_static/custom.css?v=df0a1c42" />
+
+  
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=01f34227"></script>
+      <script src="_static/doctools.js?v=9bcbadda"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="BuildX Adoption Data &amp; Notes" href="buildx_adoption_notes.html" />
+    <link rel="prev" title="Web Search Specialist" href="web_search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            Ada Brain API
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="zero_to_ada.html">Zero to Ada</a></li>
+<li class="toctree-l1"><a class="reference internal" href="getting_started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="local_mode.html">Running Ada Locally (No Docker Required!)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="nix.html">Nix &amp; Flakes Support</a></li>
+<li class="toctree-l1"><a class="reference internal" href="getting_started_scratch.html">Getting Started from Scratch</a></li>
+<li class="toctree-l1"><a class="reference internal" href="configuration.html">Configuration Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="examples.html">Examples</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Hardware Setup</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="hardware.html">Hardware &amp; GPU Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="sbc.html">Ada on Single-Board Computers (SBCs)</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Core Architecture</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="architecture.html">Architecture</a></li>
+<li class="toctree-l1"><a class="reference internal" href="data_model.html">Data Model Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="streaming.html">Streaming</a></li>
+<li class="toctree-l1"><a class="reference internal" href="memory.html">Memory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="token_monitoring.html">Token Budget Monitoring</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Interfaces &amp; Adapters</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="adapters.html">Ada Adapters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="adapter_development.html">Adapter Development Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="matrix_integration.html">Matrix Integration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api_usage.html">API Usage Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api_reference.html">API Reference</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Specialist System</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="specialists.html">Specialist System</a></li>
+<li class="toctree-l1"><a class="reference internal" href="build_specialist.html">Build Your First Specialist</a></li>
+<li class="toctree-l1"><a class="reference internal" href="bidirectional.html">Bidirectional Specialist System</a></li>
+<li class="toctree-l1"><a class="reference internal" href="specialist_rag.html">Specialist RAG Documentation System</a></li>
+<li class="toctree-l1"><a class="reference internal" href="web_search.html">Web Search Specialist</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Operations</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Build System</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#why-buildkit">Why BuildKit?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#build-performance">Build Performance</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#prerequisites">Prerequisites</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#check-buildx-installation">Check BuildX Installation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#manual-installation">Manual Installation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#create-builder-instance">Create Builder Instance</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#building-ada">Building Ada</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#basic-build">Basic Build</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#force-rebuild">Force Rebuild</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pull-latest-base-images">Pull Latest Base Images</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#build-configuration">Build Configuration</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#cache-configuration">Cache Configuration</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#dockerignore-files">.dockerignore Files</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#troubleshooting">Troubleshooting</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#warning-buildx-isn-t-installed">Warning: “buildx isn’t installed”</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#build-using-wrong-files">Build Using Wrong Files</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#permission-denied-errors">“permission denied” Errors</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#no-space-left-on-device">“no space left on device”</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#builds-very-slow">Builds Very Slow</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#using-legacy-builder">Using Legacy Builder</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#ci-cd-integration">CI/CD Integration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#best-practices">Best Practices</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#performance-tips">Performance Tips</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#buildkit-statistics">BuildKit Statistics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#see-also">See Also</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="buildx_adoption_notes.html">BuildX Adoption Data &amp; Notes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="disk_management.html">Disk Management</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Development</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="development.html">Development Tools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="testing.html">Testing Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="versioning.html">Version Management</a></li>
+<li class="toctree-l1"><a class="reference internal" href="changelog.html">Changelog</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Philosophy &amp; Design</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="project_philosophy.html">Ada Principles</a></li>
+<li class="toctree-l1"><a class="reference internal" href="documentation_philosophy.html">Documentation Philosophy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ai_documentation.html">AI-Readable Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="empathetic_documentation.html">Empathetic Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="xenofeminism.html">Xenofeminism and Ada</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Ada Brain API</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Build System</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/build_system.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="build-system">
+<h1>Build System<a class="headerlink" href="#build-system" title="Link to this heading"></a></h1>
+<p>Ada uses Docker BuildKit with BuildX for fast, consistent builds.</p>
+<section id="why-buildkit">
+<h2>Why BuildKit?<a class="headerlink" href="#why-buildkit" title="Link to this heading"></a></h2>
+<p>BuildKit provides significant advantages for Ada’s multi-service architecture:</p>
+<ul class="simple">
+<li><p><strong>Better caching</strong>: COPY commands don’t invalidate unnecessarily</p></li>
+<li><p><strong>Parallel builds</strong>: Multiple services build simultaneously</p></li>
+<li><p><strong>Consistent behavior</strong>: Same as CI/CD pipelines</p></li>
+<li><p><strong>Modern features</strong>: Multi-stage builds, cache mounts, secrets</p></li>
+</ul>
+</section>
+<section id="build-performance">
+<h2>Build Performance<a class="headerlink" href="#build-performance" title="Link to this heading"></a></h2>
+<p>With BuildKit enabled:</p>
+<ul class="simple">
+<li><p>Initial build: ~5-8 minutes (downloading base images)</p></li>
+<li><p>Rebuilds with changes: ~30-90 seconds (cached layers)</p></li>
+<li><p>No changes: ~5 seconds (full cache hit)</p></li>
+</ul>
+<p>Without BuildKit:</p>
+<ul class="simple">
+<li><p>Initial build: ~10-15 minutes</p></li>
+<li><p>Rebuilds: ~2-5 minutes (poor caching)</p></li>
+<li><p>Frequent cache misses</p></li>
+</ul>
+</section>
+<section id="prerequisites">
+<h2>Prerequisites<a class="headerlink" href="#prerequisites" title="Link to this heading"></a></h2>
+<section id="check-buildx-installation">
+<h3>Check BuildX Installation<a class="headerlink" href="#check-buildx-installation" title="Link to this heading"></a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Check if BuildX is available</span>
+docker<span class="w"> </span>buildx<span class="w"> </span>version
+
+<span class="c1"># If installed, you&#39;ll see:</span>
+<span class="c1"># github.com/docker/buildx v0.18.0 ...</span>
+</pre></div>
+</div>
+<p>If not installed, run the setup script:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>./scripts/setup_buildx.sh
+</pre></div>
+</div>
+<p>This will:</p>
+<ol class="arabic simple">
+<li><p>Detect your Linux distribution</p></li>
+<li><p>Suggest the appropriate package manager command</p></li>
+<li><p>Optionally install BuildX automatically</p></li>
+<li><p>Create an optimized builder instance named <code class="docutils literal notranslate"><span class="pre">ada-builder</span></code></p></li>
+</ol>
+</section>
+<section id="manual-installation">
+<h3>Manual Installation<a class="headerlink" href="#manual-installation" title="Link to this heading"></a></h3>
+<p><strong>Arch Linux:</strong></p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sudo<span class="w"> </span>pacman<span class="w"> </span>-S<span class="w"> </span>docker-buildx
+</pre></div>
+</div>
+<p><strong>Debian/Ubuntu:</strong></p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sudo<span class="w"> </span>apt<span class="w"> </span>install<span class="w"> </span>docker-buildx-plugin
+</pre></div>
+</div>
+<p><strong>Fedora:</strong></p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sudo<span class="w"> </span>dnf<span class="w"> </span>install<span class="w"> </span>docker-buildx-plugin
+</pre></div>
+</div>
+<p><strong>Manual (any Linux):</strong></p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>mkdir<span class="w"> </span>-p<span class="w"> </span>~/.docker/cli-plugins/
+
+<span class="c1"># For x86_64:</span>
+curl<span class="w"> </span>-Lo<span class="w"> </span>~/.docker/cli-plugins/docker-buildx<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>https://github.com/docker/buildx/releases/download/v0.18.0/buildx-v0.18.0.linux-amd64
+
+<span class="c1"># For ARM64:</span>
+curl<span class="w"> </span>-Lo<span class="w"> </span>~/.docker/cli-plugins/docker-buildx<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>https://github.com/docker/buildx/releases/download/v0.18.0/buildx-v0.18.0.linux-arm64
+
+chmod<span class="w"> </span>+x<span class="w"> </span>~/.docker/cli-plugins/docker-buildx
+</pre></div>
+</div>
+</section>
+<section id="create-builder-instance">
+<h3>Create Builder Instance<a class="headerlink" href="#create-builder-instance" title="Link to this heading"></a></h3>
+<p>After installing BuildX, create Ada’s builder:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>docker<span class="w"> </span>buildx<span class="w"> </span>create<span class="w"> </span>--name<span class="w"> </span>ada-builder<span class="w"> </span>--use<span class="w"> </span>--bootstrap
+
+<span class="c1"># Verify</span>
+docker<span class="w"> </span>buildx<span class="w"> </span>ls
+</pre></div>
+</div>
+<p>You should see <code class="docutils literal notranslate"><span class="pre">ada-builder</span></code> marked with an asterisk (active).</p>
+</section>
+</section>
+<section id="building-ada">
+<h2>Building Ada<a class="headerlink" href="#building-ada" title="Link to this heading"></a></h2>
+<section id="basic-build">
+<h3>Basic Build<a class="headerlink" href="#basic-build" title="Link to this heading"></a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Build all services</span>
+docker<span class="w"> </span>compose<span class="w"> </span>build
+
+<span class="c1"># Build specific service</span>
+docker<span class="w"> </span>compose<span class="w"> </span>build<span class="w"> </span>brain
+docker<span class="w"> </span>compose<span class="w"> </span>build<span class="w"> </span>matrix-bridge
+</pre></div>
+</div>
+<p>The <code class="docutils literal notranslate"><span class="pre">compose.yaml</span></code> is pre-configured to use BuildKit with optimized settings.</p>
+</section>
+<section id="force-rebuild">
+<h3>Force Rebuild<a class="headerlink" href="#force-rebuild" title="Link to this heading"></a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Rebuild without cache</span>
+docker<span class="w"> </span>compose<span class="w"> </span>build<span class="w"> </span>--no-cache
+
+<span class="c1"># Rebuild specific service</span>
+docker<span class="w"> </span>compose<span class="w"> </span>build<span class="w"> </span>--no-cache<span class="w"> </span>brain
+</pre></div>
+</div>
+</section>
+<section id="pull-latest-base-images">
+<h3>Pull Latest Base Images<a class="headerlink" href="#pull-latest-base-images" title="Link to this heading"></a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Update base images before building</span>
+docker<span class="w"> </span>compose<span class="w"> </span>build<span class="w"> </span>--pull
+</pre></div>
+</div>
+</section>
+</section>
+<section id="build-configuration">
+<h2>Build Configuration<a class="headerlink" href="#build-configuration" title="Link to this heading"></a></h2>
+<section id="cache-configuration">
+<h3>Cache Configuration<a class="headerlink" href="#cache-configuration" title="Link to this heading"></a></h3>
+<p>Ada uses local cache storage for BuildKit:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="c1"># In compose.yaml</span>
+<span class="nt">x-build-config</span><span class="p">:</span><span class="w"> </span><span class="nl">&amp;build-config</span>
+<span class="w">  </span><span class="nt">platforms</span><span class="p">:</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">linux/amd64</span>
+<span class="w">  </span><span class="nt">cache_from</span><span class="p">:</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">type=local,src=/tmp/.buildx-cache</span>
+<span class="w">  </span><span class="nt">cache_to</span><span class="p">:</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">type=local,dest=/tmp/.buildx-cache</span>
+</pre></div>
+</div>
+<p>Cache is stored in <code class="docutils literal notranslate"><span class="pre">/tmp/.buildx-cache</span></code> (survives reboots on most systems).</p>
+</section>
+<section id="dockerignore-files">
+<h3>.dockerignore Files<a class="headerlink" href="#dockerignore-files" title="Link to this heading"></a></h3>
+<p>Each service has a <code class="docutils literal notranslate"><span class="pre">.dockerignore</span></code> to reduce build context:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">brain/.dockerignore</span></code> - Excludes tests, docs, __pycache__</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">frontend/.dockerignore</span></code> - Excludes node_modules, dist</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">matrix-bridge/.dockerignore</span></code> - Excludes tests, venv</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">scripts/.dockerignore</span></code> - Excludes docs</p></li>
+</ul>
+<p>This significantly speeds up COPY operations.</p>
+</section>
+</section>
+<section id="troubleshooting">
+<h2>Troubleshooting<a class="headerlink" href="#troubleshooting" title="Link to this heading"></a></h2>
+<section id="warning-buildx-isn-t-installed">
+<h3>Warning: “buildx isn’t installed”<a class="headerlink" href="#warning-buildx-isn-t-installed" title="Link to this heading"></a></h3>
+<p><strong>Symptom:</strong></p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>WARN[0000] Docker Compose is configured to build using Bake,
+but buildx isn&#39;t installed
+</pre></div>
+</div>
+<p><strong>Solution:</strong></p>
+<p>Run the setup script:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>./scripts/setup_buildx.sh
+</pre></div>
+</div>
+<p>Or manually install (see “Manual Installation” above).</p>
+</section>
+<section id="build-using-wrong-files">
+<h3>Build Using Wrong Files<a class="headerlink" href="#build-using-wrong-files" title="Link to this heading"></a></h3>
+<p><strong>Symptom:</strong></p>
+<p>Code changes aren’t appearing in container after rebuild.</p>
+<p><strong>Cause:</strong></p>
+<p>BuildKit cached the COPY layer even though files changed.</p>
+<p><strong>Solution:</strong></p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Force rebuild</span>
+docker<span class="w"> </span>compose<span class="w"> </span>build<span class="w"> </span>--no-cache<span class="w"> </span>&lt;service&gt;
+
+<span class="c1"># Or touch files to update timestamps</span>
+touch<span class="w"> </span>matrix-bridge/*.py
+docker<span class="w"> </span>compose<span class="w"> </span>build<span class="w"> </span>matrix-bridge
+</pre></div>
+</div>
+</section>
+<section id="permission-denied-errors">
+<h3>“permission denied” Errors<a class="headerlink" href="#permission-denied-errors" title="Link to this heading"></a></h3>
+<p><strong>Symptom:</strong></p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>ERROR: failed to solve: failed to compute cache key:
+failed to stat /home/luna/Code/ada-v1/data: permission denied
+</pre></div>
+</div>
+<p><strong>Cause:</strong></p>
+<p>Docker doesn’t have permission to access files.</p>
+<p><strong>Solution:</strong></p>
+<p>Check file permissions and add to docker group:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Add yourself to docker group</span>
+sudo<span class="w"> </span>usermod<span class="w"> </span>-aG<span class="w"> </span>docker<span class="w"> </span><span class="nv">$USER</span>
+
+<span class="c1"># Log out and back in for changes to take effect</span>
+</pre></div>
+</div>
+</section>
+<section id="no-space-left-on-device">
+<h3>“no space left on device”<a class="headerlink" href="#no-space-left-on-device" title="Link to this heading"></a></h3>
+<p><strong>Symptom:</strong></p>
+<p>Build fails with disk space error.</p>
+<p><strong>Solution:</strong></p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Clean up Docker</span>
+docker<span class="w"> </span>system<span class="w"> </span>prune<span class="w"> </span>-af
+
+<span class="c1"># Clean BuildKit cache</span>
+docker<span class="w"> </span>buildx<span class="w"> </span>prune<span class="w"> </span>-af
+
+<span class="c1"># See disk_management.rst for more strategies</span>
+</pre></div>
+</div>
+</section>
+<section id="builds-very-slow">
+<h3>Builds Very Slow<a class="headerlink" href="#builds-very-slow" title="Link to this heading"></a></h3>
+<p><strong>Check cache:</strong></p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># View cache usage</span>
+du<span class="w"> </span>-sh<span class="w"> </span>/tmp/.buildx-cache
+
+<span class="c1"># If &gt; 5GB, prune:</span>
+docker<span class="w"> </span>buildx<span class="w"> </span>prune<span class="w"> </span>-af
+</pre></div>
+</div>
+<p><strong>Check builder:</strong></p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>docker<span class="w"> </span>buildx<span class="w"> </span>ls
+
+<span class="c1"># Should show ada-builder with status &quot;running&quot;</span>
+<span class="c1"># If not:</span>
+docker<span class="w"> </span>buildx<span class="w"> </span>create<span class="w"> </span>--name<span class="w"> </span>ada-builder<span class="w"> </span>--use<span class="w"> </span>--bootstrap
+</pre></div>
+</div>
+</section>
+</section>
+<section id="using-legacy-builder">
+<h2>Using Legacy Builder<a class="headerlink" href="#using-legacy-builder" title="Link to this heading"></a></h2>
+<p>If you can’t install BuildX, you can use the legacy builder:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Add to ~/.bashrc</span>
+<span class="nb">export</span><span class="w"> </span><span class="nv">DOCKER_BUILDKIT</span><span class="o">=</span><span class="m">0</span>
+<span class="nb">export</span><span class="w"> </span><span class="nv">COMPOSE_DOCKER_CLI_BUILD</span><span class="o">=</span><span class="m">0</span>
+
+<span class="c1"># Then reload</span>
+<span class="nb">source</span><span class="w"> </span>~/.bashrc
+
+<span class="c1"># Build as normal</span>
+docker<span class="w"> </span>compose<span class="w"> </span>build
+</pre></div>
+</div>
+<p><strong>Drawbacks:</strong></p>
+<ul class="simple">
+<li><p>Slower builds (2-3x longer)</p></li>
+<li><p>Worse caching behavior</p></li>
+<li><p>No parallel builds</p></li>
+<li><p>Missing modern Dockerfile features</p></li>
+</ul>
+</section>
+<section id="ci-cd-integration">
+<h2>CI/CD Integration<a class="headerlink" href="#ci-cd-integration" title="Link to this heading"></a></h2>
+<p>GitHub Actions (example):</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Set up Docker Buildx</span>
+<span class="w">  </span><span class="nt">uses</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">docker/setup-buildx-action@v3</span>
+
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Build images</span>
+<span class="w">  </span><span class="nt">run</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">docker compose build</span>
+</pre></div>
+</div>
+<p>BuildX is included in GitHub Actions runners by default.</p>
+</section>
+<section id="best-practices">
+<h2>Best Practices<a class="headerlink" href="#best-practices" title="Link to this heading"></a></h2>
+<ol class="arabic simple">
+<li><p><strong>Run setup script first</strong>: <code class="docutils literal notranslate"><span class="pre">./scripts/setup_buildx.sh</span></code></p></li>
+<li><p><strong>Use named builder</strong>: <code class="docutils literal notranslate"><span class="pre">ada-builder</span></code> (created by script)</p></li>
+<li><p><strong>Keep .dockerignore updated</strong>: Exclude unnecessary files</p></li>
+<li><p><strong>Prune cache periodically</strong>: <code class="docutils literal notranslate"><span class="pre">docker</span> <span class="pre">buildx</span> <span class="pre">prune</span></code> monthly</p></li>
+<li><p><strong>Pull base images</strong>: <code class="docutils literal notranslate"><span class="pre">docker</span> <span class="pre">compose</span> <span class="pre">build</span> <span class="pre">--pull</span></code> weekly</p></li>
+</ol>
+</section>
+<section id="performance-tips">
+<h2>Performance Tips<a class="headerlink" href="#performance-tips" title="Link to this heading"></a></h2>
+<p><strong>Speed up Python builds:</strong></p>
+<div class="highlight-dockerfile notranslate"><div class="highlight"><pre><span></span><span class="c"># In Dockerfile, copy requirements first</span>
+<span class="k">COPY</span><span class="w"> </span>requirements.txt<span class="w"> </span>.
+<span class="k">RUN</span><span class="w"> </span>pip<span class="w"> </span>install<span class="w"> </span>-r<span class="w"> </span>requirements.txt
+
+<span class="c"># Then copy code (cached unless requirements change)</span>
+<span class="k">COPY</span><span class="w"> </span>*.py<span class="w"> </span>.
+</pre></div>
+</div>
+<p><strong>Speed up Node builds:</strong></p>
+<div class="highlight-dockerfile notranslate"><div class="highlight"><pre><span></span><span class="c"># Copy package files first</span>
+<span class="k">COPY</span><span class="w"> </span>package*.json<span class="w"> </span>.
+<span class="k">RUN</span><span class="w"> </span>npm<span class="w"> </span>install
+
+<span class="c"># Then copy source</span>
+<span class="k">COPY</span><span class="w"> </span>.<span class="w"> </span>.
+</pre></div>
+</div>
+<p><strong>Multi-stage builds:</strong></p>
+<p>Use multi-stage builds to reduce final image size:</p>
+<div class="highlight-dockerfile notranslate"><div class="highlight"><pre><span></span><span class="c"># Build stage</span>
+<span class="k">FROM</span><span class="w"> </span><span class="s">python:3.13</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="s">builder</span>
+<span class="k">COPY</span><span class="w"> </span>requirements.txt<span class="w"> </span>.
+<span class="k">RUN</span><span class="w"> </span>pip<span class="w"> </span>wheel<span class="w"> </span>--no-cache-dir<span class="w"> </span>-r<span class="w"> </span>requirements.txt
+
+<span class="c"># Runtime stage</span>
+<span class="k">FROM</span><span class="w"> </span><span class="s">python:3.13-slim</span>
+<span class="k">COPY</span><span class="w"> </span>--from<span class="o">=</span>builder<span class="w"> </span>/wheels<span class="w"> </span>/wheels
+<span class="k">RUN</span><span class="w"> </span>pip<span class="w"> </span>install<span class="w"> </span>--no-cache<span class="w"> </span>/wheels/*.whl
+</pre></div>
+</div>
+</section>
+<section id="buildkit-statistics">
+<h2>BuildKit Statistics<a class="headerlink" href="#buildkit-statistics" title="Link to this heading"></a></h2>
+<p>According to Docker surveys and package manager data:</p>
+<ul class="simple">
+<li><p><strong>Docker Desktop users</strong>: ~95% have BuildX (included)</p></li>
+<li><p><strong>Linux docker-ce users</strong>: ~40-60% have BuildX installed</p></li>
+<li><p><strong>Adoption growing</strong>: +15-20% year-over-year</p></li>
+</ul>
+<p><strong>Why not universal on Linux?</strong></p>
+<ul class="simple">
+<li><p>Separate package (<code class="docutils literal notranslate"><span class="pre">docker-buildx-plugin</span></code>)</p></li>
+<li><p>Not always in default install</p></li>
+<li><p>Users may have older setups</p></li>
+<li><p>Some distros lag behind</p></li>
+</ul>
+<p>This is why Ada includes setup tools - we want everyone to have the best experience!</p>
+</section>
+<section id="see-also">
+<h2>See Also<a class="headerlink" href="#see-also" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p><a class="reference internal" href="getting_started.html"><span class="doc">Getting Started</span></a> - Initial setup guide</p></li>
+<li><p><a class="reference internal" href="disk_management.html"><span class="doc">Disk Management</span></a> - Disk space optimization</p></li>
+<li><p><a class="reference internal" href="development.html"><span class="doc">Development Tools</span></a> - Development workflow</p></li>
+<li><p><a class="reference external" href="https://docs.docker.com/build/">Docker BuildX Documentation</a></p></li>
+</ul>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="web_search.html" class="btn btn-neutral float-left" title="Web Search Specialist" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="buildx_adoption_notes.html" class="btn btn-neutral float-right" title="BuildX Adoption Data &amp; Notes" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p></p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
