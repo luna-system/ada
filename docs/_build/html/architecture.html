@@ -1,3 +1,5 @@
+
+
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" data-content_root="./">
 <head>
@@ -6,19 +8,16 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Architecture &mdash; Ada Brain API 0.1.0 documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
-      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=19f00094" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
       <link rel="stylesheet" type="text/css" href="_static/graphviz.css?v=4ae1632d" />
+      <link rel="stylesheet" type="text/css" href="_static/custom.css?v=df0a1c42" />
 
   
-  <!--[if lt IE 9]>
-    <script src="_static/js/html5shiv.min.js"></script>
-  <![endif]-->
-  
-        <script src="_static/jquery.js?v=5d32c60e"></script>
-        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-        <script src="_static/documentation_options.js?v=01f34227"></script>
-        <script src="_static/doctools.js?v=9bcbadda"></script>
-        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=01f34227"></script>
+      <script src="_static/doctools.js?v=9bcbadda"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -47,8 +46,10 @@
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
 <ul>
+<li class="toctree-l1"><a class="reference internal" href="zero_to_ada.html">Zero to Ada</a></li>
 <li class="toctree-l1"><a class="reference internal" href="getting_started.html">Getting Started</a></li>
-<li class="toctree-l1"><a class="reference internal" href="local_mode.html">Running Ada Locally (No Docker!)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="local_mode.html">Running Ada Locally (No Docker Required!)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="nix.html">Nix &amp; Flakes Support</a></li>
 <li class="toctree-l1"><a class="reference internal" href="getting_started_scratch.html">Getting Started from Scratch</a></li>
 <li class="toctree-l1"><a class="reference internal" href="configuration.html">Configuration Reference</a></li>
 <li class="toctree-l1"><a class="reference internal" href="examples.html">Examples</a></li>
@@ -64,6 +65,7 @@
 <li class="toctree-l2"><a class="reference internal" href="#system-overview">System Overview</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#request-flow">Request Flow</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#specialist-system-architecture">Specialist System Architecture</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#context-caching-system-v2-1">Context Caching System (v2.1)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#rag-system-components">RAG System Components</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#bidirectional-specialist-flow">Bidirectional Specialist Flow</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#testing-infrastructure">Testing Infrastructure</a></li>
@@ -75,6 +77,7 @@
 <li class="toctree-l1"><a class="reference internal" href="data_model.html">Data Model Reference</a></li>
 <li class="toctree-l1"><a class="reference internal" href="streaming.html">Streaming</a></li>
 <li class="toctree-l1"><a class="reference internal" href="memory.html">Memory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="token_monitoring.html">Token Budget Monitoring</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Interfaces &amp; Adapters</span></p>
 <ul>
@@ -102,6 +105,8 @@
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="development.html">Development Tools</a></li>
 <li class="toctree-l1"><a class="reference internal" href="testing.html">Testing Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="versioning.html">Version Management</a></li>
+<li class="toctree-l1"><a class="reference internal" href="changelog.html">Changelog</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Philosophy &amp; Design</span></p>
 <ul>
@@ -230,6 +235,22 @@
     registry -&gt; prompt_builder [label=&quot;Sorted by\nPriority&quot;];
     prompt_builder -&gt; llm [label=&quot;Enriched\nPrompt&quot;];
 }" class="graphviz" /></div>
+</section>
+<section id="context-caching-system-v2-1">
+<h2>Context Caching System (v2.1)<a class="headerlink" href="#context-caching-system-v2-1" title="Link to this heading"></a></h2>
+<p>Multi-timescale caching reduces redundant RAG queries and token usage:</p>
+<ul class="simple">
+<li><p><strong>Personas</strong>: 24-hour TTL (identity rarely changes)</p></li>
+<li><p><strong>FAQs</strong>: 24-hour TTL (knowledge base updates infrequently)</p></li>
+<li><p><strong>Memories</strong>: 5-minute TTL (balance freshness vs performance)</p></li>
+<li><p><strong>Conversations</strong>: 1-hour TTL (recent turns cached per session)</p></li>
+</ul>
+<p><strong>Benefits:</strong>
+- Reduces ChromaDB queries by ~70% for repeated context
+- Lower latency on cache hits (ms vs seconds)
+- LRU eviction prevents unbounded growth
+- Per-request cache stats logged for monitoring</p>
+<p><strong>Implementation:</strong> <code class="docutils literal notranslate"><span class="pre">brain/context_cache.py</span></code> (MultiTimescaleCache) integrated into <code class="docutils literal notranslate"><span class="pre">PromptAssembler</span></code></p>
 </section>
 <section id="rag-system-components">
 <h2>RAG System Components<a class="headerlink" href="#rag-system-components" title="Link to this heading"></a></h2>

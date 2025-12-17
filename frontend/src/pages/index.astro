@@ -1,19 +1,9 @@
 ---
-// Redirect root to garden landing page
+// Root is the chat interface - frontend is purely functional
+import BaseLayout from '../layouts/BaseLayout.astro';
+import App from '../components/App.svelte';
 ---
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="refresh" content="0; url=/garden">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ada - Redirecting...</title>
-</head>
-<body>
-    <p>Redirecting to <a href="/garden">garden</a>...</p>
-    <script>
-        window.location.href = '/garden';
-    </script>
-</body>
-</html>
+<BaseLayout title="ADA · Chat">
+  <App client:load />
+</BaseLayout>

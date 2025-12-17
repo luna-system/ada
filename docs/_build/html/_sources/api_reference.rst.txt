@@ -2,8 +2,8 @@
 API Reference
 =============
 
-Brain API Endpoints
-===================
+:autogen:`Brain API Endpoints`
+===============================
 
 .. automodule:: brain.app
    :members: healthz, chat, chat_stream, list_memory, create_memory, delete_memory, rag_debug
@@ -11,8 +11,8 @@ Brain API Endpoints
    :show-inheritance:
 
 
-Endpoint Discovery
-==================
+:autogen:`Endpoint Discovery`
+=============================
 
 **The API is fully self-documenting!** Query these endpoints to discover available functionality:
 
