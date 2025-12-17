@@ -37,15 +37,15 @@
       "cpu_only": true,
       "notes": "Results injected early in prompt (HIGH priority) after system notices"
     },
-    "media": {
-      "class_name": "MediaSpecialist",
-      "file": "brain/specialists/media_specialist.py",
+    "listenbrainz": {
+      "class_name": "ListenBrainzSpecialist",
+      "file": "brain/specialists/listenbrainz_specialist.py",
       "version": "1.0.0",
-      "description": "Analyze video files by extracting frames and generating descriptions",
+      "description": "Inject music/media context from ListenBrainz API",
       "activation_type": "context-triggered",
       "activation_trigger": {
-        "condition": "uploaded_video_path in request media_info",
-        "example": "User uploads video file"
+        "condition": "media_info present in request context",
+        "example": "User provides ListenBrainz data about current track"
       },
       "context_priority": "MEDIUM",
       "context_icon": "🎬",

@@ -2,7 +2,7 @@
 
 from typing import Any
 from mcp.types import Tool, TextContent
-from .ada_client import AdaClient
+from .ada_client import AdaClient, AdaBrainError, AdaBrainConnectionError
 
 
 # Tool definitions (exposed to MCP clients)
@@ -113,14 +113,13 @@ async def handle_tool_call(name: str, arguments: dict[str, Any], ada: AdaClient)
         message = arguments["message"]
         conversation_id = arguments.get("conversation_id")
 
-        response = await ada.chat(message, conversation_id)
-
-        return [
-            TextContent(
-                type="text",
-                text=response.get("response", "No response from Ada"),
-            )
-        ]
+        try:
+            response = await ada.chat(message, conversation_id)
+            return [TextContent(type="text", text=response)]
+        except AdaBrainConnectionError as e:
+            return [TextContent(type="text", text=f"Connection error: {e}")]
+        except AdaBrainError as e:
+            return [TextContent(type="text", text=f"Error: {e}")]
 
     elif name == "ada_search_memory":
         query = arguments["query"]
@@ -157,19 +156,22 @@ async def handle_tool_call(name: str, arguments: dict[str, Any], ada: AdaClient)
         ]
 
     elif name == "ada_health":
-        health = await ada.health()
+        try:
+            health = await ada.health()
 
-        status = "✓ Ada Brain is healthy" if health.get("ok") else "✗ Ada Brain is not healthy"
-        details = f"\n\nService: {health.get('service', 'unknown')}\n"
-        details += f"Python: {health.get('python', 'unknown')}\n"
+            status = "✓ Ada Brain is healthy" if health.get("status") == "healthy" else "✗ Ada Brain is not healthy"
+            details = f"\n\nStatus: {health.get('status', 'unknown')}\n"
+            
+            if "services" in health:
+                details += "\nServices:\n"
+                for service, service_status in health["services"].items():
+                    details += f"  {service}: {service_status}\n"
 
-        if "persona" in health:
-            details += f"Persona loaded: {health['persona'].get('loaded', False)}\n"
-
-        if "chroma" in health:
-            details += f"ChromaDB: {'✓' if health['chroma'].get('ok') else '✗'}\n"
-
-        return [TextContent(type="text", text=status + details)]
+            return [TextContent(type="text", text=status + details)]
+        except AdaBrainConnectionError as e:
+            return [TextContent(type="text", text=f"✗ Cannot connect to Ada Brain: {e}")]
+        except AdaBrainError as e:
+            return [TextContent(type="text", text=f"✗ Health check failed: {e}")]
 
     else:
         return [TextContent(type="text", text=f"Unknown tool: {name}")]
