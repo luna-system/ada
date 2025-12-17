@@ -1,18 +1,17 @@
-# Context Caching - Integration TODO
+# Context Caching - SHIPPED! ✅🎉
 
-## Phase 1 Status: COMPLETE ✅
+## Status: COMPLETE AND LIVE IN PRODUCTION
 
-**Implemented:**
-- MultiTimescaleCache class with TTL and LRU eviction
-- CacheEntry and CacheStats dataclasses
-- Configuration in brain/config.py
-- ContextRetriever supports optional cache injection
-- 23 passing tests (15 basic + 8 integration)
-
-**Ready for:**
-- Integration into live PromptAssembler
-- Persona caching with 24-hour TTL
-- Metrics tracking (hits, misses, tokens saved)
+**Shipped v2.1.0:**
+- MultiTimescaleCache class with TTL and LRU eviction ✅
+- CacheEntry and CacheStats dataclasses ✅
+- Configuration in brain/config.py ✅
+- ContextRetriever with cache integration ✅
+- PromptAssembler with automatic caching ✅
+- 23 passing tests (15 basic + 8 integration) ✅
+- Persona caching with 24-hour TTL LIVE ✅
+- Metrics tracking (hits, misses) in logs ✅
+- Deleted 266 lines of legacy code ✅
 
 ## Next Step: Integration
 
