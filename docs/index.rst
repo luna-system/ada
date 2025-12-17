@@ -14,6 +14,7 @@ Welcome to the Ada Brain API documentation. This is the REST API backend for the
    getting_started_scratch
    configuration
    examples
+   matrix_integration
 
 .. toctree::
    :maxdepth: 2
@@ -47,6 +48,13 @@ Welcome to the Ada Brain API documentation. This is the REST API backend for the
    bidirectional
    specialist_rag
    web_search
+
+.. toctree::
+   :maxdepth: 2
+   :caption: Operations
+
+   build_system
+   disk_management
 
 .. toctree::
    :maxdepth: 2

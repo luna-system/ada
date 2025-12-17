@@ -4,11 +4,29 @@
 include:
   - compose.profiles.yaml
 
+# Default logging configuration for all services
+x-logging: &default-logging
+  driver: "json-file"
+  options:
+    max-size: "10m"
+    max-file: "3"
+
+# Build configuration - uses BuildKit for better caching and performance
+# Run ./scripts/setup_buildx.sh to install BuildX if needed
+x-build-config: &build-config
+  platforms:
+    - linux/amd64
+  cache_from:
+    - type=local,src=/tmp/.buildx-cache
+  cache_to:
+    - type=local,dest=/tmp/.buildx-cache-new,mode=max
+
 services:
   web:
     build:
       context: .
       dockerfile: frontend/Dockerfile
+      <<: *build-config
     ports:
       - "5000:80"
     env_file:
@@ -17,6 +35,7 @@ services:
       - BRAIN_URL
     depends_on:
       - brain
+    logging: *default-logging
     healthcheck:
       test: ["CMD-SHELL", "curl -fsS http://localhost:80/api/health || exit 1"]
       interval: 10s
@@ -26,6 +45,7 @@ services:
   chroma:
     image: chromadb/chroma:latest
     restart: unless-stopped
+    logging: *default-logging
     environment:
       - CHROMA_SERVER_HOST=0.0.0.0
       - CHROMA_SERVER_HTTP_PORT=8000
@@ -130,8 +150,10 @@ services:
     build:
       context: .
       dockerfile: brain/Dockerfile
+      <<: *build-config
     env_file:
       - .env
+    logging: *default-logging
     ports:
       - "8000:7000"
     environment:
@@ -157,6 +179,44 @@ services:
       timeout: 3s
       retries: 5
 
+  # Matrix bridge - connects Ada to Matrix chat rooms
+  matrix-bridge:
+    build:
+      context: ./matrix-bridge
+      <<: *build-config
+    container_name: ada-matrix-bridge
+    restart: unless-stopped
+    logging: *default-logging
+    env_file:
+      - ./matrix-bridge/.env
+    environment:
+      # Matrix connection
+      - MATRIX_HOMESERVER
+      - MATRIX_USER_ID
+      - MATRIX_ACCESS_TOKEN
+      - MATRIX_PASSWORD
+      # Bot identity
+      - DISPLAY_NAME=Ada [Bot]
+      # Ada brain connection
+      - ADA_BRAIN_URL=http://brain:7000
+      # Behavior
+      - SEND_INTRO_ON_JOIN=true
+      - AUTO_ACCEPT_INVITES=true
+      - TYPING_INDICATOR=true
+      # Privacy
+      - ALLOW_PRIVACY_OPT_OUT=true
+      - STORE_IN_RAG=true
+      - DATA_RETENTION_DAYS=90
+      # Logging
+      - LOG_LEVEL=INFO
+    volumes:
+      - ./data/matrix:/data
+    depends_on:
+      - brain
+    # Uncomment to disable Matrix bridge
+    # profiles:
+    #   - matrix
+
   # Ollama LLM server (CPU-only by default)
   # For GPU: docker compose --profile cuda up  (NVIDIA)
   #          docker compose --profile rocm up  (AMD)
@@ -164,6 +224,7 @@ services:
   ollama:
     image: ollama/ollama:latest
     restart: unless-stopped
+    logging: *default-logging
     env_file:
       - .env
     environment:
@@ -244,6 +305,7 @@ services:
     build:
       context: .
       dockerfile: scripts/Dockerfile
+      <<: *build-config
     profiles: ["tools"]
     env_file:
       - .env

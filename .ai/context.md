@@ -7,11 +7,19 @@ Conversational AI system with RAG (Retrieval-Augmented Generation), streaming re
 
 ### Service Topology
 ```
-frontend (nginx:5000) → brain (fastapi:7000) ⇄ chroma (vector db:8000)
-                                              ⇄ ollama (LLM:11434)
+frontend (nginx:5000)     ┐
+                          ├→ brain (fastapi:7000) ⇄ chroma (vector db:8000)
+matrix-bridge (matrix-nio)┘                       ⇄ ollama (LLM:11434)
 ```
 
+**Interfaces:**
+- Web UI: `http://localhost:5000` (browser-based)
+- Matrix: Bot in Matrix rooms (invitation-only)
+- API: Direct REST API access
+
 ### Data Flow
+
+**Web UI Flow:**
 1. User sends message → Frontend → `/v1/chat/stream` (SSE)
 2. Brain assembles RAG context (persona, FAQ, memories, conversation history)
 3. Specialists activate based on request context (OCR, media, web search)
@@ -19,11 +27,23 @@ frontend (nginx:5000) → brain (fastapi:7000) ⇄ chroma (vector db:8000)
 5. Response streamed back via Server-Sent Events
 6. Memories extracted and stored in ChromaDB
 
+**Matrix Flow:**
+1. User @mentions Ada in Matrix room → Matrix homeserver → matrix-bridge
+2. Bridge checks activation rules (mentions, DMs, keywords)
+3. Bridge reacts to message with 🧠 emoji (processing status)
+4. Bridge queries brain `/v1/chat/stream` with room context (non-streaming wrapper)
+5. Brain processes same as web UI (RAG, specialists, LLM)
+6. Bridge receives complete response text
+7. Bridge posts response to Matrix room
+8. Bridge reacts with ✅ emoji (success) or ❌ (error)
+9. Conversation context stored per-room
+
 ## Key Modules
 
 ### Entry Points
 - `brain/app.py` - FastAPI application, all API endpoints
-- `frontend/public/app.js` - Client-side streaming handler
+- `frontend/public/app.js` - Client-side streaming handler (web UI)
+- `matrix-bridge/bridge.py` - Matrix bot main loop (Matrix interface)
 - `scripts/run.sh` - Containerized utilities and test runner
 
 ### Core Logic
@@ -38,6 +58,13 @@ frontend (nginx:5000) → brain (fastapi:7000) ⇄ chroma (vector db:8000)
 - `brain/specialists/media_specialist.py` - Video frame analysis
 - `brain/specialists/web_search_specialist.py` - External web queries
 - `brain/specialists/bidirectional.py` - LLM-initiated specialist invocation
+
+### Matrix Integration (Bridge Architecture)
+- `matrix-bridge/bridge.py` - Main bot logic, event handlers
+- `matrix-bridge/config.py` - Matrix-specific configuration
+- `matrix-bridge/identity.py` - Bot transparency and ethical presentation
+- `matrix-bridge/ada_client.py` - HTTP client for Ada's brain API
+- `matrix-bridge/message_handler.py` - Context management, command parsing
 
 ### Supporting Systems
 - `brain/notices.py` + `brain/notices_client.py` - System alerts/notifications
