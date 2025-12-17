@@ -23,6 +23,8 @@ x-build-config: &build-config
 
 services:
   web:
+    profiles:
+      - web  # Optional: only starts with --profile web
     build:
       context: .
       dockerfile: frontend/Dockerfile
