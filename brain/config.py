@@ -193,6 +193,12 @@ ATTENTION_SPOTLIGHT_SIZE = int(os.getenv("ATTENTION_SPOTLIGHT_SIZE", "4"))  # ~4
 ATTENTION_SPOTLIGHT_BUDGET = int(os.getenv("ATTENTION_SPOTLIGHT_BUDGET", "4000"))  # Tokens for detailed items
 ATTENTION_PERIPHERY_BUDGET = int(os.getenv("ATTENTION_PERIPHERY_BUDGET", "8000"))  # Tokens for summaries
 
+# Semantic chunking (group related memories to reduce redundancy)
+SEMANTIC_CHUNKING_ENABLED = os.getenv("SEMANTIC_CHUNKING_ENABLED", "true").lower() == "true"
+SEMANTIC_CHUNKING_THRESHOLD = float(os.getenv("SEMANTIC_CHUNKING_THRESHOLD", "0.3"))  # Distance threshold for grouping
+SEMANTIC_CHUNKING_MIN_SIZE = int(os.getenv("SEMANTIC_CHUNKING_MIN_SIZE", "2"))  # Min memories to form chunk
+SEMANTIC_CHUNKING_MAX_SIZE = int(os.getenv("SEMANTIC_CHUNKING_MAX_SIZE", "10"))  # Max memories per chunk
+
 def get_config_dict() -> Dict[str, Any]:
     """Return active configuration as a dictionary for health checks."""
     return {
