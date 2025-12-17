@@ -436,9 +436,67 @@
         "matrix-bridge/bridge.py"
       ],
       "notes": "Per-room context storage, privacy opt-out, activation logic"
+    },
+    "adapters/cli/ada_cli/client.py": {
+      "type": "adapter",
+      "purpose": "Reference implementation HTTP client for Ada's brain API",
+      "key_classes": [
+        "AdaClient",
+        "AdaBrainError",
+        "AdaBrainConnectionError",
+        "AdaBrainResponseError"
+      ],
+      "key_functions": [
+        "chat_stream",
+        "chat",
+        "health"
+      ],
+      "imports": [
+        "httpx"
+      ],
+      "imported_by": [
+        "adapters/cli/ada_cli/cli.py"
+      ],
+      "notes": "Simplest adapter implementation, demonstrates both streaming and non-streaming patterns. Will become foundation for shared ada-client library in Phase 2."
+    },
+    "adapters/cli/ada_cli/cli.py": {
+      "type": "adapter",
+      "purpose": "Interactive REPL and one-shot CLI interface",
+      "key_functions": [
+        "interactive_mode",
+        "oneshot_mode",
+        "main"
+      ],
+      "imports": [
+        "click",
+        "rich",
+        "adapters.cli.ada_cli.client"
+      ],
+      "imported_by": [],
+      "notes": "Demonstrates CLI patterns: REPL mode with commands, one-shot queries, JSON output for scripting"
+    },
+    "frontend/public/app.js": {
+      "type": "adapter",
+      "purpose": "Web UI adapter - browser-based EventSource client",
+      "key_functions": [
+        "sendMessage",
+        "handleStreamChunk",
+        "reconnectStream"
+      ],
+      "imports": [],
+      "imported_by": [],
+      "notes": "EventSource (SSE) client for streaming responses, proxied through nginx to /api/* endpoints"
     }
   },
   "dependency_clusters": {
+    "adapters": [
+      "adapters/cli/ada_cli/client.py",
+      "adapters/cli/ada_cli/cli.py",
+      "frontend/public/app.js",
+      "matrix-bridge/bridge.py",
+      "matrix-bridge/ada_client.py",
+      "ada-mcp/src/ada_mcp/server.py"
+    ],
     "core_api": [
       "brain/app.py",
       "brain/schemas.py",
@@ -466,14 +524,25 @@
       "brain/notices.py"
     ],
     "matrix_bridge": [
-      "matrix-bridge/bridge.py",
-      "matrix-bridge/config.py",
-      "matrix-bridge/identity.py",
-      "matrix-bridge/ada_client.py",
-      "matrix-bridge/message_handler.py"
-    ]
-  },
-  "data_flow": {
+      li_chat_request": [
+      "adapters/cli/ada_cli/cli.py::main",
+      "adapters/cli/ada_cli/client.py::chat_stream",
+      "brain/app.py::chat_stream_v1",
+      "brain/prompt_builder.py::build_prompt",
+      "brain/rag_store.py::search_memories",
+      "brain/specialists/*::process",
+      "brain/llm.py::generate_stream",
+      "adapters/cli/ada_cli/cli.py::display_stream"
+    ],
+    "web_chat_request": [
+      "frontend/public/app.js::sendMessage",
+      "nginx::proxy /api/* to brain",
+      "brain/app.py::chat_stream_v1",
+      "brain/prompt_builder.py::build_prompt",
+      "brain/rag_store.py::search_memories",
+      "brain/specialists/*::process",
+      "brain/llm.py::generate_stream",
+      "frontend/public/app.js::handleStreamChunk
     "chat_request": [
       "frontend/public/app.js",
       "brain/app.py::chat_stream_v1",
