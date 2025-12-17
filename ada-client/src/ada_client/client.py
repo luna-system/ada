@@ -38,13 +38,13 @@ class AdaClient:
     
     def __init__(
         self,
-        base_url: str = "http://localhost:7000",
+        base_url: str = "http://localhost:8000",
         timeout: float = 120.0
     ):
         """Initialize Ada client.
         
         Args:
-            base_url: Base URL for Ada's brain API (default: http://localhost:7000)
+            base_url: Base URL for Ada's brain API (default: http://localhost:8000)
             timeout: Request timeout in seconds (default: 120.0)
         """
         self.base_url = base_url.rstrip("/")
