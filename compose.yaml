@@ -177,7 +177,7 @@ services:
       - /run/user/${UID:-1000}/bus:/run/user/1000/bus:ro
     depends_on:
       - chroma
-      - ollama
+      # Note: ollama dependency optional - set OLLAMA_BASE_URL to use external instance
     extra_hosts:
       - "host.docker.internal:host-gateway"
     healthcheck:
@@ -229,6 +229,9 @@ services:
   #          docker compose --profile rocm up  (AMD)
   # See compose.profiles.yaml and docs/hardware.rst for details
   ollama:
+    profiles:
+      - ollama  # Optional: only starts with --profile ollama or default profiles
+      - ""      # Empty profile = default (starts without any --profile flag)
     image: ollama/ollama:latest
     restart: unless-stopped
     logging: *default-logging
@@ -242,6 +245,9 @@ services:
 
   # One-shot helper that pulls the required model once Ollama is healthy
   ollama-init:
+    profiles:
+      - ollama  # Only runs when ollama service is active
+      - ""      # Empty profile = default
     image: curlimages/curl:8.10.1
     depends_on:
       - ollama
