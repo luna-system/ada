@@ -1,6 +1,6 @@
 [project]
 name = "ada-v1"
-version = "1.6.0"
+version = "1.9.0"
 description = ""
 authors = [
     {name = "luna system",email = "luna@airsi.de"}

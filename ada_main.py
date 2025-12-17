@@ -71,7 +71,7 @@ def detect_environment() -> Tuple[bool, bool, bool]:
 
 
 @click.group()
-@click.version_option(version="1.6.0", prog_name="ada")
+@click.version_option(version="1.9.0")
 def cli():
     """Ada - Your local AI assistant (Docker optional!)"""
     pass
