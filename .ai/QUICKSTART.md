@@ -1,14 +1,23 @@
 # AI Assistant Quick Start
 
+## 🎯 TDD FIRST! (Preferred Workflow)
+
+**When adding features, write tests BEFORE implementation!**
+- Faster feedback (tests run in <0.1s, no Docker needed)
+- Better design (tests define interfaces)
+- See `.ai/TESTING.md` for full TDD guide
+- Example: Phase 1-2 biomimetic features (52 tests, pure TDD)
+
 ## First Time Analyzing This Codebase?
 
 Read these files in order:
 
 1. **`.ai/CONVENTIONS.md`** (3 min) - Documentation strategy: what goes where
-2. **`.ai/TOOLING.md`** (2 min) - **NEW!** Which tool to use when (bash/nix/docker/uv)
-3. **`.ai/context.md`** (5 min) - Architecture overview, data flow, key conventions
-4. **`.ai/codebase-map.json`** (2 min) - Module relationships and dependencies
-5. **`.ai/specialist-registry.json`** (2 min) - Plugin system architecture
+2. **`.ai/TOOLING.md`** (2 min) - Which tool to use when (bash/nix/docker/uv)
+3. **`.ai/TESTING.md`** (3 min) - **TDD workflow and testing patterns**
+4. **`.ai/context.md`** (5 min) - Architecture overview, data flow, key conventions
+5. **`.ai/codebase-map.json`** (2 min) - Module relationships and dependencies
+6. **`.ai/specialist-registry.json`** (2 min) - Plugin system architecture
 
 ## Common Tasks
 
