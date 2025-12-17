@@ -11,8 +11,9 @@ and produces the final prompt string ready for the LLM.
 """
 # @ai-indexable: core-component
 # @ai-purpose: Orchestrate prompt building from all components
-# @ai-dependencies: context_retriever, section_builder, specialists
+# @ai-dependencies: context_retriever, section_builder, specialists, context_habituation
 # @ai-related: brain.prompt_builder
+# @ai-enhanced: v2.1 - Habituation support for repeated context
 
 import logging
 from typing import Any
@@ -21,6 +22,7 @@ from brain.prompt_builder.context_retriever import ContextRetriever
 from brain.prompt_builder.section_builder import SectionBuilder
 from brain.context_cache import MultiTimescaleCache
 from brain.token_monitor import TokenBudgetMonitor
+from brain.context_habituation import ContextHabituation
 from brain.config import config
 
 logger = logging.getLogger(__name__)
@@ -73,6 +75,17 @@ class PromptAssembler:
             )
         else:
             self.token_monitor = None
+        
+        # Initialize context habituation (Biomimetic Phase 1)
+        if config.CONTEXT_HABITUATION_ENABLED:
+            self.habituation = ContextHabituation(
+                threshold=config.CONTEXT_HABITUATION_THRESHOLD,
+                habituated_weight=config.CONTEXT_HABITUATION_WEIGHT,
+                decay_hours=config.CONTEXT_HABITUATION_DECAY_HOURS
+            )
+            logger.info(f"Context habituation enabled (threshold={config.CONTEXT_HABITUATION_THRESHOLD})")
+        else:
+            self.habituation = None
     
     def build_prompt(
         self,
@@ -122,11 +135,21 @@ class PromptAssembler:
                 if self.token_monitor:
                     self.token_monitor.track("system_notices", notice_section)
         
-        # Persona (who Ada is)
+        # Persona (who Ada is) - with habituation
         persona_section = self.builder.format_persona(persona)
-        sections.append(persona_section)
-        if self.token_monitor:
-            self.token_monitor.track("persona", persona_section)
+        habituation_weight = 1.0
+        
+        if self.habituation:
+            habituation_weight = self.habituation.get_weight("persona", persona_section)
+            if habituation_weight < 1.0:
+                logger.info(f"Persona habituated: weight={habituation_weight:.2f}")
+        
+        # Include if weight > 0
+        if habituation_weight > 0:
+            sections.append(persona_section)
+            if self.token_monitor:
+                self.token_monitor.track("persona", persona_section, 
+                                       metadata={'habituation_weight': habituation_weight})
         
         # Specialist results (tool outputs - high priority)
         if specialist_results:
@@ -143,12 +166,22 @@ class PromptAssembler:
             if self.token_monitor:
                 self.token_monitor.track("memories", memory_section)
         
-        # FAQs (reference information)
+        # FAQs (reference information) - with habituation
         if faqs:
             faq_section = self.builder.format_faqs(faqs)
-            sections.append(faq_section)
-            if self.token_monitor:
-                self.token_monitor.track("faqs", faq_section)
+            habituation_weight = 1.0
+            
+            if self.habituation:
+                habituation_weight = self.habituation.get_weight("faqs", faq_section)
+                if habituation_weight < 1.0:
+                    logger.info(f"FAQs habituated: weight={habituation_weight:.2f}")
+            
+            # Include if weight > 0
+            if habituation_weight > 0:
+                sections.append(faq_section)
+                if self.token_monitor:
+                    self.token_monitor.track("faqs", faq_section,
+                                           metadata={'habituation_weight': habituation_weight})
         
         # Conversation history (recent turns)
         if turns:

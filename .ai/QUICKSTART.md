@@ -5,9 +5,10 @@
 Read these files in order:
 
 1. **`.ai/CONVENTIONS.md`** (3 min) - Documentation strategy: what goes where
-2. **`.ai/context.md`** (5 min) - Architecture overview, data flow, key conventions
-3. **`.ai/codebase-map.json`** (2 min) - Module relationships and dependencies
-4. **`.ai/specialist-registry.json`** (2 min) - Plugin system architecture
+2. **`.ai/TOOLING.md`** (2 min) - **NEW!** Which tool to use when (bash/nix/docker/uv)
+3. **`.ai/context.md`** (5 min) - Architecture overview, data flow, key conventions
+4. **`.ai/codebase-map.json`** (2 min) - Module relationships and dependencies
+5. **`.ai/specialist-registry.json`** (2 min) - Plugin system architecture
 
 ## Common Tasks
 
