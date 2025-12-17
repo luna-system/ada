@@ -101,7 +101,7 @@ A: Use the syntax SPECIALIST_REQUEST[{cap.name}:{{}}] in your response. I will d
                 "web_search": "Use web_search when users ask about current/recent events, today's weather, latest news, real-time data (stocks/sports), or anything after October 2023. Trigger words: 'today', 'now', 'current', 'latest', 'recent'. Example: 'What's the weather today?' → SPECIALIST_REQUEST[web_search:{\"query\":\"weather today\"}]",
                 "ocr": "OCR auto-activates on image uploads with text. Request manually when user wants text extraction from images they've shared. Trigger: 'read the text', 'what does it say', 'extract text'.",
                 "vision": "Use vision for image analysis beyond text - diagrams, charts, visual content, object detection. Trigger: 'what's in this image', 'analyze this diagram', 'describe what you see'.",
-                "media": "Media specialist auto-activates when ListenBrainz data is present. Shows what user is currently listening to."
+                "listenbrainz": "ListenBrainz specialist auto-activates when ListenBrainz API data is present. Shows what user is currently listening to or recently listened to."
             }
             
             if cap.name in trigger_patterns:
