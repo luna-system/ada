@@ -41,6 +41,7 @@ Welcome to Ada! Your personal AI assistant that runs entirely on your hardware.
    data_model
    streaming
    memory
+   token_monitoring
 
 .. toctree::
    :maxdepth: 2

@@ -134,6 +134,32 @@
       ],
       "notes": "All environment variables defined here, singleton pattern"
     },
+    "brain/token_monitor.py": {
+      "type": "core-service",
+      "purpose": "Track and monitor token usage by component for context optimization (v2.0)",
+      "key_classes": [
+        "TokenBudgetMonitor",
+        "TokenUsageBreakdown",
+        "ComponentTokens"
+      ],
+      "key_functions": [
+        "count_tokens",
+        "track",
+        "get_breakdown",
+        "get_summary",
+        "get_top_components",
+        "reset"
+      ],
+      "imports": [
+        "tiktoken",
+        "logging",
+        "dataclasses"
+      ],
+      "imported_by": [
+        "brain/prompt_builder.py"
+      ],
+      "notes": "Phase 1 v2.0 feature - provides visibility into token usage patterns before optimization. Uses tiktoken for accurate counting."
+    },
     "brain/specialists/protocol.py": {
       "type": "interface",
       "purpose": "Base protocol for specialist plugins, MCP-inspired architecture",
