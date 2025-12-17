@@ -43,9 +43,17 @@ Most AI assistants lock essential features behind subscriptions:
 
 ---
 
-## Quick Start (Local Mode - No Docker!)
+## Quick Start
 
-### 1. Install Prerequisites
+Choose your path:
+
+- **[Local Mode](#local-mode-no-docker)** - Just Python + Ollama (recommended)
+- **[Nix Flake](#nix-flake)** - Declarative, reproducible setup
+- **[Docker Mode](#docker-mode-optional)** - Containerized deployment
+
+### Local Mode (No Docker!)
+
+#### 1. Install Prerequisites
 
 - **Python 3.13+** (required)
 - **Ollama** (required) - Get from [ollama.ai](https://ollama.ai)
@@ -103,7 +111,31 @@ ada run
 # Edit .env: AI_NAME=Jarvis, AI_USER_NAME=Tony
 ```
 
-See [docs/local_mode.md](docs/local_mode.md) for complete guide.
+See [docs/local_mode.rst](docs/local_mode.rst) for complete guide.
+
+---
+
+### Nix Flake
+
+For reproducible, declarative environments:
+
+```bash
+# Development shell
+nix develop
+
+# Or with automatic activation
+direnv allow
+
+# Run Ada directly
+nix run github:luna-system/ada
+
+# Build package
+nix build
+
+# NixOS module available!
+```
+
+See [NIX.md](NIX.md) or [docs/nix.rst](docs/nix.rst) for complete guide.
 
 ---
 
