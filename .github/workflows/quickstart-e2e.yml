@@ -240,6 +240,12 @@ jobs:
         docker compose up -d chroma ollama
         sleep 10
     
+    - name: Pull embedding model for RAG tests
+      run: |
+        echo "Pulling nomic-embed-text model for embedding tests..."
+        docker compose exec -T ollama ollama pull nomic-embed-text
+        echo "✅ Embedding model ready"
+    
     - name: Run test suite
       run: |
         docker compose run --rm scripts pytest -v
