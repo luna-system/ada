@@ -13,6 +13,9 @@ Requirements
 ------------
 
 - Python 3.13+
+  
+  **Don't have Python 3.13?** Use Nix! See :doc:`nix` for instant Python 3.13 environment.
+  
 - Ollama (LLM backend)
 - 8GB+ RAM recommended
 - GPU optional (CUDA, ROCm, or Metal)
