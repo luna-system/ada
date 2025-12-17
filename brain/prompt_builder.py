@@ -15,7 +15,7 @@ Now with specialist plugin support for extensible context injection.
 import asyncio
 import datetime
 import logging
-from typing import Dict, Any, List, Optional, Tuple
+from typing import Dict, Any, List, Optional, Tuple, TYPE_CHECKING
 from config import (
     SYSTEM_PROMPT,
     RAG_ENABLE_PERSONA,
@@ -38,6 +38,9 @@ from notices_client import get_active_notices
 from brain.specialists import execute_specialists
 from brain.specialists.specialist_docs import get_relevant_specialist_docs
 
+if TYPE_CHECKING:
+    from brain.token_monitor import TokenBudgetMonitor
+
 logger = logging.getLogger(__name__)
 
 
@@ -52,6 +55,7 @@ async def build_prompt(
     faq_k: Optional[int] = None,
     memory_k: Optional[int] = None,
     ocr_context: Optional[Dict[str, Any]] = None,
+    token_monitor: Optional['TokenBudgetMonitor'] = None,
 ) -> Tuple[str, Dict[str, Any]]:
     """
     Assemble a complete prompt from all available context.
@@ -76,7 +80,10 @@ async def build_prompt(
             msg = n['message'][:200] + ("..." if len(n['message']) > 200 else "")
             severity_label = n['severity'].upper()
             notice_lines.append(f"⚠️ {severity_label} ALERT [{n['component']}.{n['code']}]: {msg}")
-        sections.append("🔔 SYSTEM NOTICES — Acknowledge these immediately before responding to the user:\n" + "\n".join(notice_lines))
+        notice_section = "🔔 SYSTEM NOTICES — Acknowledge these immediately before responding to the user:\n" + "\n".join(notice_lines)
+        sections.append(notice_section)
+        if token_monitor:
+            token_monitor.track("system_notices", notice_section)
     used_context: Dict[str, Any] = {
         'persona': None,
         'faqs': [],
@@ -90,6 +97,8 @@ async def build_prompt(
     # Always include system prompt (identity)
     # Note: If SPECIALIST_RAG_DOCS is enabled, specialist instructions come from RAG instead
     sections.append(SYSTEM_PROMPT)
+    if token_monitor:
+        token_monitor.track("system_prompt", SYSTEM_PROMPT)
     
     # --- Dynamic Specialist Documentation (RAG-based) ---
     if SPECIALIST_RAG_DOCS and rag_store is not None:
@@ -97,6 +106,8 @@ async def build_prompt(
         if specialist_docs:
             sections.append(specialist_docs)
             used_context['specialist_docs'] = True
+            if token_monitor:
+                token_monitor.track("specialist_docs", specialist_docs)
     
     # --- Execute Specialist Plugins ---
     # Build request context for specialists
@@ -117,6 +128,10 @@ async def build_prompt(
         for result in specialist_results:
             if result.success and result.context_text:
                 sections.append(result.context_text)
+                
+                # Track tokens
+                if token_monitor:
+                    token_monitor.track(f"specialist_{result.specialist_name}", result.context_text)
                 
                 # Track in used_context
                 specialist_name = result.specialist_name
@@ -142,7 +157,10 @@ async def build_prompt(
             else:
                 p_text, p_meta = str(persona_doc), {}
             short_persona = p_text if len(p_text) <= PERSONA_MAX_CHARS else p_text[:PERSONA_MAX_CHARS]
-            sections.append("Persona and style guidelines (global):\n" + short_persona)
+            persona_section = "Persona and style guidelines (global):\n" + short_persona
+            sections.append(persona_section)
+            if token_monitor:
+                token_monitor.track("persona", persona_section)
             used_context['persona'] = {
                 'included': True,
                 'version': (p_meta or {}).get('version'),
@@ -168,7 +186,10 @@ async def build_prompt(
                 else:
                     mem_lines.append(f"- ({scope}{tag_str}) {text_m}")
                 used_context['memories'].append(text_m)
-            sections.append("Long-term memory:\n" + "\n".join(mem_lines))
+            memory_section = "Long-term memory:\n" + "\n".join(mem_lines)
+            sections.append(memory_section)
+            if token_monitor:
+                token_monitor.track("memories", memory_section)
     
     # FAQs/reference
     if RAG_ENABLE_FAQ and rag_store is not None and faq_k > 0:
@@ -179,7 +200,10 @@ async def build_prompt(
                 topic = (meta or {}).get('topic', 'faq')
                 faq_lines.append(f"- ({topic}) {text}")
                 used_context['faqs'].append(text)
-            sections.append("Reference snippets (FAQs):\n" + "\n".join(faq_lines))
+            faq_section = "Reference snippets (FAQs):\n" + "\n".join(faq_lines)
+            sections.append(faq_section)
+            if token_monitor:
+                token_monitor.track("faqs", faq_section)
     
     # Conversation turns
     if RAG_ENABLE_TURN and rag_store is not None and turns_k > 0:
@@ -194,14 +218,20 @@ async def build_prompt(
                 else:
                     turn_lines.append(f"- {role}: {text}")
                 used_context['turns'].append(text)
-            sections.append("Recent conversation turns (most relevant first):\n" + "\n".join(turn_lines))
+            turn_section = "Recent conversation turns (most relevant first):\n" + "\n".join(turn_lines)
+            sections.append(turn_section)
+            if token_monitor:
+                token_monitor.track("turns", turn_section)
     
     # Conversation summaries
     if RAG_ENABLE_SUMMARY and rag_store is not None and conversation_id:
         sum_hits = rag_store.retrieve_summaries(conversation_id=conversation_id, k=RAG_SUMMARY_TOP_K)
         if sum_hits:
             used_context['summaries'] = [t for t, _ in sum_hits]
-            sections.append("Conversation summaries:\n" + "\n".join(f"- {t}" for t, _ in sum_hits))
+            summary_section = "Conversation summaries:\n" + "\n".join(f"- {t}" for t, _ in sum_hits)
+            sections.append(summary_section)
+            if token_monitor:
+                token_monitor.track("summaries", summary_section)
     
     # Instructions and reminders
     instructions = (
@@ -214,6 +244,12 @@ async def build_prompt(
     
     # Assemble final prompt
     assembled = ("\n\n".join(sections) + "\n\n" if sections else "") + instructions + "\n" + reminder + "\n" + current_ts_line
+    
+    # Track instructions and metadata
+    if token_monitor:
+        token_monitor.track("instructions", instructions + "\n" + reminder + "\n" + current_ts_line)
+        token_monitor.track("user_prompt", user_prompt)
+    
     final_prompt = f"{assembled}\nUser: {user_prompt}\nAssistant:"
     
     return final_prompt, used_context

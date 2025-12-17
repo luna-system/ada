@@ -1,72 +1,139 @@
-# Machine Documentation for AI Assistants
+# Ada v1 - AI Documentation Directory
 
-This folder contains **structured documentation designed for AI assistants** working with the Ada codebase.
+> **Purpose:** Machine-readable documentation for AI assistants and automated tools  
+> **Audience:** AI models, code analyzers, developers exploring the codebase  
+> **Philosophy:** Structured, parseable, semantic metadata
 
-## Quick Start for AI Assistants
+## Quick Navigation
 
-**New here?** Start with [context.md](context.md) for architecture overview, then check [CONVENTIONS.md](CONVENTIONS.md) to understand where things go.
+### Core Reference (Always Up-to-Date)
+- **[context.md](context.md)** - Architecture overview, data flow, service topology
+- **[codebase-map.json](codebase-map.json)** - Module dependency graph, import relationships
+- **[specialist-registry.json](specialist-registry.json)** - Plugin system metadata
 
-**Looking for specifics?** Use [codebase-map.json](codebase-map.json) to navigate modules and dependencies.
+### Conventions & Patterns
+- **[CONVENTIONS.md](CONVENTIONS.md)** - Documentation strategy (where things go)
+- **[QUICKSTART.md](QUICKSTART.md)** - Common patterns and quick reference
+- **[GOTCHAS.md](GOTCHAS.md)** - Anti-patterns, common mistakes to avoid
+- **[TESTING.md](TESTING.md)** - Testing strategies and validation
+
+### Explorations (Working Documents)
+Active research, planning, and analysis documents. These evolve as we build!
+
+#### Research (`explorations/research/`)
+Biomimicry, novel approaches, blue-sky thinking:
+- **[BIOLOGICAL_CONTEXT_MANAGEMENT.md](explorations/research/BIOLOGICAL_CONTEXT_MANAGEMENT.md)** - How biology handles context limits
+- **[TAGS_AND_GRAPHRAG.md](explorations/research/TAGS_AND_GRAPHRAG.md)** - Tags → GraphRAG evolution path
+
+#### Planning (`explorations/planning/`)
+Implementation roadmaps and feature designs:
+- **[IMPLEMENTATION_ROADMAP.md](explorations/planning/IMPLEMENTATION_ROADMAP.md)** - Master 8-12 week roadmap (v2.0)
+- **[CODEBASE_SPECIALIST_PLAN.md](explorations/planning/CODEBASE_SPECIALIST_PLAN.md)** - Ada reading her own code
+
+#### Analysis (`explorations/analysis/`)
+Technical deep-dives and architectural decisions:
+- **[ARCHITECTURE_SCALABILITY.md](explorations/analysis/ARCHITECTURE_SCALABILITY.md)** - Token budget, RAG sophistication
+- **[HARDWARE_IMPACT_ANALYSIS.md](explorations/analysis/HARDWARE_IMPACT_ANALYSIS.md)** - Resource implications, hardware tiers
+- **[MODEL_FLEXIBILITY.md](explorations/analysis/MODEL_FLEXIBILITY.md)** - Model routing, use-case optimization
+
+---
+
+## Document Types
+
+### Core Reference
+**Purpose:** Canonical source of truth about Ada's architecture  
+**Update frequency:** On every architectural change  
+**Format:** Structured markdown + JSON  
+**Audience:** All AI assistants, always read these first
+
+### Conventions
+**Purpose:** How to document, where things go  
+**Update frequency:** When documentation strategy changes  
+**Format:** Markdown with decision trees  
+**Audience:** Contributors, documentation maintainers
+
+### Explorations
+**Purpose:** Working documents, research, planning  
+**Update frequency:** Active during development phases  
+**Format:** Long-form markdown  
+**Audience:** Development team, future reference
+
+---
+
+## How to Use This Directory
+
+### For AI Assistants
+1. **Start with [context.md](context.md)** - Get the big picture
+2. **Check [codebase-map.json](codebase-map.json)** - Find module relationships
+3. **Reference [CONVENTIONS.md](CONVENTIONS.md)** - Understand documentation strategy
+4. **Browse explorations/** - See active development plans
+
+### For Developers
+1. **Read [QUICKSTART.md](QUICKSTART.md)** - Common patterns
+2. **Check [GOTCHAS.md](GOTCHAS.md)** - Avoid known pitfalls
+3. **Review [TESTING.md](TESTING.md)** - Testing strategies
+4. **Explore explorations/** - Understand roadmap and decisions
+
+### For Contributors
+1. **Follow [CONVENTIONS.md](CONVENTIONS.md)** - Document correctly
+2. **Update [codebase-map.json](codebase-map.json)** - When adding modules
+3. **Read explorations/planning/** - Understand where we're going
+
+---
 
 ## Philosophy
 
-**Machine-First Documentation:** Unlike human docs in `docs/*.rst`, these files prioritize:
-- **Structure over narrative** - JSON when appropriate, concise Markdown
-- **Relationships over explanation** - Dependency graphs, import chains  
-- **Context over tutorial** - Architectural patterns, not step-by-step guides
-- **Currency over completeness** - Quick updates, living documents
+**Machine-Readable First:**
+- Structured for parsing (JSON where possible)
+- Clear hierarchies (headings, lists)
+- Semantic metadata (tags, categories)
 
-## Files
+**Human-Friendly Second:**
+- Narrative explanations in markdown
+- Examples and use cases
+- Cross-references and links
 
-### `context.md`
-Human-readable architecture overview optimized for LLM consumption:
-- Service topology and data flow
-- Key modules and their relationships
-- Extension points and conventions
-- Critical paths and circular dependencies
+**Separation of Concerns:**
+- **`.ai/`** = Machine docs (this directory)
+- **`docs/`** = Human docs (Sphinx RST tutorials)
+- **Source code** = Implementation + docstrings
 
-### `codebase-map.json`
-Machine-readable module metadata:
-- Module purposes and key functions
-- Import relationships (imports/imported_by)
-- Dependency clusters
-- Data flow paths
+**Keep It Clean:**
+- Root `.ai/` for stable reference docs
+- `explorations/` for working documents
+- Archive completed explorations when stable
 
-### `specialist-registry.json`
-Plugin system metadata:
-- All specialist capabilities and activation patterns
-- Input/output schemas
-- Extension guide for adding new specialists
-- Priority ordering rules
+---
 
-### `CONVENTIONS.md`
-Documentation strategy and placement guidelines:
-- Where to put different types of documentation
-- Human-readable (Sphinx) vs machine-readable (.ai/)
-- Style guides and naming conventions
-- Examples and decision trees
+## Maintenance
 
-### `TESTING.md`
-Validation and testing guide:
-- How to run documentation tests
-- CI/CD integration
-- Pre-commit hooks
-- Maintenance procedures
+### When to Update Core Docs
+- **context.md** - On architectural changes, new services, data flow updates
+- **codebase-map.json** - When adding/removing modules, changing imports
+- **specialist-registry.json** - When adding/modifying specialists
 
-### `CLEANUP_NOTES.md`
-Current status, recent changes, completed work. Check here to see what's been done recently.
+### When to Update Conventions
+- **CONVENTIONS.md** - When documentation strategy changes
+- **TESTING.md** - When testing patterns evolve
 
-### `GOTCHAS.md`
-Common mistakes and anti-patterns:
-- Things that look right but are wrong for THIS codebase
-- Why standard practices don't apply here
-- What to do instead with examples
-- Detection patterns for AI assistants
+### When to Add Explorations
+- **research/** - When exploring novel approaches, biomimicry, experiments
+- **planning/** - When designing new features, creating roadmaps
+- **analysis/** - When deep-diving on technical decisions, trade-offs
 
-## Usage by AI Models
+---
 
-AI assistants should:
-1. Read `.ai/CONVENTIONS.md` first to understand documentation strategy
+## Related Documentation
+
+- **Human docs:** `docs/` (Sphinx RST, tutorials, guides)
+- **API docs:** `/v1/info`, `/v1/schema` (runtime introspection)
+- **Source annotations:** `@ai-*` tags in Python files
+
+---
+
+**Last Updated:** 2025-12-17  
+**Maintained By:** Ada Development Team  
+**License:** Same as project (check root LICENSE file)
 2. Read `.ai/context.md` for high-level architecture understanding
 3. Use `codebase-map.json` to navigate module relationships
 4. Reference `specialist-registry.json` when working with plugins
