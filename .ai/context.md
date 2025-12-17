@@ -7,34 +7,59 @@ Conversational AI system with RAG (Retrieval-Augmented Generation), streaming re
 
 ### Service Topology
 ```
-frontend (nginx:5000)     ┐
-                          ├→ brain (fastapi:7000) ⇄ chroma (vector db:8000)
-matrix-bridge (matrix-nio)┘                       ⇄ ollama (LLM:11434)
+CLI (terminal)            ┐
+Web UI (nginx:5000)       ├→ brain (fastapi:8000) ⇄ chroma (vector db:8000)
+Matrix bridge (matrix-nio)│                       ⇄ ollama (LLM:11434)
+MCP server (stdio)        ┘
 ```
 
-**Interfaces:**
-- Web UI: `http://localhost:5000` (browser-based)
-- Matrix: Bot in Matrix rooms (invitation-only)
-- API: Direct REST API access
+**Adapter Pattern:** All interfaces are equal peers that communicate with brain's REST API
+
+**Interfaces (Adapters):**
+- **CLI**: Terminal REPL and one-shot queries (`ada-cli`)
+- **Web UI**: Browser-based chat at `http://localhost:5000` (optional, `--profile web`)
+- **Matrix**: Bot in Matrix rooms (optional, `--profile matrix`)
+- **MCP**: IDE integration via Model Context Protocol (separate process)
+- **API**: Direct REST API access at `http://localhost:8000` (always available)
 
 ### Data Flow
 
-**Web UI Flow:**
-1. User sends message → Frontend → `/v1/chat/stream` (SSE)
+**CLI Flow:**
+1. User runs `ada-cli "message"` → HTTP client → `/v1/chat/stream`
 2. Brain assembles RAG context (persona, FAQ, memories, conversation history)
 3. Specialists activate based on request context (OCR, media, web search)
 4. Prompt built with context + specialist results → Ollama LLM
 5. Response streamed back via Server-Sent Events
-6. Memories extracted and stored in ChromaDB
+6. CLI displays chunks in terminal
+7. Memories extracted and stored in ChromaDB
+
+**Web UI Flow:**
+1. User sends message → Frontend EventSource → nginx proxy → `/v1/chat/stream` (SSE)
+2. Brain assembles RAG context (same as CLI)
+3. Specialists activate based on request context
+4. Prompt built with context + specialist results → Ollama LLM
+5. Response streamed back via Server-Sent Events
+6. Frontend displays chunks in browser
+7. Memories extracted and stored in ChromaDB
 
 **Matrix Flow:**
 1. User @mentions Ada in Matrix room → Matrix homeserver → matrix-bridge
 2. Bridge checks activation rules (mentions, DMs, keywords)
 3. Bridge reacts to message with 🧠 emoji (processing status)
-4. Bridge queries brain `/v1/chat/stream` with room context (non-streaming wrapper)
-5. Brain processes same as web UI (RAG, specialists, LLM)
-6. Bridge receives complete response text
-7. Bridge posts response to Matrix room
+4. Bridge queries brain `/v1/chat/stream` with room conte (core)
+- `adapters/cli/ada_cli/cli.py` - CLI adapter main entry point (reference implementation)
+- `frontend/public/app.js` - Web UI adapter, client-side streaming handler
+- `matrix-bridge/bridge.py` - Matrix adapter, bot main loop
+- `ada-mcp/src/ada_mcp/server.py` - MCP adapter, stdio server
+- `scripts/run.sh` - Containerized utilities and test runner
+
+### Adapter Pattern
+All external interfaces follow the adapter pattern:
+- **Adapter** = Protocol translation layer (Matrix, MCP, CLI, Web)
+- **Brain** = Core logic (RAG, LLM, specialists)
+- **Communication** = REST API at `/v1/chat/stream`
+
+See `docs/adapters.rst` for building new adapters.
 8. Bridge reacts with ✅ emoji (success) or ❌ (error)
 9. Conversation context stored per-room
 
