@@ -1,0 +1,4 @@
+# file: /home/luna/Code/ada-v1/brain/token_monitor.py
+# hypothesis_version: 6.148.7
+
+[100, 102400, 128000, 'cl100k_base', 'gpt-4']

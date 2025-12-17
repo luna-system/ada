@@ -1,0 +1,4 @@
+# file: /home/luna/Code/ada-v1/brain/rag_store.py
+# hypothesis_version: 6.148.7
+
+[0.0, 0.5, 5.0, 100, 443, 8000, '$and', '$eq', '/', '/data/chroma', '0.3', '0.5', '3600', 'CHROMA_URL', 'RAG_RECENCY_WEIGHT', 'assistant', 'chat', 'conversation', 'conversation_id', 'conversations', 'documents', 'embedding', 'faq', 'global', 'http', 'https', 'id', 'ids', 'importance', 'kb', 'localhost', 'memory', 'metadatas', 'model', 'nomic-embed-text', 'persona', 'preview', 'prompt', 'role', 'scope', 'source', 'summary', 'tags', 'text', 'timestamp', 'topic', 'turn', 'turn_count', 'type', 'user', 'version']
