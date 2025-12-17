@@ -18,6 +18,10 @@ OLLAMA_BASE_URL = os.getenv("OLLAMA_BASE_URL", "http://localhost:11434")
 RAG_ENABLED = os.getenv("RAG_ENABLED", "true").lower() == "true"
 EMBED_MODEL = os.getenv("OLLAMA_EMBED_MODEL", "nomic-embed-text")
 
+# ChromaDB mode: "embedded" for local file-based, or set CHROMA_URL for HTTP client
+CHROMA_MODE = os.getenv("CHROMA_MODE", "auto")  # auto, embedded, or http
+DATA_DIR = os.getenv("DATA_DIR", "./data")  # Base directory for local persistence
+
 # RAG feature toggles
 RAG_ENABLE_PERSONA = os.getenv("RAG_ENABLE_PERSONA", "true").lower() == "true"
 RAG_ENABLE_FAQ = os.getenv("RAG_ENABLE_FAQ", "true").lower() == "true"
