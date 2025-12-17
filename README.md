@@ -67,6 +67,7 @@ ollama pull deepseek-r1:14b
 
 # Start Ada
 ada run
+```
 
 **That's it!** Ada runs at http://localhost:7000
 
@@ -297,11 +298,11 @@ Built with:
 A: It's stable for personal use. For production workloads, you'll want to add authentication, rate limiting, and monitoring.
 
 **Q: How do I contribute a new specialist?**  
-A: See [Build Your First Specialist](/docs/BUILD_YOUR_FIRST_SPECIALIST.md)! We love weird use cases.
-
----
-
-**Let's build tools that let weird kihttps://ada-docs.readthedocs.io/en/latest/build_specialist.html)! We love weird use cases.
+A: See [Build a Specialist](docs/build_specialist.rst)! We love weird use cases.
 
 **Q: Was this really built with AI?**  
 A: Mostly! See [Provenance](#provenance) for full transparency about our human-AI collaboration
+
+---
+
+**Let's build tools that let weird kids make weird things.** 💜
