@@ -154,9 +154,37 @@
     },
     "bidirectional": {
       "description": "LLM can invoke specialist mid-response via XML tags",
-      "examples": ["web_search", "docs"],
+      "examples": ["web_search", "docs", "wiki_lookup"],
       "detection": "LLM output parsed for <specialist_name>args</specialist_name> tags",
       "flow": "LLM generation → tag detected → specialist executed → results injected → LLM continues"
+    },
+    "wiki_lookup": {
+      "class_name": "WikiSpecialist",
+      "file": "brain/specialists/wiki_specialist.py",
+      "version": "1.0.0",
+      "description": "Look up information from MediaWiki-based wikis (Wikipedia, Fandom, etc.)",
+      "activation_type": "bidirectional",
+      "activation_trigger": {
+        "condition": "LLM outputs SPECIALIST_REQUEST[wiki_lookup:{...}] during generation",
+        "example": "SPECIALIST_REQUEST[wiki_lookup:{\"wiki\":\"wikipedia\",\"page\":\"Python\"}]"
+      },
+      "context_priority": "MEDIUM",
+      "context_icon": "📖",
+      "dependencies": ["httpx"],
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "wiki": {"type": "string", "enum": ["wikipedia", "bfdi", "objectshowfanonpedia", "objectshows"]},
+          "page": {"type": "string"},
+          "search": {"type": "boolean", "default": true}
+        },
+        "required": ["wiki", "page"]
+      },
+      "supported_wikis": ["wikipedia", "bfdi", "objectshowfanonpedia", "objectshows"],
+      "tags": ["wiki", "knowledge", "mediawiki", "fandom", "bidirectional"],
+      "bidirectional": true,
+      "cpu_only": true,
+      "notes": "Supports Wikipedia and Object Show fandom wikis with smart search suggestions"
     }
   },
   "priority_order": {
