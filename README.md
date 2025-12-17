@@ -63,8 +63,15 @@ ollama pull deepseek-r1:14b
 ### 3. Run Ada
 
 ```bash
+# Brain only (headless - use CLI, MCP, Matrix, or direct API)
 ada run
 # Or: docker compose up -d
+
+# With web UI
+docker compose --profile web up -d
+
+# With Matrix bridge
+docker compose --profile matrix up -d
 ```
 
 **That's it.** Ada's brain runs at http://localhost:8000
@@ -72,10 +79,10 @@ ada run
 ### 4. Chat
 
 ```bash
-# Terminal
+# Terminal (works with any setup)
 ada-cli "What's Python?"
 
-# Web UI
+# Web UI (if started with --profile web)
 open http://localhost:5000
 
 # VSCode/Neovim

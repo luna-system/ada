@@ -11,6 +11,7 @@ const { title = 'ADA Chat' } = Astro.props;
   </head>
   <body>
     <slot />
+    <script src="/config.js" is:inline></script>
     <script src="/lib/highlight.min.js" is:inline></script>
     <script src="/lib/marked.min.js" is:inline></script>
     <script src="/lib/purify.min.js" is:inline></script>
