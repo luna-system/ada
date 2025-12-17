@@ -243,6 +243,11 @@ class RagStore:
                     result = self.col.query(query_texts=[query], n_results=max(k, 6), where=where)
             docs = result.get("documents", [[]])[0]
             metas = result.get("metadatas", [[]])[0]
+            distances = result.get("distances", [[]])[0]
+            # Add distance to metadata for downstream consumers (decay weighting, attention spotlight)
+            for i, meta in enumerate(metas):
+                if meta and i < len(distances):
+                    meta["distance"] = distances[i]
             items = list(zip(docs, metas))
             # If entity-scoped yielded too few, backfill with global memories
             if entity_scope and len(items) < k:
@@ -254,6 +259,11 @@ class RagStore:
                     res2 = self.col.query(query_texts=[query], n_results=max(k, 6), where=w_global)
                 docs2 = res2.get("documents", [[]])[0]
                 metas2 = res2.get("metadatas", [[]])[0]
+                distances2 = res2.get("distances", [[]])[0]
+                # Add distance to metadata
+                for i, meta in enumerate(metas2):
+                    if meta and i < len(distances2):
+                        meta["distance"] = distances2[i]
                 items2 = list(zip(docs2, metas2))
                 # merge unique preserving order
                 seen = set()
