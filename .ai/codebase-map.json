@@ -343,6 +343,42 @@
       "imported_by": [],
       "notes": "Runs via cron in Docker Compose, summarizes old conversation turns"
     },
+    "scripts/version.sh": {
+      "type": "maintenance",
+      "purpose": "Version management automation with Semantic Versioning and Conventional Commits",
+      "key_functions": [
+        "current",
+        "suggest",
+        "bump",
+        "tag",
+        "check",
+        "changelog"
+      ],
+      "imports": [],
+      "imported_by": [],
+      "notes": "Analyzes commit history to suggest version bumps, automates version file updates and git tagging"
+    },
+    "scripts/changelog.sh": {
+      "type": "maintenance",
+      "purpose": "Generate formatted changelogs from Conventional Commits",
+      "key_functions": [
+        "get_commits_by_type",
+        "count_commits_by_type"
+      ],
+      "imports": [],
+      "imported_by": [
+        "scripts/version.sh"
+      ],
+      "notes": "Parses git history, groups commits by type (feat/fix/docs), outputs markdown changelog"
+    },
+    "scripts/validate-commit.sh": {
+      "type": "maintenance",
+      "purpose": "Validate commit messages follow Conventional Commits format",
+      "key_functions": [],
+      "imports": [],
+      "imported_by": [],
+      "notes": "Can be installed as git commit-msg hook, enforces structured commit messages"
+    },
     "tests/conftest.py": {
       "type": "test-infrastructure",
       "purpose": "Pytest fixtures and test configuration",
