@@ -50,7 +50,6 @@
 <li class="toctree-l1"><a class="reference internal" href="getting_started_scratch.html">Getting Started from Scratch</a></li>
 <li class="toctree-l1"><a class="reference internal" href="configuration.html">Configuration Reference</a></li>
 <li class="toctree-l1"><a class="reference internal" href="examples.html">Examples</a></li>
-<li class="toctree-l1"><a class="reference internal" href="matrix_integration.html">Matrix Integration</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Hardware Setup</span></p>
 <ul>
@@ -64,8 +63,11 @@
 <li class="toctree-l1"><a class="reference internal" href="streaming.html">Streaming</a></li>
 <li class="toctree-l1"><a class="reference internal" href="memory.html">Memory</a></li>
 </ul>
-<p class="caption" role="heading"><span class="caption-text">API Documentation</span></p>
+<p class="caption" role="heading"><span class="caption-text">Interfaces &amp; Adapters</span></p>
 <ul>
+<li class="toctree-l1"><a class="reference internal" href="adapters.html">Ada Adapters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="adapter_development.html">Adapter Development Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="matrix_integration.html">Matrix Integration</a></li>
 <li class="toctree-l1"><a class="reference internal" href="api_usage.html">API Usage Guide</a></li>
 <li class="toctree-l1"><a class="reference internal" href="api_reference.html">API Reference</a></li>
 </ul>
@@ -80,6 +82,7 @@
 <p class="caption" role="heading"><span class="caption-text">Operations</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="build_system.html">Build System</a></li>
+<li class="toctree-l1"><a class="reference internal" href="buildx_adoption_notes.html">BuildX Adoption Data &amp; Notes</a></li>
 <li class="toctree-l1"><a class="reference internal" href="disk_management.html">Disk Management</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Development</span></p>
@@ -89,6 +92,7 @@
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Philosophy &amp; Design</span></p>
 <ul>
+<li class="toctree-l1"><a class="reference internal" href="project_philosophy.html">Ada Principles</a></li>
 <li class="toctree-l1"><a class="reference internal" href="documentation_philosophy.html">Documentation Philosophy</a></li>
 <li class="toctree-l1"><a class="reference internal" href="ai_documentation.html">AI-Readable Documentation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="empathetic_documentation.html">Empathetic Documentation</a></li>
@@ -169,19 +173,6 @@
 <li class="toctree-l2"><a class="reference internal" href="examples.html#javascript-fetch">JavaScript (fetch)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="examples.html#javascript-stream">JavaScript (stream)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="examples.html#related-documentation">Related Documentation</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="matrix_integration.html">Matrix Integration</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="matrix_integration.html#overview">Overview</a></li>
-<li class="toctree-l2"><a class="reference internal" href="matrix_integration.html#architecture">Architecture</a></li>
-<li class="toctree-l2"><a class="reference internal" href="matrix_integration.html#setup">Setup</a></li>
-<li class="toctree-l2"><a class="reference internal" href="matrix_integration.html#usage">Usage</a></li>
-<li class="toctree-l2"><a class="reference internal" href="matrix_integration.html#ethics-transparency">Ethics &amp; Transparency</a></li>
-<li class="toctree-l2"><a class="reference internal" href="matrix_integration.html#troubleshooting">Troubleshooting</a></li>
-<li class="toctree-l2"><a class="reference internal" href="matrix_integration.html#advanced-configuration">Advanced Configuration</a></li>
-<li class="toctree-l2"><a class="reference internal" href="matrix_integration.html#see-full-documentation">See Full Documentation</a></li>
-<li class="toctree-l2"><a class="reference internal" href="matrix_integration.html#community-guidelines">Community Guidelines</a></li>
-<li class="toctree-l2"><a class="reference internal" href="matrix_integration.html#philosophy">Philosophy</a></li>
 </ul>
 </li>
 </ul>
@@ -272,8 +263,48 @@
 </ul>
 </div>
 <div class="toctree-wrapper compound">
-<p class="caption" role="heading"><span class="caption-text">API Documentation</span></p>
+<p class="caption" role="heading"><span class="caption-text">Interfaces &amp; Adapters</span></p>
 <ul>
+<li class="toctree-l1"><a class="reference internal" href="adapters.html">Ada Adapters</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="adapters.html#overview">Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adapters.html#available-adapters">Available Adapters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adapters.html#comparison-table">Comparison Table</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adapters.html#building-your-own-adapter">Building Your Own Adapter</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adapters.html#deployment-patterns">Deployment Patterns</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adapters.html#error-handling">Error Handling</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adapters.html#best-practices">Best Practices</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adapters.html#future-adapters">Future Adapters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adapters.html#see-also">See Also</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="adapter_development.html">Adapter Development Guide</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="adapter_development.html#overview">Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adapter_development.html#architecture-pattern">Architecture Pattern</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adapter_development.html#reference-implementation">Reference Implementation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adapter_development.html#standard-http-client">Standard HTTP Client</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adapter_development.html#example-cli-adapter">Example: CLI Adapter</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adapter_development.html#example-matrix-bridge-adapter">Example: Matrix Bridge Adapter</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adapter_development.html#example-mcp-server-adapter">Example: MCP Server Adapter</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adapter_development.html#building-your-adapter">Building Your Adapter</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adapter_development.html#best-practices">Best Practices</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adapter_development.html#deployment-patterns">Deployment Patterns</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adapter_development.html#troubleshooting">Troubleshooting</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adapter_development.html#next-steps">Next Steps</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="matrix_integration.html">Matrix Integration</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="matrix_integration.html#overview">Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="matrix_integration.html#architecture">Architecture</a></li>
+<li class="toctree-l2"><a class="reference internal" href="matrix_integration.html#setup">Setup</a></li>
+<li class="toctree-l2"><a class="reference internal" href="matrix_integration.html#usage">Usage</a></li>
+<li class="toctree-l2"><a class="reference internal" href="matrix_integration.html#ethics-transparency">Ethics &amp; Transparency</a></li>
+<li class="toctree-l2"><a class="reference internal" href="matrix_integration.html#troubleshooting">Troubleshooting</a></li>
+<li class="toctree-l2"><a class="reference internal" href="matrix_integration.html#advanced-configuration">Advanced Configuration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="matrix_integration.html#see-full-documentation">See Full Documentation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="matrix_integration.html#community-guidelines">Community Guidelines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="matrix_integration.html#philosophy">Philosophy</a></li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="api_usage.html">API Usage Guide</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="api_usage.html#quick-start">Quick Start</a></li>
 <li class="toctree-l2"><a class="reference internal" href="api_usage.html#api-architecture">API Architecture</a></li>
@@ -400,6 +431,10 @@
 <li class="toctree-l2"><a class="reference internal" href="build_system.html#see-also">See Also</a></li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="buildx_adoption_notes.html">BuildX Adoption Data &amp; Notes</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="buildx_adoption_notes.html#research-summary-dec-2024">Research Summary (Dec 2024)</a></li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="disk_management.html">Disk Management</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="disk_management.html#disk-requirements">Disk Requirements</a></li>
 <li class="toctree-l2"><a class="reference internal" href="disk_management.html#monitoring-disk-usage">Monitoring Disk Usage</a></li>
@@ -447,6 +482,7 @@
 <div class="toctree-wrapper compound">
 <p class="caption" role="heading"><span class="caption-text">Philosophy &amp; Design</span></p>
 <ul>
+<li class="toctree-l1"><a class="reference internal" href="project_philosophy.html">Ada Principles</a></li>
 <li class="toctree-l1"><a class="reference internal" href="documentation_philosophy.html">Documentation Philosophy</a></li>
 <li class="toctree-l1"><a class="reference internal" href="ai_documentation.html">AI-Readable Documentation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="empathetic_documentation.html">Empathetic Documentation</a></li>
