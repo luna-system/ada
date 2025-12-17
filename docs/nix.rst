@@ -6,6 +6,10 @@ Ada provides first-class support for `Nix <https://nixos.org/>`_ and Nix flakes,
 Why Nix?
 --------
 
+**Solves Version Mismatches**
+   Your distro doesn't have Python 3.13 yet? Nix provides it instantly, no compilation needed.
+   Ubuntu 22.04/24.04 users: This is your easiest path to Python 3.13!
+
 **Reproducibility**
    Nix ensures everyone gets the exact same dependencies, eliminating "works on my machine" issues.
 

@@ -56,6 +56,10 @@ Choose your path:
 #### 1. Install Prerequisites
 
 - **Python 3.13+** (required)
+  
+  **Don't have Python 3.13?** Your distro might not have it yet (Ubuntu 24.04 maxes at 3.12).  
+  👉 **Use [Nix](#nix-flake)** for instant Python 3.13 - no compilation needed!
+  
 - **Ollama** (required) - Get from [ollama.ai](https://ollama.ai)
 - **8GB+ RAM** recommended
 - **GPU** (optional) - CUDA, ROCm, or Metal for faster inference

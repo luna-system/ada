@@ -84,10 +84,24 @@ def doctor():
     
     # Check Python version
     py_version = f"{sys.version_info.major}.{sys.version_info.minor}.{sys.version_info.micro}"
-    if sys.version_info >= (3, 13):
+    python_ok = sys.version_info >= (3, 13)
+    
+    if python_ok:
         success(f"Python {py_version}")
     else:
         error(f"Python {py_version} (need >= 3.13)")
+        
+        # Check if Nix is available as a solution
+        if check_command("nix"):
+            click.echo(f"\n  {BLUE}💡 Solution:{RESET} Use Nix for Python 3.13:")
+            click.echo(f"     {BOLD}nix develop{RESET}")
+            click.echo(f"     or with direnv: {BOLD}direnv allow{RESET}\n")
+        else:
+            click.echo(f"\n  {BLUE}💡 Solutions:{RESET}")
+            click.echo(f"     1. Install Nix: https://nixos.org/download")
+            click.echo(f"        Then run: {BOLD}nix develop{RESET}")
+            click.echo(f"     2. Use Docker: {BOLD}ada run --docker{RESET}")
+            click.echo(f"     3. Build Python 3.13 from source\n")
     
     # Check environment
     has_docker, has_ollama, has_chromadb = detect_environment()
