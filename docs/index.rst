@@ -20,6 +20,7 @@ Welcome to Ada! Your personal AI assistant that runs entirely on your hardware.
 
    getting_started
    local_mode
+   nix
    getting_started_scratch
    configuration
    examples
