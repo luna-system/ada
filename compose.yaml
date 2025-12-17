@@ -11,11 +11,22 @@ x-logging: &default-logging
     max-size: "10m"
     max-file: "3"
 
+# Build configuration - uses BuildKit for better caching and performance
+# Run ./scripts/setup_buildx.sh to install BuildX if needed
+x-build-config: &build-config
+  platforms:
+    - linux/amd64
+  cache_from:
+    - type=local,src=/tmp/.buildx-cache
+  cache_to:
+    - type=local,dest=/tmp/.buildx-cache-new,mode=max
+
 services:
   web:
     build:
       context: .
       dockerfile: frontend/Dockerfile
+      <<: *build-config
     ports:
       - "5000:80"
     env_file:
@@ -139,6 +150,7 @@ services:
     build:
       context: .
       dockerfile: brain/Dockerfile
+      <<: *build-config
     env_file:
       - .env
     logging: *default-logging
@@ -171,11 +183,12 @@ services:
   matrix-bridge:
     build:
       context: ./matrix-bridge
+      <<: *build-config
     container_name: ada-matrix-bridge
     restart: unless-stopped
     logging: *default-logging
     env_file:
-      - .env
+      - ./matrix-bridge/.env
     environment:
       # Matrix connection
       - MATRIX_HOMESERVER
@@ -292,6 +305,7 @@ services:
     build:
       context: .
       dockerfile: scripts/Dockerfile
+      <<: *build-config
     profiles: ["tools"]
     env_file:
       - .env

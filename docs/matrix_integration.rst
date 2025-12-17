@@ -24,14 +24,19 @@ The Matrix bridge is a standalone service that connects Matrix rooms to Ada's ex
     Matrix Room → matrix-bridge → Ada Brain API → DeepSeek-R1 LLM
          ↑              ↓              ↓                ↓
        Users      matrix-nio    /v1/chat/stream      RAG + Specialists
+                                (non-streaming)
 
 The bridge:
 
 1. Listens for Matrix messages using ``matrix-nio`` client
 2. Checks activation rules (mentions, DMs, keywords)
-3. Maintains conversation context per room
-4. Forwards to Ada's existing ``/v1/chat/stream`` API
-5. Streams responses back to Matrix
+3. Reacts with 🧠 emoji to show processing started
+4. Maintains conversation context per room
+5. Queries Ada's brain via streaming API (parses internally)
+6. Posts complete response to Matrix
+7. Reacts with ✅ emoji when done (or ❌ on error)
+
+**Key design:** Matrix can't display partial messages, so we use complete responses with reaction-based status indicators instead of streaming or typing indicators.
 
 **No changes to Ada's brain needed** - this is a pure bridge architecture.
 
@@ -132,6 +137,17 @@ Ada responds to:
 - **Display name:** ``Ada: explain Docker``
 - **Direct messages:** Just send a DM
 - **Keywords:** Any message containing "ada" (configurable)
+
+Status Indicators
+~~~~~~~~~~~~~~~~~
+
+Ada uses **message reactions** to show processing status:
+
+- **🧠 Brain emoji** - Appears immediately when Ada starts processing your message
+- **✅ Check mark** - Added when response is successfully posted
+- **❌ Error mark** - Added if something goes wrong
+
+This is more reliable than typing indicators and provides persistent visual feedback in the message timeline.
 
 Commands
 ~~~~~~~~

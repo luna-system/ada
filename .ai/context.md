@@ -30,11 +30,13 @@ matrix-bridge (matrix-nio)┘                       ⇄ ollama (LLM:11434)
 **Matrix Flow:**
 1. User @mentions Ada in Matrix room → Matrix homeserver → matrix-bridge
 2. Bridge checks activation rules (mentions, DMs, keywords)
-3. Bridge forwards to brain `/v1/chat/stream` with room context
-4. Brain processes same as web UI (RAG, specialists, LLM)
-5. Bridge receives streamed response
-6. Bridge posts to Matrix room
-7. Conversation context stored per-room
+3. Bridge reacts to message with 🧠 emoji (processing status)
+4. Bridge queries brain `/v1/chat/stream` with room context (non-streaming wrapper)
+5. Brain processes same as web UI (RAG, specialists, LLM)
+6. Bridge receives complete response text
+7. Bridge posts response to Matrix room
+8. Bridge reacts with ✅ emoji (success) or ❌ (error)
+9. Conversation context stored per-room
 
 ## Key Modules
 

@@ -41,18 +41,13 @@ class AdaBrainClient:
         url = f"{self.base_url}{self.stream_endpoint}"
         
         payload = {
-            "message": message,
-            "user_id": user_id,
+            "prompt": message,  # Brain API expects "prompt" not "message"
+            "conversation_id": room_id if room_id else user_id,  # Use room ID for context
             "stream": True
         }
         
-        # Add room context if available
-        if room_id:
-            payload["room_id"] = room_id
-        
-        # Add conversation history if available
-        if conversation_history:
-            payload["conversation_history"] = conversation_history
+        # Conversation history not needed - brain handles it via conversation_id
+        logger.info(f"Sending to brain: {payload}")
         
         try:
             async with httpx.AsyncClient(timeout=self.timeout) as client:
@@ -70,8 +65,13 @@ class AdaBrainClient:
                             if chunk and chunk != "[DONE]":
                                 yield chunk
         
+        except httpx.HTTPStatusError as e:
+            logger.error(f"Error from Ada brain: {e.response.status_code} {e.response.reason_phrase}")
+            logger.error(f"Request payload was: {payload}")
+            yield "Sorry, I encountered an error connecting to my brain. Please try again later."
         except httpx.HTTPError as e:
             logger.error(f"Error communicating with Ada brain: {e}")
+            logger.error(f"Request payload was: {payload}")
             yield "Sorry, I encountered an error connecting to my brain. Please try again later."
         except Exception as e:
             logger.error(f"Unexpected error in chat stream: {e}", exc_info=True)
@@ -94,12 +94,18 @@ class AdaBrainClient:
             conversation_history: Recent messages for context
             
         Returns:
-            Complete response text
+            Complete response text (parsed from streaming JSON chunks)
         """
-        chunks = []
+        import json
+        response_parts = []
         async for chunk in self.chat_stream(message, user_id, room_id, conversation_history):
-            chunks.append(chunk)
-        return "".join(chunks)
+            try:
+                data = json.loads(chunk)
+                if data.get("type") == "token":
+                    response_parts.append(data.get("content", ""))
+            except json.JSONDecodeError:
+                logger.warning(f"Failed to parse chunk: {chunk}")
+        return "".join(response_parts)
     
     async def healthcheck(self) -> bool:
         """
