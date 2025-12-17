@@ -119,7 +119,7 @@ import config
 from rag_store import RagStore
 from llm import stream_chat_async, complete
 from media import fetch_listenbrainz, format_media_for_prompt
-from prompt_builder import build_prompt
+from brain._legacy_prompt_builder import build_prompt
 from brain.notices_client import get_active_notices
 
 # Ollama + models
