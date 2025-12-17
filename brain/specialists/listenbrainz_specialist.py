@@ -1,10 +1,10 @@
 """
-Media Specialist - Music/Media context from ListenBrainz.
+ListenBrainz Specialist - Music/Media context from ListenBrainz API.
 
-Provides currently playing or recently listened music context.
+Provides currently playing or recently listened music context from ListenBrainz.
 """
 # @ai-indexable: specialist-plugin
-# @ai-purpose: Inject music/media context from ListenBrainz into LLM prompts
+# @ai-purpose: Inject music/media context from ListenBrainz API into LLM prompts
 # @ai-activation-trigger: media_info present in request context
 # @ai-priority: MEDIUM
 # @ai-dependencies: brain.media
@@ -25,21 +25,21 @@ from .protocol import (
 logger = logging.getLogger(__name__)
 
 
-class MediaSpecialist(BaseSpecialist):
+class ListenBrainzSpecialist(BaseSpecialist):
     """
-    Media specialist for injecting ListenBrainz music context.
+    ListenBrainz specialist for injecting music context from ListenBrainz API.
     
     Auto-activates when media info is present in request.
     """
     
     def __init__(self):
         capability = SpecialistCapability(
-            name="media",
-            description="Inject currently playing or recently listened music from ListenBrainz",
+            name="listenbrainz",
+            description="Inject currently playing or recently listened music from ListenBrainz API",
             version="1.0.0",
             context_priority=SpecialistPriority.MEDIUM,
             context_icon="🎧",
-            tags=["music", "listenbrainz", "media"],
+            tags=["music", "listenbrainz", "scrobbling"],
             input_schema={
                 "type": "object",
                 "properties": {
@@ -90,5 +90,5 @@ class MediaSpecialist(BaseSpecialist):
             )
         
         except Exception as e:
-            logger.error(f"Media specialist processing failed: {e}", exc_info=True)
-            return self.error_result(f"Media processing error: {str(e)}", "processing_error")
+            logger.error(f"ListenBrainz specialist processing failed: {e}", exc_info=True)
+            return self.error_result(f"ListenBrainz processing error: {str(e)}", "processing_error")

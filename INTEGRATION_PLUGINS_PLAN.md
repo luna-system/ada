@@ -412,15 +412,382 @@ dependencies = [
 
 ---
 
+## Phase 0: Establish Adapter Pattern with CLI + Web UI (PRIORITY)
+
+**Current Problem:**
+- Web UI (frontend service) is treated as "the" interface, not "an" interface
+- It's tightly coupled via nginx config and not truly optional
+- Lives in `frontend/` but should conceptually be an adapter like Matrix/MCP
+- Brain service doesn't depend on it, but deployment assumes it exists
+- No simple reference implementation for building new adapters
+
+**What We're Doing:**
+1. **Build CLI adapter** as the canonical reference implementation (simplest example)
+2. Make web UI follow the same adapter pattern as Matrix bridge
+3. Recognize all interfaces as equal ways to consume Ada's brain API
+4. Make both truly optional in Docker Compose
+5. Document standard adapter structure for future implementations
+
+### Current Web UI Structure
+```
+frontend/
+├── Dockerfile               # nginx + static site
+├── nginx.conf.template      # Proxies /api/* → brain:7000/v1/*
+├── public/
+│   ├── app.js              # EventSource → /api/chat/stream
+│   ├── style.css
+│   └── index.html
+├── src/                     # Astro source (builds to public/)
+└── package.json
+```
+
+**What it does:**
+- Serves static HTML/JS/CSS
+- Proxies API calls to brain via nginx
+- Uses EventSource (SSE) for streaming responses
+- Already loosely coupled via REST API ✅
+
+### Part A: Build CLI Adapter (Reference Implementation)
+
+**Why CLI First:**
+- Simplest possible adapter (no nginx, no UI framework, no protocol complexity)
+- Perfect reference for documentation ("here's how to build an adapter")
+- Immediately useful (scripting, testing, automation)
+- Shows both streaming and non-streaming patterns
+- Can be used in CI/CD pipelines
+
+#### CLI Adapter Structure
+```
+adapters/cli/
+├── README.md                # "How to build an adapter" guide
+├── pyproject.toml           # Minimal dependencies
+├── ada_cli/
+│   ├── __init__.py
+│   ├── client.py            # Reusable HTTP client (prototype for shared library!)
+│   ├── cli.py               # Interactive REPL
+│   └── formatters.py        # Output formatting (markdown, plain, JSON)
+└── tests/
+    └── test_cli.py
+```
+
+#### CLI Features
+**Interactive Mode:**
+```bash
+$ ada-cli
+🤖 Ada v1.2.0 (brain: http://localhost:7000)
+Type 'help' for commands, 'exit' to quit
+
+You: What's the weather?
+Ada: I don't have access to real-time weather data...
+
+You: /history
+1. You: What's the weather?
+   Ada: I don't have access to...
+
+You: /clear
+Conversation cleared.
+
+You: exit
+Goodbye! 👋
+```
+
+**One-Shot Mode:**
+```bash
+# Single query
+$ ada-cli "what is 2+2?"
+4
+
+# Pipe input
+$ echo "summarize this" | ada-cli
+
+# JSON output for scripting
+$ ada-cli --json "hello" | jq '.response'
+```
+
+**Streaming vs Non-Streaming:**
+```bash
+# Stream tokens (default, like web UI)
+$ ada-cli --stream "write a story"
+Once upon a time...
+
+# Complete response (like Matrix bridge)
+$ ada-cli --no-stream "quick answer"
+```
+
+#### CLI Implementation Highlights
+
+**client.py** (will become shared library in Phase 2):
+```python
+"""HTTP client for Ada's brain API - reference implementation."""
+import httpx
+from typing import AsyncIterator
+Build CLI Adapter (2 hours)**
+- Create `adapters/cli/` directory structure
+- Implement `client.py` (HTTP client - foundation for shared library)
+- Implement `cli.py` (interactive REPL + one-shot mode)
+- Add `pyproject.toml` with minimal dependencies (httpx, rich)
+- Write README.md explaining implementation
+- Test interactive and one-shot modes
+
+**Step 5: Add Adapter Comparison Table (30 min)**
+Create visual showing all adapters:
+
+| Adapter | Protocol | Use Case | Complexity | Status |
+|---------|----------|----------|------------|--------|
+| **CLI** | HTTP/SSE | Terminal, scripting | ⭐ Simple | ✅ Reference |
+| Web UI | HTTP/SSE + nginx | Browser-based chat | ⭐⭐ Medium | ✅ Production |
+| Matrix Bridge | Matrix C2S | Federated chat rooms | ⭐⭐⭐ Complex | ✅ Production |
+| MCP Server | stdio/JSON-RPC | IDE integration | ⭐⭐ Medium | ✅ Production |
+| Discord Bot | Discord API | Gaming communities | ⭐⭐ Medium | 🚧 Planned |
+| Telegram Bot | Telegram API | Mobile messaging | ⭐⭐ Medium | 🚧 Planned |
+
+**"Want to build an adapter? Start with CLI!"** ← This becomes the mantra
+        message: str,
+        conversation_id: str = "cli"
+    ) -> AsyncIterator[str]:
+        """Stream chat response chunks."""
+        url = f"{self.base_url}/v1/chat/stream"
+        payload = {"prompt": message, "conversation_id": conversation_id, "stream": True}
+        
+        async with self._client.stream("POST", url, json=payload) as response:
+            response.raise_for_status()
+            async for line in response.aiter_lines():
+                if line.startswith("data: "):
+                    chunk = line[6:]
+                    if chunk and chunk != "[DONE]":
+                        yield chunk
+    
+    async def chat(self, message: str, conversation_id: str = "cli") -> str:
+        """Get complete response (non-streaming)."""
+        chunks = []
+        async for chunk in self.chat_stream(message, conversation_id):
+            chunks.append(chunk)
+        return "".join(chunks)
+    
+    async def health(self) -> dict:
+        """Check brain health."""
+        response = await self._client.get(f"{self.base_url}/v1/healthz")
+        response.raise_for_status()
+        return response.json()
+    
+    async def close(self):
+        await self._client.aclose()
+```
+
+**cli.py** (interactive mode):
+```python
+"""Interactive CLI for Ada."""
+import asyncio
+import sys
+from rich.console import Console
+from rich.markdown import Markdown
+from .client import AdaClient
+
+console = Console()
+
+async def interactive_mode(client: AdaClient):
+    """Run interactive REPL."""
+    console.print("🤖 Ada CLI - Type 'help' for commands, 'exit' to quit\n")
+    
+    conversation_id = "cli-session"
+    history = []
+    
+    while True:
+        try:
+            user_input = console.input("[bold blue]You:[/] ").strip()
+            
+            if not user_input:
+                continue
+            if user_input.lower() in ("exit", "quit"):
+                console.print("Goodbye! 👋")
+                break
+            if user_input == "/history":
+                for i, (role, msg) in enumerate(history, 1):
+                    console.print(f"{i}. {role}: {msg[:50]}...")
+                continue
+            if user_input == "/clear":
+                history.clear()
+                conversation_id = f"cli-session-{len(history)}"
+                console.print("Conversation cleared.")
+                continue
+            
+            history.append(("You", user_input))
+            
+            console.print("[bold green]Ada:[/] ", end="")
+            response_parts = []
+            async for chunk in client.chat_stream(user_input, conversation_id):
+                console.print(chunk, end="")
+                response_parts.append(chunk)
+                sys.stdout.flush()
+            console.print()  # Newline
+            
+            history.append(("Ada", "".join(response_parts)))
+            
+        except KeyboardInterrupt:
+            console.print("\nUse 'exit' to quit.")
+        except Exception as e:
+            console.print(f"[red]Error:[/] {e}")
+```
+
+**Installation & Usage:**
+```bash
+# Install CLI adapter
+pip install -e adapters/cli
+
+# Run interactive mode
+ada-cli
+
+# One-shot query
+ada-cli "what is Ada?"
+
+# Custom brain URL
+ada-cli --brain-url http://ada.example.com:7000 "hello"
+
+# In Docker
+docker compose run --rm scripts ada-cli
+```
+
+#### Documentation Benefits
+CLI becomes the reference in `docs/building_adapters.rst`:
+
+```rst
+Building an Adapter
+===================
+
+The **CLI adapter** is the simplest reference implementation. 
+Let's walk through how it works:
+
+1. **HTTP Client** - Connects to brain's REST API
+2. **Protocol Handler** - Manages conversation state and formatting
+3. **Entry Point** - Exposes functionality to users
+
+See ``adapters/cli/`` for complete working example.
+```
+
+---
+
+### Part B: Make Web UI Optional (like Matrix)
+**compose.yaml changes:**
+```yaml
+services:
+  web:
+    profiles:
+      - web  # Only starts if explicitly requested
+    build:
+      context: .
+      dockerfile: frontend/Dockerfile
+    # ... rest stays the same
+```
+
+**Usage:**
+```bash
+# Default: Run brain + chroma + ollama (headless)
+docker compose up -d
+
+# With web UI:
+docker compose --profile web up -d
+
+# With Matrix bridge:
+docker compose --profile matrix up -d
+
+# With both:
+docker compose --profile web --profile matrix up -d
+```
+
+#### 2. Rename/Restructure (Optional, for consistency)
+Could move to adapter pattern:
+```
+adapters/web/
+├── README.md                # Setup instructions
+├── Dockerfile
+├── nginx.conf.template
+└── public/
+    ├── app.js
+    ├── style.css
+    └── index.html
+```
+
+**OR** keep as `frontend/` but document it as an adapter (less disruptive).
+
+#### 3. Update Documentation
+- Add `docs/web_ui.rst` explaining it's optional
+- Update architecture diagrams to show web UI as peer to Matrix/MCP
+- Document in `.ai/codebase-map.json` as adapter
+
+#### 4. Ensure Independence
+Verify brain service works without web:
+- ✅ Brain already independent (pure API)
+- ✅ No backend dependencies on frontend
+- ✅ Health checks don't require web UI
+- ⚠️ Update compose.yaml `depends_on` (web depends on brain, not vice versa)
+
+### Implementation Plan
+
+**Step 1: Make Web Optional (30 min)**
+- Add `profiles: [web]` to compose.yaml
+- Test: `docker compose up -d` (no web), `docker compose --profile web up -d` (with web)
+- Update README.md with profile usage
+
+**Step 2: Document as Adapter (1 hour)**
+- Add "Web UI Adapter" section to INTEGRATION_PLUGINS_PLAN.md
+- Update `.ai/context.md` to list web UI alongside Matrix/MCP
+- Update `.ai/codebase-map.json` with frontend module entries
+
+**Step 3: Update Getting Started Docs (30 min)**
+- Update `docs/getting_started.rst` to mention profiles
+- Add note: "Web UI is optional, Ada works via Matrix/MCP without it"
+- Update quick start to show `--profile web` option
+
+**Step 4: Add Adapter Comparison Table (30 min)**
+Crea**CLI as reference implementation** - "Here's how simple it can be"
+- ✅ Clearer mental model (all interfaces are peers)
+- ✅ Easier to run headless Ada (API-only, or CLI-only, or Matrix-only)
+- ✅ Consistent with "hackable architecture" philosophy
+- ✅ Makes room for more adapters
+- ✅ Reduces default resource usage (don't need nginx if using Matrix/CLI)
+- ✅ CLI useful for scripting, testing, automation
+- ✅ CLI client code becomes prototype for shared library (Phase 2
+| Matrix Bridge | Matrix C2S | Federated chat rooms | ✅ Production |
+| MCP Server | stdio/JSON-RPC | IDE integration | ✅ Production |
+| Discord Bot | Discord API | Gaming communities | 🚧 Planned |
+| Telegram Bot | Telegram API | Mobile messaging | 🚧 Planned |
+
+### Benefits
+- ✅ Clearer mental model (all interfaces are peers)
+- ✅ Easier to run headless Ada (API-only)
+- ✅ Consistent with "hackable architecture" philosophyCLI + Web UI as adapters**
+2. [x] Create feature branch (`feature/integration-plugins`)
+3. [ ] **PHASE 0: Build CLI adapter + Make web UI optional (4 hours)**
+   - [ ] Build CLI adapter (reference implementation)
+   - [ ] Make web UI optional via profiles
+   - [ ] Document adapter pattern
+   - [ ] Add comparison table
+4. [ ] PHASE 1: Standardize adapter patterns (Option B)
+   - [ ] Extract patterns from CLI/Web/Matrix/MCP
+   - [ ] Create adapter template
+   - [ ] Document adapter contract
+5. [ ] PHASE 2: Extract shared client library (Option C)
+   - [ ] Extract client.py from CLI as foundation
+   - [ ] Create ada-client package
+   - [ ] Refactor all adapters to use it
+6. [ ] PHASE 3: Consider interface plugins (Option A) - future
+7. [ ] Test with all adapters (CLI, Web, Matrix, MCP
+- ❌ Not refactoring web UI code (works fine)
+- ❌ Not changing API (already correct)
+
+---
+
 ## Next Steps
 
-1. [ ] Review plans and decide on approach
-2. [ ] Create feature branch (`feature/integration-plugins`)
-3. [ ] Implement chosen option(s)
-4. [ ] Test with existing adapters (Matrix, MCP)
-5. [ ] Document patterns and contracts
-6. [ ] Update .ai/ documentation
-7. [ ] Consider building example adapter (Discord, Telegram, Slack)
+1. [x] Review plans and decide on approach → **Start with Web UI as adapter**
+2. [x] Create feature branch (`feature/integration-plugins`)
+3. [ ] **PHASE 0: Make web UI optional and document as adapter (2 hours)**
+4. [ ] PHASE 1: Standardize adapter patterns (Option B)
+5. [ ] PHASE 2: Extract shared client library (Option C)
+6. [ ] PHASE 3: Consider interface plugins (Option A) - future
+7. [ ] Test with existing adapters (Matrix, MCP, Web)
+8. [ ] Update .ai/ documentation
+9. [ ] Consider building example adapter (Discord, Telegram, Slack)
 
 ---
 

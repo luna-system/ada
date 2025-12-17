@@ -80,7 +80,7 @@ See `docs/adapters.rst` for building new adapters.
 ### Specialist System (Plugin Architecture)
 - `brain/specialists/protocol.py` - Base interfaces, MCP-inspired
 - `brain/specialists/ocr_specialist.py` - Image text extraction
-- `brain/specialists/media_specialist.py` - Video frame analysis
+- `brain/specialists/listenbrainz_specialist.py` - ListenBrainz API music context
 - `brain/specialists/web_search_specialist.py` - External web queries
 - `brain/specialists/bidirectional.py` - LLM-initiated specialist invocation
 
