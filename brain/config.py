@@ -72,6 +72,12 @@ Available specialists:
   When to use: Questions about current events, recent news, today's weather, stock prices, 
                sports scores, anything after your training cutoff, or facts you're unsure about
   Example: SPECIALIST_REQUEST[web_search:{"query":"Python 3.13 release date"}]
+
+- wiki_lookup: Look up information from Wikipedia, Fandom wikis, and other MediaWiki sites
+  Available wikis: wikipedia, bfdi, objectshowfanonpedia, objectshows
+  When to use: Questions about specific topics, characters, shows, games, or detailed encyclopedic info
+  Example: SPECIALIST_REQUEST[wiki_lookup:{"wiki":"wikipedia","page":"Python (programming language)"}]
+  Example: SPECIALIST_REQUEST[wiki_lookup:{"wiki":"bfdi","page":"Four"}]
   
 - vision: Analyze images for visual content, diagrams, charts, etc.
   Example: SPECIALIST_REQUEST[vision:{"focus":"technical_diagrams"}]
