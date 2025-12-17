@@ -10,12 +10,11 @@ RUN apt-get update \
 RUN curl -LsSf https://astral.sh/uv/install.sh | sh
 ENV PATH="/root/.local/bin:${PATH}"
 
-# Copy project metadata for lock install
-COPY pyproject.toml uv.lock ./
-RUN uv venv && uv sync --frozen --no-dev
-
-# Copy source
+# Copy all source first (required for editable install in pyproject.toml)
 COPY . .
+
+# Install dependencies
+RUN uv venv && uv sync --frozen --no-dev
 
 ENV PATH="/app/.venv/bin:${PATH}"
 
