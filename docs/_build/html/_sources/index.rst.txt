@@ -6,7 +6,9 @@ Ada Brain API Docs
 
 Welcome to Ada! Your personal AI assistant that runs entirely on your hardware.
 
-**New to Ada?** Start here:
+**First time here?** Check out the `visual introduction <_static/garden.html>`_ 🌱 for a gentle tour!
+
+**Ready to dive in?** Start here:
 
 1. **Zero to Ada:** :doc:`zero_to_ada` - Fastest path from nothing to working Ada (< 10 minutes)
 2. **Customize:** :doc:`getting_started_scratch` - Make Ada truly yours

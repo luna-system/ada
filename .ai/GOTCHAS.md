@@ -20,6 +20,98 @@ Each entry follows the pattern: **"Why it seems right → Why it's wrong → Wha
 
 ---
 
+## 🚫 Tool Selection & Environment Management
+
+### ❌ DON'T: Use Docker for unit tests
+**Why it seems right:** `scripts/run.sh test` uses Docker, so that must be the way  
+**Why it's wrong:** 
+- Unit tests test pure Python logic - no services needed
+- Docker requires chroma + ollama to be running (dependencies in compose.yaml)
+- Adds ~10 seconds startup time unnecessarily
+- Creates false impression that tests need external services
+
+**What to do instead:**
+```bash
+# Unit tests (pure Python logic):
+python3 -m pytest tests/test_memory_decay.py --ignore=tests/conftest.py
+
+# OR with UV:
+uv run pytest tests/test_memory_decay.py
+
+# OR with Nix:
+nix develop --command pytest tests/test_memory_decay.py
+```
+
+**When Docker IS correct:**
+- Integration tests (testing brain ↔ chroma ↔ ollama interaction)
+- Full Ada stack testing (end-to-end)
+- Production deployment
+
+**The root cause:** `tests/conftest.py` imports `chromadb` unconditionally, forcing Docker dependency even for tests that don't need it.
+
+**Better pattern:** Use `--ignore=tests/conftest.py` for unit tests, or make conftest conditionally import based on test markers.
+
+### ❌ DON'T: Mix Nix + UV + Docker for the same task
+**Why it seems right:** More tools = more flexibility  
+**Why it's wrong:** Overlapping capabilities create decision paralysis and cognitive load  
+**What to do instead:** Use each tool for its strength:
+
+```
+┌─────────────────────────────────────────────────┐
+│ TOOL SELECTION DECISION TREE                    │
+├─────────────────────────────────────────────────┤
+│                                                 │
+│ Unit Tests (Python logic only)                  │
+│   ├─ Local Python venv: python3 -m pytest      │
+│   ├─ UV: uv run pytest                          │
+│   └─ Nix: nix develop --command pytest         │
+│   ❌ NOT Docker (too slow, unnecessary deps)    │
+│                                                 │
+│ Integration Tests (services talking)            │
+│   └─ Docker Compose only                        │
+│      docker compose up -d && pytest tests/      │
+│                                                 │
+│ Development Environment Setup                   │
+│   ├─ Pick ONE: Nix develop                      │
+│   └─ OR: uv venv                                │
+│   ❌ Don't use both (confusion)                 │
+│                                                 │
+│ Production Deployment                           │
+│   └─ Docker Compose with profiles              │
+│      docker compose --profile cuda up           │
+│                                                 │
+│ Quick Scripts / Orchestration                   │
+│   └─ Bash (glue between tools)                 │
+│      ./scripts/run.sh <command>                 │
+└─────────────────────────────────────────────────┘
+```
+
+**Why this matters:**
+- Bash: Orchestration and glue
+- Nix: Declarative dev environments (reproducible across machines)
+- Docker: Service isolation + deployment (heavyweight but isolated)
+- UV: Fast Python package management (lightweight, Python-specific)
+
+**Pick your layer, don't stack them unnecessarily!**
+
+### ❌ DON'T: Run `scripts/run.sh test` for fast feedback
+**Why it seems right:** Documented test command  
+**Why it's wrong:** Starts entire Docker stack when you just want to test Python logic  
+**What to do instead:**
+```bash
+# Fast unit tests (< 1 second):
+python3 -m pytest tests/test_memory_decay.py tests/test_context_habituation.py -v
+
+# Full integration tests (when needed):
+./scripts/run.sh test
+```
+
+**Speed comparison:**
+- Direct pytest: ~0.1 seconds
+- Docker compose run: ~10+ seconds (container startup + service health checks)
+
+---
+
 ## 🚫 Build & Development
 
 ### ❌ DON'T: Run `cd docs && make html` manually
