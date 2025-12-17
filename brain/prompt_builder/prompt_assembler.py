@@ -25,7 +25,7 @@ from brain.token_monitor import TokenBudgetMonitor
 from brain.context_habituation import ContextHabituation
 from brain.attention_spotlight import AttentionalSpotlight
 from brain.semantic_chunking import SemanticChunker
-from brain.config import config
+import brain.config as config
 
 logger = logging.getLogger(__name__)
 
