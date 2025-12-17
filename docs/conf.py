@@ -25,10 +25,23 @@ extensions = [
     'sphinx.ext.napoleon',
     'sphinx.ext.viewcode',
     'sphinx.ext.graphviz',
+    'myst_parser',  # Markdown support for CHANGELOG.md
+]
+
+# MyST Parser configuration for advanced Markdown features
+myst_enable_extensions = [
+    "colon_fence",  # ::: fences
+    "deflist",      # Definition lists
 ]
 
 templates_path = ['_templates']
 exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store']
+
+# Source file suffixes (support both RST and Markdown)
+source_suffix = {
+    '.rst': 'restructuredtext',
+    '.md': 'markdown',
+}
 
 language = 'en'
 

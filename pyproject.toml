@@ -32,8 +32,9 @@ dependencies = [
 
 [project.optional-dependencies]
 docs = [
-    "sphinx>=7.0.0",
-    "sphinx-rtd-theme>=2.0.0",
+    "sphinx>=8.0.0",
+    "sphinx-rtd-theme>=3.0.0",
+    "myst-parser>=4.0.0",  # Markdown support for CHANGELOG.md
 ]
 dev = [
     "pytest>=8.0.0",

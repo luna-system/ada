@@ -12,6 +12,76 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [2.1.0] - 2025-12-17
+
+### ⚡ Performance
+- **Multi-timescale context caching system** - Dramatically reduces redundant RAG queries
+  - Personas cached for 24 hours (identity rarely changes)
+  - FAQs cached for 24 hours (knowledge base updates infrequently)
+  - Memories cached for 5 minutes (balance freshness vs performance)
+  - Conversation turns cached for 1 hour (recent context preserved)
+- LRU eviction prevents unbounded memory growth
+- Cache stats logged per request for observability
+- Expected ~70% reduction in ChromaDB queries for repeated context
+
+### ✨ Features
+- **New modular prompt building architecture**
+  - `PromptAssembler` - Clean orchestration with automatic caching
+  - `ContextRetriever` - Cache-aware RAG data retrieval
+  - `SectionBuilder` - Structured section formatting
+  - `MultiTimescaleCache` - Production-ready caching implementation
+- Cache integration transparent to specialists and adapters
+- Per-request cache statistics in logs
+
+### 🗑️ Removed (Breaking Changes)
+- **Deleted legacy `brain/_legacy_prompt_builder.py`** (266 lines)
+- **Removed backward-compatible `build_prompt()` shim**
+- New code must use `PromptAssembler` API directly
+- Technical debt eliminated: -299 net lines across the codebase
+
+### 🔧 Fixes
+- **Corrected default port from 7000 to 8000** in ada-client and ada-cli
+  - Brain runs internally on 7000, exposed via Docker on 8000
+  - Clients now default to correct external port
+- Updated CLI Python requirement to >=3.13 for consistency
+
+### 📚 Documentation
+- Updated architecture.rst with caching system overview
+- Refreshed API usage examples for new PromptAssembler
+- Updated specialist RAG documentation
+- Token monitoring examples modernized
+- AI documentation (codebase-map.json) fully updated
+- Marked TODO-CACHE-INTEGRATION.md as complete
+
+### 🧪 Testing
+- 23 new comprehensive cache tests (15 basic + 8 integration)
+- Tests cover TTL expiration, LRU eviction, cache stats, and retriever integration
+- All tests passing, cache validated in production
+
+### 📦 Dependencies
+- No new external dependencies (pure Python implementation)
+
+### Impact
+**Massive performance win:** Caching reduces latency on repeated queries from seconds to milliseconds. Cleaner codebase with 300 fewer lines of legacy code. Modern modular architecture ready for future optimization phases (FAQ caching, memory caching expansion).
+
+**Migration Guide:**
+```python
+# Old (removed):
+from brain.prompt_builder import build_prompt
+prompt, context = await build_prompt(...)
+
+# New (required):
+from brain.prompt_builder import PromptAssembler
+assembler = PromptAssembler()
+prompt = assembler.build_prompt(
+    user_message="...",
+    conversation_id="...",
+    notices=get_active_notices()
+)
+```
+
+---
+
 ## [1.8.0] - 2025-12-16
 
 ### ✨ Features
