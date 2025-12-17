@@ -30,10 +30,10 @@ The system:
 2. Context-Aware Retrieval
 ---------------------------
 
-During prompt building (``build_prompt()`` function, now using modular ``brain/prompt_builder/`` package):
+During prompt building (``PromptAssembler`` in ``brain/prompt_builder/`` package with caching):
 
 - User's query is embedded
-- RAG retrieves the top K most relevant specialist FAQs
+- RAG retrieves the top K most relevant specialist FAQs (with caching for frequent queries)
 - Retrieved docs are injected into the prompt before specialist execution
 - This provides **just-in-time** specialist guidance instead of static instructions
 

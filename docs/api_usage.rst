@@ -435,11 +435,11 @@ Modular Components
 - ``brain/rag_store.py`` - RAG system integration (600+ lines)
 - ``brain/llm.py`` - LLM provider interface (60 lines)
 - ``brain/media.py`` - External media integration (100 lines)
-- ``brain/prompt_builder/`` - Modular prompt assembly package:
-  - ``context_retriever.py`` - RAG data retrieval (100 lines)
+- ``brain/prompt_builder/`` - Modular prompt assembly with caching:
+  - ``context_retriever.py`` - RAG data retrieval (cache-aware)
   - ``section_builder.py`` - Section formatting (150 lines)
-  - ``prompt_assembler.py`` - Final assembly (150 lines)
-  - Legacy ``build_prompt()`` available via package import
+  - ``prompt_assembler.py`` - Final assembly with caching (170 lines)
+- ``brain/context_cache.py`` - Multi-timescale context caching (220 lines)
 
 Type Hints & Documentation
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~

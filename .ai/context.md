@@ -26,9 +26,9 @@ MCP server (stdio)        ┘
 
 **CLI Flow:**
 1. User runs `ada-cli "message"` → HTTP client → `/v1/chat/stream`
-2. Brain assembles RAG context (persona, FAQ, memories, conversation history)
+2. Brain assembles RAG context with **caching** (persona cached 24hr, memories 5min)
 3. Specialists activate based on request context (OCR, media, web search)
-4. Prompt built with context + specialist results → Ollama LLM
+4. PromptAssembler builds prompt with cached + fresh context → Ollama LLM
 5. Response streamed back via Server-Sent Events
 6. CLI displays chunks in terminal
 7. Memories extracted and stored in ChromaDB
@@ -73,11 +73,11 @@ See `docs/adapters.rst` for building new adapters.
 
 ### Core Logic
 - `brain/llm.py` - LLM client (Ollama), streaming generation
-- `brain/prompt_builder/` - **NEW (v2.0):** Modular prompt building package
-  - `context_retriever.py` - RAG data retrieval
+- `brain/prompt_builder/` - **v2.1:** Modular prompt building with caching
+  - `context_retriever.py` - RAG data retrieval (cache-aware)
   - `section_builder.py` - Section formatting
-  - `prompt_assembler.py` - Final orchestration
-  - `_legacy_prompt_builder.py` - Backward-compatible shim
+  - `prompt_assembler.py` - Final orchestration with MultiTimescaleCache
+- `brain/context_cache.py` - **NEW (v2.1):** Multi-timescale caching (personas, FAQs, memories)
 - `brain/rag_store.py` - Vector storage interface (ChromaDB)
 - `brain/schemas.py` - All Pydantic models, self-documenting via `/v1/schema`
 

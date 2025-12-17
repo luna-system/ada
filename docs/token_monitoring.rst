@@ -204,20 +204,21 @@ Integration with Prompt Builder
 
 .. code-block:: python
 
-   from brain.prompt_builder import build_prompt
+   from brain.prompt_builder import PromptAssembler
    from brain.token_monitor import TokenBudgetMonitor
    
-   # Create monitor
-   monitor = TokenBudgetMonitor()
+   # Create assembler (includes cache automatically)
+   assembler = PromptAssembler()
    
-   # Build prompt with monitoring
-   prompt = build_prompt(
+   # Build prompt (cache handles optimization)
+   prompt = assembler.build_prompt(
        user_message="What's the weather?",
-       token_monitor=monitor  # Pass monitor
+       conversation_id="conv-123"
    )
    
-   # Log what was used
-   monitor.log_breakdown()
+   # Check cache stats
+   stats = assembler.cache.get_stats()
+   print(f"Cache hit rate: {stats.hit_rate:.2%}")
 
 Per-Request Tracking
 ~~~~~~~~~~~~~~~~~~~
