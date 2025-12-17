@@ -43,41 +43,30 @@ Most AI assistants lock essential features behind subscriptions:
 
 ---
 
-## Quick Start
+## Quick Start (Local Mode - No Docker!)
 
 ### 1. Install Prerequisites
 
-- **Docker & Docker Compose** (required)
-- **Docker BuildX** (recommended for fast builds)
-  - Included with Docker Desktop
-  - Linux: Run `./scripts/setup_buildx.sh` (auto-detects your distro)
-  - Or manually install: `sudo pacman -S docker-buildx` (Arch), `sudo apt install docker-buildx-plugin` (Debian/Ubuntu)
-- **Disk Space** ⚠️ **Important!**
-  - Minimum: 20GB free space
-  - Recommended: 50GB+ (allows multiple models)
-  - Large models (DeepSeek R1): 15-20GB each
-  - Tip: Run `./scripts/check_disk_space.sh` to monitor usage
-- **GPU** (optional but recommended)
-  - NVIDIA (CUDA) - Widest support
-  - AMD (ROCm) - Great performance, Ada's default config
-  - Apple Silicon (Metal) - M1/M2/M3/M4 Macs
-  - CPU-only works but is slower
-- **RAM**
-  - Minimum: 8GB (small models)
-  - Recommended: 16GB+ (larger models)
+- **Python 3.13+** (required)
+- **Ollama** (required) - Get from [ollama.ai](https://ollama.ai)
+- **8GB+ RAM** recommended
+- **GPU** (optional) - CUDA, ROCm, or Metal for faster inference
 
-See [Hardware Guide](/docs/hardware.rst) for detailed setup and GPU configuration.
-
-### 2. Clone and Setup
+### 2. Setup
 
 ```bash
+# Clone repository
 git clone https://github.com/luna-system/ada.git
 cd ada
 
-# Set up BuildX for fast builds (optional but recommended)
-./scripts/setup_buildx.sh
+# Run setup wizard
+python3 ada_cli.py setup
 
-# Create data directories and check prerequisites
+# Pull a model
+ollama pull deepseek-r1:14b
+
+# Start Ada
+ada run
 ./setup.sh
 
 # Start Ada (CPU-only by default, headless)
@@ -89,47 +78,64 @@ docker compose --profile web up -d
 # With Matrix bridge  
 docker compose --profile matrix up -d
 
-# With both web UI and Matrix
-docker compose --profile web --profile matrix up -d
+**That's it!** Ada runs at http://localhost:7000
 
-# OR with GPU acceleration (add to any of the above):
-docker compose --profile cuda up -d             # NVIDIA GPUs
-docker compose --profile rocm up -d             # AMD GPUs
-docker compose --profile cuda --profile web up -d  # GPU + web UI
+### 3. Use Ada
+
+```bash
+# Check status
+ada status
+
+# Chat from terminal
+ada chat "What's Python?"
+
+# Interactive CLI
+ada-cli
+
+# Web UI (optional)
+cd frontend && npm run dev
 ```
 
-That's it! Ada will:
-- Pull and start core services (Ollama, ChromaDB, brain API)
-- Download the default model (DeepSeek-R1, ~4GB)
-- Start interfaces based on profiles:
-  - **Default (headless)**: API only at http://localhost:8000
-  - **--profile web**: Web UI at http://localhost:5000
-  - **--profile matrix**: Matrix bridge (see [setup](matrix-bridge/README.md))
-  - **CLI**: `pip install -e adapters/cli && ada-cli` (works with any profile)
+### 4. Customize (Optional)
 
-### 3. Customize (Optional)
-
-**Change the AI model:**
 ```bash
-# Edit .env
-OLLAMA_MODEL=llama3.1
-# or mistral, qwen, gemma, etc. - any model Ollama supports
-```
+# Change model
+ollama pull llama3.1
+# Edit .env: OLLAMA_MODEL=llama3.1
+ada run
 
-**Give your AI a different personality:**
-```bash
-# Copy an example persona or create your own
+# Custom personality
 cp examples/personas/coding-buddy.md persona.md
-docker compose restart brain
+ada run
+
+# Change AI name
+# Edit .env: AI_NAME=Jarvis, AI_USER_NAME=Tony
 ```
 
-**Change your AI's name:**
+See [docs/local_mode.md](docs/local_mode.md) for complete guide.
+
+---
+
+## Docker Mode (Optional)
+
+Want isolated services or multi-container orchestration? Ada also supports Docker!
+
 ```bash
-# In .env
-AI_NAME=Jarvis
-AI_USER_NAME=Tony
+# Start with Docker instead
+docker compose up -d
+
+# With web UI
+docker compose --profile web up -d
+
+# With Matrix bridge
+docker compose --profile matrix up -d
+
+# With GPU support
+docker compose --profile cuda up -d  # NVIDIA
+docker compose --profile rocm up -d  # AMD
 ```
-https://ada-docs.readthedocs.io/) for detailed customization.
+
+See [docs/external_ollama.md](docs/external_ollama.md) for hybrid setups.
 
 ---
 
