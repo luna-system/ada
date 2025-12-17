@@ -18,6 +18,8 @@ from typing import Any
 
 from brain.prompt_builder.context_retriever import ContextRetriever
 from brain.prompt_builder.section_builder import SectionBuilder
+from brain.context_cache import MultiTimescaleCache
+from brain.config import config
 
 
 class PromptAssembler:
@@ -42,15 +44,21 @@ class PromptAssembler:
     def __init__(
         self,
         retriever: ContextRetriever | None = None,
-        builder: SectionBuilder | None = None
+        builder: SectionBuilder | None = None,
+        cache: MultiTimescaleCache | None = None
     ):
         """Initialize with dependencies.
         
         Args:
             retriever: ContextRetriever instance (creates default if None)
             builder: SectionBuilder instance (creates default if None)
+            cache: Cache instance (creates default if None)
         """
-        self.retriever = retriever or ContextRetriever()
+        # Initialize cache first
+        self.cache = cache or MultiTimescaleCache(config)
+        
+        # Pass cache to retriever
+        self.retriever = retriever or ContextRetriever(cache=self.cache)
         self.builder = builder or SectionBuilder()
     
     def build_prompt(
