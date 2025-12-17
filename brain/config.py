@@ -150,6 +150,19 @@ SEARXNG_URL = os.getenv("SEARXNG_URL")
 LISTENBRAINZ_USER = os.getenv("LISTENBRAINZ_USER")
 LISTENBRAINZ_TOKEN = os.getenv("LISTENBRAINZ_TOKEN")
 
+# ============= Context Cache Configuration =============
+# Multi-timescale caching for RAG context
+
+# TTL values (seconds)
+CACHE_PERSONA_TTL = int(os.getenv("CACHE_PERSONA_TTL", "86400"))  # 24 hours
+CACHE_FAQ_TTL = int(os.getenv("CACHE_FAQ_TTL", "86400"))  # 24 hours
+CACHE_MEMORY_TTL = int(os.getenv("CACHE_MEMORY_TTL", "300"))  # 5 minutes
+CACHE_CONVERSATION_TTL = int(os.getenv("CACHE_CONVERSATION_TTL", "3600"))  # 1 hour
+
+# Cache limits
+CACHE_MAX_ENTRIES = int(os.getenv("CACHE_MAX_ENTRIES", "1000"))
+CACHE_CLEANUP_INTERVAL = int(os.getenv("CACHE_CLEANUP_INTERVAL", "300"))  # 5 minutes
+
 def get_config_dict() -> Dict[str, Any]:
     """Return active configuration as a dictionary for health checks."""
     return {
