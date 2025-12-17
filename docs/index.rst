@@ -14,7 +14,6 @@ Welcome to the Ada Brain API documentation. This is the REST API backend for the
    getting_started_scratch
    configuration
    examples
-   matrix_integration
 
 .. toctree::
    :maxdepth: 2
@@ -37,6 +36,8 @@ Welcome to the Ada Brain API documentation. This is the REST API backend for the
    :caption: Interfaces & Adapters
 
    adapters
+   adapter_development
+   matrix_integration
    api_usage
    api_reference
 
@@ -55,6 +56,7 @@ Welcome to the Ada Brain API documentation. This is the REST API backend for the
    :caption: Operations
 
    build_system
+   buildx_adoption_notes
    disk_management
 
 .. toctree::
@@ -68,6 +70,7 @@ Welcome to the Ada Brain API documentation. This is the REST API backend for the
    :maxdepth: 1
    :caption: Philosophy & Design
 
+   project_philosophy
    documentation_philosophy
    ai_documentation
    empathetic_documentation

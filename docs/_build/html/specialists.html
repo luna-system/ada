@@ -51,7 +51,6 @@
 <li class="toctree-l1"><a class="reference internal" href="getting_started_scratch.html">Getting Started from Scratch</a></li>
 <li class="toctree-l1"><a class="reference internal" href="configuration.html">Configuration Reference</a></li>
 <li class="toctree-l1"><a class="reference internal" href="examples.html">Examples</a></li>
-<li class="toctree-l1"><a class="reference internal" href="matrix_integration.html">Matrix Integration</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Hardware Setup</span></p>
 <ul>
@@ -65,8 +64,11 @@
 <li class="toctree-l1"><a class="reference internal" href="streaming.html">Streaming</a></li>
 <li class="toctree-l1"><a class="reference internal" href="memory.html">Memory</a></li>
 </ul>
-<p class="caption" role="heading"><span class="caption-text">API Documentation</span></p>
+<p class="caption" role="heading"><span class="caption-text">Interfaces &amp; Adapters</span></p>
 <ul>
+<li class="toctree-l1"><a class="reference internal" href="adapters.html">Ada Adapters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="adapter_development.html">Adapter Development Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="matrix_integration.html">Matrix Integration</a></li>
 <li class="toctree-l1"><a class="reference internal" href="api_usage.html">API Usage Guide</a></li>
 <li class="toctree-l1"><a class="reference internal" href="api_reference.html">API Reference</a></li>
 </ul>
@@ -117,6 +119,7 @@
 <p class="caption" role="heading"><span class="caption-text">Operations</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="build_system.html">Build System</a></li>
+<li class="toctree-l1"><a class="reference internal" href="buildx_adoption_notes.html">BuildX Adoption Data &amp; Notes</a></li>
 <li class="toctree-l1"><a class="reference internal" href="disk_management.html">Disk Management</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Development</span></p>
@@ -126,6 +129,7 @@
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Philosophy &amp; Design</span></p>
 <ul>
+<li class="toctree-l1"><a class="reference internal" href="project_philosophy.html">Ada Principles</a></li>
 <li class="toctree-l1"><a class="reference internal" href="documentation_philosophy.html">Documentation Philosophy</a></li>
 <li class="toctree-l1"><a class="reference internal" href="ai_documentation.html">AI-Readable Documentation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="empathetic_documentation.html">Empathetic Documentation</a></li>
@@ -159,6 +163,10 @@
   <section id="specialist-system">
 <h1>Specialist System<a class="headerlink" href="#specialist-system" title="Link to this heading"></a></h1>
 <p>The specialist plugin system provides extensible AI capabilities through a standardized interface. Drop a new <code class="docutils literal notranslate"><span class="pre">*_specialist.py</span></code> file into <code class="docutils literal notranslate"><span class="pre">brain/specialists/</span></code> and it’s automatically discovered and integrated.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p><strong>Live Specialist List:</strong> See <code class="docutils literal notranslate"><span class="pre">GET</span> <span class="pre">/v1/specialists</span></code> for the current list of active specialists with their capabilities, activation triggers, and priority levels. This endpoint reflects runtime state including any custom specialists you’ve added.</p>
+</div>
 <section id="overview">
 <h2>Overview<a class="headerlink" href="#overview" title="Link to this heading"></a></h2>
 <section id="architecture">
