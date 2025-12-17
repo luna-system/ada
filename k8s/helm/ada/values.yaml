@@ -1,0 +1,232 @@
+# Ada Helm Chart - Default Values
+# Override these in your own values.yaml or via --set
+
+# Global settings
+global:
+  namespaceOverride: ""
+  
+# Brain API (FastAPI backend)
+brain:
+  enabled: true
+  replicaCount: 2
+  
+  image:
+    repository: ghcr.io/luna-system/ada-brain
+    tag: ""  # Defaults to chart appVersion
+    pullPolicy: IfNotPresent
+  
+  service:
+    type: ClusterIP
+    port: 7000
+    annotations: {}
+  
+  resources:
+    requests:
+      memory: "2Gi"
+      cpu: "1"
+    limits:
+      memory: "4Gi"
+      cpu: "2"
+  
+  autoscaling:
+    enabled: false
+    minReplicas: 2
+    maxReplicas: 10
+    targetCPUUtilizationPercentage: 70
+    targetMemoryUtilizationPercentage: 80
+  
+  env:
+    AI_NAME: "Ada"
+    AI_USER_NAME: "user"
+    RAG_ENABLED: "true"
+    RAG_ENABLE_PERSONA: "true"
+    RAG_ENABLE_FAQ: "true"
+    RAG_ENABLE_MEMORY: "true"
+    LOG_LEVEL: "info"
+  
+  nodeSelector: {}
+  tolerations: []
+  affinity: {}
+
+# Ollama (LLM backend)
+ollama:
+  enabled: true
+  
+  image:
+    repository: ollama/ollama
+    tag: "latest"
+    pullPolicy: IfNotPresent
+  
+  model: "deepseek-r1:14b"
+  
+  # GPU support
+  gpu:
+    enabled: false
+    type: "nvidia"  # nvidia or amd
+    count: 1
+  
+  service:
+    type: ClusterIP
+    port: 11434
+  
+  resources:
+    requests:
+      memory: "8Gi"
+      cpu: "4"
+    limits:
+      memory: "16Gi"
+      cpu: "8"
+      # GPU limits added dynamically based on gpu.type
+  
+  persistence:
+    enabled: true
+    storageClass: ""  # Use default
+    accessMode: ReadWriteOnce
+    size: "50Gi"
+  
+  # Use external Ollama instead
+  external:
+    enabled: false
+    url: "http://external-ollama:11434"
+  
+  nodeSelector: {}
+  tolerations: []
+  affinity: {}
+
+# ChromaDB (Vector database)
+chroma:
+  enabled: true
+  
+  image:
+    repository: chromadb/chroma
+    tag: "latest"
+    pullPolicy: IfNotPresent
+  
+  service:
+    type: ClusterIP
+    port: 8000
+  
+  resources:
+    requests:
+      memory: "2Gi"
+      cpu: "1"
+    limits:
+      memory: "4Gi"
+      cpu: "2"
+  
+  persistence:
+    enabled: true
+    storageClass: ""
+    accessMode: ReadWriteOnce
+    size: "20Gi"
+  
+  nodeSelector: {}
+  tolerations: []
+  affinity: {}
+
+# Web UI (nginx + Astro)
+web:
+  enabled: false
+  
+  image:
+    repository: ghcr.io/luna-system/ada-web
+    tag: ""
+    pullPolicy: IfNotPresent
+  
+  service:
+    type: ClusterIP
+    port: 80
+  
+  resources:
+    requests:
+      memory: "128Mi"
+      cpu: "100m"
+    limits:
+      memory: "256Mi"
+      cpu: "200m"
+  
+  nodeSelector: {}
+  tolerations: []
+  affinity: {}
+
+# Matrix Bridge (optional)
+matrix:
+  enabled: false
+  
+  image:
+    repository: ghcr.io/luna-system/ada-matrix-bridge
+    tag: ""
+    pullPolicy: IfNotPresent
+  
+  config:
+    homeserver: "https://matrix.org"
+    userId: "@ada:matrix.org"
+    # accessToken in secret
+  
+  resources:
+    requests:
+      memory: "256Mi"
+      cpu: "200m"
+    limits:
+      memory: "512Mi"
+      cpu: "500m"
+  
+  nodeSelector: {}
+  tolerations: []
+  affinity: {}
+
+# Ingress configuration
+ingress:
+  enabled: false
+  className: "nginx"
+  annotations:
+    # cert-manager.io/cluster-issuer: "letsencrypt-prod"
+    # nginx.ingress.kubernetes.io/ssl-redirect: "true"
+  hostname: "ada.example.com"
+  path: /
+  pathType: Prefix
+  tls:
+    enabled: false
+    secretName: "ada-tls"
+
+# ServiceMonitor for Prometheus Operator
+monitoring:
+  enabled: false
+  serviceMonitor:
+    enabled: false
+    interval: 30s
+    scrapeTimeout: 10s
+    labels: {}
+
+# NetworkPolicy
+networkPolicy:
+  enabled: false
+  policyTypes:
+    - Ingress
+    - Egress
+
+# PodDisruptionBudget
+podDisruptionBudget:
+  enabled: false
+  minAvailable: 1
+  # maxUnavailable: 1
+
+# Secrets
+secrets:
+  # Matrix access token
+  matrixAccessToken: ""
+  # API keys for specialists
+  openweatherApiKey: ""
+  searxngUrl: ""
+
+# Init containers for model download
+initContainers:
+  downloadModel:
+    enabled: true
+    resources:
+      requests:
+        memory: "1Gi"
+        cpu: "500m"
+      limits:
+        memory: "2Gi"
+        cpu: "1"
