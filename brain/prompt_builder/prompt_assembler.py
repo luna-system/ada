@@ -103,7 +103,7 @@ class PromptAssembler:
         # Initialize semantic chunker (Biomimetic Phase 2.2)
         if config.SEMANTIC_CHUNKING_ENABLED:
             self.chunker = SemanticChunker(
-                threshold=config.SEMANTIC_CHUNKING_THRESHOLD,
+                similarity_threshold=config.SEMANTIC_CHUNKING_THRESHOLD,
                 min_chunk_size=config.SEMANTIC_CHUNKING_MIN_SIZE,
                 max_chunk_size=config.SEMANTIC_CHUNKING_MAX_SIZE
             )
@@ -139,7 +139,7 @@ class PromptAssembler:
         persona = self.retriever.get_persona()
         memories = self.retriever.get_memories(query=user_message, k=5)
         faqs = self.retriever.get_faqs(query=user_message, k=3)
-        turns = self.retriever.get_turns(conversation_id=conversation_id, k=10)
+        turns = self.retriever.get_turns(query=user_message, conversation_id=conversation_id, k=10)
         
         # 2. Activate specialists
         specialist_results = self._activate_specialists(
