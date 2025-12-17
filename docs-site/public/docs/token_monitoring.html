@@ -1,0 +1,568 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Token Budget Monitoring &mdash; Ada Brain API 0.1.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="_static/graphviz.css?v=4ae1632d" />
+      <link rel="stylesheet" type="text/css" href="_static/custom.css?v=df0a1c42" />
+
+  
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=01f34227"></script>
+      <script src="_static/doctools.js?v=9bcbadda"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Ada Adapters" href="adapters.html" />
+    <link rel="prev" title="Memory" href="memory.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            Ada Brain API
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="zero_to_ada.html">Zero to Ada</a></li>
+<li class="toctree-l1"><a class="reference internal" href="getting_started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="local_mode.html">Running Ada Locally (No Docker Required!)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="nix.html">Nix &amp; Flakes Support</a></li>
+<li class="toctree-l1"><a class="reference internal" href="getting_started_scratch.html">Getting Started from Scratch</a></li>
+<li class="toctree-l1"><a class="reference internal" href="configuration.html">Configuration Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="examples.html">Examples</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Hardware Setup</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="hardware.html">Hardware &amp; GPU Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="sbc.html">Ada on Single-Board Computers (SBCs)</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Core Architecture</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="architecture.html">Architecture</a></li>
+<li class="toctree-l1"><a class="reference internal" href="data_model.html">Data Model Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="streaming.html">Streaming</a></li>
+<li class="toctree-l1"><a class="reference internal" href="memory.html">Memory</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Token Budget Monitoring</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#overview">Overview</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#why-token-monitoring">Why Token Monitoring?</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#architecture">Architecture</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#data-structures">Data Structures</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#componenttokens">ComponentTokens</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#tokenusagebreakdown">TokenUsageBreakdown</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#api-reference">API Reference</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#tokenbudgetmonitor">TokenBudgetMonitor</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#TokenBudgetMonitor"><code class="docutils literal notranslate"><span class="pre">TokenBudgetMonitor</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#usage-examples">Usage Examples</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#basic-tracking">Basic Tracking</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#warning-detection">Warning Detection</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#integration-with-prompt-builder">Integration with Prompt Builder</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#per-request-tracking">Per-Request Tracking</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#token-counting-details">Token Counting Details</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#performance-considerations">Performance Considerations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#future-enhancements">Future Enhancements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#integration-status">Integration Status</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#see-also">See Also</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Interfaces &amp; Adapters</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="adapters.html">Ada Adapters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="adapter_development.html">Adapter Development Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="matrix_integration.html">Matrix Integration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api_usage.html">API Usage Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api_reference.html">API Reference</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Specialist System</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="specialists.html">Specialist System</a></li>
+<li class="toctree-l1"><a class="reference internal" href="build_specialist.html">Build Your First Specialist</a></li>
+<li class="toctree-l1"><a class="reference internal" href="bidirectional.html">Bidirectional Specialist System</a></li>
+<li class="toctree-l1"><a class="reference internal" href="specialist_rag.html">Specialist RAG Documentation System</a></li>
+<li class="toctree-l1"><a class="reference internal" href="web_search.html">Web Search Specialist</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Operations</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="build_system.html">Build System</a></li>
+<li class="toctree-l1"><a class="reference internal" href="buildx_adoption_notes.html">BuildX Adoption Data &amp; Notes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="disk_management.html">Disk Management</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Development</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="development.html">Development Tools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="testing.html">Testing Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="versioning.html">Version Management</a></li>
+<li class="toctree-l1"><a class="reference internal" href="changelog.html">Changelog</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Philosophy &amp; Design</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="project_philosophy.html">Ada Principles</a></li>
+<li class="toctree-l1"><a class="reference internal" href="documentation_philosophy.html">Documentation Philosophy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ai_documentation.html">AI-Readable Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="empathetic_documentation.html">Empathetic Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="xenofeminism.html">Xenofeminism and Ada</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Ada Brain API</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Token Budget Monitoring</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/token_monitoring.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="token-budget-monitoring">
+<h1>Token Budget Monitoring<a class="headerlink" href="#token-budget-monitoring" title="Link to this heading"></a></h1>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This feature is part of Ada v2.0’s biomimetic foundation. It provides visibility
+into token usage patterns before implementing optimization strategies.</p>
+</div>
+<section id="overview">
+<h2>Overview<a class="headerlink" href="#overview" title="Link to this heading"></a></h2>
+<p>The Token Budget Monitor tracks how many tokens are consumed by different parts of Ada’s
+context window:</p>
+<ul class="simple">
+<li><p><strong>Persona</strong> - Your AI persona description</p></li>
+<li><p><strong>FAQ</strong> - Frequently asked questions and answers</p></li>
+<li><p><strong>Memories</strong> - Retrieved memories from RAG search</p></li>
+<li><p><strong>Conversation History</strong> - Recent messages</p></li>
+<li><p><strong>Specialist Results</strong> - OCR output, web searches, etc.</p></li>
+<li><p><strong>System Notices</strong> - Important system alerts</p></li>
+</ul>
+<section id="why-token-monitoring">
+<h3>Why Token Monitoring?<a class="headerlink" href="#why-token-monitoring" title="Link to this heading"></a></h3>
+<p><strong>The Problem</strong>: Modern LLMs have large context windows (128k+ tokens), but loading
+too much context:</p>
+<ol class="arabic simple">
+<li><p>Slows down responses (more tokens to process)</p></li>
+<li><p>Costs more (token-based pricing)</p></li>
+<li><p>Can overwhelm the model with irrelevant information</p></li>
+<li><p>Makes it harder to stay within limits</p></li>
+</ol>
+<p><strong>The Solution</strong>: Track what’s using tokens so we can optimize strategically.</p>
+</section>
+</section>
+<section id="architecture">
+<h2>Architecture<a class="headerlink" href="#architecture" title="Link to this heading"></a></h2>
+<p>The monitoring system uses <code class="docutils literal notranslate"><span class="pre">tiktoken</span></code> (OpenAI’s tokenizer) to accurately count
+tokens the way language models see them.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">brain.token_monitor</span><span class="w"> </span><span class="kn">import</span> <span class="n">TokenBudgetMonitor</span>
+
+<span class="c1"># Initialize monitor</span>
+<span class="n">monitor</span> <span class="o">=</span> <span class="n">TokenBudgetMonitor</span><span class="p">(</span>
+    <span class="n">max_tokens</span><span class="o">=</span><span class="mi">128000</span><span class="p">,</span>      <span class="c1"># Context window size</span>
+    <span class="n">warning_threshold</span><span class="o">=</span><span class="mi">102400</span> <span class="c1"># Warn at 80%</span>
+<span class="p">)</span>
+
+<span class="c1"># Track components</span>
+<span class="n">monitor</span><span class="o">.</span><span class="n">track</span><span class="p">(</span><span class="s2">&quot;persona&quot;</span><span class="p">,</span> <span class="n">persona_text</span><span class="p">)</span>
+<span class="n">monitor</span><span class="o">.</span><span class="n">track</span><span class="p">(</span><span class="s2">&quot;memories&quot;</span><span class="p">,</span> <span class="n">memory_text</span><span class="p">)</span>
+<span class="n">monitor</span><span class="o">.</span><span class="n">track</span><span class="p">(</span><span class="s2">&quot;specialist_ocr&quot;</span><span class="p">,</span> <span class="n">ocr_results</span><span class="p">)</span>
+
+<span class="c1"># Get breakdown</span>
+<span class="n">breakdown</span> <span class="o">=</span> <span class="n">monitor</span><span class="o">.</span><span class="n">get_breakdown</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Total tokens: </span><span class="si">{</span><span class="n">breakdown</span><span class="o">.</span><span class="n">total_tokens</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Percentage used: </span><span class="si">{</span><span class="n">breakdown</span><span class="o">.</span><span class="n">percentage_used</span><span class="si">:</span><span class="s2">.1f</span><span class="si">}</span><span class="s2">%&quot;</span><span class="p">)</span>
+
+<span class="c1"># Human-readable summary</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">monitor</span><span class="o">.</span><span class="n">get_summary</span><span class="p">())</span>
+</pre></div>
+</div>
+</section>
+<section id="data-structures">
+<h2>Data Structures<a class="headerlink" href="#data-structures" title="Link to this heading"></a></h2>
+<section id="componenttokens">
+<h3>ComponentTokens<a class="headerlink" href="#componenttokens" title="Link to this heading"></a></h3>
+<p>Tracks tokens for a single component:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nd">@dataclass</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">ComponentTokens</span><span class="p">:</span>
+    <span class="n">tokens</span><span class="p">:</span> <span class="nb">int</span>          <span class="c1"># Absolute token count</span>
+    <span class="n">percentage</span><span class="p">:</span> <span class="nb">float</span>    <span class="c1"># Percentage of total</span>
+</pre></div>
+</div>
+</section>
+<section id="tokenusagebreakdown">
+<h3>TokenUsageBreakdown<a class="headerlink" href="#tokenusagebreakdown" title="Link to this heading"></a></h3>
+<p>Complete breakdown of all token usage:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nd">@dataclass</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">TokenUsageBreakdown</span><span class="p">:</span>
+    <span class="n">components</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">ComponentTokens</span><span class="p">]</span>  <span class="c1"># Per-component stats</span>
+    <span class="n">total_tokens</span><span class="p">:</span> <span class="nb">int</span>                        <span class="c1"># Sum of all components</span>
+    <span class="n">percentage_used</span><span class="p">:</span> <span class="nb">float</span>                   <span class="c1"># Percentage of budget</span>
+    <span class="n">is_warning</span><span class="p">:</span> <span class="nb">bool</span>                         <span class="c1"># True if over threshold</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="api-reference">
+<h2>API Reference<a class="headerlink" href="#api-reference" title="Link to this heading"></a></h2>
+<section id="tokenbudgetmonitor">
+<h3>TokenBudgetMonitor<a class="headerlink" href="#tokenbudgetmonitor" title="Link to this heading"></a></h3>
+<dl class="py class">
+<dt class="sig sig-object py" id="TokenBudgetMonitor">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">TokenBudgetMonitor</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">max_tokens</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">128000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">warning_threshold</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">102400</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'gpt-4'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#TokenBudgetMonitor" title="Link to this definition"></a></dt>
+<dd><p>Main monitoring class.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>max_tokens</strong> – Maximum token budget (context window size)</p></li>
+<li><p><strong>warning_threshold</strong> – Token count at which to warn</p></li>
+<li><p><strong>model</strong> – Model name for tokenizer (affects counting)</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="TokenBudgetMonitor.count_tokens">
+<span class="sig-name descname"><span class="pre">count_tokens</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">text</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">int</span></span></span><a class="headerlink" href="#TokenBudgetMonitor.count_tokens" title="Link to this definition"></a></dt>
+<dd><p>Count tokens in text.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>text</strong> – Text to count tokens for</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Number of tokens</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="TokenBudgetMonitor.track">
+<span class="sig-name descname"><span class="pre">track</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">component</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">text</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">int</span></span></span><a class="headerlink" href="#TokenBudgetMonitor.track" title="Link to this definition"></a></dt>
+<dd><p>Track token usage for a component.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>component</strong> – Component name (e.g., “persona”, “memories”)</p></li>
+<li><p><strong>text</strong> – Text content to track</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Number of tokens in this text</p>
+</dd>
+</dl>
+<p>Components accumulate tokens if tracked multiple times.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="TokenBudgetMonitor.get_breakdown">
+<span class="sig-name descname"><span class="pre">get_breakdown</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">TokenUsageBreakdown</span></span></span><a class="headerlink" href="#TokenBudgetMonitor.get_breakdown" title="Link to this definition"></a></dt>
+<dd><p>Get detailed breakdown of token usage.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>TokenUsageBreakdown with all stats</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="TokenBudgetMonitor.get_summary">
+<span class="sig-name descname"><span class="pre">get_summary</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="headerlink" href="#TokenBudgetMonitor.get_summary" title="Link to this definition"></a></dt>
+<dd><p>Get human-readable summary.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Formatted string with breakdown</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="TokenBudgetMonitor.get_top_components">
+<span class="sig-name descname"><span class="pre">get_top_components</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">3</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">int</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#TokenBudgetMonitor.get_top_components" title="Link to this definition"></a></dt>
+<dd><p>Get top N components by token usage.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>n</strong> – Number of components to return</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>List of (name, tokens) tuples, sorted descending</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="TokenBudgetMonitor.reset">
+<span class="sig-name descname"><span class="pre">reset</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#TokenBudgetMonitor.reset" title="Link to this definition"></a></dt>
+<dd><p>Reset tracking for a new request.</p>
+<p>Call at the start of each request to track independently.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="TokenBudgetMonitor.log_breakdown">
+<span class="sig-name descname"><span class="pre">log_breakdown</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#TokenBudgetMonitor.log_breakdown" title="Link to this definition"></a></dt>
+<dd><p>Log detailed breakdown at INFO level.</p>
+<p>Useful for debugging and monitoring.</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+</section>
+<section id="usage-examples">
+<h2>Usage Examples<a class="headerlink" href="#usage-examples" title="Link to this heading"></a></h2>
+<section id="basic-tracking">
+<h3>Basic Tracking<a class="headerlink" href="#basic-tracking" title="Link to this heading"></a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">brain.token_monitor</span><span class="w"> </span><span class="kn">import</span> <span class="n">TokenBudgetMonitor</span>
+
+<span class="n">monitor</span> <span class="o">=</span> <span class="n">TokenBudgetMonitor</span><span class="p">()</span>
+
+<span class="c1"># Track different components</span>
+<span class="n">monitor</span><span class="o">.</span><span class="n">track</span><span class="p">(</span><span class="s2">&quot;persona&quot;</span><span class="p">,</span> <span class="s2">&quot;I am Ada, a friendly AI assistant...&quot;</span><span class="p">)</span>
+<span class="n">monitor</span><span class="o">.</span><span class="n">track</span><span class="p">(</span><span class="s2">&quot;memories&quot;</span><span class="p">,</span> <span class="s2">&quot;User prefers Python over JavaScript...&quot;</span><span class="p">)</span>
+<span class="n">monitor</span><span class="o">.</span><span class="n">track</span><span class="p">(</span><span class="s2">&quot;history&quot;</span><span class="p">,</span> <span class="s2">&quot;User: Hello! Ada: Hi there!&quot;</span><span class="p">)</span>
+
+<span class="c1"># Get summary</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">monitor</span><span class="o">.</span><span class="n">get_summary</span><span class="p">())</span>
+
+<span class="c1"># Output:</span>
+<span class="c1"># Token Usage: 1,234 / 128,000 (0.96%)</span>
+<span class="c1">#</span>
+<span class="c1"># Breakdown by component:</span>
+<span class="c1">#   history              :    567 tokens ( 45.9%)</span>
+<span class="c1">#   memories             :    456 tokens ( 37.0%)</span>
+<span class="c1">#   persona              :    211 tokens ( 17.1%)</span>
+</pre></div>
+</div>
+</section>
+<section id="warning-detection">
+<h3>Warning Detection<a class="headerlink" href="#warning-detection" title="Link to this heading"></a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">monitor</span> <span class="o">=</span> <span class="n">TokenBudgetMonitor</span><span class="p">(</span>
+    <span class="n">max_tokens</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span>
+    <span class="n">warning_threshold</span><span class="o">=</span><span class="mi">800</span>
+<span class="p">)</span>
+
+<span class="c1"># Add a lot of content</span>
+<span class="n">monitor</span><span class="o">.</span><span class="n">track</span><span class="p">(</span><span class="s2">&quot;large_component&quot;</span><span class="p">,</span> <span class="s2">&quot;...&quot;</span> <span class="o">*</span> <span class="mi">500</span><span class="p">)</span>
+
+<span class="n">breakdown</span> <span class="o">=</span> <span class="n">monitor</span><span class="o">.</span><span class="n">get_breakdown</span><span class="p">()</span>
+<span class="k">if</span> <span class="n">breakdown</span><span class="o">.</span><span class="n">is_warning</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;⚠️  Warning! Using </span><span class="si">{</span><span class="n">breakdown</span><span class="o">.</span><span class="n">total_tokens</span><span class="si">}</span><span class="s2"> tokens&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Top components:&quot;</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">tokens</span> <span class="ow">in</span> <span class="n">monitor</span><span class="o">.</span><span class="n">get_top_components</span><span class="p">(</span><span class="mi">3</span><span class="p">):</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  </span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">tokens</span><span class="si">}</span><span class="s2"> tokens&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="integration-with-prompt-builder">
+<h3>Integration with Prompt Builder<a class="headerlink" href="#integration-with-prompt-builder" title="Link to this heading"></a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">brain.prompt_builder</span><span class="w"> </span><span class="kn">import</span> <span class="n">PromptAssembler</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">brain.token_monitor</span><span class="w"> </span><span class="kn">import</span> <span class="n">TokenBudgetMonitor</span>
+
+<span class="c1"># Create assembler (includes cache automatically)</span>
+<span class="n">assembler</span> <span class="o">=</span> <span class="n">PromptAssembler</span><span class="p">()</span>
+
+<span class="c1"># Build prompt (cache handles optimization)</span>
+<span class="n">prompt</span> <span class="o">=</span> <span class="n">assembler</span><span class="o">.</span><span class="n">build_prompt</span><span class="p">(</span>
+    <span class="n">user_message</span><span class="o">=</span><span class="s2">&quot;What&#39;s the weather?&quot;</span><span class="p">,</span>
+    <span class="n">conversation_id</span><span class="o">=</span><span class="s2">&quot;conv-123&quot;</span>
+<span class="p">)</span>
+
+<span class="c1"># Check cache stats</span>
+<span class="n">stats</span> <span class="o">=</span> <span class="n">assembler</span><span class="o">.</span><span class="n">cache</span><span class="o">.</span><span class="n">get_stats</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Cache hit rate: </span><span class="si">{</span><span class="n">stats</span><span class="o">.</span><span class="n">hit_rate</span><span class="si">:</span><span class="s2">.2%</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="per-request-tracking">
+<h3>Per-Request Tracking<a class="headerlink" href="#per-request-tracking" title="Link to this heading"></a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">monitor</span> <span class="o">=</span> <span class="n">TokenBudgetMonitor</span><span class="p">()</span>
+
+<span class="k">for</span> <span class="n">request</span> <span class="ow">in</span> <span class="n">requests</span><span class="p">:</span>
+    <span class="c1"># Reset for new request</span>
+    <span class="n">monitor</span><span class="o">.</span><span class="n">reset</span><span class="p">()</span>
+
+    <span class="c1"># Track this request</span>
+    <span class="n">monitor</span><span class="o">.</span><span class="n">track</span><span class="p">(</span><span class="s2">&quot;persona&quot;</span><span class="p">,</span> <span class="n">persona</span><span class="p">)</span>
+    <span class="n">monitor</span><span class="o">.</span><span class="n">track</span><span class="p">(</span><span class="s2">&quot;context&quot;</span><span class="p">,</span> <span class="n">request</span><span class="o">.</span><span class="n">context</span><span class="p">)</span>
+
+    <span class="c1"># Process request...</span>
+
+    <span class="c1"># Log usage for this request</span>
+    <span class="n">monitor</span><span class="o">.</span><span class="n">log_breakdown</span><span class="p">()</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="token-counting-details">
+<h2>Token Counting Details<a class="headerlink" href="#token-counting-details" title="Link to this heading"></a></h2>
+<p>The monitor uses <code class="docutils literal notranslate"><span class="pre">tiktoken</span></code> to count tokens exactly as language models do.</p>
+<div class="admonition important">
+<p class="admonition-title">Important</p>
+<p>Different models tokenize differently! The default uses GPT-4’s tokenizer
+for consistency, but you can specify a different model:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Use a different tokenizer</span>
+<span class="n">monitor</span> <span class="o">=</span> <span class="n">TokenBudgetMonitor</span><span class="p">(</span><span class="n">model</span><span class="o">=</span><span class="s2">&quot;gpt-3.5-turbo&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<p>Common token counts (approximate):</p>
+<ul class="simple">
+<li><p>“Hello” = 1 token</p></li>
+<li><p>“Hello world” = 2 tokens</p></li>
+<li><p>“Hello, how are you?” = 6 tokens</p></li>
+<li><p>Average English word ≈ 1.3 tokens</p></li>
+<li><p>100 words ≈ 130 tokens</p></li>
+<li><p>1000 words ≈ 1300 tokens</p></li>
+</ul>
+</section>
+<section id="performance-considerations">
+<h2>Performance Considerations<a class="headerlink" href="#performance-considerations" title="Link to this heading"></a></h2>
+<p>Token counting is fast but not free:</p>
+<ul class="simple">
+<li><p><strong>Negligible impact</strong> for normal usage (&lt; 1ms per component)</p></li>
+<li><p><strong>Caching recommended</strong> for large static content (persona, FAQ)</p></li>
+<li><p><strong>Monitor overhead</strong> is far less than token processing by LLM</p></li>
+</ul>
+<p>The token monitor itself uses minimal memory:</p>
+<ul class="simple">
+<li><p>~1KB per component tracked</p></li>
+<li><p>Tracking 20 components = ~20KB overhead</p></li>
+<li><p>Completely acceptable for the visibility gained</p></li>
+</ul>
+</section>
+<section id="future-enhancements">
+<h2>Future Enhancements<a class="headerlink" href="#future-enhancements" title="Link to this heading"></a></h2>
+<p>Planned improvements for v2.0:</p>
+<ol class="arabic simple">
+<li><p><strong>Automatic Optimization</strong> - Suggest which components to cache or reduce</p></li>
+<li><p><strong>Historical Tracking</strong> - Track token usage over time to identify trends</p></li>
+<li><p><strong>Budget Allocation</strong> - Set per-component token budgets</p></li>
+<li><p><strong>Smart Truncation</strong> - Automatically trim least important components when over budget</p></li>
+<li><p><strong>Model-Specific Optimization</strong> - Tune counting for different model families</p></li>
+</ol>
+</section>
+<section id="integration-status">
+<h2>Integration Status<a class="headerlink" href="#integration-status" title="Link to this heading"></a></h2>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 30.0%" />
+<col style="width: 20.0%" />
+<col style="width: 50.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Component</p></th>
+<th class="head"><p>Status</p></th>
+<th class="head"><p>Notes</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Token Monitor (Core)</p></td>
+<td><p>✅ Complete</p></td>
+<td><p>All tests passing</p></td>
+</tr>
+<tr class="row-odd"><td><p>Prompt Builder Integration</p></td>
+<td><p>🚧 Planned</p></td>
+<td><p>Next step</p></td>
+</tr>
+<tr class="row-even"><td><p>Logging Integration</p></td>
+<td><p>🚧 Planned</p></td>
+<td><p>Automatic logging</p></td>
+</tr>
+<tr class="row-odd"><td><p>Dashboard/UI</p></td>
+<td><p>📋 Future</p></td>
+<td><p>Visual token breakdown</p></td>
+</tr>
+<tr class="row-even"><td><p>API Endpoint</p></td>
+<td><p>📋 Future</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">GET</span> <span class="pre">/v1/tokens/usage</span></code></p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="see-also">
+<h2>See Also<a class="headerlink" href="#see-also" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p><a class="reference internal" href="architecture.html"><span class="doc">Architecture</span></a> - How token monitoring fits in Ada’s architecture</p></li>
+<li><p><a class="reference internal" href="memory.html"><span class="doc">Memory</span></a> - RAG system that benefits from token optimization</p></li>
+<li><p><a class="reference internal" href="streaming.html"><span class="doc">Streaming</span></a> - How tokens flow through the system</p></li>
+<li><p><strong>Phase 1 Roadmap</strong> - <code class="docutils literal notranslate"><span class="pre">.ai/explorations/planning/IMPLEMENTATION_ROADMAP.md</span></code></p></li>
+</ul>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Token monitoring is <strong>read-only</strong> - it observes but doesn’t modify behavior.
+This provides a safe foundation for optimization features built on top.</p>
+</div>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="memory.html" class="btn btn-neutral float-left" title="Memory" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="adapters.html" class="btn btn-neutral float-right" title="Ada Adapters" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p></p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

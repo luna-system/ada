@@ -1,0 +1,472 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Web Search Specialist &mdash; Ada Brain API 0.1.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="_static/graphviz.css?v=4ae1632d" />
+      <link rel="stylesheet" type="text/css" href="_static/custom.css?v=df0a1c42" />
+
+  
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=01f34227"></script>
+      <script src="_static/doctools.js?v=9bcbadda"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Build System" href="build_system.html" />
+    <link rel="prev" title="Specialist RAG Documentation System" href="specialist_rag.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            Ada Brain API
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="zero_to_ada.html">Zero to Ada</a></li>
+<li class="toctree-l1"><a class="reference internal" href="getting_started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="local_mode.html">Running Ada Locally (No Docker Required!)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="nix.html">Nix &amp; Flakes Support</a></li>
+<li class="toctree-l1"><a class="reference internal" href="getting_started_scratch.html">Getting Started from Scratch</a></li>
+<li class="toctree-l1"><a class="reference internal" href="configuration.html">Configuration Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="examples.html">Examples</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Hardware Setup</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="hardware.html">Hardware &amp; GPU Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="sbc.html">Ada on Single-Board Computers (SBCs)</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Core Architecture</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="architecture.html">Architecture</a></li>
+<li class="toctree-l1"><a class="reference internal" href="data_model.html">Data Model Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="streaming.html">Streaming</a></li>
+<li class="toctree-l1"><a class="reference internal" href="memory.html">Memory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="token_monitoring.html">Token Budget Monitoring</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Interfaces &amp; Adapters</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="adapters.html">Ada Adapters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="adapter_development.html">Adapter Development Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="matrix_integration.html">Matrix Integration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api_usage.html">API Usage Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api_reference.html">API Reference</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Specialist System</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="specialists.html">Specialist System</a></li>
+<li class="toctree-l1"><a class="reference internal" href="build_specialist.html">Build Your First Specialist</a></li>
+<li class="toctree-l1"><a class="reference internal" href="bidirectional.html">Bidirectional Specialist System</a></li>
+<li class="toctree-l1"><a class="reference internal" href="specialist_rag.html">Specialist RAG Documentation System</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Web Search Specialist</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#overview">Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#features">Features</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#configuration">Configuration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#usage-pattern">Usage Pattern</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#llm-detection">LLM Detection</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#specialist-execution-pause-resume">Specialist Execution (Pause/Resume)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#result-format">Result Format</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#specialist-metadata">Specialist Metadata</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#request-schema">Request Schema</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#example-interactions">Example Interactions</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#news-query">News Query</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#fact-checking">Fact Checking</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#current-events">Current Events</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#rate-limiting">Rate Limiting</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#testing">Testing</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#manual-test-via-bidirectional-handler">Manual Test via Bidirectional Handler</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#direct-api-test-future">Direct API Test (Future)</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#architecture-integration">Architecture Integration</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#discovery">Discovery</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#dynamic-documentation">Dynamic Documentation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pause-resume-flow">Pause/Resume Flow</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#privacy-security">Privacy &amp; Security</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#future-enhancements">Future Enhancements</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#caching">Caching</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#result-filtering">Result Filtering</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#image-search">Image Search</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#troubleshooting">Troubleshooting</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#specialist-not-discovered">Specialist Not Discovered</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#search-fails">Search Fails</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#rate-limited">Rate Limited</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#related-documentation">Related Documentation</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Operations</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="build_system.html">Build System</a></li>
+<li class="toctree-l1"><a class="reference internal" href="buildx_adoption_notes.html">BuildX Adoption Data &amp; Notes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="disk_management.html">Disk Management</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Development</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="development.html">Development Tools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="testing.html">Testing Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="versioning.html">Version Management</a></li>
+<li class="toctree-l1"><a class="reference internal" href="changelog.html">Changelog</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Philosophy &amp; Design</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="project_philosophy.html">Ada Principles</a></li>
+<li class="toctree-l1"><a class="reference internal" href="documentation_philosophy.html">Documentation Philosophy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ai_documentation.html">AI-Readable Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="empathetic_documentation.html">Empathetic Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="xenofeminism.html">Xenofeminism and Ada</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Ada Brain API</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Web Search Specialist</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/web_search.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="web-search-specialist">
+<h1>Web Search Specialist<a class="headerlink" href="#web-search-specialist" title="Link to this heading"></a></h1>
+<section id="overview">
+<h2>Overview<a class="headerlink" href="#overview" title="Link to this heading"></a></h2>
+<p>The web search specialist provides Ada with real-time access to current information via your self-hosted SearxNG instance at <a class="reference external" href="https://hunt.airsi.de">https://hunt.airsi.de</a>.</p>
+</section>
+<section id="features">
+<h2>Features<a class="headerlink" href="#features" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p><strong>Bidirectional only</strong>: LLM must explicitly request search (not auto-activated)</p></li>
+<li><p><strong>SearxNG integration</strong>: Privacy-respecting metasearch aggregating multiple sources</p></li>
+<li><p><strong>Context injection</strong>: Search results formatted and injected into prompt</p></li>
+<li><p><strong>Rate limit aware</strong>: Handles 429 errors gracefully</p></li>
+</ul>
+</section>
+<section id="configuration">
+<h2>Configuration<a class="headerlink" href="#configuration" title="Link to this heading"></a></h2>
+<p>Set in <code class="docutils literal notranslate"><span class="pre">.env</span></code>:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nv">SEARXNG_URL</span><span class="o">=</span>https://hunt.airsi.de
+</pre></div>
+</div>
+<p>The specialist auto-discovers when <code class="docutils literal notranslate"><span class="pre">SEARXNG_URL</span></code> is set.</p>
+</section>
+<section id="usage-pattern">
+<h2>Usage Pattern<a class="headerlink" href="#usage-pattern" title="Link to this heading"></a></h2>
+<section id="llm-detection">
+<h3>LLM Detection<a class="headerlink" href="#llm-detection" title="Link to this heading"></a></h3>
+<p>When Ada realizes she needs current information:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>User: What&#39;s the weather in Portland today?
+Ada: I don&#39;t have access to real-time weather data in my training.
+     Let me search for current information.
+     SPECIALIST_REQUEST[web_search:{&quot;query&quot;:&quot;Portland weather today&quot;}]
+</pre></div>
+</div>
+</section>
+<section id="specialist-execution-pause-resume">
+<h3>Specialist Execution (Pause/Resume)<a class="headerlink" href="#specialist-execution-pause-resume" title="Link to this heading"></a></h3>
+<ol class="arabic simple">
+<li><p>Generation <strong>pauses</strong> when request detected</p></li>
+<li><p>Web search executes via SearxNG</p></li>
+<li><p>Results formatted and injected into context</p></li>
+<li><p>Generation <strong>resumes</strong> with enriched prompt</p></li>
+</ol>
+</section>
+<section id="result-format">
+<h3>Result Format<a class="headerlink" href="#result-format" title="Link to this heading"></a></h3>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>🔍 Web Search Results for &#39;Portland weather today&#39;:
+
+1. Portland Weather - National Weather Service
+   URL: https://weather.gov/portland
+   Partly cloudy with high of 55°F. Rain expected this evening...
+
+2. Weather.com - Portland, OR
+   URL: https://weather.com/weather/today/l/Portland+OR
+   Current conditions: 52°F, mostly cloudy. Chance of rain 60%...
+</pre></div>
+</div>
+</section>
+</section>
+<section id="specialist-metadata">
+<h2>Specialist Metadata<a class="headerlink" href="#specialist-metadata" title="Link to this heading"></a></h2>
+<p>Auto-generated FAQ entries:</p>
+<ul class="simple">
+<li><p><strong>Capability</strong>: “Search the web for current information, news, facts, and real-time data”</p></li>
+<li><p><strong>Priority</strong>: HIGH (injected early in prompt)</p></li>
+<li><p><strong>Icon</strong>: 🔍</p></li>
+<li><p><strong>Tags</strong>: web, search, current-events, real-time</p></li>
+</ul>
+</section>
+<section id="request-schema">
+<h2>Request Schema<a class="headerlink" href="#request-schema" title="Link to this heading"></a></h2>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="s2">&quot;query&quot;</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>           <span class="c1"># Search terms (required)</span>
+    <span class="s2">&quot;num_results&quot;</span><span class="p">:</span> <span class="nb">int</span>      <span class="c1"># Number of results (default: 5)</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</section>
+<section id="example-interactions">
+<h2>Example Interactions<a class="headerlink" href="#example-interactions" title="Link to this heading"></a></h2>
+<section id="news-query">
+<h3>News Query<a class="headerlink" href="#news-query" title="Link to this heading"></a></h3>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>User: What happened in AI today?
+Ada: SPECIALIST_REQUEST[web_search:{&quot;query&quot;:&quot;AI news today&quot;}]
+
+[Results injected]
+
+Based on the search results, here&#39;s what&#39;s happening in AI today:
+- OpenAI released...
+- Google announced...
+</pre></div>
+</div>
+</section>
+<section id="fact-checking">
+<h3>Fact Checking<a class="headerlink" href="#fact-checking" title="Link to this heading"></a></h3>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>User: Is Python 3.13 released yet?
+Ada: Let me check the latest information.
+     SPECIALIST_REQUEST[web_search:{&quot;query&quot;:&quot;Python 3.13 release&quot;}]
+
+[Results show release date]
+
+Yes! Python 3.13 was released on October 7, 2024...
+</pre></div>
+</div>
+</section>
+<section id="current-events">
+<h3>Current Events<a class="headerlink" href="#current-events" title="Link to this heading"></a></h3>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>User: Who won the game last night?
+Ada: SPECIALIST_REQUEST[web_search:{&quot;query&quot;:&quot;game results yesterday&quot;}]
+
+[Results with sports scores]
+
+Based on the search results...
+</pre></div>
+</div>
+</section>
+</section>
+<section id="rate-limiting">
+<h2>Rate Limiting<a class="headerlink" href="#rate-limiting" title="Link to this heading"></a></h2>
+<p>Your SearxNG instance has rate limiting enabled (429 Too Many Requests). This is handled gracefully:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">except</span> <span class="n">httpx</span><span class="o">.</span><span class="n">HTTPError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+    <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;[WEB_SEARCH] HTTP error: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">error_result</span><span class="p">(</span>
+        <span class="sa">f</span><span class="s2">&quot;Search service error: </span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+        <span class="n">request_context</span>
+    <span class="p">)</span>
+</pre></div>
+</div>
+<p>The error is returned to the LLM, which can inform the user:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Ada: I&#39;m unable to search right now due to rate limiting.
+     Based on my knowledge up to [training date]...
+</pre></div>
+</div>
+</section>
+<section id="testing">
+<h2>Testing<a class="headerlink" href="#testing" title="Link to this heading"></a></h2>
+<section id="manual-test-via-bidirectional-handler">
+<h3>Manual Test via Bidirectional Handler<a class="headerlink" href="#manual-test-via-bidirectional-handler" title="Link to this heading"></a></h3>
+<p>The web search specialist will be invoked when DeepSeek-R1 emits the request syntax during generation.</p>
+</section>
+<section id="direct-api-test-future">
+<h3>Direct API Test (Future)<a class="headerlink" href="#direct-api-test-future" title="Link to this heading"></a></h3>
+<p>Once we add a manual specialist invocation endpoint:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>curl<span class="w"> </span>-X<span class="w"> </span>POST<span class="w"> </span>http://localhost:7000/v1/specialists/web_search<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>-H<span class="w"> </span><span class="s2">&quot;Content-Type: application/json&quot;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>-d<span class="w"> </span><span class="s1">&#39;{&quot;query&quot;: &quot;test search&quot;}&#39;</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="architecture-integration">
+<h2>Architecture Integration<a class="headerlink" href="#architecture-integration" title="Link to this heading"></a></h2>
+<section id="discovery">
+<h3>Discovery<a class="headerlink" href="#discovery" title="Link to this heading"></a></h3>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>[BRAIN] Discovered 3 specialists: 🎧 media, 📄 ocr, 🔍 web_search
+[BRAIN] Synced 10 specialist FAQ entries to RAG
+</pre></div>
+</div>
+</section>
+<section id="dynamic-documentation">
+<h3>Dynamic Documentation<a class="headerlink" href="#dynamic-documentation" title="Link to this heading"></a></h3>
+<p>When user asks search-related questions, RAG retrieves:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Q: How do I invoke the web_search specialist?
+A: Use the syntax SPECIALIST_REQUEST[web_search:{&quot;query&quot;:&quot;search terms&quot;}]...
+</pre></div>
+</div>
+</section>
+<section id="pause-resume-flow">
+<h3>Pause/Resume Flow<a class="headerlink" href="#pause-resume-flow" title="Link to this heading"></a></h3>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>User query → Prompt building → LLM generation →
+  Detection: SPECIALIST_REQUEST[web_search:...] →
+  PAUSE → Execute search → Build enriched prompt →
+  RESUME → Continue generation with results
+</pre></div>
+</div>
+</section>
+</section>
+<section id="privacy-security">
+<h2>Privacy &amp; Security<a class="headerlink" href="#privacy-security" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p><strong>Self-hosted</strong>: All searches go through your SearxNG instance</p></li>
+<li><p><strong>No tracking</strong>: SearxNG doesn’t track user queries</p></li>
+<li><p><strong>Aggregated results</strong>: Multiple search engines provide diverse sources</p></li>
+<li><p><strong>Rate limiting</strong>: Prevents abuse</p></li>
+</ul>
+</section>
+<section id="future-enhancements">
+<h2>Future Enhancements<a class="headerlink" href="#future-enhancements" title="Link to this heading"></a></h2>
+<section id="caching">
+<h3>Caching<a class="headerlink" href="#caching" title="Link to this heading"></a></h3>
+<p>Cache recent searches to reduce API calls:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">search_cache</span> <span class="o">=</span> <span class="p">{}</span>  <span class="c1"># TTL: 5 minutes</span>
+<span class="k">if</span> <span class="n">query</span> <span class="ow">in</span> <span class="n">search_cache</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">expired</span><span class="p">:</span>
+    <span class="k">return</span> <span class="n">cached_result</span>
+</pre></div>
+</div>
+</section>
+<section id="result-filtering">
+<h3>Result Filtering<a class="headerlink" href="#result-filtering" title="Link to this heading"></a></h3>
+<p>Filter by domain, date, content type:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">SPECIALIST_REQUEST</span><span class="p">[</span><span class="n">web_search</span><span class="p">:{</span>
+    <span class="s2">&quot;query&quot;</span><span class="p">:</span> <span class="s2">&quot;Python news&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;num_results&quot;</span><span class="p">:</span> <span class="mi">10</span><span class="p">,</span>
+    <span class="s2">&quot;time_range&quot;</span><span class="p">:</span> <span class="s2">&quot;day&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;engines&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;google&quot;</span><span class="p">,</span> <span class="s2">&quot;bing&quot;</span><span class="p">]</span>
+<span class="p">}]</span>
+</pre></div>
+</div>
+</section>
+<section id="image-search">
+<h3>Image Search<a class="headerlink" href="#image-search" title="Link to this heading"></a></h3>
+<p>Add image search capability:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">SPECIALIST_REQUEST</span><span class="p">[</span><span class="n">image_search</span><span class="p">:{</span><span class="s2">&quot;query&quot;</span><span class="p">:</span> <span class="s2">&quot;Mars rover&quot;</span><span class="p">}]</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="troubleshooting">
+<h2>Troubleshooting<a class="headerlink" href="#troubleshooting" title="Link to this heading"></a></h2>
+<section id="specialist-not-discovered">
+<h3>Specialist Not Discovered<a class="headerlink" href="#specialist-not-discovered" title="Link to this heading"></a></h3>
+<p>Check logs:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>docker<span class="w"> </span>logs<span class="w"> </span>ada-v1-brain-1<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span><span class="s2">&quot;Discovered&quot;</span>
+<span class="c1"># Should show: Discovered 3 specialists: 🎧 media, 📄 ocr, 🔍 web_search</span>
+</pre></div>
+</div>
+<p>Verify environment:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>docker<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>ada-v1-brain-1<span class="w"> </span>env<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>SEARXNG
+<span class="c1"># Should show: SEARXNG_URL=https://hunt.airsi.de</span>
+</pre></div>
+</div>
+</section>
+<section id="search-fails">
+<h3>Search Fails<a class="headerlink" href="#search-fails" title="Link to this heading"></a></h3>
+<p>Check SearxNG accessibility:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>curl<span class="w"> </span><span class="s2">&quot;https://hunt.airsi.de/search?q=test&amp;format=json&quot;</span>
+</pre></div>
+</div>
+<p>Check logs for errors:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>docker<span class="w"> </span>logs<span class="w"> </span>ada-v1-brain-1<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>WEB_SEARCH
+</pre></div>
+</div>
+</section>
+<section id="rate-limited">
+<h3>Rate Limited<a class="headerlink" href="#rate-limited" title="Link to this heading"></a></h3>
+<p>Your instance has rate limiting. Options:</p>
+<ol class="arabic simple">
+<li><p>Wait for rate limit reset</p></li>
+<li><p>Implement request caching</p></li>
+<li><p>Add authentication to SearxNG (if available)</p></li>
+<li><p>Increase rate limits in SearxNG config</p></li>
+</ol>
+</section>
+</section>
+<section id="related-documentation">
+<h2>Related Documentation<a class="headerlink" href="#related-documentation" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p><a class="reference internal" href="bidirectional.html"><span class="doc">Bidirectional Specialist System</span></a> - How bidirectional communication works</p></li>
+<li><p><a class="reference internal" href="specialists.html"><span class="doc">Specialist System</span></a> - Creating new specialists</p></li>
+<li><p><a class="reference internal" href="specialist_rag.html"><span class="doc">Specialist RAG Documentation System</span></a> - Dynamic documentation system</p></li>
+</ul>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="specialist_rag.html" class="btn btn-neutral float-left" title="Specialist RAG Documentation System" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="build_system.html" class="btn btn-neutral float-right" title="Build System" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p></p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

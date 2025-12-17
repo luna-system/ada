@@ -1,0 +1,316 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Common Nix Onboarding Issues &mdash; Ada Brain API 0.1.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="_static/graphviz.css?v=4ae1632d" />
+      <link rel="stylesheet" type="text/css" href="_static/custom.css?v=df0a1c42" />
+
+  
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=01f34227"></script>
+      <script src="_static/doctools.js?v=9bcbadda"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            Ada Brain API
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="zero_to_ada.html">Zero to Ada</a></li>
+<li class="toctree-l1"><a class="reference internal" href="getting_started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="local_mode.html">Running Ada Locally (No Docker Required!)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="nix.html">Nix &amp; Flakes Support</a></li>
+<li class="toctree-l1"><a class="reference internal" href="getting_started_scratch.html">Getting Started from Scratch</a></li>
+<li class="toctree-l1"><a class="reference internal" href="configuration.html">Configuration Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="examples.html">Examples</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Hardware Setup</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="hardware.html">Hardware &amp; GPU Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="sbc.html">Ada on Single-Board Computers (SBCs)</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Core Architecture</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="architecture.html">Architecture</a></li>
+<li class="toctree-l1"><a class="reference internal" href="data_model.html">Data Model Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="streaming.html">Streaming</a></li>
+<li class="toctree-l1"><a class="reference internal" href="memory.html">Memory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="token_monitoring.html">Token Budget Monitoring</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Interfaces &amp; Adapters</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="adapters.html">Ada Adapters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="adapter_development.html">Adapter Development Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="matrix_integration.html">Matrix Integration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api_usage.html">API Usage Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api_reference.html">API Reference</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Specialist System</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="specialists.html">Specialist System</a></li>
+<li class="toctree-l1"><a class="reference internal" href="build_specialist.html">Build Your First Specialist</a></li>
+<li class="toctree-l1"><a class="reference internal" href="bidirectional.html">Bidirectional Specialist System</a></li>
+<li class="toctree-l1"><a class="reference internal" href="specialist_rag.html">Specialist RAG Documentation System</a></li>
+<li class="toctree-l1"><a class="reference internal" href="web_search.html">Web Search Specialist</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Operations</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="build_system.html">Build System</a></li>
+<li class="toctree-l1"><a class="reference internal" href="buildx_adoption_notes.html">BuildX Adoption Data &amp; Notes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="disk_management.html">Disk Management</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Development</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="development.html">Development Tools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="testing.html">Testing Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="versioning.html">Version Management</a></li>
+<li class="toctree-l1"><a class="reference internal" href="changelog.html">Changelog</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Philosophy &amp; Design</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="project_philosophy.html">Ada Principles</a></li>
+<li class="toctree-l1"><a class="reference internal" href="documentation_philosophy.html">Documentation Philosophy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ai_documentation.html">AI-Readable Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="empathetic_documentation.html">Empathetic Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="xenofeminism.html">Xenofeminism and Ada</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Ada Brain API</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Common Nix Onboarding Issues</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/nix_troubleshooting.md.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="common-nix-onboarding-issues">
+<h1>Common Nix Onboarding Issues<a class="headerlink" href="#common-nix-onboarding-issues" title="Link to this heading"></a></h1>
+<p>Real problems we’ve encountered and how to fix them.</p>
+<section id="nix-command-not-found-after-install">
+<h2>“nix: command not found” after install<a class="headerlink" href="#nix-command-not-found-after-install" title="Link to this heading"></a></h2>
+<p><strong>Cause:</strong> Shell hasn’t reloaded Nix paths</p>
+<p><strong>Fix:</strong></p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Reload your shell</span>
+<span class="nb">exec</span><span class="w"> </span><span class="nv">$SHELL</span>
+
+<span class="c1"># Or source the Nix profile</span>
+.<span class="w"> </span>~/.nix-profile/etc/profile.d/nix.sh
+</pre></div>
+</div>
+</section>
+<section id="nix-requires-sudo-permission-denied">
+<h2>Nix requires sudo / permission denied<a class="headerlink" href="#nix-requires-sudo-permission-denied" title="Link to this heading"></a></h2>
+<p><strong>Cause:</strong> User not in <code class="docutils literal notranslate"><span class="pre">nix-users</span></code> group, or daemon not running</p>
+<p><strong>Fix:</strong></p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># 1. Add yourself to nix-users</span>
+sudo<span class="w"> </span>usermod<span class="w"> </span>-aG<span class="w"> </span>nix-users<span class="w"> </span><span class="nv">$USER</span>
+
+<span class="c1"># 2. Enable and start daemon</span>
+sudo<span class="w"> </span>systemctl<span class="w"> </span><span class="nb">enable</span><span class="w"> </span>--now<span class="w"> </span>nix-daemon
+
+<span class="c1"># 3. Log out and back in (or exec $SHELL)</span>
+<span class="nb">exec</span><span class="w"> </span><span class="nv">$SHELL</span>
+
+<span class="c1"># Test: should work without sudo now</span>
+nix<span class="w"> </span>--version
+</pre></div>
+</div>
+<p><strong>Why this happens:</strong> Multi-user Nix install creates the daemon but doesn’t always add you to the group automatically.</p>
+</section>
+<section id="locale-utf-8-errors">
+<h2>Locale / UTF-8 errors<a class="headerlink" href="#locale-utf-8-errors" title="Link to this heading"></a></h2>
+<p><strong>Cause:</strong> Missing locale configuration</p>
+<p><strong>Fix:</strong> Ada’s flake sets <code class="docutils literal notranslate"><span class="pre">LC_ALL=C.UTF-8</span></code> automatically, but if you see errors outside the flake:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span><span class="w"> </span><span class="nv">LC_ALL</span><span class="o">=</span><span class="s2">&quot;C.UTF-8&quot;</span>
+<span class="nb">export</span><span class="w"> </span><span class="nv">LANG</span><span class="o">=</span><span class="s2">&quot;C.UTF-8&quot;</span>
+</pre></div>
+</div>
+<p>Or permanently in <code class="docutils literal notranslate"><span class="pre">~/.bashrc</span></code> or <code class="docutils literal notranslate"><span class="pre">~/.zshrc</span></code>.</p>
+</section>
+<section id="not-found-in-nix-develop">
+<h2>“404 Not Found” in nix develop<a class="headerlink" href="#not-found-in-nix-develop" title="Link to this heading"></a></h2>
+<p><strong>Cause:</strong> Outdated flake.lock or python313 not available</p>
+<p><strong>Fix:</strong></p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Update flake to latest nixpkgs</span>
+nix<span class="w"> </span>flake<span class="w"> </span>update
+
+<span class="c1"># Try again</span>
+nix<span class="w"> </span>develop
+</pre></div>
+</div>
+<p>The flake has fallback: <code class="docutils literal notranslate"><span class="pre">python313</span> <span class="pre">or</span> <span class="pre">python312</span> <span class="pre">or</span> <span class="pre">python3</span></code>, so if 313 isn’t available, it uses 312.</p>
+</section>
+<section id="experimental-features-disabled">
+<h2>“experimental features disabled”<a class="headerlink" href="#experimental-features-disabled" title="Link to this heading"></a></h2>
+<p><strong>Cause:</strong> Flakes not enabled</p>
+<p><strong>Fix:</strong></p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>mkdir<span class="w"> </span>-p<span class="w"> </span>~/.config/nix
+<span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;experimental-features = nix-command flakes&quot;</span><span class="w"> </span>&gt;&gt;<span class="w"> </span>~/.config/nix/nix.conf
+</pre></div>
+</div>
+</section>
+<section id="building-python313-taking-forever">
+<h2>“building python313…” taking forever<a class="headerlink" href="#building-python313-taking-forever" title="Link to this heading"></a></h2>
+<p><strong>Cause:</strong> Nix is compiling Python from source (binary cache miss)</p>
+<p><strong>Fix:</strong></p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Use the binary cache (should be default)</span>
+nix<span class="w"> </span>develop<span class="w"> </span>--option<span class="w"> </span>substituters<span class="w"> </span><span class="s2">&quot;https://cache.nixos.org&quot;</span>
+
+<span class="c1"># Or wait - it only happens once, cached after</span>
+</pre></div>
+</div>
+</section>
+<section id="can-t-install-nix-no-sudo-access">
+<h2>Can’t install Nix (no sudo access)<a class="headerlink" href="#can-t-install-nix-no-sudo-access" title="Link to this heading"></a></h2>
+<p><strong>Workaround:</strong> Use Docker mode instead:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>docker<span class="w"> </span>compose<span class="w"> </span>up<span class="w"> </span>-d
+<span class="c1"># Ada runs in container with all dependencies</span>
+</pre></div>
+</div>
+<p>Or ask your admin to install Nix system-wide.</p>
+</section>
+<section id="nix-using-too-much-disk-space">
+<h2>Nix using too much disk space<a class="headerlink" href="#nix-using-too-much-disk-space" title="Link to this heading"></a></h2>
+<p><strong>Fix:</strong> Garbage collect old generations:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Remove old unused packages</span>
+nix-collect-garbage
+
+<span class="c1"># Remove everything unused (aggressive)</span>
+nix-collect-garbage<span class="w"> </span>-d
+
+<span class="c1"># See disk usage</span>
+du<span class="w"> </span>-sh<span class="w"> </span>/nix/store
+</pre></div>
+</div>
+</section>
+<section id="how-these-issues-affect-onboarding">
+<h2>How These Issues Affect Onboarding<a class="headerlink" href="#how-these-issues-affect-onboarding" title="Link to this heading"></a></h2>
+<p><strong>The Problem:</strong> Technical setup friction makes people give up before they try Ada.</p>
+<p><strong>What We Learned:</strong></p>
+<ol class="arabic simple">
+<li><p><strong>Python version mismatches</strong> - Ubuntu/Debian users hit this immediately</p></li>
+<li><p><strong>Nix daemon not configured</strong> - Multi-user install incomplete</p></li>
+<li><p><strong>Locale issues</strong> - Breaks Python/Nix on some systems</p></li>
+<li><p><strong>“Requires sudo”</strong> - Confusing when docs say it shouldn’t</p></li>
+</ol>
+<p><strong>How We Fixed It:</strong></p>
+<ul class="simple">
+<li><p><strong>Zero to Ada guide</strong> - Decision tree: have Python 3.13? → path</p></li>
+<li><p><strong>Automatic locale fixes</strong> - Flake sets LC_ALL for you</p></li>
+<li><p><strong>Fallback Python versions</strong> - python313 or python312 or python3</p></li>
+<li><p><strong>Troubleshooting sections</strong> - Real errors, real fixes</p></li>
+<li><p><strong>Multi-path setup</strong> - Nix, local, or Docker - whatever works</p></li>
+</ul>
+<p><strong>Philosophy:</strong> Don’t assume user environment is perfect. Handle the common cases, provide escape hatches.</p>
+</section>
+<section id="testing-your-nix-setup">
+<h2>Testing Your Nix Setup<a class="headerlink" href="#testing-your-nix-setup" title="Link to this heading"></a></h2>
+<p>Run this to verify everything works:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># 1. Check Nix works without sudo</span>
+nix<span class="w"> </span>--version
+
+<span class="c1"># 2. Check you&#39;re in the right group</span>
+groups<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>nix-users
+
+<span class="c1"># 3. Check daemon is running</span>
+systemctl<span class="w"> </span>status<span class="w"> </span>nix-daemon
+
+<span class="c1"># 4. Test flake evaluation</span>
+<span class="nb">cd</span><span class="w"> </span>ada
+nix<span class="w"> </span>flake<span class="w"> </span>show
+
+<span class="c1"># 5. Enter dev shell</span>
+nix<span class="w"> </span>develop
+
+<span class="c1"># 6. Verify Python</span>
+python<span class="w"> </span>--version<span class="w">  </span><span class="c1"># Should show 3.13.x or 3.12.x</span>
+</pre></div>
+</div>
+<p>All green? You’re ready to go! 🎉</p>
+</section>
+<section id="contributing-fixes">
+<h2>Contributing Fixes<a class="headerlink" href="#contributing-fixes" title="Link to this heading"></a></h2>
+<p>Found another onboarding issue? Please:</p>
+<ol class="arabic simple">
+<li><p><strong>Document it</strong> - What error, what command, what system?</p></li>
+<li><p><strong>Find the fix</strong> - What solved it for you?</p></li>
+<li><p><strong>Submit PR</strong> - Add to this file or relevant docs</p></li>
+<li><p><strong>Update flake</strong> - Can we automate the fix?</p></li>
+</ol>
+<p>Accessibility means handling real-world messiness. Let’s make Ada work for everyone! 💙</p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p></p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

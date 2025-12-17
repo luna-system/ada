@@ -1,0 +1,792 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Testing Guide &mdash; Ada Brain API 0.1.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="_static/graphviz.css?v=4ae1632d" />
+      <link rel="stylesheet" type="text/css" href="_static/custom.css?v=df0a1c42" />
+
+  
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=01f34227"></script>
+      <script src="_static/doctools.js?v=9bcbadda"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Version Management" href="versioning.html" />
+    <link rel="prev" title="Development Tools" href="development.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            Ada Brain API
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="zero_to_ada.html">Zero to Ada</a></li>
+<li class="toctree-l1"><a class="reference internal" href="getting_started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="local_mode.html">Running Ada Locally (No Docker Required!)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="nix.html">Nix &amp; Flakes Support</a></li>
+<li class="toctree-l1"><a class="reference internal" href="getting_started_scratch.html">Getting Started from Scratch</a></li>
+<li class="toctree-l1"><a class="reference internal" href="configuration.html">Configuration Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="examples.html">Examples</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Hardware Setup</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="hardware.html">Hardware &amp; GPU Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="sbc.html">Ada on Single-Board Computers (SBCs)</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Core Architecture</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="architecture.html">Architecture</a></li>
+<li class="toctree-l1"><a class="reference internal" href="data_model.html">Data Model Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="streaming.html">Streaming</a></li>
+<li class="toctree-l1"><a class="reference internal" href="memory.html">Memory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="token_monitoring.html">Token Budget Monitoring</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Interfaces &amp; Adapters</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="adapters.html">Ada Adapters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="adapter_development.html">Adapter Development Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="matrix_integration.html">Matrix Integration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api_usage.html">API Usage Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api_reference.html">API Reference</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Specialist System</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="specialists.html">Specialist System</a></li>
+<li class="toctree-l1"><a class="reference internal" href="build_specialist.html">Build Your First Specialist</a></li>
+<li class="toctree-l1"><a class="reference internal" href="bidirectional.html">Bidirectional Specialist System</a></li>
+<li class="toctree-l1"><a class="reference internal" href="specialist_rag.html">Specialist RAG Documentation System</a></li>
+<li class="toctree-l1"><a class="reference internal" href="web_search.html">Web Search Specialist</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Operations</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="build_system.html">Build System</a></li>
+<li class="toctree-l1"><a class="reference internal" href="buildx_adoption_notes.html">BuildX Adoption Data &amp; Notes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="disk_management.html">Disk Management</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Development</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="development.html">Development Tools</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Testing Guide</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#running-services-for-testing">Running Services for Testing</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#option-1-using-docker-compose-recommended">Option 1: Using Docker Compose (Recommended)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#option-2-local-development">Option 2: Local Development</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#manual-testing">Manual Testing</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#testing-markdown-rendering">Testing Markdown Rendering</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#testing-api-endpoints-directly">Testing API Endpoints Directly</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#testing-with-frontend-proxy">Testing with Frontend Proxy</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#automated-testing-with-pytest">Automated Testing with Pytest</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#test-infrastructure">Test Infrastructure</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#running-tests">Running Tests</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#quick-way-recommended">Quick Way (Recommended)</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#direct-way-full-control">Direct Way (Full Control)</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#test-structure">Test Structure</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#test-types">Test Types</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#adding-new-tests">Adding New Tests</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#hypothesis-configuration">Hypothesis Configuration</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#test-markers">Test Markers</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#health-check-script">Health Check Script</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#ci-cd-integration">CI/CD Integration</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#gitlab-ci-example">GitLab CI Example</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#github-actions-example">GitHub Actions Example</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pre-deployment-health-check">Pre-Deployment Health Check</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#interactive-debugging">Interactive Debugging</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#test-coverage-priorities">Test Coverage Priorities</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#current-coverage">Current Coverage</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#recommended-next-tests">Recommended Next Tests</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#example-api-endpoint-test">Example API Endpoint Test</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#troubleshooting-tests">Troubleshooting Tests</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#tests-fail-locally-but-pass-in-container">Tests Fail Locally but Pass in Container</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#import-errors">Import Errors</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#can-t-reach-services">Can’t Reach Services</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#test-discovery-issues">Test Discovery Issues</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#best-practices">Best Practices</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#resources">Resources</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="versioning.html">Version Management</a></li>
+<li class="toctree-l1"><a class="reference internal" href="changelog.html">Changelog</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Philosophy &amp; Design</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="project_philosophy.html">Ada Principles</a></li>
+<li class="toctree-l1"><a class="reference internal" href="documentation_philosophy.html">Documentation Philosophy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ai_documentation.html">AI-Readable Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="empathetic_documentation.html">Empathetic Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="xenofeminism.html">Xenofeminism and Ada</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Ada Brain API</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Testing Guide</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/testing.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="testing-guide">
+<h1>Testing Guide<a class="headerlink" href="#testing-guide" title="Link to this heading"></a></h1>
+<p>This guide covers testing Ada’s Brain service, including manual testing, automated tests with pytest, and API endpoint testing.</p>
+<p>For API endpoint documentation, see <a class="reference internal" href="api_reference.html"><span class="doc">API Reference</span></a>. For configuration options, see <a class="reference internal" href="configuration.html"><span class="doc">Configuration Reference</span></a>. For architecture overview, see <a class="reference internal" href="architecture.html"><span class="doc">Architecture</span></a>.</p>
+<section id="running-services-for-testing">
+<h2>Running Services for Testing<a class="headerlink" href="#running-services-for-testing" title="Link to this heading"></a></h2>
+<section id="option-1-using-docker-compose-recommended">
+<h3>Option 1: Using Docker Compose (Recommended)<a class="headerlink" href="#option-1-using-docker-compose-recommended" title="Link to this heading"></a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span><span class="w"> </span>/home/luna/Code/ada-v1
+docker<span class="w"> </span>compose<span class="w"> </span>up
+</pre></div>
+</div>
+<p>Then open the UI in your browser at <code class="docutils literal notranslate"><span class="pre">http://localhost:5000/</span></code>.</p>
+</section>
+<section id="option-2-local-development">
+<h3>Option 2: Local Development<a class="headerlink" href="#option-2-local-development" title="Link to this heading"></a></h3>
+<p>If testing the FastAPI backend directly without Docker:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span><span class="w"> </span>/home/luna/Code/ada-v1
+<span class="nb">source</span><span class="w"> </span>.venv/bin/activate
+python<span class="w"> </span>-m<span class="w"> </span>uvicorn<span class="w"> </span>brain.app:app<span class="w"> </span>--host<span class="w"> </span><span class="m">0</span>.0.0.0<span class="w"> </span>--port<span class="w"> </span><span class="m">7000</span>
+</pre></div>
+</div>
+<p>The API will be available at <code class="docutils literal notranslate"><span class="pre">http://localhost:7000/v1/*</span></code> with interactive docs at <code class="docutils literal notranslate"><span class="pre">http://localhost:7000/docs</span></code>.</p>
+</section>
+</section>
+<section id="manual-testing">
+<h2>Manual Testing<a class="headerlink" href="#manual-testing" title="Link to this heading"></a></h2>
+<section id="testing-markdown-rendering">
+<h3>Testing Markdown Rendering<a class="headerlink" href="#testing-markdown-rendering" title="Link to this heading"></a></h3>
+<p>With the frontend running (via Docker Compose or local dev server):</p>
+<ol class="arabic">
+<li><p>Try these messages in the chat composer and submit (note: inline markdown is rendered; block-level markdown/code fences are rendered with syntax highlighting):</p>
+<ul class="simple">
+<li><p>Hello <strong>bold</strong> text</p></li>
+<li><p><em>italic</em> and <strong>bold</strong> together</p></li>
+<li><p>A link: <a class="reference external" href="https://openai.com">OpenAI</a></p></li>
+<li><p>Inline code: <code class="docutils literal notranslate"><span class="pre">const</span> <span class="pre">a</span> <span class="pre">=</span> <span class="pre">1;</span></code></p></li>
+<li><p>Code block:</p></li>
+</ul>
+<div class="highlight-js notranslate"><div class="highlight"><pre><span></span><span class="kd">function</span><span class="w"> </span><span class="nx">test</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="mf">42</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</li>
+<li><p>Verify:</p>
+<ul class="simple">
+<li><p>Messages render with bold/italic/links/inline code formatting</p></li>
+<li><p>Links open in a new tab and have <code class="docutils literal notranslate"><span class="pre">rel=&quot;noopener</span> <span class="pre">noreferrer&quot;</span></code> set</p></li>
+<li><p>Code fences (<code class="docutils literal notranslate"><span class="pre">`...`</span></code>) render with a monospace, sanitized <code class="docutils literal notranslate"><span class="pre">&lt;pre&gt;&lt;code&gt;</span></code> block and basic syntax highlighting</p></li>
+<li><p>The ‘Thinking’ bubble (if enabled) renders inline markdown similarly</p></li>
+<li><p>If markdown does not render, check the small header status next to the brand for <code class="docutils literal notranslate"><span class="pre">marked:✓</span> <span class="pre">DOMPurify:✓</span> <span class="pre">hljs:✓</span></code> — these indicate the client-side libraries loaded successfully</p></li>
+<li><p>If any are missing (✕), open DevTools console to see errors and clear browser cache (or refresh with Ctrl/Cmd+Shift+R)</p></li>
+</ul>
+</li>
+<li><p>Optional: Check that the chat input and memory list still work as before.</p></li>
+</ol>
+</section>
+<section id="testing-api-endpoints-directly">
+<h3>Testing API Endpoints Directly<a class="headerlink" href="#testing-api-endpoints-directly" title="Link to this heading"></a></h3>
+<p>To test API endpoints without the frontend:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Health check</span>
+curl<span class="w"> </span>http://localhost:7000/v1/healthz
+
+<span class="c1"># Get recent conversations</span>
+curl<span class="w"> </span>http://localhost:7000/v1/conversations/recent
+
+<span class="c1"># Query memory</span>
+curl<span class="w"> </span><span class="s2">&quot;http://localhost:7000/v1/memory?query=example&quot;</span>
+
+<span class="c1"># Create a memory</span>
+curl<span class="w"> </span>-X<span class="w"> </span>POST<span class="w"> </span>http://localhost:7000/v1/memory<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>-H<span class="w"> </span><span class="s2">&quot;Content-Type: application/json&quot;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>-d<span class="w"> </span><span class="s1">&#39;{&quot;content&quot;: &quot;Test memory&quot;, &quot;memory_type&quot;: &quot;important&quot;}&#39;</span>
+
+<span class="c1"># Interactive API docs</span>
+<span class="c1"># Open http://localhost:7000/docs in your browser</span>
+</pre></div>
+</div>
+<p>For complete endpoint documentation, see <a class="reference internal" href="api_reference.html"><span class="doc">API Reference</span></a> and <a class="reference internal" href="api_usage.html"><span class="doc">API Usage Guide</span></a>. For code examples, see <a class="reference internal" href="examples.html"><span class="doc">Examples</span></a>.</p>
+</section>
+<section id="testing-with-frontend-proxy">
+<h3>Testing with Frontend Proxy<a class="headerlink" href="#testing-with-frontend-proxy" title="Link to this heading"></a></h3>
+<p>All API calls from the frontend go through the Nginx reverse proxy:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Same endpoints available via proxy</span>
+curl<span class="w"> </span>http://localhost:5000/api/health
+curl<span class="w"> </span>http://localhost:5000/api/conversations/recent
+
+<span class="c1"># Stream endpoint (SSE)</span>
+curl<span class="w"> </span>http://localhost:5000/api/chat/stream<span class="w"> </span>-X<span class="w"> </span>POST<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>-H<span class="w"> </span><span class="s2">&quot;Content-Type: application/json&quot;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>-d<span class="w"> </span><span class="s1">&#39;{&quot;message&quot;: &quot;Hello&quot;, &quot;conversation_id&quot;: &quot;test&quot;}&#39;</span>
+</pre></div>
+</div>
+<p>The proxy remaps <code class="docutils literal notranslate"><span class="pre">/api/*</span></code> → <code class="docutils literal notranslate"><span class="pre">/v1/*</span></code> on the brain service with proper SSE handling.</p>
+</section>
+</section>
+<section id="automated-testing-with-pytest">
+<h2>Automated Testing with Pytest<a class="headerlink" href="#automated-testing-with-pytest" title="Link to this heading"></a></h2>
+<p>Ada uses a <strong>hybrid testing approach</strong> combining traditional example-based tests with property-based testing using <strong>Hypothesis</strong>. All tests are located in the <code class="docutils literal notranslate"><span class="pre">tests/</span></code> directory and run in a dedicated Docker container for consistency.</p>
+<section id="test-infrastructure">
+<h3>Test Infrastructure<a class="headerlink" href="#test-infrastructure" title="Link to this heading"></a></h3>
+<p>The testing infrastructure includes:</p>
+<ul class="simple">
+<li><p><strong>Tests Container</strong>: Dedicated Docker service with Python 3.13 and all dependencies</p></li>
+<li><p><strong>Pytest Configuration</strong>: <code class="docutils literal notranslate"><span class="pre">pytest.ini</span></code> with sensible defaults</p></li>
+<li><p><strong>Fixtures</strong>: Shared test fixtures in <code class="docutils literal notranslate"><span class="pre">tests/conftest.py</span></code> and feature-specific <code class="docutils literal notranslate"><span class="pre">conftest.py</span></code> files</p></li>
+<li><p><strong>Hypothesis</strong>: Property-based testing for algorithmic correctness</p></li>
+<li><p><strong>Convenience Script</strong>: <code class="docutils literal notranslate"><span class="pre">scripts/run.sh</span></code> wrapper for common test commands</p></li>
+<li><p><strong>Organized Structure</strong>: Tests grouped by feature and type (traditional vs property-based)</p></li>
+</ul>
+</section>
+<section id="running-tests">
+<h3>Running Tests<a class="headerlink" href="#running-tests" title="Link to this heading"></a></h3>
+<section id="quick-way-recommended">
+<h4>Quick Way (Recommended)<a class="headerlink" href="#quick-way-recommended" title="Link to this heading"></a></h4>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Run all tests</span>
+./scripts/run.sh<span class="w"> </span><span class="nb">test</span>
+
+<span class="c1"># Run with verbose output</span>
+docker<span class="w"> </span>compose<span class="w"> </span>run<span class="w"> </span>--rm<span class="w"> </span>scripts<span class="w"> </span>pytest<span class="w"> </span>-vv
+
+<span class="c1"># Run specific test file</span>
+docker<span class="w"> </span>compose<span class="w"> </span>run<span class="w"> </span>--rm<span class="w"> </span>scripts<span class="w"> </span>pytest<span class="w"> </span>tests/test_rag.py
+
+<span class="c1"># Run tests matching a pattern</span>
+docker<span class="w"> </span>compose<span class="w"> </span>run<span class="w"> </span>--rm<span class="w"> </span>scripts<span class="w"> </span>pytest<span class="w"> </span>-k<span class="w"> </span><span class="s2">&quot;memory&quot;</span>
+
+<span class="c1"># Skip slow tests</span>
+docker<span class="w"> </span>compose<span class="w"> </span>run<span class="w"> </span>--rm<span class="w"> </span>scripts<span class="w"> </span>pytest<span class="w"> </span>-m<span class="w"> </span><span class="s2">&quot;not slow&quot;</span>
+</pre></div>
+</div>
+</section>
+<section id="direct-way-full-control">
+<h4>Direct Way (Full Control)<a class="headerlink" href="#direct-way-full-control" title="Link to this heading"></a></h4>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Run all tests</span>
+docker<span class="w"> </span>compose<span class="w"> </span>run<span class="w"> </span>--rm<span class="w"> </span>scripts<span class="w"> </span>pytest
+
+<span class="c1"># Run specific file with verbose output</span>
+docker<span class="w"> </span>compose<span class="w"> </span>run<span class="w"> </span>--rm<span class="w"> </span>scripts<span class="w"> </span>pytest<span class="w"> </span>tests/test_prompt_builder.py<span class="w"> </span>-vv
+
+<span class="c1"># Run only async tests</span>
+docker<span class="w"> </span>compose<span class="w"> </span>run<span class="w"> </span>--rm<span class="w"> </span>scripts<span class="w"> </span>pytest<span class="w"> </span>-k<span class="w"> </span><span class="s2">&quot;async&quot;</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="test-structure">
+<h3>Test Structure<a class="headerlink" href="#test-structure" title="Link to this heading"></a></h3>
+<p>The test suite uses an organized directory structure:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>tests/
+  conftest.py                   # Global fixtures (rag_store, conversation_id)
+
+  prompt_builder/               # Traditional example-based tests
+    conftest.py                 # Shared fixtures for prompt_builder
+    test_context_retriever.py   # Context retrieval from RAG (14 tests)
+    test_section_builder.py     # Prompt section formatting
+    test_prompt_assembler.py    # Final prompt assembly
+
+  property/                     # Property-based tests (Hypothesis)
+    conftest.py                 # Hypothesis configuration
+    test_token_properties.py    # Token counting invariants (11 tests)
+    test_memory_properties.py   # Memory decay, ranking (v2.0)
+
+  test_rag.py                   # RAG store tests (6 tests)
+  test_specialists.py           # Specialist system tests
+  test_ai_documentation.py      # Documentation validation tests
+</pre></div>
+</div>
+<dl class="simple">
+<dt><strong>Traditional Tests</strong> (example-based):</dt><dd><p>Test specific API behavior, integration workflows, and regression cases.
+Use parametrization to reduce duplication.</p>
+</dd>
+<dt><strong>Property Tests</strong> (Hypothesis):</dt><dd><p>Test mathematical properties that should ALWAYS hold (bounds, monotonicity, etc.).
+Hypothesis generates 100+ random test cases automatically.</p>
+</dd>
+</dl>
+<section id="test-types">
+<h4>Test Types<a class="headerlink" href="#test-types" title="Link to this heading"></a></h4>
+<p><strong>Traditional Tests</strong> verify specific behavior:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">test_context_retriever_initialization</span><span class="p">():</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;ContextRetriever initializes correctly.&quot;&quot;&quot;</span>
+    <span class="n">retriever</span> <span class="o">=</span> <span class="n">ContextRetriever</span><span class="p">()</span>
+    <span class="k">assert</span> <span class="n">retriever</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+
+<span class="nd">@pytest</span><span class="o">.</span><span class="n">mark</span><span class="o">.</span><span class="n">parametrize</span><span class="p">(</span><span class="s2">&quot;method,kwargs,expected_len&quot;</span><span class="p">,</span> <span class="p">[</span>
+    <span class="p">(</span><span class="s2">&quot;get_memories&quot;</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;query&quot;</span><span class="p">:</span> <span class="s2">&quot;test&quot;</span><span class="p">,</span> <span class="s2">&quot;k&quot;</span><span class="p">:</span> <span class="mi">5</span><span class="p">},</span> <span class="mi">2</span><span class="p">),</span>
+    <span class="p">(</span><span class="s2">&quot;get_faqs&quot;</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;query&quot;</span><span class="p">:</span> <span class="s2">&quot;test&quot;</span><span class="p">,</span> <span class="s2">&quot;k&quot;</span><span class="p">:</span> <span class="mi">3</span><span class="p">},</span> <span class="mi">2</span><span class="p">),</span>
+<span class="p">])</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">test_retrieval_methods</span><span class="p">(</span><span class="n">retriever</span><span class="p">,</span> <span class="n">method</span><span class="p">,</span> <span class="n">kwargs</span><span class="p">,</span> <span class="n">expected_len</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Test multiple similar methods with one parametrized test.&quot;&quot;&quot;</span>
+    <span class="n">method</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">retriever</span><span class="p">,</span> <span class="n">method</span><span class="p">)</span>
+    <span class="n">result</span> <span class="o">=</span> <span class="n">method</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+    <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">result</span><span class="p">)</span> <span class="o">==</span> <span class="n">expected_len</span>
+</pre></div>
+</div>
+<p><strong>Property Tests</strong> verify universal invariants:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">hypothesis</span><span class="w"> </span><span class="kn">import</span> <span class="n">given</span><span class="p">,</span> <span class="n">strategies</span> <span class="k">as</span> <span class="n">st</span><span class="p">,</span> <span class="n">example</span>
+
+<span class="nd">@given</span><span class="p">(</span><span class="n">st</span><span class="o">.</span><span class="n">text</span><span class="p">(</span><span class="n">min_size</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">max_size</span><span class="o">=</span><span class="mi">10000</span><span class="p">))</span>
+<span class="nd">@example</span><span class="p">(</span><span class="s2">&quot;🎵&quot;</span> <span class="o">*</span> <span class="mi">100</span><span class="p">)</span>  <span class="c1"># Always test this edge case</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">test_positive_token_count</span><span class="p">(</span><span class="n">text</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Non-empty text ALWAYS produces positive tokens.&quot;&quot;&quot;</span>
+    <span class="n">monitor</span> <span class="o">=</span> <span class="n">TokenBudgetMonitor</span><span class="p">()</span>
+    <span class="n">tokens</span> <span class="o">=</span> <span class="n">monitor</span><span class="o">.</span><span class="n">count_tokens</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
+    <span class="k">assert</span> <span class="n">tokens</span> <span class="o">&gt;</span> <span class="mi">0</span>
+</pre></div>
+</div>
+<p>Hypothesis will generate random inputs to try to falsify your assertions!</p>
+</section>
+</section>
+<section id="adding-new-tests">
+<h3>Adding New Tests<a class="headerlink" href="#adding-new-tests" title="Link to this heading"></a></h3>
+<p><strong>When to use which pattern:</strong></p>
+<dl class="simple">
+<dt>Traditional Tests (example-based)</dt><dd><ul class="simple">
+<li><p>✅ Specific API behavior</p></li>
+<li><p>✅ Integration tests</p></li>
+<li><p>✅ Regression tests for known bugs</p></li>
+<li><p>✅ Business logic and workflows</p></li>
+</ul>
+</dd>
+<dt>Property Tests (Hypothesis)</dt><dd><ul class="simple">
+<li><p>✅ Mathematical invariants</p></li>
+<li><p>✅ Algorithmic properties</p></li>
+<li><p>✅ Edge case discovery</p></li>
+<li><p>✅ Universal constraints</p></li>
+</ul>
+</dd>
+</dl>
+<p><strong>Example: Traditional Test</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># tests/prompt_builder/test_my_feature.py</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pytest</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">brain.my_module</span><span class="w"> </span><span class="kn">import</span> <span class="n">my_function</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">test_my_feature</span><span class="p">(</span><span class="n">rag_store</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Test description.&quot;&quot;&quot;</span>
+    <span class="n">result</span> <span class="o">=</span> <span class="n">my_function</span><span class="p">(</span><span class="n">rag_store</span><span class="p">)</span>
+    <span class="k">assert</span> <span class="n">result</span> <span class="o">==</span> <span class="n">expected_value</span>
+    <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">result</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span>
+
+<span class="nd">@pytest</span><span class="o">.</span><span class="n">mark</span><span class="o">.</span><span class="n">parametrize</span><span class="p">(</span><span class="s2">&quot;input,expected&quot;</span><span class="p">,</span> <span class="p">[</span>
+    <span class="p">(</span><span class="s2">&quot;hello&quot;</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span>
+    <span class="p">(</span><span class="s2">&quot;hello world&quot;</span><span class="p">,</span> <span class="mi">3</span><span class="p">),</span>
+<span class="p">])</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">test_multiple_cases</span><span class="p">(</span><span class="nb">input</span><span class="p">,</span> <span class="n">expected</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Test multiple similar cases with parametrization.&quot;&quot;&quot;</span>
+    <span class="n">result</span> <span class="o">=</span> <span class="n">my_function</span><span class="p">(</span><span class="nb">input</span><span class="p">)</span>
+    <span class="k">assert</span> <span class="n">result</span> <span class="o">==</span> <span class="n">expected</span>
+</pre></div>
+</div>
+<p><strong>Example: Property Test</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># tests/property/test_my_properties.py</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">hypothesis</span><span class="w"> </span><span class="kn">import</span> <span class="n">given</span><span class="p">,</span> <span class="n">strategies</span> <span class="k">as</span> <span class="n">st</span><span class="p">,</span> <span class="n">example</span>
+
+<span class="nd">@given</span><span class="p">(</span><span class="n">st</span><span class="o">.</span><span class="n">text</span><span class="p">(</span><span class="n">min_size</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">max_size</span><span class="o">=</span><span class="mi">1000</span><span class="p">))</span>
+<span class="nd">@example</span><span class="p">(</span><span class="s2">&quot;edge case&quot;</span><span class="p">)</span>  <span class="c1"># Always test specific cases</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">test_universal_property</span><span class="p">(</span><span class="n">text</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;This should ALWAYS be true for ANY input.&quot;&quot;&quot;</span>
+    <span class="n">result</span> <span class="o">=</span> <span class="n">my_function</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
+    <span class="k">assert</span> <span class="n">result</span> <span class="o">&gt;</span> <span class="mi">0</span>  <span class="c1"># Non-empty input always produces positive result</span>
+    <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">result</span><span class="p">,</span> <span class="nb">int</span><span class="p">)</span>  <span class="c1"># Result is always an integer</span>
+</pre></div>
+</div>
+<p>No rebuild needed! Tests are volume-mounted, so you can ad</p>
+<blockquote>
+<div><p># Run only property tests
+docker compose run –rm scripts pytest tests/property/</p>
+<p># Run only traditional tests for a feature
+docker compose run –rm scripts pytest tests/prompt_builder/</p>
+</div></blockquote>
+<section id="hypothesis-configuration">
+<h4>Hypothesis Configuration<a class="headerlink" href="#hypothesis-configuration" title="Link to this heading"></a></h4>
+<p>Property tests use different profiles for different environments:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Local development (100 examples, fast)</span>
+pytest<span class="w"> </span>tests/property/
+
+<span class="c1"># CI/thorough testing (1000 examples)</span>
+<span class="nv">HYPOTHESIS_PROFILE</span><span class="o">=</span>ci<span class="w"> </span>pytest<span class="w"> </span>tests/property/
+
+<span class="c1"># Debugging (10 examples, verbose)</span>
+<span class="nv">HYPOTHESIS_PROFILE</span><span class="o">=</span>debug<span class="w"> </span>pytest<span class="w"> </span>tests/property/<span class="w"> </span>-v
+</pre></div>
+</div>
+<p>Configuration is in <code class="docutils literal notranslate"><span class="pre">tests/property/conftest.py</span></code>.d/edit tests and run immediately.</p>
+</section>
+<section id="test-markers">
+<h4>Test Markers<a class="headerlink" href="#test-markers" title="Link to this heading"></a></h4>
+<p>Use markers to categorize tests:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nd">@pytest</span><span class="o">.</span><span class="n">mark</span><span class="o">.</span><span class="n">slow</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">test_expensive_operation</span><span class="p">():</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;This test takes a while.&quot;&quot;&quot;</span>
+    <span class="k">pass</span>
+
+<span class="nd">@pytest</span><span class="o">.</span><span class="n">mark</span><span class="o">.</span><span class="n">integration</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">test_full_workflow</span><span class="p">():</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Tests multiple components together.&quot;&quot;&quot;</span>
+    <span class="k">pass</span>
+
+<span class="nd">@pytest</span><span class="o">.</span><span class="n">mark</span><span class="o">.</span><span class="n">unit</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">test_isolated_function</span><span class="p">():</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Tests a single function.&quot;&quot;&quot;</span>
+    <span class="k">pass</span>
+</pre></div>
+</div>
+<p>Run specific markers:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Skip slow tests</span>
+docker<span class="w"> </span>compose<span class="w"> </span>run<span class="w"> </span>--rm<span class="w"> </span>scripts<span class="w"> </span>pytest<span class="w"> </span>-m<span class="w"> </span><span class="s2">&quot;not slow&quot;</span>
+
+<span class="c1"># Run only integration tests</span>
+docker<span class="w"> </span>compose<span class="w"> </span>run<span class="w"> </span>--rm<span class="w"> </span>scripts<span class="w"> </span>pytest<span class="w"> </span>-m<span class="w"> </span><span class="s2">&quot;integration&quot;</span>
+</pre></div>
+</div>
+</section>
+</section>
+</section>
+<section id="health-check-script">
+<h2>Health Check Script<a class="headerlink" href="#health-check-script" title="Link to this heading"></a></h2>
+<p>Comprehensive health check for operational validation (not a test):</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>./scripts/run.sh<span class="w"> </span>health
+<span class="c1"># Or directly:</span>
+docker<span class="w"> </span>compose<span class="w"> </span>run<span class="w"> </span>--rm<span class="w"> </span>scripts<span class="w"> </span>python<span class="w"> </span>/app/scripts/health_check_chroma.py
+</pre></div>
+</div>
+<p><strong>Checks:</strong></p>
+<ul class="simple">
+<li><p>Chroma server connectivity</p></li>
+<li><p>Collection existence and document count</p></li>
+<li><p>Embedding generation</p></li>
+<li><p>Memory/FAQ/turn query functionality</p></li>
+<li><p>Specialist docs retrieval</p></li>
+<li><p>Query consistency</p></li>
+<li><p>Persona loading</p></li>
+</ul>
+<p><strong>Exit codes:</strong> 0 (healthy), 1 (unhealthy)</p>
+</section>
+<section id="ci-cd-integration">
+<h2>CI/CD Integration<a class="headerlink" href="#ci-cd-integration" title="Link to this heading"></a></h2>
+<p>The pytest infrastructure is designed for easy CI/CD integration:</p>
+<section id="gitlab-ci-example">
+<h3>GitLab CI Example<a class="headerlink" href="#gitlab-ci-example" title="Link to this heading"></a></h3>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="c1"># .gitlab-ci.yml</span>
+<span class="nt">test</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">script</span><span class="p">:</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">docker compose build scripts</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">docker compose run --rm scripts pytest</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">docker compose run --rm scripts python /app/scripts/health_check_chroma.py</span>
+</pre></div>
+</div>
+</section>
+<section id="github-actions-example">
+<h3>GitHub Actions Example<a class="headerlink" href="#github-actions-example" title="Link to this heading"></a></h3>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="c1"># .github/workflows/test.yml</span>
+<span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Test</span>
+<span class="nt">on</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">push</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">pull_request</span><span class="p p-Indicator">]</span>
+
+<span class="nt">jobs</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">test</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">runs-on</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ubuntu-latest</span>
+<span class="w">    </span><span class="nt">steps</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">uses</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">actions/checkout@v3</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Run tests</span>
+<span class="w">        </span><span class="nt">run</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">|</span>
+<span class="w">          </span><span class="no">docker compose build scripts</span>
+<span class="w">          </span><span class="no">docker compose run --rm scripts pytest</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Health check</span>
+<span class="w">        </span><span class="nt">run</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">docker compose run --rm scripts python /app/scripts/health_check_chroma.py</span>
+</pre></div>
+</div>
+</section>
+<section id="pre-deployment-health-check">
+<h3>Pre-Deployment Health Check<a class="headerlink" href="#pre-deployment-health-check" title="Link to this heading"></a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/bin/bash</span>
+<span class="c1"># pre-deploy.sh</span>
+./scripts/run.sh<span class="w"> </span>health<span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="nb">exit</span><span class="w"> </span><span class="m">1</span>
+./scripts/run.sh<span class="w"> </span><span class="nb">test</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="nb">exit</span><span class="w"> </span><span class="m">1</span>
+
+<span class="k">if</span><span class="w"> </span><span class="o">[</span><span class="w"> </span><span class="nv">$?</span><span class="w"> </span>-eq<span class="w"> </span><span class="m">0</span><span class="w"> </span><span class="o">]</span><span class="p">;</span><span class="w"> </span><span class="k">then</span>
+<span class="w">  </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;All checks passed, proceeding with deployment&quot;</span>
+<span class="w">  </span>docker<span class="w"> </span>compose<span class="w"> </span>up<span class="w"> </span>-d
+<span class="k">else</span>
+<span class="w">  </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;Checks failed, aborting deployment&quot;</span>
+<span class="w">  </span><span class="nb">exit</span><span class="w"> </span><span class="m">1</span>
+<span class="k">fi</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="interactive-debugging">
+<h2>Interactive Debugging<a class="headerlink" href="#interactive-debugging" title="Link to this heading"></a></h2>
+<p>Start an interactive Python session with all dependencies:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>./scripts/run.sh<span class="w"> </span>shell
+<span class="c1"># Or directly:</span>
+docker<span class="w"> </span>compose<span class="w"> </span>run<span class="w"> </span>--rm<span class="w"> </span>scripts<span class="w"> </span>python
+</pre></div>
+</div>
+<p>Then in Python:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">brain.rag_store</span><span class="w"> </span><span class="kn">import</span> <span class="n">RagStore</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">brain</span><span class="w"> </span><span class="kn">import</span> <span class="n">config</span>
+<span class="gp">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">store</span> <span class="o">=</span> <span class="n">RagStore</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">results</span> <span class="o">=</span> <span class="n">store</span><span class="o">.</span><span class="n">retrieve_memories</span><span class="p">(</span><span class="s2">&quot;test query&quot;</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">results</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># Test embedding generation</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">embedding</span> <span class="o">=</span> <span class="n">store</span><span class="o">.</span><span class="n">embed_text</span><span class="p">(</span><span class="s2">&quot;sample text&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">embedding</span><span class="p">))</span>  <span class="c1"># Should be 768</span>
+</pre></div>
+</div>
+</section>
+<section id="test-coverage-priorities">
+<h2>Test Coverage Priorities<a class="headerlink" href="#test-coverage-priorities" title="Link to this heading"></a></h2>
+<section id="current-coverage">
+<h3>Current Coverage<a class="headerlink" href="#current-coverage" title="Link to this heading"></a></h3>
+<p>✅ <strong>Well-Covered:</strong></p>
+<ul class="simple">
+<li><p>RAG retrieval (6 tests)</p></li>
+<li><p>Prompt building (2 tests)</p></li>
+<li><p>Specialist system (1 test)</p></li>
+</ul>
+<p>⚠️ <strong>Needs Coverage:</strong></p>
+<ul class="simple">
+<li><p>API endpoints (streaming, non-streaming)</p></li>
+<li><p>Error handling (Chroma down, Ollama down)</p></li>
+<li><p>Edge cases (invalid input, timeouts)</p></li>
+<li><p>Specialist execution</p></li>
+<li><p>Memory consolidation</p></li>
+</ul>
+</section>
+<section id="recommended-next-tests">
+<h3>Recommended Next Tests<a class="headerlink" href="#recommended-next-tests" title="Link to this heading"></a></h3>
+<p><strong>High Priority:</strong></p>
+<ol class="arabic simple">
+<li><p>API endpoint tests (~10 tests needed)</p>
+<ul class="simple">
+<li><p>Test <code class="docutils literal notranslate"><span class="pre">/v1/chat/stream</span></code> endpoint</p></li>
+<li><p>Test <code class="docutils literal notranslate"><span class="pre">/v1/chat/completions</span></code> endpoint</p></li>
+<li><p>Test health check endpoint variations</p></li>
+<li><p>Test error responses (400, 500, 503)</p></li>
+</ul>
+</li>
+<li><p>Error handling tests (~5-10 tests needed)</p>
+<ul class="simple">
+<li><p>Test Chroma down scenarios</p></li>
+<li><p>Test Ollama down scenarios</p></li>
+<li><p>Test invalid input handling</p></li>
+<li><p>Test timeout handling</p></li>
+</ul>
+</li>
+</ol>
+<p><strong>Medium Priority:</strong></p>
+<ol class="arabic simple" start="3">
+<li><p>Specialist system tests</p>
+<ul class="simple">
+<li><p>Test specialist activation logic</p></li>
+<li><p>Test specialist execution</p></li>
+<li><p>Test bidirectional specialist communication</p></li>
+</ul>
+</li>
+<li><p>Memory consolidation tests</p>
+<ul class="simple">
+<li><p>Test nightly consolidation logic</p></li>
+<li><p>Test summary generation</p></li>
+<li><p>Test memory archival</p></li>
+</ul>
+</li>
+</ol>
+</section>
+<section id="example-api-endpoint-test">
+<h3>Example API Endpoint Test<a class="headerlink" href="#example-api-endpoint-test" title="Link to this heading"></a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># tests/test_api.py</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pytest</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">httpx</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">json</span>
+
+<span class="nd">@pytest</span><span class="o">.</span><span class="n">mark</span><span class="o">.</span><span class="n">asyncio</span>
+<span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">test_chat_stream_endpoint</span><span class="p">():</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Test streaming chat endpoint.&quot;&quot;&quot;</span>
+    <span class="k">async</span> <span class="k">with</span> <span class="n">httpx</span><span class="o">.</span><span class="n">AsyncClient</span><span class="p">()</span> <span class="k">as</span> <span class="n">client</span><span class="p">:</span>
+        <span class="n">response</span> <span class="o">=</span> <span class="k">await</span> <span class="n">client</span><span class="o">.</span><span class="n">post</span><span class="p">(</span>
+            <span class="s2">&quot;http://localhost:7000/v1/chat/stream&quot;</span><span class="p">,</span>
+            <span class="n">json</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;messages&quot;</span><span class="p">:</span> <span class="p">[{</span><span class="s2">&quot;role&quot;</span><span class="p">:</span> <span class="s2">&quot;user&quot;</span><span class="p">,</span> <span class="s2">&quot;content&quot;</span><span class="p">:</span> <span class="s2">&quot;hi&quot;</span><span class="p">}]}</span>
+        <span class="p">)</span>
+        <span class="k">assert</span> <span class="n">response</span><span class="o">.</span><span class="n">status_code</span> <span class="o">==</span> <span class="mi">200</span>
+
+        <span class="n">chunks</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">async</span> <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">response</span><span class="o">.</span><span class="n">aiter_lines</span><span class="p">():</span>
+            <span class="k">if</span> <span class="n">line</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;data: &quot;</span><span class="p">):</span>
+                <span class="n">chunks</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">line</span><span class="p">[</span><span class="mi">6</span><span class="p">:]))</span>
+
+        <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">chunks</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span>
+
+<span class="nd">@pytest</span><span class="o">.</span><span class="n">mark</span><span class="o">.</span><span class="n">asyncio</span>
+<span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">test_handles_chroma_down</span><span class="p">(</span><span class="n">monkeypatch</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Test graceful handling when Chroma is unavailable.&quot;&quot;&quot;</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">mock_fail</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">ConnectionError</span><span class="p">(</span><span class="s2">&quot;Chroma unavailable&quot;</span><span class="p">)</span>
+
+    <span class="n">monkeypatch</span><span class="o">.</span><span class="n">setattr</span><span class="p">(</span><span class="s2">&quot;chromadb.HttpClient&quot;</span><span class="p">,</span> <span class="n">mock_fail</span><span class="p">)</span>
+
+    <span class="c1"># Test that API returns 503 instead of crashing</span>
+    <span class="k">async</span> <span class="k">with</span> <span class="n">httpx</span><span class="o">.</span><span class="n">AsyncClient</span><span class="p">()</span> <span class="k">as</span> <span class="n">client</span><span class="p">:</span>
+        <span class="n">response</span> <span class="o">=</span> <span class="k">await</span> <span class="n">client</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;http://localhost:7000/v1/healthz&quot;</span><span class="p">)</span>
+        <span class="k">assert</span> <span class="n">response</span><span class="o">.</span><span class="n">status_code</span> <span class="o">==</span> <span class="mi">503</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="troubleshooting-tests">
+<h2>Troubleshooting Tests<a class="headerlink" href="#troubleshooting-tests" title="Link to this heading"></a></h2>
+<section id="tests-fail-locally-but-pass-in-container">
+<h3>Tests Fail Locally but Pass in Container<a class="headerlink" href="#tests-fail-locally-but-pass-in-container" title="Link to this heading"></a></h3>
+<p><strong>Solution:</strong> Always run tests in the scripts container, not on your host machine. The container has the correct environment:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># ✅ Correct</span>
+./scripts/run.sh<span class="w"> </span><span class="nb">test</span>
+
+<span class="c1"># ❌ Wrong</span>
+pytest<span class="w">  </span><span class="c1"># Don&#39;t run on host</span>
+</pre></div>
+</div>
+</section>
+<section id="import-errors">
+<h3>Import Errors<a class="headerlink" href="#import-errors" title="Link to this heading"></a></h3>
+<p><strong>Problem:</strong> <code class="docutils literal notranslate"><span class="pre">ModuleNotFoundError:</span> <span class="pre">No</span> <span class="pre">module</span> <span class="pre">named</span> <span class="pre">'brain'</span></code></p>
+<p><strong>Solution:</strong> Use the scripts container. The PYTHONPATH is configured correctly:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>docker<span class="w"> </span>compose<span class="w"> </span>run<span class="w"> </span>--rm<span class="w"> </span>scripts<span class="w"> </span>pytest
+</pre></div>
+</div>
+</section>
+<section id="can-t-reach-services">
+<h3>Can’t Reach Services<a class="headerlink" href="#can-t-reach-services" title="Link to this heading"></a></h3>
+<p><strong>Problem:</strong> <code class="docutils literal notranslate"><span class="pre">httpx.ConnectError:</span> <span class="pre">Connection</span> <span class="pre">refused</span></code></p>
+<p><strong>Solution:</strong></p>
+<ol class="arabic simple">
+<li><p>Ensure services are running: <code class="docutils literal notranslate"><span class="pre">docker</span> <span class="pre">compose</span> <span class="pre">ps</span></code></p></li>
+<li><p>Use service names (chroma, ollama), not localhost</p></li>
+<li><p>Check environment variables in <code class="docutils literal notranslate"><span class="pre">compose.yaml</span></code></p></li>
+</ol>
+</section>
+<section id="test-discovery-issues">
+<h3>Test Discovery Issues<a class="headerlink" href="#test-discovery-issues" title="Link to this heading"></a></h3>
+<p><strong>Problem:</strong> Pytest doesn’t find your tests</p>
+<p><strong>Solution:</strong></p>
+<ol class="arabic simple">
+<li><p>Name files <code class="docutils literal notranslate"><span class="pre">test_*.py</span></code> or <code class="docutils literal notranslate"><span class="pre">*_test.py</span></code></p></li>
+<li><p>Name functions <code class="docutils literal notranslate"><span class="pre">test_*</span></code></p></li>
+<li><p>Place files in <code class="docutils literal notranslate"><span class="pre">tests/</span></code> directory</p></li>
+<li><p>Check <code class="docutils literal notranslate"><span class="pre">pytest.ini</span></code> for <code class="docutils literal notranslate"><span class="pre">testpaths</span></code> configuration</p></li>
+</ol>
+</section>
+</section>
+<section id="best-practices">
+<h2>Best Practices<a class="headerlink" href="#best-practices" title="Link to this heading"></a></h2>
+<ol class="arabic simple">
+<li><p><strong>Always use scripts container</strong>: Consistent environment across machines</p></li>
+<li><p><strong>Exit codes matter</strong>: Tests should return 0 (success) or 1 (failure)</p></li>
+<li><p><strong>Use fixtures</strong>: Share common setup via <code class="docutils literal notranslate"><span class="pre">conftest.py</span></code></p></li>
+<li><p><strong>Test in isolation</strong>: Each test should be independent</p></li>
+<li><p><strong>Mock external services</strong>: Use <code class="docutils literal notranslate"><span class="pre">pytest-mock</span></code> or <code class="docutils literal notranslate"><span class="pre">monkeypatch</span></code> for external APIs</p></li>
+<li><p><strong>Document test purpose</strong>: Clear docstrings for each test function</p></li>
+<li><p><strong>Run tests before commits</strong>: Catch issues early</p></li>
+<li><p><strong>Add tests for bug fixes</strong>: Prevent regression</p></li>
+</ol>
+</section>
+<section id="resources">
+<h2>Resources<a class="headerlink" href="#resources" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p><a class="reference external" href="https://docs.pytest.org/">Pytest Documentation</a></p></li>
+<li><p><a class="reference external" href="https://pytest-asyncio.readthedocs.io/">Pytest-asyncio Documentation</a></p></li>
+<li><p><a class="reference external" href="https://fastapi.tiangolo.com/tutorial/testing/">FastAPI Testing</a></p></li>
+<li><p><a class="reference external" href="https://docs.docker.com/compose/">Docker Compose for Testing</a></p></li>
+</ul>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="development.html" class="btn btn-neutral float-left" title="Development Tools" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="versioning.html" class="btn btn-neutral float-right" title="Version Management" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p></p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

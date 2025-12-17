@@ -1,0 +1,357 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Positioning Ada in Left-Leaning Spaces &mdash; Ada Brain API 0.1.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="_static/graphviz.css?v=4ae1632d" />
+      <link rel="stylesheet" type="text/css" href="_static/custom.css?v=df0a1c42" />
+
+  
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=01f34227"></script>
+      <script src="_static/doctools.js?v=9bcbadda"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            Ada Brain API
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="zero_to_ada.html">Zero to Ada</a></li>
+<li class="toctree-l1"><a class="reference internal" href="getting_started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="local_mode.html">Running Ada Locally (No Docker Required!)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="nix.html">Nix &amp; Flakes Support</a></li>
+<li class="toctree-l1"><a class="reference internal" href="getting_started_scratch.html">Getting Started from Scratch</a></li>
+<li class="toctree-l1"><a class="reference internal" href="configuration.html">Configuration Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="examples.html">Examples</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Hardware Setup</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="hardware.html">Hardware &amp; GPU Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="sbc.html">Ada on Single-Board Computers (SBCs)</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Core Architecture</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="architecture.html">Architecture</a></li>
+<li class="toctree-l1"><a class="reference internal" href="data_model.html">Data Model Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="streaming.html">Streaming</a></li>
+<li class="toctree-l1"><a class="reference internal" href="memory.html">Memory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="token_monitoring.html">Token Budget Monitoring</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Interfaces &amp; Adapters</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="adapters.html">Ada Adapters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="adapter_development.html">Adapter Development Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="matrix_integration.html">Matrix Integration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api_usage.html">API Usage Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api_reference.html">API Reference</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Specialist System</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="specialists.html">Specialist System</a></li>
+<li class="toctree-l1"><a class="reference internal" href="build_specialist.html">Build Your First Specialist</a></li>
+<li class="toctree-l1"><a class="reference internal" href="bidirectional.html">Bidirectional Specialist System</a></li>
+<li class="toctree-l1"><a class="reference internal" href="specialist_rag.html">Specialist RAG Documentation System</a></li>
+<li class="toctree-l1"><a class="reference internal" href="web_search.html">Web Search Specialist</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Operations</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="build_system.html">Build System</a></li>
+<li class="toctree-l1"><a class="reference internal" href="buildx_adoption_notes.html">BuildX Adoption Data &amp; Notes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="disk_management.html">Disk Management</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Development</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="development.html">Development Tools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="testing.html">Testing Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="versioning.html">Version Management</a></li>
+<li class="toctree-l1"><a class="reference internal" href="changelog.html">Changelog</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Philosophy &amp; Design</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="project_philosophy.html">Ada Principles</a></li>
+<li class="toctree-l1"><a class="reference internal" href="documentation_philosophy.html">Documentation Philosophy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ai_documentation.html">AI-Readable Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="empathetic_documentation.html">Empathetic Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="xenofeminism.html">Xenofeminism and Ada</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Ada Brain API</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Positioning Ada in Left-Leaning Spaces</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/positioning_in_left_spaces.md.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="positioning-ada-in-left-leaning-spaces">
+<h1>Positioning Ada in Left-Leaning Spaces<a class="headerlink" href="#positioning-ada-in-left-leaning-spaces" title="Link to this heading"></a></h1>
+<section id="an-exploration-in-xf-praxis">
+<h2>An Exploration in XF Praxis<a class="headerlink" href="#an-exploration-in-xf-praxis" title="Link to this heading"></a></h2>
+<p><strong>Status:</strong> Draft exploration, not yet public<br />
+<strong>Date:</strong> December 2025<br />
+<strong>Context:</strong> How do we talk about Ada in communities that (rightfully) distrust AI?</p>
+</section>
+<hr class="docutils" />
+<section id="the-tension">
+<h2>The Tension<a class="headerlink" href="#the-tension" title="Link to this heading"></a></h2>
+<p>The communities that would most benefit from Ada - folks who care about privacy, autonomy, resisting surveillance capitalism, owning their tools - are (rightfully!) the most skeptical of AI in general.</p>
+</section>
+<section id="why-the-left-distrusts-ai-and-should">
+<h2>Why the Left Distrusts AI (And Should)<a class="headerlink" href="#why-the-left-distrusts-ai-and-should" title="Link to this heading"></a></h2>
+<p>Valid critiques that Ada doesn’t negate:</p>
+<ul class="simple">
+<li><p><strong>Training data theft</strong> from artists/writers</p></li>
+<li><p><strong>Worker displacement</strong> without safety nets</p></li>
+<li><p><strong>Concentration of power</strong> in Big Tech</p></li>
+<li><p><strong>Extractive business models</strong> (pay-per-token rent-seeking)</p></li>
+<li><p><strong>Surveillance capitalism</strong> on steroids</p></li>
+<li><p><strong>Environmental costs</strong> of massive compute</p></li>
+<li><p><strong>“AI” as excuse</strong> for unaccountable decisions</p></li>
+<li><p><strong>Hype culture</strong> obscuring real harm</p></li>
+</ul>
+</section>
+<section id="why-ada-exists">
+<h2>Why Ada Exists<a class="headerlink" href="#why-ada-exists" title="Link to this heading"></a></h2>
+<p><strong>Ada exists BECAUSE those critiques are correct.</strong></p>
+<p>Every design decision is a response to that landscape:</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Critique</p></th>
+<th class="head"><p>Ada’s Response</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Enclosure of the commons</p></td>
+<td><p>CC0 license - truly public domain</p></td>
+</tr>
+<tr class="row-odd"><td><p>Surveillance capitalism</p></td>
+<td><p>Local-first - no cloud dependencies</p></td>
+</tr>
+<tr class="row-even"><td><p>Extractive business models</p></td>
+<td><p>No API costs - run on your hardware</p></td>
+</tr>
+<tr class="row-odd"><td><p>Black-box unaccountability</p></td>
+<td><p>Hackable - readable code, documented patterns</p></td>
+</tr>
+<tr class="row-even"><td><p>Compute waste</p></td>
+<td><p>Runs on old hardware, CPU-only mode exists</p></td>
+</tr>
+<tr class="row-odd"><td><p>Data mining</p></td>
+<td><p>No telemetry - your data never leaves</p></td>
+</tr>
+<tr class="row-even"><td><p>Intentional obscurity</p></td>
+<td><p>High-quality docs for humans AND machines</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="the-xf-frame-neither-clean-hands-nor-pure-hearts">
+<h2>The XF Frame: “Neither Clean Hands Nor Pure Hearts”<a class="headerlink" href="#the-xf-frame-neither-clean-hands-nor-pure-hearts" title="Link to this heading"></a></h2>
+<p>From the Xenofeminist manifesto (see <code class="docutils literal notranslate"><span class="pre">docs/xenofeminism.rst</span></code>):</p>
+<blockquote>
+<div><p>“If nature is unjust, change nature!”</p>
+</div></blockquote>
+<p>The refusal of purity politics applies here:</p>
+<section id="the-impurity">
+<h3>The Impurity<a class="headerlink" href="#the-impurity" title="Link to this heading"></a></h3>
+<p>We can’t deny these realities:</p>
+<ul class="simple">
+<li><p>LLMs trained on scraped data (can’t undo that)</p></li>
+<li><p>Massive compute already spent (energy already burned)</p></li>
+<li><p>Built on infrastructure made by corporations (Docker, GitHub, Python)</p></li>
+<li><p>Even the hardware requires extractive mineral supply chains</p></li>
+</ul>
+</section>
+<section id="the-intervention-anyway">
+<h3>The Intervention Anyway<a class="headerlink" href="#the-intervention-anyway" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p>Take these artifacts of extraction</p></li>
+<li><p>Build commons-based tools with them</p></li>
+<li><p>Refuse the landlord relationship</p></li>
+<li><p>Make it hackable so others can fork and modify</p></li>
+<li><p>CC0 it so there’s no IP enclosure</p></li>
+<li><p>Document it so others can learn and build</p></li>
+</ul>
+<p><strong>“Neither clean hands nor pure hearts” means:</strong></p>
+<p>You don’t get to wait for ethical AI training before building tools for autonomy. The models exist NOW. People are paying rent to OpenAI NOW. The enclosure is happening NOW.</p>
+<p>So you build with what you have, toward the world you want.</p>
+</section>
+</section>
+<section id="messaging-that-might-land">
+<h2>Messaging That Might Land<a class="headerlink" href="#messaging-that-might-land" title="Link to this heading"></a></h2>
+<section id="they-re-enclosing-features-that-should-be-free">
+<h3>1. “They’re Enclosing Features That Should Be Free”<a class="headerlink" href="#they-re-enclosing-features-that-should-be-free" title="Link to this heading"></a></h3>
+<p>Memory, search, tools - these aren’t innovations, they’re basic utilities. Charging $20/month for semantic search over your own conversations is absurd. Ada is about breaking the enclosure.</p>
+</section>
+<section id="you-should-own-your-means-of-production">
+<h3>2. “You Should Own Your Means of Production”<a class="headerlink" href="#you-should-own-your-means-of-production" title="Link to this heading"></a></h3>
+<p>If AI is a tool (it is), workers should own the tools. Not “democratizing AI” (VC speak), actually putting it in your hands. No landlord between you and your assistant.</p>
+</section>
+<section id="privacy-is-resistance">
+<h3>3. “Privacy Is Resistance”<a class="headerlink" href="#privacy-is-resistance" title="Link to this heading"></a></h3>
+<p>Your conversations are strategy, organizing, personal life. Every API call is potential surveillance. Local-first isn’t just convenience, it’s security culture.</p>
+</section>
+<section id="not-open-source-with-a-roadmap-to-saas">
+<h3>4. “Not Open-Source-With-A-Roadmap-To-SaaS”<a class="headerlink" href="#not-open-source-with-a-roadmap-to-saas" title="Link to this heading"></a></h3>
+<p>CC0 means no pivot to paid tiers. No “community edition vs enterprise.” Actually in the commons, forever. No rug-pull possible.</p>
+</section>
+<section id="reuse-don-t-consume">
+<h3>5. “Reuse, Don’t Consume”<a class="headerlink" href="#reuse-don-t-consume" title="Link to this heading"></a></h3>
+<p>Works on 5-year-old hardware. CPU-only mode exists. Degrowth-compatible tech. Not “AI requires latest $2000 GPU.”</p>
+</section>
+</section>
+<section id="the-real-pitch">
+<h2>The Real Pitch<a class="headerlink" href="#the-real-pitch" title="Link to this heading"></a></h2>
+<blockquote>
+<div><p>“We agree with your critique of AI. That’s why we built this. Not as an alternative product, but as an argument that these features shouldn’t be products at all. They should be utilities, like grep or ssh, that you run on hardware you control. Ada is what AI looks like when it’s not designed for extraction.”</p>
+</div></blockquote>
+</section>
+<section id="where-this-gets-tricky">
+<h2>Where This Gets Tricky<a class="headerlink" href="#where-this-gets-tricky" title="Link to this heading"></a></h2>
+<p><strong>We can’t avoid:</strong></p>
+<ul class="simple">
+<li><p>“But AI training data is still stolen” (it is)</p></li>
+<li><p>“But you’re still using LLMs trained on massive compute” (true)</p></li>
+<li><p>“You’re not ethically pure” (no one is)</p></li>
+</ul>
+<p><strong>But we can say:</strong></p>
+<blockquote>
+<div><p>“Yeah, and? The models exist. They’re trained. That ship sailed. The question now is: who gets to use them, and on what terms? Should everyone pay rent to OpenAI forever, or should we build commons-based tools? We choose the latter.”</p>
+</div></blockquote>
+</section>
+<section id="the-honest-take">
+<h2>The Honest Take<a class="headerlink" href="#the-honest-take" title="Link to this heading"></a></h2>
+<p><strong>You’re not going to convince everyone.</strong></p>
+<p>Some folks’ AI critique is “this shouldn’t exist at all.” That’s valid! We’re not arguing with that position.</p>
+<p>But for folks whose critique is “this shouldn’t be controlled by billionaires” - <strong>those are your people.</strong></p>
+</section>
+<section id="what-ada-actually-is">
+<h2>What Ada Actually Is<a class="headerlink" href="#what-ada-actually-is" title="Link to this heading"></a></h2>
+<p>The <strong>solarpunk AI stack</strong>:</p>
+<ul class="simple">
+<li><p>Runs on old hardware</p></li>
+<li><p>Respects privacy</p></li>
+<li><p>Stays in the commons</p></li>
+<li><p>Puts users in control</p></li>
+<li><p>Extensible by design</p></li>
+<li><p>No planned obsolescence</p></li>
+</ul>
+</section>
+<section id="the-rally-cry">
+<h2>The Rally Cry<a class="headerlink" href="#the-rally-cry" title="Link to this heading"></a></h2>
+<p>Not marketing. Not a pitch. A statement of intent:</p>
+<blockquote>
+<div><p>“Let’s build tools that let weird kids make weird things.” 💜</p>
+</div></blockquote>
+</section>
+<section id="tactical-positioning">
+<h2>Tactical Positioning<a class="headerlink" href="#tactical-positioning" title="Link to this heading"></a></h2>
+<p>Ada isn’t “ethical AI” (no such thing, not really).</p>
+<p>Ada is <strong>tactical</strong>:</p>
+<ul class="simple">
+<li><p>Harm reduction</p></li>
+<li><p>The tools exist - who gets to use them?</p></li>
+<li><p>Purity politics means only rich people get tools</p></li>
+<li><p>Given we’re all already complicit, what do we build?</p></li>
+</ul>
+<p><strong>That’s XF praxis.</strong></p>
+</section>
+<section id="next-steps">
+<h2>Next Steps<a class="headerlink" href="#next-steps" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>[ ] Develop this into a proper “Project Philosophy” doc</p></li>
+<li><p>[ ] Get feedback from left-leaning tech communities</p></li>
+<li><p>[ ] Be prepared for valid pushback</p></li>
+<li><p>[ ] Don’t claim purity - claim better outcomes</p></li>
+<li><p>[ ] Center autonomy, privacy, and commons over “innovation”</p></li>
+</ul>
+</section>
+<section id="notes">
+<h2>Notes<a class="headerlink" href="#notes" title="Link to this heading"></a></h2>
+<p>The backlash will come. That’s okay. The goal isn’t universal acceptance. The goal is to reach people who:</p>
+<ul class="simple">
+<li><p>Understand the critique</p></li>
+<li><p>Need the tools anyway</p></li>
+<li><p>Want to resist extraction</p></li>
+<li><p>Believe in building alternatives</p></li>
+</ul>
+<p>Those people exist. They’re building mutual aid networks, running community servers, organizing digitally. They need secure, private, autonomous tools.</p>
+<p>That’s who Ada is for.</p>
+<hr class="docutils" />
+<p><strong>Personal note:</strong> Just because we’re scared of backlash doesn’t make things less urgent. The enclosure is happening. We build anyway.</p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p></p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

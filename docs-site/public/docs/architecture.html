@@ -1,0 +1,457 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Architecture &mdash; Ada Brain API 0.1.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="_static/graphviz.css?v=4ae1632d" />
+      <link rel="stylesheet" type="text/css" href="_static/custom.css?v=df0a1c42" />
+
+  
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=01f34227"></script>
+      <script src="_static/doctools.js?v=9bcbadda"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Data Model Reference" href="data_model.html" />
+    <link rel="prev" title="Ada on Single-Board Computers (SBCs)" href="sbc.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            Ada Brain API
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="zero_to_ada.html">Zero to Ada</a></li>
+<li class="toctree-l1"><a class="reference internal" href="getting_started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="local_mode.html">Running Ada Locally (No Docker Required!)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="nix.html">Nix &amp; Flakes Support</a></li>
+<li class="toctree-l1"><a class="reference internal" href="getting_started_scratch.html">Getting Started from Scratch</a></li>
+<li class="toctree-l1"><a class="reference internal" href="configuration.html">Configuration Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="examples.html">Examples</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Hardware Setup</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="hardware.html">Hardware &amp; GPU Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="sbc.html">Ada on Single-Board Computers (SBCs)</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Core Architecture</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Architecture</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#system-overview">System Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#request-flow">Request Flow</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#specialist-system-architecture">Specialist System Architecture</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#context-caching-system-v2-1">Context Caching System (v2.1)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#rag-system-components">RAG System Components</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#bidirectional-specialist-flow">Bidirectional Specialist Flow</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#testing-infrastructure">Testing Infrastructure</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#data-flow-conversation-turn">Data Flow: Conversation Turn</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#deployment-architecture">Deployment Architecture</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#resources">Resources</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="data_model.html">Data Model Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="streaming.html">Streaming</a></li>
+<li class="toctree-l1"><a class="reference internal" href="memory.html">Memory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="token_monitoring.html">Token Budget Monitoring</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Interfaces &amp; Adapters</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="adapters.html">Ada Adapters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="adapter_development.html">Adapter Development Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="matrix_integration.html">Matrix Integration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api_usage.html">API Usage Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api_reference.html">API Reference</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Specialist System</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="specialists.html">Specialist System</a></li>
+<li class="toctree-l1"><a class="reference internal" href="build_specialist.html">Build Your First Specialist</a></li>
+<li class="toctree-l1"><a class="reference internal" href="bidirectional.html">Bidirectional Specialist System</a></li>
+<li class="toctree-l1"><a class="reference internal" href="specialist_rag.html">Specialist RAG Documentation System</a></li>
+<li class="toctree-l1"><a class="reference internal" href="web_search.html">Web Search Specialist</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Operations</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="build_system.html">Build System</a></li>
+<li class="toctree-l1"><a class="reference internal" href="buildx_adoption_notes.html">BuildX Adoption Data &amp; Notes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="disk_management.html">Disk Management</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Development</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="development.html">Development Tools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="testing.html">Testing Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="versioning.html">Version Management</a></li>
+<li class="toctree-l1"><a class="reference internal" href="changelog.html">Changelog</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Philosophy &amp; Design</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="project_philosophy.html">Ada Principles</a></li>
+<li class="toctree-l1"><a class="reference internal" href="documentation_philosophy.html">Documentation Philosophy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ai_documentation.html">AI-Readable Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="empathetic_documentation.html">Empathetic Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="xenofeminism.html">Xenofeminism and Ada</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Ada Brain API</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Architecture</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/architecture.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="architecture">
+<h1>Architecture<a class="headerlink" href="#architecture" title="Link to this heading"></a></h1>
+<p>This document provides visual representations of Ada’s system architecture, data flow, and component interactions.</p>
+<section id="system-overview">
+<h2>System Overview<a class="headerlink" href="#system-overview" title="Link to this heading"></a></h2>
+<p>Ada is composed of several containerized services orchestrated via Docker Compose:</p>
+<div class="graphviz"><img src="_images/graphviz-88200e5c900a74c9f8aedc9ff52480e84f102abd.png" alt="digraph system {
+    rankdir=TB;
+    node [shape=box, style=filled, fillcolor=lightblue];
+
+    user [label=&quot;User\nBrowser&quot;, fillcolor=lightgreen];
+    matrix_user [label=&quot;Matrix\nUsers&quot;, fillcolor=lightgreen];
+    web [label=&quot;Web Service\nNginx + Frontend\n(Port 5000)&quot;];
+    matrix_bridge [label=&quot;Matrix Bridge\nmatrix-nio Client&quot;, fillcolor=lightcyan];
+    brain [label=&quot;Brain Service\nFastAPI Backend\n(Port 7000)&quot;];
+    ollama [label=&quot;Ollama Service\nLLM Inference\n(Port 11434)&quot;];
+    chroma [label=&quot;Chroma Service\nVector Database\n(Port 8000)&quot;];
+    consolidation [label=&quot;Memory\nConsolidation\n(Nightly Cron)&quot;];
+    scripts [label=&quot;Scripts Service\nTooling Container\n(On-demand)&quot;];
+
+    user -&gt; web [label=&quot;HTTP&quot;];
+    matrix_user -&gt; matrix_bridge [label=&quot;Matrix Protocol&quot;];
+    web -&gt; brain [label=&quot;API Proxy\n/api/* → /v1/*&quot;];
+    matrix_bridge -&gt; brain [label=&quot;/v1/chat/stream&quot;];
+    brain -&gt; ollama [label=&quot;LLM Requests&quot;];
+    brain -&gt; chroma [label=&quot;RAG Queries&quot;];
+    consolidation -&gt; brain [label=&quot;Uses&quot;];
+    scripts -&gt; chroma [label=&quot;Maintenance&quot;];
+    scripts -&gt; brain [label=&quot;Testing&quot;];
+
+    {rank=same; user; matrix_user;}
+    {rank=same; web; matrix_bridge;}
+    {rank=same; brain;}
+    {rank=same; ollama; chroma;}
+}" class="graphviz" /></div>
+</section>
+<section id="request-flow">
+<h2>Request Flow<a class="headerlink" href="#request-flow" title="Link to this heading"></a></h2>
+<p>This diagram shows how a user message flows through the system:</p>
+<div class="graphviz"><img src="_images/graphviz-3fef9f3933c3a0de9041b7d3c40cc6ff8f07bfe0.png" alt="digraph request_flow {
+    rankdir=LR;
+    node [shape=box, style=filled, fillcolor=lightblue];
+
+    user [label=&quot;User Message&quot;, fillcolor=lightgreen];
+    frontend [label=&quot;Frontend\nSvelte&quot;];
+    nginx [label=&quot;Nginx\nReverse Proxy&quot;];
+    brain [label=&quot;Brain API\nFastAPI&quot;];
+    prompt [label=&quot;Prompt Builder&quot;];
+    rag [label=&quot;RAG Store\n(Chroma)&quot;];
+    llm [label=&quot;LLM\n(Ollama)&quot;];
+    stream [label=&quot;SSE Stream&quot;, fillcolor=lightyellow];
+
+    user -&gt; frontend -&gt; nginx -&gt; brain;
+    brain -&gt; prompt;
+    prompt -&gt; rag [label=&quot;Retrieve\nContext&quot;];
+    rag -&gt; prompt [label=&quot;Persona,\nFAQ,\nMemories&quot;];
+    prompt -&gt; llm [label=&quot;Enriched\nPrompt&quot;];
+    llm -&gt; stream [label=&quot;Tokens&quot;];
+    stream -&gt; nginx -&gt; frontend -&gt; user;
+
+    {rank=same; frontend; nginx;}
+}" class="graphviz" /></div>
+</section>
+<section id="specialist-system-architecture">
+<h2>Specialist System Architecture<a class="headerlink" href="#specialist-system-architecture" title="Link to this heading"></a></h2>
+<p>The plugin-based specialist system allows extensible capabilities:</p>
+<div class="graphviz"><img src="_images/graphviz-06acc8c5773e6c9e3e5adad906f22208f9590cd4.png" alt="digraph specialists {
+    rankdir=TB;
+    node [shape=box, style=filled, fillcolor=lightblue];
+
+    user [label=&quot;User Request&quot;, fillcolor=lightgreen];
+    brain [label=&quot;Brain API&quot;];
+    registry [label=&quot;Specialist Registry\n(Auto-discovery)&quot;];
+
+    ocr [label=&quot;OCR Specialist\n📄 Priority: HIGH&quot;];
+    media [label=&quot;Media Specialist\n🎧 Priority: MEDIUM&quot;];
+    websearch [label=&quot;Web Search\n🔍 Priority: HIGH&quot;];
+
+    prompt_builder [label=&quot;Prompt Builder&quot;];
+    llm [label=&quot;LLM&quot;];
+
+    user -&gt; brain;
+    brain -&gt; registry [label=&quot;request_context&quot;];
+    registry -&gt; ocr [label=&quot;should_activate()?&quot;];
+    registry -&gt; media [label=&quot;should_activate()?&quot;];
+    registry -&gt; websearch [label=&quot;should_activate()?&quot;];
+
+    ocr -&gt; registry [label=&quot;context_text&quot;];
+    media -&gt; registry [label=&quot;context_text&quot;];
+    websearch -&gt; registry [label=&quot;context_text&quot;];
+
+    registry -&gt; prompt_builder [label=&quot;Sorted by\nPriority&quot;];
+    prompt_builder -&gt; llm [label=&quot;Enriched\nPrompt&quot;];
+}" class="graphviz" /></div>
+</section>
+<section id="context-caching-system-v2-1">
+<h2>Context Caching System (v2.1)<a class="headerlink" href="#context-caching-system-v2-1" title="Link to this heading"></a></h2>
+<p>Multi-timescale caching reduces redundant RAG queries and token usage:</p>
+<ul class="simple">
+<li><p><strong>Personas</strong>: 24-hour TTL (identity rarely changes)</p></li>
+<li><p><strong>FAQs</strong>: 24-hour TTL (knowledge base updates infrequently)</p></li>
+<li><p><strong>Memories</strong>: 5-minute TTL (balance freshness vs performance)</p></li>
+<li><p><strong>Conversations</strong>: 1-hour TTL (recent turns cached per session)</p></li>
+</ul>
+<p><strong>Benefits:</strong>
+- Reduces ChromaDB queries by ~70% for repeated context
+- Lower latency on cache hits (ms vs seconds)
+- LRU eviction prevents unbounded growth
+- Per-request cache stats logged for monitoring</p>
+<p><strong>Implementation:</strong> <code class="docutils literal notranslate"><span class="pre">brain/context_cache.py</span></code> (MultiTimescaleCache) integrated into <code class="docutils literal notranslate"><span class="pre">PromptAssembler</span></code></p>
+</section>
+<section id="rag-system-components">
+<h2>RAG System Components<a class="headerlink" href="#rag-system-components" title="Link to this heading"></a></h2>
+<p>The Retrieval-Augmented Generation system provides contextual memory:</p>
+<div class="graphviz"><img src="_images/graphviz-587762de03e99ae5a749b0e23f7dc2013df8af22.png" alt="digraph rag {
+    rankdir=TB;
+    node [shape=box, style=filled, fillcolor=lightblue];
+
+    prompt [label=&quot;User Query&quot;];
+    embed [label=&quot;Embedding\nGenerator\n(nomic-embed-text)&quot;];
+    chroma [label=&quot;ChromaDB\nVector Store&quot;];
+
+    persona [label=&quot;Persona\n(Identity)&quot;, fillcolor=lightyellow];
+    faq [label=&quot;FAQ Entries\n(Knowledge)&quot;, fillcolor=lightyellow];
+    memory [label=&quot;Memories\n(Long-term)&quot;, fillcolor=lightyellow];
+    turns [label=&quot;Conversation\nTurns (History)&quot;, fillcolor=lightyellow];
+    specialist_docs [label=&quot;Specialist\nDocs (Dynamic)&quot;, fillcolor=lightyellow];
+
+    prompt -&gt; embed;
+    embed -&gt; chroma [label=&quot;768-dim\nVector&quot;];
+
+    chroma -&gt; persona [label=&quot;Query&quot;];
+    chroma -&gt; faq [label=&quot;Query&quot;];
+    chroma -&gt; memory [label=&quot;Query&quot;];
+    chroma -&gt; turns [label=&quot;Query&quot;];
+    chroma -&gt; specialist_docs [label=&quot;Query&quot;];
+
+    persona -&gt; prompt [label=&quot;Context&quot;];
+    faq -&gt; prompt [label=&quot;Context&quot;];
+    memory -&gt; prompt [label=&quot;Context&quot;];
+    turns -&gt; prompt [label=&quot;Context&quot;];
+    specialist_docs -&gt; prompt [label=&quot;Context&quot;];
+}" class="graphviz" /></div>
+</section>
+<section id="bidirectional-specialist-flow">
+<h2>Bidirectional Specialist Flow<a class="headerlink" href="#bidirectional-specialist-flow" title="Link to this heading"></a></h2>
+<p>How the LLM can request specialist execution mid-response:</p>
+<div class="graphviz"><img src="_images/graphviz-78b7c6242cb3c81002bf6780c1caa9a5b29e348e.png" alt="digraph bidirectional {
+    rankdir=TB;
+    node [shape=box, style=filled, fillcolor=lightblue];
+
+    start [label=&quot;LLM Generation\nStarts&quot;, fillcolor=lightgreen];
+    token [label=&quot;Stream Tokens&quot;];
+    detect [label=&quot;Detect Request\nPattern&quot;, shape=diamond, fillcolor=lightyellow];
+    pause [label=&quot;Pause\nGeneration&quot;, fillcolor=orange];
+    execute [label=&quot;Execute\nSpecialist&quot;];
+    inject [label=&quot;Inject Result\ninto Context&quot;];
+    resume [label=&quot;Resume\nGeneration&quot;, fillcolor=lightgreen];
+    done [label=&quot;Complete&quot;, fillcolor=lightgreen];
+
+    start -&gt; token;
+    token -&gt; detect;
+    detect -&gt; token [label=&quot;No Request&quot;];
+    detect -&gt; pause [label=&quot;SPECIALIST_REQUEST[...]&quot;];
+    pause -&gt; execute;
+    execute -&gt; inject;
+    inject -&gt; resume;
+    resume -&gt; token;
+    token -&gt; done [label=&quot;Stream\nComplete&quot;];
+}" class="graphviz" /></div>
+</section>
+<section id="testing-infrastructure">
+<h2>Testing Infrastructure<a class="headerlink" href="#testing-infrastructure" title="Link to this heading"></a></h2>
+<p>The scripts container provides isolated testing environment:</p>
+<div class="graphviz"><img src="_images/graphviz-c578f9dcca08ad01748d37ff2df3e37f8190a0c1.png" alt="digraph testing {
+    rankdir=LR;
+    node [shape=box, style=filled, fillcolor=lightblue];
+
+    dev [label=&quot;Developer&quot;, fillcolor=lightgreen];
+    scripts [label=&quot;Scripts Container\nPython 3.13 + uv&quot;];
+    pytest [label=&quot;Pytest\nTest Suite&quot;];
+    health [label=&quot;Health Check\nScript&quot;];
+
+    tests_rag [label=&quot;tests/test_rag.py\n(6 tests)&quot;, fillcolor=lightyellow];
+    tests_prompt [label=&quot;tests/test_prompt_builder.py\n(2 tests)&quot;, fillcolor=lightyellow];
+    tests_specialists [label=&quot;tests/test_specialists.py\n(1 test)&quot;, fillcolor=lightyellow];
+
+    brain [label=&quot;Brain Service&quot;];
+    chroma [label=&quot;Chroma Service&quot;];
+    ollama [label=&quot;Ollama Service&quot;];
+
+    dev -&gt; scripts [label=&quot;./scripts/run.sh test&quot;];
+    scripts -&gt; pytest;
+    scripts -&gt; health;
+
+    pytest -&gt; tests_rag;
+    pytest -&gt; tests_prompt;
+    pytest -&gt; tests_specialists;
+
+    tests_rag -&gt; chroma;
+    tests_rag -&gt; brain;
+    tests_prompt -&gt; chroma;
+    tests_specialists -&gt; chroma;
+
+    health -&gt; chroma;
+    health -&gt; brain;
+}" class="graphviz" /></div>
+</section>
+<section id="data-flow-conversation-turn">
+<h2>Data Flow: Conversation Turn<a class="headerlink" href="#data-flow-conversation-turn" title="Link to this heading"></a></h2>
+<p>Complete flow for processing and storing a conversation turn:</p>
+<div class="graphviz"><img src="_images/graphviz-f548503ee6f86f2e2c9f2b63b8238dedb66eb0a5.png" alt="digraph conversation_turn {
+    rankdir=TB;
+    node [shape=box, style=filled, fillcolor=lightblue];
+
+    user_msg [label=&quot;User Message&quot;, fillcolor=lightgreen];
+    api [label=&quot;POST /v1/chat/stream&quot;];
+    context [label=&quot;Build Request\nContext&quot;];
+    specialists [label=&quot;Execute\nSpecialists&quot;];
+    rag_query [label=&quot;RAG Query\n(Persona, FAQ,\nMemory, Turns)&quot;];
+    prompt [label=&quot;Build Final\nPrompt&quot;];
+    llm [label=&quot;Stream LLM\nResponse&quot;];
+    store_turn [label=&quot;Store Turn\nin Chroma&quot;];
+    user_response [label=&quot;User Sees\nResponse&quot;, fillcolor=lightgreen];
+
+    user_msg -&gt; api;
+    api -&gt; context;
+    context -&gt; specialists;
+    specialists -&gt; rag_query;
+    rag_query -&gt; prompt;
+    prompt -&gt; llm;
+    llm -&gt; store_turn;
+    llm -&gt; user_response;
+    store_turn -&gt; rag_query [label=&quot;Available for\nNext Query&quot;, style=dashed];
+}" class="graphviz" /></div>
+</section>
+<section id="deployment-architecture">
+<h2>Deployment Architecture<a class="headerlink" href="#deployment-architecture" title="Link to this heading"></a></h2>
+<p>Production deployment structure:</p>
+<div class="graphviz"><img src="_images/graphviz-8eca66a3beb108a5eefaef73be3b927e205fb4c7.png" alt="digraph deployment {
+    rankdir=TB;
+    node [shape=box, style=filled, fillcolor=lightblue];
+
+    internet [label=&quot;Internet&quot;, fillcolor=lightgreen, shape=cloud];
+    nginx_proxy [label=&quot;Nginx Reverse Proxy\nSSL Termination&quot;];
+
+    subgraph cluster_ada {
+        label=&quot;Ada Docker Stack&quot;;
+        style=filled;
+        fillcolor=lightgray;
+
+        web [label=&quot;Web Container&quot;];
+        brain [label=&quot;Brain Container&quot;];
+        ollama [label=&quot;Ollama Container&quot;];
+        chroma [label=&quot;Chroma Container&quot;];
+        consolidation [label=&quot;Consolidation\nContainer&quot;];
+    }
+
+    data_volume [label=&quot;./data/\nPersistent Volume&quot;, shape=cylinder, fillcolor=lightyellow];
+
+    internet -&gt; nginx_proxy [label=&quot;HTTPS&quot;];
+    nginx_proxy -&gt; web [label=&quot;HTTP&quot;];
+    web -&gt; brain;
+    brain -&gt; ollama;
+    brain -&gt; chroma;
+    consolidation -&gt; brain;
+
+    chroma -&gt; data_volume [label=&quot;Store&quot;];
+    ollama -&gt; data_volume [label=&quot;Store\nModels&quot;];
+}" class="graphviz" /></div>
+</section>
+<section id="resources">
+<h2>Resources<a class="headerlink" href="#resources" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>See <a class="reference internal" href="specialists.html"><span class="doc">Specialist System</span></a> for detailed specialist system documentation</p></li>
+<li><p>See <a class="reference internal" href="testing.html"><span class="doc">Testing Guide</span></a> for testing infrastructure details</p></li>
+<li><p>See <a class="reference internal" href="development.html"><span class="doc">Development Tools</span></a> for scripts container usage</p></li>
+<li><p>See <a class="reference internal" href="api_usage.html"><span class="doc">API Usage Guide</span></a> for API endpoint documentation</p></li>
+</ul>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="sbc.html" class="btn btn-neutral float-left" title="Ada on Single-Board Computers (SBCs)" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="data_model.html" class="btn btn-neutral float-right" title="Data Model Reference" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p></p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
