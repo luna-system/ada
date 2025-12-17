@@ -57,6 +57,10 @@ Active development tasks and future work.
 
 ## Documentation Improvements
 
+- [ ] **User-friendly changelog** - GitHub Pages accessible, maybe in Sphinx
+  - For when we have more users tracking releases
+  - Auto-generate from git tags + conventional commits?
+  - Could use scripts/changelog.sh as foundation
 - [ ] Video walkthrough / demo
 - [ ] "Ada in 5 minutes" quick start
 - [ ] Troubleshooting guide (common issues)

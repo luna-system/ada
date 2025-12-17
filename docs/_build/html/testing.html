@@ -22,7 +22,7 @@
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Ada Principles" href="project_philosophy.html" />
+    <link rel="next" title="Version Management" href="versioning.html" />
     <link rel="prev" title="Development Tools" href="development.html" /> 
 </head>
 
@@ -47,8 +47,10 @@
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
 <ul>
+<li class="toctree-l1"><a class="reference internal" href="zero_to_ada.html">Zero to Ada</a></li>
 <li class="toctree-l1"><a class="reference internal" href="getting_started.html">Getting Started</a></li>
 <li class="toctree-l1"><a class="reference internal" href="local_mode.html">Running Ada Locally (No Docker!)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="nix.html">Nix &amp; Flakes Support</a></li>
 <li class="toctree-l1"><a class="reference internal" href="getting_started_scratch.html">Getting Started from Scratch</a></li>
 <li class="toctree-l1"><a class="reference internal" href="configuration.html">Configuration Reference</a></li>
 <li class="toctree-l1"><a class="reference internal" href="examples.html">Examples</a></li>
@@ -64,6 +66,7 @@
 <li class="toctree-l1"><a class="reference internal" href="data_model.html">Data Model Reference</a></li>
 <li class="toctree-l1"><a class="reference internal" href="streaming.html">Streaming</a></li>
 <li class="toctree-l1"><a class="reference internal" href="memory.html">Memory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="token_monitoring.html">Token Budget Monitoring</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Interfaces &amp; Adapters</span></p>
 <ul>
@@ -109,8 +112,12 @@
 <li class="toctree-l4"><a class="reference internal" href="#direct-way-full-control">Direct Way (Full Control)</a></li>
 </ul>
 </li>
-<li class="toctree-l3"><a class="reference internal" href="#test-structure">Test Structure</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#test-structure">Test Structure</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#test-types">Test Types</a></li>
+</ul>
+</li>
 <li class="toctree-l3"><a class="reference internal" href="#adding-new-tests">Adding New Tests</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#hypothesis-configuration">Hypothesis Configuration</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#test-markers">Test Markers</a></li>
 </ul>
 </li>
@@ -141,6 +148,7 @@
 <li class="toctree-l2"><a class="reference internal" href="#resources">Resources</a></li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="versioning.html">Version Management</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Philosophy &amp; Design</span></p>
 <ul>
@@ -274,15 +282,17 @@ curl<span class="w"> </span>http://localhost:5000/api/chat/stream<span class="w"
 </section>
 <section id="automated-testing-with-pytest">
 <h2>Automated Testing with Pytest<a class="headerlink" href="#automated-testing-with-pytest" title="Link to this heading"></a></h2>
-<p>Ada uses <strong>pytest</strong> for automated testing. All tests are located in the <code class="docutils literal notranslate"><span class="pre">tests/</span></code> directory and run in a dedicated Docker container for consistency.</p>
+<p>Ada uses a <strong>hybrid testing approach</strong> combining traditional example-based tests with property-based testing using <strong>Hypothesis</strong>. All tests are located in the <code class="docutils literal notranslate"><span class="pre">tests/</span></code> directory and run in a dedicated Docker container for consistency.</p>
 <section id="test-infrastructure">
 <h3>Test Infrastructure<a class="headerlink" href="#test-infrastructure" title="Link to this heading"></a></h3>
 <p>The testing infrastructure includes:</p>
 <ul class="simple">
 <li><p><strong>Tests Container</strong>: Dedicated Docker service with Python 3.13 and all dependencies</p></li>
 <li><p><strong>Pytest Configuration</strong>: <code class="docutils literal notranslate"><span class="pre">pytest.ini</span></code> with sensible defaults</p></li>
-<li><p><strong>Fixtures</strong>: Shared test fixtures in <code class="docutils literal notranslate"><span class="pre">tests/conftest.py</span></code> (rag_store, conversation_id)</p></li>
+<li><p><strong>Fixtures</strong>: Shared test fixtures in <code class="docutils literal notranslate"><span class="pre">tests/conftest.py</span></code> and feature-specific <code class="docutils literal notranslate"><span class="pre">conftest.py</span></code> files</p></li>
+<li><p><strong>Hypothesis</strong>: Property-based testing for algorithmic correctness</p></li>
 <li><p><strong>Convenience Script</strong>: <code class="docutils literal notranslate"><span class="pre">scripts/run.sh</span></code> wrapper for common test commands</p></li>
+<li><p><strong>Organized Structure</strong>: Tests grouped by feature and type (traditional vs property-based)</p></li>
 </ul>
 </section>
 <section id="running-tests">
@@ -322,41 +332,89 @@ docker<span class="w"> </span>compose<span class="w"> </span>run<span class="w">
 </section>
 <section id="test-structure">
 <h3>Test Structure<a class="headerlink" href="#test-structure" title="Link to this heading"></a></h3>
-<p>The test suite is organized as follows:</p>
+<p>The test suite uses an organized directory structure:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>tests/
+  conftest.py                   # Global fixtures (rag_store, conversation_id)
+
+  prompt_builder/               # Traditional example-based tests
+    conftest.py                 # Shared fixtures for prompt_builder
+    test_context_retriever.py   # Context retrieval from RAG (14 tests)
+    test_section_builder.py     # Prompt section formatting
+    test_prompt_assembler.py    # Final prompt assembly
+
+  property/                     # Property-based tests (Hypothesis)
+    conftest.py                 # Hypothesis configuration
+    test_token_properties.py    # Token counting invariants (11 tests)
+    test_memory_properties.py   # Memory decay, ranking (v2.0)
+
+  test_rag.py                   # RAG store tests (6 tests)
+  test_specialists.py           # Specialist system tests
+  test_ai_documentation.py      # Documentation validation tests
+</pre></div>
+</div>
 <dl class="simple">
-<dt><strong>tests/conftest.py</strong></dt><dd><p>Shared pytest fixtures:</p>
-<ul class="simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">rag_store</span></code>: Session-scoped RagStore instance</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">conversation_id</span></code>: Session-scoped valid conversation ID from database</p></li>
-</ul>
+<dt><strong>Traditional Tests</strong> (example-based):</dt><dd><p>Test specific API behavior, integration workflows, and regression cases.
+Use parametrization to reduce duplication.</p>
 </dd>
-<dt><strong>tests/test_rag.py</strong> (6 tests)</dt><dd><p>RAG store retrieval tests:</p>
-<ul class="simple">
-<li><p>RAG store initialization</p></li>
-<li><p>Embedding generation</p></li>
-<li><p>Memory retrieval</p></li>
-<li><p>FAQ retrieval</p></li>
-<li><p>Turn retrieval</p></li>
-<li><p>Query consistency</p></li>
-</ul>
-</dd>
-<dt><strong>tests/test_prompt_builder.py</strong> (2 tests)</dt><dd><p>Prompt building tests:</p>
-<ul class="simple">
-<li><p>Full prompt building with RAG context</p></li>
-<li><p>User message inclusion verification</p></li>
-</ul>
-</dd>
-<dt><strong>tests/test_specialists.py</strong> (1 test)</dt><dd><p>Specialist system tests:</p>
-<ul class="simple">
-<li><p>Specialist documentation retrieval</p></li>
-</ul>
+<dt><strong>Property Tests</strong> (Hypothesis):</dt><dd><p>Test mathematical properties that should ALWAYS hold (bounds, monotonicity, etc.).
+Hypothesis generates 100+ random test cases automatically.</p>
 </dd>
 </dl>
+<section id="test-types">
+<h4>Test Types<a class="headerlink" href="#test-types" title="Link to this heading"></a></h4>
+<p><strong>Traditional Tests</strong> verify specific behavior:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">test_context_retriever_initialization</span><span class="p">():</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;ContextRetriever initializes correctly.&quot;&quot;&quot;</span>
+    <span class="n">retriever</span> <span class="o">=</span> <span class="n">ContextRetriever</span><span class="p">()</span>
+    <span class="k">assert</span> <span class="n">retriever</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+
+<span class="nd">@pytest</span><span class="o">.</span><span class="n">mark</span><span class="o">.</span><span class="n">parametrize</span><span class="p">(</span><span class="s2">&quot;method,kwargs,expected_len&quot;</span><span class="p">,</span> <span class="p">[</span>
+    <span class="p">(</span><span class="s2">&quot;get_memories&quot;</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;query&quot;</span><span class="p">:</span> <span class="s2">&quot;test&quot;</span><span class="p">,</span> <span class="s2">&quot;k&quot;</span><span class="p">:</span> <span class="mi">5</span><span class="p">},</span> <span class="mi">2</span><span class="p">),</span>
+    <span class="p">(</span><span class="s2">&quot;get_faqs&quot;</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;query&quot;</span><span class="p">:</span> <span class="s2">&quot;test&quot;</span><span class="p">,</span> <span class="s2">&quot;k&quot;</span><span class="p">:</span> <span class="mi">3</span><span class="p">},</span> <span class="mi">2</span><span class="p">),</span>
+<span class="p">])</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">test_retrieval_methods</span><span class="p">(</span><span class="n">retriever</span><span class="p">,</span> <span class="n">method</span><span class="p">,</span> <span class="n">kwargs</span><span class="p">,</span> <span class="n">expected_len</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Test multiple similar methods with one parametrized test.&quot;&quot;&quot;</span>
+    <span class="n">method</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">retriever</span><span class="p">,</span> <span class="n">method</span><span class="p">)</span>
+    <span class="n">result</span> <span class="o">=</span> <span class="n">method</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+    <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">result</span><span class="p">)</span> <span class="o">==</span> <span class="n">expected_len</span>
+</pre></div>
+</div>
+<p><strong>Property Tests</strong> verify universal invariants:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">hypothesis</span><span class="w"> </span><span class="kn">import</span> <span class="n">given</span><span class="p">,</span> <span class="n">strategies</span> <span class="k">as</span> <span class="n">st</span><span class="p">,</span> <span class="n">example</span>
+
+<span class="nd">@given</span><span class="p">(</span><span class="n">st</span><span class="o">.</span><span class="n">text</span><span class="p">(</span><span class="n">min_size</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">max_size</span><span class="o">=</span><span class="mi">10000</span><span class="p">))</span>
+<span class="nd">@example</span><span class="p">(</span><span class="s2">&quot;🎵&quot;</span> <span class="o">*</span> <span class="mi">100</span><span class="p">)</span>  <span class="c1"># Always test this edge case</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">test_positive_token_count</span><span class="p">(</span><span class="n">text</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Non-empty text ALWAYS produces positive tokens.&quot;&quot;&quot;</span>
+    <span class="n">monitor</span> <span class="o">=</span> <span class="n">TokenBudgetMonitor</span><span class="p">()</span>
+    <span class="n">tokens</span> <span class="o">=</span> <span class="n">monitor</span><span class="o">.</span><span class="n">count_tokens</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
+    <span class="k">assert</span> <span class="n">tokens</span> <span class="o">&gt;</span> <span class="mi">0</span>
+</pre></div>
+</div>
+<p>Hypothesis will generate random inputs to try to falsify your assertions!</p>
+</section>
 </section>
 <section id="adding-new-tests">
 <h3>Adding New Tests<a class="headerlink" href="#adding-new-tests" title="Link to this heading"></a></h3>
-<p>Create a new test file in <code class="docutils literal notranslate"><span class="pre">tests/</span></code>:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># tests/test_my_feature.py</span>
+<p><strong>When to use which pattern:</strong></p>
+<dl class="simple">
+<dt>Traditional Tests (example-based)</dt><dd><ul class="simple">
+<li><p>✅ Specific API behavior</p></li>
+<li><p>✅ Integration tests</p></li>
+<li><p>✅ Regression tests for known bugs</p></li>
+<li><p>✅ Business logic and workflows</p></li>
+</ul>
+</dd>
+<dt>Property Tests (Hypothesis)</dt><dd><ul class="simple">
+<li><p>✅ Mathematical invariants</p></li>
+<li><p>✅ Algorithmic properties</p></li>
+<li><p>✅ Edge case discovery</p></li>
+<li><p>✅ Universal constraints</p></li>
+</ul>
+</dd>
+</dl>
+<p><strong>Example: Traditional Test</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># tests/prompt_builder/test_my_feature.py</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">pytest</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">brain.my_module</span><span class="w"> </span><span class="kn">import</span> <span class="n">my_function</span>
 
@@ -366,14 +424,51 @@ docker<span class="w"> </span>compose<span class="w"> </span>run<span class="w">
     <span class="k">assert</span> <span class="n">result</span> <span class="o">==</span> <span class="n">expected_value</span>
     <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">result</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span>
 
-<span class="nd">@pytest</span><span class="o">.</span><span class="n">mark</span><span class="o">.</span><span class="n">asyncio</span>
-<span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">test_async_feature</span><span class="p">():</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Test async functionality.&quot;&quot;&quot;</span>
-    <span class="n">result</span> <span class="o">=</span> <span class="k">await</span> <span class="n">async_function</span><span class="p">()</span>
-    <span class="k">assert</span> <span class="n">result</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+<span class="nd">@pytest</span><span class="o">.</span><span class="n">mark</span><span class="o">.</span><span class="n">parametrize</span><span class="p">(</span><span class="s2">&quot;input,expected&quot;</span><span class="p">,</span> <span class="p">[</span>
+    <span class="p">(</span><span class="s2">&quot;hello&quot;</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span>
+    <span class="p">(</span><span class="s2">&quot;hello world&quot;</span><span class="p">,</span> <span class="mi">3</span><span class="p">),</span>
+<span class="p">])</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">test_multiple_cases</span><span class="p">(</span><span class="nb">input</span><span class="p">,</span> <span class="n">expected</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Test multiple similar cases with parametrization.&quot;&quot;&quot;</span>
+    <span class="n">result</span> <span class="o">=</span> <span class="n">my_function</span><span class="p">(</span><span class="nb">input</span><span class="p">)</span>
+    <span class="k">assert</span> <span class="n">result</span> <span class="o">==</span> <span class="n">expected</span>
 </pre></div>
 </div>
-<p>No rebuild needed! Tests are volume-mounted, so you can add/edit tests and run immediately.</p>
+<p><strong>Example: Property Test</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># tests/property/test_my_properties.py</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">hypothesis</span><span class="w"> </span><span class="kn">import</span> <span class="n">given</span><span class="p">,</span> <span class="n">strategies</span> <span class="k">as</span> <span class="n">st</span><span class="p">,</span> <span class="n">example</span>
+
+<span class="nd">@given</span><span class="p">(</span><span class="n">st</span><span class="o">.</span><span class="n">text</span><span class="p">(</span><span class="n">min_size</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">max_size</span><span class="o">=</span><span class="mi">1000</span><span class="p">))</span>
+<span class="nd">@example</span><span class="p">(</span><span class="s2">&quot;edge case&quot;</span><span class="p">)</span>  <span class="c1"># Always test specific cases</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">test_universal_property</span><span class="p">(</span><span class="n">text</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;This should ALWAYS be true for ANY input.&quot;&quot;&quot;</span>
+    <span class="n">result</span> <span class="o">=</span> <span class="n">my_function</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
+    <span class="k">assert</span> <span class="n">result</span> <span class="o">&gt;</span> <span class="mi">0</span>  <span class="c1"># Non-empty input always produces positive result</span>
+    <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">result</span><span class="p">,</span> <span class="nb">int</span><span class="p">)</span>  <span class="c1"># Result is always an integer</span>
+</pre></div>
+</div>
+<p>No rebuild needed! Tests are volume-mounted, so you can ad</p>
+<blockquote>
+<div><p># Run only property tests
+docker compose run –rm scripts pytest tests/property/</p>
+<p># Run only traditional tests for a feature
+docker compose run –rm scripts pytest tests/prompt_builder/</p>
+</div></blockquote>
+<section id="hypothesis-configuration">
+<h4>Hypothesis Configuration<a class="headerlink" href="#hypothesis-configuration" title="Link to this heading"></a></h4>
+<p>Property tests use different profiles for different environments:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Local development (100 examples, fast)</span>
+pytest<span class="w"> </span>tests/property/
+
+<span class="c1"># CI/thorough testing (1000 examples)</span>
+<span class="nv">HYPOTHESIS_PROFILE</span><span class="o">=</span>ci<span class="w"> </span>pytest<span class="w"> </span>tests/property/
+
+<span class="c1"># Debugging (10 examples, verbose)</span>
+<span class="nv">HYPOTHESIS_PROFILE</span><span class="o">=</span>debug<span class="w"> </span>pytest<span class="w"> </span>tests/property/<span class="w"> </span>-v
+</pre></div>
+</div>
+<p>Configuration is in <code class="docutils literal notranslate"><span class="pre">tests/property/conftest.py</span></code>.d/edit tests and run immediately.</p>
+</section>
 <section id="test-markers">
 <h4>Test Markers<a class="headerlink" href="#test-markers" title="Link to this heading"></a></h4>
 <p>Use markers to categorize tests:</p>
@@ -668,7 +763,7 @@ pytest<span class="w">  </span><span class="c1"># Don&#39;t run on host</span>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
         <a href="development.html" class="btn btn-neutral float-left" title="Development Tools" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="project_philosophy.html" class="btn btn-neutral float-right" title="Ada Principles" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="versioning.html" class="btn btn-neutral float-right" title="Version Management" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>
