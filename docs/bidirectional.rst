@@ -133,7 +133,9 @@ One-Way (Auto-activated)
 Bidirectional (LLM-requested)
 ------------------------------
 
-- **Vision** (coming soon): Complex visual analysis
+- **Web Search**: Real-time information from the web
+- **Wiki Lookup**: MediaWiki-based encyclopedia queries
+- **Docs Lookup**: Ada's own documentation self-reference
 - **OCR** (can also be requested): Enhanced text extraction
 
 Safety & Limits
