@@ -46,6 +46,27 @@ source .venv/bin/activate
 pip install package_name
 ```
 
+### ❌ DON'T: Edit requirements.txt directly
+**Why it seems right:** Standard way to manage Python dependencies  
+**Why it's wrong:** Dependencies are managed through pyproject.toml + UV/pip-tools workflow  
+**What to do instead:**
+```bash
+# For main project dependencies:
+# 1. Edit pyproject.toml [project.dependencies] or [project.optional-dependencies]
+# 2. Regenerate requirements.txt from pyproject.toml
+
+# For module-specific dependencies (like matrix-bridge):
+# Check if there's a pyproject.toml in that directory
+# Or coordinate with maintainer on dependency management strategy
+```
+
+**Why this matters:**
+- Editing requirements.txt creates drift from source of truth
+- Version conflicts (like aiofiles vs matrix-nio) should be resolved in dependency specification, not requirements.txt
+- Regenerated files get overwritten, losing manual edits
+
+**Note:** If you encounter a dependency conflict, report it rather than patching requirements.txt directly.
+
 ### ❌ DON'T: Run migrations or database setup manually
 **Why it seems right:** Standard practice for database-backed apps  
 **Why it's wrong:** ChromaDB handles schema automatically, no migrations needed  

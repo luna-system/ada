@@ -1,0 +1,19 @@
+# Matrix Bridge for Ada
+# Python 3.13+
+
+# Matrix client with E2EE support
+matrix-nio[e2e]==0.24.0
+
+# HTTP client for Ada's brain API
+httpx==0.27.0
+
+# Configuration management
+pydantic==2.10.3
+pydantic-settings==2.6.1
+python-dotenv==1.0.1
+
+# Logging
+structlog==24.4.0
+
+# Note: aiofiles is brought in by matrix-nio as a transitive dependency
+# (matrix-nio requires aiofiles<24.0.0, >=23.1.0)

@@ -341,6 +341,101 @@
         "tests/*.py"
       ],
       "notes": "Shared test setup, mocked dependencies"
+    },
+    "matrix-bridge/bridge.py": {
+      "type": "entrypoint",
+      "purpose": "Matrix bot main loop, connects Matrix rooms to Ada's brain",
+      "key_functions": [
+        "on_message",
+        "on_invite",
+        "handle_command",
+        "send_intro",
+        "start"
+      ],
+      "imports": [
+        "nio",
+        "matrix-bridge.ada_client",
+        "matrix-bridge.config",
+        "matrix-bridge.identity",
+        "matrix-bridge.message_handler"
+      ],
+      "imported_by": [],
+      "notes": "Main Matrix bridge service, uses matrix-nio AsyncClient. Non-streaming approach with reaction-based status: 🧠 while processing, ✅ on success, ❌ on error. Filters old messages by timestamp."
+    },
+    "matrix-bridge/config.py": {
+      "type": "configuration",
+      "purpose": "Matrix-specific configuration via Pydantic Settings",
+      "key_classes": [
+        "Config"
+      ],
+      "imports": [
+        "pydantic_settings"
+      ],
+      "imported_by": [
+        "matrix-bridge/bridge.py",
+        "matrix-bridge/identity.py",
+        "matrix-bridge/ada_client.py",
+        "matrix-bridge/message_handler.py"
+      ],
+      "notes": "Bot identity, behavior, privacy settings, Matrix connection params"
+    },
+    "matrix-bridge/identity.py": {
+      "type": "utility",
+      "purpose": "Bot transparency and ethical presentation helpers",
+      "key_functions": [
+        "get_intro_message",
+        "format_message_with_signature",
+        "setup_bot_profile"
+      ],
+      "imports": [
+        "matrix-bridge.config"
+      ],
+      "imported_by": [
+        "matrix-bridge/bridge.py"
+      ],
+      "notes": "Ensures Ada is clearly identified as AI bot with opt-out instructions"
+    },
+    "matrix-bridge/ada_client.py": {
+      "type": "client",
+      "purpose": "HTTP client for Ada's brain API with clean non-streaming interface",
+      "key_classes": [
+        "AdaBrainClient"
+      ],
+      "key_functions": [
+        "chat_stream",
+        "chat",
+        "healthcheck"
+      ],
+      "imports": [
+        "httpx",
+        "matrix-bridge.config"
+      ],
+      "imported_by": [
+        "matrix-bridge/bridge.py"
+      ],
+      "notes": "chat() method internally uses streaming but returns complete text - JSON parsing abstracted away from bridge logic"
+    },
+    "matrix-bridge/message_handler.py": {
+      "type": "core-service",
+      "purpose": "Message processing, context management, command parsing",
+      "key_classes": [
+        "RoomContextManager",
+        "MessageHandler"
+      ],
+      "key_functions": [
+        "should_respond",
+        "parse_command",
+        "add_message",
+        "get_context",
+        "set_privacy"
+      ],
+      "imports": [
+        "matrix-bridge.config"
+      ],
+      "imported_by": [
+        "matrix-bridge/bridge.py"
+      ],
+      "notes": "Per-room context storage, privacy opt-out, activation logic"
     }
   },
   "dependency_clusters": {
@@ -369,6 +464,13 @@
       "brain/ocr.py",
       "brain/media.py",
       "brain/notices.py"
+    ],
+    "matrix_bridge": [
+      "matrix-bridge/bridge.py",
+      "matrix-bridge/config.py",
+      "matrix-bridge/identity.py",
+      "matrix-bridge/ada_client.py",
+      "matrix-bridge/message_handler.py"
     ]
   },
   "data_flow": {
@@ -380,6 +482,16 @@
       "brain/specialists/*::process",
       "brain/llm.py::generate_stream",
       "brain/app.py::stream_response"
+    ],
+    "matrix_chat_request": [
+      "matrix-bridge/bridge.py::on_message",
+      "matrix-bridge/message_handler.py::should_respond",
+      "matrix-bridge/message_handler.py::get_context",
+      "matrix-bridge/ada_client.py::chat",
+      "brain/app.py::chat_stream_v1",
+      "brain/prompt_builder.py::build_prompt",
+      "brain/llm.py::generate_stream",
+      "matrix-bridge/bridge.py::send_response"
     ],
     "memory_storage": [
       "brain/app.py::chat_stream_v1",
