@@ -22,7 +22,7 @@
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Getting Started" href="getting_started.html" /> 
+    <link rel="next" title="Zero to Ada" href="zero_to_ada.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -46,8 +46,10 @@
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
 <ul>
+<li class="toctree-l1"><a class="reference internal" href="zero_to_ada.html">Zero to Ada</a></li>
 <li class="toctree-l1"><a class="reference internal" href="getting_started.html">Getting Started</a></li>
 <li class="toctree-l1"><a class="reference internal" href="local_mode.html">Running Ada Locally (No Docker!)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="nix.html">Nix &amp; Flakes Support</a></li>
 <li class="toctree-l1"><a class="reference internal" href="getting_started_scratch.html">Getting Started from Scratch</a></li>
 <li class="toctree-l1"><a class="reference internal" href="configuration.html">Configuration Reference</a></li>
 <li class="toctree-l1"><a class="reference internal" href="examples.html">Examples</a></li>
@@ -63,6 +65,7 @@
 <li class="toctree-l1"><a class="reference internal" href="data_model.html">Data Model Reference</a></li>
 <li class="toctree-l1"><a class="reference internal" href="streaming.html">Streaming</a></li>
 <li class="toctree-l1"><a class="reference internal" href="memory.html">Memory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="token_monitoring.html">Token Budget Monitoring</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Interfaces &amp; Adapters</span></p>
 <ul>
@@ -90,6 +93,7 @@
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="development.html">Development Tools</a></li>
 <li class="toctree-l1"><a class="reference internal" href="testing.html">Testing Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="versioning.html">Version Management</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Philosophy &amp; Design</span></p>
 <ul>
@@ -129,14 +133,24 @@
 <p>Welcome to Ada! Your personal AI assistant that runs entirely on your hardware.</p>
 <p><strong>New to Ada?</strong> Start here:</p>
 <ol class="arabic simple">
-<li><p><strong>Quick Start:</strong> <a class="reference internal" href="getting_started.html"><span class="doc">Getting Started</span></a> - Get Ada running in 5 minutes with the <code class="docutils literal notranslate"><span class="pre">ada</span></code> CLI</p></li>
+<li><p><strong>Zero to Ada:</strong> <a class="reference internal" href="zero_to_ada.html"><span class="doc">Zero to Ada</span></a> - Fastest path from nothing to working Ada (&lt; 10 minutes)</p></li>
 <li><p><strong>Customize:</strong> <a class="reference internal" href="getting_started_scratch.html"><span class="doc">Getting Started from Scratch</span></a> - Make Ada truly yours</p></li>
 <li><p><strong>Explore:</strong> <a class="reference internal" href="specialists.html"><span class="doc">Specialist System</span></a> - Extend Ada’s capabilities</p></li>
 </ol>
-<p><strong>Local Mode (Recommended):</strong> Ada now runs without Docker! Just Python and Ollama. See <a class="reference internal" href="getting_started.html"><span class="doc">Getting Started</span></a> for the fastest setup.</p>
+<p><strong>Multiple setup options:</strong> Use Nix (any Linux/macOS), local Python 3.13, or Docker. Choose what works for you!</p>
 <div class="toctree-wrapper compound">
 <p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
 <ul>
+<li class="toctree-l1"><a class="reference internal" href="zero_to_ada.html">Zero to Ada</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="zero_to_ada.html#step-1-choose-your-path">Step 1: Choose Your Path</a></li>
+<li class="toctree-l2"><a class="reference internal" href="zero_to_ada.html#setup-with-nix-recommended-for-most-users">Setup with Nix (Recommended for Most Users)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="zero_to_ada.html#setup-with-python-3-13-local-mode">Setup with Python 3.13 (Local Mode)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="zero_to_ada.html#setup-with-docker">Setup with Docker</a></li>
+<li class="toctree-l2"><a class="reference internal" href="zero_to_ada.html#next-steps">Next Steps</a></li>
+<li class="toctree-l2"><a class="reference internal" href="zero_to_ada.html#troubleshooting">Troubleshooting</a></li>
+<li class="toctree-l2"><a class="reference internal" href="zero_to_ada.html#still-stuck">Still Stuck?</a></li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="getting_started.html">Getting Started</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="getting_started.html#local-mode-recommended">Local Mode (Recommended)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="getting_started.html#docker-mode-optional">Docker Mode (Optional)</a></li>
@@ -162,6 +176,24 @@
 <li class="toctree-l2"><a class="reference internal" href="local_mode.html#hybrid-setups">Hybrid Setups</a></li>
 <li class="toctree-l2"><a class="reference internal" href="local_mode.html#next-steps">Next Steps</a></li>
 <li class="toctree-l2"><a class="reference internal" href="local_mode.html#why-local-mode">Why Local Mode?</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="nix.html">Nix &amp; Flakes Support</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="nix.html#why-nix">Why Nix?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="nix.html#quick-start">Quick Start</a></li>
+<li class="toctree-l2"><a class="reference internal" href="nix.html#nixos-module">NixOS Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="nix.html#home-manager-integration">Home Manager Integration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="nix.html#customization">Customization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="nix.html#flake-structure">Flake Structure</a></li>
+<li class="toctree-l2"><a class="reference internal" href="nix.html#gpu-support">GPU Support</a></li>
+<li class="toctree-l2"><a class="reference internal" href="nix.html#troubleshooting">Troubleshooting</a></li>
+<li class="toctree-l2"><a class="reference internal" href="nix.html#comparison-with-other-methods">Comparison with Other Methods</a></li>
+<li class="toctree-l2"><a class="reference internal" href="nix.html#best-practices">Best Practices</a></li>
+<li class="toctree-l2"><a class="reference internal" href="nix.html#integration-examples">Integration Examples</a></li>
+<li class="toctree-l2"><a class="reference internal" href="nix.html#philosophy">Philosophy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="nix.html#resources">Resources</a></li>
+<li class="toctree-l2"><a class="reference internal" href="nix.html#community">Community</a></li>
+<li class="toctree-l2"><a class="reference internal" href="nix.html#contributing">Contributing</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="getting_started_scratch.html">Getting Started from Scratch</a><ul>
@@ -283,6 +315,19 @@
 <li class="toctree-l2"><a class="reference internal" href="memory.html#delete-memory">Delete Memory</a></li>
 <li class="toctree-l2"><a class="reference internal" href="memory.html#notes">Notes</a></li>
 <li class="toctree-l2"><a class="reference internal" href="memory.html#related-documentation">Related Documentation</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="token_monitoring.html">Token Budget Monitoring</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="token_monitoring.html#overview">Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="token_monitoring.html#architecture">Architecture</a></li>
+<li class="toctree-l2"><a class="reference internal" href="token_monitoring.html#data-structures">Data Structures</a></li>
+<li class="toctree-l2"><a class="reference internal" href="token_monitoring.html#api-reference">API Reference</a></li>
+<li class="toctree-l2"><a class="reference internal" href="token_monitoring.html#usage-examples">Usage Examples</a></li>
+<li class="toctree-l2"><a class="reference internal" href="token_monitoring.html#token-counting-details">Token Counting Details</a></li>
+<li class="toctree-l2"><a class="reference internal" href="token_monitoring.html#performance-considerations">Performance Considerations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="token_monitoring.html#future-enhancements">Future Enhancements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="token_monitoring.html#integration-status">Integration Status</a></li>
+<li class="toctree-l2"><a class="reference internal" href="token_monitoring.html#see-also">See Also</a></li>
 </ul>
 </li>
 </ul>
@@ -478,6 +523,7 @@
 <p class="caption" role="heading"><span class="caption-text">Development</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="development.html">Development Tools</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="development.html#version-management">Version Management</a></li>
 <li class="toctree-l2"><a class="reference internal" href="development.html#scripts-tooling-container">Scripts Tooling Container</a></li>
 <li class="toctree-l2"><a class="reference internal" href="development.html#available-scripts">Available Scripts</a></li>
 <li class="toctree-l2"><a class="reference internal" href="development.html#development-patterns">Development Patterns</a></li>
@@ -500,6 +546,16 @@
 <li class="toctree-l2"><a class="reference internal" href="testing.html#troubleshooting-tests">Troubleshooting Tests</a></li>
 <li class="toctree-l2"><a class="reference internal" href="testing.html#best-practices">Best Practices</a></li>
 <li class="toctree-l2"><a class="reference internal" href="testing.html#resources">Resources</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="versioning.html">Version Management</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="versioning.html#overview">Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="versioning.html#version-management-tools">Version Management Tools</a></li>
+<li class="toctree-l2"><a class="reference internal" href="versioning.html#workflow">Workflow</a></li>
+<li class="toctree-l2"><a class="reference internal" href="versioning.html#best-practices">Best Practices</a></li>
+<li class="toctree-l2"><a class="reference internal" href="versioning.html#automation">Automation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="versioning.html#troubleshooting">Troubleshooting</a></li>
+<li class="toctree-l2"><a class="reference internal" href="versioning.html#reference">Reference</a></li>
 </ul>
 </li>
 </ul>
@@ -570,7 +626,7 @@
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="getting_started.html" class="btn btn-neutral float-right" title="Getting Started" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="zero_to_ada.html" class="btn btn-neutral float-right" title="Zero to Ada" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>

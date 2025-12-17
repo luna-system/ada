@@ -30,7 +30,7 @@ The system:
 2. Context-Aware Retrieval
 ---------------------------
 
-During prompt building (``build_prompt()`` in ``prompt_builder.py``):
+During prompt building (``build_prompt()`` function, now using modular ``brain/prompt_builder/`` package):
 
 - User's query is embedded
 - RAG retrieves the top K most relevant specialist FAQs
@@ -91,7 +91,7 @@ Set in ``brain/config.py``:
 Retrieval Count
 ---------------
 
-In ``prompt_builder.py``, specialist docs retrieve 2 FAQs by default:
+In the prompt building system, specialist docs retrieve 2 FAQs by default:
 
 .. code-block:: python
 
@@ -147,7 +147,8 @@ brain/app.py (lifespan)
        doc_count = sync_specialist_docs_to_faq(rag_store)
        print(f"[BRAIN] Synced {doc_count} specialist FAQ entries to RAG")
 
-brain/prompt_builder.py
+brain/prompt_builder/ (modular package)
+brain/_legacy_prompt_builder.py (legacy compatibility)
 -----------------------
 
 .. code-block:: python
