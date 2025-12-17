@@ -2,19 +2,8 @@
 FROM node:20-slim AS build
 WORKDIR /app
 
-# Install Python and Sphinx dependencies
-RUN apt-get update && apt-get install -y --no-install-recommends \
-    python3 \
-    python3-pip \
-    python3-venv \
-    make \
-    graphviz \
-    && rm -rf /var/lib/apt/lists/* \
-    && pip3 install --no-cache-dir --break-system-packages sphinx sphinx-rtd-theme
-
-# Copy docs and build Sphinx documentation
-COPY docs/ /app/docs/
-RUN cd /app/docs && make html
+# Note: Sphinx docs are built separately and served via GitHub Pages
+# Frontend only serves the Astro UI
 
 # Build Astro frontend
 COPY frontend/package*.json /app/frontend/
@@ -29,7 +18,6 @@ ENV BRAIN_URL=http://brain:7000
 # Let the nginx entrypoint envsubst templates from /etc/nginx/templates
 COPY frontend/nginx.conf.template /etc/nginx/templates/default.conf.template
 COPY --from=build /app/frontend/dist /usr/share/nginx/html
-# Copy Sphinx documentation
-COPY --from=build /app/docs/_build/html /usr/share/nginx/html/docs
+# Note: Docs served separately via GitHub Pages at https://luna-system.github.io/ada/
 EXPOSE 80
 HEALTHCHECK --interval=10s --timeout=3s --retries=5 CMD wget -qO- http://localhost/api/health || exit 1
