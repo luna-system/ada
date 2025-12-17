@@ -5,8 +5,19 @@ This package provides modular components for building prompts:
 - SectionBuilder: Formats context into prompt sections
 - PromptAssembler: Assembles sections into final prompt
 
-The main build_prompt() function orchestrates these components.
+The legacy build_prompt() function is re-exported for backward compatibility.
 """
-# Will import build_prompt after refactoring old prompt_builder.py
 
-__all__ = []
+from brain.prompt_builder.context_retriever import ContextRetriever
+from brain.prompt_builder.section_builder import SectionBuilder
+from brain.prompt_builder.prompt_assembler import PromptAssembler
+
+# Import legacy build_prompt for backward compatibility
+from brain._legacy_prompt_builder import build_prompt
+
+__all__ = [
+    "ContextRetriever",
+    "SectionBuilder",
+    "PromptAssembler",
+    "build_prompt",  # Legacy API
+]
