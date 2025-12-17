@@ -21,6 +21,9 @@ RUN pip install --no-cache-dir uv && \
 # Copy brain module (for imports - includes RAG functionality)
 COPY brain/ /app/brain/
 
+# Copy matrix-bridge (for documentation validation tests)
+COPY matrix-bridge/ /app/matrix-bridge/
+
 # Copy scripts directory
 COPY scripts/ /app/scripts/
 
