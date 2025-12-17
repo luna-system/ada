@@ -1,0 +1,359 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Using External Ollama &mdash; Ada Brain API 0.1.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="_static/graphviz.css?v=4ae1632d" />
+      <link rel="stylesheet" type="text/css" href="_static/custom.css?v=df0a1c42" />
+
+  
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=01f34227"></script>
+      <script src="_static/doctools.js?v=9bcbadda"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            Ada Brain API
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="zero_to_ada.html">Zero to Ada</a></li>
+<li class="toctree-l1"><a class="reference internal" href="getting_started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="local_mode.html">Running Ada Locally (No Docker Required!)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="nix.html">Nix &amp; Flakes Support</a></li>
+<li class="toctree-l1"><a class="reference internal" href="getting_started_scratch.html">Getting Started from Scratch</a></li>
+<li class="toctree-l1"><a class="reference internal" href="configuration.html">Configuration Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="examples.html">Examples</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Hardware Setup</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="hardware.html">Hardware &amp; GPU Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="sbc.html">Ada on Single-Board Computers (SBCs)</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Core Architecture</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="architecture.html">Architecture</a></li>
+<li class="toctree-l1"><a class="reference internal" href="data_model.html">Data Model Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="streaming.html">Streaming</a></li>
+<li class="toctree-l1"><a class="reference internal" href="memory.html">Memory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="token_monitoring.html">Token Budget Monitoring</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Interfaces &amp; Adapters</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="adapters.html">Ada Adapters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="adapter_development.html">Adapter Development Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="matrix_integration.html">Matrix Integration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api_usage.html">API Usage Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api_reference.html">API Reference</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Specialist System</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="specialists.html">Specialist System</a></li>
+<li class="toctree-l1"><a class="reference internal" href="build_specialist.html">Build Your First Specialist</a></li>
+<li class="toctree-l1"><a class="reference internal" href="bidirectional.html">Bidirectional Specialist System</a></li>
+<li class="toctree-l1"><a class="reference internal" href="specialist_rag.html">Specialist RAG Documentation System</a></li>
+<li class="toctree-l1"><a class="reference internal" href="web_search.html">Web Search Specialist</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Operations</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="build_system.html">Build System</a></li>
+<li class="toctree-l1"><a class="reference internal" href="buildx_adoption_notes.html">BuildX Adoption Data &amp; Notes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="disk_management.html">Disk Management</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Development</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="development.html">Development Tools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="testing.html">Testing Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="versioning.html">Version Management</a></li>
+<li class="toctree-l1"><a class="reference internal" href="changelog.html">Changelog</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Philosophy &amp; Design</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="project_philosophy.html">Ada Principles</a></li>
+<li class="toctree-l1"><a class="reference internal" href="documentation_philosophy.html">Documentation Philosophy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ai_documentation.html">AI-Readable Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="empathetic_documentation.html">Empathetic Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="xenofeminism.html">Xenofeminism and Ada</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Ada Brain API</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Using External Ollama</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/external_ollama.md.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="using-external-ollama">
+<h1>Using External Ollama<a class="headerlink" href="#using-external-ollama" title="Link to this heading"></a></h1>
+<p>Ada’s dockerized Ollama service is now <strong>optional</strong>! You can use an existing Ollama installation to avoid duplicating large models.</p>
+<section id="quick-start">
+<h2>Quick Start<a class="headerlink" href="#quick-start" title="Link to this heading"></a></h2>
+<section id="option-1-use-dockerized-ollama-default">
+<h3>Option 1: Use Dockerized Ollama (Default)<a class="headerlink" href="#option-1-use-dockerized-ollama-default" title="Link to this heading"></a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Just start normally - ollama service included by default</span>
+docker<span class="w"> </span>compose<span class="w"> </span>up
+</pre></div>
+</div>
+<p>Models stored in: <code class="docutils literal notranslate"><span class="pre">./data/ollama/</span></code></p>
+</section>
+<section id="option-2-use-existing-ollama-installation">
+<h3>Option 2: Use Existing Ollama Installation<a class="headerlink" href="#option-2-use-existing-ollama-installation" title="Link to this heading"></a></h3>
+<p><strong>Step 1:</strong> Edit <code class="docutils literal notranslate"><span class="pre">.env</span></code> file:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Change this line:</span>
+<span class="nv">OLLAMA_BASE_URL</span><span class="o">=</span>http://ollama:11434
+
+<span class="c1"># To point to your existing Ollama:</span>
+<span class="nv">OLLAMA_BASE_URL</span><span class="o">=</span>http://host.docker.internal:11434
+</pre></div>
+</div>
+<p><strong>Step 2:</strong> Start Ada WITHOUT the ollama service:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Method A: Explicitly exclude ollama profile</span>
+docker<span class="w"> </span>compose<span class="w"> </span>--profile<span class="w"> </span>web<span class="w"> </span>up
+
+<span class="c1"># Method B: Set empty profiles (cleaner)</span>
+<span class="nv">COMPOSE_PROFILES</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="w"> </span>docker<span class="w"> </span>compose<span class="w"> </span>up
+
+<span class="c1"># Method C: Override in .env</span>
+<span class="nb">echo</span><span class="w"> </span><span class="s1">&#39;COMPOSE_PROFILES=&quot;&quot;&#39;</span><span class="w"> </span>&gt;&gt;<span class="w"> </span>.env
+docker<span class="w"> </span>compose<span class="w"> </span>up
+</pre></div>
+</div>
+<p><strong>Step 3:</strong> Make sure your Ollama has the required models:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Check existing models</span>
+ollama<span class="w"> </span>list
+
+<span class="c1"># Pull required models if needed</span>
+ollama<span class="w"> </span>pull<span class="w"> </span>deepseek-r1:14b
+ollama<span class="w"> </span>pull<span class="w"> </span>nomic-embed-text
+</pre></div>
+</div>
+</section>
+</section>
+<section id="benefits-of-external-ollama">
+<h2>Benefits of External Ollama<a class="headerlink" href="#benefits-of-external-ollama" title="Link to this heading"></a></h2>
+<p>✅ <strong>No Model Duplication</strong> - Use models already pulled<br />
+✅ <strong>Shared Models</strong> - Multiple projects can use same Ollama<br />
+✅ <strong>Faster Startup</strong> - No need to pull models in Docker<br />
+✅ <strong>Easier Updates</strong> - Update Ollama independently</p>
+</section>
+<section id="important-shell-environment-variables">
+<h2>Important: Shell Environment Variables<a class="headerlink" href="#important-shell-environment-variables" title="Link to this heading"></a></h2>
+<p><strong>Docker Compose priority:</strong> Shell environment &gt; .env file &gt; compose.yaml defaults</p>
+<p>If you have <code class="docutils literal notranslate"><span class="pre">OLLAMA_BASE_URL</span></code> set in your shell environment (e.g., in <code class="docutils literal notranslate"><span class="pre">~/.bashrc</span></code> or <code class="docutils literal notranslate"><span class="pre">~/.zshrc</span></code>), it will OVERRIDE the <code class="docutils literal notranslate"><span class="pre">.env</span></code> file!</p>
+<p><strong>Check your shell environment:</strong></p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">echo</span><span class="w"> </span><span class="nv">$OLLAMA_BASE_URL</span>
+<span class="c1"># If this shows a value, it&#39;s overriding your .env</span>
+</pre></div>
+</div>
+<p><strong>Solution:</strong> Unset the variable or export the new value:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Option A: Unset it (use .env value)</span>
+<span class="nb">unset</span><span class="w"> </span>OLLAMA_BASE_URL
+
+<span class="c1"># Option B: Export new value</span>
+<span class="nb">export</span><span class="w"> </span><span class="nv">OLLAMA_BASE_URL</span><span class="o">=</span>http://host.docker.internal:11434
+
+<span class="c1"># Then start</span>
+docker<span class="w"> </span>compose<span class="w"> </span>up
+</pre></div>
+</div>
+</section>
+<section id="troubleshooting">
+<h2>Troubleshooting<a class="headerlink" href="#troubleshooting" title="Link to this heading"></a></h2>
+<section id="connection-refused-errors">
+<h3>“Connection refused” errors<a class="headerlink" href="#connection-refused-errors" title="Link to this heading"></a></h3>
+<p><strong>Most common cause:</strong> Ollama is only listening on <code class="docutils literal notranslate"><span class="pre">127.0.0.1</span></code> (localhost), not accessible from Docker containers.</p>
+<p><strong>Check Ollama’s listen address:</strong></p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>ss<span class="w"> </span>-tlnp<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span><span class="m">11434</span>
+<span class="c1"># If you see:  127.0.0.1:11434  ← Only localhost (won&#39;t work from Docker)</span>
+<span class="c1"># Need:        0.0.0.0:11434    ← All interfaces (will work from Docker)</span>
+</pre></div>
+</div>
+<p><strong>Solution:</strong> Configure Ollama to listen on all interfaces:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Set environment variable for Ollama</span>
+<span class="nb">export</span><span class="w"> </span><span class="nv">OLLAMA_HOST</span><span class="o">=</span><span class="m">0</span>.0.0.0:11434
+
+<span class="c1"># Restart Ollama service</span>
+systemctl<span class="w"> </span>--user<span class="w"> </span>restart<span class="w"> </span>ollama
+<span class="c1"># OR if running manually:</span>
+ollama<span class="w"> </span>serve
+</pre></div>
+</div>
+<p><strong>Alternative:</strong> Use host network mode OR bridge IP:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Option A: Use host&#39;s actual IP address</span>
+<span class="nv">OLLAMA_BASE_URL</span><span class="o">=</span>http://192.168.1.100:11434<span class="w">  </span><span class="c1"># Your machine&#39;s IP</span>
+
+<span class="c1"># Option B: Use Docker bridge gateway (Linux)</span>
+<span class="nv">OLLAMA_BASE_URL</span><span class="o">=</span>http://172.17.0.1:11434
+</pre></div>
+</div>
+<p>Make sure <code class="docutils literal notranslate"><span class="pre">host.docker.internal</span></code> resolves (it should on Docker Desktop automatically).</p>
+<p>If using Linux without Docker Desktop, the compose.yaml already includes:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">extra_hosts</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&quot;host.docker.internal:host-gateway&quot;</span><span class="w">  </span><span class="c1"># Already configured!</span>
+</pre></div>
+</div>
+</section>
+<section id="check-ollama-is-accessible">
+<h3>Check Ollama is accessible<a class="headerlink" href="#check-ollama-is-accessible" title="Link to this heading"></a></h3>
+<p>From inside the brain container:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>docker<span class="w"> </span>compose<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>brain<span class="w"> </span>curl<span class="w"> </span>http://host.docker.internal:11434/api/tags
+</pre></div>
+</div>
+<p>Should return JSON with your models.</p>
+</section>
+</section>
+<section id="configuration-reference">
+<h2>Configuration Reference<a class="headerlink" href="#configuration-reference" title="Link to this heading"></a></h2>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Environment Variable</p></th>
+<th class="head"><p>Default</p></th>
+<th class="head"><p>Purpose</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">OLLAMA_BASE_URL</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">http://ollama:11434</span></code></p></td>
+<td><p>Ollama API endpoint</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">OLLAMA_MODEL</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">deepseek-r1:14b</span></code></p></td>
+<td><p>Main LLM model</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">OLLAMA_EMBED_MODEL</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">nomic-embed-text</span></code></p></td>
+<td><p>Embedding model for RAG</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">COMPOSE_PROFILES</span></code></p></td>
+<td><p>(unset)</p></td>
+<td><p>Set to <code class="docutils literal notranslate"><span class="pre">&quot;&quot;</span></code> to disable ollama service</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="example-setups">
+<h2>Example Setups<a class="headerlink" href="#example-setups" title="Link to this heading"></a></h2>
+<section id="local-development-shared-ollama">
+<h3>Local Development (Shared Ollama)<a class="headerlink" href="#local-development-shared-ollama" title="Link to this heading"></a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># .env</span>
+<span class="nv">OLLAMA_BASE_URL</span><span class="o">=</span>http://host.docker.internal:11434
+<span class="nv">COMPOSE_PROFILES</span><span class="o">=</span><span class="s2">&quot;&quot;</span>
+</pre></div>
+</div>
+</section>
+<section id="production-dockerized-ollama">
+<h3>Production (Dockerized Ollama)<a class="headerlink" href="#production-dockerized-ollama" title="Link to this heading"></a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># .env</span>
+<span class="nv">OLLAMA_BASE_URL</span><span class="o">=</span>http://ollama:11434
+<span class="c1"># COMPOSE_PROFILES not set (default includes ollama)</span>
+</pre></div>
+</div>
+</section>
+<section id="gpu-server-external-ollama">
+<h3>GPU Server (External Ollama)<a class="headerlink" href="#gpu-server-external-ollama" title="Link to this heading"></a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># .env</span>
+<span class="nv">OLLAMA_BASE_URL</span><span class="o">=</span>http://gpu-server.local:11434
+<span class="nv">COMPOSE_PROFILES</span><span class="o">=</span><span class="s2">&quot;&quot;</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="migration">
+<h2>Migration<a class="headerlink" href="#migration" title="Link to this heading"></a></h2>
+<section id="from-dockerized-to-external">
+<h3>From Dockerized to External<a class="headerlink" href="#from-dockerized-to-external" title="Link to this heading"></a></h3>
+<ol class="arabic simple">
+<li><p>Note your current model in <code class="docutils literal notranslate"><span class="pre">.env</span></code> (e.g., <code class="docutils literal notranslate"><span class="pre">deepseek-r1:14b</span></code>)</p></li>
+<li><p>Pull that model in your external Ollama: <code class="docutils literal notranslate"><span class="pre">ollama</span> <span class="pre">pull</span> <span class="pre">deepseek-r1:14b</span></code></p></li>
+<li><p>Update <code class="docutils literal notranslate"><span class="pre">OLLAMA_BASE_URL</span></code> in <code class="docutils literal notranslate"><span class="pre">.env</span></code></p></li>
+<li><p>Set <code class="docutils literal notranslate"><span class="pre">COMPOSE_PROFILES=&quot;&quot;</span></code> in <code class="docutils literal notranslate"><span class="pre">.env</span></code></p></li>
+<li><p>Restart: <code class="docutils literal notranslate"><span class="pre">docker</span> <span class="pre">compose</span> <span class="pre">down</span> <span class="pre">&amp;&amp;</span> <span class="pre">docker</span> <span class="pre">compose</span> <span class="pre">up</span></code></p></li>
+</ol>
+</section>
+<section id="from-external-to-dockerized">
+<h3>From External to Dockerized<a class="headerlink" href="#from-external-to-dockerized" title="Link to this heading"></a></h3>
+<ol class="arabic simple">
+<li><p>Remove <code class="docutils literal notranslate"><span class="pre">COMPOSE_PROFILES=&quot;&quot;</span></code> from <code class="docutils literal notranslate"><span class="pre">.env</span></code></p></li>
+<li><p>Set <code class="docutils literal notranslate"><span class="pre">OLLAMA_BASE_URL=http://ollama:11434</span></code> in <code class="docutils literal notranslate"><span class="pre">.env</span></code></p></li>
+<li><p>Restart: <code class="docutils literal notranslate"><span class="pre">docker</span> <span class="pre">compose</span> <span class="pre">down</span> <span class="pre">&amp;&amp;</span> <span class="pre">docker</span> <span class="pre">compose</span> <span class="pre">up</span></code></p></li>
+<li><p>Wait for <code class="docutils literal notranslate"><span class="pre">ollama-init</span></code> to pull models (shown in logs)</p></li>
+</ol>
+<hr class="docutils" />
+<p><strong>Note:</strong> The <code class="docutils literal notranslate"><span class="pre">extra_hosts</span></code> configuration in <code class="docutils literal notranslate"><span class="pre">compose.yaml</span></code> already includes <code class="docutils literal notranslate"><span class="pre">host.docker.internal</span></code> mapping, so it should “just work” on most systems!</p>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p></p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

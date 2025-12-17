@@ -1,0 +1,669 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ada Brain API Docs &mdash; Ada Brain API 0.1.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="_static/graphviz.css?v=4ae1632d" />
+      <link rel="stylesheet" type="text/css" href="_static/custom.css?v=df0a1c42" />
+
+  
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=01f34227"></script>
+      <script src="_static/doctools.js?v=9bcbadda"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Zero to Ada" href="zero_to_ada.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="#" class="icon icon-home">
+            Ada Brain API
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="zero_to_ada.html">Zero to Ada</a></li>
+<li class="toctree-l1"><a class="reference internal" href="getting_started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="local_mode.html">Running Ada Locally (No Docker Required!)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="nix.html">Nix &amp; Flakes Support</a></li>
+<li class="toctree-l1"><a class="reference internal" href="getting_started_scratch.html">Getting Started from Scratch</a></li>
+<li class="toctree-l1"><a class="reference internal" href="configuration.html">Configuration Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="examples.html">Examples</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Hardware Setup</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="hardware.html">Hardware &amp; GPU Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="sbc.html">Ada on Single-Board Computers (SBCs)</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Core Architecture</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="architecture.html">Architecture</a></li>
+<li class="toctree-l1"><a class="reference internal" href="data_model.html">Data Model Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="streaming.html">Streaming</a></li>
+<li class="toctree-l1"><a class="reference internal" href="memory.html">Memory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="token_monitoring.html">Token Budget Monitoring</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Interfaces &amp; Adapters</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="adapters.html">Ada Adapters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="adapter_development.html">Adapter Development Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="matrix_integration.html">Matrix Integration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api_usage.html">API Usage Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api_reference.html">API Reference</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Specialist System</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="specialists.html">Specialist System</a></li>
+<li class="toctree-l1"><a class="reference internal" href="build_specialist.html">Build Your First Specialist</a></li>
+<li class="toctree-l1"><a class="reference internal" href="bidirectional.html">Bidirectional Specialist System</a></li>
+<li class="toctree-l1"><a class="reference internal" href="specialist_rag.html">Specialist RAG Documentation System</a></li>
+<li class="toctree-l1"><a class="reference internal" href="web_search.html">Web Search Specialist</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Operations</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="build_system.html">Build System</a></li>
+<li class="toctree-l1"><a class="reference internal" href="buildx_adoption_notes.html">BuildX Adoption Data &amp; Notes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="disk_management.html">Disk Management</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Development</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="development.html">Development Tools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="testing.html">Testing Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="versioning.html">Version Management</a></li>
+<li class="toctree-l1"><a class="reference internal" href="changelog.html">Changelog</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Philosophy &amp; Design</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="project_philosophy.html">Ada Principles</a></li>
+<li class="toctree-l1"><a class="reference internal" href="documentation_philosophy.html">Documentation Philosophy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ai_documentation.html">AI-Readable Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="empathetic_documentation.html">Empathetic Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="xenofeminism.html">Xenofeminism and Ada</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="#">Ada Brain API</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="#" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Ada Brain API Docs</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/index.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="ada-brain-api-docs">
+<h1>Ada Brain API Docs<a class="headerlink" href="#ada-brain-api-docs" title="Link to this heading"></a></h1>
+<p>Welcome to Ada! Your personal AI assistant that runs entirely on your hardware.</p>
+<p><strong>First time here?</strong> Check out the <a class="reference external" href="_static/garden.html">visual introduction</a> 🌱 for a gentle tour!</p>
+<p><strong>Ready to dive in?</strong> Start here:</p>
+<ol class="arabic simple">
+<li><p><strong>Zero to Ada:</strong> <a class="reference internal" href="zero_to_ada.html"><span class="doc">Zero to Ada</span></a> - Fastest path from nothing to working Ada (&lt; 10 minutes)</p></li>
+<li><p><strong>Customize:</strong> <a class="reference internal" href="getting_started_scratch.html"><span class="doc">Getting Started from Scratch</span></a> - Make Ada truly yours</p></li>
+<li><p><strong>Explore:</strong> <a class="reference internal" href="specialists.html"><span class="doc">Specialist System</span></a> - Extend Ada’s capabilities</p></li>
+</ol>
+<p><strong>Multiple setup options:</strong> Use Nix (any Linux/macOS), local Python 3.13, or Docker. Choose what works for you!</p>
+<div class="toctree-wrapper compound">
+<p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="zero_to_ada.html">Zero to Ada</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="zero_to_ada.html#step-1-choose-your-path">Step 1: Choose Your Path</a></li>
+<li class="toctree-l2"><a class="reference internal" href="zero_to_ada.html#setup-with-nix-recommended-for-most-users">Setup with Nix (Recommended for Most Users)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="zero_to_ada.html#setup-with-python-3-13-local-mode">Setup with Python 3.13 (Local Mode)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="zero_to_ada.html#setup-with-docker">Setup with Docker</a></li>
+<li class="toctree-l2"><a class="reference internal" href="zero_to_ada.html#next-steps">Next Steps</a></li>
+<li class="toctree-l2"><a class="reference internal" href="zero_to_ada.html#troubleshooting">Troubleshooting</a></li>
+<li class="toctree-l2"><a class="reference internal" href="zero_to_ada.html#still-stuck">Still Stuck?</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="getting_started.html">Getting Started</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="getting_started.html#local-mode-recommended">Local Mode (Recommended)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="getting_started.html#docker-mode-optional">Docker Mode (Optional)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="getting_started.html#configuration">Configuration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="getting_started.html#running-the-service">Running the Service</a></li>
+<li class="toctree-l2"><a class="reference internal" href="getting_started.html#your-first-request">Your First Request</a></li>
+<li class="toctree-l2"><a class="reference internal" href="getting_started.html#troubleshooting">Troubleshooting</a></li>
+<li class="toctree-l2"><a class="reference internal" href="getting_started.html#debugging">Debugging</a></li>
+<li class="toctree-l2"><a class="reference internal" href="getting_started.html#next-steps">Next Steps</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="local_mode.html">Running Ada Locally (No Docker Required!)</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="local_mode.html#quick-start">Quick Start</a></li>
+<li class="toctree-l2"><a class="reference internal" href="local_mode.html#architecture-local-mode">Architecture: Local Mode</a></li>
+<li class="toctree-l2"><a class="reference internal" href="local_mode.html#comparison-local-vs-docker">Comparison: Local vs Docker</a></li>
+<li class="toctree-l2"><a class="reference internal" href="local_mode.html#configuration">Configuration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="local_mode.html#features">Features</a></li>
+<li class="toctree-l2"><a class="reference internal" href="local_mode.html#accessing-the-api">Accessing the API</a></li>
+<li class="toctree-l2"><a class="reference internal" href="local_mode.html#data-management">Data Management</a></li>
+<li class="toctree-l2"><a class="reference internal" href="local_mode.html#troubleshooting">Troubleshooting</a></li>
+<li class="toctree-l2"><a class="reference internal" href="local_mode.html#performance-tips">Performance Tips</a></li>
+<li class="toctree-l2"><a class="reference internal" href="local_mode.html#development-workflow">Development Workflow</a></li>
+<li class="toctree-l2"><a class="reference internal" href="local_mode.html#hybrid-setups">Hybrid Setups</a></li>
+<li class="toctree-l2"><a class="reference internal" href="local_mode.html#next-steps">Next Steps</a></li>
+<li class="toctree-l2"><a class="reference internal" href="local_mode.html#why-local-mode">Why Local Mode?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="local_mode.html#community-support">Community &amp; Support</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="nix.html">Nix &amp; Flakes Support</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="nix.html#why-nix">Why Nix?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="nix.html#quick-start">Quick Start</a></li>
+<li class="toctree-l2"><a class="reference internal" href="nix.html#nixos-module">NixOS Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="nix.html#home-manager-integration">Home Manager Integration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="nix.html#customization">Customization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="nix.html#flake-structure">Flake Structure</a></li>
+<li class="toctree-l2"><a class="reference internal" href="nix.html#gpu-support">GPU Support</a></li>
+<li class="toctree-l2"><a class="reference internal" href="nix.html#troubleshooting">Troubleshooting</a></li>
+<li class="toctree-l2"><a class="reference internal" href="nix.html#comparison-with-other-methods">Comparison with Other Methods</a></li>
+<li class="toctree-l2"><a class="reference internal" href="nix.html#best-practices">Best Practices</a></li>
+<li class="toctree-l2"><a class="reference internal" href="nix.html#integration-examples">Integration Examples</a></li>
+<li class="toctree-l2"><a class="reference internal" href="nix.html#philosophy">Philosophy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="nix.html#resources">Resources</a></li>
+<li class="toctree-l2"><a class="reference internal" href="nix.html#community">Community</a></li>
+<li class="toctree-l2"><a class="reference internal" href="nix.html#contributing">Contributing</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="getting_started_scratch.html">Getting Started from Scratch</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="getting_started_scratch.html#overview">Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="getting_started_scratch.html#step-1-get-ada-running">Step 1: Get Ada Running</a></li>
+<li class="toctree-l2"><a class="reference internal" href="getting_started_scratch.html#step-2-choose-your-ai-model">Step 2: Choose Your AI Model</a></li>
+<li class="toctree-l2"><a class="reference internal" href="getting_started_scratch.html#step-3-give-your-ai-a-personality">Step 3: Give Your AI a Personality</a></li>
+<li class="toctree-l2"><a class="reference internal" href="getting_started_scratch.html#step-4-name-your-ai">Step 4: Name Your AI</a></li>
+<li class="toctree-l2"><a class="reference internal" href="getting_started_scratch.html#step-5-tweak-rag-settings-optional">Step 5: Tweak RAG Settings (Optional)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="getting_started_scratch.html#step-6-test-core-features">Step 6: Test Core Features</a></li>
+<li class="toctree-l2"><a class="reference internal" href="getting_started_scratch.html#common-issues">Common Issues</a></li>
+<li class="toctree-l2"><a class="reference internal" href="getting_started_scratch.html#next-steps">Next Steps</a></li>
+<li class="toctree-l2"><a class="reference internal" href="getting_started_scratch.html#need-help">Need Help?</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="configuration.html">Configuration Reference</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="configuration.html#quick-start">Quick Start</a></li>
+<li class="toctree-l2"><a class="reference internal" href="configuration.html#configuration-file">Configuration File</a></li>
+<li class="toctree-l2"><a class="reference internal" href="configuration.html#core-services">Core Services</a></li>
+<li class="toctree-l2"><a class="reference internal" href="configuration.html#rag-configuration">RAG Configuration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="configuration.html#specialist-system">Specialist System</a></li>
+<li class="toctree-l2"><a class="reference internal" href="configuration.html#integrations">Integrations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="configuration.html#backup-configuration">Backup Configuration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="configuration.html#configuration-validation">Configuration Validation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="configuration.html#best-practices">Best Practices</a></li>
+<li class="toctree-l2"><a class="reference internal" href="configuration.html#environment-specific-configuration">Environment-Specific Configuration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="configuration.html#troubleshooting">Troubleshooting</a></li>
+<li class="toctree-l2"><a class="reference internal" href="configuration.html#see-also">See Also</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="examples.html">Examples</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="examples.html#curl">curl</a></li>
+<li class="toctree-l2"><a class="reference internal" href="examples.html#python">Python</a></li>
+<li class="toctree-l2"><a class="reference internal" href="examples.html#javascript-fetch">JavaScript (fetch)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="examples.html#javascript-stream">JavaScript (stream)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="examples.html#related-documentation">Related Documentation</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<p class="caption" role="heading"><span class="caption-text">Hardware Setup</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="hardware.html">Hardware &amp; GPU Guide</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="hardware.html#supported-hardware-acceleration">Supported Hardware Acceleration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="hardware.html#quick-start-by-hardware">Quick Start by Hardware</a></li>
+<li class="toctree-l2"><a class="reference internal" href="hardware.html#hardware-recommendations">Hardware Recommendations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="hardware.html#model-size-vs-vram-requirements">Model Size vs VRAM Requirements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="hardware.html#performance-tuning">Performance Tuning</a></li>
+<li class="toctree-l2"><a class="reference internal" href="hardware.html#power-consumption-benchmarks">Power Consumption Benchmarks</a></li>
+<li class="toctree-l2"><a class="reference internal" href="hardware.html#hackable-hardware-projects">Hackable Hardware Projects</a></li>
+<li class="toctree-l2"><a class="reference internal" href="hardware.html#cloud-alternatives">Cloud Alternatives</a></li>
+<li class="toctree-l2"><a class="reference internal" href="hardware.html#troubleshooting">Troubleshooting</a></li>
+<li class="toctree-l2"><a class="reference internal" href="hardware.html#faq">FAQ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="hardware.html#getting-help">Getting Help</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="sbc.html">Ada on Single-Board Computers (SBCs)</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="sbc.html#why-sbcs-for-ada">Why SBCs for Ada?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sbc.html#best-sbcs-for-ada-2025">Best SBCs for Ada (2025)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sbc.html#other-notable-options">Other Notable Options</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sbc.html#recommended-configurations">Recommended Configurations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sbc.html#performance-comparison">Performance Comparison</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sbc.html#setup-tips">Setup Tips</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sbc.html#model-recommendations-for-sbcs">Model Recommendations for SBCs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sbc.html#power-consumption-cost">Power Consumption &amp; Cost</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sbc.html#npu-acceleration-status">NPU Acceleration Status</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sbc.html#real-world-use-cases">Real-World Use Cases</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sbc.html#troubleshooting">Troubleshooting</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sbc.html#future-add-on-options">Future: Add-On Options</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sbc.html#community-projects">Community Projects</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sbc.html#buying-guide-what-to-prioritize">Buying Guide: What to Prioritize</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sbc.html#conclusion">Conclusion</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<p class="caption" role="heading"><span class="caption-text">Core Architecture</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="architecture.html">Architecture</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="architecture.html#system-overview">System Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="architecture.html#request-flow">Request Flow</a></li>
+<li class="toctree-l2"><a class="reference internal" href="architecture.html#specialist-system-architecture">Specialist System Architecture</a></li>
+<li class="toctree-l2"><a class="reference internal" href="architecture.html#context-caching-system-v2-1">Context Caching System (v2.1)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="architecture.html#rag-system-components">RAG System Components</a></li>
+<li class="toctree-l2"><a class="reference internal" href="architecture.html#bidirectional-specialist-flow">Bidirectional Specialist Flow</a></li>
+<li class="toctree-l2"><a class="reference internal" href="architecture.html#testing-infrastructure">Testing Infrastructure</a></li>
+<li class="toctree-l2"><a class="reference internal" href="architecture.html#data-flow-conversation-turn">Data Flow: Conversation Turn</a></li>
+<li class="toctree-l2"><a class="reference internal" href="architecture.html#deployment-architecture">Deployment Architecture</a></li>
+<li class="toctree-l2"><a class="reference internal" href="architecture.html#resources">Resources</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="data_model.html">Data Model Reference</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="data_model.html#overview">Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="data_model.html#schema-introspection">Schema Introspection</a></li>
+<li class="toctree-l2"><a class="reference internal" href="data_model.html#document-schemas">Document Schemas</a></li>
+<li class="toctree-l2"><a class="reference internal" href="data_model.html#retrieval-strategies">Retrieval Strategies</a></li>
+<li class="toctree-l2"><a class="reference internal" href="data_model.html#usage-examples">Usage Examples</a></li>
+<li class="toctree-l2"><a class="reference internal" href="data_model.html#configuration">Configuration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="data_model.html#see-also">See Also</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="streaming.html">Streaming</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="streaming.html#endpoint">Endpoint</a></li>
+<li class="toctree-l2"><a class="reference internal" href="streaming.html#request-body-json">Request Body (JSON)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="streaming.html#response-format-sse">Response Format (SSE)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="streaming.html#event-types">Event Types</a></li>
+<li class="toctree-l2"><a class="reference internal" href="streaming.html#curl-example">curl Example</a></li>
+<li class="toctree-l2"><a class="reference internal" href="streaming.html#python-requests">Python (requests)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="streaming.html#javascript-fetch-readablestream">JavaScript (fetch + ReadableStream)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="streaming.html#best-practices">Best Practices</a></li>
+<li class="toctree-l2"><a class="reference internal" href="streaming.html#related-documentation">Related Documentation</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="memory.html">Memory</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="memory.html#endpoints">Endpoints</a></li>
+<li class="toctree-l2"><a class="reference internal" href="memory.html#search-memories">Search Memories</a></li>
+<li class="toctree-l2"><a class="reference internal" href="memory.html#create-memory">Create Memory</a></li>
+<li class="toctree-l2"><a class="reference internal" href="memory.html#delete-memory">Delete Memory</a></li>
+<li class="toctree-l2"><a class="reference internal" href="memory.html#notes">Notes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="memory.html#related-documentation">Related Documentation</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="token_monitoring.html">Token Budget Monitoring</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="token_monitoring.html#overview">Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="token_monitoring.html#architecture">Architecture</a></li>
+<li class="toctree-l2"><a class="reference internal" href="token_monitoring.html#data-structures">Data Structures</a></li>
+<li class="toctree-l2"><a class="reference internal" href="token_monitoring.html#api-reference">API Reference</a></li>
+<li class="toctree-l2"><a class="reference internal" href="token_monitoring.html#usage-examples">Usage Examples</a></li>
+<li class="toctree-l2"><a class="reference internal" href="token_monitoring.html#token-counting-details">Token Counting Details</a></li>
+<li class="toctree-l2"><a class="reference internal" href="token_monitoring.html#performance-considerations">Performance Considerations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="token_monitoring.html#future-enhancements">Future Enhancements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="token_monitoring.html#integration-status">Integration Status</a></li>
+<li class="toctree-l2"><a class="reference internal" href="token_monitoring.html#see-also">See Also</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<p class="caption" role="heading"><span class="caption-text">Interfaces &amp; Adapters</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="adapters.html">Ada Adapters</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="adapters.html#overview">Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adapters.html#available-adapters">Available Adapters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adapters.html#comparison-table">Comparison Table</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adapters.html#building-your-own-adapter">Building Your Own Adapter</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adapters.html#deployment-patterns">Deployment Patterns</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adapters.html#error-handling">Error Handling</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adapters.html#best-practices">Best Practices</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adapters.html#future-adapters">Future Adapters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adapters.html#see-also">See Also</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="adapter_development.html">Adapter Development Guide</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="adapter_development.html#overview">Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adapter_development.html#architecture-pattern">Architecture Pattern</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adapter_development.html#reference-implementation">Reference Implementation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adapter_development.html#standard-http-client">Standard HTTP Client</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adapter_development.html#example-cli-adapter">Example: CLI Adapter</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adapter_development.html#example-matrix-bridge-adapter">Example: Matrix Bridge Adapter</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adapter_development.html#example-mcp-server-adapter">Example: MCP Server Adapter</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adapter_development.html#building-your-adapter">Building Your Adapter</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adapter_development.html#best-practices">Best Practices</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adapter_development.html#deployment-patterns">Deployment Patterns</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adapter_development.html#troubleshooting">Troubleshooting</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adapter_development.html#next-steps">Next Steps</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="matrix_integration.html">Matrix Integration</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="matrix_integration.html#overview">Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="matrix_integration.html#architecture">Architecture</a></li>
+<li class="toctree-l2"><a class="reference internal" href="matrix_integration.html#setup">Setup</a></li>
+<li class="toctree-l2"><a class="reference internal" href="matrix_integration.html#usage">Usage</a></li>
+<li class="toctree-l2"><a class="reference internal" href="matrix_integration.html#ethics-transparency">Ethics &amp; Transparency</a></li>
+<li class="toctree-l2"><a class="reference internal" href="matrix_integration.html#troubleshooting">Troubleshooting</a></li>
+<li class="toctree-l2"><a class="reference internal" href="matrix_integration.html#advanced-configuration">Advanced Configuration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="matrix_integration.html#see-full-documentation">See Full Documentation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="matrix_integration.html#community-guidelines">Community Guidelines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="matrix_integration.html#philosophy">Philosophy</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="api_usage.html">API Usage Guide</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="api_usage.html#quick-start">Quick Start</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api_usage.html#api-architecture">API Architecture</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api_usage.html#api-endpoints">API Endpoints</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api_usage.html#quick-reference">Quick Reference</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api_usage.html#environment-variables">Environment Variables</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api_usage.html#code-structure">Code Structure</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api_usage.html#error-handling">Error Handling</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api_usage.html#deployment">Deployment</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api_usage.html#integration-with-frontend">Integration with Frontend</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api_usage.html#adding-new-endpoints">Adding New Endpoints</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api_usage.html#resources">Resources</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="api_reference.html">API Reference</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="api_reference.html#brain-api-endpoints"><span class="autogen-doc">Brain API Endpoints</span></a></li>
+<li class="toctree-l2"><a class="reference internal" href="api_reference.html#endpoint-discovery"><span class="autogen-doc">Endpoint Discovery</span></a></li>
+<li class="toctree-l2"><a class="reference internal" href="api_reference.html#key-endpoints">Key Endpoints</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api_reference.html#request-response-models">Request/Response Models</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api_reference.html#status-codes">Status Codes</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<p class="caption" role="heading"><span class="caption-text">Specialist System</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="specialists.html">Specialist System</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="specialists.html#overview">Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="specialists.html#creating-a-new-specialist">Creating a New Specialist</a></li>
+<li class="toctree-l2"><a class="reference internal" href="specialists.html#discovering-available-specialists">Discovering Available Specialists</a></li>
+<li class="toctree-l2"><a class="reference internal" href="specialists.html#currently-available-specialists">Currently Available Specialists</a></li>
+<li class="toctree-l2"><a class="reference internal" href="specialists.html#request-context-structure">Request Context Structure</a></li>
+<li class="toctree-l2"><a class="reference internal" href="specialists.html#priority-system">Priority System</a></li>
+<li class="toctree-l2"><a class="reference internal" href="specialists.html#advanced-topics">Advanced Topics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="specialists.html#testing-specialists">Testing Specialists</a></li>
+<li class="toctree-l2"><a class="reference internal" href="specialists.html#future-enhancements">Future Enhancements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="specialists.html#best-practices">Best Practices</a></li>
+<li class="toctree-l2"><a class="reference internal" href="specialists.html#debugging">Debugging</a></li>
+<li class="toctree-l2"><a class="reference internal" href="specialists.html#resources">Resources</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="build_specialist.html">Build Your First Specialist</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="build_specialist.html#what-you-ll-build">What You’ll Build</a></li>
+<li class="toctree-l2"><a class="reference internal" href="build_specialist.html#prerequisites">Prerequisites</a></li>
+<li class="toctree-l2"><a class="reference internal" href="build_specialist.html#step-1-understand-the-specialist-protocol">Step 1: Understand the Specialist Protocol</a></li>
+<li class="toctree-l2"><a class="reference internal" href="build_specialist.html#step-2-create-the-file">Step 2: Create the File</a></li>
+<li class="toctree-l2"><a class="reference internal" href="build_specialist.html#step-3-write-the-specialist">Step 3: Write the Specialist</a></li>
+<li class="toctree-l2"><a class="reference internal" href="build_specialist.html#step-4-add-api-key-to-environment">Step 4: Add API Key to Environment</a></li>
+<li class="toctree-l2"><a class="reference internal" href="build_specialist.html#step-5-restart-services">Step 5: Restart Services</a></li>
+<li class="toctree-l2"><a class="reference internal" href="build_specialist.html#step-6-test-it">Step 6: Test It</a></li>
+<li class="toctree-l2"><a class="reference internal" href="build_specialist.html#step-7-enable-bidirectional-mode-advanced">Step 7: Enable Bidirectional Mode (Advanced)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="build_specialist.html#understanding-the-code">Understanding the Code</a></li>
+<li class="toctree-l2"><a class="reference internal" href="build_specialist.html#common-patterns">Common Patterns</a></li>
+<li class="toctree-l2"><a class="reference internal" href="build_specialist.html#testing-your-specialist">Testing Your Specialist</a></li>
+<li class="toctree-l2"><a class="reference internal" href="build_specialist.html#debugging-tips">Debugging Tips</a></li>
+<li class="toctree-l2"><a class="reference internal" href="build_specialist.html#next-steps">Next Steps</a></li>
+<li class="toctree-l2"><a class="reference internal" href="build_specialist.html#need-help">Need Help?</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="bidirectional.html">Bidirectional Specialist System</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="bidirectional.html#overview">Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="bidirectional.html#architecture">Architecture</a></li>
+<li class="toctree-l2"><a class="reference internal" href="bidirectional.html#request-syntax">Request Syntax</a></li>
+<li class="toctree-l2"><a class="reference internal" href="bidirectional.html#usage-examples">Usage Examples</a></li>
+<li class="toctree-l2"><a class="reference internal" href="bidirectional.html#current-specialists">Current Specialists</a></li>
+<li class="toctree-l2"><a class="reference internal" href="bidirectional.html#safety-limits">Safety &amp; Limits</a></li>
+<li class="toctree-l2"><a class="reference internal" href="bidirectional.html#implementation-details">Implementation Details</a></li>
+<li class="toctree-l2"><a class="reference internal" href="bidirectional.html#future-enhancements">Future Enhancements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="bidirectional.html#testing">Testing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="bidirectional.html#best-practices">Best Practices</a></li>
+<li class="toctree-l2"><a class="reference internal" href="bidirectional.html#troubleshooting">Troubleshooting</a></li>
+<li class="toctree-l2"><a class="reference internal" href="bidirectional.html#summary">Summary</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="specialist_rag.html">Specialist RAG Documentation System</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="specialist_rag.html#overview">Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="specialist_rag.html#how-it-works">How It Works</a></li>
+<li class="toctree-l2"><a class="reference internal" href="specialist_rag.html#configuration">Configuration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="specialist_rag.html#benefits">Benefits</a></li>
+<li class="toctree-l2"><a class="reference internal" href="specialist_rag.html#implementation-files">Implementation Files</a></li>
+<li class="toctree-l2"><a class="reference internal" href="specialist_rag.html#example-workflow">Example Workflow</a></li>
+<li class="toctree-l2"><a class="reference internal" href="specialist_rag.html#future-enhancements">Future Enhancements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="specialist_rag.html#debugging">Debugging</a></li>
+<li class="toctree-l2"><a class="reference internal" href="specialist_rag.html#configuration-reference">Configuration Reference</a></li>
+<li class="toctree-l2"><a class="reference internal" href="specialist_rag.html#migration-notes">Migration Notes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="specialist_rag.html#related-documentation">Related Documentation</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="web_search.html">Web Search Specialist</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="web_search.html#overview">Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="web_search.html#features">Features</a></li>
+<li class="toctree-l2"><a class="reference internal" href="web_search.html#configuration">Configuration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="web_search.html#usage-pattern">Usage Pattern</a></li>
+<li class="toctree-l2"><a class="reference internal" href="web_search.html#specialist-metadata">Specialist Metadata</a></li>
+<li class="toctree-l2"><a class="reference internal" href="web_search.html#request-schema">Request Schema</a></li>
+<li class="toctree-l2"><a class="reference internal" href="web_search.html#example-interactions">Example Interactions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="web_search.html#rate-limiting">Rate Limiting</a></li>
+<li class="toctree-l2"><a class="reference internal" href="web_search.html#testing">Testing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="web_search.html#architecture-integration">Architecture Integration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="web_search.html#privacy-security">Privacy &amp; Security</a></li>
+<li class="toctree-l2"><a class="reference internal" href="web_search.html#future-enhancements">Future Enhancements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="web_search.html#troubleshooting">Troubleshooting</a></li>
+<li class="toctree-l2"><a class="reference internal" href="web_search.html#related-documentation">Related Documentation</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<p class="caption" role="heading"><span class="caption-text">Operations</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="build_system.html">Build System</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="build_system.html#why-buildkit">Why BuildKit?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="build_system.html#build-performance">Build Performance</a></li>
+<li class="toctree-l2"><a class="reference internal" href="build_system.html#prerequisites">Prerequisites</a></li>
+<li class="toctree-l2"><a class="reference internal" href="build_system.html#building-ada">Building Ada</a></li>
+<li class="toctree-l2"><a class="reference internal" href="build_system.html#build-configuration">Build Configuration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="build_system.html#troubleshooting">Troubleshooting</a></li>
+<li class="toctree-l2"><a class="reference internal" href="build_system.html#using-legacy-builder">Using Legacy Builder</a></li>
+<li class="toctree-l2"><a class="reference internal" href="build_system.html#ci-cd-integration">CI/CD Integration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="build_system.html#best-practices">Best Practices</a></li>
+<li class="toctree-l2"><a class="reference internal" href="build_system.html#performance-tips">Performance Tips</a></li>
+<li class="toctree-l2"><a class="reference internal" href="build_system.html#buildkit-statistics">BuildKit Statistics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="build_system.html#see-also">See Also</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="buildx_adoption_notes.html">BuildX Adoption Data &amp; Notes</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="buildx_adoption_notes.html#research-summary-dec-2024">Research Summary (Dec 2024)</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="disk_management.html">Disk Management</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="disk_management.html#disk-requirements">Disk Requirements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="disk_management.html#monitoring-disk-usage">Monitoring Disk Usage</a></li>
+<li class="toctree-l2"><a class="reference internal" href="disk_management.html#cleanup-strategies">Cleanup Strategies</a></li>
+<li class="toctree-l2"><a class="reference internal" href="disk_management.html#troubleshooting">Troubleshooting</a></li>
+<li class="toctree-l2"><a class="reference internal" href="disk_management.html#maintenance-schedule">Maintenance Schedule</a></li>
+<li class="toctree-l2"><a class="reference internal" href="disk_management.html#best-practices">Best Practices</a></li>
+<li class="toctree-l2"><a class="reference internal" href="disk_management.html#advanced-topics">Advanced Topics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="disk_management.html#see-also">See Also</a></li>
+<li class="toctree-l2"><a class="reference internal" href="disk_management.html#summary">Summary</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<p class="caption" role="heading"><span class="caption-text">Development</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="development.html">Development Tools</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="development.html#version-management">Version Management</a></li>
+<li class="toctree-l2"><a class="reference internal" href="development.html#scripts-tooling-container">Scripts Tooling Container</a></li>
+<li class="toctree-l2"><a class="reference internal" href="development.html#available-scripts">Available Scripts</a></li>
+<li class="toctree-l2"><a class="reference internal" href="development.html#development-patterns">Development Patterns</a></li>
+<li class="toctree-l2"><a class="reference internal" href="development.html#troubleshooting">Troubleshooting</a></li>
+<li class="toctree-l2"><a class="reference internal" href="development.html#architecture">Architecture</a></li>
+<li class="toctree-l2"><a class="reference internal" href="development.html#best-practices">Best Practices</a></li>
+<li class="toctree-l2"><a class="reference internal" href="development.html#development-workflow">Development Workflow</a></li>
+<li class="toctree-l2"><a class="reference internal" href="development.html#code-quality">Code Quality</a></li>
+<li class="toctree-l2"><a class="reference internal" href="development.html#resources">Resources</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="testing.html">Testing Guide</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="testing.html#running-services-for-testing">Running Services for Testing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="testing.html#manual-testing">Manual Testing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="testing.html#automated-testing-with-pytest">Automated Testing with Pytest</a></li>
+<li class="toctree-l2"><a class="reference internal" href="testing.html#health-check-script">Health Check Script</a></li>
+<li class="toctree-l2"><a class="reference internal" href="testing.html#ci-cd-integration">CI/CD Integration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="testing.html#interactive-debugging">Interactive Debugging</a></li>
+<li class="toctree-l2"><a class="reference internal" href="testing.html#test-coverage-priorities">Test Coverage Priorities</a></li>
+<li class="toctree-l2"><a class="reference internal" href="testing.html#troubleshooting-tests">Troubleshooting Tests</a></li>
+<li class="toctree-l2"><a class="reference internal" href="testing.html#best-practices">Best Practices</a></li>
+<li class="toctree-l2"><a class="reference internal" href="testing.html#resources">Resources</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="versioning.html">Version Management</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="versioning.html#overview">Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="versioning.html#version-management-tools">Version Management Tools</a></li>
+<li class="toctree-l2"><a class="reference internal" href="versioning.html#workflow">Workflow</a></li>
+<li class="toctree-l2"><a class="reference internal" href="versioning.html#best-practices">Best Practices</a></li>
+<li class="toctree-l2"><a class="reference internal" href="versioning.html#automation">Automation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="versioning.html#troubleshooting">Troubleshooting</a></li>
+<li class="toctree-l2"><a class="reference internal" href="versioning.html#reference">Reference</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="changelog.html">Changelog</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#unreleased">[Unreleased]</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#id1">[2.1.0] - 2025-12-17</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#id2">[1.8.0] - 2025-12-16</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#id6">[1.7.0] - 2025-12-16</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#id11">[1.6.0] - 2025-12-15</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#id15">[1.5.0] - 2025-12-10</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#earlier-versions">Earlier Versions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#version-format">Version Format</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<p class="caption" role="heading"><span class="caption-text">Philosophy &amp; Design</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="project_philosophy.html">Ada Principles</a></li>
+<li class="toctree-l1"><a class="reference internal" href="documentation_philosophy.html">Documentation Philosophy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ai_documentation.html">AI-Readable Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="empathetic_documentation.html">Empathetic Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="xenofeminism.html">Xenofeminism and Ada</a></li>
+</ul>
+</div>
+<section id="overview">
+<h2>Overview<a class="headerlink" href="#overview" title="Link to this heading"></a></h2>
+<p>The Brain API provides endpoints for:</p>
+<ul class="simple">
+<li><p><strong>Chat with RAG</strong> - Generate responses with context from persona, FAQ, memories, and conversation history</p></li>
+<li><p><strong>Streaming</strong> - Real-time token delivery via Server-Sent Events (SSE)</p></li>
+<li><p><strong>Memory Management</strong> - Store and retrieve long-term user/context memories</p></li>
+<li><p><strong>Health Monitoring</strong> - Check service and dependency status</p></li>
+<li><p><strong>Debug Tools</strong> - Inspect RAG system state</p></li>
+</ul>
+<p>Key Features:</p>
+<p>✓ Non-blocking streaming responses (see <a class="reference internal" href="streaming.html"><span class="doc">Streaming</span></a>)
+✓ Semantic search on memories (see <a class="reference internal" href="memory.html"><span class="doc">Memory</span></a>)
+✓ Automatic conversation threading
+✓ Thinking/reasoning visibility
+✓ Entity-scoped context retrieval (see <a class="reference internal" href="data_model.html"><span class="doc">Data Model Reference</span></a>)
+✓ Conversation summarization
+✓ Specialist plugin system (see <a class="reference internal" href="specialists.html"><span class="doc">Specialist System</span></a>)</p>
+</section>
+<section id="quick-start">
+<h2>Quick Start<a class="headerlink" href="#quick-start" title="Link to this heading"></a></h2>
+<p><strong>Health Check:</strong></p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>curl<span class="w"> </span>http://localhost:7000/v1/healthz
+</pre></div>
+</div>
+<p><strong>Simple Chat:</strong></p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>curl<span class="w"> </span>-X<span class="w"> </span>POST<span class="w"> </span>http://localhost:7000/v1/chat<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>-H<span class="w"> </span><span class="s2">&quot;Content-Type: application/json&quot;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>-d<span class="w"> </span><span class="s1">&#39;{&quot;prompt&quot;: &quot;Hello!&quot;}&#39;</span>
+</pre></div>
+</div>
+<p><strong>Streaming Chat:</strong></p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>curl<span class="w"> </span>-N<span class="w"> </span>-X<span class="w"> </span>POST<span class="w"> </span>http://localhost:7000/v1/chat/stream<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>-H<span class="w"> </span><span class="s2">&quot;Content-Type: application/json&quot;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>-d<span class="w"> </span><span class="s1">&#39;{&quot;prompt&quot;: &quot;Hello!&quot;}&#39;</span>
+</pre></div>
+</div>
+<p>See <a class="reference internal" href="getting_started.html"><span class="doc">Getting Started</span></a> for detailed setup and configuration.</p>
+</section>
+<section id="full-api-reference">
+<h2>Full API Reference<a class="headerlink" href="#full-api-reference" title="Link to this heading"></a></h2>
+<p>For complete endpoint documentation with parameters, responses, and examples, see <a class="reference internal" href="api_reference.html"><span class="doc">API Reference</span></a>.</p>
+</section>
+<section id="indices-and-search">
+<h2>Indices and search<a class="headerlink" href="#indices-and-search" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p><a class="reference internal" href="genindex.html"><span class="std std-ref">Index</span></a></p></li>
+<li><p><a class="reference internal" href="search.html"><span class="std std-ref">Search Page</span></a></p></li>
+</ul>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="zero_to_ada.html" class="btn btn-neutral float-right" title="Zero to Ada" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p></p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

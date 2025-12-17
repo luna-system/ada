@@ -1,0 +1,726 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Running Ada Locally (No Docker Required!) &mdash; Ada Brain API 0.1.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="_static/graphviz.css?v=4ae1632d" />
+      <link rel="stylesheet" type="text/css" href="_static/custom.css?v=df0a1c42" />
+
+  
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=01f34227"></script>
+      <script src="_static/doctools.js?v=9bcbadda"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Nix &amp; Flakes Support" href="nix.html" />
+    <link rel="prev" title="Getting Started" href="getting_started.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            Ada Brain API
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="zero_to_ada.html">Zero to Ada</a></li>
+<li class="toctree-l1"><a class="reference internal" href="getting_started.html">Getting Started</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Running Ada Locally (No Docker Required!)</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#quick-start">Quick Start</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#prerequisites">Prerequisites</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#installation">Installation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#running-ada">Running Ada</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#quick-commands">Quick Commands</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#architecture-local-mode">Architecture: Local Mode</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#comparison-local-vs-docker">Comparison: Local vs Docker</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#configuration">Configuration</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#env-for-local-mode">.env for Local Mode</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#advanced-options">Advanced Options</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#features">Features</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#all-ada-features-work-in-local-mode">All Ada features work in local mode:</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#what-requires-docker">What requires Docker:</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#accessing-the-api">Accessing the API</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#from-browser">From Browser</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#using-ada-cli">Using ada-cli</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#using-curl">Using curl</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#data-management">Data Management</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#data-directory-structure">Data Directory Structure</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#backing-up">Backing Up</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#migrating-from-docker">Migrating from Docker</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#troubleshooting">Troubleshooting</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#ollama-not-running">“Ollama not running”</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#modulenotfounderror-no-module-named-brain">“ModuleNotFoundError: No module named ‘brain’”</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#port-7000-already-in-use">“Port 7000 already in use”</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#permission-denied-data-chroma">“Permission denied: ./data/chroma”</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#ollama-connection-refused-from-brain">Ollama connection refused from brain</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#chromadb-errors">ChromaDB errors</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#performance-tips">Performance Tips</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#memory-optimization">Memory Optimization</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#cpu-only-performance">CPU-Only Performance</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#gpu-acceleration">GPU Acceleration</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#development-workflow">Development Workflow</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#hot-reload">Hot Reload</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#running-tests">Running Tests</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#adding-specialists">Adding Specialists</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#hybrid-setups">Hybrid Setups</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#local-brain-docker-services">Local Brain + Docker Services</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#local-development-docker-ollama">Local Development + Docker Ollama</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#next-steps">Next Steps</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#why-local-mode">Why Local Mode?</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#benefits">Benefits</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#when-to-use-docker-instead">When to use Docker instead</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#community-support">Community &amp; Support</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="nix.html">Nix &amp; Flakes Support</a></li>
+<li class="toctree-l1"><a class="reference internal" href="getting_started_scratch.html">Getting Started from Scratch</a></li>
+<li class="toctree-l1"><a class="reference internal" href="configuration.html">Configuration Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="examples.html">Examples</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Hardware Setup</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="hardware.html">Hardware &amp; GPU Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="sbc.html">Ada on Single-Board Computers (SBCs)</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Core Architecture</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="architecture.html">Architecture</a></li>
+<li class="toctree-l1"><a class="reference internal" href="data_model.html">Data Model Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="streaming.html">Streaming</a></li>
+<li class="toctree-l1"><a class="reference internal" href="memory.html">Memory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="token_monitoring.html">Token Budget Monitoring</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Interfaces &amp; Adapters</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="adapters.html">Ada Adapters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="adapter_development.html">Adapter Development Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="matrix_integration.html">Matrix Integration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api_usage.html">API Usage Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api_reference.html">API Reference</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Specialist System</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="specialists.html">Specialist System</a></li>
+<li class="toctree-l1"><a class="reference internal" href="build_specialist.html">Build Your First Specialist</a></li>
+<li class="toctree-l1"><a class="reference internal" href="bidirectional.html">Bidirectional Specialist System</a></li>
+<li class="toctree-l1"><a class="reference internal" href="specialist_rag.html">Specialist RAG Documentation System</a></li>
+<li class="toctree-l1"><a class="reference internal" href="web_search.html">Web Search Specialist</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Operations</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="build_system.html">Build System</a></li>
+<li class="toctree-l1"><a class="reference internal" href="buildx_adoption_notes.html">BuildX Adoption Data &amp; Notes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="disk_management.html">Disk Management</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Development</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="development.html">Development Tools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="testing.html">Testing Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="versioning.html">Version Management</a></li>
+<li class="toctree-l1"><a class="reference internal" href="changelog.html">Changelog</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Philosophy &amp; Design</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="project_philosophy.html">Ada Principles</a></li>
+<li class="toctree-l1"><a class="reference internal" href="documentation_philosophy.html">Documentation Philosophy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ai_documentation.html">AI-Readable Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="empathetic_documentation.html">Empathetic Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="xenofeminism.html">Xenofeminism and Ada</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Ada Brain API</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Running Ada Locally (No Docker Required!)</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/local_mode.md.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="running-ada-locally-no-docker-required">
+<h1>Running Ada Locally (No Docker Required!)<a class="headerlink" href="#running-ada-locally-no-docker-required" title="Link to this heading"></a></h1>
+<p>Ada now supports running entirely locally without Docker! This is the <strong>recommended</strong> deployment mode for most users.</p>
+<section id="quick-start">
+<h2>Quick Start<a class="headerlink" href="#quick-start" title="Link to this heading"></a></h2>
+<section id="prerequisites">
+<h3>Prerequisites<a class="headerlink" href="#prerequisites" title="Link to this heading"></a></h3>
+<ol class="arabic">
+<li><p><strong>Python 3.13+</strong></p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python3<span class="w"> </span>--version<span class="w">  </span><span class="c1"># Should show 3.13 or higher</span>
+</pre></div>
+</div>
+</li>
+<li><p><strong>Ollama</strong> (for LLM inference)</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Install from https://ollama.ai</span>
+curl<span class="w"> </span>-fsSL<span class="w"> </span>https://ollama.com/install.sh<span class="w"> </span><span class="p">|</span><span class="w"> </span>sh
+
+<span class="c1"># Start Ollama</span>
+ollama<span class="w"> </span>serve
+
+<span class="c1"># Pull a model</span>
+ollama<span class="w"> </span>pull<span class="w"> </span>deepseek-r1:14b
+</pre></div>
+</div>
+</li>
+</ol>
+</section>
+<section id="installation">
+<h3>Installation<a class="headerlink" href="#installation" title="Link to this heading"></a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Clone the repository</span>
+git<span class="w"> </span>clone<span class="w"> </span>https://github.com/luna-system/ada.git
+<span class="nb">cd</span><span class="w"> </span>ada
+
+<span class="c1"># Run setup wizard</span>
+python3<span class="w"> </span>ada_cli.py<span class="w"> </span>setup
+
+<span class="c1"># Or manual setup:</span>
+python3<span class="w"> </span>-m<span class="w"> </span>venv<span class="w"> </span>.venv
+<span class="nb">source</span><span class="w"> </span>.venv/bin/activate<span class="w">  </span><span class="c1"># On Windows: .venv\Scripts\activate</span>
+pip<span class="w"> </span>install<span class="w"> </span>-e<span class="w"> </span>.
+cp<span class="w"> </span>.env.example<span class="w"> </span>.env
+</pre></div>
+</div>
+</section>
+<section id="running-ada">
+<h3>Running Ada<a class="headerlink" href="#running-ada" title="Link to this heading"></a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Activate virtual environment</span>
+<span class="nb">source</span><span class="w"> </span>.venv/bin/activate
+
+<span class="c1"># Start Ada (auto-detects local Ollama)</span>
+ada<span class="w"> </span>run
+
+<span class="c1"># Or explicitly use local mode</span>
+ada<span class="w"> </span>run<span class="w"> </span>--local
+
+<span class="c1"># Development mode (hot reload)</span>
+ada<span class="w"> </span>run<span class="w"> </span>--local<span class="w"> </span>--dev
+</pre></div>
+</div>
+<p>Ada will:</p>
+<ul class="simple">
+<li><p>✅ Detect your local Ollama installation</p></li>
+<li><p>✅ Use embedded ChromaDB (no separate database process)</p></li>
+<li><p>✅ Start the brain API on http://localhost:7000</p></li>
+<li><p>✅ Store all data in <code class="docutils literal notranslate"><span class="pre">./data/</span></code> directory</p></li>
+</ul>
+</section>
+<section id="quick-commands">
+<h3>Quick Commands<a class="headerlink" href="#quick-commands" title="Link to this heading"></a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Check system health</span>
+ada<span class="w"> </span>doctor
+
+<span class="c1"># View running services</span>
+ada<span class="w"> </span>status
+
+<span class="c1"># Chat directly from terminal</span>
+ada<span class="w"> </span>chat<span class="w"> </span><span class="s2">&quot;What&#39;s the weather today?&quot;</span>
+
+<span class="c1"># Stop Ada</span>
+ada<span class="w"> </span>stop
+</pre></div>
+</div>
+</section>
+</section>
+<section id="architecture-local-mode">
+<h2>Architecture: Local Mode<a class="headerlink" href="#architecture-local-mode" title="Link to this heading"></a></h2>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>Terminal               Local Ollama (port 11434)
+   │                           │
+   ├─ ada run ────────────────┤
+   │                           │
+   └─ Brain API ───────────────┘
+      (port 7000)               
+         │
+         └─ Embedded ChromaDB
+            (./data/chroma/)
+</pre></div>
+</div>
+<p><strong>No Docker containers!</strong> Everything runs as local processes.</p>
+</section>
+<section id="comparison-local-vs-docker">
+<h2>Comparison: Local vs Docker<a class="headerlink" href="#comparison-local-vs-docker" title="Link to this heading"></a></h2>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Feature</p></th>
+<th class="head"><p>Local Mode</p></th>
+<th class="head"><p>Docker Mode</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><strong>Setup Time</strong></p></td>
+<td><p>&lt; 5 minutes</p></td>
+<td><p>10-15 minutes</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>Memory Usage</strong></p></td>
+<td><p>~2GB (Ollama + Brain)</p></td>
+<td><p>~4GB (all containers)</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>Startup Time</strong></p></td>
+<td><p>&lt; 5 seconds</p></td>
+<td><p>~30 seconds</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>Model Storage</strong></p></td>
+<td><p>Single copy</p></td>
+<td><p>Separate container volume</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>GPU Support</strong></p></td>
+<td><p>Native (CUDA/ROCm/Metal)</p></td>
+<td><p>Requires GPU passthrough</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>Development</strong></p></td>
+<td><p>Hot reload built-in</p></td>
+<td><p>Requires rebuild</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>Portability</strong></p></td>
+<td><p>Requires Python/Ollama</p></td>
+<td><p>Requires Docker</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>Data Backup</strong></p></td>
+<td><p>Simple <code class="docutils literal notranslate"><span class="pre">./data/</span></code> folder</p></td>
+<td><p>Container volumes</p></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Recommendation:</strong> Use local mode unless you need multi-service orchestration.</p>
+</section>
+<section id="configuration">
+<h2>Configuration<a class="headerlink" href="#configuration" title="Link to this heading"></a></h2>
+<section id="env-for-local-mode">
+<h3>.env for Local Mode<a class="headerlink" href="#env-for-local-mode" title="Link to this heading"></a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Minimal local configuration</span>
+<span class="nv">OLLAMA_BASE_URL</span><span class="o">=</span>http://localhost:11434
+<span class="nv">OLLAMA_MODEL</span><span class="o">=</span>deepseek-r1:14b
+<span class="nv">CHROMA_MODE</span><span class="o">=</span>embedded
+<span class="nv">DATA_DIR</span><span class="o">=</span>./data
+</pre></div>
+</div>
+</section>
+<section id="advanced-options">
+<h3>Advanced Options<a class="headerlink" href="#advanced-options" title="Link to this heading"></a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Use different port</span>
+ada<span class="w"> </span>run<span class="w"> </span>--local<span class="w"> </span>--port<span class="w"> </span><span class="m">8080</span>
+
+<span class="c1"># Bind to specific interface</span>
+ada<span class="w"> </span>run<span class="w"> </span>--local<span class="w"> </span>--host<span class="w"> </span><span class="m">127</span>.0.0.1
+
+<span class="c1"># Development mode (auto-reload)</span>
+ada<span class="w"> </span>run<span class="w"> </span>--local<span class="w"> </span>--dev
+</pre></div>
+</div>
+</section>
+</section>
+<section id="features">
+<h2>Features<a class="headerlink" href="#features" title="Link to this heading"></a></h2>
+<section id="all-ada-features-work-in-local-mode">
+<h3>All Ada features work in local mode:<a class="headerlink" href="#all-ada-features-work-in-local-mode" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p>✅ <strong>RAG (Retrieval-Augmented Generation)</strong> - Embedded ChromaDB</p></li>
+<li><p>✅ <strong>Conversation Memory</strong> - Stored in <code class="docutils literal notranslate"><span class="pre">./data/chroma/</span></code></p></li>
+<li><p>✅ <strong>Streaming Responses</strong> - Full SSE support</p></li>
+<li><p>✅ <strong>Specialists</strong> - All specialists work (OCR, web search, wiki, etc.)</p></li>
+<li><p>✅ <strong>Matrix Bridge</strong> - Can connect to local brain</p></li>
+<li><p>✅ <strong>CLI Adapter</strong> - Works out of the box</p></li>
+<li><p>✅ <strong>Web UI</strong> - Use nginx proxy or run Astro dev server</p></li>
+</ul>
+</section>
+<section id="what-requires-docker">
+<h3>What requires Docker:<a class="headerlink" href="#what-requires-docker" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p>❌ <strong>Web UI</strong> (nginx) - Optional, can use Astro dev server instead</p></li>
+<li><p>❌ <strong>Matrix Bridge</strong> - Optional, requires containerized setup</p></li>
+<li><p>❌ <strong>Automated backups</strong> - Optional maintenance scripts</p></li>
+</ul>
+</section>
+</section>
+<section id="accessing-the-api">
+<h2>Accessing the API<a class="headerlink" href="#accessing-the-api" title="Link to this heading"></a></h2>
+<section id="from-browser">
+<h3>From Browser<a class="headerlink" href="#from-browser" title="Link to this heading"></a></h3>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">http</span><span class="p">:</span><span class="o">//</span><span class="n">localhost</span><span class="p">:</span><span class="mi">7000</span><span class="o">/</span><span class="n">v1</span><span class="o">/</span><span class="n">healthz</span>
+</pre></div>
+</div>
+</section>
+<section id="using-ada-cli">
+<h3>Using ada-cli<a class="headerlink" href="#using-ada-cli" title="Link to this heading"></a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Interactive mode</span>
+ada-cli
+
+<span class="c1"># One-shot query</span>
+ada-cli<span class="w"> </span><span class="s2">&quot;Tell me about Python&quot;</span>
+
+<span class="c1"># JSON output</span>
+ada-cli<span class="w"> </span>--json<span class="w"> </span><span class="s2">&quot;List 3 facts about Mars&quot;</span>
+</pre></div>
+</div>
+</section>
+<section id="using-curl">
+<h3>Using curl<a class="headerlink" href="#using-curl" title="Link to this heading"></a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>curl<span class="w"> </span>-X<span class="w"> </span>POST<span class="w"> </span>http://localhost:7000/v1/chat/stream<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>-H<span class="w"> </span><span class="s2">&quot;Content-Type: application/json&quot;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>-d<span class="w"> </span><span class="s1">&#39;{&quot;prompt&quot;:&quot;Hello Ada!&quot;}&#39;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--no-buffer
+</pre></div>
+</div>
+</section>
+</section>
+<section id="data-management">
+<h2>Data Management<a class="headerlink" href="#data-management" title="Link to this heading"></a></h2>
+<section id="data-directory-structure">
+<h3>Data Directory Structure<a class="headerlink" href="#data-directory-structure" title="Link to this heading"></a></h3>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>./data/
+├── chroma/           # Embedded vector database
+│   ├── personas/     # Persona documents
+│   ├── faqs/         # FAQ collection
+│   ├── memories/     # Long-term memories
+│   └── turns/        # Conversation history
+├── brain/            # Brain service data
+│   ├── notices.json  # System notifications
+│   └── uploads/      # Uploaded files
+└── backups/          # Optional manual backups
+</pre></div>
+</div>
+</section>
+<section id="backing-up">
+<h3>Backing Up<a class="headerlink" href="#backing-up" title="Link to this heading"></a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Simple backup</span>
+tar<span class="w"> </span>-czf<span class="w"> </span>ada-backup-<span class="k">$(</span>date<span class="w"> </span>+%Y%m%d<span class="k">)</span>.tar.gz<span class="w"> </span>data/
+
+<span class="c1"># Restore</span>
+tar<span class="w"> </span>-xzf<span class="w"> </span>ada-backup-20250116.tar.gz
+</pre></div>
+</div>
+</section>
+<section id="migrating-from-docker">
+<h3>Migrating from Docker<a class="headerlink" href="#migrating-from-docker" title="Link to this heading"></a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># 1. Stop Docker services</span>
+docker<span class="w"> </span>compose<span class="w"> </span>down
+
+<span class="c1"># 2. Copy data from Docker volumes</span>
+docker<span class="w"> </span>run<span class="w"> </span>--rm<span class="w"> </span>-v<span class="w"> </span>ada-v1_chroma-data:/data<span class="w"> </span>-v<span class="w"> </span><span class="k">$(</span><span class="nb">pwd</span><span class="k">)</span>/data:/backup<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>alpine<span class="w"> </span>tar<span class="w"> </span>-czf<span class="w"> </span>/backup/chroma.tar.gz<span class="w"> </span>-C<span class="w"> </span>/data<span class="w"> </span>.
+
+<span class="c1"># 3. Extract to local data directory</span>
+mkdir<span class="w"> </span>-p<span class="w"> </span>data/chroma
+tar<span class="w"> </span>-xzf<span class="w"> </span>data/chroma.tar.gz<span class="w"> </span>-C<span class="w"> </span>data/chroma/
+
+<span class="c1"># 4. Update .env for local mode</span>
+cp<span class="w"> </span>.env.example<span class="w"> </span>.env
+<span class="c1"># Edit .env - use local mode configuration</span>
+
+<span class="c1"># 5. Start local mode</span>
+ada<span class="w"> </span>run<span class="w"> </span>--local
+</pre></div>
+</div>
+</section>
+</section>
+<section id="troubleshooting">
+<h2>Troubleshooting<a class="headerlink" href="#troubleshooting" title="Link to this heading"></a></h2>
+<section id="ollama-not-running">
+<h3>“Ollama not running”<a class="headerlink" href="#ollama-not-running" title="Link to this heading"></a></h3>
+<p><strong>Solution:</strong></p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Check if Ollama is running</span>
+curl<span class="w"> </span>http://localhost:11434/api/tags
+
+<span class="c1"># If not, start it</span>
+ollama<span class="w"> </span>serve
+
+<span class="c1"># Check if model is available</span>
+ollama<span class="w"> </span>list
+ollama<span class="w"> </span>pull<span class="w"> </span>deepseek-r1:14b<span class="w">  </span><span class="c1"># If model missing</span>
+</pre></div>
+</div>
+</section>
+<section id="modulenotfounderror-no-module-named-brain">
+<h3>“ModuleNotFoundError: No module named ‘brain’”<a class="headerlink" href="#modulenotfounderror-no-module-named-brain" title="Link to this heading"></a></h3>
+<p><strong>Solution:</strong></p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Ensure you&#39;re in virtual environment</span>
+<span class="nb">source</span><span class="w"> </span>.venv/bin/activate
+
+<span class="c1"># Reinstall in editable mode</span>
+pip<span class="w"> </span>install<span class="w"> </span>-e<span class="w"> </span>.
+
+<span class="c1"># Verify installation</span>
+ada<span class="w"> </span>--version
+</pre></div>
+</div>
+</section>
+<section id="port-7000-already-in-use">
+<h3>“Port 7000 already in use”<a class="headerlink" href="#port-7000-already-in-use" title="Link to this heading"></a></h3>
+<p><strong>Solution:</strong></p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Find process using port</span>
+lsof<span class="w"> </span>-i<span class="w"> </span>:7000
+
+<span class="c1"># Kill it</span>
+<span class="nb">kill</span><span class="w"> </span>-9<span class="w"> </span>&lt;PID&gt;
+
+<span class="c1"># Or use different port</span>
+ada<span class="w"> </span>run<span class="w"> </span>--local<span class="w"> </span>--port<span class="w"> </span><span class="m">8000</span>
+</pre></div>
+</div>
+</section>
+<section id="permission-denied-data-chroma">
+<h3>“Permission denied: ./data/chroma”<a class="headerlink" href="#permission-denied-data-chroma" title="Link to this heading"></a></h3>
+<p><strong>Solution:</strong></p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Fix permissions</span>
+chmod<span class="w"> </span>-R<span class="w"> </span><span class="m">755</span><span class="w"> </span>data/
+
+<span class="c1"># Or run with sudo (not recommended)</span>
+sudo<span class="w"> </span>ada<span class="w"> </span>run<span class="w"> </span>--local
+</pre></div>
+</div>
+</section>
+<section id="ollama-connection-refused-from-brain">
+<h3>Ollama connection refused from brain<a class="headerlink" href="#ollama-connection-refused-from-brain" title="Link to this heading"></a></h3>
+<p><strong>Issue:</strong> Brain can’t reach Ollama even though it’s running.</p>
+<p><strong>Solution:</strong></p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Check Ollama is listening on all interfaces (not just 127.0.0.1)</span>
+ss<span class="w"> </span>-tlnp<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span><span class="m">11434</span>
+
+<span class="c1"># If only on 127.0.0.1, restart with:</span>
+<span class="nv">OLLAMA_HOST</span><span class="o">=</span><span class="m">0</span>.0.0.0:11434<span class="w"> </span>ollama<span class="w"> </span>serve
+</pre></div>
+</div>
+</section>
+<section id="chromadb-errors">
+<h3>ChromaDB errors<a class="headerlink" href="#chromadb-errors" title="Link to this heading"></a></h3>
+<p><strong>Solution:</strong></p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Clear ChromaDB data (WARNING: loses history!)</span>
+rm<span class="w"> </span>-rf<span class="w"> </span>data/chroma/
+
+<span class="c1"># Restart Ada</span>
+ada<span class="w"> </span>run<span class="w"> </span>--local
+</pre></div>
+</div>
+</section>
+</section>
+<section id="performance-tips">
+<h2>Performance Tips<a class="headerlink" href="#performance-tips" title="Link to this heading"></a></h2>
+<section id="memory-optimization">
+<h3>Memory Optimization<a class="headerlink" href="#memory-optimization" title="Link to this heading"></a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Use smaller model for faster responses</span>
+ada<span class="w"> </span>run<span class="w"> </span>--local
+<span class="c1"># Edit .env: OLLAMA_MODEL=deepseek-r1:7b</span>
+
+<span class="c1"># Reduce context window</span>
+<span class="nv">RAG_TURN_TOP_K</span><span class="o">=</span><span class="m">2</span>
+<span class="nv">RAG_MEMORY_TOP_K</span><span class="o">=</span><span class="m">1</span>
+</pre></div>
+</div>
+</section>
+<section id="cpu-only-performance">
+<h3>CPU-Only Performance<a class="headerlink" href="#cpu-only-performance" title="Link to this heading"></a></h3>
+<p>If you don’t have a GPU, use optimized models:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>ollama<span class="w"> </span>pull<span class="w"> </span>deepseek-r1:7b-q4_0<span class="w">  </span><span class="c1"># Quantized for CPU</span>
+<span class="nv">OLLAMA_MODEL</span><span class="o">=</span>deepseek-r1:7b-q4_0<span class="w"> </span>ada<span class="w"> </span>run<span class="w"> </span>--local
+</pre></div>
+</div>
+</section>
+<section id="gpu-acceleration">
+<h3>GPU Acceleration<a class="headerlink" href="#gpu-acceleration" title="Link to this heading"></a></h3>
+<p>Ada automatically uses GPU if available:</p>
+<ul class="simple">
+<li><p><strong>NVIDIA</strong>: CUDA toolkit (automatically detected by Ollama)</p></li>
+<li><p><strong>AMD</strong>: ROCm (Linux only)</p></li>
+<li><p><strong>Apple</strong>: Metal (macOS M1/M2)</p></li>
+</ul>
+<p>No configuration needed - Ollama handles it!</p>
+</section>
+</section>
+<section id="development-workflow">
+<h2>Development Workflow<a class="headerlink" href="#development-workflow" title="Link to this heading"></a></h2>
+<section id="hot-reload">
+<h3>Hot Reload<a class="headerlink" href="#hot-reload" title="Link to this heading"></a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Start in development mode</span>
+ada<span class="w"> </span>run<span class="w"> </span>--local<span class="w"> </span>--dev
+
+<span class="c1"># Edit brain/*.py files</span>
+<span class="c1"># Changes apply immediately (no restart needed)</span>
+</pre></div>
+</div>
+</section>
+<section id="running-tests">
+<h3>Running Tests<a class="headerlink" href="#running-tests" title="Link to this heading"></a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Unit tests</span>
+pytest<span class="w"> </span>tests/
+
+<span class="c1"># Integration tests (requires brain running)</span>
+ada<span class="w"> </span>run<span class="w"> </span>--local<span class="w"> </span><span class="p">&amp;</span>
+pytest<span class="w"> </span>tests/test_integration.py
+</pre></div>
+</div>
+</section>
+<section id="adding-specialists">
+<h3>Adding Specialists<a class="headerlink" href="#adding-specialists" title="Link to this heading"></a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># 1. Create specialist</span>
+vim<span class="w"> </span>brain/specialists/my_specialist.py
+
+<span class="c1"># 2. Register in __init__.py</span>
+vim<span class="w"> </span>brain/specialists/__init__.py
+
+<span class="c1"># 3. Restart brain (dev mode auto-reloads)</span>
+<span class="c1"># Changes take effect immediately</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="hybrid-setups">
+<h2>Hybrid Setups<a class="headerlink" href="#hybrid-setups" title="Link to this heading"></a></h2>
+<section id="local-brain-docker-services">
+<h3>Local Brain + Docker Services<a class="headerlink" href="#local-brain-docker-services" title="Link to this heading"></a></h3>
+<p>Run brain locally but use Docker for optional services:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Start only web UI and matrix bridge</span>
+docker<span class="w"> </span>compose<span class="w"> </span>up<span class="w"> </span>-d<span class="w"> </span>frontend<span class="w"> </span>matrix-bridge
+
+<span class="c1"># Run brain locally</span>
+ada<span class="w"> </span>run<span class="w"> </span>--local
+
+<span class="c1"># Access web UI at http://localhost:5000</span>
+</pre></div>
+</div>
+</section>
+<section id="local-development-docker-ollama">
+<h3>Local Development + Docker Ollama<a class="headerlink" href="#local-development-docker-ollama" title="Link to this heading"></a></h3>
+<p>Use Docker for Ollama isolation:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Start Ollama in Docker</span>
+docker<span class="w"> </span>compose<span class="w"> </span>up<span class="w"> </span>-d<span class="w"> </span>ollama
+
+<span class="c1"># Run brain locally pointing to Docker Ollama</span>
+<span class="nv">OLLAMA_BASE_URL</span><span class="o">=</span>http://localhost:11434<span class="w"> </span>ada<span class="w"> </span>run<span class="w"> </span>--local
+</pre></div>
+</div>
+</section>
+</section>
+<section id="next-steps">
+<h2>Next Steps<a class="headerlink" href="#next-steps" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p><strong>Web UI:</strong> See <a class="reference internal" href="adapters.html"><span class="std std-doc">docs/adapters.rst</span></a> for Astro dev server</p></li>
+<li><p><strong>Matrix Bot:</strong> See <span class="xref myst">matrix-bridge/QUICKSTART.md</span></p></li>
+<li><p><strong>Custom Persona:</strong> Edit <code class="docutils literal notranslate"><span class="pre">persona.md</span></code> and restart</p></li>
+<li><p><strong>Specialists:</strong> See <a class="reference internal" href="specialists.html"><span class="std std-doc">docs/specialists.rst</span></a></p></li>
+</ul>
+</section>
+<section id="why-local-mode">
+<h2>Why Local Mode?<a class="headerlink" href="#why-local-mode" title="Link to this heading"></a></h2>
+<section id="benefits">
+<h3>Benefits<a class="headerlink" href="#benefits" title="Link to this heading"></a></h3>
+<ol class="arabic simple">
+<li><p><strong>Faster startup</strong> - No container orchestration</p></li>
+<li><p><strong>Less memory</strong> - One Ollama instance shared across tools</p></li>
+<li><p><strong>Native GPU</strong> - Direct hardware access, no passthrough</p></li>
+<li><p><strong>Easier development</strong> - Hot reload, native debugging</p></li>
+<li><p><strong>Simpler backups</strong> - Just copy <code class="docutils literal notranslate"><span class="pre">./data/</span></code> folder</p></li>
+<li><p><strong>Lower disk usage</strong> - No duplicate model storage</p></li>
+</ol>
+</section>
+<section id="when-to-use-docker-instead">
+<h3>When to use Docker instead<a class="headerlink" href="#when-to-use-docker-instead" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p><strong>Production deployment</strong> with multiple services</p></li>
+<li><p><strong>Isolated environments</strong> (testing, CI/CD)</p></li>
+<li><p><strong>Teams</strong> sharing consistent setup</p></li>
+<li><p><strong>Remote deployment</strong> without shell access</p></li>
+</ul>
+</section>
+</section>
+<section id="community-support">
+<h2>Community &amp; Support<a class="headerlink" href="#community-support" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p><strong>Issues:</strong> https://github.com/luna-system/ada/issues</p></li>
+<li><p><strong>Discussions:</strong> https://github.com/luna-system/ada/discussions</p></li>
+<li><p><strong>Matrix:</strong> <code class="docutils literal notranslate"><span class="pre">#ada-assistant:matrix.org</span></code></p></li>
+</ul>
+<hr class="docutils" />
+<p><strong>Made with 💜 by the Ada team</strong><br />
+<em>Docker optional, autonomy essential.</em></p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="getting_started.html" class="btn btn-neutral float-left" title="Getting Started" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="nix.html" class="btn btn-neutral float-right" title="Nix &amp; Flakes Support" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p></p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

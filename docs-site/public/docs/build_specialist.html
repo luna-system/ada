@@ -1,0 +1,703 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Build Your First Specialist &mdash; Ada Brain API 0.1.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="_static/graphviz.css?v=4ae1632d" />
+      <link rel="stylesheet" type="text/css" href="_static/custom.css?v=df0a1c42" />
+
+  
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=01f34227"></script>
+      <script src="_static/doctools.js?v=9bcbadda"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Bidirectional Specialist System" href="bidirectional.html" />
+    <link rel="prev" title="Specialist System" href="specialists.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            Ada Brain API
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="zero_to_ada.html">Zero to Ada</a></li>
+<li class="toctree-l1"><a class="reference internal" href="getting_started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="local_mode.html">Running Ada Locally (No Docker Required!)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="nix.html">Nix &amp; Flakes Support</a></li>
+<li class="toctree-l1"><a class="reference internal" href="getting_started_scratch.html">Getting Started from Scratch</a></li>
+<li class="toctree-l1"><a class="reference internal" href="configuration.html">Configuration Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="examples.html">Examples</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Hardware Setup</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="hardware.html">Hardware &amp; GPU Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="sbc.html">Ada on Single-Board Computers (SBCs)</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Core Architecture</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="architecture.html">Architecture</a></li>
+<li class="toctree-l1"><a class="reference internal" href="data_model.html">Data Model Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="streaming.html">Streaming</a></li>
+<li class="toctree-l1"><a class="reference internal" href="memory.html">Memory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="token_monitoring.html">Token Budget Monitoring</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Interfaces &amp; Adapters</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="adapters.html">Ada Adapters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="adapter_development.html">Adapter Development Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="matrix_integration.html">Matrix Integration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api_usage.html">API Usage Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api_reference.html">API Reference</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Specialist System</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="specialists.html">Specialist System</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Build Your First Specialist</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#what-you-ll-build">What You’ll Build</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#prerequisites">Prerequisites</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#get-a-weather-api-key">Get a Weather API Key</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#step-1-understand-the-specialist-protocol">Step 1: Understand the Specialist Protocol</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#step-2-create-the-file">Step 2: Create the File</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#step-3-write-the-specialist">Step 3: Write the Specialist</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#step-4-add-api-key-to-environment">Step 4: Add API Key to Environment</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#step-5-restart-services">Step 5: Restart Services</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#step-6-test-it">Step 6: Test It</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#via-web-interface">Via Web Interface</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#via-api">Via API</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#check-specialist-registration">Check Specialist Registration</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#step-7-enable-bidirectional-mode-advanced">Step 7: Enable Bidirectional Mode (Advanced)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#understanding-the-code">Understanding the Code</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#key-patterns">Key Patterns</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#common-patterns">Common Patterns</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#file-upload-specialist">File Upload Specialist</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#database-query-specialist">Database Query Specialist</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#external-api-specialist">External API Specialist</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#testing-your-specialist">Testing Your Specialist</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#unit-test">Unit Test</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#debugging-tips">Debugging Tips</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#next-steps">Next Steps</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#ideas-for-more-specialists">Ideas for More Specialists</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#need-help">Need Help?</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="bidirectional.html">Bidirectional Specialist System</a></li>
+<li class="toctree-l1"><a class="reference internal" href="specialist_rag.html">Specialist RAG Documentation System</a></li>
+<li class="toctree-l1"><a class="reference internal" href="web_search.html">Web Search Specialist</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Operations</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="build_system.html">Build System</a></li>
+<li class="toctree-l1"><a class="reference internal" href="buildx_adoption_notes.html">BuildX Adoption Data &amp; Notes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="disk_management.html">Disk Management</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Development</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="development.html">Development Tools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="testing.html">Testing Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="versioning.html">Version Management</a></li>
+<li class="toctree-l1"><a class="reference internal" href="changelog.html">Changelog</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Philosophy &amp; Design</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="project_philosophy.html">Ada Principles</a></li>
+<li class="toctree-l1"><a class="reference internal" href="documentation_philosophy.html">Documentation Philosophy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ai_documentation.html">AI-Readable Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="empathetic_documentation.html">Empathetic Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="xenofeminism.html">Xenofeminism and Ada</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Ada Brain API</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Build Your First Specialist</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/build_specialist.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="build-your-first-specialist">
+<h1>Build Your First Specialist<a class="headerlink" href="#build-your-first-specialist" title="Link to this heading"></a></h1>
+<p><strong>Extend Ada with custom capabilities in 30 minutes.</strong></p>
+<p>Specialists are Ada’s plugin system. Drop a Python file in <code class="docutils literal notranslate"><span class="pre">brain/specialists/</span></code> and your AI gains new powers - web search, image analysis, weather lookups, whatever you imagine.</p>
+<p>This tutorial builds a <strong>weather specialist</strong> from scratch, teaching you the pattern for ANY specialist.</p>
+<hr class="docutils" />
+<section id="what-you-ll-build">
+<h2>What You’ll Build<a class="headerlink" href="#what-you-ll-build" title="Link to this heading"></a></h2>
+<p>A specialist that:</p>
+<ul class="simple">
+<li><p>Activates when users ask about weather</p></li>
+<li><p>Calls a weather API</p></li>
+<li><p>Returns formatted data the AI can use</p></li>
+<li><p>Works bidirectionally (AI can invoke it mid-response)</p></li>
+</ul>
+<p><strong>Time required:</strong> 30 minutes
+<strong>Difficulty:</strong> Intermediate (basic Python knowledge)</p>
+</section>
+<hr class="docutils" />
+<section id="prerequisites">
+<h2>Prerequisites<a class="headerlink" href="#prerequisites" title="Link to this heading"></a></h2>
+<ol class="arabic simple">
+<li><p>Ada running locally (<code class="docutils literal notranslate"><span class="pre">docker</span> <span class="pre">compose</span> <span class="pre">up</span></code>)</p></li>
+<li><p>Python 3.13+ (for local testing)</p></li>
+<li><p>A weather API key (we’ll use OpenWeatherMap free tier)</p></li>
+</ol>
+<section id="get-a-weather-api-key">
+<h3>Get a Weather API Key<a class="headerlink" href="#get-a-weather-api-key" title="Link to this heading"></a></h3>
+<ol class="arabic simple">
+<li><p>Visit <a class="reference external" href="https://openweathermap.org/api">https://openweathermap.org/api</a></p></li>
+<li><p>Sign up for free account</p></li>
+<li><p>Generate API key (takes ~10 minutes to activate)</p></li>
+<li><p>Save it - we’ll use it in Step 3</p></li>
+</ol>
+</section>
+</section>
+<hr class="docutils" />
+<section id="step-1-understand-the-specialist-protocol">
+<h2>Step 1: Understand the Specialist Protocol<a class="headerlink" href="#step-1-understand-the-specialist-protocol" title="Link to this heading"></a></h2>
+<p>All specialists inherit from <code class="docutils literal notranslate"><span class="pre">BaseSpecialist</span></code> and implement two methods:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">brain.specialists.protocol</span><span class="w"> </span><span class="kn">import</span> <span class="n">BaseSpecialist</span><span class="p">,</span> <span class="n">SpecialistResult</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">MySpecialist</span><span class="p">(</span><span class="n">BaseSpecialist</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">should_activate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">request_context</span><span class="p">:</span> <span class="nb">dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Should this specialist run for this request?&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="s1">&#39;my_trigger&#39;</span> <span class="ow">in</span> <span class="n">request_context</span>
+
+    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">process</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">SpecialistResult</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Do the actual work and return results.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">SpecialistResult</span><span class="p">(</span>
+            <span class="n">specialist_name</span><span class="o">=</span><span class="s2">&quot;my_specialist&quot;</span><span class="p">,</span>
+            <span class="n">success</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+            <span class="n">data</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;message&quot;</span><span class="p">:</span> <span class="s2">&quot;Hello!&quot;</span><span class="p">}</span>
+        <span class="p">)</span>
+</pre></div>
+</div>
+<p><strong>Key concepts:</strong></p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">should_activate()</span></code> - When to run (user uploaded image? Mentioned “weather”?)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">process()</span></code> - What to do (call API, analyze data, return results)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">SpecialistResult</span></code> - Standard return format</p></li>
+</ul>
+</section>
+<hr class="docutils" />
+<section id="step-2-create-the-file">
+<h2>Step 2: Create the File<a class="headerlink" href="#step-2-create-the-file" title="Link to this heading"></a></h2>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span><span class="w"> </span>brain/specialists
+touch<span class="w"> </span>weather_specialist.py
+</pre></div>
+</div>
+<p>The <code class="docutils literal notranslate"><span class="pre">_specialist.py</span></code> suffix is required for auto-discovery.</p>
+</section>
+<hr class="docutils" />
+<section id="step-3-write-the-specialist">
+<h2>Step 3: Write the Specialist<a class="headerlink" href="#step-3-write-the-specialist" title="Link to this heading"></a></h2>
+<p>Open <code class="docutils literal notranslate"><span class="pre">brain/specialists/weather_specialist.py</span></code>:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Weather specialist - provides current weather information via OpenWeatherMap API.</span>
+
+<span class="sd">@ai-specialist: weather</span>
+<span class="sd">@ai-activation-trigger: User asks about weather/temperature/forecast</span>
+<span class="sd">@ai-priority: MEDIUM</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">httpx</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Optional</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.protocol</span><span class="w"> </span><span class="kn">import</span> <span class="n">BaseSpecialist</span><span class="p">,</span> <span class="n">SpecialistCapability</span><span class="p">,</span> <span class="n">SpecialistResult</span><span class="p">,</span> <span class="n">SpecialistPriority</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">WeatherSpecialist</span><span class="p">(</span><span class="n">BaseSpecialist</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Fetches current weather data for locations.&quot;&quot;&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Initialize with API key from environment.&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">api_key</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s2">&quot;OPENWEATHER_API_KEY&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_capability</span> <span class="o">=</span> <span class="n">SpecialistCapability</span><span class="p">(</span>
+            <span class="n">name</span><span class="o">=</span><span class="s2">&quot;weather&quot;</span><span class="p">,</span>
+            <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Get current weather conditions for any location&quot;</span><span class="p">,</span>
+            <span class="n">context_priority</span><span class="o">=</span><span class="n">SpecialistPriority</span><span class="o">.</span><span class="n">MEDIUM</span><span class="p">,</span>
+            <span class="n">input_schema</span><span class="o">=</span><span class="p">{</span>
+                <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;object&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;properties&quot;</span><span class="p">:</span> <span class="p">{</span>
+                    <span class="s2">&quot;location&quot;</span><span class="p">:</span> <span class="p">{</span>
+                        <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
+                        <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;City name or &#39;City, Country&#39;&quot;</span>
+                    <span class="p">}</span>
+                <span class="p">},</span>
+                <span class="s2">&quot;required&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;location&quot;</span><span class="p">]</span>
+            <span class="p">},</span>
+            <span class="n">tags</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;weather&quot;</span><span class="p">,</span> <span class="s2">&quot;real-time&quot;</span><span class="p">,</span> <span class="s2">&quot;api&quot;</span><span class="p">]</span>
+        <span class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">capability</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">SpecialistCapability</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return capability metadata.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_capability</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">should_activate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">request_context</span><span class="p">:</span> <span class="nb">dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Activate if:</span>
+<span class="sd">        - User message mentions weather/temperature/forecast keywords</span>
+<span class="sd">        - Weather tag present (for bidirectional calls)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">user_message</span> <span class="o">=</span> <span class="n">request_context</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;user_message&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+
+        <span class="c1"># Check for weather keywords</span>
+        <span class="n">weather_keywords</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;weather&quot;</span><span class="p">,</span> <span class="s2">&quot;temperature&quot;</span><span class="p">,</span> <span class="s2">&quot;forecast&quot;</span><span class="p">,</span> <span class="s2">&quot;hot&quot;</span><span class="p">,</span> <span class="s2">&quot;cold&quot;</span><span class="p">,</span>
+                          <span class="s2">&quot;rain&quot;</span><span class="p">,</span> <span class="s2">&quot;snow&quot;</span><span class="p">,</span> <span class="s2">&quot;sunny&quot;</span><span class="p">,</span> <span class="s2">&quot;cloudy&quot;</span><span class="p">]</span>
+
+        <span class="k">if</span> <span class="nb">any</span><span class="p">(</span><span class="n">keyword</span> <span class="ow">in</span> <span class="n">user_message</span> <span class="k">for</span> <span class="n">keyword</span> <span class="ow">in</span> <span class="n">weather_keywords</span><span class="p">):</span>
+            <span class="k">return</span> <span class="kc">True</span>
+
+        <span class="c1"># Check for bidirectional activation</span>
+        <span class="k">if</span> <span class="n">request_context</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;specialist_request&quot;</span><span class="p">)</span> <span class="o">==</span> <span class="s2">&quot;weather&quot;</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">True</span>
+
+        <span class="k">return</span> <span class="kc">False</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">can_handle</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">request_context</span><span class="p">:</span> <span class="nb">dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Alias for should_activate (required by protocol).&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">should_activate</span><span class="p">(</span><span class="n">request_context</span><span class="p">)</span>
+
+    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">process</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">location</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">SpecialistResult</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Fetch weather data for the specified location.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            location: City name (e.g., &quot;Chicago&quot; or &quot;London, UK&quot;)</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            SpecialistResult with weather data or error</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">specialist_name</span> <span class="o">=</span> <span class="s2">&quot;weather&quot;</span>
+
+        <span class="c1"># Validate we have API key</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">api_key</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">SpecialistResult</span><span class="p">(</span>
+                <span class="n">specialist_name</span><span class="o">=</span><span class="n">specialist_name</span><span class="p">,</span>
+                <span class="n">success</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                <span class="n">error</span><span class="o">=</span><span class="s2">&quot;Weather API key not configured. Set OPENWEATHER_API_KEY environment variable.&quot;</span>
+            <span class="p">)</span>
+
+        <span class="c1"># Validate location provided</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">location</span><span class="p">:</span>
+            <span class="c1"># Try to extract from kwargs or return error</span>
+            <span class="n">request_context</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;request_context&quot;</span><span class="p">,</span> <span class="p">{})</span>
+            <span class="n">user_message</span> <span class="o">=</span> <span class="n">request_context</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;user_message&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+
+            <span class="c1"># Simple extraction: look for city names (you could use NER here)</span>
+            <span class="c1"># For now, return an error asking for location</span>
+            <span class="k">return</span> <span class="n">SpecialistResult</span><span class="p">(</span>
+                <span class="n">specialist_name</span><span class="o">=</span><span class="n">specialist_name</span><span class="p">,</span>
+                <span class="n">success</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                <span class="n">error</span><span class="o">=</span><span class="s2">&quot;Please specify a location. Example: &#39;weather in Chicago&#39;&quot;</span>
+            <span class="p">)</span>
+
+        <span class="c1"># Call OpenWeatherMap API</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">async</span> <span class="k">with</span> <span class="n">httpx</span><span class="o">.</span><span class="n">AsyncClient</span><span class="p">()</span> <span class="k">as</span> <span class="n">client</span><span class="p">:</span>
+                <span class="n">url</span> <span class="o">=</span> <span class="s2">&quot;https://api.openweathermap.org/data/2.5/weather&quot;</span>
+                <span class="n">params</span> <span class="o">=</span> <span class="p">{</span>
+                    <span class="s2">&quot;q&quot;</span><span class="p">:</span> <span class="n">location</span><span class="p">,</span>
+                    <span class="s2">&quot;appid&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">api_key</span><span class="p">,</span>
+                    <span class="s2">&quot;units&quot;</span><span class="p">:</span> <span class="s2">&quot;metric&quot;</span>  <span class="c1"># Celsius</span>
+                <span class="p">}</span>
+
+                <span class="n">response</span> <span class="o">=</span> <span class="k">await</span> <span class="n">client</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="n">params</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="mf">10.0</span><span class="p">)</span>
+                <span class="n">response</span><span class="o">.</span><span class="n">raise_for_status</span><span class="p">()</span>
+                <span class="n">data</span> <span class="o">=</span> <span class="n">response</span><span class="o">.</span><span class="n">json</span><span class="p">()</span>
+
+            <span class="c1"># Extract relevant information</span>
+            <span class="n">weather_info</span> <span class="o">=</span> <span class="p">{</span>
+                <span class="s2">&quot;location&quot;</span><span class="p">:</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">],</span>
+                <span class="s2">&quot;country&quot;</span><span class="p">:</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;sys&quot;</span><span class="p">][</span><span class="s2">&quot;country&quot;</span><span class="p">],</span>
+                <span class="s2">&quot;temperature_celsius&quot;</span><span class="p">:</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;main&quot;</span><span class="p">][</span><span class="s2">&quot;temp&quot;</span><span class="p">],</span>
+                <span class="s2">&quot;temperature_fahrenheit&quot;</span><span class="p">:</span> <span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;main&quot;</span><span class="p">][</span><span class="s2">&quot;temp&quot;</span><span class="p">]</span> <span class="o">*</span> <span class="mi">9</span><span class="o">/</span><span class="mi">5</span><span class="p">)</span> <span class="o">+</span> <span class="mi">32</span><span class="p">,</span>
+                <span class="s2">&quot;feels_like_celsius&quot;</span><span class="p">:</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;main&quot;</span><span class="p">][</span><span class="s2">&quot;feels_like&quot;</span><span class="p">],</span>
+                <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;weather&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="s2">&quot;description&quot;</span><span class="p">],</span>
+                <span class="s2">&quot;humidity&quot;</span><span class="p">:</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;main&quot;</span><span class="p">][</span><span class="s2">&quot;humidity&quot;</span><span class="p">],</span>
+                <span class="s2">&quot;wind_speed&quot;</span><span class="p">:</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;wind&quot;</span><span class="p">][</span><span class="s2">&quot;speed&quot;</span><span class="p">],</span>
+                <span class="s2">&quot;timestamp&quot;</span><span class="p">:</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;dt&quot;</span><span class="p">]</span>
+            <span class="p">}</span>
+
+            <span class="c1"># Format for LLM consumption</span>
+            <span class="n">formatted_response</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;Current weather in </span><span class="si">{</span><span class="n">weather_info</span><span class="p">[</span><span class="s1">&#39;location&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">, </span><span class="si">{</span><span class="n">weather_info</span><span class="p">[</span><span class="s1">&#39;country&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">:</span><span class="se">\n</span><span class="s2">&quot;</span>
+                <span class="sa">f</span><span class="s2">&quot;- Temperature: </span><span class="si">{</span><span class="n">weather_info</span><span class="p">[</span><span class="s1">&#39;temperature_celsius&#39;</span><span class="p">]</span><span class="si">:</span><span class="s2">.1f</span><span class="si">}</span><span class="s2">°C / &quot;</span>
+                <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">weather_info</span><span class="p">[</span><span class="s1">&#39;temperature_fahrenheit&#39;</span><span class="p">]</span><span class="si">:</span><span class="s2">.1f</span><span class="si">}</span><span class="s2">°F</span><span class="se">\n</span><span class="s2">&quot;</span>
+                <span class="sa">f</span><span class="s2">&quot;- Feels like: </span><span class="si">{</span><span class="n">weather_info</span><span class="p">[</span><span class="s1">&#39;feels_like_celsius&#39;</span><span class="p">]</span><span class="si">:</span><span class="s2">.1f</span><span class="si">}</span><span class="s2">°C</span><span class="se">\n</span><span class="s2">&quot;</span>
+                <span class="sa">f</span><span class="s2">&quot;- Conditions: </span><span class="si">{</span><span class="n">weather_info</span><span class="p">[</span><span class="s1">&#39;description&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">capitalize</span><span class="p">()</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span>
+                <span class="sa">f</span><span class="s2">&quot;- Humidity: </span><span class="si">{</span><span class="n">weather_info</span><span class="p">[</span><span class="s1">&#39;humidity&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">%</span><span class="se">\n</span><span class="s2">&quot;</span>
+                <span class="sa">f</span><span class="s2">&quot;- Wind speed: </span><span class="si">{</span><span class="n">weather_info</span><span class="p">[</span><span class="s1">&#39;wind_speed&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2"> m/s&quot;</span>
+            <span class="p">)</span>
+
+            <span class="k">return</span> <span class="n">SpecialistResult</span><span class="p">(</span>
+                <span class="n">specialist_name</span><span class="o">=</span><span class="n">specialist_name</span><span class="p">,</span>
+                <span class="n">success</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                <span class="n">data</span><span class="o">=</span><span class="n">weather_info</span><span class="p">,</span>
+                <span class="n">message</span><span class="o">=</span><span class="n">formatted_response</span><span class="p">,</span>
+                <span class="n">context_note</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;Weather data for </span><span class="si">{</span><span class="n">location</span><span class="si">}</span><span class="s2">&quot;</span>
+            <span class="p">)</span>
+
+        <span class="k">except</span> <span class="n">httpx</span><span class="o">.</span><span class="n">HTTPStatusError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">e</span><span class="o">.</span><span class="n">response</span><span class="o">.</span><span class="n">status_code</span> <span class="o">==</span> <span class="mi">404</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">SpecialistResult</span><span class="p">(</span>
+                    <span class="n">specialist_name</span><span class="o">=</span><span class="n">specialist_name</span><span class="p">,</span>
+                    <span class="n">success</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                    <span class="n">error</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;Location &#39;</span><span class="si">{</span><span class="n">location</span><span class="si">}</span><span class="s2">&#39; not found. Try being more specific (e.g., &#39;London, UK&#39;).&quot;</span>
+                <span class="p">)</span>
+            <span class="k">return</span> <span class="n">SpecialistResult</span><span class="p">(</span>
+                <span class="n">specialist_name</span><span class="o">=</span><span class="n">specialist_name</span><span class="p">,</span>
+                <span class="n">success</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                <span class="n">error</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;Weather API error: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span>
+            <span class="p">)</span>
+
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">SpecialistResult</span><span class="p">(</span>
+                <span class="n">specialist_name</span><span class="o">=</span><span class="n">specialist_name</span><span class="p">,</span>
+                <span class="n">success</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                <span class="n">error</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;Failed to fetch weather: </span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span>
+            <span class="p">)</span>
+</pre></div>
+</div>
+<p><strong>What this does:</strong></p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">__init__()</span></code> - Loads API key, defines capability metadata</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">should_activate()</span></code> - Checks for weather keywords in user message</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">process()</span></code> - Calls OpenWeatherMap API, formats response</p></li>
+<li><p>Returns structured data the AI can use naturally</p></li>
+</ul>
+</section>
+<hr class="docutils" />
+<section id="step-4-add-api-key-to-environment">
+<h2>Step 4: Add API Key to Environment<a class="headerlink" href="#step-4-add-api-key-to-environment" title="Link to this heading"></a></h2>
+<p>Edit <code class="docutils literal notranslate"><span class="pre">.env</span></code> in project root:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Add this line</span>
+<span class="nv">OPENWEATHER_API_KEY</span><span class="o">=</span>your_api_key_here
+</pre></div>
+</div>
+</section>
+<hr class="docutils" />
+<section id="step-5-restart-services">
+<h2>Step 5: Restart Services<a class="headerlink" href="#step-5-restart-services" title="Link to this heading"></a></h2>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>docker<span class="w"> </span>compose<span class="w"> </span>restart<span class="w"> </span>brain
+</pre></div>
+</div>
+<p>The specialist is automatically discovered - no registration needed!</p>
+</section>
+<hr class="docutils" />
+<section id="step-6-test-it">
+<h2>Step 6: Test It<a class="headerlink" href="#step-6-test-it" title="Link to this heading"></a></h2>
+<section id="via-web-interface">
+<h3>Via Web Interface<a class="headerlink" href="#via-web-interface" title="Link to this heading"></a></h3>
+<p>Visit <a class="reference external" href="http://localhost:5000">http://localhost:5000</a> and ask:</p>
+<blockquote>
+<div><p>“What’s the weather like in Tokyo?”</p>
+</div></blockquote>
+<p>You should see:</p>
+<ol class="arabic simple">
+<li><p>A notice that the weather specialist activated</p></li>
+<li><p>Current weather data</p></li>
+<li><p>The AI using that data to respond naturally</p></li>
+</ol>
+</section>
+<section id="via-api">
+<h3>Via API<a class="headerlink" href="#via-api" title="Link to this heading"></a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>curl<span class="w"> </span>-X<span class="w"> </span>POST<span class="w"> </span>http://localhost:5000/v1/chat<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>-H<span class="w"> </span><span class="s2">&quot;Content-Type: application/json&quot;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>-d<span class="w"> </span><span class="s1">&#39;{&quot;message&quot;: &quot;Weather in Paris?&quot;, &quot;stream&quot;: false}&#39;</span>
+</pre></div>
+</div>
+</section>
+<section id="check-specialist-registration">
+<h3>Check Specialist Registration<a class="headerlink" href="#check-specialist-registration" title="Link to this heading"></a></h3>
+<p>Visit <a class="reference external" href="http://localhost:5000/api/specialists">http://localhost:5000/api/specialists</a></p>
+<p>Your weather specialist should appear in the list with full capability metadata!</p>
+</section>
+</section>
+<hr class="docutils" />
+<section id="step-7-enable-bidirectional-mode-advanced">
+<h2>Step 7: Enable Bidirectional Mode (Advanced)<a class="headerlink" href="#step-7-enable-bidirectional-mode-advanced" title="Link to this heading"></a></h2>
+<p>Let the AI invoke weather lookups mid-response:</p>
+<ol class="arabic">
+<li><p><strong>Modify activation pattern</strong></p>
+<p>Already done! Our <code class="docutils literal notranslate"><span class="pre">should_activate()</span></code> checks for <code class="docutils literal notranslate"><span class="pre">specialist_request</span> <span class="pre">==</span> <span class="pre">&quot;weather&quot;</span></code>.</p>
+</li>
+<li><p><strong>Update system instructions</strong> (optional)</p>
+<p>Edit <code class="docutils literal notranslate"><span class="pre">brain/config.py</span></code> to mention weather in <code class="docutils literal notranslate"><span class="pre">SPECIALIST_INSTRUCTIONS</span></code>:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="o">-</span> <span class="n">weather</span><span class="p">:</span> <span class="n">Get</span> <span class="n">current</span> <span class="n">weather</span> <span class="k">for</span> <span class="nb">any</span> <span class="n">location</span>
+  <span class="n">Example</span><span class="p">:</span> <span class="n">SPECIALIST_REQUEST</span><span class="p">[</span><span class="n">weather</span><span class="p">:{</span><span class="s2">&quot;location&quot;</span><span class="p">:</span><span class="s2">&quot;Chicago&quot;</span><span class="p">}]</span>
+</pre></div>
+</div>
+</li>
+<li><p><strong>Test bidirectional</strong></p>
+<p>Ask something like:</p>
+<blockquote>
+<div><p>“Compare the weather in New York and London right now.”</p>
+</div></blockquote>
+<p>The AI should:</p>
+<ul class="simple">
+<li><p>Recognize it needs weather data</p></li>
+<li><p>Emit specialist requests for both cities</p></li>
+<li><p>Receive results</p></li>
+<li><p>Compare them naturally</p></li>
+</ul>
+</li>
+</ol>
+</section>
+<hr class="docutils" />
+<section id="understanding-the-code">
+<h2>Understanding the Code<a class="headerlink" href="#understanding-the-code" title="Link to this heading"></a></h2>
+<section id="key-patterns">
+<h3>Key Patterns<a class="headerlink" href="#key-patterns" title="Link to this heading"></a></h3>
+<p><strong>1. Activation Logic</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">should_activate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">request_context</span><span class="p">:</span> <span class="nb">dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+    <span class="c1"># Check user message</span>
+    <span class="k">if</span> <span class="s2">&quot;weather&quot;</span> <span class="ow">in</span> <span class="n">request_context</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;user_message&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">lower</span><span class="p">():</span>
+        <span class="k">return</span> <span class="kc">True</span>
+
+    <span class="c1"># Check bidirectional request</span>
+    <span class="k">if</span> <span class="n">request_context</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;specialist_request&quot;</span><span class="p">)</span> <span class="o">==</span> <span class="s2">&quot;weather&quot;</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">True</span>
+
+    <span class="k">return</span> <span class="kc">False</span>
+</pre></div>
+</div>
+<p><strong>2. Error Handling</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">try</span><span class="p">:</span>
+    <span class="c1"># ... do work ...</span>
+    <span class="k">return</span> <span class="n">SpecialistResult</span><span class="p">(</span><span class="n">success</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">result</span><span class="p">)</span>
+<span class="k">except</span> <span class="n">SpecificError</span><span class="p">:</span>
+    <span class="k">return</span> <span class="n">SpecialistResult</span><span class="p">(</span><span class="n">success</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">error</span><span class="o">=</span><span class="s2">&quot;Friendly message&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><strong>3. LLM-Friendly Formatting</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Return BOTH structured data AND formatted message</span>
+<span class="k">return</span> <span class="n">SpecialistResult</span><span class="p">(</span>
+    <span class="n">data</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;temp&quot;</span><span class="p">:</span> <span class="mi">72</span><span class="p">,</span> <span class="s2">&quot;conditions&quot;</span><span class="p">:</span> <span class="s2">&quot;sunny&quot;</span><span class="p">},</span>  <span class="c1"># Structured</span>
+    <span class="n">message</span><span class="o">=</span><span class="s2">&quot;Temperature: 72°F, sunny skies&quot;</span>   <span class="c1"># Formatted</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p>The AI gets both - structured for processing, formatted for natural language.</p>
+</section>
+</section>
+<hr class="docutils" />
+<section id="common-patterns">
+<h2>Common Patterns<a class="headerlink" href="#common-patterns" title="Link to this heading"></a></h2>
+<section id="file-upload-specialist">
+<h3>File Upload Specialist<a class="headerlink" href="#file-upload-specialist" title="Link to this heading"></a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">should_activate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">request_context</span><span class="p">:</span> <span class="nb">dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+    <span class="k">return</span> <span class="n">request_context</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;has_file_upload&quot;</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
+
+<span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">process</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">file_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">SpecialistResult</span><span class="p">:</span>
+    <span class="c1"># Read file, analyze, return results</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">file_path</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+        <span class="n">content</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+    <span class="c1"># ...</span>
+</pre></div>
+</div>
+</section>
+<section id="database-query-specialist">
+<h3>Database Query Specialist<a class="headerlink" href="#database-query-specialist" title="Link to this heading"></a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">process</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">query</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">SpecialistResult</span><span class="p">:</span>
+    <span class="k">async</span> <span class="k">with</span> <span class="n">db_pool</span><span class="o">.</span><span class="n">acquire</span><span class="p">()</span> <span class="k">as</span> <span class="n">conn</span><span class="p">:</span>
+        <span class="n">results</span> <span class="o">=</span> <span class="k">await</span> <span class="n">conn</span><span class="o">.</span><span class="n">fetch</span><span class="p">(</span><span class="n">query</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">SpecialistResult</span><span class="p">(</span><span class="n">success</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">results</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="external-api-specialist">
+<h3>External API Specialist<a class="headerlink" href="#external-api-specialist" title="Link to this heading"></a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">process</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">search_term</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">SpecialistResult</span><span class="p">:</span>
+    <span class="k">async</span> <span class="k">with</span> <span class="n">httpx</span><span class="o">.</span><span class="n">AsyncClient</span><span class="p">()</span> <span class="k">as</span> <span class="n">client</span><span class="p">:</span>
+        <span class="n">response</span> <span class="o">=</span> <span class="k">await</span> <span class="n">client</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;https://api.example.com/search?q=</span><span class="si">{</span><span class="n">search_term</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">SpecialistResult</span><span class="p">(</span><span class="n">success</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">response</span><span class="o">.</span><span class="n">json</span><span class="p">())</span>
+</pre></div>
+</div>
+</section>
+</section>
+<hr class="docutils" />
+<section id="testing-your-specialist">
+<h2>Testing Your Specialist<a class="headerlink" href="#testing-your-specialist" title="Link to this heading"></a></h2>
+<section id="unit-test">
+<h3>Unit Test<a class="headerlink" href="#unit-test" title="Link to this heading"></a></h3>
+<p>Create <code class="docutils literal notranslate"><span class="pre">tests/test_weather_specialist.py</span></code>:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">pytest</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">brain.specialists.weather_specialist</span><span class="w"> </span><span class="kn">import</span> <span class="n">WeatherSpecialist</span>
+
+<span class="nd">@pytest</span><span class="o">.</span><span class="n">mark</span><span class="o">.</span><span class="n">asyncio</span>
+<span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">test_weather_specialist_activation</span><span class="p">():</span>
+    <span class="n">specialist</span> <span class="o">=</span> <span class="n">WeatherSpecialist</span><span class="p">()</span>
+
+    <span class="c1"># Should activate on weather keywords</span>
+    <span class="n">context</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;user_message&quot;</span><span class="p">:</span> <span class="s2">&quot;What&#39;s the weather like today?&quot;</span><span class="p">}</span>
+    <span class="k">assert</span> <span class="n">specialist</span><span class="o">.</span><span class="n">should_activate</span><span class="p">(</span><span class="n">context</span><span class="p">)</span> <span class="o">==</span> <span class="kc">True</span>
+
+    <span class="c1"># Should not activate on unrelated messages</span>
+    <span class="n">context</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;user_message&quot;</span><span class="p">:</span> <span class="s2">&quot;Hello, how are you?&quot;</span><span class="p">}</span>
+    <span class="k">assert</span> <span class="n">specialist</span><span class="o">.</span><span class="n">should_activate</span><span class="p">(</span><span class="n">context</span><span class="p">)</span> <span class="o">==</span> <span class="kc">False</span>
+
+<span class="nd">@pytest</span><span class="o">.</span><span class="n">mark</span><span class="o">.</span><span class="n">asyncio</span>
+<span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">test_weather_specialist_process</span><span class="p">():</span>
+    <span class="n">specialist</span> <span class="o">=</span> <span class="n">WeatherSpecialist</span><span class="p">()</span>
+
+    <span class="c1"># Test with valid location</span>
+    <span class="n">result</span> <span class="o">=</span> <span class="k">await</span> <span class="n">specialist</span><span class="o">.</span><span class="n">process</span><span class="p">(</span><span class="n">location</span><span class="o">=</span><span class="s2">&quot;London&quot;</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">specialist</span><span class="o">.</span><span class="n">api_key</span><span class="p">:</span>  <span class="c1"># Only if API key configured</span>
+        <span class="k">assert</span> <span class="n">result</span><span class="o">.</span><span class="n">success</span> <span class="o">==</span> <span class="kc">True</span>
+        <span class="k">assert</span> <span class="s2">&quot;temperature_celsius&quot;</span> <span class="ow">in</span> <span class="n">result</span><span class="o">.</span><span class="n">data</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">assert</span> <span class="n">result</span><span class="o">.</span><span class="n">success</span> <span class="o">==</span> <span class="kc">False</span>
+        <span class="k">assert</span> <span class="s2">&quot;not configured&quot;</span> <span class="ow">in</span> <span class="n">result</span><span class="o">.</span><span class="n">error</span>
+</pre></div>
+</div>
+<p>Run tests:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>docker<span class="w"> </span>compose<span class="w"> </span>run<span class="w"> </span>--rm<span class="w"> </span>scripts<span class="w"> </span>pytest<span class="w"> </span>tests/test_weather_specialist.py<span class="w"> </span>-v
+</pre></div>
+</div>
+</section>
+</section>
+<hr class="docutils" />
+<section id="debugging-tips">
+<h2>Debugging Tips<a class="headerlink" href="#debugging-tips" title="Link to this heading"></a></h2>
+<p><strong>Specialist not activating?</strong></p>
+<p>Check brain logs:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>docker<span class="w"> </span>compose<span class="w"> </span>logs<span class="w"> </span>brain<span class="w"> </span>-f
+</pre></div>
+</div>
+<p>You’ll see which specialists are discovered and why they activate/don’t activate.</p>
+<p><strong>API errors?</strong></p>
+<p>Add logging in your <code class="docutils literal notranslate"><span class="pre">process()</span></code> method:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">logging</span>
+<span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
+
+<span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">process</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Weather specialist processing: </span><span class="si">{</span><span class="n">kwargs</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="c1"># ...</span>
+</pre></div>
+</div>
+<p><strong>Want to see all specialist activity?</strong></p>
+<p>Visit <a class="reference external" href="http://localhost:5000/api/info">http://localhost:5000/api/info</a> and check the <code class="docutils literal notranslate"><span class="pre">specialists</span></code> section.</p>
+</section>
+<hr class="docutils" />
+<section id="next-steps">
+<h2>Next Steps<a class="headerlink" href="#next-steps" title="Link to this heading"></a></h2>
+<p>Now that you’ve built a specialist:</p>
+<ol class="arabic simple">
+<li><p><strong>Add it to the registry</strong> - Update <code class="docutils literal notranslate"><span class="pre">.ai/specialist-registry.json</span></code></p></li>
+<li><p><strong>Write tests</strong> - Add to <code class="docutils literal notranslate"><span class="pre">tests/test_specialists.py</span></code></p></li>
+<li><p><strong>Document it</strong> - Add usage examples</p></li>
+<li><p><strong>Share it!</strong> - Submit a PR or publish separately</p></li>
+</ol>
+<section id="ideas-for-more-specialists">
+<h3>Ideas for More Specialists<a class="headerlink" href="#ideas-for-more-specialists" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p><strong>Calendar</strong> - Check your schedule, add events</p></li>
+<li><p><strong>Code execution</strong> - Run Python snippets safely</p></li>
+<li><p><strong>Database</strong> - Query your personal databases</p></li>
+<li><p><strong>Home automation</strong> - Control smart home devices</p></li>
+<li><p><strong>Translation</strong> - Real-time language translation</p></li>
+<li><p><strong>Calculations</strong> - Complex math via SymPy</p></li>
+<li><p><strong>Email</strong> - Read/send emails</p></li>
+<li><p><strong>Git operations</strong> - Commit, push, create PRs</p></li>
+<li><p><strong>RSS feeds</strong> - Check news from sources you follow</p></li>
+</ul>
+<p>The pattern is always the same - implement the protocol, drop it in <code class="docutils literal notranslate"><span class="pre">specialists/</span></code>, restart.</p>
+</section>
+</section>
+<hr class="docutils" />
+<section id="need-help">
+<h2>Need Help?<a class="headerlink" href="#need-help" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p><strong>Protocol documentation:</strong> See <code class="docutils literal notranslate"><span class="pre">brain/specialists/protocol.py</span></code></p></li>
+<li><p><strong>Example specialists:</strong> Check existing ones in <code class="docutils literal notranslate"><span class="pre">brain/specialists/</span></code></p></li>
+<li><p><strong>Issues:</strong> <a class="reference external" href="https://github.com/yourusername/ada/issues">https://github.com/yourusername/ada/issues</a></p></li>
+</ul>
+<p>Remember: Your weird specialist idea might be exactly what someone else needs! 🚀</p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="specialists.html" class="btn btn-neutral float-left" title="Specialist System" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="bidirectional.html" class="btn btn-neutral float-right" title="Bidirectional Specialist System" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p></p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

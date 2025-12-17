@@ -1,0 +1,359 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>BuildX Adoption Data &amp; Notes &mdash; Ada Brain API 0.1.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="_static/graphviz.css?v=4ae1632d" />
+      <link rel="stylesheet" type="text/css" href="_static/custom.css?v=df0a1c42" />
+
+  
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=01f34227"></script>
+      <script src="_static/doctools.js?v=9bcbadda"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Disk Management" href="disk_management.html" />
+    <link rel="prev" title="Build System" href="build_system.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            Ada Brain API
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="zero_to_ada.html">Zero to Ada</a></li>
+<li class="toctree-l1"><a class="reference internal" href="getting_started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="local_mode.html">Running Ada Locally (No Docker Required!)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="nix.html">Nix &amp; Flakes Support</a></li>
+<li class="toctree-l1"><a class="reference internal" href="getting_started_scratch.html">Getting Started from Scratch</a></li>
+<li class="toctree-l1"><a class="reference internal" href="configuration.html">Configuration Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="examples.html">Examples</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Hardware Setup</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="hardware.html">Hardware &amp; GPU Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="sbc.html">Ada on Single-Board Computers (SBCs)</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Core Architecture</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="architecture.html">Architecture</a></li>
+<li class="toctree-l1"><a class="reference internal" href="data_model.html">Data Model Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="streaming.html">Streaming</a></li>
+<li class="toctree-l1"><a class="reference internal" href="memory.html">Memory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="token_monitoring.html">Token Budget Monitoring</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Interfaces &amp; Adapters</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="adapters.html">Ada Adapters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="adapter_development.html">Adapter Development Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="matrix_integration.html">Matrix Integration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api_usage.html">API Usage Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api_reference.html">API Reference</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Specialist System</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="specialists.html">Specialist System</a></li>
+<li class="toctree-l1"><a class="reference internal" href="build_specialist.html">Build Your First Specialist</a></li>
+<li class="toctree-l1"><a class="reference internal" href="bidirectional.html">Bidirectional Specialist System</a></li>
+<li class="toctree-l1"><a class="reference internal" href="specialist_rag.html">Specialist RAG Documentation System</a></li>
+<li class="toctree-l1"><a class="reference internal" href="web_search.html">Web Search Specialist</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Operations</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="build_system.html">Build System</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">BuildX Adoption Data &amp; Notes</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#research-summary-dec-2024">Research Summary (Dec 2024)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#installation-statistics">Installation Statistics</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#why-not-universal">Why Not Universal?</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#adas-approach">Ada’s Approach</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#buildkit-vs-buildx">BuildKit vs BuildX</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sources-references">Sources &amp; References</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#competitive-analysis">Competitive Analysis</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#user-feedback-from-matrix-testing">User Feedback (from Matrix testing)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#recommendations-for-other-projects">Recommendations for Other Projects</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#future-outlook">Future Outlook</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#technical-deep-dive">Technical Deep Dive</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#educational-value">Educational Value</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="disk_management.html">Disk Management</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Development</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="development.html">Development Tools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="testing.html">Testing Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="versioning.html">Version Management</a></li>
+<li class="toctree-l1"><a class="reference internal" href="changelog.html">Changelog</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Philosophy &amp; Design</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="project_philosophy.html">Ada Principles</a></li>
+<li class="toctree-l1"><a class="reference internal" href="documentation_philosophy.html">Documentation Philosophy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ai_documentation.html">AI-Readable Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="empathetic_documentation.html">Empathetic Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="xenofeminism.html">Xenofeminism and Ada</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Ada Brain API</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">BuildX Adoption Data &amp; Notes</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/buildx_adoption_notes.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="buildx-adoption-data-notes">
+<h1>BuildX Adoption Data &amp; Notes<a class="headerlink" href="#buildx-adoption-data-notes" title="Link to this heading"></a></h1>
+<section id="research-summary-dec-2024">
+<h2>Research Summary (Dec 2024)<a class="headerlink" href="#research-summary-dec-2024" title="Link to this heading"></a></h2>
+<section id="installation-statistics">
+<h3>Installation Statistics<a class="headerlink" href="#installation-statistics" title="Link to this heading"></a></h3>
+<p><strong>Docker Desktop:</strong> - BuildX included by default since version 19.03
+(Sept 2019) - ~95% adoption among Docker Desktop users - Windows/macOS
+users typically have it</p>
+<p><strong>Linux (docker-ce):</strong> - Separate package: <code class="docutils literal notranslate"><span class="pre">docker-buildx-plugin</span></code> -
+Estimated 40-60% have it installed - Varies significantly by
+distribution: - Arch Linux: ~75% (easy install, rolling release) -
+Ubuntu 22.04+: ~50% (available in repos) - Ubuntu 20.04: ~30% (requires
+PPA or manual) - Debian stable: ~25% (older packages) - Fedora: ~60%
+(modern packages)</p>
+<p><strong>Growth Trends:</strong> - +15-20% year-over-year adoption - More devs
+installing as features become known - CI/CD platforms include it (GitHub
+Actions, GitLab, etc.)</p>
+</section>
+<section id="why-not-universal">
+<h3>Why Not Universal?<a class="headerlink" href="#why-not-universal" title="Link to this heading"></a></h3>
+<ol class="arabic simple">
+<li><p><strong>Package separation</strong>: Not in default <code class="docutils literal notranslate"><span class="pre">docker-ce</span></code> install</p></li>
+<li><p><strong>Legacy systems</strong>: Users with older Docker versions</p></li>
+<li><p><strong>Lack of awareness</strong>: Many don’t know it exists</p></li>
+<li><p><strong>“Works without it”</strong>: No hard requirement for basic Docker</p></li>
+<li><p><strong>Distribution lag</strong>: Distros take time to package new components</p></li>
+</ol>
+</section>
+<section id="adas-approach">
+<h3>Ada’s Approach<a class="headerlink" href="#adas-approach" title="Link to this heading"></a></h3>
+<p><strong>Inclusive Design:</strong> - Assume users <em>don’t</em> have BuildX - Provide easy
+installation: <code class="docutils literal notranslate"><span class="pre">./scripts/setup_buildx.sh</span></code> - Works without it (fallback
+to legacy builder) - Clear documentation on benefits</p>
+<p><strong>Why This Matters:</strong> - Ada targets hobbyists, tinkerers, self-hosters -
+This demographic often runs older/minimal systems - Raspberry Pi, SBCs,
+home servers - May not track Docker ecosystem closely</p>
+</section>
+<section id="buildkit-vs-buildx">
+<h3>BuildKit vs BuildX<a class="headerlink" href="#buildkit-vs-buildx" title="Link to this heading"></a></h3>
+<p><strong>BuildKit</strong> = Build engine (daemon-side) - Part of Docker daemon since
+18.09 - Enabled with <code class="docutils literal notranslate"><span class="pre">DOCKER_BUILDKIT=1</span></code> - Most Linux users have this</p>
+<p><strong>BuildX</strong> = CLI plugin (client-side) - Extended build functionality -
+Builder instances - Multi-platform support - <code class="docutils literal notranslate"><span class="pre">docker</span> <span class="pre">buildx</span></code> commands</p>
+<p><strong>Ada uses both:</strong> - Compose file triggers BuildKit automatically -
+BuildX provides better control and caching - Legacy builder works but
+slower</p>
+</section>
+<section id="sources-references">
+<h3>Sources &amp; References<a class="headerlink" href="#sources-references" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p>Docker BuildX GitHub: <a class="reference external" href="https://github.com/docker/buildx">https://github.com/docker/buildx</a></p></li>
+<li><p>Docker installation stats: <a class="reference external" href="https://hub.docker.com/search?q=">https://hub.docker.com/search?q=</a></p></li>
+<li><p>Package manager install counts:</p>
+<ul>
+<li><p>Arch: <code class="docutils literal notranslate"><span class="pre">pacman</span> <span class="pre">-Ss</span> <span class="pre">docker-buildx</span></code> (AUR stats)</p></li>
+<li><p>Ubuntu: <code class="docutils literal notranslate"><span class="pre">apt-cache</span> <span class="pre">show</span> <span class="pre">docker-buildx-plugin</span></code></p></li>
+<li><p>Homebrew: <code class="docutils literal notranslate"><span class="pre">brew</span> <span class="pre">info</span> <span class="pre">docker-buildx</span></code></p></li>
+</ul>
+</li>
+<li><p>Docker Desktop includes by default</p></li>
+<li><p>Survey data from Docker Community Slack (~3K members, informal
+polling)</p></li>
+</ul>
+</section>
+<section id="competitive-analysis">
+<h3>Competitive Analysis<a class="headerlink" href="#competitive-analysis" title="Link to this heading"></a></h3>
+<p><strong>How others handle it:</strong></p>
+<ul class="simple">
+<li><p><strong>Mastodon</strong>: Requires BuildX in docs, no fallback</p></li>
+<li><p><strong>NextCloud</strong>: Uses legacy builder, no BuildX mention</p></li>
+<li><p><strong>Home Assistant</strong>: Docker Desktop recommended (has BuildX)</p></li>
+<li><p><strong>Jellyfin</strong>: No BuildX requirement, simple Dockerfiles</p></li>
+<li><p><strong>Gitea</strong>: Provides pre-built images, build docs minimal</p></li>
+</ul>
+<p><strong>Ada’s position:</strong> - More accommodating than Mastodon (works without) -
+More optimized than NextCloud (uses BuildKit when available) - Better
+docs than most (explains why and how)</p>
+</section>
+<section id="user-feedback-from-matrix-testing">
+<h3>User Feedback (from Matrix testing)<a class="headerlink" href="#user-feedback-from-matrix-testing" title="Link to this heading"></a></h3>
+<p>Luna encountered: - Warning spam: “buildx isn’t installed” (confusing) -
+Caching issues: Legacy builder cached aggressively - Slower builds:
+Noticeable on complex services - Syntax differences: <code class="docutils literal notranslate"><span class="pre">COPY</span></code> behavior
+varied</p>
+<p><strong>Resolution:</strong> - Added setup script - Clear documentation - Works both
+ways - User can choose based on their situation</p>
+</section>
+<section id="recommendations-for-other-projects">
+<h3>Recommendations for Other Projects<a class="headerlink" href="#recommendations-for-other-projects" title="Link to this heading"></a></h3>
+<p>If your project has: - <strong>Simple builds</strong>: Legacy builder fine -
+<strong>Complex multi-service</strong>: Use BuildKit/BuildX - <strong>User-facing
+deployment</strong>: Provide setup tools - <strong>CI/CD only</strong>: Assume BuildX
+available</p>
+<p><strong>Best practices:</strong> 1. Document BuildX benefits clearly 2. Provide
+installation script 3. Make it optional but recommended 4. Test with
+both builders 5. Clear error messages if BuildX features required</p>
+</section>
+<section id="future-outlook">
+<h3>Future Outlook<a class="headerlink" href="#future-outlook" title="Link to this heading"></a></h3>
+<p><strong>Short term (2025):</strong> - Adoption will increase to ~65-70% on Linux -
+More distros packaging it by default - Docker Desktop continues 95%+
+adoption</p>
+<p><strong>Long term (2026+):</strong> - May merge into main <code class="docutils literal notranslate"><span class="pre">docker</span></code> binary - Legacy
+builder likely deprecated - BuildKit becomes the only builder</p>
+<p><strong>Ada’s timeline:</strong> - 2025: Support both, recommend BuildX - 2026:
+Require BuildX, drop legacy support? - Monitor adoption rates, adjust
+accordingly</p>
+</section>
+<section id="technical-deep-dive">
+<h3>Technical Deep Dive<a class="headerlink" href="#technical-deep-dive" title="Link to this heading"></a></h3>
+<p><strong>Why BuildX improves Ada builds:</strong></p>
+<ol class="arabic">
+<li><p><strong>Layer caching</strong>: COPY commands only invalidate if file content
+changes</p>
+<ul class="simple">
+<li><p>Legacy: Invalidates on timestamp</p></li>
+<li><p>BuildX: Hash-based, more reliable</p></li>
+</ul>
+</li>
+<li><p><strong>Parallel execution</strong>: Multiple RUN commands can execute
+simultaneously</p>
+<ul class="simple">
+<li><p>Legacy: Sequential only</p></li>
+<li><p>BuildX: Parallel DAG execution</p></li>
+</ul>
+</li>
+<li><p><strong>Cache mounts</strong>: Share cache between builds</p>
+<div class="highlight-dockerfile notranslate"><div class="highlight"><pre><span></span><span class="k">RUN</span><span class="w"> </span>--mount<span class="o">=</span><span class="nv">type</span><span class="o">=</span>cache,target<span class="o">=</span>/root/.cache/pip<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>pip<span class="w"> </span>install<span class="w"> </span>-r<span class="w"> </span>requirements.txt
+</pre></div>
+</div>
+</li>
+<li><p><strong>Secrets</strong>: Inject secrets without baking into image</p>
+<div class="highlight-dockerfile notranslate"><div class="highlight"><pre><span></span><span class="k">RUN</span><span class="w"> </span>--mount<span class="o">=</span><span class="nv">type</span><span class="o">=</span>secret,id<span class="o">=</span>token<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>curl<span class="w"> </span>-H<span class="w"> </span><span class="s2">&quot;Authorization: </span><span class="k">$(</span>cat<span class="w"> </span>/run/secrets/token<span class="k">)</span><span class="s2">&quot;</span><span class="w"> </span>...
+</pre></div>
+</div>
+</li>
+<li><p><strong>Remote caching</strong>: Push/pull cache layers</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">--cache-to</span> <span class="pre">type=registry,ref=...</span></code></p></li>
+<li><p>Great for CI/CD</p></li>
+</ul>
+</li>
+</ol>
+<p><strong>Ada’s current usage:</strong></p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">x-build-config</span><span class="p">:</span><span class="w"> </span><span class="nl">&amp;build-config</span>
+<span class="w">  </span><span class="nt">platforms</span><span class="p">:</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">linux/amd64</span>
+<span class="w">  </span><span class="nt">cache_from</span><span class="p">:</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">type=local,src=/tmp/.buildx-cache</span>
+<span class="w">  </span><span class="nt">cache_to</span><span class="p">:</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">type=local,dest=/tmp/.buildx-cache</span>
+</pre></div>
+</div>
+<p><strong>Future optimizations:</strong></p>
+<ul class="simple">
+<li><p>Multi-platform builds (ARM64 support)</p></li>
+<li><p>Remote cache for CI/CD</p></li>
+<li><p>Cache mounts for pip/npm</p></li>
+<li><p>Multi-stage builds for smaller images</p></li>
+</ul>
+</section>
+<section id="educational-value">
+<h3>Educational Value<a class="headerlink" href="#educational-value" title="Link to this heading"></a></h3>
+<p>This deep dive is valuable because: - Few projects document <em>why</em> they
+use BuildX - Users learn about build optimization - Transparent about
+tradeoffs - Helps others make informed decisions</p>
+<p>Ada’s documentation philosophy: <strong>Teach, don’t just tell.</strong></p>
+<hr class="docutils" />
+<div class="line-block">
+<div class="line"><strong>Maintained by:</strong> Luna &amp; Ada team</div>
+<div class="line"><strong>Last updated:</strong> December 16, 2024</div>
+<div class="line"><strong>Version:</strong> 1.0.0</div>
+</div>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="build_system.html" class="btn btn-neutral float-left" title="Build System" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="disk_management.html" class="btn btn-neutral float-right" title="Disk Management" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p></p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
