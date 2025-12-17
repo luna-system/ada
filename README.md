@@ -14,6 +14,8 @@ Named after Ada Lovelace, the first programmer.
 ## 📖 Documentation
 
 **[→ Read the full docs online](https://luna-system.github.io/ada/)**  
+*Or browse the [visual introduction](https://luna-system.github.io/ada/_static/garden.html) 🌱*
+
 *(Also available at http://localhost:5000/docs when running locally)*
 
 **Quick links:**
