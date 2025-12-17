@@ -78,6 +78,7 @@ Welcome to Ada! Your personal AI assistant that runs entirely on your hardware.
    development
    testing
    versioning
+   changelog
 
 .. toctree::
    :maxdepth: 1
