@@ -24,6 +24,7 @@ from brain.context_cache import MultiTimescaleCache
 from brain.token_monitor import TokenBudgetMonitor
 from brain.context_habituation import ContextHabituation
 from brain.attention_spotlight import AttentionalSpotlight
+from brain.semantic_chunking import SemanticChunker
 from brain.config import config
 
 logger = logging.getLogger(__name__)
@@ -98,6 +99,17 @@ class PromptAssembler:
             logger.info(f"Attention spotlight enabled (size={config.ATTENTION_SPOTLIGHT_SIZE})")
         else:
             self.spotlight = None
+        
+        # Initialize semantic chunker (Biomimetic Phase 2.2)
+        if config.SEMANTIC_CHUNKING_ENABLED:
+            self.chunker = SemanticChunker(
+                threshold=config.SEMANTIC_CHUNKING_THRESHOLD,
+                min_chunk_size=config.SEMANTIC_CHUNKING_MIN_SIZE,
+                max_chunk_size=config.SEMANTIC_CHUNKING_MAX_SIZE
+            )
+            logger.info(f"Semantic chunking enabled (threshold={config.SEMANTIC_CHUNKING_THRESHOLD})")
+        else:
+            self.chunker = None
     
     def build_prompt(
         self,
@@ -171,19 +183,48 @@ class PromptAssembler:
                 if self.token_monitor:
                     self.token_monitor.track("specialists", specialist_section)
         
-        # Memories (user-specific context) - with attention spotlight
+        # Memories (user-specific context) - with chunking and attention spotlight
         if memories:
-            # Apply attention spotlight if enabled
-            if self.spotlight:
-                # Convert (text, metadata) tuples to dicts for spotlight
+            # Convert to dict format for processing pipeline
+            memory_dicts = [
+                {
+                    'content': text,
+                    'metadata': metadata,
+                    'distance': metadata.get('distance', 0.5)
+                }
+                for text, metadata in memories
+            ]
+            
+            # Apply semantic chunking if enabled (after decay, before attention)
+            if self.chunker:
+                chunks = self.chunker.chunk_memories(memory_dicts)
+                logger.info(
+                    f"Semantic chunking: {len(memory_dicts)} memories → {len(chunks)} chunks"
+                )
+                
+                # Collapse chunks to fit attention budget if needed
+                if self.spotlight:
+                    budget = self.spotlight.spotlight_budget + self.spotlight.periphery_budget
+                    chunks = self.chunker.collapse_chunks(chunks, max_tokens=budget)
+                    logger.info(f"Collapsed to {len(chunks)} chunks within budget")
+                
+                # Convert chunks back to memory dict format for attention spotlight
+                # Each chunk becomes a representative memory with summary
                 memory_dicts = [
                     {
-                        'content': text,
-                        'metadata': metadata,
-                        'distance': metadata.get('distance', 0.5)
+                        'content': chunk.representative['content'],
+                        'metadata': {
+                            **chunk.representative['metadata'],
+                            'chunk_size': chunk.size,
+                            'chunk_summary': self.chunker.format_summary(chunk)
+                        },
+                        'distance': chunk.centroid_distance
                     }
-                    for text, metadata in memories
+                    for chunk in chunks
                 ]
+            
+            # Apply attention spotlight if enabled
+            if self.spotlight:
                 
                 distribution = self.spotlight.apply_attention(memory_dicts)
                 stats = self.spotlight.get_stats(distribution)
