@@ -1,0 +1,4 @@
+# file: /home/luna/Code/ada-v1/.venv/bin/pytest
+# hypothesis_version: 6.148.7
+
+['-script.pyw', '.exe', '__main__']
