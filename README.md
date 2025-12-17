@@ -272,6 +272,18 @@ We welcome:
 - 💡 Architecture suggestions
 - 🧪 Testing improvements
 
+### Commit Messages
+
+Ada uses [Conventional Commits](https://www.conventionalcommits.org/) for automated changelog generation:
+
+```bash
+feat: add new specialist       # New feature → minor version bump
+fix: resolve memory leak       # Bug fix → patch version bump
+docs: update API reference     # Documentation → patch version bump
+```
+
+See [Version Management Guide](docs/versioning.rst) for complete workflow.
+
 Open an issue or pull request on [GitHub](https://github.com/luna-system/ada).
 
 **Your contributions join the commons** under CC0 1.0 Universal, helping democratize AI infrastructure for everyone.
