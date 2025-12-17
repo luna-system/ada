@@ -186,6 +186,13 @@ CONTEXT_HABITUATION_THRESHOLD = int(os.getenv("CONTEXT_HABITUATION_THRESHOLD", "
 CONTEXT_HABITUATION_WEIGHT = float(os.getenv("CONTEXT_HABITUATION_WEIGHT", "0.1"))  # 10% weight when habituated
 CONTEXT_HABITUATION_DECAY_HOURS = float(os.getenv("CONTEXT_HABITUATION_DECAY_HOURS", "24.0"))  # Reset after 24hr
 
+# === Biomimetic Context Management (Phase 2) ===
+# Attentional spotlight (focus + periphery like human attention)
+ATTENTION_SPOTLIGHT_ENABLED = os.getenv("ATTENTION_SPOTLIGHT_ENABLED", "true").lower() == "true"
+ATTENTION_SPOTLIGHT_SIZE = int(os.getenv("ATTENTION_SPOTLIGHT_SIZE", "4"))  # ~4 items in focus (Miller's Law)
+ATTENTION_SPOTLIGHT_BUDGET = int(os.getenv("ATTENTION_SPOTLIGHT_BUDGET", "4000"))  # Tokens for detailed items
+ATTENTION_PERIPHERY_BUDGET = int(os.getenv("ATTENTION_PERIPHERY_BUDGET", "8000"))  # Tokens for summaries
+
 def get_config_dict() -> Dict[str, Any]:
     """Return active configuration as a dictionary for health checks."""
     return {
