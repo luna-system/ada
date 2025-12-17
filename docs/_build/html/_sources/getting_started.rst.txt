@@ -13,6 +13,22 @@ Requirements
 - ChromaDB (Vector database)
 - Docker Compose (optional, for containerized setup)
 
+.. warning::
+
+   **Ubuntu Users:** If you have Docker installed via **snap**, it won't work with Docker Compose properly. 
+   
+   **Quick fix:**
+   
+   .. code-block:: bash
+   
+      # Remove snap Docker
+      sudo snap remove docker
+      
+      # Install official Docker (see https://docs.docker.com/engine/install/ubuntu/)
+      # Then add your user to docker group
+      sudo usermod -aG docker $USER
+      newgrp docker
+
 Setup
 -----
 

@@ -48,6 +48,10 @@ Most AI assistants lock essential features behind subscriptions:
 ### 1. Install Prerequisites
 
 - **Docker & Docker Compose** (required)
+- **Docker BuildX** (recommended for fast builds)
+  - Included with Docker Desktop
+  - Linux: Run `./scripts/setup_buildx.sh` (auto-detects your distro)
+  - Or manually install: `sudo pacman -S docker-buildx` (Arch), `sudo apt install docker-buildx-plugin` (Debian/Ubuntu)
 - **Disk Space** ⚠️ **Important!**
   - Minimum: 20GB free space
   - Recommended: 50GB+ (allows multiple models)
@@ -69,7 +73,12 @@ See [Hardware Guide](/docs/hardware.rst) for detailed setup and GPU configuratio
 ```bash
 git clone https://github.com/luna-system/ada.git
 cd ada
-./setup.sh          # Creates data directories and checks prerequisites
+
+# Set up BuildX for fast builds (optional but recommended)
+./scripts/setup_buildx.sh
+
+# Create data directories and check prerequisites
+./setup.sh
 
 # Start Ada (CPU-only by default)
 docker compose up -d

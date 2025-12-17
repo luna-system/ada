@@ -360,7 +360,7 @@
         "matrix-bridge.message_handler"
       ],
       "imported_by": [],
-      "notes": "Main Matrix bridge service, uses matrix-nio AsyncClient"
+      "notes": "Main Matrix bridge service, uses matrix-nio AsyncClient. Non-streaming approach with reaction-based status: 🧠 while processing, ✅ on success, ❌ on error. Filters old messages by timestamp."
     },
     "matrix-bridge/config.py": {
       "type": "configuration",
@@ -397,7 +397,7 @@
     },
     "matrix-bridge/ada_client.py": {
       "type": "client",
-      "purpose": "HTTP client for Ada's brain streaming API",
+      "purpose": "HTTP client for Ada's brain API with clean non-streaming interface",
       "key_classes": [
         "AdaBrainClient"
       ],
@@ -413,7 +413,7 @@
       "imported_by": [
         "matrix-bridge/bridge.py"
       ],
-      "notes": "Wraps /v1/chat/stream endpoint, handles SSE streaming"
+      "notes": "chat() method internally uses streaming but returns complete text - JSON parsing abstracted away from bridge logic"
     },
     "matrix-bridge/message_handler.py": {
       "type": "core-service",
@@ -487,7 +487,7 @@
       "matrix-bridge/bridge.py::on_message",
       "matrix-bridge/message_handler.py::should_respond",
       "matrix-bridge/message_handler.py::get_context",
-      "matrix-bridge/ada_client.py::chat_stream",
+      "matrix-bridge/ada_client.py::chat",
       "brain/app.py::chat_stream_v1",
       "brain/prompt_builder.py::build_prompt",
       "brain/llm.py::generate_stream",

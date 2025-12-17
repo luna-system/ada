@@ -1,8 +1,17 @@
-"""Ada Matrix Bridge - Main bot logic."""
+"""Ada Matrix Bridge - Main bot logic.
+
+TODO: Future Enhancements
+- Add reaction callback handling (on_reaction event) to let users interact with bot via reactions
+  (e.g., 👍 to regenerate, 🔄 to retry, etc.)
+- Robust intro message handling: send once per user (track in persistent storage)
+- Conversation management: ensure brain conversations are grouped by room_id for proper context isolation
+  (currently using room_id as conversation_id, verify brain stores/retrieves correctly)
+"""
 
 import asyncio
 import logging
 import sys
+import time
 from pathlib import Path
 
 from nio import (
@@ -42,6 +51,9 @@ class AdaMatrixBridge:
         
         # Track which rooms we've sent intro to
         self.sent_intros: set[str] = set()
+        
+        # Track startup time to ignore old messages
+        self.startup_time = time.time() * 1000  # milliseconds
         
         # Register callbacks
         self.client.add_event_callback(self.on_message, RoomMessageText)
@@ -102,6 +114,11 @@ class AdaMatrixBridge:
         if sender == self.client.user:
             return
         
+        # Skip old messages from before we started
+        if event.server_timestamp < self.startup_time:
+            logger.debug(f"Skipping old message from {sender} (timestamp: {event.server_timestamp})")
+            return
+        
         logger.debug(f"Message from {sender} in {room.display_name}: {message[:50]}...")
         
         # Check for commands first
@@ -118,26 +135,21 @@ class AdaMatrixBridge:
         
         logger.info(f"Responding to {sender} in {room.display_name}")
         
-        # Show typing indicator
-        if self.config.typing_indicator:
-            await self.client.room_typing(room_id, True)
-        
-        # React to acknowledge (optional)
-        if self.config.reaction_acknowledgment:
-            try:
-                await self.client.room_send(
-                    room_id=room_id,
-                    message_type="m.reaction",
-                    content={
-                        "m.relates_to": {
-                            "rel_type": "m.annotation",
-                            "event_id": event.event_id,
-                            "key": self.config.reaction_acknowledgment
-                        }
+        # React with brain emoji to show we're processing
+        try:
+            await self.client.room_send(
+                room_id=room_id,
+                message_type="m.reaction",
+                content={
+                    "m.relates_to": {
+                        "rel_type": "m.annotation",
+                        "event_id": event.event_id,
+                        "key": "🧠"  # Brain emoji while processing
                     }
-                )
-            except Exception as e:
-                logger.debug(f"Failed to send reaction: {e}")
+                }
+            )
+        except Exception as e:
+            logger.debug(f"Failed to send brain reaction: {e}")
         
         try:
             # Get conversation context
@@ -146,17 +158,13 @@ class AdaMatrixBridge:
             # Add current message to context
             self.context_manager.add_message(room_id, sender, message, is_bot=False)
             
-            # Query Ada's brain (streaming)
-            response_chunks = []
-            async for chunk in self.ada.chat_stream(
+            # Query Ada's brain (non-streaming - Matrix can't display partial messages anyway)
+            response = await self.ada.chat(
                 message=message,
                 user_id=sender,
                 room_id=room_id,
                 conversation_history=context
-            ):
-                response_chunks.append(chunk)
-            
-            response = "".join(response_chunks)
+            )
             
             # Store Ada's response in context
             self.context_manager.add_message(room_id, self.client.user, response, is_bot=True)
@@ -173,10 +181,43 @@ class AdaMatrixBridge:
                 }
             )
             
+            # React with check emoji to show we're done
+            try:
+                await self.client.room_send(
+                    room_id=room_id,
+                    message_type="m.reaction",
+                    content={
+                        "m.relates_to": {
+                            "rel_type": "m.annotation",
+                            "event_id": event.event_id,
+                            "key": "✅"  # Check mark when done
+                        }
+                    }
+                )
+            except Exception as e:
+                logger.debug(f"Failed to send check reaction: {e}")
+            
             logger.info(f"Sent response to {room.display_name}")
         
         except Exception as e:
             logger.error(f"Error processing message: {e}", exc_info=True)
+            
+            # React with error emoji
+            try:
+                await self.client.room_send(
+                    room_id=room_id,
+                    message_type="m.reaction",
+                    content={
+                        "m.relates_to": {
+                            "rel_type": "m.annotation",
+                            "event_id": event.event_id,
+                            "key": "❌"  # Error emoji on failure
+                        }
+                    }
+                )
+            except Exception as ex:
+                logger.debug(f"Failed to send error reaction: {ex}")
+            
             error_msg = "Sorry, I encountered an error processing that message."
             await self.client.room_send(
                 room_id=room_id,
@@ -186,11 +227,6 @@ class AdaMatrixBridge:
                     "body": error_msg
                 }
             )
-        
-        finally:
-            # Stop typing indicator
-            if self.config.typing_indicator:
-                await self.client.room_typing(room_id, False)
     
     async def handle_command(self, room_id: str, sender: str, command: str, args: list[str]):
         """Handle !ada commands."""
