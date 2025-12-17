@@ -7,7 +7,7 @@ and non-streaming patterns.
 
 __version__ = "1.0.0"
 
-from .client import AdaClient
+from ada_client import AdaClient
 from .cli import main
 
 __all__ = ["AdaClient", "main"]

@@ -23,7 +23,7 @@ from nio import (
     SyncResponse
 )
 
-from ada_client import AdaBrainClient, AdaBrainError, AdaBrainConnectionError, AdaBrainResponseError
+from ada_client import AdaClient, AdaBrainError, AdaBrainConnectionError, AdaBrainResponseError
 from config import Config, get_config
 from identity import get_intro_message, setup_bot_profile, should_send_intro
 from message_handler import MessageHandler, RoomContextManager
@@ -45,7 +45,7 @@ class AdaMatrixBridge:
     def __init__(self, config: Config):
         self.config = config
         self.client = AsyncClient(config.matrix_homeserver, config.matrix_user_id)
-        self.ada = AdaBrainClient(config)
+        self.ada = AdaClient(base_url=config.brain_base_url)
         self.context_manager = RoomContextManager(config)
         self.message_handler = MessageHandler(config, config.matrix_user_id)
         
