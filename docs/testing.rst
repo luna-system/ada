@@ -111,7 +111,7 @@ The proxy remaps ``/api/*`` → ``/v1/*`` on the brain service with proper SSE h
 Automated Testing with Pytest
 ------------------------------
 
-Ada uses **pytest** for automated testing. All tests are located in the ``tests/`` directory and run in a dedicated Docker container for consistency.
+Ada uses a **hybrid testing approach** combining traditional example-based tests with property-based testing using **Hypothesis**. All tests are located in the ``tests/`` directory and run in a dedicated Docker container for consistency.
 
 Test Infrastructure
 ~~~~~~~~~~~~~~~~~~~
@@ -120,8 +120,10 @@ The testing infrastructure includes:
 
 - **Tests Container**: Dedicated Docker service with Python 3.13 and all dependencies
 - **Pytest Configuration**: ``pytest.ini`` with sensible defaults
-- **Fixtures**: Shared test fixtures in ``tests/conftest.py`` (rag_store, conversation_id)
+- **Fixtures**: Shared test fixtures in ``tests/conftest.py`` and feature-specific ``conftest.py`` files
+- **Hypothesis**: Property-based testing for algorithmic correctness
 - **Convenience Script**: ``scripts/run.sh`` wrapper for common test commands
+- **Organized Structure**: Tests grouped by feature and type (traditional vs property-based)
 
 Running Tests
 ~~~~~~~~~~~~~
@@ -163,43 +165,96 @@ Direct Way (Full Control)
 Test Structure
 ~~~~~~~~~~~~~~
 
-The test suite is organized as follows:
+The test suite uses an organized directory structure:
 
-**tests/conftest.py**
-   Shared pytest fixtures:
-   
-   - ``rag_store``: Session-scoped RagStore instance
-   - ``conversation_id``: Session-scoped valid conversation ID from database
+.. code-block:: text
 
-**tests/test_rag.py** (6 tests)
-   RAG store retrieval tests:
-   
-   - RAG store initialization
-   - Embedding generation
-   - Memory retrieval
-   - FAQ retrieval
-   - Turn retrieval
-   - Query consistency
+   tests/
+     conftest.py                   # Global fixtures (rag_store, conversation_id)
+     
+     prompt_builder/               # Traditional example-based tests
+       conftest.py                 # Shared fixtures for prompt_builder
+       test_context_retriever.py   # Context retrieval from RAG (14 tests)
+       test_section_builder.py     # Prompt section formatting
+       test_prompt_assembler.py    # Final prompt assembly
+     
+     property/                     # Property-based tests (Hypothesis)
+       conftest.py                 # Hypothesis configuration
+       test_token_properties.py    # Token counting invariants (11 tests)
+       test_memory_properties.py   # Memory decay, ranking (v2.0)
+     
+     test_rag.py                   # RAG store tests (6 tests)
+     test_specialists.py           # Specialist system tests
+     test_ai_documentation.py      # Documentation validation tests
 
-**tests/test_prompt_builder.py** (2 tests)
-   Prompt building tests:
-   
-   - Full prompt building with RAG context
-   - User message inclusion verification
+**Traditional Tests** (example-based):
+   Test specific API behavior, integration workflows, and regression cases.
+   Use parametrization to reduce duplication.
 
-**tests/test_specialists.py** (1 test)
-   Specialist system tests:
+**Property Tests** (Hypothesis):
+   Test mathematical properties that should ALWAYS hold (bounds, monotonicity, etc.).
+   Hypothesis generates 100+ random test cases automatically.
+
+Test Types
+^^^^^^^^^^
+
+**Traditional Tests** verify specific behavior:
+
+.. code-block:: python
+
+   def test_context_retriever_initialization():
+       """ContextRetriever initializes correctly."""
+       retriever = ContextRetriever()
+       assert retriever is not None
    
-   - Specialist documentation retrieval
+   @pytest.mark.parametrize("method,kwargs,expected_len", [
+       ("get_memories", {"query": "test", "k": 5}, 2),
+       ("get_faqs", {"query": "test", "k": 3}, 2),
+   ])
+   def test_retrieval_methods(retriever, method, kwargs, expected_len):
+       """Test multiple similar methods with one parametrized test."""
+       method = getattr(retriever, method)
+       result = method(**kwargs)
+       assert len(result) == expected_len
+
+**Property Tests** verify universal invariants:
+
+.. code-block:: python
+
+   from hypothesis import given, strategies as st, example
+   
+   @given(st.text(min_size=1, max_size=10000))
+   @example("🎵" * 100)  # Always test this edge case
+   def test_positive_token_count(text):
+       """Non-empty text ALWAYS produces positive tokens."""
+       monitor = TokenBudgetMonitor()
+       tokens = monitor.count_tokens(text)
+       assert tokens > 0
+
+Hypothesis will generate random inputs to try to falsify your assertions!
 
 Adding New Tests
 ~~~~~~~~~~~~~~~~
 
-Create a new test file in ``tests/``:
+**When to use which pattern:**
+
+Traditional Tests (example-based)
+   - ✅ Specific API behavior
+   - ✅ Integration tests
+   - ✅ Regression tests for known bugs
+   - ✅ Business logic and workflows
+
+Property Tests (Hypothesis)
+   - ✅ Mathematical invariants
+   - ✅ Algorithmic properties
+   - ✅ Edge case discovery
+   - ✅ Universal constraints
+
+**Example: Traditional Test**
 
 .. code-block:: python
 
-   # tests/test_my_feature.py
+   # tests/prompt_builder/test_my_feature.py
    import pytest
    from brain.my_module import my_function
 
@@ -209,13 +264,55 @@ Create a new test file in ``tests/``:
        assert result == expected_value
        assert len(result) > 0
 
-   @pytest.mark.asyncio
-   async def test_async_feature():
-       """Test async functionality."""
-       result = await async_function()
-       assert result is not None
+   @pytest.mark.parametrize("input,expected", [
+       ("hello", 2),
+       ("hello world", 3),
+   ])
+   def test_multiple_cases(input, expected):
+       """Test multiple similar cases with parametrization."""
+       result = my_function(input)
+       assert result == expected
 
-No rebuild needed! Tests are volume-mounted, so you can add/edit tests and run immediately.
+**Example: Property Test**
+
+.. code-block:: python
+
+   # tests/property/test_my_properties.py
+   from hypothesis import given, strategies as st, example
+   
+   @given(st.text(min_size=1, max_size=1000))
+   @example("edge case")  # Always test specific cases
+   def test_universal_property(text):
+       """This should ALWAYS be true for ANY input."""
+       result = my_function(text)
+       assert result > 0  # Non-empty input always produces positive result
+       assert isinstance(result, int)  # Result is always an integer
+
+No rebuild needed! Tests are volume-mounted, so you can ad
+   
+   # Run only property tests
+   docker compose run --rm scripts pytest tests/property/
+   
+   # Run only traditional tests for a feature
+   docker compose run --rm scripts pytest tests/prompt_builder/
+
+Hypothesis Configuration
+^^^^^^^^^^^^^^^^^^^^^^^^
+
+Property tests use different profiles for different environments:
+
+.. code-block:: bash
+
+   # Local development (100 examples, fast)
+   pytest tests/property/
+   
+   # CI/thorough testing (1000 examples)
+   HYPOTHESIS_PROFILE=ci pytest tests/property/
+   
+   # Debugging (10 examples, verbose)
+   HYPOTHESIS_PROFILE=debug pytest tests/property/ -v
+
+Configuration is in ``tests/property/conftest.py``.d/edit tests and run immediately.
 
 Test Markers
 ^^^^^^^^^^^^
