@@ -1,4 +1,8 @@
-"""HTTP client for Ada's brain API."""
+"""HTTP client for Ada's brain API.
+
+This client follows the standard adapter contract pattern established by
+the CLI reference implementation.
+"""
 
 import logging
 from typing import AsyncIterator
@@ -8,6 +12,21 @@ import httpx
 from config import Config
 
 logger = logging.getLogger(__name__)
+
+
+class AdaBrainError(Exception):
+    """Base exception for Ada brain client errors."""
+    pass
+
+
+class AdaBrainConnectionError(AdaBrainError):
+    """Raised when unable to connect to Ada's brain."""
+    pass
+
+
+class AdaBrainResponseError(AdaBrainError):
+    """Raised when Ada's brain returns an error response."""
+    pass
 
 
 class AdaBrainClient:
@@ -57,7 +76,11 @@ class AdaBrainClient:
                     json=payload,
                     headers={"Accept": "text/event-stream"}
                 ) as response:
-                    response.raise_for_status()
+                    if response.status_code != 200:
+                        error_text = await response.aread()
+                        raise AdaBrainResponseError(
+                            f"Brain returned {response.status_code}: {error_text.decode()}"
+                        )
                     
                     async for line in response.aiter_lines():
                         if line.startswith("data: "):
@@ -65,17 +88,16 @@ class AdaBrainClient:
                             if chunk and chunk != "[DONE]":
                                 yield chunk
         
-        except httpx.HTTPStatusError as e:
-            logger.error(f"Error from Ada brain: {e.response.status_code} {e.response.reason_phrase}")
-            logger.error(f"Request payload was: {payload}")
-            yield "Sorry, I encountered an error connecting to my brain. Please try again later."
+        except httpx.ConnectError as e:
+            logger.error(f"Unable to connect to Ada brain at {self.base_url}: {e}")
+            raise AdaBrainConnectionError(
+                f"Unable to connect to Ada's brain at {self.base_url}: {e}"
+            ) from e
         except httpx.HTTPError as e:
-            logger.error(f"Error communicating with Ada brain: {e}")
-            logger.error(f"Request payload was: {payload}")
-            yield "Sorry, I encountered an error connecting to my brain. Please try again later."
-        except Exception as e:
-            logger.error(f"Unexpected error in chat stream: {e}", exc_info=True)
-            yield "Sorry, I encountered an unexpected error. Please try again later."
+            logger.error(f"HTTP error communicating with Ada brain: {e}")
+            raise AdaBrainConnectionError(
+                f"HTTP error communicating with Ada's brain: {e}"
+            ) from e
     
     async def chat(
         self,
@@ -104,20 +126,29 @@ class AdaBrainClient:
                 if data.get("type") == "token":
                     response_parts.append(data.get("content", ""))
             except json.JSONDecodeError:
-                logger.warning(f"Failed to parse chunk: {chunk}")
-        return "".join(response_parts)
-    
-    async def healthcheck(self) -> bool:
+                logg(self) -> dict:
         """
-        Check if Ada's brain is healthy.
+        Check Ada's brain health status.
         
         Returns:
-            True if healthy, False otherwise
+            Health status dictionary with service statuses
+            
+        Raises:
+            AdaBrainConnectionError: If unable to connect to brain
         """
         try:
             async with httpx.AsyncClient(timeout=5) as client:
                 response = await client.get(f"{self.base_url}/v1/healthz")
-                return response.status_code == 200
+                response.raise_for_status()
+                return response.json()
+        except httpx.ConnectError as e:
+            raise AdaBrainConnectionError(
+                f"Unable to connect to Ada's brain at {self.base_url}: {e}"
+            ) from e
+        except httpx.HTTPError as e:
+            raise AdaBrainConnectionError(
+                f"HTTP error communicating with Ada's brain: {e}"
+            ) from response.status_code == 200
         except Exception as e:
             logger.error(f"Brain healthcheck failed: {e}")
             return False

@@ -172,13 +172,13 @@
       "priority": "HIGH",
       "notes": "Auto-activated on image uploads, results injected early in prompt"
     },
-    "brain/specialists/media_specialist.py": {
+    "brain/specialists/listenbrainz_specialist.py": {
       "type": "plugin",
-      "purpose": "Analyze video files by extracting frames and generating descriptions",
+      "purpose": "Inject music context from ListenBrainz API for currently playing or recent tracks",
       "key_classes": [
-        "MediaSpecialist"
+        "ListenBrainzSpecialist"
       ],
-      "activation_trigger": "uploaded_video_path in request context",
+      "activation_trigger": "media_info present in request context",
       "imports": [
         "brain.specialists.protocol",
         "brain.media",
@@ -188,7 +188,7 @@
         "brain/specialists/__init__.py"
       ],
       "priority": "MEDIUM",
-      "notes": "Extracts frames from videos for visual analysis"
+      "notes": "Provides ListenBrainz scrobbling data and recently played tracks"
     },
     "brain/specialists/docs_specialist.py": {
       "type": "plugin",
@@ -514,7 +514,7 @@
     "specialist_plugins": [
       "brain/specialists/protocol.py",
       "brain/specialists/ocr_specialist.py",
-      "brain/specialists/media_specialist.py",
+      "brain/specialists/listenbrainz_specialist.py",
       "brain/specialists/web_search_specialist.py",
       "brain/specialists/docs_specialist.py"
     ],
