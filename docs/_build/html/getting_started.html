@@ -22,7 +22,7 @@
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Getting Started from Scratch" href="getting_started_scratch.html" />
+    <link rel="next" title="Running Ada Locally (No Docker!)" href="local_mode.html" />
     <link rel="prev" title="Ada Brain API Docs" href="index.html" /> 
 </head>
 
@@ -48,9 +48,14 @@
               <p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
 <ul class="current">
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Getting Started</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#installation">Installation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#local-mode-recommended">Local Mode (Recommended)</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#requirements">Requirements</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#setup">Setup</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#quick-setup">Quick Setup</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#docker-mode-optional">Docker Mode (Optional)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id1">Requirements</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id2">Quick Setup</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="#configuration">Configuration</a><ul>
@@ -85,6 +90,7 @@
 <li class="toctree-l2"><a class="reference internal" href="#next-steps">Next Steps</a></li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="local_mode.html">Running Ada Locally (No Docker!)</a></li>
 <li class="toctree-l1"><a class="reference internal" href="getting_started_scratch.html">Getting Started from Scratch</a></li>
 <li class="toctree-l1"><a class="reference internal" href="configuration.html">Configuration Reference</a></li>
 <li class="toctree-l1"><a class="reference internal" href="examples.html">Examples</a></li>
@@ -163,15 +169,17 @@
              
   <section id="getting-started">
 <h1>Getting Started<a class="headerlink" href="#getting-started" title="Link to this heading"></a></h1>
-<section id="installation">
-<h2>Installation<a class="headerlink" href="#installation" title="Link to this heading"></a></h2>
+<p><strong>Get Ada running in 5 minutes!</strong></p>
+<section id="local-mode-recommended">
+<h2>Local Mode (Recommended)<a class="headerlink" href="#local-mode-recommended" title="Link to this heading"></a></h2>
+<p>The fastest way to start Ada - no Docker required!</p>
 <section id="requirements">
 <h3>Requirements<a class="headerlink" href="#requirements" title="Link to this heading"></a></h3>
 <ul class="simple">
 <li><p>Python 3.13+</p></li>
 <li><p>Ollama (LLM backend)</p></li>
-<li><p>ChromaDB (Vector database)</p></li>
-<li><p>Docker Compose (optional, for containerized setup)</p></li>
+<li><p>8GB+ RAM recommended</p></li>
+<li><p>GPU optional (CUDA, ROCm, or Metal)</p></li>
 </ul>
 <div class="admonition warning">
 <p class="admonition-title">Warning</p>
@@ -188,31 +196,86 @@ newgrp<span class="w"> </span>docker
 </div>
 </div>
 </section>
-<section id="setup">
-<h3>Setup<a class="headerlink" href="#setup" title="Link to this heading"></a></h3>
+<section id="quick-setup">
+<h3>Quick Setup<a class="headerlink" href="#quick-setup" title="Link to this heading"></a></h3>
 <ol class="arabic">
-<li><p><strong>Clone and activate virtual environment:</strong></p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span><span class="w"> </span>/home/luna/Code/ada-v1
-<span class="nb">source</span><span class="w"> </span>.venv/bin/activate
+<li><p><strong>Install Ollama:</strong></p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Get from https://ollama.ai</span>
+curl<span class="w"> </span>-fsSL<span class="w"> </span>https://ollama.com/install.sh<span class="w"> </span><span class="p">|</span><span class="w"> </span>sh
+ollama<span class="w"> </span>serve
 </pre></div>
 </div>
 </li>
-<li><p><strong>Start dependencies:</strong></p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>docker<span class="w"> </span>compose<span class="w"> </span>up<span class="w"> </span>-d
+<li><p><strong>Clone and setup Ada:</strong></p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/luna-system/ada.git
+<span class="nb">cd</span><span class="w"> </span>ada
+python3<span class="w"> </span>ada_main.py<span class="w"> </span>setup
 </pre></div>
 </div>
-<p>This starts:
-- Ollama LLM backend (port 11434)
-- ChromaDB vector store (port 8000)
-- Web server (port 5000)
-- Brain API (port 7000)</p>
+<p>The setup wizard will:
+- Create a virtual environment
+- Install dependencies
+- Create .env configuration file</p>
+</li>
+<li><p><strong>Pull a model:</strong></p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>ollama<span class="w"> </span>pull<span class="w"> </span>deepseek-r1:14b
+</pre></div>
+</div>
+</li>
+<li><p><strong>Start Ada:</strong></p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>ada<span class="w"> </span>run
+</pre></div>
+</div>
+<p>Ada will auto-detect your local Ollama and start at <a class="reference external" href="http://localhost:7000">http://localhost:7000</a></p>
 </li>
 <li><p><strong>Verify health:</strong></p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>curl<span class="w"> </span>http://localhost:7000/v1/healthz
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>ada<span class="w"> </span>doctor
+<span class="c1"># or</span>
+curl<span class="w"> </span>http://localhost:7000/v1/healthz
 </pre></div>
 </div>
 </li>
 </ol>
+<p><strong>That’s it!</strong> You’re running Ada locally. For complete local mode documentation, see the <a class="reference internal" href="local_mode.html"><span class="doc">Running Ada Locally (No Docker!)</span></a> guide.</p>
+</section>
+</section>
+<section id="docker-mode-optional">
+<h2>Docker Mode (Optional)<a class="headerlink" href="#docker-mode-optional" title="Link to this heading"></a></h2>
+<p>Need isolated services or multi-container orchestration? Ada supports Docker too!</p>
+<section id="id1">
+<h3>Requirements<a class="headerlink" href="#id1" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p>Docker &amp; Docker Compose</p></li>
+<li><p>Docker BuildX (recommended)</p></li>
+<li><p>20GB+ disk space</p></li>
+<li><p>GPU optional (with proper passthrough)</p></li>
+</ul>
+</section>
+<section id="id2">
+<h3>Quick Setup<a class="headerlink" href="#id2" title="Link to this heading"></a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/luna-system/ada.git
+<span class="nb">cd</span><span class="w"> </span>ada
+
+<span class="c1"># Start with default services</span>
+docker<span class="w"> </span>compose<span class="w"> </span>up<span class="w"> </span>-d
+
+<span class="c1"># Or with web UI</span>
+docker<span class="w"> </span>compose<span class="w"> </span>--profile<span class="w"> </span>web<span class="w"> </span>up<span class="w"> </span>-d
+
+<span class="c1"># Or with Matrix bridge</span>
+docker<span class="w"> </span>compose<span class="w"> </span>--profile<span class="w"> </span>matrix<span class="w"> </span>up<span class="w"> </span>-d
+
+<span class="c1"># With GPU support</span>
+docker<span class="w"> </span>compose<span class="w"> </span>--profile<span class="w"> </span>cuda<span class="w"> </span>up<span class="w"> </span>-d<span class="w">  </span><span class="c1"># NVIDIA</span>
+docker<span class="w"> </span>compose<span class="w"> </span>--profile<span class="w"> </span>rocm<span class="w"> </span>up<span class="w"> </span>-d<span class="w">  </span><span class="c1"># AMD</span>
+</pre></div>
+</div>
+<p>Docker starts:
+- Ollama LLM backend (port 11434)
+- ChromaDB vector store (port 8000)
+- Brain API (port 7000)
+- Optional: Web UI (port 5000), Matrix bridge</p>
+<p>See <code class="docutils literal notranslate"><span class="pre">docs/external_ollama.md</span></code> for hybrid setups (local Ollama + Docker services).</p>
 </section>
 </section>
 <section id="configuration">
@@ -478,7 +541,7 @@ python<span class="w"> </span>-c<span class="w"> </span><span class="s2">&quot;f
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
         <a href="index.html" class="btn btn-neutral float-left" title="Ada Brain API Docs" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="getting_started_scratch.html" class="btn btn-neutral float-right" title="Getting Started from Scratch" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="local_mode.html" class="btn btn-neutral float-right" title="Running Ada Locally (No Docker!)" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>

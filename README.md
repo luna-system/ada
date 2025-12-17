@@ -67,16 +67,6 @@ ollama pull deepseek-r1:14b
 
 # Start Ada
 ada run
-./setup.sh
-
-# Start Ada (CPU-only by default, headless)
-docker compose up -d
-
-# With web UI
-docker compose --profile web up -d
-
-# With Matrix bridge  
-docker compose --profile matrix up -d
 
 **That's it!** Ada runs at http://localhost:7000
 
@@ -153,8 +143,7 @@ See [docs/external_ollama.md](docs/external_ollama.md) for hybrid setups.
 
 **⌨️ Editor Integration** - Use Ada from VSCode, Neovim, Helix via [Model Context Protocol](ada-mcp/).
 
-See [full documentation](https://ada-docs.readthedocs.io/) for detail
-See [ada-mcp/](/ada-mcp/) for setup instructions.
+**📖 Full Documentation** - Complete guides at http://localhost:5000/docs (when running) or see [docs/](docs/) folder.
 
 ---
 
@@ -178,18 +167,18 @@ ada/
 
 ## Documentation
 
-**Full documentation available at http://localhost:5000/docs** when running.
+**📖 Complete documentation at http://localhost:5000/docs** (when Ada is running)
 
-**Quick links:**
-- [Getting Started from Scratch](/docs/getting_started_scratch.rst) - Customize your AI
-- [Hardware Guide](/docs/hardware.rst) - GPU setup, hardware recommendations
-- [SBC Guide](/docs/sbc.rst) - Running Ada on Raspberry Pi, Orange Pi, etc.
-- [Build Your First Specialist](/docs/build_specialist.rst) - Extend capabilities
-- [Architecture Guide](/docs/architecture.rst) - How it all works
-- [API Reference](/docs/api_reference.rst) - Complete API docs
-- [Specialists](/docs/specialists.rst) - Plugin system documentation
-- [Xenofeminism & Design](/docs/xenofeminism.rst) - Our philosophical foundation
-- [Principles](/PRINCIPLES.md) - Why Ada is always free and open
+All guides are in [docs/](docs/) as Sphinx RST files:
+- **[Getting Started](docs/getting_started.rst)** - Quick setup with `ada` CLI
+- **[Local Mode Guide](docs/local_mode.md)** - Running without Docker
+- **[Getting Started from Scratch](docs/getting_started_scratch.rst)** - Customize your AI
+- **[Hardware Guide](docs/hardware.rst)** - GPU setup and optimization
+- **[Build a Specialist](docs/build_specialist.rst)** - Extend capabilities
+- **[Architecture](docs/architecture.rst)** - How it all works
+- **[API Reference](docs/api_reference.rst)** - REST API documentation
+
+Start with **Getting Started** for the fastest onboarding!
 
 ---
 
