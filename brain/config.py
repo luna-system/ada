@@ -163,6 +163,18 @@ CACHE_CONVERSATION_TTL = int(os.getenv("CACHE_CONVERSATION_TTL", "3600"))  # 1 h
 CACHE_MAX_ENTRIES = int(os.getenv("CACHE_MAX_ENTRIES", "1000"))
 CACHE_CLEANUP_INTERVAL = int(os.getenv("CACHE_CLEANUP_INTERVAL", "300"))  # 5 minutes
 
+# ============= Token Budget Monitoring =============
+# Context window management (v2.0 Phase 2)
+
+# Maximum context tokens (model-specific)
+LLM_MAX_CONTEXT = int(os.getenv("LLM_MAX_CONTEXT", "128000"))  # deepseek-r1 default
+
+# Warning threshold (0.0-1.0)
+TOKEN_WARNING_THRESHOLD = float(os.getenv("TOKEN_WARNING_THRESHOLD", "0.8"))  # Warn at 80%
+
+# Enable token monitoring logging
+TOKEN_MONITORING_ENABLED = os.getenv("TOKEN_MONITORING_ENABLED", "true").lower() == "true"
+
 def get_config_dict() -> Dict[str, Any]:
     """Return active configuration as a dictionary for health checks."""
     return {
