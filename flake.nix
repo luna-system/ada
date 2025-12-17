@@ -11,7 +11,8 @@
       let
         pkgs = nixpkgs.legacyPackages.${system};
         
-        python = pkgs.python313;
+        # Use python313 if available, fallback to python312 or python3
+        python = pkgs.python313 or pkgs.python312 or pkgs.python3;
         
         # Python environment with all Ada dependencies
         adaPythonEnv = python.withPackages (ps: with ps; [
