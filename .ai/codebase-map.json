@@ -228,6 +228,23 @@
       "priority": "MEDIUM",
       "notes": "Bidirectional specialist, LLM can request searches mid-generation"
     },
+    "brain/specialists/wiki_specialist.py": {
+      "type": "plugin",
+      "purpose": "Look up information from MediaWiki-based wikis (Wikipedia, Fandom)",
+      "key_classes": [
+        "WikiSpecialist"
+      ],
+      "activation_trigger": "LLM uses SPECIALIST_REQUEST[wiki_lookup:...] (bidirectional)",
+      "imports": [
+        "brain.specialists.protocol",
+        "httpx"
+      ],
+      "imported_by": [
+        "brain/specialists/__init__.py"
+      ],
+      "priority": "MEDIUM",
+      "notes": "Bidirectional specialist, supports Wikipedia and Object Show fandom wikis with smart search"
+    },
     "brain/specialists/bidirectional.py": {
       "type": "framework",
       "purpose": "Enables LLM to invoke specialists mid-response using XML tags",
@@ -516,6 +533,7 @@
       "brain/specialists/ocr_specialist.py",
       "brain/specialists/listenbrainz_specialist.py",
       "brain/specialists/web_search_specialist.py",
+      "brain/specialists/wiki_specialist.py",
       "brain/specialists/docs_specialist.py"
     ],
     "support_utilities": [
