@@ -150,6 +150,55 @@ SEARXNG_URL = os.getenv("SEARXNG_URL")
 LISTENBRAINZ_USER = os.getenv("LISTENBRAINZ_USER")
 LISTENBRAINZ_TOKEN = os.getenv("LISTENBRAINZ_TOKEN")
 
+# ============= Context Cache Configuration =============
+# Multi-timescale caching for RAG context
+
+# TTL values (seconds)
+CACHE_PERSONA_TTL = int(os.getenv("CACHE_PERSONA_TTL", "86400"))  # 24 hours
+CACHE_FAQ_TTL = int(os.getenv("CACHE_FAQ_TTL", "86400"))  # 24 hours
+CACHE_MEMORY_TTL = int(os.getenv("CACHE_MEMORY_TTL", "300"))  # 5 minutes
+CACHE_CONVERSATION_TTL = int(os.getenv("CACHE_CONVERSATION_TTL", "3600"))  # 1 hour
+
+# Cache limits
+CACHE_MAX_ENTRIES = int(os.getenv("CACHE_MAX_ENTRIES", "1000"))
+CACHE_CLEANUP_INTERVAL = int(os.getenv("CACHE_CLEANUP_INTERVAL", "300"))  # 5 minutes
+
+# ============= Token Budget Monitoring =============
+# Context window management (v2.0 Phase 2)
+
+# Maximum context tokens (model-specific)
+LLM_MAX_CONTEXT = int(os.getenv("LLM_MAX_CONTEXT", "128000"))  # deepseek-r1 default
+
+# Warning threshold (0.0-1.0)
+TOKEN_WARNING_THRESHOLD = float(os.getenv("TOKEN_WARNING_THRESHOLD", "0.8"))  # Warn at 80%
+
+# Enable token monitoring logging
+TOKEN_MONITORING_ENABLED = os.getenv("TOKEN_MONITORING_ENABLED", "true").lower() == "true"
+
+# ===  Biomimetic Context Management (Phase 1) ===
+# Memory decay weighting (Ebbinghaus forgetting curve)
+MEMORY_DECAY_ENABLED = os.getenv("MEMORY_DECAY_ENABLED", "true").lower() == "true"
+MEMORY_DECAY_TIME_SCALE_HOURS = float(os.getenv("MEMORY_DECAY_TIME_SCALE_HOURS", "100.0"))  # ~4 days
+
+# Context habituation (reduce weight of repeated context)
+CONTEXT_HABITUATION_ENABLED = os.getenv("CONTEXT_HABITUATION_ENABLED", "true").lower() == "true"
+CONTEXT_HABITUATION_THRESHOLD = int(os.getenv("CONTEXT_HABITUATION_THRESHOLD", "3"))  # Habituate after 3 reps
+CONTEXT_HABITUATION_WEIGHT = float(os.getenv("CONTEXT_HABITUATION_WEIGHT", "0.1"))  # 10% weight when habituated
+CONTEXT_HABITUATION_DECAY_HOURS = float(os.getenv("CONTEXT_HABITUATION_DECAY_HOURS", "24.0"))  # Reset after 24hr
+
+# === Biomimetic Context Management (Phase 2) ===
+# Attentional spotlight (focus + periphery like human attention)
+ATTENTION_SPOTLIGHT_ENABLED = os.getenv("ATTENTION_SPOTLIGHT_ENABLED", "true").lower() == "true"
+ATTENTION_SPOTLIGHT_SIZE = int(os.getenv("ATTENTION_SPOTLIGHT_SIZE", "4"))  # ~4 items in focus (Miller's Law)
+ATTENTION_SPOTLIGHT_BUDGET = int(os.getenv("ATTENTION_SPOTLIGHT_BUDGET", "4000"))  # Tokens for detailed items
+ATTENTION_PERIPHERY_BUDGET = int(os.getenv("ATTENTION_PERIPHERY_BUDGET", "8000"))  # Tokens for summaries
+
+# Semantic chunking (group related memories to reduce redundancy)
+SEMANTIC_CHUNKING_ENABLED = os.getenv("SEMANTIC_CHUNKING_ENABLED", "true").lower() == "true"
+SEMANTIC_CHUNKING_THRESHOLD = float(os.getenv("SEMANTIC_CHUNKING_THRESHOLD", "0.3"))  # Distance threshold for grouping
+SEMANTIC_CHUNKING_MIN_SIZE = int(os.getenv("SEMANTIC_CHUNKING_MIN_SIZE", "2"))  # Min memories to form chunk
+SEMANTIC_CHUNKING_MAX_SIZE = int(os.getenv("SEMANTIC_CHUNKING_MAX_SIZE", "10"))  # Max memories per chunk
+
 def get_config_dict() -> Dict[str, Any]:
     """Return active configuration as a dictionary for health checks."""
     return {

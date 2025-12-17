@@ -214,9 +214,9 @@ async def oneshot_mode(
 @click.argument("message", required=False)
 @click.option(
     "--brain-url",
-    default="http://localhost:7000",
+    default="http://localhost:8000",
     envvar="ADA_BRAIN_URL",
-    help="Ada brain API URL (default: http://localhost:7000)"
+    help="Ada brain API URL (default: http://localhost:8000)"
 )
 @click.option(
     "--conversation-id",

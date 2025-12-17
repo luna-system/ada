@@ -1,0 +1,718 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Nix &amp; Flakes Support &mdash; Ada Brain API 0.1.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="_static/graphviz.css?v=4ae1632d" />
+      <link rel="stylesheet" type="text/css" href="_static/custom.css?v=df0a1c42" />
+
+  
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=01f34227"></script>
+      <script src="_static/doctools.js?v=9bcbadda"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Getting Started from Scratch" href="getting_started_scratch.html" />
+    <link rel="prev" title="Running Ada Locally (No Docker Required!)" href="local_mode.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            Ada Brain API
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="zero_to_ada.html">Zero to Ada</a></li>
+<li class="toctree-l1"><a class="reference internal" href="getting_started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="local_mode.html">Running Ada Locally (No Docker Required!)</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Nix &amp; Flakes Support</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#why-nix">Why Nix?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#quick-start">Quick Start</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#prerequisites">Prerequisites</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#development-shell">Development Shell</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#build-ada-package">Build Ada Package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#run-ada-directly">Run Ada Directly</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#direnv-integration">direnv Integration</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#nixos-module">NixOS Module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#module-options">Module Options</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#service-management">Service Management</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#home-manager-integration">Home Manager Integration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#customization">Customization</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#override-flake-inputs">Override Flake Inputs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#custom-python-version">Custom Python Version</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#add-extra-dependencies">Add Extra Dependencies</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#flake-structure">Flake Structure</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#flake-outputs">Flake Outputs</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#gpu-support">GPU Support</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#troubleshooting">Troubleshooting</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#comparison-with-other-methods">Comparison with Other Methods</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#best-practices">Best Practices</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#integration-examples">Integration Examples</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#github-actions">GitHub Actions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#gitlab-ci">GitLab CI</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#with-docker-nix-built">With Docker (Nix-built)</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#philosophy">Philosophy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#resources">Resources</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#community">Community</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#contributing">Contributing</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="getting_started_scratch.html">Getting Started from Scratch</a></li>
+<li class="toctree-l1"><a class="reference internal" href="configuration.html">Configuration Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="examples.html">Examples</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Hardware Setup</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="hardware.html">Hardware &amp; GPU Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="sbc.html">Ada on Single-Board Computers (SBCs)</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Core Architecture</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="architecture.html">Architecture</a></li>
+<li class="toctree-l1"><a class="reference internal" href="data_model.html">Data Model Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="streaming.html">Streaming</a></li>
+<li class="toctree-l1"><a class="reference internal" href="memory.html">Memory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="token_monitoring.html">Token Budget Monitoring</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Interfaces &amp; Adapters</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="adapters.html">Ada Adapters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="adapter_development.html">Adapter Development Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="matrix_integration.html">Matrix Integration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api_usage.html">API Usage Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api_reference.html">API Reference</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Specialist System</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="specialists.html">Specialist System</a></li>
+<li class="toctree-l1"><a class="reference internal" href="build_specialist.html">Build Your First Specialist</a></li>
+<li class="toctree-l1"><a class="reference internal" href="bidirectional.html">Bidirectional Specialist System</a></li>
+<li class="toctree-l1"><a class="reference internal" href="specialist_rag.html">Specialist RAG Documentation System</a></li>
+<li class="toctree-l1"><a class="reference internal" href="web_search.html">Web Search Specialist</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Operations</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="build_system.html">Build System</a></li>
+<li class="toctree-l1"><a class="reference internal" href="buildx_adoption_notes.html">BuildX Adoption Data &amp; Notes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="disk_management.html">Disk Management</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Development</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="development.html">Development Tools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="testing.html">Testing Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="versioning.html">Version Management</a></li>
+<li class="toctree-l1"><a class="reference internal" href="changelog.html">Changelog</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Philosophy &amp; Design</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="project_philosophy.html">Ada Principles</a></li>
+<li class="toctree-l1"><a class="reference internal" href="documentation_philosophy.html">Documentation Philosophy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ai_documentation.html">AI-Readable Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="empathetic_documentation.html">Empathetic Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="xenofeminism.html">Xenofeminism and Ada</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Ada Brain API</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Nix &amp; Flakes Support</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/nix.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="nix-flakes-support">
+<h1>Nix &amp; Flakes Support<a class="headerlink" href="#nix-flakes-support" title="Link to this heading"></a></h1>
+<p>Ada provides first-class support for <a class="reference external" href="https://nixos.org/">Nix</a> and Nix flakes, offering declarative, reproducible development and deployment environments.</p>
+<section id="why-nix">
+<h2>Why Nix?<a class="headerlink" href="#why-nix" title="Link to this heading"></a></h2>
+<dl class="simple">
+<dt><strong>Solves Version Mismatches</strong></dt><dd><p>Your distro doesn’t have Python 3.13 yet? Nix provides it instantly, no compilation needed.
+Ubuntu 22.04/24.04 users: This is your easiest path to Python 3.13!</p>
+</dd>
+<dt><strong>Reproducibility</strong></dt><dd><p>Nix ensures everyone gets the exact same dependencies, eliminating “works on my machine” issues.</p>
+</dd>
+<dt><strong>Declarative</strong></dt><dd><p>All dependencies declared in <code class="docutils literal notranslate"><span class="pre">flake.nix</span></code> - Python packages, system libraries, tools.</p>
+</dd>
+<dt><strong>Cross-platform</strong></dt><dd><p>Works on Linux, macOS, and Windows (via WSL). Perfect for teams with mixed environments.</p>
+</dd>
+<dt><strong>Composable</strong></dt><dd><p>Integrate Ada into larger Nix configurations, NixOS modules, or home-manager.</p>
+</dd>
+<dt><strong>Cutting Edge</strong></dt><dd><p>Nix flakes are at the forefront of reproducible software development.</p>
+</dd>
+</dl>
+</section>
+<section id="quick-start">
+<h2>Quick Start<a class="headerlink" href="#quick-start" title="Link to this heading"></a></h2>
+<section id="prerequisites">
+<h3>Prerequisites<a class="headerlink" href="#prerequisites" title="Link to this heading"></a></h3>
+<p>Install Nix with flakes enabled:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Install Nix (official installer)</span>
+curl<span class="w"> </span>-L<span class="w"> </span>https://nixos.org/nix/install<span class="w"> </span><span class="p">|</span><span class="w"> </span>sh
+
+<span class="c1"># Enable flakes (add to ~/.config/nix/nix.conf or /etc/nix/nix.conf)</span>
+experimental-features<span class="w"> </span><span class="o">=</span><span class="w"> </span>nix-command<span class="w"> </span>flakes
+</pre></div>
+</div>
+</section>
+<section id="development-shell">
+<h3>Development Shell<a class="headerlink" href="#development-shell" title="Link to this heading"></a></h3>
+<p>Enter a development environment with all dependencies:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span><span class="w"> </span>ada-v1
+nix<span class="w"> </span>develop
+
+<span class="c1"># Shell hook displays available commands</span>
+<span class="c1"># 🤖 Ada development environment</span>
+<span class="c1"># Available commands: ada, ollama, python, pytest...</span>
+</pre></div>
+</div>
+<p>Now you’re in a shell with:</p>
+<ul class="simple">
+<li><p>Python 3.13 with all Ada dependencies</p></li>
+<li><p>Ollama LLM runtime</p></li>
+<li><p>Tesseract OCR</p></li>
+<li><p>Development tools (uv, ruff, pytest)</p></li>
+<li><p>Pre-configured environment variables</p></li>
+</ul>
+<p>Run Ada in development mode:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Inside nix develop shell</span>
+ada<span class="w"> </span>setup
+ollama<span class="w"> </span>serve<span class="w"> </span><span class="p">&amp;</span>
+ollama<span class="w"> </span>pull<span class="w"> </span>deepseek-r1:latest
+ada<span class="w"> </span>run
+</pre></div>
+</div>
+</section>
+<section id="build-ada-package">
+<h3>Build Ada Package<a class="headerlink" href="#build-ada-package" title="Link to this heading"></a></h3>
+<p>Build Ada as a standalone package:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Build Ada</span>
+nix<span class="w"> </span>build
+
+<span class="c1"># Result in ./result/bin/ada</span>
+./result/bin/ada<span class="w"> </span>--version
+</pre></div>
+</div>
+</section>
+<section id="run-ada-directly">
+<h3>Run Ada Directly<a class="headerlink" href="#run-ada-directly" title="Link to this heading"></a></h3>
+<p>Run Ada without building or entering dev shell:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Run from flake</span>
+nix<span class="w"> </span>run<span class="w"> </span>github:luna-system/ada
+
+<span class="c1"># Or locally</span>
+nix<span class="w"> </span>run<span class="w"> </span>.<span class="w"> </span>--<span class="w"> </span>chat<span class="w"> </span><span class="s2">&quot;Hello Ada&quot;</span>
+
+<span class="c1"># Specific commands</span>
+nix<span class="w"> </span>run<span class="w"> </span>.#ada-doctor
+nix<span class="w"> </span>run<span class="w"> </span>.#ada-setup
+</pre></div>
+</div>
+</section>
+<section id="direnv-integration">
+<h3>direnv Integration<a class="headerlink" href="#direnv-integration" title="Link to this heading"></a></h3>
+<p>Automatically activate Nix environment when entering directory:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Install direnv</span>
+nix<span class="w"> </span>profile<span class="w"> </span>install<span class="w"> </span>nixpkgs#direnv
+
+<span class="c1"># Hook into your shell (add to ~/.bashrc or ~/.zshrc)</span>
+<span class="nb">eval</span><span class="w"> </span><span class="s2">&quot;</span><span class="k">$(</span>direnv<span class="w"> </span>hook<span class="w"> </span>bash<span class="k">)</span><span class="s2">&quot;</span><span class="w">  </span><span class="c1"># or zsh, fish, etc.</span>
+
+<span class="c1"># Allow direnv in Ada directory</span>
+<span class="nb">cd</span><span class="w"> </span>ada-v1
+direnv<span class="w"> </span>allow
+</pre></div>
+</div>
+<p>Now the Nix environment activates automatically when you <code class="docutils literal notranslate"><span class="pre">cd</span></code> into the Ada directory! 🎉</p>
+</section>
+</section>
+<section id="nixos-module">
+<h2>NixOS Module<a class="headerlink" href="#nixos-module" title="Link to this heading"></a></h2>
+<p>Deploy Ada as a system service on NixOS:</p>
+<div class="highlight-nix notranslate"><div class="highlight"><pre><span></span><span class="c1"># In your configuration.nix or flake</span>
+<span class="p">{</span>
+  inputs<span class="o">.</span>ada<span class="o">.</span><span class="ss">url</span> <span class="o">=</span> <span class="s2">&quot;github:luna-system/ada&quot;</span><span class="p">;</span>
+
+  <span class="ss">outputs</span> <span class="o">=</span> <span class="p">{</span> self<span class="p">,</span> nixpkgs<span class="p">,</span> ada <span class="p">}:</span> <span class="p">{</span>
+    nixosConfigurations<span class="o">.</span><span class="ss">myhost</span> <span class="o">=</span> nixpkgs<span class="o">.</span>lib<span class="o">.</span>nixosSystem <span class="p">{</span>
+      <span class="ss">system</span> <span class="o">=</span> <span class="s2">&quot;x86_64-linux&quot;</span><span class="p">;</span>
+      <span class="ss">modules</span> <span class="o">=</span> <span class="p">[</span>
+        ada<span class="o">.</span>nixosModules<span class="o">.</span>default
+        <span class="p">{</span>
+          services<span class="o">.</span><span class="ss">ada</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="ss">enable</span> <span class="o">=</span> <span class="no">true</span><span class="p">;</span>
+            <span class="ss">port</span> <span class="o">=</span> <span class="mi">8000</span><span class="p">;</span>
+            <span class="ss">ollamaUrl</span> <span class="o">=</span> <span class="s2">&quot;http://localhost:11434&quot;</span><span class="p">;</span>
+            <span class="ss">dataDir</span> <span class="o">=</span> <span class="s2">&quot;/var/lib/ada&quot;</span><span class="p">;</span>
+          <span class="p">};</span>
+
+          <span class="c1"># Ollama automatically enabled by default</span>
+          services<span class="o">.</span>ollama<span class="o">.</span><span class="ss">enable</span> <span class="o">=</span> <span class="no">true</span><span class="p">;</span>
+        <span class="p">}</span>
+      <span class="p">];</span>
+    <span class="p">};</span>
+  <span class="p">};</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<section id="module-options">
+<h3>Module Options<a class="headerlink" href="#module-options" title="Link to this heading"></a></h3>
+<div class="highlight-nix notranslate"><div class="highlight"><pre><span></span>services<span class="o">.</span><span class="ss">ada</span> <span class="o">=</span> <span class="p">{</span>
+  <span class="ss">enable</span> <span class="o">=</span> <span class="no">true</span><span class="p">;</span>           <span class="c1"># Enable Ada service</span>
+  <span class="ss">package</span> <span class="o">=</span> pkgs<span class="o">.</span>ada<span class="p">;</span>      <span class="c1"># Package to use (override if needed)</span>
+  <span class="ss">dataDir</span> <span class="o">=</span> <span class="s2">&quot;/var/lib/ada&quot;</span><span class="p">;</span> <span class="c1"># Data directory</span>
+  <span class="ss">ollamaUrl</span> <span class="o">=</span> <span class="s2">&quot;http://localhost:11434&quot;</span><span class="p">;</span> <span class="c1"># Ollama endpoint</span>
+  <span class="ss">port</span> <span class="o">=</span> <span class="mi">8000</span><span class="p">;</span>             <span class="c1"># API port</span>
+  <span class="ss">user</span> <span class="o">=</span> <span class="s2">&quot;ada&quot;</span><span class="p">;</span>            <span class="c1"># Service user</span>
+  <span class="ss">group</span> <span class="o">=</span> <span class="s2">&quot;ada&quot;</span><span class="p">;</span>           <span class="c1"># Service group</span>
+<span class="p">};</span>
+</pre></div>
+</div>
+</section>
+<section id="service-management">
+<h3>Service Management<a class="headerlink" href="#service-management" title="Link to this heading"></a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Start Ada</span>
+sudo<span class="w"> </span>systemctl<span class="w"> </span>start<span class="w"> </span>ada
+
+<span class="c1"># Enable on boot</span>
+sudo<span class="w"> </span>systemctl<span class="w"> </span><span class="nb">enable</span><span class="w"> </span>ada
+
+<span class="c1"># Check status</span>
+sudo<span class="w"> </span>systemctl<span class="w"> </span>status<span class="w"> </span>ada
+
+<span class="c1"># View logs</span>
+sudo<span class="w"> </span>journalctl<span class="w"> </span>-u<span class="w"> </span>ada<span class="w"> </span>-f
+</pre></div>
+</div>
+</section>
+</section>
+<section id="home-manager-integration">
+<h2>Home Manager Integration<a class="headerlink" href="#home-manager-integration" title="Link to this heading"></a></h2>
+<p>Include Ada in your personal environment:</p>
+<div class="highlight-nix notranslate"><div class="highlight"><pre><span></span><span class="c1"># In home.nix</span>
+<span class="p">{</span> pkgs<span class="p">,</span> <span class="o">...</span> <span class="p">}:</span>
+<span class="p">{</span>
+  home<span class="o">.</span><span class="ss">packages</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="p">(</span>pkgs<span class="o">.</span>callPackage <span class="l">/path/to/ada/flake.nix</span> <span class="p">{})</span><span class="o">.</span>packages<span class="o">.</span><span class="si">${</span>pkgs<span class="o">.</span>system<span class="si">}</span><span class="o">.</span>default
+  <span class="p">];</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>Or as a flake input:</p>
+<div class="highlight-nix notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+  inputs<span class="o">.</span>ada<span class="o">.</span><span class="ss">url</span> <span class="o">=</span> <span class="s2">&quot;github:luna-system/ada&quot;</span><span class="p">;</span>
+
+  <span class="ss">outputs</span> <span class="o">=</span> <span class="p">{</span> self<span class="p">,</span> nixpkgs<span class="p">,</span> home-manager<span class="p">,</span> ada <span class="p">}:</span> <span class="p">{</span>
+    homeConfigurations<span class="o">.</span><span class="s2">&quot;user@host&quot;</span> <span class="o">=</span> home-manager<span class="o">.</span>lib<span class="o">.</span>homeManagerConfiguration <span class="p">{</span>
+      <span class="ss">pkgs</span> <span class="o">=</span> nixpkgs<span class="o">.</span>legacyPackages<span class="o">.</span>x86_64-linux<span class="p">;</span>
+      <span class="ss">modules</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="p">{</span>
+          home<span class="o">.</span><span class="ss">packages</span> <span class="o">=</span> <span class="p">[</span> ada<span class="o">.</span>packages<span class="o">.</span>x86_64-linux<span class="o">.</span>default <span class="p">];</span>
+        <span class="p">}</span>
+      <span class="p">];</span>
+    <span class="p">};</span>
+  <span class="p">};</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</section>
+<section id="customization">
+<h2>Customization<a class="headerlink" href="#customization" title="Link to this heading"></a></h2>
+<section id="override-flake-inputs">
+<h3>Override Flake Inputs<a class="headerlink" href="#override-flake-inputs" title="Link to this heading"></a></h3>
+<p>Use specific nixpkgs version or overlays:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>nix<span class="w"> </span>develop<span class="w"> </span>--override-input<span class="w"> </span>nixpkgs<span class="w"> </span>github:NixOS/nixpkgs/nixos-24.11
+</pre></div>
+</div>
+</section>
+<section id="custom-python-version">
+<h3>Custom Python Version<a class="headerlink" href="#custom-python-version" title="Link to this heading"></a></h3>
+<p>Edit <code class="docutils literal notranslate"><span class="pre">flake.nix</span></code> to use different Python:</p>
+<div class="highlight-nix notranslate"><div class="highlight"><pre><span></span><span class="k">let</span>
+  <span class="ss">python</span> <span class="o">=</span> pkgs<span class="o">.</span>python312<span class="p">;</span>  <span class="c1"># Change from python313</span>
+<span class="k">in</span>
+<span class="c1"># ... rest of flake</span>
+</pre></div>
+</div>
+</section>
+<section id="add-extra-dependencies">
+<h3>Add Extra Dependencies<a class="headerlink" href="#add-extra-dependencies" title="Link to this heading"></a></h3>
+<p>Add packages to <code class="docutils literal notranslate"><span class="pre">devShells.default.buildInputs</span></code>:</p>
+<div class="highlight-nix notranslate"><div class="highlight"><pre><span></span>devShells<span class="o">.</span><span class="ss">default</span> <span class="o">=</span> pkgs<span class="o">.</span>mkShell <span class="p">{</span>
+  <span class="ss">buildInputs</span> <span class="o">=</span> <span class="k">with</span> pkgs<span class="p">;</span> <span class="p">[</span>
+    adaPythonEnv
+    tesseract
+    <span class="c1"># Add your tools</span>
+    ripgrep
+    fd
+    neovim
+  <span class="p">];</span>
+<span class="p">};</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="flake-structure">
+<h2>Flake Structure<a class="headerlink" href="#flake-structure" title="Link to this heading"></a></h2>
+<p>The Ada flake provides:</p>
+<dl class="simple">
+<dt><strong>Development Shell</strong> (<code class="docutils literal notranslate"><span class="pre">nix</span> <span class="pre">develop</span></code>)</dt><dd><p>Complete development environment with all dependencies and tools.</p>
+</dd>
+<dt><strong>Package</strong> (<code class="docutils literal notranslate"><span class="pre">nix</span> <span class="pre">build</span></code>)</dt><dd><p>Standalone Ada package that can be installed system-wide.</p>
+</dd>
+<dt><strong>Apps</strong> (<code class="docutils literal notranslate"><span class="pre">nix</span> <span class="pre">run</span></code>)</dt><dd><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">ada</span></code> - Main command</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">ada-setup</span></code> - Setup wizard</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">ada-doctor</span></code> - Health check</p></li>
+</ul>
+</dd>
+<dt><strong>NixOS Module</strong></dt><dd><p>System service configuration for NixOS deployments.</p>
+</dd>
+</dl>
+<section id="flake-outputs">
+<h3>Flake Outputs<a class="headerlink" href="#flake-outputs" title="Link to this heading"></a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># List all outputs</span>
+nix<span class="w"> </span>flake<span class="w"> </span>show
+
+<span class="c1"># Output structure:</span>
+<span class="c1"># ├── devShells.x86_64-linux.default</span>
+<span class="c1"># ├── packages.x86_64-linux.default</span>
+<span class="c1"># ├── apps.x86_64-linux</span>
+<span class="c1"># │   ├── default (ada)</span>
+<span class="c1"># │   ├── ada-setup</span>
+<span class="c1"># │   └── ada-doctor</span>
+<span class="c1"># └── nixosModules.default</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="gpu-support">
+<h2>GPU Support<a class="headerlink" href="#gpu-support" title="Link to this heading"></a></h2>
+<p>For GPU acceleration (NVIDIA CUDA):</p>
+<div class="highlight-nix notranslate"><div class="highlight"><pre><span></span><span class="c1"># In flake.nix or overlay</span>
+<span class="k">let</span>
+  <span class="ss">pkgs</span> <span class="o">=</span> <span class="nb">import</span> nixpkgs <span class="p">{</span>
+    config<span class="o">.</span><span class="ss">allowUnfree</span> <span class="o">=</span> <span class="no">true</span><span class="p">;</span>  <span class="c1"># CUDA is unfree</span>
+    config<span class="o">.</span><span class="ss">cudaSupport</span> <span class="o">=</span> <span class="no">true</span><span class="p">;</span>
+  <span class="p">};</span>
+<span class="k">in</span>
+<span class="c1"># ... use pkgs</span>
+</pre></div>
+</div>
+<p>Or enable system-wide on NixOS:</p>
+<div class="highlight-nix notranslate"><div class="highlight"><pre><span></span><span class="c1"># configuration.nix</span>
+<span class="p">{</span>
+  nixpkgs<span class="o">.</span>config<span class="o">.</span><span class="ss">allowUnfree</span> <span class="o">=</span> <span class="no">true</span><span class="p">;</span>
+  services<span class="o">.</span>xserver<span class="o">.</span><span class="ss">videoDrivers</span> <span class="o">=</span> <span class="p">[</span> <span class="s2">&quot;nvidia&quot;</span> <span class="p">];</span>
+  hardware<span class="o">.</span>opengl<span class="o">.</span><span class="ss">enable</span> <span class="o">=</span> <span class="no">true</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</section>
+<section id="troubleshooting">
+<h2>Troubleshooting<a class="headerlink" href="#troubleshooting" title="Link to this heading"></a></h2>
+<p><strong>Flakes not enabled</strong></p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Add to ~/.config/nix/nix.conf</span>
+experimental-features<span class="w"> </span><span class="o">=</span><span class="w"> </span>nix-command<span class="w"> </span>flakes
+</pre></div>
+</div>
+<p><strong>Permission issues / “need sudo”</strong></p>
+<p>If Nix requires sudo after installation, your setup is incomplete:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Check if you&#39;re in nix-users group</span>
+groups<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>nix-users
+
+<span class="c1"># If not, add yourself</span>
+sudo<span class="w"> </span>usermod<span class="w"> </span>-aG<span class="w"> </span>nix-users<span class="w"> </span><span class="nv">$USER</span>
+
+<span class="c1"># Start the daemon</span>
+sudo<span class="w"> </span>systemctl<span class="w"> </span><span class="nb">enable</span><span class="w"> </span>--now<span class="w"> </span>nix-daemon
+
+<span class="c1"># Log out and back in (or reload shell)</span>
+<span class="nb">exec</span><span class="w"> </span><span class="nv">$SHELL</span>
+
+<span class="c1"># Now nix should work without sudo</span>
+nix<span class="w"> </span>--version
+</pre></div>
+</div>
+<p><strong>Locale errors</strong></p>
+<p>If you see UTF-8 or locale errors, the flake sets <code class="docutils literal notranslate"><span class="pre">LC_ALL=C.UTF-8</span></code> automatically.
+If using Nix outside the flake, set it manually:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span><span class="w"> </span><span class="nv">LC_ALL</span><span class="o">=</span><span class="s2">&quot;C.UTF-8&quot;</span>
+nix<span class="w"> </span>develop
+</pre></div>
+</div>
+<p><strong>direnv not activating</strong></p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Check direnv is hooked</span>
+direnv<span class="w"> </span>status
+
+<span class="c1"># Re-allow</span>
+direnv<span class="w"> </span>allow
+</pre></div>
+</div>
+<p><strong>Python import errors</strong></p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Ensure PYTHONPATH is set (automatic in dev shell)</span>
+<span class="nb">echo</span><span class="w"> </span><span class="nv">$PYTHONPATH</span>
+
+<span class="c1"># If missing:</span>
+<span class="nb">export</span><span class="w"> </span><span class="nv">PYTHONPATH</span><span class="o">=</span><span class="s2">&quot;</span><span class="nv">$PWD</span><span class="s2">:</span><span class="nv">$PYTHONPATH</span><span class="s2">&quot;</span>
+</pre></div>
+</div>
+</section>
+<section id="comparison-with-other-methods">
+<h2>Comparison with Other Methods<a class="headerlink" href="#comparison-with-other-methods" title="Link to this heading"></a></h2>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 20.0%" />
+<col style="width: 20.0%" />
+<col style="width: 20.0%" />
+<col style="width: 20.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Feature</p></th>
+<th class="head"><p>Nix Flake</p></th>
+<th class="head"><p>Docker</p></th>
+<th class="head"><p>Python venv</p></th>
+<th class="head"><p>System Install</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Reproducibility</p></td>
+<td><p>✅ Perfect</p></td>
+<td><p>✅ Very Good</p></td>
+<td><p>⚠️  Partial</p></td>
+<td><p>❌ Poor</p></td>
+</tr>
+<tr class="row-odd"><td><p>Cross-platform</p></td>
+<td><p>✅ Linux/macOS/WSL</p></td>
+<td><p>✅ Linux/macOS/Win</p></td>
+<td><p>✅ All platforms</p></td>
+<td><p>⚠️  Linux/macOS</p></td>
+</tr>
+<tr class="row-even"><td><p>Disk Usage</p></td>
+<td><p>⚠️  Moderate</p></td>
+<td><p>⚠️  Large</p></td>
+<td><p>✅ Minimal</p></td>
+<td><p>✅ Minimal</p></td>
+</tr>
+<tr class="row-odd"><td><p>Isolation</p></td>
+<td><p>✅ Strong</p></td>
+<td><p>✅ Strong</p></td>
+<td><p>⚠️  Python only</p></td>
+<td><p>❌ None</p></td>
+</tr>
+<tr class="row-even"><td><p>Speed</p></td>
+<td><p>✅ Native</p></td>
+<td><p>⚠️  Overhead</p></td>
+<td><p>✅ Native</p></td>
+<td><p>✅ Native</p></td>
+</tr>
+<tr class="row-odd"><td><p>Setup Time</p></td>
+<td><p>⚠️  First time slow</p></td>
+<td><p>⚠️  Pull images</p></td>
+<td><p>✅ Fast</p></td>
+<td><p>✅ Fast</p></td>
+</tr>
+<tr class="row-even"><td><p>System Impact</p></td>
+<td><p>✅ Minimal</p></td>
+<td><p>⚠️  Daemon</p></td>
+<td><p>✅ Minimal</p></td>
+<td><p>⚠️  Packages</p></td>
+</tr>
+<tr class="row-odd"><td><p>Declarative</p></td>
+<td><p>✅ Yes</p></td>
+<td><p>✅ Yes</p></td>
+<td><p>❌ No</p></td>
+<td><p>❌ No</p></td>
+</tr>
+<tr class="row-even"><td><p>Composability</p></td>
+<td><p>✅ Excellent</p></td>
+<td><p>⚠️  Limited</p></td>
+<td><p>❌ No</p></td>
+<td><p>❌ No</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="best-practices">
+<h2>Best Practices<a class="headerlink" href="#best-practices" title="Link to this heading"></a></h2>
+<p><strong>Development</strong>: Use <code class="docutils literal notranslate"><span class="pre">nix</span> <span class="pre">develop</span></code> with <code class="docutils literal notranslate"><span class="pre">direnv</span></code> for automatic environment activation.</p>
+<p><strong>CI/CD</strong>: Use <code class="docutils literal notranslate"><span class="pre">nix</span> <span class="pre">build</span></code> for reproducible builds across different machines.</p>
+<p><strong>Production (NixOS)</strong>: Use the NixOS module for system service deployment.</p>
+<p><strong>Production (Other)</strong>: Use <code class="docutils literal notranslate"><span class="pre">nix</span> <span class="pre">build</span></code> then copy <code class="docutils literal notranslate"><span class="pre">result/</span></code> to target system.</p>
+<p><strong>Teams</strong>: Pin flake inputs with <code class="docutils literal notranslate"><span class="pre">flake.lock</span></code> for consistent environments.</p>
+<p><strong>Updates</strong>: Run <code class="docutils literal notranslate"><span class="pre">nix</span> <span class="pre">flake</span> <span class="pre">update</span></code> to update dependencies, commit <code class="docutils literal notranslate"><span class="pre">flake.lock</span></code>.</p>
+</section>
+<section id="integration-examples">
+<h2>Integration Examples<a class="headerlink" href="#integration-examples" title="Link to this heading"></a></h2>
+<section id="github-actions">
+<h3>GitHub Actions<a class="headerlink" href="#github-actions" title="Link to this heading"></a></h3>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="c1"># .github/workflows/test.yml</span>
+<span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Test</span>
+<span class="nt">on</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">push</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">pull_request</span><span class="p p-Indicator">]</span>
+<span class="nt">jobs</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">test</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">runs-on</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ubuntu-latest</span>
+<span class="w">    </span><span class="nt">steps</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">uses</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">actions/checkout@v4</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">uses</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">cachix/install-nix-action@v27</span>
+<span class="w">        </span><span class="nt">with</span><span class="p">:</span>
+<span class="w">          </span><span class="nt">extra_nix_config</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">|</span>
+<span class="w">            </span><span class="no">experimental-features = nix-command flakes</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">run</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nix build</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">run</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nix run . -- doctor</span>
+</pre></div>
+</div>
+</section>
+<section id="gitlab-ci">
+<h3>GitLab CI<a class="headerlink" href="#gitlab-ci" title="Link to this heading"></a></h3>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="c1"># .gitlab-ci.yml</span>
+<span class="nt">test</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nixos/nix:latest</span>
+<span class="w">  </span><span class="nt">before_script</span><span class="p">:</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nix --version</span>
+<span class="w">  </span><span class="nt">script</span><span class="p">:</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nix build</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nix run . -- doctor</span>
+</pre></div>
+</div>
+</section>
+<section id="with-docker-nix-built">
+<h3>With Docker (Nix-built)<a class="headerlink" href="#with-docker-nix-built" title="Link to this heading"></a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Build Docker image from Nix package</span>
+nix<span class="w"> </span>build<span class="w"> </span>.#dockerImage
+docker<span class="w"> </span>load<span class="w"> </span>&lt;<span class="w"> </span>result
+docker<span class="w"> </span>run<span class="w"> </span>-p<span class="w"> </span><span class="m">8000</span>:8000<span class="w"> </span>ada:latest
+</pre></div>
+</div>
+</section>
+</section>
+<section id="philosophy">
+<h2>Philosophy<a class="headerlink" href="#philosophy" title="Link to this heading"></a></h2>
+<p>Nix support aligns with Ada’s core values:</p>
+<dl class="simple">
+<dt><strong>Reproducibility = Accessibility</strong></dt><dd><p>Everyone can run Ada in the exact same environment, regardless of their system.</p>
+</dd>
+<dt><strong>Declarative = Hackable</strong></dt><dd><p>The entire environment is defined in <code class="docutils literal notranslate"><span class="pre">flake.nix</span></code> - read it, understand it, modify it.</p>
+</dd>
+<dt><strong>Local-first = Control</strong></dt><dd><p>No cloud services, no Docker daemon required - just Nix and your code.</p>
+</dd>
+<dt><strong>Standards-based = Composable</strong></dt><dd><p>Nix flakes are a standard, allowing Ada to integrate into larger Nix ecosystems.</p>
+</dd>
+</dl>
+</section>
+<section id="resources">
+<h2>Resources<a class="headerlink" href="#resources" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p><a class="reference external" href="https://nixos.org/manual/nix/stable/">Official Nix Documentation</a></p></li>
+<li><p><a class="reference external" href="https://nixos.wiki/wiki/Flakes">Nix Flakes Tutorial</a></p></li>
+<li><p><a class="reference external" href="https://nixos.org/manual/nixos/stable/">NixOS Module System</a></p></li>
+<li><p><a class="reference external" href="https://direnv.net/">direnv Documentation</a></p></li>
+<li><p><a class="reference external" href="https://nixos.org/guides/nix-pills/">Nix Pills</a> (deep dive)</p></li>
+</ul>
+</section>
+<section id="community">
+<h2>Community<a class="headerlink" href="#community" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p><strong>NixOS Discourse</strong>: <a class="reference external" href="https://discourse.nixos.org/">https://discourse.nixos.org/</a></p></li>
+<li><p><strong>Nix Matrix</strong>: #nix:nixos.org</p></li>
+<li><p><strong>r/NixOS</strong>: <a class="reference external" href="https://reddit.com/r/NixOS">https://reddit.com/r/NixOS</a></p></li>
+</ul>
+</section>
+<section id="contributing">
+<h2>Contributing<a class="headerlink" href="#contributing" title="Link to this heading"></a></h2>
+<p>To improve Ada’s Nix support:</p>
+<ol class="arabic simple">
+<li><p>Test flake on different platforms (Linux, macOS, NixOS)</p></li>
+<li><p>Report issues with <code class="docutils literal notranslate"><span class="pre">nix</span> <span class="pre">flake</span> <span class="pre">show</span></code> output</p></li>
+<li><p>Suggest additional packages for dev shell</p></li>
+<li><p>Improve NixOS module options</p></li>
+<li><p>Share your Nix configurations!</p></li>
+</ol>
+<p>See <code class="docutils literal notranslate"><span class="pre">docs/development.rst</span></code> for contribution guidelines.</p>
+<p>—</p>
+<p><strong>Ada + Nix</strong>: Reproducible AI for everyone. 🤖❄️</p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="local_mode.html" class="btn btn-neutral float-left" title="Running Ada Locally (No Docker Required!)" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="getting_started_scratch.html" class="btn btn-neutral float-right" title="Getting Started from Scratch" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p></p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

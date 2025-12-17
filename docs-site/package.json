@@ -1,0 +1,16 @@
+{
+  "name": "ada-docs-site",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "astro dev",
+    "build": "npm run build:sphinx && astro build",
+    "build:sphinx": ". ../.venv/bin/activate && cd ../docs && make html && mkdir -p ../docs-site/public/docs && cp -r _build/html/* ../docs-site/public/docs/",
+    "preview": "astro preview",
+    "serve": "python -m http.server 4321 --directory dist"
+  },
+  "dependencies": {
+    "astro": "^5.16.5"
+  }
+}

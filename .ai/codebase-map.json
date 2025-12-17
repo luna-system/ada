@@ -54,26 +54,95 @@
       ],
       "notes": "Single source of truth for LLM communication, streaming SSE responses"
     },
-    "brain/prompt_builder.py": {
-      "type": "core-service",
-      "purpose": "Assembles RAG context from multiple sources, coordinates specialists",
+    "brain/prompt_builder/__init__.py": {
+      "type": "package",
+      "purpose": "Modular prompt building system with integrated caching",
+      "exports": [
+        "ContextRetriever",
+        "SectionBuilder",
+        "PromptAssembler"
+      ],
+      "notes": "Clean modular architecture - PromptAssembler now has MultiTimescaleCache integrated"
+    },
+    "brain/prompt_builder/context_retriever.py": {
+      "type": "core-component",
+      "purpose": "Retrieves context from RAG store and configuration",
       "key_functions": [
-        "build_prompt",
-        "discover_specialists",
-        "activate_specialists",
-        "process_bidirectional_specialist"
+        "get_persona",
+        "get_memories",
+        "get_faqs",
+        "get_turns",
+        "get_summaries"
       ],
       "imports": [
         "brain.rag_store",
-        "brain.specialists.protocol",
-        "brain.specialists.bidirectional",
-        "brain.config",
-        "brain.notices"
+        "brain.config"
+      ],
+      "imported_by": [
+        "brain/prompt_builder/prompt_assembler.py"
+      ],
+      "notes": "Pure retrieval logic, no formatting. Tested with 14 tests."
+    },
+    "brain/prompt_builder/section_builder.py": {
+      "type": "core-component",
+      "purpose": "Formats RAG context into structured prompt sections",
+      "key_functions": [
+        "format_persona",
+        "format_memories",
+        "format_faqs",
+        "format_conversation_history",
+        "format_notices",
+        "format_specialist_results"
+      ],
+      "imports": [],
+      "imported_by": [
+        "brain/prompt_builder/prompt_assembler.py"
+      ],
+      "notes": "Pure formatting logic, no retrieval. Tested with 14 tests."
+    },
+    "brain/prompt_builder/prompt_assembler.py": {
+      "type": "core-component",
+      "purpose": "Orchestrates prompt building with integrated caching - coordinates ContextRetriever, SectionBuilder, and specialists",
+      "key_functions": [
+        "build_prompt",
+        "_activate_specialists"
+      ],
+      "imports": [
+        "brain.prompt_builder.context_retriever",
+        "brain.prompt_builder.section_builder",
+        "brain.context_cache",
+        "brain.config"
       ],
       "imported_by": [
         "brain/app.py"
       ],
-      "notes": "Central orchestration point, context injection order matters"
+      "notes": "Main orchestrator with MultiTimescaleCache integrated. Initializes cache and passes to ContextRetriever. Live in production."
+    },
+    "brain/context_cache.py": {
+      "type": "core-service",
+      "purpose": "Multi-timescale context caching with TTL and LRU eviction (v2.1 Phase 1)",
+      "key_classes": [
+        "MultiTimescaleCache",
+        "CacheEntry",
+        "CacheStats"
+      ],
+      "key_functions": [
+        "get",
+        "set",
+        "invalidate",
+        "cleanup_expired",
+        "get_stats"
+      ],
+      "imports": [
+        "collections.OrderedDict",
+        "dataclasses",
+        "datetime",
+        "logging"
+      ],
+      "imported_by": [
+        "brain/prompt_builder/context_retriever.py"
+      ],
+      "notes": "Phase 1 implementation: Persona caching with 24hr TTL. Ready for integration into PromptAssembler. Tested with 23 tests (15 basic + 8 integration)."
     },
     "brain/rag_store.py": {
       "type": "core-service",
@@ -133,6 +202,32 @@
         "brain/prompt_builder.py"
       ],
       "notes": "All environment variables defined here, singleton pattern"
+    },
+    "brain/token_monitor.py": {
+      "type": "core-service",
+      "purpose": "Track and monitor token usage by component for context optimization (v2.0)",
+      "key_classes": [
+        "TokenBudgetMonitor",
+        "TokenUsageBreakdown",
+        "ComponentTokens"
+      ],
+      "key_functions": [
+        "count_tokens",
+        "track",
+        "get_breakdown",
+        "get_summary",
+        "get_top_components",
+        "reset"
+      ],
+      "imports": [
+        "tiktoken",
+        "logging",
+        "dataclasses"
+      ],
+      "imported_by": [
+        "brain/prompt_builder.py"
+      ],
+      "notes": "Phase 1 v2.0 feature - provides visibility into token usage patterns before optimization. Uses tiktoken for accurate counting."
     },
     "brain/specialists/protocol.py": {
       "type": "interface",
@@ -578,7 +673,15 @@
       "brain/notices.py"
     ],
     "matrix_bridge": [
-      li_chat_request": [
+      "matrix-bridge/bridge.py",
+      "matrix-bridge/config.py",
+      "matrix-bridge/identity.py",
+      "matrix-bridge/ada_client.py",
+      "matrix-bridge/message_handler.py"
+    ]
+  },
+  "data_flow": {
+    "cli_chat_request": [
       "adapters/cli/ada_cli/cli.py::main",
       "adapters/cli/ada_cli/client.py::chat_stream",
       "brain/app.py::chat_stream_v1",
@@ -596,15 +699,7 @@
       "brain/rag_store.py::search_memories",
       "brain/specialists/*::process",
       "brain/llm.py::generate_stream",
-      "frontend/public/app.js::handleStreamChunk
-    "chat_request": [
-      "frontend/public/app.js",
-      "brain/app.py::chat_stream_v1",
-      "brain/prompt_builder.py::build_prompt",
-      "brain/rag_store.py::search_memories",
-      "brain/specialists/*::process",
-      "brain/llm.py::generate_stream",
-      "brain/app.py::stream_response"
+      "frontend/public/app.js::handleStreamChunk"
     ],
     "matrix_chat_request": [
       "matrix-bridge/bridge.py::on_message",

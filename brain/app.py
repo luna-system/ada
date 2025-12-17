@@ -119,7 +119,7 @@ import config
 from rag_store import RagStore
 from llm import stream_chat_async, complete
 from media import fetch_listenbrainz, format_media_for_prompt
-from prompt_builder import build_prompt
+from brain.prompt_builder import PromptAssembler
 from brain.notices_client import get_active_notices
 
 # Ollama + models
@@ -252,6 +252,11 @@ def _autoload_seed():
 async def lifespan(app: FastAPI):
     """Manage application lifecycle - init RAG store on startup."""
     # Startup
+    from brain.startup_quotes import get_startup_quote, format_startup_banner
+    
+    quote = get_startup_quote()
+    banner = format_startup_banner(quote)
+    print(banner)
     print("[BRAIN] Server is ready. Spawning workers")
     _init_rag_store()
     yield
@@ -642,25 +647,39 @@ async def chat_stream(request: Request):
     faq_k = int(data.get('faq_k', RAG_FAQ_TOP_K))
     memory_k = int(data.get('memory_k', RAG_MEMORY_TOP_K))
 
-    # Build prompt using modularized builder (now async with specialists)
-    media_info = data.get('media') if isinstance(data.get('media'), dict) else None
-    ocr_context = data.get('ocr_context') if isinstance(data.get('ocr_context'), dict) else None
+    # Build prompt using new modular PromptAssembler with caching
     if RAG_ENABLED and rag_store is not None:
-        final_prompt, used_context = await build_prompt(
-            prompt,
-            conversation_id,
-            entity,
-            media_info,
-            user_timestamp,
-            rag_store,
-            turns_k=turns_k,
-            faq_k=faq_k,
-            memory_k=memory_k,
-            ocr_context=ocr_context,
+        # Get active notices
+        notices = get_active_notices()
+        
+        # Create assembler (initializes cache internally)
+        assembler = PromptAssembler()
+        
+        # Build request context for specialists
+        request_context = {
+            'entity': entity,
+            'media': data.get('media') if isinstance(data.get('media'), dict) else None,
+            'ocr_context': data.get('ocr_context') if isinstance(data.get('ocr_context'), dict) else None,
+        }
+        
+        # Build prompt (clean new API!)
+        final_prompt = assembler.build_prompt(
+            user_message=prompt,
+            conversation_id=conversation_id,
+            specialists=[],  # TODO: Load actual specialists
+            notices=notices,
+            request_context=request_context
         )
+        
+        # Get cache stats for logging
+        cache_stats = assembler.cache.get_stats()
+        logger.info(f"Request {req_id}: Cache hits={cache_stats.hits}, misses={cache_stats.misses}, hit_rate={cache_stats.hit_rate:.2%}")
+        
+        # Stub for used_context (kept for backward compat in metadata)
+        used_context = {'cache': cache_stats.__dict__}
     else:
         final_prompt = f"User: {prompt}\nAssistant:"
-        used_context = {'persona': None, 'faqs': [], 'memories': [], 'turns': [], 'summaries': [], 'entity': entity, 'media': media_info, 'ocr': ocr_context}
+        used_context = {}
 
     # Generator function for SSE streaming
     async def generate():

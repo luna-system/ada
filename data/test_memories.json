@@ -1,0 +1,595 @@
+[
+  {
+    "content": "Do one thing and do it well",
+    "metadata": {
+      "type": "memory",
+      "timestamp": "2025-09-18T23:51:32.824119+00:00",
+      "importance": 0.49204530894858994,
+      "scope": "user",
+      "topic": "unix_philosophy",
+      "source": "test_generator",
+      "entity": "test_user"
+    }
+  },
+  {
+    "content": "Context managers (with statement) ensure proper resource cleanup",
+    "metadata": {
+      "type": "memory",
+      "timestamp": "2025-09-18T23:51:32.824119+00:00",
+      "importance": 0.35030608933586027,
+      "scope": "global",
+      "topic": "python_programming",
+      "source": "test_generator"
+    }
+  },
+  {
+    "content": "Use pathlib.Path instead of os.path for cleaner file operations",
+    "metadata": {
+      "type": "memory",
+      "timestamp": "2025-09-18T23:51:32.824119+00:00",
+      "importance": 0.5869520668518857,
+      "scope": "user",
+      "topic": "python_programming",
+      "source": "test_generator",
+      "entity": "test_user"
+    }
+  },
+  {
+    "content": "Scrobbling tracks listening history automatically",
+    "metadata": {
+      "type": "memory",
+      "timestamp": "2025-11-23T18:56:23.993938+00:00",
+      "importance": 0.517598580705889,
+      "scope": "user",
+      "topic": "music_tech",
+      "source": "test_generator",
+      "entity": "test_user"
+    }
+  },
+  {
+    "content": "Compose small tools into powerful pipelines",
+    "metadata": {
+      "type": "memory",
+      "timestamp": "2025-09-18T23:51:32.824119+00:00",
+      "importance": 0.30890602466666073,
+      "scope": "user",
+      "topic": "unix_philosophy",
+      "source": "test_generator",
+      "entity": "test_user"
+    }
+  },
+  {
+    "content": "Python list comprehensions are more efficient than loops for simple transformations",
+    "metadata": {
+      "type": "memory",
+      "timestamp": "2025-09-18T23:51:32.824119+00:00",
+      "importance": 0.6058068404417376,
+      "scope": "user",
+      "topic": "python_programming",
+      "source": "test_generator",
+      "entity": "test_user"
+    }
+  },
+  {
+    "content": "Conventional commits enable automated changelog generation",
+    "metadata": {
+      "type": "memory",
+      "timestamp": "2025-09-18T23:51:32.824119+00:00",
+      "importance": 0.7809793407936907,
+      "scope": "user",
+      "topic": "open_source",
+      "source": "test_generator",
+      "entity": "test_user"
+    }
+  },
+  {
+    "content": "Use pathlib.Path instead of os.path for cleaner file operations",
+    "metadata": {
+      "type": "memory",
+      "timestamp": "2025-09-18T23:51:32.824119+00:00",
+      "importance": 0.9161399066686677,
+      "scope": "user",
+      "topic": "python_programming",
+      "source": "test_generator",
+      "entity": "test_user"
+    }
+  },
+  {
+    "content": "Quantization reduces model size with minimal quality loss",
+    "metadata": {
+      "type": "memory",
+      "timestamp": "2025-09-18T23:51:32.824119+00:00",
+      "importance": 0.6136501375170772,
+      "scope": "user",
+      "topic": "machine_learning",
+      "source": "test_generator",
+      "entity": "test_user"
+    }
+  },
+  {
+    "content": "Copyleft licenses require derivatives to be open source",
+    "metadata": {
+      "type": "memory",
+      "timestamp": "2025-10-05T02:58:02.189862+00:00",
+      "importance": 0.19709592165497203,
+      "scope": "user",
+      "topic": "open_source",
+      "source": "test_generator",
+      "entity": "test_user"
+    }
+  },
+  {
+    "content": "Do one thing and do it well",
+    "metadata": {
+      "type": "memory",
+      "timestamp": "2025-09-18T23:51:32.824119+00:00",
+      "importance": 0.6694722846696001,
+      "scope": "user",
+      "topic": "unix_philosophy",
+      "source": "test_generator",
+      "entity": "test_user"
+    }
+  },
+  {
+    "content": "Type hints improve code readability and catch bugs early",
+    "metadata": {
+      "type": "memory",
+      "timestamp": "2025-09-18T23:51:32.824119+00:00",
+      "importance": 0.29955943515153005,
+      "scope": "user",
+      "topic": "python_programming",
+      "source": "test_generator",
+      "entity": "test_user"
+    }
+  },
+  {
+    "content": "Use pathlib.Path instead of os.path for cleaner file operations",
+    "metadata": {
+      "type": "memory",
+      "timestamp": "2025-09-18T23:51:32.824119+00:00",
+      "importance": 0.6307143690532879,
+      "scope": "user",
+      "topic": "python_programming",
+      "source": "test_generator",
+      "entity": "test_user"
+    }
+  },
+  {
+    "content": "Prompt engineering guides model behavior without training",
+    "metadata": {
+      "type": "memory",
+      "timestamp": "2025-09-18T23:51:32.824119+00:00",
+      "importance": 0.3544908712196059,
+      "scope": "user",
+      "topic": "machine_learning",
+      "source": "test_generator",
+      "entity": "test_user"
+    }
+  },
+  {
+    "content": "Text streams are universal interfaces",
+    "metadata": {
+      "type": "memory",
+      "timestamp": "2025-09-18T23:51:32.824119+00:00",
+      "importance": 0.7664370152607756,
+      "scope": "user",
+      "topic": "unix_philosophy",
+      "source": "test_generator",
+      "entity": "test_user"
+    }
+  },
+  {
+    "content": "CORS headers control cross-origin resource sharing",
+    "metadata": {
+      "type": "memory",
+      "timestamp": "2025-09-18T23:51:32.824119+00:00",
+      "importance": 0.38797639679335727,
+      "scope": "user",
+      "topic": "web_development",
+      "source": "test_generator",
+      "entity": "test_user"
+    }
+  },
+  {
+    "content": "Documentation is a feature, not an afterthought",
+    "metadata": {
+      "type": "memory",
+      "timestamp": "2025-09-18T23:51:32.824119+00:00",
+      "importance": 0.7852689954884324,
+      "scope": "user",
+      "topic": "open_source",
+      "source": "test_generator",
+      "entity": "test_user"
+    }
+  },
+  {
+    "content": "Design for extensibility, not prediction",
+    "metadata": {
+      "type": "memory",
+      "timestamp": "2025-09-18T23:51:32.824119+00:00",
+      "importance": 0.4811945047967392,
+      "scope": "user",
+      "topic": "unix_philosophy",
+      "source": "test_generator",
+      "entity": "test_user"
+    }
+  },
+  {
+    "content": "Dataclasses reduce boilerplate for simple data containers",
+    "metadata": {
+      "type": "memory",
+      "timestamp": "2025-09-18T23:51:32.824119+00:00",
+      "importance": 0.6705962467628621,
+      "scope": "user",
+      "topic": "python_programming",
+      "source": "test_generator",
+      "entity": "test_user"
+    }
+  },
+  {
+    "content": "Progressive enhancement ensures baseline functionality for all users",
+    "metadata": {
+      "type": "memory",
+      "timestamp": "2025-09-18T23:51:32.824119+00:00",
+      "importance": 0.5348821455062355,
+      "scope": "user",
+      "topic": "web_development",
+      "source": "test_generator",
+      "entity": "test_user"
+    }
+  },
+  {
+    "content": "Silence is golden - only output what matters",
+    "metadata": {
+      "type": "memory",
+      "timestamp": "2025-09-18T23:51:32.824119+00:00",
+      "importance": 0.38764048153319386,
+      "scope": "global",
+      "topic": "unix_philosophy",
+      "source": "test_generator"
+    }
+  },
+  {
+    "content": "Documentation is a feature, not an afterthought",
+    "metadata": {
+      "type": "memory",
+      "timestamp": "2025-09-18T23:51:32.824119+00:00",
+      "importance": 0.3336837797515987,
+      "scope": "user",
+      "topic": "open_source",
+      "source": "test_generator",
+      "entity": "test_user"
+    }
+  },
+  {
+    "content": "Everything is a file (or should act like one)",
+    "metadata": {
+      "type": "memory",
+      "timestamp": "2025-09-18T23:51:32.824119+00:00",
+      "importance": 0.47879926327235967,
+      "scope": "global",
+      "topic": "unix_philosophy",
+      "source": "test_generator"
+    }
+  },
+  {
+    "content": "Permissive licenses allow proprietary use of code",
+    "metadata": {
+      "type": "memory",
+      "timestamp": "2025-09-18T23:51:32.824119+00:00",
+      "importance": 0.7642515849179923,
+      "scope": "global",
+      "topic": "open_source",
+      "source": "test_generator"
+    }
+  },
+  {
+    "content": "RESTful APIs use HTTP methods semantically (GET, POST, PUT, DELETE)",
+    "metadata": {
+      "type": "memory",
+      "timestamp": "2025-09-18T23:51:32.824119+00:00",
+      "importance": 0.5522728558399606,
+      "scope": "user",
+      "topic": "web_development",
+      "source": "test_generator",
+      "entity": "test_user"
+    }
+  },
+  {
+    "content": "Do one thing and do it well",
+    "metadata": {
+      "type": "memory",
+      "timestamp": "2025-09-18T23:51:32.824119+00:00",
+      "importance": 0.5335938737094464,
+      "scope": "user",
+      "topic": "unix_philosophy",
+      "source": "test_generator",
+      "entity": "test_user"
+    }
+  },
+  {
+    "content": "Scrobbling tracks listening history automatically",
+    "metadata": {
+      "type": "memory",
+      "timestamp": "2025-10-19T22:08:08.605200+00:00",
+      "importance": 0.009547796395169506,
+      "scope": "user",
+      "topic": "music_tech",
+      "source": "test_generator",
+      "entity": "test_user"
+    }
+  },
+  {
+    "content": "Sample rate determines audio frequency range captured",
+    "metadata": {
+      "type": "memory",
+      "timestamp": "2025-09-18T23:51:32.824119+00:00",
+      "importance": 0.951263459221583,
+      "scope": "user",
+      "topic": "music_tech",
+      "source": "test_generator",
+      "entity": "test_user"
+    }
+  },
+  {
+    "content": "Make errors clear and actionable",
+    "metadata": {
+      "type": "memory",
+      "timestamp": "2025-09-18T23:51:32.824119+00:00",
+      "importance": 0.749826753162293,
+      "scope": "user",
+      "topic": "unix_philosophy",
+      "source": "test_generator",
+      "entity": "test_user"
+    }
+  },
+  {
+    "content": "Fine-tuning adapts pre-trained models to specific tasks",
+    "metadata": {
+      "type": "memory",
+      "timestamp": "2025-09-18T23:51:32.824119+00:00",
+      "importance": 0.27915722230228324,
+      "scope": "user",
+      "topic": "machine_learning",
+      "source": "test_generator",
+      "entity": "test_user"
+    }
+  },
+  {
+    "content": "Documentation is a feature, not an afterthought",
+    "metadata": {
+      "type": "memory",
+      "timestamp": "2025-12-15T01:38:46.668805+00:00",
+      "importance": 0.4443534100745717,
+      "scope": "global",
+      "topic": "open_source",
+      "source": "test_generator"
+    }
+  },
+  {
+    "content": "HTTP caching with ETag and Last-Modified reduces server load",
+    "metadata": {
+      "type": "memory",
+      "timestamp": "2025-09-18T23:51:32.824119+00:00",
+      "importance": 0.18591477968435144,
+      "scope": "user",
+      "topic": "web_development",
+      "source": "test_generator",
+      "entity": "test_user"
+    }
+  },
+  {
+    "content": "Do one thing and do it well",
+    "metadata": {
+      "type": "memory",
+      "timestamp": "2025-09-18T23:51:32.824119+00:00",
+      "importance": 0.3239072251684787,
+      "scope": "user",
+      "topic": "unix_philosophy",
+      "source": "test_generator",
+      "entity": "test_user"
+    }
+  },
+  {
+    "content": "CORS headers control cross-origin resource sharing",
+    "metadata": {
+      "type": "memory",
+      "timestamp": "2025-09-18T23:51:32.824119+00:00",
+      "importance": 0.2899784354938164,
+      "scope": "user",
+      "topic": "web_development",
+      "source": "test_generator",
+      "entity": "test_user"
+    }
+  },
+  {
+    "content": "MusicBrainz is the Wikipedia of music metadata",
+    "metadata": {
+      "type": "memory",
+      "timestamp": "2025-09-18T23:51:32.824119+00:00",
+      "importance": 0.31171447033834565,
+      "scope": "user",
+      "topic": "music_tech",
+      "source": "test_generator",
+      "entity": "test_user"
+    }
+  },
+  {
+    "content": "Prompt engineering guides model behavior without training",
+    "metadata": {
+      "type": "memory",
+      "timestamp": "2025-09-18T23:51:32.824119+00:00",
+      "importance": 0.36510111364085207,
+      "scope": "global",
+      "topic": "machine_learning",
+      "source": "test_generator"
+    }
+  },
+  {
+    "content": "Attention mechanisms let models focus on relevant context",
+    "metadata": {
+      "type": "memory",
+      "timestamp": "2025-09-18T23:51:32.824119+00:00",
+      "importance": 0.5148409899387684,
+      "scope": "user",
+      "topic": "machine_learning",
+      "source": "test_generator",
+      "entity": "test_user"
+    }
+  },
+  {
+    "content": "Make errors clear and actionable",
+    "metadata": {
+      "type": "memory",
+      "timestamp": "2025-09-18T23:51:32.824119+00:00",
+      "importance": 0.758470741707373,
+      "scope": "user",
+      "topic": "unix_philosophy",
+      "source": "test_generator",
+      "entity": "test_user"
+    }
+  },
+  {
+    "content": "FLAC provides lossless audio compression",
+    "metadata": {
+      "type": "memory",
+      "timestamp": "2025-09-18T23:51:32.824119+00:00",
+      "importance": 0.6571520218776861,
+      "scope": "user",
+      "topic": "music_tech",
+      "source": "test_generator",
+      "entity": "test_user"
+    }
+  },
+  {
+    "content": "Embeddings map semantic similarity to geometric distance",
+    "metadata": {
+      "type": "memory",
+      "timestamp": "2025-09-18T23:51:32.824119+00:00",
+      "importance": 0.6639964754213633,
+      "scope": "user",
+      "topic": "machine_learning",
+      "source": "test_generator",
+      "entity": "test_user"
+    }
+  },
+  {
+    "content": "Progressive enhancement ensures baseline functionality for all users",
+    "metadata": {
+      "type": "memory",
+      "timestamp": "2025-09-18T23:51:32.824119+00:00",
+      "importance": 0.5101226319659798,
+      "scope": "user",
+      "topic": "web_development",
+      "source": "test_generator",
+      "entity": "test_user"
+    }
+  },
+  {
+    "content": "Permissive licenses allow proprietary use of code",
+    "metadata": {
+      "type": "memory",
+      "timestamp": "2025-09-18T23:51:32.824119+00:00",
+      "importance": 0.19412744700609696,
+      "scope": "user",
+      "topic": "open_source",
+      "source": "test_generator",
+      "entity": "test_user"
+    }
+  },
+  {
+    "content": "GitHub Actions automate CI/CD workflows",
+    "metadata": {
+      "type": "memory",
+      "timestamp": "2025-09-18T23:51:32.824119+00:00",
+      "importance": 0.35599110735114414,
+      "scope": "user",
+      "topic": "open_source",
+      "source": "test_generator",
+      "entity": "test_user"
+    }
+  },
+  {
+    "content": "Use f-strings for string formatting in Python 3.6+",
+    "metadata": {
+      "type": "memory",
+      "timestamp": "2025-09-18T23:51:32.824119+00:00",
+      "importance": 0.545309102522214,
+      "scope": "user",
+      "topic": "python_programming",
+      "source": "test_generator",
+      "entity": "test_user"
+    }
+  },
+  {
+    "content": "Content Security Policy headers prevent XSS attacks",
+    "metadata": {
+      "type": "memory",
+      "timestamp": "2025-12-11T11:58:33.081186+00:00",
+      "importance": 0.48175934391794256,
+      "scope": "user",
+      "topic": "web_development",
+      "source": "test_generator",
+      "entity": "test_user"
+    }
+  },
+  {
+    "content": "Type hints improve code readability and catch bugs early",
+    "metadata": {
+      "type": "memory",
+      "timestamp": "2025-09-18T23:51:32.824119+00:00",
+      "importance": 0.43275776245938935,
+      "scope": "user",
+      "topic": "python_programming",
+      "source": "test_generator",
+      "entity": "test_user"
+    }
+  },
+  {
+    "content": "Service workers enable offline-first web applications",
+    "metadata": {
+      "type": "memory",
+      "timestamp": "2025-09-18T23:51:32.824119+00:00",
+      "importance": 0.2520685105124857,
+      "scope": "user",
+      "topic": "web_development",
+      "source": "test_generator",
+      "entity": "test_user"
+    }
+  },
+  {
+    "content": "Bit depth affects dynamic range and noise floor",
+    "metadata": {
+      "type": "memory",
+      "timestamp": "2025-09-18T23:51:32.824119+00:00",
+      "importance": 0.5227851085708192,
+      "scope": "user",
+      "topic": "music_tech",
+      "source": "test_generator",
+      "entity": "test_user"
+    }
+  },
+  {
+    "content": "Open source thrives on welcoming contributor communities",
+    "metadata": {
+      "type": "memory",
+      "timestamp": "2025-09-18T23:51:32.824119+00:00",
+      "importance": 0.5330301529842987,
+      "scope": "user",
+      "topic": "open_source",
+      "source": "test_generator",
+      "entity": "test_user"
+    }
+  },
+  {
+    "content": "Conventional commits enable automated changelog generation",
+    "metadata": {
+      "type": "memory",
+      "timestamp": "2025-09-18T23:51:32.824119+00:00",
+      "importance": 0.5840565158622524,
+      "scope": "global",
+      "topic": "open_source",
+      "source": "test_generator"
+    }
+  }
+]

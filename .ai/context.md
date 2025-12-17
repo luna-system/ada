@@ -26,9 +26,9 @@ MCP server (stdio)        ┘
 
 **CLI Flow:**
 1. User runs `ada-cli "message"` → HTTP client → `/v1/chat/stream`
-2. Brain assembles RAG context (persona, FAQ, memories, conversation history)
+2. Brain assembles RAG context with **caching** (persona cached 24hr, memories 5min)
 3. Specialists activate based on request context (OCR, media, web search)
-4. Prompt built with context + specialist results → Ollama LLM
+4. PromptAssembler builds prompt with cached + fresh context → Ollama LLM
 5. Response streamed back via Server-Sent Events
 6. CLI displays chunks in terminal
 7. Memories extracted and stored in ChromaDB
@@ -73,7 +73,11 @@ See `docs/adapters.rst` for building new adapters.
 
 ### Core Logic
 - `brain/llm.py` - LLM client (Ollama), streaming generation
-- `brain/prompt_builder.py` - RAG context assembly, specialist coordination
+- `brain/prompt_builder/` - **v2.1:** Modular prompt building with caching
+  - `context_retriever.py` - RAG data retrieval (cache-aware)
+  - `section_builder.py` - Section formatting
+  - `prompt_assembler.py` - Final orchestration with MultiTimescaleCache
+- `brain/context_cache.py` - **NEW (v2.1):** Multi-timescale caching (personas, FAQs, memories)
 - `brain/rag_store.py` - Vector storage interface (ChromaDB)
 - `brain/schemas.py` - All Pydantic models, self-documenting via `/v1/schema`
 
@@ -134,10 +138,27 @@ See `docs/adapters.rst` for building new adapters.
 - Context injection order controlled by `SpecialistPriority` enum
 
 ## Testing Philosophy
-- Integration tests via containerized environment
-- Pytest fixtures in `tests/conftest.py`
+
+**See `.ai/TOOLING.md` for complete tool selection guide!**
+
+### Test Types
+- **Unit tests** (pure Python logic): Run directly with pytest
+  - Fast (< 1 second)
+  - No services needed
+  - Example: `pytest tests/test_memory_decay.py --ignore=tests/conftest.py`
+- **Integration tests** (services talking): Use Docker Compose
+  - Slower (~10+ seconds startup)
+  - Requires chroma + ollama
+  - Example: `docker compose up -d && pytest tests/integration/`
+
+### Common Mistake
+❌ Don't use Docker for unit tests - it's unnecessarily slow!  
+✅ Use direct pytest for logic testing, Docker only for integration
+
+### Test Organization
+- Pytest fixtures in `tests/conftest.py` (imports ChromaDB - skip for unit tests)
 - Test scripts in `scripts/test_*.py`
-- Run via `./scripts/run.sh test`
+- Helper: `./scripts/run.sh test` (uses Docker - integration tests only)
 
 ## Key Relationships
 

@@ -1,0 +1,334 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ada Principles &mdash; Ada Brain API 0.1.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="_static/graphviz.css?v=4ae1632d" />
+      <link rel="stylesheet" type="text/css" href="_static/custom.css?v=df0a1c42" />
+
+  
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=01f34227"></script>
+      <script src="_static/doctools.js?v=9bcbadda"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Documentation Philosophy" href="documentation_philosophy.html" />
+    <link rel="prev" title="Changelog" href="changelog.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            Ada Brain API
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="zero_to_ada.html">Zero to Ada</a></li>
+<li class="toctree-l1"><a class="reference internal" href="getting_started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="local_mode.html">Running Ada Locally (No Docker Required!)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="nix.html">Nix &amp; Flakes Support</a></li>
+<li class="toctree-l1"><a class="reference internal" href="getting_started_scratch.html">Getting Started from Scratch</a></li>
+<li class="toctree-l1"><a class="reference internal" href="configuration.html">Configuration Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="examples.html">Examples</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Hardware Setup</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="hardware.html">Hardware &amp; GPU Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="sbc.html">Ada on Single-Board Computers (SBCs)</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Core Architecture</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="architecture.html">Architecture</a></li>
+<li class="toctree-l1"><a class="reference internal" href="data_model.html">Data Model Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="streaming.html">Streaming</a></li>
+<li class="toctree-l1"><a class="reference internal" href="memory.html">Memory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="token_monitoring.html">Token Budget Monitoring</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Interfaces &amp; Adapters</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="adapters.html">Ada Adapters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="adapter_development.html">Adapter Development Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="matrix_integration.html">Matrix Integration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api_usage.html">API Usage Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api_reference.html">API Reference</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Specialist System</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="specialists.html">Specialist System</a></li>
+<li class="toctree-l1"><a class="reference internal" href="build_specialist.html">Build Your First Specialist</a></li>
+<li class="toctree-l1"><a class="reference internal" href="bidirectional.html">Bidirectional Specialist System</a></li>
+<li class="toctree-l1"><a class="reference internal" href="specialist_rag.html">Specialist RAG Documentation System</a></li>
+<li class="toctree-l1"><a class="reference internal" href="web_search.html">Web Search Specialist</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Operations</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="build_system.html">Build System</a></li>
+<li class="toctree-l1"><a class="reference internal" href="buildx_adoption_notes.html">BuildX Adoption Data &amp; Notes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="disk_management.html">Disk Management</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Development</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="development.html">Development Tools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="testing.html">Testing Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="versioning.html">Version Management</a></li>
+<li class="toctree-l1"><a class="reference internal" href="changelog.html">Changelog</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Philosophy &amp; Design</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Ada Principles</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#why-this-exists">Why This Exists</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#our-commitments">Our Commitments</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#always-free-and-open">1. Always Free and Open</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#privacy-by-default">2. Privacy by Default</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#local-first-always">3. Local-First, Always</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#hackable-and-understandable">4. Hackable and Understandable</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#no-lock-in">5. No Lock-In</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#the-bigger-picture">The Bigger Picture</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#for-the-big-weird-kids">For the Big Weird Kids</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#for-research-democratization">For Research Democratization</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#for-digital-sovereignty">For Digital Sovereignty</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#what-this-means-practically">What This Means Practically</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#for-contributors">For Contributors</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#living-document">Living Document</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="documentation_philosophy.html">Documentation Philosophy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ai_documentation.html">AI-Readable Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="empathetic_documentation.html">Empathetic Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="xenofeminism.html">Xenofeminism and Ada</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Ada Brain API</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Ada Principles</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/project_philosophy.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="ada-principles">
+<h1>Ada Principles<a class="headerlink" href="#ada-principles" title="Link to this heading"></a></h1>
+<section id="why-this-exists">
+<h2>Why This Exists<a class="headerlink" href="#why-this-exists" title="Link to this heading"></a></h2>
+<p>Ada is named after Ada Lovelace, who wrote the first computer program in
+1843. She imagined machines that could compose music, create art, and
+amplify human creativity - not replace it.</p>
+<p>We built Ada because <strong>the infrastructure for personal AI shouldn’t
+require subscriptions, API keys, or permission.</strong></p>
+<p>If you can run the model, you should be able to give it memory, tools,
+and personality without paying gatekeepers.</p>
+</section>
+<section id="our-commitments">
+<h2>Our Commitments<a class="headerlink" href="#our-commitments" title="Link to this heading"></a></h2>
+<p>These aren’t aspirations. These are permanent:</p>
+<section id="always-free-and-open">
+<h3>1. Always Free and Open<a class="headerlink" href="#always-free-and-open" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p>Ada will <strong>always</strong> be open source under a permissive license
+(currently CC0 1.0 Universal)</p></li>
+<li><p>No features will ever be paywalled, cloud-gated, or require
+subscriptions</p></li>
+<li><p>Documentation stays public and comprehensive</p></li>
+<li><p>All core functionality runs entirely on your hardware</p></li>
+</ul>
+<p><strong>Why:</strong> Knowledge infrastructure should be free infrastructure. If you
+can download a model, you should be able to make it useful without
+opening your wallet.</p>
+</section>
+<section id="privacy-by-default">
+<h3>2. Privacy by Default<a class="headerlink" href="#privacy-by-default" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p>No telemetry, no analytics, no phone-home</p></li>
+<li><p>Your conversations stay on your hardware</p></li>
+<li><p>No cloud services required for core functionality</p></li>
+<li><p>If we ever add optional cloud features, local-only must remain fully
+functional</p></li>
+</ul>
+<p><strong>Why:</strong> Your thoughts, questions, and creative process aren’t product.
+Privacy isn’t a premium feature.</p>
+</section>
+<section id="local-first-always">
+<h3>3. Local-First, Always<a class="headerlink" href="#local-first-always" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p>Designed for open models (Ollama, vLLM, etc.)</p></li>
+<li><p>Works offline after initial setup</p></li>
+<li><p>No dependency on any company’s API for core features</p></li>
+<li><p>If a cloud service goes down, Ada keeps working</p></li>
+</ul>
+<p><strong>Why:</strong> Infrastructure you can’t control isn’t yours. Big companies
+change terms, deprecate features, and shut down. Your tools shouldn’t
+vanish when they do.</p>
+</section>
+<section id="hackable-and-understandable">
+<h3>4. Hackable and Understandable<a class="headerlink" href="#hackable-and-understandable" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p>Readable code over clever code</p></li>
+<li><p>Documentation explains WHY, not just WHAT</p></li>
+<li><p>Architecture designed for modification</p></li>
+<li><p>Examples and extensibility prioritized over feature completeness</p></li>
+</ul>
+<p><strong>Why:</strong> If you can’t understand it, you can’t improve it. Ada is a
+starting point, not a finished product. Your weird ideas are the point.</p>
+</section>
+<section id="no-lock-in">
+<h3>5. No Lock-In<a class="headerlink" href="#no-lock-in" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p>Standard protocols (HTTP, SSE, REST)</p></li>
+<li><p>Portable data formats (JSON, SQLite, Parquet)</p></li>
+<li><p>No proprietary APIs or vendor-specific patterns</p></li>
+<li><p>Easy to migrate away from Ada if you want to</p></li>
+</ul>
+<p><strong>Why:</strong> Good projects earn your loyalty through usefulness, not
+hostages. If something better comes along, we should make it easy for
+you to leave.</p>
+</section>
+</section>
+<section id="the-bigger-picture">
+<h2>The Bigger Picture<a class="headerlink" href="#the-bigger-picture" title="Link to this heading"></a></h2>
+<section id="for-the-big-weird-kids">
+<h3>For the Big Weird Kids<a class="headerlink" href="#for-the-big-weird-kids" title="Link to this heading"></a></h3>
+<p>The best tools emerge from people building silly things for themselves.</p>
+<p>Want an AI that speaks only in haiku? Responds as a fictional character?
+Helps you worldbuild a novel? Manages your ADHD by understanding how
+YOUR brain works? <strong>Build it.</strong></p>
+<p>Ada exists so you don’t need a CS degree, a $200/month API budget, or
+anyone’s permission to experiment.</p>
+</section>
+<section id="for-research-democratization">
+<h3>For Research Democratization<a class="headerlink" href="#for-research-democratization" title="Link to this heading"></a></h3>
+<p>Current AI research has biases: - Academic: Limited compute, publishing
+pressure - Corporate: Profit motives, closed data - Individual:
+Paywalled infrastructure, API restrictions</p>
+<p>When <strong>anyone</strong> can run memory systems, tool-use architectures, and
+multi-modal RAG on their laptop, we get: - More diverse experiments -
+Weird edge cases discovered - Use cases nobody imagined - Innovation
+from unexpected places</p>
+<p>Over time, this shifts the landscape. Accessibility creates opportunity.
+Opportunity creates innovation.</p>
+</section>
+<section id="for-digital-sovereignty">
+<h3>For Digital Sovereignty<a class="headerlink" href="#for-digital-sovereignty" title="Link to this heading"></a></h3>
+<p>In 2025, “AI” increasingly means: - Renting access to someone else’s
+model - Accepting terms that change quarterly - Hoping features don’t
+get deprecated - Trusting companies with your data</p>
+<p>Ada offers a different path: - Run your own models - Control your own
+data - Modify your own tools - Build your own future</p>
+<p>This isn’t anti-commercial or anti-cloud. It’s <strong>pro-choice</strong>. You
+should be able to pick subscriptions OR sovereignty.</p>
+</section>
+</section>
+<section id="what-this-means-practically">
+<h2>What This Means Practically<a class="headerlink" href="#what-this-means-practically" title="Link to this heading"></a></h2>
+<p><strong>We will not:</strong> - Add required telemetry or tracking - Paywall features
+behind “Pro” tiers - Replace local options with cloud-only features -
+Make the project dependent on any single company’s API - Add DRM,
+activation, or license enforcement</p>
+<p><strong>We will:</strong> - Keep the codebase readable and well-documented - Support
+local/open models as first-class citizens - Make extension points
+obvious and documented - Provide migration paths if architectures change
+- Credit contributors and maintain transparency</p>
+<p><strong>We encourage:</strong> - Forking for your own weird use cases - Building
+specialists we’d never imagine - Selling services/support around Ada
+(consulting, hosting, custom builds) - Creating commercial products
+using Ada as infrastructure - Making it better and sharing improvements
+back</p>
+</section>
+<section id="for-contributors">
+<h2>For Contributors<a class="headerlink" href="#for-contributors" title="Link to this heading"></a></h2>
+<p>If you contribute to Ada: - Your work joins the commons (per the
+license) - You’re helping democratize AI infrastructure - You’re making
+someone’s weird project possible - You’re part of something bigger than
+any single assistant</p>
+<p>We’re building infrastructure for the next generation of personal AI -
+not a product, but a foundation.</p>
+</section>
+<section id="living-document">
+<h2>Living Document<a class="headerlink" href="#living-document" title="Link to this heading"></a></h2>
+<p>These principles guide Ada’s development. If we ever need to change
+them, it will be: 1. Discussed openly with the community 2. Justified
+with clear reasoning 3. Backward-compatible where possible 4. Documented
+transparently</p>
+<p>This project exists to empower you. If it stops doing that, tell us.</p>
+<hr class="docutils" />
+<p><strong>Ada is named after the first programmer. We’re building it for all the
+programmers, tinkerers, and dreamers who come next.</strong></p>
+<p><em>Let’s build tools that let weird kids build weird things that change
+the world.</em> 🚀</p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="changelog.html" class="btn btn-neutral float-left" title="Changelog" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="documentation_philosophy.html" class="btn btn-neutral float-right" title="Documentation Philosophy" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p></p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -1,0 +1,531 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Specialist RAG Documentation System &mdash; Ada Brain API 0.1.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="_static/graphviz.css?v=4ae1632d" />
+      <link rel="stylesheet" type="text/css" href="_static/custom.css?v=df0a1c42" />
+
+  
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=01f34227"></script>
+      <script src="_static/doctools.js?v=9bcbadda"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Web Search Specialist" href="web_search.html" />
+    <link rel="prev" title="Bidirectional Specialist System" href="bidirectional.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            Ada Brain API
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="zero_to_ada.html">Zero to Ada</a></li>
+<li class="toctree-l1"><a class="reference internal" href="getting_started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="local_mode.html">Running Ada Locally (No Docker Required!)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="nix.html">Nix &amp; Flakes Support</a></li>
+<li class="toctree-l1"><a class="reference internal" href="getting_started_scratch.html">Getting Started from Scratch</a></li>
+<li class="toctree-l1"><a class="reference internal" href="configuration.html">Configuration Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="examples.html">Examples</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Hardware Setup</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="hardware.html">Hardware &amp; GPU Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="sbc.html">Ada on Single-Board Computers (SBCs)</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Core Architecture</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="architecture.html">Architecture</a></li>
+<li class="toctree-l1"><a class="reference internal" href="data_model.html">Data Model Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="streaming.html">Streaming</a></li>
+<li class="toctree-l1"><a class="reference internal" href="memory.html">Memory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="token_monitoring.html">Token Budget Monitoring</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Interfaces &amp; Adapters</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="adapters.html">Ada Adapters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="adapter_development.html">Adapter Development Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="matrix_integration.html">Matrix Integration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api_usage.html">API Usage Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api_reference.html">API Reference</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Specialist System</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="specialists.html">Specialist System</a></li>
+<li class="toctree-l1"><a class="reference internal" href="build_specialist.html">Build Your First Specialist</a></li>
+<li class="toctree-l1"><a class="reference internal" href="bidirectional.html">Bidirectional Specialist System</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Specialist RAG Documentation System</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#overview">Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#how-it-works">How It Works</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#automatic-sync-on-startup">1. Automatic Sync on Startup</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#context-aware-retrieval">2. Context-Aware Retrieval</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#faq-entry-types">3. FAQ Entry Types</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#configuration">Configuration</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#enable-disable-rag-docs">Enable/Disable RAG Docs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#retrieval-count">Retrieval Count</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#benefits">Benefits</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#context-aware-guidance">1. Context-Aware Guidance</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#automatic-updates">2. Automatic Updates</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#token-efficiency">3. Token Efficiency</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#semantic-matching">4. Semantic Matching</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#implementation-files">Implementation Files</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#brain-specialists-specialist-docs-py">brain/specialists/specialist_docs.py</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#brain-app-py-lifespan">brain/app.py (lifespan)</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#example-workflow">Example Workflow</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#user-query-can-you-read-the-text-in-this-image">User Query: “Can you read the text in this image?”</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#future-enhancements">Future Enhancements</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#phase-1-embedding-based-specialist-discovery">Phase 1: Embedding-Based Specialist Discovery</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#phase-2-example-based-learning">Phase 2: Example-Based Learning</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#phase-3-failure-case-documentation">Phase 3: Failure Case Documentation</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#debugging">Debugging</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#check-synced-faqs">Check Synced FAQs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#test-retrieval">Test Retrieval</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#monitor-logs">Monitor Logs</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#configuration-reference">Configuration Reference</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#migration-notes">Migration Notes</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#before-static-instructions">Before (Static Instructions)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#after-dynamic-rag">After (Dynamic RAG)</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#related-documentation">Related Documentation</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="web_search.html">Web Search Specialist</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Operations</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="build_system.html">Build System</a></li>
+<li class="toctree-l1"><a class="reference internal" href="buildx_adoption_notes.html">BuildX Adoption Data &amp; Notes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="disk_management.html">Disk Management</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Development</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="development.html">Development Tools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="testing.html">Testing Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="versioning.html">Version Management</a></li>
+<li class="toctree-l1"><a class="reference internal" href="changelog.html">Changelog</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Philosophy &amp; Design</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="project_philosophy.html">Ada Principles</a></li>
+<li class="toctree-l1"><a class="reference internal" href="documentation_philosophy.html">Documentation Philosophy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ai_documentation.html">AI-Readable Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="empathetic_documentation.html">Empathetic Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="xenofeminism.html">Xenofeminism and Ada</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Ada Brain API</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Specialist RAG Documentation System</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/specialist_rag.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="specialist-rag-documentation-system">
+<h1>Specialist RAG Documentation System<a class="headerlink" href="#specialist-rag-documentation-system" title="Link to this heading"></a></h1>
+<section id="overview">
+<h2>Overview<a class="headerlink" href="#overview" title="Link to this heading"></a></h2>
+<p>Instead of using static specialist instructions in the system prompt, Ada now uses <strong>RAG-based dynamic documentation</strong> that retrieves relevant specialist guidance based on the user’s query context.</p>
+</section>
+<section id="how-it-works">
+<h2>How It Works<a class="headerlink" href="#how-it-works" title="Link to this heading"></a></h2>
+<section id="automatic-sync-on-startup">
+<h3>1. Automatic Sync on Startup<a class="headerlink" href="#automatic-sync-on-startup" title="Link to this heading"></a></h3>
+<p>When the brain service starts:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>[BRAIN] Discovered 2 specialists: 🎧 media, 📄 ocr
+[BRAIN] Synced 8 specialist FAQ entries to RAG
+</pre></div>
+</div>
+<p>The system:</p>
+<ul class="simple">
+<li><p>Discovers all registered specialists via the plugin registry</p></li>
+<li><p>Generates FAQ entries from specialist capabilities</p></li>
+<li><p>Stores them in Chroma with <code class="docutils literal notranslate"><span class="pre">type=&quot;faq&quot;</span></code> and <code class="docutils literal notranslate"><span class="pre">topic=&quot;specialists&quot;</span></code></p></li>
+<li><p>Removes old entries to ensure idempotency</p></li>
+</ul>
+</section>
+<section id="context-aware-retrieval">
+<h3>2. Context-Aware Retrieval<a class="headerlink" href="#context-aware-retrieval" title="Link to this heading"></a></h3>
+<p>During prompt building (<code class="docutils literal notranslate"><span class="pre">PromptAssembler</span></code> in <code class="docutils literal notranslate"><span class="pre">brain/prompt_builder/</span></code> package with caching):</p>
+<ul class="simple">
+<li><p>User’s query is embedded</p></li>
+<li><p>RAG retrieves the top K most relevant specialist FAQs (with caching for frequent queries)</p></li>
+<li><p>Retrieved docs are injected into the prompt before specialist execution</p></li>
+<li><p>This provides <strong>just-in-time</strong> specialist guidance instead of static instructions</p></li>
+</ul>
+</section>
+<section id="faq-entry-types">
+<h3>3. FAQ Entry Types<a class="headerlink" href="#faq-entry-types" title="Link to this heading"></a></h3>
+<p>The system generates multiple FAQ types:</p>
+<p><strong>Overview FAQ:</strong></p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Q: What specialist capabilities are available?
+A: Ada has 2 specialist capabilities integrated: 🎧 media, 📄 ocr.
+   These can be invoked mid-conversation using SPECIALIST_REQUEST[name:{params}] syntax...
+</pre></div>
+</div>
+<p><strong>Per-Specialist Capability FAQ:</strong></p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Q: What does the ocr specialist do?
+A: Extract text from images using Tesseract OCR (Priority: HIGH, Icon: 📄)
+</pre></div>
+</div>
+<p><strong>Per-Specialist Syntax FAQ:</strong></p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Q: How do I invoke the ocr specialist?
+A: Use the syntax SPECIALIST_REQUEST[ocr:{}] in your response. I will detect this pattern,
+   pause generation, execute the specialist, and resume with enriched context.
+</pre></div>
+</div>
+<p><strong>Usage Pattern FAQs:</strong></p>
+<ul class="simple">
+<li><p>When to use specialists</p></li>
+<li><p>Chaining multiple specialists</p></li>
+<li><p>How pause/resume works</p></li>
+</ul>
+</section>
+</section>
+<section id="configuration">
+<h2>Configuration<a class="headerlink" href="#configuration" title="Link to this heading"></a></h2>
+<section id="enable-disable-rag-docs">
+<h3>Enable/Disable RAG Docs<a class="headerlink" href="#enable-disable-rag-docs" title="Link to this heading"></a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nv">SPECIALIST_RAG_DOCS</span><span class="o">=</span><span class="nb">true</span><span class="w">  </span><span class="c1"># Use dynamic RAG retrieval (default)</span>
+<span class="nv">SPECIALIST_RAG_DOCS</span><span class="o">=</span><span class="nb">false</span><span class="w"> </span><span class="c1"># Use static SPECIALIST_INSTRUCTIONS only</span>
+</pre></div>
+</div>
+<p>Set in <code class="docutils literal notranslate"><span class="pre">brain/config.py</span></code>:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">SPECIALIST_RAG_DOCS</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s2">&quot;SPECIALIST_RAG_DOCS&quot;</span><span class="p">,</span> <span class="s2">&quot;true&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s2">&quot;true&quot;</span>
+</pre></div>
+</div>
+</section>
+<section id="retrieval-count">
+<h3>Retrieval Count<a class="headerlink" href="#retrieval-count" title="Link to this heading"></a></h3>
+<p>In the prompt building system, specialist docs retrieve 2 FAQs by default:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">specialist_docs</span> <span class="o">=</span> <span class="n">get_relevant_specialist_docs</span><span class="p">(</span><span class="n">user_prompt</span><span class="p">,</span> <span class="n">rag_store</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="benefits">
+<h2>Benefits<a class="headerlink" href="#benefits" title="Link to this heading"></a></h2>
+<section id="context-aware-guidance">
+<h3>1. Context-Aware Guidance<a class="headerlink" href="#context-aware-guidance" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p>User asks “can you analyze this image?” → OCR/vision docs retrieved</p></li>
+<li><p>User asks “what’s playing?” → Media specialist docs retrieved</p></li>
+<li><p>Irrelevant specialists don’t clutter the prompt</p></li>
+</ul>
+</section>
+<section id="automatic-updates">
+<h3>2. Automatic Updates<a class="headerlink" href="#automatic-updates" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p>Add a new specialist → FAQ entries auto-generated on next startup</p></li>
+<li><p>Modify specialist capability → Updated in RAG automatically</p></li>
+<li><p>No manual prompt engineering required</p></li>
+</ul>
+</section>
+<section id="token-efficiency">
+<h3>3. Token Efficiency<a class="headerlink" href="#token-efficiency" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p>Static <code class="docutils literal notranslate"><span class="pre">SPECIALIST_INSTRUCTIONS</span></code> = ~300 tokens always present</p></li>
+<li><p>Dynamic RAG retrieval = ~100-200 tokens only when relevant</p></li>
+<li><p>Reduces prompt bloat for non-specialist queries</p></li>
+</ul>
+</section>
+<section id="semantic-matching">
+<h3>4. Semantic Matching<a class="headerlink" href="#semantic-matching" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p>User query: “What can you see in this photo?”</p></li>
+<li><p>RAG retrieves: OCR + vision specialist documentation</p></li>
+<li><p>LLM learns specialist syntax contextually</p></li>
+</ul>
+</section>
+</section>
+<section id="implementation-files">
+<h2>Implementation Files<a class="headerlink" href="#implementation-files" title="Link to this heading"></a></h2>
+<section id="brain-specialists-specialist-docs-py">
+<h3>brain/specialists/specialist_docs.py<a class="headerlink" href="#brain-specialists-specialist-docs-py" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">sync_specialist_docs_to_faq()</span></code> - Generate FAQ entries from all specialists</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">get_relevant_specialist_docs()</span></code> - Retrieve relevant docs for a query</p></li>
+</ul>
+</section>
+<section id="brain-app-py-lifespan">
+<h3>brain/app.py (lifespan)<a class="headerlink" href="#brain-app-py-lifespan" title="Link to this heading"></a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Sync specialist documentation to FAQ system</span>
+<span class="k">if</span> <span class="n">rag_store</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="n">doc_count</span> <span class="o">=</span> <span class="n">sync_specialist_docs_to_faq</span><span class="p">(</span><span class="n">rag_store</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;[BRAIN] Synced </span><span class="si">{</span><span class="n">doc_count</span><span class="si">}</span><span class="s2"> specialist FAQ entries to RAG&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>brain/prompt_builder/ (modular package)
+brain/_legacy_prompt_builder.py (legacy compatibility)
+———————–</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># --- Dynamic Specialist Documentation (RAG-based) ---</span>
+<span class="k">if</span> <span class="n">SPECIALIST_RAG_DOCS</span> <span class="ow">and</span> <span class="n">rag_store</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="n">specialist_docs</span> <span class="o">=</span> <span class="n">get_relevant_specialist_docs</span><span class="p">(</span><span class="n">user_prompt</span><span class="p">,</span> <span class="n">rag_store</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">specialist_docs</span><span class="p">:</span>
+        <span class="n">sections</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">specialist_docs</span><span class="p">)</span>
+        <span class="n">used_context</span><span class="p">[</span><span class="s1">&#39;specialist_docs&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">True</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="example-workflow">
+<h2>Example Workflow<a class="headerlink" href="#example-workflow" title="Link to this heading"></a></h2>
+<section id="user-query-can-you-read-the-text-in-this-image">
+<h3>User Query: “Can you read the text in this image?”<a class="headerlink" href="#user-query-can-you-read-the-text-in-this-image" title="Link to this heading"></a></h3>
+<ol class="arabic">
+<li><p><strong>Prompt Building Phase:</strong></p>
+<ul>
+<li><p>Embed query: “Can you read the text in this image?”</p></li>
+<li><p>RAG retrieves from <code class="docutils literal notranslate"><span class="pre">type=&quot;faq&quot;,</span> <span class="pre">topic=&quot;specialists&quot;</span></code>:</p>
+<ul class="simple">
+<li><p>“How do I invoke the ocr specialist?”</p></li>
+<li><p>“What does the ocr specialist do?”</p></li>
+</ul>
+</li>
+<li><p>Format and inject into prompt:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>📚 Specialist Capabilities Reference:
+  • Use the syntax SPECIALIST_REQUEST[ocr:{}]...
+  • Extract text from images using Tesseract OCR...
+</pre></div>
+</div>
+</li>
+</ul>
+</li>
+<li><p><strong>LLM Generation:</strong></p>
+<ul class="simple">
+<li><p>Ada sees relevant OCR documentation in context</p></li>
+<li><p>Generates: “I can extract the text using OCR. SPECIALIST_REQUEST[ocr:{}]”</p></li>
+</ul>
+</li>
+<li><p><strong>Specialist Execution (Pause/Resume):</strong></p>
+<ul class="simple">
+<li><p>Generation pauses</p></li>
+<li><p>OCR specialist extracts: “Annual Report 2024…”</p></li>
+<li><p>Generation resumes with OCR result injected</p></li>
+</ul>
+</li>
+<li><p><strong>Final Response:</strong></p>
+<ul class="simple">
+<li><p>“The image contains: Annual Report 2024…”</p></li>
+</ul>
+</li>
+</ol>
+</section>
+</section>
+<section id="future-enhancements">
+<h2>Future Enhancements<a class="headerlink" href="#future-enhancements" title="Link to this heading"></a></h2>
+<section id="phase-1-embedding-based-specialist-discovery">
+<h3>Phase 1: Embedding-Based Specialist Discovery<a class="headerlink" href="#phase-1-embedding-based-specialist-discovery" title="Link to this heading"></a></h3>
+<p>Instead of the LLM explicitly requesting specialists, the system could:</p>
+<ul class="simple">
+<li><p>Embed user query</p></li>
+<li><p>Check similarity to specialist capabilities</p></li>
+<li><p>Auto-suggest specialists in prompt</p></li>
+</ul>
+</section>
+<section id="phase-2-example-based-learning">
+<h3>Phase 2: Example-Based Learning<a class="headerlink" href="#phase-2-example-based-learning" title="Link to this heading"></a></h3>
+<p>Store successful specialist invocations as FAQs:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Q: User uploaded a diagram and asked &quot;what&#39;s the architecture?&quot;
+A: I used SPECIALIST_REQUEST[vision:{&quot;focus&quot;:&quot;architecture&quot;}] to analyze...
+</pre></div>
+</div>
+</section>
+<section id="phase-3-failure-case-documentation">
+<h3>Phase 3: Failure Case Documentation<a class="headerlink" href="#phase-3-failure-case-documentation" title="Link to this heading"></a></h3>
+<p>Track failed specialist calls and add FAQ warnings:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Q: Can OCR read handwritten text?
+A: OCR works best with printed text. Handwritten text may have lower accuracy.
+</pre></div>
+</div>
+</section>
+</section>
+<section id="debugging">
+<h2>Debugging<a class="headerlink" href="#debugging" title="Link to this heading"></a></h2>
+<section id="check-synced-faqs">
+<h3>Check Synced FAQs<a class="headerlink" href="#check-synced-faqs" title="Link to this heading"></a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># View all specialist FAQs</span>
+docker<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>ada-v1-brain-1<span class="w"> </span>python<span class="w"> </span>-c<span class="w"> </span><span class="s2">&quot;</span>
+<span class="s2">from rag_store import RagStore</span>
+<span class="s2">store = RagStore()</span>
+<span class="s2">result = store.col.query(</span>
+<span class="s2">    query_texts=[&#39;specialists&#39;],</span>
+<span class="s2">    n_results=10,</span>
+<span class="s2">    where={&#39;type&#39;: &#39;faq&#39;, &#39;topic&#39;: &#39;specialists&#39;}</span>
+<span class="s2">)</span>
+<span class="s2">for doc in result[&#39;documents&#39;][0]:</span>
+<span class="s2">    print(doc)</span>
+<span class="s2">    print(&#39;---&#39;)</span>
+<span class="s2">&quot;</span>
+</pre></div>
+</div>
+</section>
+<section id="test-retrieval">
+<h3>Test Retrieval<a class="headerlink" href="#test-retrieval" title="Link to this heading"></a></h3>
+<p>Query the debug endpoint (if <code class="docutils literal notranslate"><span class="pre">RAG_DEBUG=true</span></code>):</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>curl<span class="w"> </span><span class="s2">&quot;http://localhost:7000/v1/debug/prompt?prompt=analyze%20image&amp;faq_k=5&quot;</span>
+</pre></div>
+</div>
+<p>Check <code class="docutils literal notranslate"><span class="pre">used_context.specialist_docs</span></code> field to see if docs were injected.</p>
+</section>
+<section id="monitor-logs">
+<h3>Monitor Logs<a class="headerlink" href="#monitor-logs" title="Link to this heading"></a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>docker<span class="w"> </span>logs<span class="w"> </span>ada-v1-brain-1<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span><span class="s2">&quot;Synced.*FAQ&quot;</span>
+<span class="c1"># [BRAIN] Synced 8 specialist FAQ entries to RAG</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="configuration-reference">
+<h2>Configuration Reference<a class="headerlink" href="#configuration-reference" title="Link to this heading"></a></h2>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 30.0%" />
+<col style="width: 15.0%" />
+<col style="width: 55.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Variable</p></th>
+<th class="head"><p>Default</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">SPECIALIST_RAG_DOCS</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">true</span></code></p></td>
+<td><p>Enable dynamic RAG-based specialist documentation</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">SPECIALIST_PAUSE_RESUME</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">true</span></code></p></td>
+<td><p>Enable pause/resume for specialist execution</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">SPECIALIST_MAX_TURNS</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">5</span></code></p></td>
+<td><p>Maximum specialist calls per conversation</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">RAG_FAQ_TOP_K</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">2</span></code></p></td>
+<td><p>Number of FAQ entries to retrieve (includes specialist docs)</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="migration-notes">
+<h2>Migration Notes<a class="headerlink" href="#migration-notes" title="Link to this heading"></a></h2>
+<section id="before-static-instructions">
+<h3>Before (Static Instructions)<a class="headerlink" href="#before-static-instructions" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p>All specialist syntax in <code class="docutils literal notranslate"><span class="pre">SPECIALIST_INSTRUCTIONS</span></code> (300+ tokens)</p></li>
+<li><p>Present in every prompt regardless of relevance</p></li>
+<li><p>Manual updates required for new specialists</p></li>
+</ul>
+</section>
+<section id="after-dynamic-rag">
+<h3>After (Dynamic RAG)<a class="headerlink" href="#after-dynamic-rag" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p>Specialist syntax retrieved on-demand from FAQ system</p></li>
+<li><p>Only relevant specialists injected based on query</p></li>
+<li><p>Automatic updates when specialists added/changed</p></li>
+<li><p>Backward compatible: static instructions still present as fallback</p></li>
+</ul>
+</section>
+</section>
+<section id="related-documentation">
+<h2>Related Documentation<a class="headerlink" href="#related-documentation" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p><a class="reference internal" href="specialists.html"><span class="doc">Specialist System</span></a> - Plugin protocol and creation guide</p></li>
+<li><p><a class="reference internal" href="bidirectional.html"><span class="doc">Bidirectional Specialist System</span></a> - Communication patterns</p></li>
+<li><p>API documentation - RAG system overview</p></li>
+</ul>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="bidirectional.html" class="btn btn-neutral float-left" title="Bidirectional Specialist System" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="web_search.html" class="btn btn-neutral float-right" title="Web Search Specialist" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p></p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

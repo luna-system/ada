@@ -1,0 +1,4 @@
+# file: /home/luna/Code/ada-v1/brain/_legacy_prompt_builder.py
+# hypothesis_version: 6.148.7
+
+[200, '...', 'Long-term memory:\n', 'TokenBudgetMonitor', 'context', 'conversation_id', 'entity', 'faq', 'faqs', 'global', 'importance', 'included', 'instructions', 'media', 'memories', 'message', 'metadata', 'ocr_context', 'persona', 'prompt', 'role', 'scope', 'severity', 'specialist_docs', 'success', 'summaries', 'system_notices', 'system_prompt', 'tags', 'text', 'timestamp', 'topic', 'turns', 'user_prompt', 'user_timestamp']

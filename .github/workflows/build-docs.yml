@@ -5,6 +5,7 @@ on:
     branches: [ trunk ]
     paths:
       - 'docs/**'
+      - 'docs-site/**'
       - '.github/workflows/build-docs.yml'
   workflow_dispatch:
 
@@ -29,17 +30,37 @@ jobs:
       - name: Setup Python
         uses: actions/setup-python@v5
         with:
-          python-version: '3.11'
+          python-version: '3.13'
       
-      - name: Install dependencies
-        run: |
-          python -m pip install --upgrade pip
-          pip install -r docs/requirements.txt
+      - name: Install uv
+        uses: astral-sh/setup-uv@v5
+        with:
+          enable-cache: true
       
-      - name: Build Sphinx documentation
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+          cache-dependency-path: docs-site/package-lock.json
+      
+      - name: Create Python virtual environment
+        run: uv venv
+      
+      - name: Install Python dependencies
         run: |
-          cd docs
-          make html
+          source .venv/bin/activate
+          uv pip install -r docs/requirements.txt
+      
+      - name: Install Node dependencies
+        run: |
+          cd docs-site
+          npm ci
+      
+      - name: Build unified docs site (Sphinx + Astro)
+        run: |
+          cd docs-site
+          npm run build
       
       - name: Setup Pages
         uses: actions/configure-pages@v4
@@ -47,7 +68,7 @@ jobs:
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: 'docs/_build/html'
+          path: 'docs-site/dist'
   
   deploy:
     # Only deploy from trunk branch

@@ -1,6 +1,6 @@
 [project]
 name = "ada-v1"
-version = "1.9.0"
+version = "2.0.0"
 description = ""
 authors = [
     {name = "luna system",email = "luna@airsi.de"}
@@ -26,12 +26,15 @@ dependencies = [
     "python-multipart>=0.0.9",
     "pytesseract>=0.3.10",
     "pillow>=10.0.0",
+    "tiktoken>=0.12.0",
+    "hypothesis>=6.148.7",
 ]
 
 [project.optional-dependencies]
 docs = [
-    "sphinx>=7.0.0",
-    "sphinx-rtd-theme>=2.0.0",
+    "sphinx>=8.0.0",
+    "sphinx-rtd-theme>=3.0.0",
+    "myst-parser>=4.0.0",  # Markdown support for CHANGELOG.md
 ]
 dev = [
     "pytest>=8.0.0",

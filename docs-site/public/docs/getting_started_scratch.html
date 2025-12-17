@@ -1,0 +1,487 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Getting Started from Scratch &mdash; Ada Brain API 0.1.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="_static/graphviz.css?v=4ae1632d" />
+      <link rel="stylesheet" type="text/css" href="_static/custom.css?v=df0a1c42" />
+
+  
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=01f34227"></script>
+      <script src="_static/doctools.js?v=9bcbadda"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Configuration Reference" href="configuration.html" />
+    <link rel="prev" title="Nix &amp; Flakes Support" href="nix.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            Ada Brain API
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="zero_to_ada.html">Zero to Ada</a></li>
+<li class="toctree-l1"><a class="reference internal" href="getting_started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="local_mode.html">Running Ada Locally (No Docker Required!)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="nix.html">Nix &amp; Flakes Support</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Getting Started from Scratch</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#overview">Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#step-1-get-ada-running">Step 1: Get Ada Running</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#step-2-choose-your-ai-model">Step 2: Choose Your AI Model</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#see-available-models">See Available Models</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#change-the-model">Change the Model</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#step-3-give-your-ai-a-personality">Step 3: Give Your AI a Personality</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#choose-an-example-or-start-fresh">Choose an Example or Start Fresh</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#edit-the-persona">Edit the Persona</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#reload-the-persona">Reload the Persona</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#step-4-name-your-ai">Step 4: Name Your AI</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#step-5-tweak-rag-settings-optional">Step 5: Tweak RAG Settings (Optional)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#common-adjustments">Common Adjustments</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#when-to-adjust">When to Adjust</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#step-6-test-core-features">Step 6: Test Core Features</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#memory">Memory</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#web-search">Web Search</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#ocr-optional">OCR (Optional)</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#common-issues">Common Issues</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#model-not-found">“Model not found”</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#persona-not-loading">Persona not loading</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#responses-are-slow">Responses are slow</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#ai-doesn-t-remember-anything">AI doesn’t remember anything</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#next-steps">Next Steps</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#need-help">Need Help?</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="configuration.html">Configuration Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="examples.html">Examples</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Hardware Setup</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="hardware.html">Hardware &amp; GPU Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="sbc.html">Ada on Single-Board Computers (SBCs)</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Core Architecture</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="architecture.html">Architecture</a></li>
+<li class="toctree-l1"><a class="reference internal" href="data_model.html">Data Model Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="streaming.html">Streaming</a></li>
+<li class="toctree-l1"><a class="reference internal" href="memory.html">Memory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="token_monitoring.html">Token Budget Monitoring</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Interfaces &amp; Adapters</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="adapters.html">Ada Adapters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="adapter_development.html">Adapter Development Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="matrix_integration.html">Matrix Integration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api_usage.html">API Usage Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api_reference.html">API Reference</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Specialist System</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="specialists.html">Specialist System</a></li>
+<li class="toctree-l1"><a class="reference internal" href="build_specialist.html">Build Your First Specialist</a></li>
+<li class="toctree-l1"><a class="reference internal" href="bidirectional.html">Bidirectional Specialist System</a></li>
+<li class="toctree-l1"><a class="reference internal" href="specialist_rag.html">Specialist RAG Documentation System</a></li>
+<li class="toctree-l1"><a class="reference internal" href="web_search.html">Web Search Specialist</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Operations</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="build_system.html">Build System</a></li>
+<li class="toctree-l1"><a class="reference internal" href="buildx_adoption_notes.html">BuildX Adoption Data &amp; Notes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="disk_management.html">Disk Management</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Development</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="development.html">Development Tools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="testing.html">Testing Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="versioning.html">Version Management</a></li>
+<li class="toctree-l1"><a class="reference internal" href="changelog.html">Changelog</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Philosophy &amp; Design</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="project_philosophy.html">Ada Principles</a></li>
+<li class="toctree-l1"><a class="reference internal" href="documentation_philosophy.html">Documentation Philosophy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ai_documentation.html">AI-Readable Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="empathetic_documentation.html">Empathetic Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="xenofeminism.html">Xenofeminism and Ada</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Ada Brain API</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Getting Started from Scratch</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/getting_started_scratch.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="getting-started-from-scratch">
+<h1>Getting Started from Scratch<a class="headerlink" href="#getting-started-from-scratch" title="Link to this heading"></a></h1>
+<p><strong>Build your own AI assistant with Ada.</strong></p>
+<p>This guide walks you through customizing Ada to create YOUR personalized AI assistant - not just use the default.</p>
+<hr class="docutils" />
+<section id="overview">
+<h2>Overview<a class="headerlink" href="#overview" title="Link to this heading"></a></h2>
+<p>Ada ships with a default “helpful assistant” personality named Ada. But the whole point is to make it YOURS:</p>
+<ul class="simple">
+<li><p>Different name and personality</p></li>
+<li><p>Custom knowledge and context</p></li>
+<li><p>Tailored tone and behavior</p></li>
+<li><p>Your choice of model</p></li>
+</ul>
+<p><strong>Time required:</strong> 15-30 minutes
+<strong>Difficulty:</strong> Beginner-friendly</p>
+</section>
+<hr class="docutils" />
+<section id="step-1-get-ada-running">
+<h2>Step 1: Get Ada Running<a class="headerlink" href="#step-1-get-ada-running" title="Link to this heading"></a></h2>
+<p>If you haven’t already:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Install Ollama</span>
+curl<span class="w"> </span>-fsSL<span class="w"> </span>https://ollama.com/install.sh<span class="w"> </span><span class="p">|</span><span class="w"> </span>sh
+ollama<span class="w"> </span>serve
+
+<span class="c1"># Clone and setup</span>
+git<span class="w"> </span>clone<span class="w"> </span>https://github.com/luna-system/ada.git
+<span class="nb">cd</span><span class="w"> </span>ada
+python3<span class="w"> </span>ada_main.py<span class="w"> </span>setup
+
+<span class="c1"># Pull a model and start</span>
+ollama<span class="w"> </span>pull<span class="w"> </span>deepseek-r1:14b
+ada<span class="w"> </span>run
+</pre></div>
+</div>
+<p><strong>Checkpoint:</strong> Visit <a class="reference external" href="http://localhost:7000/v1/healthz">http://localhost:7000/v1/healthz</a> - you should see status “ok”.</p>
+</section>
+<hr class="docutils" />
+<section id="step-2-choose-your-ai-model">
+<h2>Step 2: Choose Your AI Model<a class="headerlink" href="#step-2-choose-your-ai-model" title="Link to this heading"></a></h2>
+<p>Ada uses Ollama to run local models. You can use ANY model Ollama supports.</p>
+<section id="see-available-models">
+<h3>See Available Models<a class="headerlink" href="#see-available-models" title="Link to this heading"></a></h3>
+<p>Visit <a class="reference external" href="https://ollama.com/library">https://ollama.com/library</a> for the full list.</p>
+<p><strong>Popular choices:</strong></p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">llama3.1</span></code> - Meta’s open model, good balance of speed/quality</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">mistral</span></code> - Fast and capable, great for coding</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">qwen2.5</span></code> - Excellent multilingual support</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">deepseek-r1</span></code> - Default, shows reasoning process</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">gemma2</span></code> - Google’s open model, efficient</p></li>
+</ul>
+</section>
+<section id="change-the-model">
+<h3>Change the Model<a class="headerlink" href="#change-the-model" title="Link to this heading"></a></h3>
+<p>Edit <code class="docutils literal notranslate"><span class="pre">.env</span></code> in the project root:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Change this line</span>
+<span class="nv">OLLAMA_MODEL</span><span class="o">=</span>llama3.1
+
+<span class="c1"># Or use a specific size</span>
+<span class="nv">OLLAMA_MODEL</span><span class="o">=</span>mistral:7b
+</pre></div>
+</div>
+<p>Restart Ada:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>ada<span class="w"> </span>stop
+ada<span class="w"> </span>run
+</pre></div>
+</div>
+<p>The first message will be slower as Ollama downloads the new model.</p>
+<p><strong>Checkpoint:</strong> Chat with your chosen model and verify it responds.</p>
+</section>
+</section>
+<hr class="docutils" />
+<section id="step-3-give-your-ai-a-personality">
+<h2>Step 3: Give Your AI a Personality<a class="headerlink" href="#step-3-give-your-ai-a-personality" title="Link to this heading"></a></h2>
+<section id="choose-an-example-or-start-fresh">
+<h3>Choose an Example or Start Fresh<a class="headerlink" href="#choose-an-example-or-start-fresh" title="Link to this heading"></a></h3>
+<p>Ada includes example personas in <code class="docutils literal notranslate"><span class="pre">examples/personas/</span></code>:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># See what&#39;s available</span>
+ls<span class="w"> </span>examples/personas/
+
+<span class="c1"># Copy one you like</span>
+cp<span class="w"> </span>examples/personas/coding-buddy.md<span class="w"> </span>persona.md
+
+<span class="c1"># Or start minimal</span>
+cp<span class="w"> </span>examples/personas/minimal.md<span class="w"> </span>persona.md
+</pre></div>
+</div>
+</section>
+<section id="edit-the-persona">
+<h3>Edit the Persona<a class="headerlink" href="#edit-the-persona" title="Link to this heading"></a></h3>
+<p>Open <code class="docutils literal notranslate"><span class="pre">persona.md</span></code> in your editor and customize:</p>
+<div class="highlight-markdown notranslate"><div class="highlight"><pre><span></span><span class="gh"># My AI Assistant</span>
+
+<span class="gu">## Role</span>
+
+You are [NAME], a [DESCRIPTION] for [USER].
+
+<span class="gu">## Tone</span>
+
+[How should your AI communicate? Formal? Casual? Technical?]
+
+<span class="gu">## Priorities</span>
+
+What matters most in responses:
+<span class="k">-</span><span class="w"> </span>Be concise / Be detailed
+<span class="k">-</span><span class="w"> </span>Focus on code / Focus on ideas
+<span class="k">-</span><span class="w"> </span>Ask clarifying questions / Make reasonable assumptions
+
+<span class="gu">## Special Context</span>
+
+[Any specific knowledge your AI should have?]
+<span class="k">-</span><span class="w"> </span>Your work domain
+<span class="k">-</span><span class="w"> </span>Your preferences
+<span class="k">-</span><span class="w"> </span>Things to remember about you
+</pre></div>
+</div>
+<p><strong>Tips:</strong></p>
+<ul class="simple">
+<li><p>Keep it under 2000 characters (longer personas get truncated)</p></li>
+<li><p>Be specific - “prefer functional programming” works better than “likes code”</p></li>
+<li><p>Use examples to show tone rather than describing it</p></li>
+<li><p>Don’t worry about perfection - iterate!</p></li>
+</ul>
+</section>
+<section id="reload-the-persona">
+<h3>Reload the Persona<a class="headerlink" href="#reload-the-persona" title="Link to this heading"></a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>docker<span class="w"> </span>compose<span class="w"> </span>restart<span class="w"> </span>brain
+</pre></div>
+</div>
+<p><strong>Checkpoint:</strong> Chat with your AI. Does it match the personality you defined?</p>
+</section>
+</section>
+<hr class="docutils" />
+<section id="step-4-name-your-ai">
+<h2>Step 4: Name Your AI<a class="headerlink" href="#step-4-name-your-ai" title="Link to this heading"></a></h2>
+<p>Edit <code class="docutils literal notranslate"><span class="pre">.env</span></code>:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nv">AI_NAME</span><span class="o">=</span>Jarvis
+<span class="nv">AI_USER_NAME</span><span class="o">=</span>Tony
+</pre></div>
+</div>
+<p>Restart:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>docker<span class="w"> </span>compose<span class="w"> </span>restart<span class="w"> </span>brain
+</pre></div>
+</div>
+<p>Your AI will now introduce itself as Jarvis and recognize you as Tony.</p>
+<p><strong>Checkpoint:</strong> Ask “What’s your name?” and verify it responds correctly.</p>
+</section>
+<hr class="docutils" />
+<section id="step-5-tweak-rag-settings-optional">
+<h2>Step 5: Tweak RAG Settings (Optional)<a class="headerlink" href="#step-5-tweak-rag-settings-optional" title="Link to this heading"></a></h2>
+<p>RAG (Retrieval-Augmented Generation) controls how much context/memory your AI uses.</p>
+<section id="common-adjustments">
+<h3>Common Adjustments<a class="headerlink" href="#common-adjustments" title="Link to this heading"></a></h3>
+<p>In <code class="docutils literal notranslate"><span class="pre">.env</span></code>:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># How many past conversation turns to include</span>
+<span class="nv">RAG_TURN_TOP_K</span><span class="o">=</span><span class="m">4</span><span class="w">  </span><span class="c1"># Default: 4, try 6-8 for more context</span>
+
+<span class="c1"># How many memories to retrieve</span>
+<span class="nv">RAG_MEMORY_TOP_K</span><span class="o">=</span><span class="m">3</span><span class="w">  </span><span class="c1"># Default: 3</span>
+
+<span class="c1"># Max persona length</span>
+<span class="nv">RAG_PERSONA_MAX_CHARS</span><span class="o">=</span><span class="m">2000</span><span class="w">  </span><span class="c1"># Default: 2000</span>
+
+<span class="c1"># Disable features you don&#39;t need</span>
+<span class="nv">RAG_ENABLE_FAQ</span><span class="o">=</span><span class="nb">false</span><span class="w">  </span><span class="c1"># If you don&#39;t have FAQs loaded</span>
+<span class="nv">RAG_ENABLE_SUMMARY</span><span class="o">=</span><span class="nb">false</span><span class="w">  </span><span class="c1"># If you don&#39;t want auto-summaries</span>
+</pre></div>
+</div>
+<p>Restart brain after changes.</p>
+</section>
+<section id="when-to-adjust">
+<h3>When to Adjust<a class="headerlink" href="#when-to-adjust" title="Link to this heading"></a></h3>
+<p><strong>Increase context</strong> if:</p>
+<ul class="simple">
+<li><p>Your AI forgets important details from earlier in the conversation</p></li>
+<li><p>You have long, complex discussions</p></li>
+</ul>
+<p><strong>Decrease context</strong> if:</p>
+<ul class="simple">
+<li><p>Responses are slow</p></li>
+<li><p>Your AI seems confused by too much information</p></li>
+<li><p>You want more focused, concise responses</p></li>
+</ul>
+</section>
+</section>
+<hr class="docutils" />
+<section id="step-6-test-core-features">
+<h2>Step 6: Test Core Features<a class="headerlink" href="#step-6-test-core-features" title="Link to this heading"></a></h2>
+<section id="memory">
+<h3>Memory<a class="headerlink" href="#memory" title="Link to this heading"></a></h3>
+<p>Have a conversation, then restart the service:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>docker<span class="w"> </span>compose<span class="w"> </span>restart<span class="w"> </span>brain
+</pre></div>
+</div>
+<p>In a new conversation, reference something from before. Your AI should remember (memories are stored in ChromaDB).</p>
+</section>
+<section id="web-search">
+<h3>Web Search<a class="headerlink" href="#web-search" title="Link to this heading"></a></h3>
+<p>Ask for current information:</p>
+<blockquote>
+<div><p>“What’s the weather today in Chicago?”</p>
+</div></blockquote>
+<p>Your AI should use the web_search specialist (you’ll see a specialist activation notice).</p>
+</section>
+<section id="ocr-optional">
+<h3>OCR (Optional)<a class="headerlink" href="#ocr-optional" title="Link to this heading"></a></h3>
+<p>Upload an image with text via the web interface. Your AI should extract and discuss the text.</p>
+</section>
+</section>
+<hr class="docutils" />
+<section id="common-issues">
+<h2>Common Issues<a class="headerlink" href="#common-issues" title="Link to this heading"></a></h2>
+<section id="model-not-found">
+<h3>“Model not found”<a class="headerlink" href="#model-not-found" title="Link to this heading"></a></h3>
+<p>Ollama hasn’t downloaded the model yet. Wait for the brain container logs:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>docker<span class="w"> </span>compose<span class="w"> </span>logs<span class="w"> </span>brain<span class="w"> </span>-f
+</pre></div>
+</div>
+<p>You’ll see download progress.</p>
+</section>
+<section id="persona-not-loading">
+<h3>Persona not loading<a class="headerlink" href="#persona-not-loading" title="Link to this heading"></a></h3>
+<p>Check that <code class="docutils literal notranslate"><span class="pre">persona.md</span></code> exists and is less than <code class="docutils literal notranslate"><span class="pre">RAG_PERSONA_MAX_CHARS</span></code>.</p>
+<p>View brain logs for errors:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>docker<span class="w"> </span>compose<span class="w"> </span>logs<span class="w"> </span>brain<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>persona
+</pre></div>
+</div>
+</section>
+<section id="responses-are-slow">
+<h3>Responses are slow<a class="headerlink" href="#responses-are-slow" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p>Try a smaller model (<code class="docutils literal notranslate"><span class="pre">mistral:7b</span></code> vs <code class="docutils literal notranslate"><span class="pre">mistral:70b</span></code>)</p></li>
+<li><p>Reduce <code class="docutils literal notranslate"><span class="pre">RAG_TURN_TOP_K</span></code> and <code class="docutils literal notranslate"><span class="pre">RAG_MEMORY_TOP_K</span></code></p></li>
+<li><p>Check if you have a GPU being used (run <code class="docutils literal notranslate"><span class="pre">docker</span> <span class="pre">compose</span> <span class="pre">logs</span> <span class="pre">ollama</span></code>)</p></li>
+</ul>
+</section>
+<section id="ai-doesn-t-remember-anything">
+<h3>AI doesn’t remember anything<a class="headerlink" href="#ai-doesn-t-remember-anything" title="Link to this heading"></a></h3>
+<p>Check ChromaDB is running:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>docker<span class="w"> </span>compose<span class="w"> </span>ps<span class="w"> </span>chroma
+</pre></div>
+</div>
+<p>If stopped, start it:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>docker<span class="w"> </span>compose<span class="w"> </span>up<span class="w"> </span>-d<span class="w"> </span>chroma
+</pre></div>
+</div>
+</section>
+</section>
+<hr class="docutils" />
+<section id="next-steps">
+<h2>Next Steps<a class="headerlink" href="#next-steps" title="Link to this heading"></a></h2>
+<p>Now that you have a personalized AI:</p>
+<ol class="arabic simple">
+<li><p><strong>Build a specialist</strong> - Add custom capabilities</p>
+<ul class="simple">
+<li><p>See <a class="reference internal" href="build_specialist.html"><span class="doc">Build Your First Specialist</span></a></p></li>
+</ul>
+</li>
+<li><p><strong>Explore the API</strong> - Integrate with other tools</p>
+<ul class="simple">
+<li><p>Visit <a class="reference external" href="http://localhost:5000/api/info">http://localhost:5000/api/info</a></p></li>
+</ul>
+</li>
+<li><p><strong>Tune performance</strong> - Optimize for your hardware</p>
+<ul class="simple">
+<li><p>See <a class="reference internal" href="configuration.html"><span class="doc">Configuration Reference</span></a></p></li>
+</ul>
+</li>
+<li><p><strong>Share your persona</strong> - Help others learn</p>
+<ul class="simple">
+<li><p>Submit a PR with your persona to <code class="docutils literal notranslate"><span class="pre">examples/personas/</span></code></p></li>
+</ul>
+</li>
+</ol>
+</section>
+<hr class="docutils" />
+<section id="need-help">
+<h2>Need Help?<a class="headerlink" href="#need-help" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p><strong>Documentation:</strong> <a class="reference external" href="http://localhost:5000/docs">http://localhost:5000/docs</a></p></li>
+<li><p><strong>Issues:</strong> <a class="reference external" href="https://github.com/yourusername/ada/issues">https://github.com/yourusername/ada/issues</a></p></li>
+<li><p><strong>Community:</strong> [Discord/Matrix link]</p></li>
+</ul>
+<p>Remember: Ada is a starting point, not a finished product. Your weird ideas are the point! 🚀</p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="nix.html" class="btn btn-neutral float-left" title="Nix &amp; Flakes Support" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="configuration.html" class="btn btn-neutral float-right" title="Configuration Reference" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p></p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

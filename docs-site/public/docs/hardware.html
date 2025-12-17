@@ -1,0 +1,784 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Hardware &amp; GPU Guide &mdash; Ada Brain API 0.1.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="_static/graphviz.css?v=4ae1632d" />
+      <link rel="stylesheet" type="text/css" href="_static/custom.css?v=df0a1c42" />
+
+  
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=01f34227"></script>
+      <script src="_static/doctools.js?v=9bcbadda"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Ada on Single-Board Computers (SBCs)" href="sbc.html" />
+    <link rel="prev" title="Examples" href="examples.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            Ada Brain API
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="zero_to_ada.html">Zero to Ada</a></li>
+<li class="toctree-l1"><a class="reference internal" href="getting_started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="local_mode.html">Running Ada Locally (No Docker Required!)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="nix.html">Nix &amp; Flakes Support</a></li>
+<li class="toctree-l1"><a class="reference internal" href="getting_started_scratch.html">Getting Started from Scratch</a></li>
+<li class="toctree-l1"><a class="reference internal" href="configuration.html">Configuration Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="examples.html">Examples</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Hardware Setup</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Hardware &amp; GPU Guide</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#supported-hardware-acceleration">Supported Hardware Acceleration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#quick-start-by-hardware">Quick Start by Hardware</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#nvidia-gpus-cuda">NVIDIA GPUs (CUDA)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#amd-gpus-rocm">AMD GPUs (ROCm)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#apple-silicon-metal">Apple Silicon (Metal)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#vulkan-experimental">Vulkan (Experimental)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#cpu-only-mode">CPU-Only Mode</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#hardware-recommendations">Hardware Recommendations</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#budget-build-500">Budget Build (~$500)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#mid-range-build-1200">Mid-Range Build (~$1200)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#high-end-build-3000">High-End Build (~$3000)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#ultra-budget-100-existing-hardware">Ultra Budget (&lt;$100 + existing hardware)</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#model-size-vs-vram-requirements">Model Size vs VRAM Requirements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#performance-tuning">Performance Tuning</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#environment-variables">Environment Variables</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#model-selection">Model Selection</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#power-consumption-benchmarks">Power Consumption Benchmarks</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#hackable-hardware-projects">Hackable Hardware Projects</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#raspberry-pi-5-ai-hat">Raspberry Pi 5 + AI HAT</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#used-gaming-laptop">Used Gaming Laptop</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#mini-pc-egpu">Mini PC + eGPU</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#diy-nas-gpu">DIY NAS + GPU</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#cloud-alternatives">Cloud Alternatives</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#troubleshooting">Troubleshooting</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#gpu-not-detected">GPU not detected</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#out-of-memory-oom">Out of Memory (OOM)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#slow-inference">Slow inference</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#model-compatibility">Model compatibility</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#faq">FAQ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#getting-help">Getting Help</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="sbc.html">Ada on Single-Board Computers (SBCs)</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Core Architecture</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="architecture.html">Architecture</a></li>
+<li class="toctree-l1"><a class="reference internal" href="data_model.html">Data Model Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="streaming.html">Streaming</a></li>
+<li class="toctree-l1"><a class="reference internal" href="memory.html">Memory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="token_monitoring.html">Token Budget Monitoring</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Interfaces &amp; Adapters</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="adapters.html">Ada Adapters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="adapter_development.html">Adapter Development Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="matrix_integration.html">Matrix Integration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api_usage.html">API Usage Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api_reference.html">API Reference</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Specialist System</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="specialists.html">Specialist System</a></li>
+<li class="toctree-l1"><a class="reference internal" href="build_specialist.html">Build Your First Specialist</a></li>
+<li class="toctree-l1"><a class="reference internal" href="bidirectional.html">Bidirectional Specialist System</a></li>
+<li class="toctree-l1"><a class="reference internal" href="specialist_rag.html">Specialist RAG Documentation System</a></li>
+<li class="toctree-l1"><a class="reference internal" href="web_search.html">Web Search Specialist</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Operations</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="build_system.html">Build System</a></li>
+<li class="toctree-l1"><a class="reference internal" href="buildx_adoption_notes.html">BuildX Adoption Data &amp; Notes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="disk_management.html">Disk Management</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Development</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="development.html">Development Tools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="testing.html">Testing Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="versioning.html">Version Management</a></li>
+<li class="toctree-l1"><a class="reference internal" href="changelog.html">Changelog</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Philosophy &amp; Design</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="project_philosophy.html">Ada Principles</a></li>
+<li class="toctree-l1"><a class="reference internal" href="documentation_philosophy.html">Documentation Philosophy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ai_documentation.html">AI-Readable Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="empathetic_documentation.html">Empathetic Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="xenofeminism.html">Xenofeminism and Ada</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Ada Brain API</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Hardware &amp; GPU Guide</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/hardware.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="hardware-gpu-guide">
+<h1>Hardware &amp; GPU Guide<a class="headerlink" href="#hardware-gpu-guide" title="Link to this heading"></a></h1>
+<p>Complete guide to running Ada on different hardware configurations.</p>
+<section id="supported-hardware-acceleration">
+<h2>Supported Hardware Acceleration<a class="headerlink" href="#supported-hardware-acceleration" title="Link to this heading"></a></h2>
+<p>Ollama (Ada’s LLM backend) supports multiple hardware acceleration modes:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 15.0%" />
+<col style="width: 20.0%" />
+<col style="width: 15.0%" />
+<col style="width: 50.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Backend</p></th>
+<th class="head"><p>Hardware</p></th>
+<th class="head"><p>Status</p></th>
+<th class="head"><p>Notes</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><strong>CUDA</strong></p></td>
+<td><p>NVIDIA GPUs</p></td>
+<td><p>✅ Native</p></td>
+<td><p>Best supported, widest model compatibility</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>ROCm</strong></p></td>
+<td><p>AMD GPUs</p></td>
+<td><p>✅ Native</p></td>
+<td><p>Excellent performance, requires ROCm 5.7+</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>Metal</strong></p></td>
+<td><p>Apple Silicon</p></td>
+<td><p>✅ Native</p></td>
+<td><p>M1/M2/M3/M4 Macs, very efficient</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>Vulkan</strong></p></td>
+<td><p>Cross-platform</p></td>
+<td><p>⚠️ Experimental</p></td>
+<td><p>Opt-in, may be unstable</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>CPU</strong></p></td>
+<td><p>Any CPU</p></td>
+<td><p>✅ Fallback</p></td>
+<td><p>Works everywhere, but slow</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="quick-start-by-hardware">
+<h2>Quick Start by Hardware<a class="headerlink" href="#quick-start-by-hardware" title="Link to this heading"></a></h2>
+<section id="nvidia-gpus-cuda">
+<h3>NVIDIA GPUs (CUDA)<a class="headerlink" href="#nvidia-gpus-cuda" title="Link to this heading"></a></h3>
+<p><strong>Prerequisites:</strong></p>
+<ul class="simple">
+<li><p>NVIDIA GPU with compute capability 6.0+ (Pascal or newer)</p></li>
+<li><p>NVIDIA drivers installed</p></li>
+<li><p>NVIDIA Container Toolkit (for Docker)</p></li>
+</ul>
+<p><strong>Setup:</strong></p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Install NVIDIA Container Toolkit</span>
+curl<span class="w"> </span>-fsSL<span class="w"> </span>https://nvidia.github.io/libnvidia-container/gpgkey<span class="w"> </span><span class="p">|</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>sudo<span class="w"> </span>gpg<span class="w"> </span>--dearmor<span class="w"> </span>-o<span class="w"> </span>/usr/share/keyrings/nvidia-container-toolkit-keyring.gpg
+curl<span class="w"> </span>-s<span class="w"> </span>-L<span class="w"> </span>https://nvidia.github.io/libnvidia-container/stable/deb/nvidia-container-toolkit.list<span class="w"> </span><span class="p">|</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>sed<span class="w"> </span><span class="s1">&#39;s#deb https://#deb [signed-by=/usr/share/keyrings/nvidia-container-toolkit-keyring.gpg] https://#g&#39;</span><span class="w"> </span><span class="p">|</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>sudo<span class="w"> </span>tee<span class="w"> </span>/etc/apt/sources.list.d/nvidia-container-toolkit.list
+sudo<span class="w"> </span>apt-get<span class="w"> </span>update
+sudo<span class="w"> </span>apt-get<span class="w"> </span>install<span class="w"> </span>-y<span class="w"> </span>nvidia-container-toolkit
+sudo<span class="w"> </span>nvidia-ctk<span class="w"> </span>runtime<span class="w"> </span>configure<span class="w"> </span>--runtime<span class="o">=</span>docker
+sudo<span class="w"> </span>systemctl<span class="w"> </span>restart<span class="w"> </span>docker
+</pre></div>
+</div>
+<p><strong>Using CUDA with Ada:</strong></p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Use the cuda profile (already configured in compose.profiles.yaml)</span>
+docker<span class="w"> </span>compose<span class="w"> </span>--profile<span class="w"> </span>cuda<span class="w"> </span>up<span class="w"> </span>-d
+</pre></div>
+</div>
+<p>That’s it! Ada ships with CUDA support pre-configured. No manual compose.yaml editing needed.</p>
+<p><strong>Environment variables:</strong></p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># .env</span>
+<span class="nv">OLLAMA_GPU_DRIVER</span><span class="o">=</span>cuda
+<span class="nv">CUDA_VISIBLE_DEVICES</span><span class="o">=</span><span class="m">0</span><span class="w">  </span><span class="c1"># Limit to specific GPU(s)</span>
+</pre></div>
+</div>
+</section>
+<section id="amd-gpus-rocm">
+<h3>AMD GPUs (ROCm)<a class="headerlink" href="#amd-gpus-rocm" title="Link to this heading"></a></h3>
+<p><strong>Prerequisites:</strong></p>
+<ul class="simple">
+<li><p>AMD GPU with ROCm support (RDNA2+: RX 6000/7000 series, or MI series)</p></li>
+<li><p>ROCm 5.7 or newer installed on host</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">/dev/kfd</span></code> and <code class="docutils literal notranslate"><span class="pre">/dev/dri</span></code> devices accessible</p></li>
+</ul>
+<p><strong>Supported AMD GPUs:</strong></p>
+<ul class="simple">
+<li><p><strong>Consumer:</strong> RX 6000 series, RX 7000 series (RDNA2/3)</p></li>
+<li><p><strong>Professional:</strong> Radeon Pro, MI100/MI200 series</p></li>
+<li><p>Check <a class="reference external" href="https://rocm.docs.amd.com/en/latest/release/gpu_os_support.html">ROCm compatibility list</a></p></li>
+</ul>
+<p><strong>Setup:</strong></p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Install ROCm (Ubuntu/Debian)</span>
+sudo<span class="w"> </span>apt-get<span class="w"> </span>update
+wget<span class="w"> </span>https://repo.radeon.com/amdgpu-install/latest/ubuntu/focal/amdgpu-install_5.7.50700-1_all.deb
+sudo<span class="w"> </span>apt-get<span class="w"> </span>install<span class="w"> </span>./amdgpu-install_5.7.50700-1_all.deb
+sudo<span class="w"> </span>amdgpu-install<span class="w"> </span>--usecase<span class="o">=</span>rocm
+
+<span class="c1"># Verify installation</span>
+rocminfo
+rocm-smi
+</pre></div>
+</div>
+<p><strong>Using ROCm with Ada:</strong></p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Use the rocm profile (already configured in compose.profiles.yaml)</span>
+docker<span class="w"> </span>compose<span class="w"> </span>--profile<span class="w"> </span>rocm<span class="w"> </span>up<span class="w"> </span>-d
+
+<span class="c1"># Optional environment variables (in .env):</span>
+<span class="c1"># HIP_VISIBLE_DEVICES=0              # Limit to specific GPU</span>
+<span class="c1"># HSA_OVERRIDE_GFX_VERSION=10.3.0   # ISA override for older GPUs</span>
+</pre></div>
+</div>
+<p>That’s it! Ada ships with ROCm support pre-configured.</p>
+<p><strong>Troubleshooting:</strong></p>
+<ul class="simple">
+<li><p>If models fail to load: Check <code class="docutils literal notranslate"><span class="pre">HSA_OVERRIDE_GFX_VERSION</span></code> (find your GPU’s gfx version with <code class="docutils literal notranslate"><span class="pre">rocminfo</span> <span class="pre">|</span> <span class="pre">grep</span> <span class="pre">gfx</span></code>)</p></li>
+<li><p>If Docker can’t see GPU: Ensure user is in <code class="docutils literal notranslate"><span class="pre">video</span></code> and <code class="docutils literal notranslate"><span class="pre">render</span></code> groups</p></li>
+<li><p>Performance issues: Update to latest ROCm version</p></li>
+</ul>
+</section>
+<section id="apple-silicon-metal">
+<h3>Apple Silicon (Metal)<a class="headerlink" href="#apple-silicon-metal" title="Link to this heading"></a></h3>
+<p><strong>Prerequisites:</strong></p>
+<ul class="simple">
+<li><p>Mac with M1, M2, M3, or M4 chip</p></li>
+<li><p>macOS 12.3 or later</p></li>
+</ul>
+<p><strong>Setup:</strong></p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Install Ollama natively (recommended, better than Docker)</span>
+curl<span class="w"> </span>-fsSL<span class="w"> </span>https://ollama.com/install.sh<span class="w"> </span><span class="p">|</span><span class="w"> </span>sh
+
+<span class="c1"># Or use Docker (slower due to virtualization)</span>
+docker<span class="w"> </span>pull<span class="w"> </span>ollama/ollama
+docker<span class="w"> </span>run<span class="w"> </span>-d<span class="w"> </span>-v<span class="w"> </span>ollama:/root/.ollama<span class="w"> </span>-p<span class="w"> </span><span class="m">11434</span>:11434<span class="w"> </span>--name<span class="w"> </span>ollama<span class="w"> </span>ollama/ollama
+</pre></div>
+</div>
+<p><strong>Notes:</strong></p>
+<ul class="simple">
+<li><p>Native Metal acceleration is automatic</p></li>
+<li><p>Unified memory makes smaller Macs (8GB) usable for 7B models</p></li>
+<li><p>16GB+ recommended for larger models</p></li>
+<li><p>Docker performance is reduced due to virtualization overhead</p></li>
+</ul>
+</section>
+<section id="vulkan-experimental">
+<h3>Vulkan (Experimental)<a class="headerlink" href="#vulkan-experimental" title="Link to this heading"></a></h3>
+<p><strong>Status:</strong> Opt-in experimental feature (as of Ollama v0.13+)</p>
+<p><strong>Supported hardware:</strong></p>
+<ul class="simple">
+<li><p>Any GPU with Vulkan 1.2+ support</p></li>
+<li><p>Useful for Intel GPUs, older AMD GPUs, or non-standard setups</p></li>
+</ul>
+<p><strong>Setup:</strong></p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Set environment variable to enable Vulkan</span>
+<span class="nv">OLLAMA_VULKAN</span><span class="o">=</span><span class="m">1</span><span class="w"> </span>ollama<span class="w"> </span>serve
+</pre></div>
+</div>
+<p><strong>Limitations:</strong></p>
+<ul class="simple">
+<li><p>Not all models may work</p></li>
+<li><p>Performance may be lower than CUDA/ROCm/Metal</p></li>
+<li><p>Experimental - expect bugs</p></li>
+</ul>
+</section>
+<section id="cpu-only-mode">
+<h3>CPU-Only Mode<a class="headerlink" href="#cpu-only-mode" title="Link to this heading"></a></h3>
+<p><strong>Use cases:</strong></p>
+<ul class="simple">
+<li><p>No GPU available</p></li>
+<li><p>Testing/development</p></li>
+<li><p>Low-power environments</p></li>
+</ul>
+<p><strong>Performance expectations:</strong></p>
+<ul class="simple">
+<li><p>7B models: 1-5 tokens/second (depending on CPU)</p></li>
+<li><p>13B+ models: Very slow, may need quantized models (Q4)</p></li>
+<li><p>Memory: RAM = model size + 2-4GB overhead</p></li>
+</ul>
+<p><strong>Setup:</strong></p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Ollama automatically falls back to CPU if no GPU detected</span>
+<span class="c1"># No special configuration needed</span>
+
+<span class="c1"># Optional: Limit CPU threads</span>
+<span class="nv">OLLAMA_NUM_THREADS</span><span class="o">=</span><span class="m">8</span><span class="w"> </span>ollama<span class="w"> </span>serve
+</pre></div>
+</div>
+<p><strong>Optimization tips:</strong></p>
+<ul class="simple">
+<li><p>Use smaller models (1B-7B)</p></li>
+<li><p>Use heavily quantized models (Q4_0, Q4_K_M)</p></li>
+<li><p>Close other applications to free RAM</p></li>
+<li><p>Consider using swap if RAM constrained (will be very slow)</p></li>
+</ul>
+</section>
+</section>
+<section id="hardware-recommendations">
+<h2>Hardware Recommendations<a class="headerlink" href="#hardware-recommendations" title="Link to this heading"></a></h2>
+<section id="budget-build-500">
+<h3>Budget Build (~$500)<a class="headerlink" href="#budget-build-500" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p><strong>GPU:</strong> Used RX 6600/6700 XT (8-12GB VRAM, ~$200-300)</p></li>
+<li><p><strong>CPU:</strong> AMD Ryzen 5 5600 or Intel i5-12400</p></li>
+<li><p><strong>RAM:</strong> 16GB DDR4</p></li>
+<li><p><strong>Storage:</strong> 500GB SSD</p></li>
+<li><p><strong>Power:</strong> 550W PSU</p></li>
+<li><p><strong>Use case:</strong> 7B-13B models, good for experimentation</p></li>
+</ul>
+</section>
+<section id="mid-range-build-1200">
+<h3>Mid-Range Build (~$1200)<a class="headerlink" href="#mid-range-build-1200" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p><strong>GPU:</strong> RTX 4060 Ti 16GB or RX 7800 XT (16GB VRAM)</p></li>
+<li><p><strong>CPU:</strong> AMD Ryzen 7 5700X3D or Intel i7-13700</p></li>
+<li><p><strong>RAM:</strong> 32GB DDR4/DDR5</p></li>
+<li><p><strong>Storage:</strong> 1TB NVMe SSD</p></li>
+<li><p><strong>Power:</strong> 750W PSU</p></li>
+<li><p><strong>Use case:</strong> 13B-30B models, solid daily driver</p></li>
+</ul>
+</section>
+<section id="high-end-build-3000">
+<h3>High-End Build (~$3000)<a class="headerlink" href="#high-end-build-3000" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p><strong>GPU:</strong> RTX 4090 (24GB VRAM) or RX 7900 XTX (24GB)</p></li>
+<li><p><strong>CPU:</strong> AMD Ryzen 9 7950X or Intel i9-13900K</p></li>
+<li><p><strong>RAM:</strong> 64GB DDR5</p></li>
+<li><p><strong>Storage:</strong> 2TB NVMe SSD (PCIe 4.0+)</p></li>
+<li><p><strong>Power:</strong> 1000W PSU</p></li>
+<li><p><strong>Use case:</strong> 30B-70B models, professional use</p></li>
+</ul>
+</section>
+<section id="ultra-budget-100-existing-hardware">
+<h3>Ultra Budget (&lt;$100 + existing hardware)<a class="headerlink" href="#ultra-budget-100-existing-hardware" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p><strong>Option 1:</strong> Raspberry Pi 5 (8GB) + AI HAT (~$100)</p>
+<ul>
+<li><p>Very slow, 1B-3B models only</p></li>
+<li><p>Great for learning/tinkering</p></li>
+</ul>
+</li>
+<li><p><strong>Option 2:</strong> Used office PC + used GPU</p>
+<ul>
+<li><p>Dell OptiPlex (~$50) + RX 580 (~$40)</p></li>
+<li><p>7B models workable</p></li>
+</ul>
+</li>
+<li><p><strong>Option 3:</strong> Orange Pi 5 Plus (~$80)</p>
+<ul>
+<li><p>NPU support, 3B models</p></li>
+</ul>
+</li>
+</ul>
+<p><strong>For single-board computers:</strong> See <a class="reference internal" href="sbc.html"><span class="doc">Ada on Single-Board Computers (SBCs)</span></a> for detailed recommendations on Raspberry Pi, Orange Pi, Rock Pi, and other ARM boards.</p>
+</section>
+</section>
+<section id="model-size-vs-vram-requirements">
+<h2>Model Size vs VRAM Requirements<a class="headerlink" href="#model-size-vs-vram-requirements" title="Link to this heading"></a></h2>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 18.8%" />
+<col style="width: 18.8%" />
+<col style="width: 18.8%" />
+<col style="width: 43.8%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Model Size</p></th>
+<th class="head"><p>Quantization</p></th>
+<th class="head"><p>VRAM Needed</p></th>
+<th class="head"><p>Recommended GPU</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>1B</p></td>
+<td><p>Q4</p></td>
+<td><p>~1GB</p></td>
+<td><p>Any GPU, even integrated</p></td>
+</tr>
+<tr class="row-odd"><td><p>3B</p></td>
+<td><p>Q4</p></td>
+<td><p>~2GB</p></td>
+<td><p>GTX 1050, RX 560</p></td>
+</tr>
+<tr class="row-even"><td><p>7B</p></td>
+<td><p>Q4</p></td>
+<td><p>~4GB</p></td>
+<td><p>GTX 1660, RX 5600</p></td>
+</tr>
+<tr class="row-odd"><td><p>7B</p></td>
+<td><p>Q8/FP16</p></td>
+<td><p>~8GB</p></td>
+<td><p>RTX 3060, RX 6600</p></td>
+</tr>
+<tr class="row-even"><td><p>13B</p></td>
+<td><p>Q4</p></td>
+<td><p>~8GB</p></td>
+<td><p>RTX 3060, RX 6600</p></td>
+</tr>
+<tr class="row-odd"><td><p>13B</p></td>
+<td><p>Q8/FP16</p></td>
+<td><p>~16GB</p></td>
+<td><p>RTX 4060 Ti 16GB, RX 7800 XT</p></td>
+</tr>
+<tr class="row-even"><td><p>30B</p></td>
+<td><p>Q4</p></td>
+<td><p>~16GB</p></td>
+<td><p>RTX 4060 Ti 16GB, RX 7800 XT</p></td>
+</tr>
+<tr class="row-odd"><td><p>70B</p></td>
+<td><p>Q4</p></td>
+<td><p>~40GB</p></td>
+<td><p>Multiple GPUs or A100/H100</p></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Note:</strong> Add 2-4GB overhead for system/context</p>
+</section>
+<section id="performance-tuning">
+<h2>Performance Tuning<a class="headerlink" href="#performance-tuning" title="Link to this heading"></a></h2>
+<section id="environment-variables">
+<h3>Environment Variables<a class="headerlink" href="#environment-variables" title="Link to this heading"></a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># General</span>
+<span class="nv">OLLAMA_NUM_PARALLEL</span><span class="o">=</span><span class="m">1</span><span class="w">           </span><span class="c1"># Concurrent requests (increase for multi-user)</span>
+<span class="nv">OLLAMA_MAX_LOADED_MODELS</span><span class="o">=</span><span class="m">1</span><span class="w">      </span><span class="c1"># Keep models in VRAM</span>
+<span class="nv">OLLAMA_KEEP_ALIVE</span><span class="o">=</span>24h<span class="w">           </span><span class="c1"># How long to keep model loaded</span>
+<span class="nv">OLLAMA_CONTEXT_LENGTH</span><span class="o">=</span><span class="m">4096</span><span class="w">      </span><span class="c1"># Context window size</span>
+
+<span class="c1"># CUDA-specific</span>
+<span class="nv">CUDA_VISIBLE_DEVICES</span><span class="o">=</span><span class="m">0</span><span class="w">          </span><span class="c1"># Which GPU(s) to use</span>
+<span class="nv">OLLAMA_DEBUG</span><span class="o">=</span>INFO<span class="w">               </span><span class="c1"># Verbose logging</span>
+
+<span class="c1"># ROCm-specific</span>
+<span class="nv">HIP_VISIBLE_DEVICES</span><span class="o">=</span><span class="m">0</span><span class="w">           </span><span class="c1"># Which GPU(s) to use</span>
+<span class="nv">HSA_OVERRIDE_GFX_VERSION</span><span class="o">=</span><span class="m">10</span>.3.0<span class="w"> </span><span class="c1"># ISA override if needed</span>
+
+<span class="c1"># CPU-specific</span>
+<span class="nv">OLLAMA_NUM_THREADS</span><span class="o">=</span><span class="m">8</span><span class="w">            </span><span class="c1"># CPU threads to use</span>
+</pre></div>
+</div>
+</section>
+<section id="model-selection">
+<h3>Model Selection<a class="headerlink" href="#model-selection" title="Link to this heading"></a></h3>
+<p><strong>For speed:</strong></p>
+<ul class="simple">
+<li><p>Use Q4_K_M quantization (good quality, fast)</p></li>
+<li><p>Smaller context windows (2048 vs 8192)</p></li>
+<li><p>Smaller models (7B vs 13B)</p></li>
+</ul>
+<p><strong>For quality:</strong></p>
+<ul class="simple">
+<li><p>Use Q8 or FP16 quantization</p></li>
+<li><p>Larger context windows</p></li>
+<li><p>Larger models with VRAM to spare</p></li>
+</ul>
+</section>
+</section>
+<section id="power-consumption-benchmarks">
+<h2>Power Consumption Benchmarks<a class="headerlink" href="#power-consumption-benchmarks" title="Link to this heading"></a></h2>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 29.4%" />
+<col style="width: 17.6%" />
+<col style="width: 23.5%" />
+<col style="width: 29.4%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Configuration</p></th>
+<th class="head"><p>Idle</p></th>
+<th class="head"><p>Light Load (7B)</p></th>
+<th class="head"><p>Heavy Load (30B)</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>RTX 4090</p></td>
+<td><p>~30W</p></td>
+<td><p>~150W</p></td>
+<td><p>~400W</p></td>
+</tr>
+<tr class="row-odd"><td><p>RX 7900 XTX</p></td>
+<td><p>~25W</p></td>
+<td><p>~180W</p></td>
+<td><p>~320W</p></td>
+</tr>
+<tr class="row-even"><td><p>RTX 3060</p></td>
+<td><p>~15W</p></td>
+<td><p>~100W</p></td>
+<td><p>~170W</p></td>
+</tr>
+<tr class="row-odd"><td><p>RX 6600</p></td>
+<td><p>~10W</p></td>
+<td><p>~80W</p></td>
+<td><p>~130W</p></td>
+</tr>
+<tr class="row-even"><td><p>M2 Max</p></td>
+<td><p>~5W</p></td>
+<td><p>~25W</p></td>
+<td><p>~40W</p></td>
+</tr>
+<tr class="row-odd"><td><p>CPU (Ryzen 7)</p></td>
+<td><p>~30W</p></td>
+<td><p>~90W</p></td>
+<td><p>~150W</p></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Monthly cost</strong> (at $0.12/kWh, 24/7 idle + 4h heavy use daily):</p>
+<ul class="simple">
+<li><p>High-end GPU: ~$25-35/month</p></li>
+<li><p>Mid-range GPU: ~$15-20/month</p></li>
+<li><p>Apple Silicon: ~$5-8/month</p></li>
+<li><p>CPU-only: ~$10-15/month</p></li>
+</ul>
+</section>
+<section id="hackable-hardware-projects">
+<h2>Hackable Hardware Projects<a class="headerlink" href="#hackable-hardware-projects" title="Link to this heading"></a></h2>
+<p><strong>For detailed single-board computer builds:</strong> See <a class="reference internal" href="sbc.html"><span class="doc">Ada on Single-Board Computers (SBCs)</span></a> - comprehensive guide to running Ada on Raspberry Pi, Orange Pi, Rock Pi, and other ARM boards.</p>
+<section id="raspberry-pi-5-ai-hat">
+<h3>Raspberry Pi 5 + AI HAT<a class="headerlink" href="#raspberry-pi-5-ai-hat" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p><strong>Cost:</strong> ~$100 total</p></li>
+<li><p><strong>Models:</strong> 1B-3B quantized</p></li>
+<li><p><strong>Pros:</strong> Ultra low power, portable, great for learning</p></li>
+<li><p><strong>Cons:</strong> Very limited, slow inference</p></li>
+<li><p><strong>Details:</strong> See <a class="reference internal" href="sbc.html"><span class="doc">Ada on Single-Board Computers (SBCs)</span></a></p></li>
+</ul>
+</section>
+<section id="used-gaming-laptop">
+<h3>Used Gaming Laptop<a class="headerlink" href="#used-gaming-laptop" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p><strong>Cost:</strong> $300-600</p></li>
+<li><p><strong>Models:</strong> 7B-13B (depending on GPU)</p></li>
+<li><p><strong>Pros:</strong> Portable, all-in-one</p></li>
+<li><p><strong>Cons:</strong> Harder to upgrade, thermal limits</p></li>
+<li><p><strong>Look for:</strong> RTX 3060+ or RX 6600M+</p></li>
+</ul>
+</section>
+<section id="mini-pc-egpu">
+<h3>Mini PC + eGPU<a class="headerlink" href="#mini-pc-egpu" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p><strong>Cost:</strong> ~$400-700</p></li>
+<li><p><strong>Models:</strong> Depends on eGPU</p></li>
+<li><p><strong>Pros:</strong> Compact, upgradeable GPU</p></li>
+<li><p><strong>Cons:</strong> Thunderbolt bottleneck, complexity</p></li>
+<li><p><strong>Example:</strong> NUC + Razer Core X + used GPU</p></li>
+</ul>
+</section>
+<section id="diy-nas-gpu">
+<h3>DIY NAS + GPU<a class="headerlink" href="#diy-nas-gpu" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p><strong>Cost:</strong> ~$500-1000</p></li>
+<li><p><strong>Models:</strong> 7B-30B</p></li>
+<li><p><strong>Pros:</strong> Doubles as storage, always-on</p></li>
+<li><p><strong>Cons:</strong> Power consumption, noise</p></li>
+<li><p><strong>Build:</strong> Cheap server board + used workstation GPU</p></li>
+</ul>
+</section>
+</section>
+<section id="cloud-alternatives">
+<h2>Cloud Alternatives<a class="headerlink" href="#cloud-alternatives" title="Link to this heading"></a></h2>
+<p><strong>When privacy isn’t critical:</strong></p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 15.0%" />
+<col style="width: 25.0%" />
+<col style="width: 40.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Provider</p></th>
+<th class="head"><p>Cost</p></th>
+<th class="head"><p>GPU Options</p></th>
+<th class="head"><p>Notes</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><a class="reference external" href="https://vast.ai">Vast.ai</a></p></td>
+<td><p>~$0.10-0.50/hr</p></td>
+<td><p>RTX 3090, 4090, A100</p></td>
+<td><p>Spot instances, cheapest</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference external" href="https://runpod.io">RunPod</a></p></td>
+<td><p>~$0.30-1.00/hr</p></td>
+<td><p>RTX 4090, A100</p></td>
+<td><p>More reliable</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference external" href="https://lambdalabs.com">Lambda Labs</a></p></td>
+<td><p>~$1.10/hr</p></td>
+<td><p>A100, H100</p></td>
+<td><p>Professional tier</p></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Setup Ollama on cloud:</strong></p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># SSH into instance</span>
+curl<span class="w"> </span>-fsSL<span class="w"> </span>https://ollama.com/install.sh<span class="w"> </span><span class="p">|</span><span class="w"> </span>sh
+ollama<span class="w"> </span>serve<span class="w"> </span><span class="p">&amp;</span>
+ollama<span class="w"> </span>pull<span class="w"> </span>your-model
+
+<span class="c1"># Expose to local machine</span>
+ssh<span class="w"> </span>-L<span class="w"> </span><span class="m">11434</span>:localhost:11434<span class="w"> </span>user@cloud-ip
+</pre></div>
+</div>
+</section>
+<section id="troubleshooting">
+<h2>Troubleshooting<a class="headerlink" href="#troubleshooting" title="Link to this heading"></a></h2>
+<section id="gpu-not-detected">
+<h3>GPU not detected<a class="headerlink" href="#gpu-not-detected" title="Link to this heading"></a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># NVIDIA</span>
+nvidia-smi<span class="w">  </span><span class="c1"># Should show GPU</span>
+docker<span class="w"> </span>run<span class="w"> </span>--rm<span class="w"> </span>--gpus<span class="w"> </span>all<span class="w"> </span>nvidia/cuda:12.0-base<span class="w"> </span>nvidia-smi
+
+<span class="c1"># AMD</span>
+rocm-smi<span class="w">    </span><span class="c1"># Should show GPU</span>
+docker<span class="w"> </span>run<span class="w"> </span>--rm<span class="w"> </span>--device<span class="o">=</span>/dev/kfd<span class="w"> </span>--device<span class="o">=</span>/dev/dri<span class="w"> </span>rocm/pytorch:latest<span class="w"> </span>rocminfo
+
+<span class="c1"># Check Ollama logs</span>
+docker<span class="w"> </span>logs<span class="w"> </span>ada-v1-ollama-1
+</pre></div>
+</div>
+</section>
+<section id="out-of-memory-oom">
+<h3>Out of Memory (OOM)<a class="headerlink" href="#out-of-memory-oom" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p>Use smaller model (13B → 7B)</p></li>
+<li><p>Use more aggressive quantization (Q8 → Q4)</p></li>
+<li><p>Reduce context length: <code class="docutils literal notranslate"><span class="pre">OLLAMA_CONTEXT_LENGTH=2048</span></code></p></li>
+<li><p>Close other GPU applications</p></li>
+</ul>
+</section>
+<section id="slow-inference">
+<h3>Slow inference<a class="headerlink" href="#slow-inference" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p>Check GPU utilization: <code class="docutils literal notranslate"><span class="pre">nvidia-smi</span></code> or <code class="docutils literal notranslate"><span class="pre">rocm-smi</span></code></p></li>
+<li><p>Ensure model fully fits in VRAM</p></li>
+<li><p>Check thermal throttling</p></li>
+<li><p>Try different quantization</p></li>
+</ul>
+</section>
+<section id="model-compatibility">
+<h3>Model compatibility<a class="headerlink" href="#model-compatibility" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p>Some models don’t work with all backends</p></li>
+<li><p>ROCm may need specific model formats</p></li>
+<li><p>Check model card on <a class="reference external" href="https://ollama.com/library">ollama.com/library</a></p></li>
+</ul>
+</section>
+</section>
+<section id="faq">
+<h2>FAQ<a class="headerlink" href="#faq" title="Link to this heading"></a></h2>
+<p><strong>Q: Can I mix NVIDIA and AMD GPUs?</strong></p>
+<p>A: No, Ollama uses one backend at a time. Choose the better GPU.</p>
+<p><strong>Q: Will integrated graphics work?</strong></p>
+<p>A: Technically yes (via Vulkan), but performance will be poor. Only for small models.</p>
+<p><strong>Q: What about Intel Arc GPUs?</strong></p>
+<p>A: Limited support via Vulkan. Experimental, your mileage may vary.</p>
+<p><strong>Q: Can I run multiple models on one GPU?</strong></p>
+<p>A: Yes, set <code class="docutils literal notranslate"><span class="pre">OLLAMA_NUM_PARALLEL=2+</span></code> but total VRAM must fit all models.</p>
+<p><strong>Q: Do I need a GPU for embeddings?</strong></p>
+<p>A: No, CPU embeddings are fast enough for most use cases.</p>
+<p><strong>Q: What’s the minimum for a good experience?</strong></p>
+<p>A: 8GB VRAM GPU + 16GB RAM for 7B models, 16GB VRAM + 32GB RAM for 13B+</p>
+</section>
+<section id="getting-help">
+<h2>Getting Help<a class="headerlink" href="#getting-help" title="Link to this heading"></a></h2>
+<p><strong>Need help?</strong> Open an issue on <a class="reference external" href="https://github.com/luna-system/ada/issues">GitHub</a> with:</p>
+<ul class="simple">
+<li><p>Your hardware (GPU, RAM, OS)</p></li>
+<li><p>Ollama version: <code class="docutils literal notranslate"><span class="pre">docker</span> <span class="pre">exec</span> <span class="pre">ada-v1-ollama-1</span> <span class="pre">ollama</span> <span class="pre">--version</span></code></p></li>
+<li><p>Logs: <code class="docutils literal notranslate"><span class="pre">docker</span> <span class="pre">logs</span> <span class="pre">ada-v1-ollama-1</span> <span class="pre">--tail</span> <span class="pre">100</span></code></p></li>
+</ul>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="examples.html" class="btn btn-neutral float-left" title="Examples" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="sbc.html" class="btn btn-neutral float-right" title="Ada on Single-Board Computers (SBCs)" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p></p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

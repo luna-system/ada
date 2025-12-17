@@ -1,0 +1,290 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>&lt;no title&gt; &mdash; Ada Brain API 0.1.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="_static/graphviz.css?v=4ae1632d" />
+      <link rel="stylesheet" type="text/css" href="_static/custom.css?v=df0a1c42" />
+
+  
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=01f34227"></script>
+      <script src="_static/doctools.js?v=9bcbadda"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            Ada Brain API
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="zero_to_ada.html">Zero to Ada</a></li>
+<li class="toctree-l1"><a class="reference internal" href="getting_started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="local_mode.html">Running Ada Locally (No Docker Required!)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="nix.html">Nix &amp; Flakes Support</a></li>
+<li class="toctree-l1"><a class="reference internal" href="getting_started_scratch.html">Getting Started from Scratch</a></li>
+<li class="toctree-l1"><a class="reference internal" href="configuration.html">Configuration Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="examples.html">Examples</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Hardware Setup</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="hardware.html">Hardware &amp; GPU Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="sbc.html">Ada on Single-Board Computers (SBCs)</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Core Architecture</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="architecture.html">Architecture</a></li>
+<li class="toctree-l1"><a class="reference internal" href="data_model.html">Data Model Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="streaming.html">Streaming</a></li>
+<li class="toctree-l1"><a class="reference internal" href="memory.html">Memory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="token_monitoring.html">Token Budget Monitoring</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Interfaces &amp; Adapters</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="adapters.html">Ada Adapters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="adapter_development.html">Adapter Development Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="matrix_integration.html">Matrix Integration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api_usage.html">API Usage Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api_reference.html">API Reference</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Specialist System</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="specialists.html">Specialist System</a></li>
+<li class="toctree-l1"><a class="reference internal" href="build_specialist.html">Build Your First Specialist</a></li>
+<li class="toctree-l1"><a class="reference internal" href="bidirectional.html">Bidirectional Specialist System</a></li>
+<li class="toctree-l1"><a class="reference internal" href="specialist_rag.html">Specialist RAG Documentation System</a></li>
+<li class="toctree-l1"><a class="reference internal" href="web_search.html">Web Search Specialist</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Operations</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="build_system.html">Build System</a></li>
+<li class="toctree-l1"><a class="reference internal" href="buildx_adoption_notes.html">BuildX Adoption Data &amp; Notes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="disk_management.html">Disk Management</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Development</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="development.html">Development Tools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="testing.html">Testing Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="versioning.html">Version Management</a></li>
+<li class="toctree-l1"><a class="reference internal" href="changelog.html">Changelog</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Philosophy &amp; Design</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="project_philosophy.html">Ada Principles</a></li>
+<li class="toctree-l1"><a class="reference internal" href="documentation_philosophy.html">Documentation Philosophy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ai_documentation.html">AI-Readable Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="empathetic_documentation.html">Empathetic Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="xenofeminism.html">Xenofeminism and Ada</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Ada Brain API</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">&lt;no title&gt;</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/frontend_as_adapter.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <p># Frontend as Adapter</p>
+<p>## Architecture</p>
+<p>Ada follows a <strong>clean adapter pattern</strong> where the frontend is just one of many interfaces to the brain’s REST API.</p>
+<p><code class="docutils literal notranslate"><span class="pre">`</span>
+<span class="pre">┌──────────────┐</span>
+<span class="pre">│</span>&#160;&#160; <span class="pre">CLI</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">│────┐</span>
+<span class="pre">├──────────────┤</span>&#160;&#160;&#160; <span class="pre">│</span>
+<span class="pre">│</span>&#160;&#160; <span class="pre">Web</span> <span class="pre">UI</span>&#160;&#160;&#160;&#160; <span class="pre">│────┼──→</span>&#160; <span class="pre">Ada</span> <span class="pre">Brain</span> <span class="pre">(REST</span> <span class="pre">API)</span>
+<span class="pre">├──────────────┤</span>&#160;&#160;&#160; <span class="pre">│</span>&#160;&#160;&#160;&#160; <span class="pre">http://localhost:8000/v1/*</span>
+<span class="pre">│</span>&#160;&#160; <span class="pre">Matrix</span>&#160;&#160;&#160;&#160; <span class="pre">│────┤</span>
+<span class="pre">├──────────────┤</span>&#160;&#160;&#160; <span class="pre">│</span>
+<span class="pre">│</span>&#160;&#160; <span class="pre">MCP</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">│────┘</span>
+<span class="pre">└──────────────┘</span>
+<span class="pre">`</span></code></p>
+<p><strong>All adapters are equal peers.</strong> The web UI has no special privileges.</p>
+<p>## Running Headless</p>
+<p>Ada works perfectly without the web UI:</p>
+<p><a href="#id1"><span class="problematic" id="id2">``</span></a><a href="#id3"><span class="problematic" id="id4">`</span></a>bash
+# Brain only
+docker compose up -d</p>
+<p># Use CLI
+ada-cli “Hello!”</p>
+<p># Use MCP (in your editor)
+# See ada-mcp/README.md</p>
+<p># Use Matrix bridge
+docker compose –profile matrix up -d</p>
+<p># Direct API calls
+curl <a class="reference external" href="http://localhost:8000/v1/chat/stream">http://localhost:8000/v1/chat/stream</a> </p>
+<blockquote>
+<div><p>-d ‘{“message”: “Hello!”}’</p>
+</div></blockquote>
+<p><a href="#id5"><span class="problematic" id="id6">``</span></a><a href="#id7"><span class="problematic" id="id8">`</span></a></p>
+<p>## Running the Web UI</p>
+<p>The web UI is <strong>optional</strong> and starts with a profile flag:</p>
+<p><a href="#id9"><span class="problematic" id="id10">``</span></a><a href="#id11"><span class="problematic" id="id12">`</span></a>bash
+# Start with web UI
+docker compose –profile web up -d</p>
+<p># Access at <a class="reference external" href="http://localhost:5000">http://localhost:5000</a>
+<a href="#id13"><span class="problematic" id="id14">``</span></a><a href="#id15"><span class="problematic" id="id16">`</span></a></p>
+<p>## Configuration</p>
+<p>The frontend can connect to any Ada brain instance by editing <cite>frontend/public/config.js</cite>:</p>
+<p><a href="#id17"><span class="problematic" id="id18">``</span></a><a href="#id19"><span class="problematic" id="id20">`</span></a>javascript
+// Default: proxied through nginx
+window.API_BASE_URL = ‘/api’;</p>
+<p>// Direct connection to remote Ada
+window.API_BASE_URL = ‘<a class="reference external" href="http://ada.local:8000/v1">http://ada.local:8000/v1</a>’;</p>
+<p>// Cloud deployment
+window.API_BASE_URL = ‘<a class="reference external" href="https://my-ada.example.com/v1">https://my-ada.example.com/v1</a>’;
+<a href="#id21"><span class="problematic" id="id22">``</span></a><a href="#id23"><span class="problematic" id="id24">`</span></a></p>
+<p>No rebuild needed - just edit the config file!</p>
+<p>## Why This Matters</p>
+<p>### Modularity
+- Swap frontends without touching the brain
+- Run multiple UIs pointing to one brain
+- Build custom interfaces for specific workflows</p>
+<p>### Deployment Flexibility
+- Deploy brain on powerful server, frontend on CDN
+- Run brain headless on Raspberry Pi, use SSH tunnel for UI
+- One brain, many clients (family members, devices)</p>
+<p>### Development
+- Frontend devs work without Python/ChromaDB/Ollama
+- Test UI against staging/production brains
+- Easier contribution path</p>
+<p>### Forkability
+Ada’s adapter pattern means you can:
+- Replace the web UI entirely (terminal-style, mobile app, etc.)
+- Add new adapters (Discord bot, Telegram, Signal, etc.)
+- Run multiple interfaces simultaneously</p>
+<p>## Adapter Checklist</p>
+<p>When building a new adapter:</p>
+<ul class="simple">
+<li><p>✅ <strong>HTTP client</strong> - Talk to brain via REST API</p></li>
+<li><p>✅ <strong>SSE support</strong> - Handle streaming responses</p></li>
+<li><p>✅ <strong>Conversation IDs</strong> - Maintain context across turns</p></li>
+<li><p>✅ <strong>Optional entity</strong> - Support entity-scoped memories</p></li>
+<li><p>✅ <strong>Error handling</strong> - Graceful degradation</p></li>
+</ul>
+<p><strong>Don’t need:</strong>
+- ❌ Ollama access
+- ❌ ChromaDB connection
+- ❌ Python environment
+- ❌ Direct access to brain internals</p>
+<p>## Existing Adapters</p>
+<p>All follow this pattern:</p>
+<div class="line-block">
+<div class="line">Adapter | Location | Protocol | Status |</div>
+</div>
+<p><a href="#id33"><span class="problematic" id="id34">|---------|</span></a>———-<a href="#id35"><span class="problematic" id="id36">|----------|</span></a>——–|
+| <strong>CLI</strong> | <cite>adapters/cli/</cite> | HTTP → stdout | ✅ Production |
+| <strong>Web UI</strong> | <cite>frontend/</cite> | HTTP → browser | ✅ Production |
+| <strong>Matrix</strong> | <cite>matrix-bridge/</cite> | HTTP → Matrix | ✅ Production |
+| <strong>MCP</strong> | <cite>ada-mcp/</cite> | stdio → editor | ✅ Production |</p>
+<p>## Example: Minimal Adapter</p>
+<p><a href="#id25"><span class="problematic" id="id26">``</span></a><a href="#id27"><span class="problematic" id="id28">`</span></a>python
+import httpx</p>
+<dl>
+<dt>class MinimalAdapter:</dt><dd><dl>
+<dt>def __init__(self, brain_url=”<a class="reference external" href="http://localhost:8000">http://localhost:8000</a>”):</dt><dd><p>self.client = httpx.Client(base_url=brain_url)</p>
+</dd>
+<dt>def chat(self, message: str) -&gt; str:</dt><dd><p>“””Send message, get full response.”””
+response = self.client.post(</p>
+<blockquote>
+<div><p>“/v1/chat/stream”,
+json={“message”: message}</p>
+</div></blockquote>
+<p>)</p>
+<p>full_text = “”
+for line in response.iter_lines():</p>
+<blockquote>
+<div><dl class="simple">
+<dt>if line.startswith(“data: “):</dt><dd><p>chunk = json.loads(line[6:])
+full_text += chunk[“text”]</p>
+</dd>
+</dl>
+</div></blockquote>
+<p>return full_text</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p><a href="#id29"><span class="problematic" id="id30">``</span></a><a href="#id31"><span class="problematic" id="id32">`</span></a></p>
+<p>That’s it! <strong>40 lines to build an Ada client.</strong></p>
+<p>## See Also</p>
+<ul class="simple">
+<li><p>[Adapter Development Guide](adapter_development.rst) - Build your own</p></li>
+<li><p>[API Reference](api_reference.rst) - Full API documentation</p></li>
+<li><p>[MCP Integration](ada-mcp/README.md) - Editor integration</p></li>
+<li><p>[Matrix Bridge](matrix_integration.rst) - Bot setup</p></li>
+</ul>
+<p>—</p>
+<p><strong>The brain is the product. Everything else is an adapter.</strong> 🧠🔌</p>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p></p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
