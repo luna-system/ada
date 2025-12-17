@@ -88,6 +88,22 @@ Step 2: Enable Flakes
    # Enable flakes
    echo "experimental-features = nix-command flakes" >> ~/.config/nix/nix.conf
 
+**Troubleshooting:** If you get permission errors or need sudo:
+
+.. code-block:: bash
+
+   # Fix 1: Make sure you're in nix-users group
+   sudo usermod -aG nix-users $USER
+   
+   # Fix 2: Start the Nix daemon
+   sudo systemctl enable --now nix-daemon
+   
+   # Fix 3: Log out and back in (or reload shell)
+   exec $SHELL
+   
+   # Test: Should work without sudo now
+   nix --version
+
 Step 3: Clone Ada
 -----------------
 

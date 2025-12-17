@@ -335,15 +335,36 @@ Troubleshooting
    # Add to ~/.config/nix/nix.conf
    experimental-features = nix-command flakes
 
-**Permission issues**
+**Permission issues / "need sudo"**
+
+If Nix requires sudo after installation, your setup is incomplete:
 
 .. code-block:: bash
 
-   # Ensure you're in nix-users group
+   # Check if you're in nix-users group
    groups | grep nix-users
    
-   # Restart nix-daemon
-   sudo systemctl restart nix-daemon
+   # If not, add yourself
+   sudo usermod -aG nix-users $USER
+   
+   # Start the daemon
+   sudo systemctl enable --now nix-daemon
+   
+   # Log out and back in (or reload shell)
+   exec $SHELL
+   
+   # Now nix should work without sudo
+   nix --version
+
+**Locale errors**
+
+If you see UTF-8 or locale errors, the flake sets ``LC_ALL=C.UTF-8`` automatically.
+If using Nix outside the flake, set it manually:
+
+.. code-block:: bash
+
+   export LC_ALL="C.UTF-8"
+   nix develop
 
 **direnv not activating**
 
