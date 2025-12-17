@@ -57,6 +57,30 @@ ollama pull nomic-embed-text
 ✅ **Faster Startup** - No need to pull models in Docker  
 ✅ **Easier Updates** - Update Ollama independently  
 
+## Important: Shell Environment Variables
+
+**Docker Compose priority:** Shell environment > .env file > compose.yaml defaults
+
+If you have `OLLAMA_BASE_URL` set in your shell environment (e.g., in `~/.bashrc` or `~/.zshrc`), it will OVERRIDE the `.env` file!
+
+**Check your shell environment:**
+```bash
+echo $OLLAMA_BASE_URL
+# If this shows a value, it's overriding your .env
+```
+
+**Solution:** Unset the variable or export the new value:
+```bash
+# Option A: Unset it (use .env value)
+unset OLLAMA_BASE_URL
+
+# Option B: Export new value
+export OLLAMA_BASE_URL=http://host.docker.internal:11434
+
+# Then start
+docker compose up
+```
+
 ## Troubleshooting
 
 ### "Connection refused" errors

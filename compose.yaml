@@ -230,8 +230,8 @@ services:
   # See compose.profiles.yaml and docs/hardware.rst for details
   ollama:
     profiles:
-      - ollama  # Optional: only starts with --profile ollama or default profiles
-      - ""      # Empty profile = default (starts without any --profile flag)
+      - ollama  # Start with: docker compose --profile ollama up
+      # OR set COMPOSE_PROFILES=ollama in .env to include by default
     image: ollama/ollama:latest
     restart: unless-stopped
     logging: *default-logging
@@ -246,8 +246,7 @@ services:
   # One-shot helper that pulls the required model once Ollama is healthy
   ollama-init:
     profiles:
-      - ollama  # Only runs when ollama service is active
-      - ""      # Empty profile = default
+      - ollama  # Only runs when ollama profile is active
     image: curlimages/curl:8.10.1
     depends_on:
       - ollama
