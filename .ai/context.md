@@ -73,7 +73,11 @@ See `docs/adapters.rst` for building new adapters.
 
 ### Core Logic
 - `brain/llm.py` - LLM client (Ollama), streaming generation
-- `brain/prompt_builder.py` - RAG context assembly, specialist coordination
+- `brain/prompt_builder/` - **NEW (v2.0):** Modular prompt building package
+  - `context_retriever.py` - RAG data retrieval
+  - `section_builder.py` - Section formatting
+  - `prompt_assembler.py` - Final orchestration
+  - `_legacy_prompt_builder.py` - Backward-compatible shim
 - `brain/rag_store.py` - Vector storage interface (ChromaDB)
 - `brain/schemas.py` - All Pydantic models, self-documenting via `/v1/schema`
 

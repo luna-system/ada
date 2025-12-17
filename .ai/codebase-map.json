@@ -54,26 +54,87 @@
       ],
       "notes": "Single source of truth for LLM communication, streaming SSE responses"
     },
-    "brain/prompt_builder.py": {
-      "type": "core-service",
-      "purpose": "Assembles RAG context from multiple sources, coordinates specialists",
+    "brain/_legacy_prompt_builder.py": {
+      "type": "core-service-legacy",
+      "purpose": "LEGACY: Backward-compatible build_prompt() shim, uses new modular components internally",
       "key_functions": [
-        "build_prompt",
-        "discover_specialists",
-        "activate_specialists",
-        "process_bidirectional_specialist"
+        "build_prompt"
+      ],
+      "imports": [
+        "brain.prompt_builder.ContextRetriever",
+        "brain.prompt_builder.SectionBuilder",
+        "brain.rag_store",
+        "brain.specialists",
+        "brain.config",
+        "brain.notices_client"
+      ],
+      "imported_by": [
+        "brain/app.py",
+        "brain/prompt_builder/__init__.py"
+      ],
+      "notes": "Migration shim - maintains old API while using new architecture. Will be removed after full migration."
+    },
+    "brain/prompt_builder/__init__.py": {
+      "type": "package",
+      "purpose": "Modular prompt building system - exports components and legacy build_prompt()",
+      "exports": [
+        "ContextRetriever",
+        "SectionBuilder",
+        "PromptAssembler",
+        "build_prompt"
+      ],
+      "notes": "New modular architecture replaces old monolithic prompt_builder.py"
+    },
+    "brain/prompt_builder/context_retriever.py": {
+      "type": "core-component",
+      "purpose": "Retrieves context from RAG store and configuration",
+      "key_functions": [
+        "get_persona",
+        "get_memories",
+        "get_faqs",
+        "get_turns",
+        "get_summaries"
       ],
       "imports": [
         "brain.rag_store",
-        "brain.specialists.protocol",
-        "brain.specialists.bidirectional",
-        "brain.config",
-        "brain.notices"
+        "brain.config"
       ],
       "imported_by": [
-        "brain/app.py"
+        "brain/prompt_builder/prompt_assembler.py",
+        "brain/_legacy_prompt_builder.py"
       ],
-      "notes": "Central orchestration point, context injection order matters"
+      "notes": "Pure retrieval logic, no formatting. Tested with 14 tests."
+    },
+    "brain/prompt_builder/section_builder.py": {
+      "type": "core-component",
+      "purpose": "Formats RAG context into structured prompt sections",
+      "key_functions": [
+        "format_persona",
+        "format_memories",
+        "format_faqs",
+        "format_conversation_history",
+        "format_notices",
+        "format_specialist_results"
+      ],
+      "imports": [],
+      "imported_by": [
+        "brain/prompt_builder/prompt_assembler.py"
+      ],
+      "notes": "Pure formatting logic, no retrieval. Tested with 14 tests."
+    },
+    "brain/prompt_builder/prompt_assembler.py": {
+      "type": "core-component",
+      "purpose": "Orchestrates prompt building - coordinates ContextRetriever, SectionBuilder, and specialists",
+      "key_functions": [
+        "build_prompt",
+        "_activate_specialists"
+      ],
+      "imports": [
+        "brain.prompt_builder.context_retriever",
+        "brain.prompt_builder.section_builder"
+      ],
+      "imported_by": [],
+      "notes": "Main orchestrator, handles section ordering and specialist coordination. Tested with 10 tests."
     },
     "brain/rag_store.py": {
       "type": "core-service",

@@ -23,7 +23,7 @@
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Running Ada Locally (No Docker!)" href="local_mode.html" />
-    <link rel="prev" title="Ada Brain API Docs" href="index.html" /> 
+    <link rel="prev" title="Zero to Ada" href="zero_to_ada.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -47,6 +47,7 @@
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
 <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="zero_to_ada.html">Zero to Ada</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Getting Started</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#local-mode-recommended">Local Mode (Recommended)</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#requirements">Requirements</a></li>
@@ -91,6 +92,7 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="local_mode.html">Running Ada Locally (No Docker!)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="nix.html">Nix &amp; Flakes Support</a></li>
 <li class="toctree-l1"><a class="reference internal" href="getting_started_scratch.html">Getting Started from Scratch</a></li>
 <li class="toctree-l1"><a class="reference internal" href="configuration.html">Configuration Reference</a></li>
 <li class="toctree-l1"><a class="reference internal" href="examples.html">Examples</a></li>
@@ -106,6 +108,7 @@
 <li class="toctree-l1"><a class="reference internal" href="data_model.html">Data Model Reference</a></li>
 <li class="toctree-l1"><a class="reference internal" href="streaming.html">Streaming</a></li>
 <li class="toctree-l1"><a class="reference internal" href="memory.html">Memory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="token_monitoring.html">Token Budget Monitoring</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Interfaces &amp; Adapters</span></p>
 <ul>
@@ -133,6 +136,7 @@
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="development.html">Development Tools</a></li>
 <li class="toctree-l1"><a class="reference internal" href="testing.html">Testing Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="versioning.html">Version Management</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Philosophy &amp; Design</span></p>
 <ul>
@@ -175,8 +179,10 @@
 <p>The fastest way to start Ada - no Docker required!</p>
 <section id="requirements">
 <h3>Requirements<a class="headerlink" href="#requirements" title="Link to this heading"></a></h3>
-<ul class="simple">
-<li><p>Python 3.13+</p></li>
+<ul>
+<li><p>Python 3.13+</p>
+<p><strong>Don’t have Python 3.13?</strong> Use Nix! See <a class="reference internal" href="nix.html"><span class="doc">Nix &amp; Flakes Support</span></a> for instant Python 3.13 environment.</p>
+</li>
 <li><p>Ollama (LLM backend)</p></li>
 <li><p>8GB+ RAM recommended</p></li>
 <li><p>GPU optional (CUDA, ROCm, or Metal)</p></li>
@@ -540,7 +546,7 @@ python<span class="w"> </span>-c<span class="w"> </span><span class="s2">&quot;f
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="index.html" class="btn btn-neutral float-left" title="Ada Brain API Docs" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="zero_to_ada.html" class="btn btn-neutral float-left" title="Zero to Ada" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
         <a href="local_mode.html" class="btn btn-neutral float-right" title="Running Ada Locally (No Docker!)" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
