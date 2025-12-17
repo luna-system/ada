@@ -11,8 +11,9 @@ and produces the final prompt string ready for the LLM.
 """
 # @ai-indexable: core-component
 # @ai-purpose: Orchestrate prompt building from all components
-# @ai-dependencies: context_retriever, section_builder, specialists
+# @ai-dependencies: context_retriever, section_builder, specialists, context_habituation
 # @ai-related: brain.prompt_builder
+# @ai-enhanced: v2.1 - Habituation support for repeated context
 
 import logging
 from typing import Any
@@ -21,7 +22,10 @@ from brain.prompt_builder.context_retriever import ContextRetriever
 from brain.prompt_builder.section_builder import SectionBuilder
 from brain.context_cache import MultiTimescaleCache
 from brain.token_monitor import TokenBudgetMonitor
-from brain.config import config
+from brain.context_habituation import ContextHabituation
+from brain.attention_spotlight import AttentionalSpotlight
+from brain.semantic_chunking import SemanticChunker
+import brain.config as config
 
 logger = logging.getLogger(__name__)
 
@@ -73,6 +77,39 @@ class PromptAssembler:
             )
         else:
             self.token_monitor = None
+        
+        # Initialize context habituation (Biomimetic Phase 1)
+        if config.CONTEXT_HABITUATION_ENABLED:
+            self.habituation = ContextHabituation(
+                threshold=config.CONTEXT_HABITUATION_THRESHOLD,
+                habituated_weight=config.CONTEXT_HABITUATION_WEIGHT,
+                decay_hours=config.CONTEXT_HABITUATION_DECAY_HOURS
+            )
+            logger.info(f"Context habituation enabled (threshold={config.CONTEXT_HABITUATION_THRESHOLD})")
+        else:
+            self.habituation = None
+        
+        # Initialize attention spotlight (Biomimetic Phase 2)
+        if config.ATTENTION_SPOTLIGHT_ENABLED:
+            self.spotlight = AttentionalSpotlight(
+                spotlight_budget=config.ATTENTION_SPOTLIGHT_BUDGET,
+                periphery_budget=config.ATTENTION_PERIPHERY_BUDGET,
+                spotlight_size=config.ATTENTION_SPOTLIGHT_SIZE
+            )
+            logger.info(f"Attention spotlight enabled (size={config.ATTENTION_SPOTLIGHT_SIZE})")
+        else:
+            self.spotlight = None
+        
+        # Initialize semantic chunker (Biomimetic Phase 2.2)
+        if config.SEMANTIC_CHUNKING_ENABLED:
+            self.chunker = SemanticChunker(
+                similarity_threshold=config.SEMANTIC_CHUNKING_THRESHOLD,
+                min_chunk_size=config.SEMANTIC_CHUNKING_MIN_SIZE,
+                max_chunk_size=config.SEMANTIC_CHUNKING_MAX_SIZE
+            )
+            logger.info(f"Semantic chunking enabled (threshold={config.SEMANTIC_CHUNKING_THRESHOLD})")
+        else:
+            self.chunker = None
     
     def build_prompt(
         self,
@@ -102,7 +139,7 @@ class PromptAssembler:
         persona = self.retriever.get_persona()
         memories = self.retriever.get_memories(query=user_message, k=5)
         faqs = self.retriever.get_faqs(query=user_message, k=3)
-        turns = self.retriever.get_turns(conversation_id=conversation_id, k=10)
+        turns = self.retriever.get_turns(query=user_message, conversation_id=conversation_id, k=10)
         
         # 2. Activate specialists
         specialist_results = self._activate_specialists(
@@ -122,11 +159,21 @@ class PromptAssembler:
                 if self.token_monitor:
                     self.token_monitor.track("system_notices", notice_section)
         
-        # Persona (who Ada is)
+        # Persona (who Ada is) - with habituation
         persona_section = self.builder.format_persona(persona)
-        sections.append(persona_section)
-        if self.token_monitor:
-            self.token_monitor.track("persona", persona_section)
+        habituation_weight = 1.0
+        
+        if self.habituation:
+            habituation_weight = self.habituation.get_weight("persona", persona_section)
+            if habituation_weight < 1.0:
+                logger.info(f"Persona habituated: weight={habituation_weight:.2f}")
+        
+        # Include if weight > 0
+        if habituation_weight > 0:
+            sections.append(persona_section)
+            if self.token_monitor:
+                self.token_monitor.track("persona", persona_section, 
+                                       metadata={'habituation_weight': habituation_weight})
         
         # Specialist results (tool outputs - high priority)
         if specialist_results:
@@ -136,19 +183,85 @@ class PromptAssembler:
                 if self.token_monitor:
                     self.token_monitor.track("specialists", specialist_section)
         
-        # Memories (user-specific context)
+        # Memories (user-specific context) - with chunking and attention spotlight
         if memories:
-            memory_section = self.builder.format_memories(memories)
+            # Convert to dict format for processing pipeline
+            memory_dicts = [
+                {
+                    'content': text,
+                    'metadata': metadata,
+                    'distance': metadata.get('distance', 0.5)
+                }
+                for text, metadata in memories
+            ]
+            
+            # Apply semantic chunking if enabled (after decay, before attention)
+            if self.chunker:
+                chunks = self.chunker.chunk_memories(memory_dicts)
+                logger.info(
+                    f"Semantic chunking: {len(memory_dicts)} memories → {len(chunks)} chunks"
+                )
+                
+                # Collapse chunks to fit attention budget if needed
+                if self.spotlight:
+                    budget = self.spotlight.spotlight_budget + self.spotlight.periphery_budget
+                    chunks = self.chunker.collapse_chunks(chunks, max_tokens=budget)
+                    logger.info(f"Collapsed to {len(chunks)} chunks within budget")
+                
+                # Convert chunks back to memory dict format for attention spotlight
+                # Each chunk becomes a representative memory with summary
+                memory_dicts = [
+                    {
+                        'content': chunk.representative['content'],
+                        'metadata': {
+                            **chunk.representative['metadata'],
+                            'chunk_size': chunk.size,
+                            'chunk_summary': self.chunker.format_summary(chunk)
+                        },
+                        'distance': chunk.centroid_distance
+                    }
+                    for chunk in chunks
+                ]
+            
+            # Apply attention spotlight if enabled
+            if self.spotlight:
+                
+                distribution = self.spotlight.apply_attention(memory_dicts)
+                stats = self.spotlight.get_stats(distribution)
+                
+                logger.info(
+                    f"Attention: {stats['spotlight_count']} spotlight, "
+                    f"{stats['periphery_count']} periphery "
+                    f"({stats['total_tokens']} tokens)"
+                )
+                
+                # Format with attention structure
+                memory_section = distribution.format_context()
+            else:
+                # No spotlight - format normally
+                memory_texts = [text for text, _ in memories]
+                memory_section = self.builder.format_memories(memory_texts)
+            
             sections.append(memory_section)
             if self.token_monitor:
                 self.token_monitor.track("memories", memory_section)
         
-        # FAQs (reference information)
+        # FAQs (reference information) - with habituation
         if faqs:
             faq_section = self.builder.format_faqs(faqs)
-            sections.append(faq_section)
-            if self.token_monitor:
-                self.token_monitor.track("faqs", faq_section)
+            habituation_weight = 1.0
+            
+            if self.habituation:
+                habituation_weight = self.habituation.get_weight("faqs", faq_section)
+                if habituation_weight < 1.0:
+                    logger.info(f"FAQs habituated: weight={habituation_weight:.2f}")
+            
+            # Include if weight > 0
+            if habituation_weight > 0:
+                sections.append(faq_section)
+                if self.token_monitor:
+                    self.token_monitor.track("faqs", faq_section,
+                                           metadata={'habituation_weight': habituation_weight})
         
         # Conversation history (recent turns)
         if turns:
