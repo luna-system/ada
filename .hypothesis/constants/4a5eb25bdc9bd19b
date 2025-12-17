@@ -1,0 +1,4 @@
+# file: /home/luna/Code/ada-v1/brain/specialists/__init__.py
+# hypothesis_version: 6.148.7
+
+['*_specialist.py', 'BaseSpecialist', 'Specialist', 'capability', 'process', 'should_activate']
