@@ -85,20 +85,43 @@ docker compose up
 
 ### "Connection refused" errors
 
-Make sure `host.docker.internal` resolves (it should on Docker Desktop automatically).
+**Most common cause:** Ollama is only listening on `127.0.0.1` (localhost), not accessible from Docker containers.
 
-If using Linux without Docker Desktop:
-
+**Check Ollama's listen address:**
 ```bash
-# Add to compose.yaml's brain service:
-extra_hosts:
-  - "host.docker.internal:172.17.0.1"  # Docker bridge IP
+ss -tlnp | grep 11434
+# If you see:  127.0.0.1:11434  ← Only localhost (won't work from Docker)
+# Need:        0.0.0.0:11434    ← All interfaces (will work from Docker)
 ```
 
-Or use the host's actual IP:
+**Solution:** Configure Ollama to listen on all interfaces:
 
 ```bash
+# Set environment variable for Ollama
+export OLLAMA_HOST=0.0.0.0:11434
+
+# Restart Ollama service
+systemctl --user restart ollama
+# OR if running manually:
+ollama serve
+```
+
+**Alternative:** Use host network mode OR bridge IP:
+
+```bash
+# Option A: Use host's actual IP address
 OLLAMA_BASE_URL=http://192.168.1.100:11434  # Your machine's IP
+
+# Option B: Use Docker bridge gateway (Linux)
+OLLAMA_BASE_URL=http://172.17.0.1:11434
+```
+
+Make sure `host.docker.internal` resolves (it should on Docker Desktop automatically).
+
+If using Linux without Docker Desktop, the compose.yaml already includes:
+```yaml
+extra_hosts:
+  - "host.docker.internal:host-gateway"  # Already configured!
 ```
 
 ### Check Ollama is accessible
