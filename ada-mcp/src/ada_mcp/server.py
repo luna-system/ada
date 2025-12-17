@@ -57,10 +57,10 @@ async def main():
             write_stream,
             server.create_initialization_options(),
         )
-print(f"📚 Documentation resources: {len(RESOURCES)} available", file=sys.stderr)
-    
-    # Cleanup
-    await ada.close()
+        print(f"📚 Documentation resources: {len(RESOURCES)} available", file=sys.stderr)
+        
+        # Cleanup
+        await ada.close()
 
 
 def run():

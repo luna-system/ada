@@ -3,6 +3,9 @@ Specialist System
 
 The specialist plugin system provides extensible AI capabilities through a standardized interface. Drop a new ``*_specialist.py`` file into ``brain/specialists/`` and it's automatically discovered and integrated.
 
+.. note::
+   **Live Specialist List:** See ``GET /v1/specialists`` for the current list of active specialists with their capabilities, activation triggers, and priority levels. This endpoint reflects runtime state including any custom specialists you've added.
+
 Overview
 --------
 

@@ -23,6 +23,8 @@ x-build-config: &build-config
 
 services:
   web:
+    profiles:
+      - web  # Optional: only starts with --profile web
     build:
       context: .
       dockerfile: frontend/Dockerfile
@@ -154,6 +156,7 @@ services:
     env_file:
       - .env
     logging: *default-logging
+    user: "${UID:-1000}:${GID:-1000}"
     ports:
       - "8000:7000"
     environment:
@@ -166,8 +169,12 @@ services:
       - SEARXNG_URL
       - LISTENBRAINZ_USER
       - LISTENBRAINZ_TOKEN
+      # Enable D-Bus for MPRIS (now_playing specialist)
+      - DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/1000/bus
     volumes:
       - ./data/brain:/data
+      # Mount D-Bus socket for MPRIS (now_playing specialist)
+      - /run/user/${UID:-1000}/bus:/run/user/1000/bus:ro
     depends_on:
       - chroma
       - ollama

@@ -80,18 +80,32 @@ cd ada
 # Create data directories and check prerequisites
 ./setup.sh
 
-# Start Ada (CPU-only by default)
+# Start Ada (CPU-only by default, headless)
 docker compose up -d
 
-# OR with GPU acceleration:
-docker compose --profile cuda up -d  # NVIDIA GPUs
-docker compose --profile rocm up -d  # AMD GPUs
+# With web UI
+docker compose --profile web up -d
+
+# With Matrix bridge  
+docker compose --profile matrix up -d
+
+# With both web UI and Matrix
+docker compose --profile web --profile matrix up -d
+
+# OR with GPU acceleration (add to any of the above):
+docker compose --profile cuda up -d             # NVIDIA GPUs
+docker compose --profile rocm up -d             # AMD GPUs
+docker compose --profile cuda --profile web up -d  # GPU + web UI
 ```
 
 That's it! Ada will:
-- Pull and start all services (Ollama, ChromaDB, frontend, brain API)
+- Pull and start core services (Ollama, ChromaDB, brain API)
 - Download the default model (DeepSeek-R1, ~4GB)
-- Start the web interface at **http://localhost:5000**
+- Start interfaces based on profiles:
+  - **Default (headless)**: API only at http://localhost:8000
+  - **--profile web**: Web UI at http://localhost:5000
+  - **--profile matrix**: Matrix bridge (see [setup](matrix-bridge/README.md))
+  - **CLI**: `pip install -e adapters/cli && ada-cli` (works with any profile)
 
 ### 3. Customize (Optional)
 
