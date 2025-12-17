@@ -9,17 +9,29 @@ This document describes the testing patterns used in Ada v1, established during 
 ```
 tests/
   conftest.py                    # Global fixtures
-  prompt_builder/                # Feature-specific test directory
+  
+  prompt_builder/                # Traditional tests: specific behavior
     conftest.py                  # Shared fixtures for prompt_builder
     __init__.py
     test_context_retriever.py
     test_section_builder.py
     test_prompt_assembler.py
-  token_monitor/
-    conftest.py
-    test_monitoring.py
-    test_breakdown.py
+  
+  property/                      # Property-based tests: mathematical invariants
+    conftest.py                  # Hypothesis configuration
+    __init__.py
+    test_token_properties.py     # Token counting properties
+    test_memory_properties.py    # Memory decay, ranking (v2.0)
+    test_rag_properties.py       # RAG filtering/retrieval (v2.0)
+  
+  integration/                   # End-to-end tests
+    test_full_pipeline.py
 ```
+
+**Rationale:** 
+- **prompt_builder/**: Example-based tests for specific API behavior
+- **property/**: Property-based tests for algorithmic correctness
+- **integration/**: Full system tests
 
 **Rationale:** Organizing tests by feature/component prevents monolithic test files and makes it easier to:
 - Run subset of tests (`pytest tests/prompt_builder/`)
@@ -134,29 +146,139 @@ class TestEmptyResults:
 - Many fixtures needed → Move to `conftest.py`
 - Lots of parametrize data → Extract to separate data file or fixture
 
-## Pattern: Property-Based Testing
+## Property-Based Testing with Hypothesis
 
-For algorithmic code (token counting, ranking, filtering), consider `hypothesis`:
+Ada uses **Hypothesis** for property-based testing of algorithmic code. Property tests verify mathematical properties that should ALWAYS hold, regardless of input.
+
+### Installation
+
+```bash
+uv add hypothesis
+```
+
+### Basic Example
 
 ```python
-from hypothesis import given, strategies as st
+from hypothesis import given, strategies as st, example
 
 @given(st.text(min_size=1, max_size=1000))
+@example("🎵" * 100)  # Always test specific edge cases
 def test_token_count_is_positive(text):
+    """Non-empty text should always produce positive tokens."""
     monitor = TokenBudgetMonitor()
     tokens = monitor.count_tokens(text)
     assert tokens > 0
 ```
 
-**Use when:**
-- Testing mathematical properties
-- Finding edge cases
-- Validating invariants
+Hypothesis will generate 100+ random test cases and try to break your assertion!
 
-**Don't use when:**
-- Testing specific business logic
-- Integration tests
-- Tests that require specific setup
+### When to Use Property Tests vs Traditional Tests
+
+**Use Property Tests (Hypothesis) for:**
+- ✅ Mathematical invariants (bounds, monotonicity, additivity)
+- ✅ Algorithmic properties (sorting, filtering, ranking)
+- ✅ Edge case discovery (finds Unicode issues, boundary conditions)
+- ✅ Testing with ANY input (not specific examples)
+
+**Use Traditional Tests for:**
+- ✅ Specific API behavior ("does it call X with Y params?")
+- ✅ Integration tests (multi-component interactions)
+- ✅ Regression tests (specific bugs that were fixed)
+- ✅ Business logic (workflow-specific behavior)
+
+### Example: Hybrid Testing
+
+For TokenBudgetMonitor, we have BOTH:
+
+```python
+# tests/test_token_monitor.py (Traditional)
+def test_initialization():
+    """Monitor initializes with specific defaults."""
+    monitor = TokenBudgetMonitor()
+    assert monitor.max_tokens == 100000  # Specific value
+
+# tests/property/test_token_properties.py (Property)
+@given(st.text(min_size=1))
+def test_positive_tokens(text):
+    """Non-empty text ALWAYS has positive tokens."""
+    monitor = TokenBudgetMonitor()
+    assert monitor.count_tokens(text) > 0  # Universal property
+```
+
+Both are valuable! Traditional tests verify the API contract. Property tests verify the math is sound.
+
+### Configuration
+
+Hypothesis is configured in `tests/property/conftest.py`:
+
+```python
+from hypothesis import settings
+
+# Different profiles for different environments
+settings.register_profile("ci", max_examples=1000)    # Thorough
+settings.register_profile("dev", max_examples=100)     # Fast
+settings.register_profile("debug", max_examples=10)    # Debugging
+
+# Load via environment variable
+settings.load_profile(os.getenv("HYPOTHESIS_PROFILE", "dev"))
+```
+
+Run with different profiles:
+```bash
+# Local development (100 examples)
+pytest tests/property/
+
+# CI (1000 examples)
+HYPOTHESIS_PROFILE=ci pytest tests/property/
+
+# Debugging (10 examples, verbose)
+HYPOTHESIS_PROFILE=debug pytest tests/property/ -v
+```
+
+### Real Example from Ada
+
+Property test that **found a real issue**:
+
+```python
+@given(st.text(min_size=1, max_size=5000))
+def test_token_count_bounded_by_length(text):
+    """Token count should be reasonable relative to length."""
+    monitor = TokenBudgetMonitor()
+    tokens = monitor.count_tokens(text)
+    char_count = len(text)
+    
+    # Unicode chars can be 10+ tokens!
+    assert tokens <= char_count * 10
+```
+
+**Hypothesis found:** Unicode character `ࠂ` produces 3 tokens from 1 character!
+This taught us that our initial bounds (2x) were too strict.
+
+### Advanced: @example Decorator
+
+Always test specific edge cases alongside random generation:
+
+```python
+@given(st.text(min_size=1, max_size=1000))
+@example("Hello world")        # ASCII baseline
+@example("🎵" * 100)           # Emoji stress test
+@example("你好世界")            # CJK characters
+@example("\n\n\n")             # Whitespace edge case
+def test_something(text):
+    # Hypothesis tests 100+ random cases
+    # Plus these 4 specific examples EVERY time
+    ...
+```
+
+### When NOT to Use Property Tests
+
+❌ **Don't use for:**
+- Testing specific mocked behavior
+- Testing exact string outputs
+- Integration tests with external services
+- Tests requiring complex setup/teardown
+
+For these, use traditional example-based tests.
 
 ## Running Tests
 
