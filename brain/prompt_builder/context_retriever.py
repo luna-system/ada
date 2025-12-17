@@ -20,19 +20,51 @@ class ContextRetriever:
     separating retrieval logic from formatting and assembly.
     """
 
-    def __init__(self):
-        """Initialize the context retriever."""
-        self.rag_store = rag_store
-        self.config = config
+    def __init__(self, rag_store_instance=None, config_instance=None, cache=None):
+        """Initialize the context retriever.
+        
+        Args:
+            rag_store_instance: Optional RAG store (for testing)
+            config_instance: Optional config (for testing)
+            cache: Optional MultiTimescaleCache instance
+        """
+        self.rag_store = rag_store_instance or rag_store
+        self.config = config_instance or config
+        self.cache = cache
 
     def get_persona(self) -> Optional[Tuple[str, Dict[str, Any]]]:
-        """Retrieve persona content from RAG store.
+        """Retrieve persona content from RAG store (with caching).
         
         Returns:
             (text, metadata) tuple or None if not found
         """
+        # Try cache first if enabled
+        if self.cache is not None:
+            cached = self.cache.get("persona")
+            if cached is not None:
+                logger.debug("Persona cache hit")
+                # Cache stores tuple as string, need to reconstruct
+                # For Phase 1, we store just the text and reconstruct metadata
+                return (cached, {})
+        
+        # Cache miss - query RAG
         try:
-            return self.rag_store.load_persona_block()
+            result = self.rag_store.load_persona_block()
+            
+            # Cache the result if caching is enabled
+            if self.cache is not None and result is not None:
+                text, metadata = result
+                # Estimate token count (rough: 1 token ≈ 4 chars)
+                token_count = len(text) // 4
+                self.cache.set(
+                    "persona",
+                    text,
+                    ttl_seconds=self.config.CACHE_PERSONA_TTL,
+                    token_count=token_count
+                )
+                logger.debug(f"Cached persona ({token_count} tokens)")
+            
+            return result
         except Exception as e:
             logger.error(f"Error reading persona: {e}")
             return None
