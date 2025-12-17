@@ -47,8 +47,10 @@
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
 <ul>
+<li class="toctree-l1"><a class="reference internal" href="zero_to_ada.html">Zero to Ada</a></li>
 <li class="toctree-l1"><a class="reference internal" href="getting_started.html">Getting Started</a></li>
 <li class="toctree-l1"><a class="reference internal" href="local_mode.html">Running Ada Locally (No Docker!)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="nix.html">Nix &amp; Flakes Support</a></li>
 <li class="toctree-l1"><a class="reference internal" href="getting_started_scratch.html">Getting Started from Scratch</a></li>
 <li class="toctree-l1"><a class="reference internal" href="configuration.html">Configuration Reference</a></li>
 <li class="toctree-l1"><a class="reference internal" href="examples.html">Examples</a></li>
@@ -64,6 +66,7 @@
 <li class="toctree-l1"><a class="reference internal" href="data_model.html">Data Model Reference</a></li>
 <li class="toctree-l1"><a class="reference internal" href="streaming.html">Streaming</a></li>
 <li class="toctree-l1"><a class="reference internal" href="memory.html">Memory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="token_monitoring.html">Token Budget Monitoring</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Interfaces &amp; Adapters</span></p>
 <ul class="current">
@@ -149,6 +152,7 @@
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="development.html">Development Tools</a></li>
 <li class="toctree-l1"><a class="reference internal" href="testing.html">Testing Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="versioning.html">Version Management</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Philosophy &amp; Design</span></p>
 <ul>
@@ -650,7 +654,11 @@ Debug Endpoints
 <li><p><code class="docutils literal notranslate"><span class="pre">brain/rag_store.py</span></code> - RAG system integration (600+ lines)</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">brain/llm.py</span></code> - LLM provider interface (60 lines)</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">brain/media.py</span></code> - External media integration (100 lines)</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">brain/prompt_builder.py</span></code> - Prompt assembly (150+ lines)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">brain/prompt_builder/</span></code> - Modular prompt assembly package:
+- <code class="docutils literal notranslate"><span class="pre">context_retriever.py</span></code> - RAG data retrieval (100 lines)
+- <code class="docutils literal notranslate"><span class="pre">section_builder.py</span></code> - Section formatting (150 lines)
+- <code class="docutils literal notranslate"><span class="pre">prompt_assembler.py</span></code> - Final assembly (150 lines)
+- Legacy <code class="docutils literal notranslate"><span class="pre">build_prompt()</span></code> available via package import</p></li>
 </ul>
 </section>
 <section id="type-hints-documentation">
