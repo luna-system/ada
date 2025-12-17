@@ -15,7 +15,7 @@ from rich.markdown import Markdown
 from rich.panel import Panel
 from rich.prompt import Prompt
 
-from .client import AdaClient, AdaBrainConnectionError, AdaBrainError
+from ada_client import AdaClient, AdaBrainConnectionError, AdaBrainError
 
 console = Console()
 
