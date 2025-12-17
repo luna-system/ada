@@ -107,7 +107,17 @@ def format_media_for_prompt(media_info: Optional[Dict[str, Any]]) -> Optional[st
     if status == "playing":
         artist = media_info.get("artist", "Unknown Artist")
         track = media_info.get("track", "Unknown Track")
-        return f"luna has chosen to share that she is currently listening to the song {track} by artist {artist}."
+        # Rich markdown formatting for ListenBrainz
+        return f"""## 🎧 ListenBrainz Scrobble
+
+**{track}**  
+*by {artist}*
+
+📡 Currently scrobbling to ListenBrainz
+
+---
+
+💡 *Consider: Luna is actively sharing this track - what does this say about their listening patterns?*"""
     elif status == "recent":
         artist = media_info.get("artist", "Unknown Artist")
         track = media_info.get("track", "Unknown Track")
@@ -131,6 +141,16 @@ def format_media_for_prompt(media_info: Optional[Dict[str, Any]]) -> Optional[st
                 time_str = "recently"
         else:
             time_str = "recently"
-        return f"luna has chosen to share that the last song she listened to was {track} by artist {artist} {time_str}."
+        # Rich markdown formatting for recent listens
+        return f"""## 🎧 Recent Listen (ListenBrainz)
+
+**{track}**  
+*by {artist}*
+
+⏰ Listened {time_str}
+
+---
+
+💡 *Consider: What does Luna's recent listening history tell you about their mood or interests?*"""
     
     return None

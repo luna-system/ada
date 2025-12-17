@@ -23,7 +23,7 @@ from nio import (
     SyncResponse
 )
 
-from ada_client import AdaBrainClient
+from ada_client import AdaBrainClient, AdaBrainError, AdaBrainConnectionError, AdaBrainResponseError
 from config import Config, get_config
 from identity import get_intro_message, setup_bot_profile, should_send_intro
 from message_handler import MessageHandler, RoomContextManager
@@ -199,8 +199,14 @@ class AdaMatrixBridge:
             
             logger.info(f"Sent response to {room.display_name}")
         
+        except AdaBrainConnectionError as e:
+            logger.error(f"Connection error to Ada's brain: {e}", exc_info=True)
+        except AdaBrainResponseError as e:
+            logger.error(f"Response error from Ada's brain: {e}", exc_info=True)
+        except AdaBrainError as e:
+            logger.error(f"Ada brain error: {e}", exc_info=True)
         except Exception as e:
-            logger.error(f"Error processing message: {e}", exc_info=True)
+            logger.error(f"Unexpected error processing message: {e}", exc_info=True)
             
             # React with error emoji
             try:
@@ -263,8 +269,13 @@ class AdaMatrixBridge:
 """
         
         elif command == "status":
-            brain_healthy = await self.ada.healthcheck()
-            status = "✅ online" if brain_healthy else "❌ offline"
+            try:
+                health = await self.ada.health()
+                brain_healthy = health.get("status") == "healthy"
+                status = "✅ online" if brain_healthy else "❌ offline"
+            except (AdaBrainConnectionError, AdaBrainError):
+                status = "❌ offline"
+            
             response = f"""**Ada Status:**
 • Brain: {status}
 • Rooms: {len(self.client.rooms)}
@@ -304,11 +315,14 @@ class AdaMatrixBridge:
         
         # Check Ada brain health
         logger.info("Checking Ada brain health...")
-        healthy = await self.ada.healthcheck()
-        if healthy:
-            logger.info("✅ Ada brain is healthy")
-        else:
-            logger.warning("⚠️  Ada brain is not responding (will retry during operation)")
+        try:
+            health = await self.ada.health()
+            if health.get("status") == "healthy":
+                logger.info("✅ Ada brain is healthy")
+            else:
+                logger.warning("⚠️  Ada brain is not fully healthy (will retry during operation)")
+        except (AdaBrainConnectionError, AdaBrainError) as e:
+            logger.warning(f"⚠️  Ada brain is not responding: {e} (will retry during operation)")
         
         # Login
         logger.info("Logging in to Matrix...")
