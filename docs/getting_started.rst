@@ -2,16 +2,20 @@
 Getting Started
 ===============
 
-Installation
-============
+**Get Ada running in 5 minutes!**
+
+Local Mode (Recommended)
+=========================
+
+The fastest way to start Ada - no Docker required!
 
 Requirements
 ------------
 
 - Python 3.13+
 - Ollama (LLM backend)
-- ChromaDB (Vector database)
-- Docker Compose (optional, for containerized setup)
+- 8GB+ RAM recommended
+- GPU optional (CUDA, ROCm, or Metal)
 
 .. warning::
 
@@ -29,33 +33,95 @@ Requirements
       sudo usermod -aG docker $USER
       newgrp docker
 
-Setup
------
+Quick Setup
+-----------
 
-1. **Clone and activate virtual environment:**
-
-   .. code-block:: bash
-
-      cd /home/luna/Code/ada-v1
-      source .venv/bin/activate
-
-2. **Start dependencies:**
+1. **Install Ollama:**
 
    .. code-block:: bash
 
-      docker compose up -d
+      # Get from https://ollama.ai
+      curl -fsSL https://ollama.com/install.sh | sh
+      ollama serve
 
-   This starts:
-   - Ollama LLM backend (port 11434)
-   - ChromaDB vector store (port 8000)
-   - Web server (port 5000)
-   - Brain API (port 7000)
-
-3. **Verify health:**
+2. **Clone and setup Ada:**
 
    .. code-block:: bash
 
+      git clone https://github.com/luna-system/ada.git
+      cd ada
+      python3 ada_main.py setup
+
+   The setup wizard will:
+   - Create a virtual environment
+   - Install dependencies
+   - Create .env configuration file
+
+3. **Pull a model:**
+
+   .. code-block:: bash
+
+      ollama pull deepseek-r1:14b
+
+4. **Start Ada:**
+
+   .. code-block:: bash
+
+      ada run
+
+   Ada will auto-detect your local Ollama and start at http://localhost:7000
+
+5. **Verify health:**
+
+   .. code-block:: bash
+
+      ada doctor
+      # or
       curl http://localhost:7000/v1/healthz
+
+**That's it!** You're running Ada locally. For complete local mode documentation, see the :doc:`local_mode` guide.
+
+Docker Mode (Optional)
+======================
+
+Need isolated services or multi-container orchestration? Ada supports Docker too!
+
+Requirements
+------------
+
+- Docker & Docker Compose
+- Docker BuildX (recommended)
+- 20GB+ disk space
+- GPU optional (with proper passthrough)
+
+Quick Setup
+-----------
+
+.. code-block:: bash
+
+   git clone https://github.com/luna-system/ada.git
+   cd ada
+   
+   # Start with default services
+   docker compose up -d
+   
+   # Or with web UI
+   docker compose --profile web up -d
+   
+   # Or with Matrix bridge
+   docker compose --profile matrix up -d
+   
+   # With GPU support
+   docker compose --profile cuda up -d  # NVIDIA
+   docker compose --profile rocm up -d  # AMD
+
+Docker starts:
+- Ollama LLM backend (port 11434)
+- ChromaDB vector store (port 8000)
+- Brain API (port 7000)
+- Optional: Web UI (port 5000), Matrix bridge
+
+See ``docs/external_ollama.md`` for hybrid setups (local Ollama + Docker services).
 
 Configuration
 =============

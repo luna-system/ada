@@ -30,15 +30,20 @@ If you haven't already:
 
 .. code-block:: bash
 
-   git clone https://github.com/yourusername/ada.git
+   # Install Ollama
+   curl -fsSL https://ollama.com/install.sh | sh
+   ollama serve
+
+   # Clone and setup
+   git clone https://github.com/luna-system/ada.git
    cd ada
-   docker compose up
+   python3 ada_main.py setup
 
-Wait for services to start (first run downloads models, ~5-10 minutes).
+   # Pull a model and start
+   ollama pull deepseek-r1:14b
+   ada run
 
-Visit http://localhost:5000 to verify it works.
-
-**Checkpoint:** You should be able to chat with default Ada.
+**Checkpoint:** Visit http://localhost:7000/v1/healthz - you should see status "ok".
 
 ----
 
@@ -73,11 +78,12 @@ Edit ``.env`` in the project root:
    # Or use a specific size
    OLLAMA_MODEL=mistral:7b
 
-Restart the brain service:
+Restart Ada:
 
 .. code-block:: bash
 
-   docker compose restart brain
+   ada stop
+   ada run
 
 The first message will be slower as Ollama downloads the new model.
 

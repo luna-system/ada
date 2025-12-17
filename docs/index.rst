@@ -4,13 +4,22 @@
 Ada Brain API Docs
 ==================
 
-Welcome to the Ada Brain API documentation. This is the REST API backend for the conversational LLM system with Retrieval-Augmented Generation (RAG).
+Welcome to Ada! Your personal AI assistant that runs entirely on your hardware.
+
+**New to Ada?** Start here:
+
+1. **Quick Start:** :doc:`getting_started` - Get Ada running in 5 minutes with the ``ada`` CLI
+2. **Customize:** :doc:`getting_started_scratch` - Make Ada truly yours
+3. **Explore:** :doc:`specialists` - Extend Ada's capabilities
+
+**Local Mode (Recommended):** Ada now runs without Docker! Just Python and Ollama. See :doc:`getting_started` for the fastest setup.
 
 .. toctree::
    :maxdepth: 2
    :caption: Getting Started
 
    getting_started
+   local_mode
    getting_started_scratch
    configuration
    examples
