@@ -22,9 +22,16 @@ x-build-config: &build-config
     - type=local,dest=/tmp/.buildx-cache-new,mode=max
 
 services:
+  # ============================================================================
+  # Frontend (Optional Web UI)
+  # ============================================================================
+  # The web UI is just one adapter for Ada - brain provides the API.
+  # Start with: docker compose --profile web up
+  # Ada works fine headless - use CLI, MCP, Matrix, or direct API instead!
+  
   web:
     profiles:
-      - web  # Optional: only starts with --profile web
+      - web
     build:
       context: .
       dockerfile: frontend/Dockerfile
