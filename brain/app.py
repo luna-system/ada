@@ -643,6 +643,10 @@ async def chat_stream(request: Request):
     memory_k = int(data.get('memory_k', RAG_MEMORY_TOP_K))
 
     # Build prompt using modularized builder (now async with specialists)
+    # Initialize token monitor for this request
+    from brain.token_monitor import TokenBudgetMonitor
+    token_monitor = TokenBudgetMonitor()
+    
     media_info = data.get('media') if isinstance(data.get('media'), dict) else None
     ocr_context = data.get('ocr_context') if isinstance(data.get('ocr_context'), dict) else None
     if RAG_ENABLED and rag_store is not None:
@@ -657,10 +661,17 @@ async def chat_stream(request: Request):
             faq_k=faq_k,
             memory_k=memory_k,
             ocr_context=ocr_context,
+            token_monitor=token_monitor,  # Track token usage
         )
     else:
         final_prompt = f"User: {prompt}\nAssistant:"
         used_context = {'persona': None, 'faqs': [], 'memories': [], 'turns': [], 'summaries': [], 'entity': entity, 'media': media_info, 'ocr': ocr_context}
+    
+    # Log token usage for monitoring
+    token_monitor.log_breakdown()
+    breakdown = token_monitor.get_breakdown()
+    if breakdown.is_warning:
+        logger.warning(f"Request {req_id}: Token usage at {breakdown.percentage_used:.1f}% of budget")
 
     # Generator function for SSE streaming
     async def generate():
