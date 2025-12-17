@@ -23,7 +23,7 @@
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Data Model Reference" href="data_model.html" />
-    <link rel="prev" title="Configuration Reference" href="configuration.html" /> 
+    <link rel="prev" title="Ada on Single-Board Computers (SBCs)" href="sbc.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -45,10 +45,21 @@
   </form>
 </div>
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
-              <p class="caption" role="heading"><span class="caption-text">Documentation:</span></p>
-<ul class="current">
+              <p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+<ul>
 <li class="toctree-l1"><a class="reference internal" href="getting_started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="getting_started_scratch.html">Getting Started from Scratch</a></li>
 <li class="toctree-l1"><a class="reference internal" href="configuration.html">Configuration Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="examples.html">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="matrix_integration.html">Matrix Integration</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Hardware Setup</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="hardware.html">Hardware &amp; GPU Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="sbc.html">Ada on Single-Board Computers (SBCs)</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Core Architecture</span></p>
+<ul class="current">
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Architecture</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#system-overview">System Overview</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#request-flow">Request Flow</a></li>
@@ -62,16 +73,37 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="data_model.html">Data Model Reference</a></li>
-<li class="toctree-l1"><a class="reference internal" href="api_usage.html">API Usage Guide</a></li>
-<li class="toctree-l1"><a class="reference internal" href="api_reference.html">API Reference</a></li>
-<li class="toctree-l1"><a class="reference internal" href="specialists.html">Specialist System</a></li>
-<li class="toctree-l1"><a class="reference internal" href="testing.html">Testing Guide</a></li>
-<li class="toctree-l1"><a class="reference internal" href="development.html">Development Tools</a></li>
 <li class="toctree-l1"><a class="reference internal" href="streaming.html">Streaming</a></li>
 <li class="toctree-l1"><a class="reference internal" href="memory.html">Memory</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">API Documentation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="api_usage.html">API Usage Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api_reference.html">API Reference</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Specialist System</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="specialists.html">Specialist System</a></li>
+<li class="toctree-l1"><a class="reference internal" href="build_specialist.html">Build Your First Specialist</a></li>
+<li class="toctree-l1"><a class="reference internal" href="bidirectional.html">Bidirectional Specialist System</a></li>
+<li class="toctree-l1"><a class="reference internal" href="specialist_rag.html">Specialist RAG Documentation System</a></li>
+<li class="toctree-l1"><a class="reference internal" href="web_search.html">Web Search Specialist</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Operations</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="build_system.html">Build System</a></li>
+<li class="toctree-l1"><a class="reference internal" href="disk_management.html">Disk Management</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Development</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="development.html">Development Tools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="testing.html">Testing Guide</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Philosophy &amp; Design</span></p>
+<ul>
 <li class="toctree-l1"><a class="reference internal" href="documentation_philosophy.html">Documentation Philosophy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ai_documentation.html">AI-Readable Documentation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="empathetic_documentation.html">Empathetic Documentation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="examples.html">Examples</a></li>
 <li class="toctree-l1"><a class="reference internal" href="xenofeminism.html">Xenofeminism and Ada</a></li>
 </ul>
 
@@ -105,12 +137,14 @@
 <section id="system-overview">
 <h2>System Overview<a class="headerlink" href="#system-overview" title="Link to this heading"></a></h2>
 <p>Ada is composed of several containerized services orchestrated via Docker Compose:</p>
-<div class="graphviz"><img src="_images/graphviz-0ba1c8fafb11ad658b30449a8aec5be54beaf490.png" alt="digraph system {
+<div class="graphviz"><img src="_images/graphviz-88200e5c900a74c9f8aedc9ff52480e84f102abd.png" alt="digraph system {
     rankdir=TB;
     node [shape=box, style=filled, fillcolor=lightblue];
 
     user [label=&quot;User\nBrowser&quot;, fillcolor=lightgreen];
+    matrix_user [label=&quot;Matrix\nUsers&quot;, fillcolor=lightgreen];
     web [label=&quot;Web Service\nNginx + Frontend\n(Port 5000)&quot;];
+    matrix_bridge [label=&quot;Matrix Bridge\nmatrix-nio Client&quot;, fillcolor=lightcyan];
     brain [label=&quot;Brain Service\nFastAPI Backend\n(Port 7000)&quot;];
     ollama [label=&quot;Ollama Service\nLLM Inference\n(Port 11434)&quot;];
     chroma [label=&quot;Chroma Service\nVector Database\n(Port 8000)&quot;];
@@ -118,14 +152,18 @@
     scripts [label=&quot;Scripts Service\nTooling Container\n(On-demand)&quot;];
 
     user -&gt; web [label=&quot;HTTP&quot;];
+    matrix_user -&gt; matrix_bridge [label=&quot;Matrix Protocol&quot;];
     web -&gt; brain [label=&quot;API Proxy\n/api/* → /v1/*&quot;];
+    matrix_bridge -&gt; brain [label=&quot;/v1/chat/stream&quot;];
     brain -&gt; ollama [label=&quot;LLM Requests&quot;];
     brain -&gt; chroma [label=&quot;RAG Queries&quot;];
     consolidation -&gt; brain [label=&quot;Uses&quot;];
     scripts -&gt; chroma [label=&quot;Maintenance&quot;];
     scripts -&gt; brain [label=&quot;Testing&quot;];
 
-    {rank=same; web; brain;}
+    {rank=same; user; matrix_user;}
+    {rank=same; web; matrix_bridge;}
+    {rank=same; brain;}
     {rank=same; ollama; chroma;}
 }" class="graphviz" /></div>
 </section>
@@ -363,7 +401,7 @@
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="configuration.html" class="btn btn-neutral float-left" title="Configuration Reference" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="sbc.html" class="btn btn-neutral float-left" title="Ada on Single-Board Computers (SBCs)" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
         <a href="data_model.html" class="btn btn-neutral float-right" title="Data Model Reference" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 

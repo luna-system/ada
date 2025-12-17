@@ -15,7 +15,9 @@ Ada is composed of several containerized services orchestrated via Docker Compos
        node [shape=box, style=filled, fillcolor=lightblue];
        
        user [label="User\nBrowser", fillcolor=lightgreen];
+       matrix_user [label="Matrix\nUsers", fillcolor=lightgreen];
        web [label="Web Service\nNginx + Frontend\n(Port 5000)"];
+       matrix_bridge [label="Matrix Bridge\nmatrix-nio Client", fillcolor=lightcyan];
        brain [label="Brain Service\nFastAPI Backend\n(Port 7000)"];
        ollama [label="Ollama Service\nLLM Inference\n(Port 11434)"];
        chroma [label="Chroma Service\nVector Database\n(Port 8000)"];
@@ -23,14 +25,18 @@ Ada is composed of several containerized services orchestrated via Docker Compos
        scripts [label="Scripts Service\nTooling Container\n(On-demand)"];
        
        user -> web [label="HTTP"];
+       matrix_user -> matrix_bridge [label="Matrix Protocol"];
        web -> brain [label="API Proxy\n/api/* → /v1/*"];
+       matrix_bridge -> brain [label="/v1/chat/stream"];
        brain -> ollama [label="LLM Requests"];
        brain -> chroma [label="RAG Queries"];
        consolidation -> brain [label="Uses"];
        scripts -> chroma [label="Maintenance"];
        scripts -> brain [label="Testing"];
        
-       {rank=same; web; brain;}
+       {rank=same; user; matrix_user;}
+       {rank=same; web; matrix_bridge;}
+       {rank=same; brain;}
        {rank=same; ollama; chroma;}
    }
 

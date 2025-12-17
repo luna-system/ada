@@ -51,6 +51,13 @@ Welcome to the Ada Brain API documentation. This is the REST API backend for the
 
 .. toctree::
    :maxdepth: 2
+   :caption: Operations
+
+   build_system
+   disk_management
+
+.. toctree::
+   :maxdepth: 2
    :caption: Development
 
    development
