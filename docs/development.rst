@@ -1,7 +1,82 @@
 Development Tools
 =================
 
-This guide covers Ada's utility scripts, the scripts tooling container, and development workflows.
+This guide covers Ada's utility scripts, the scripts tooling container, development workflows, and version management.
+
+.. contents:: Table of Contents
+   :local:
+   :depth: 2
+
+Version Management
+------------------
+
+Ada uses **Semantic Versioning** with **Conventional Commits** for automated changelog generation.
+
+Quick Start
+~~~~~~~~~~~
+
+.. code-block:: bash
+
+   # Check current version
+   ./scripts/version.sh current
+   
+   # Suggest next version based on commits
+   ./scripts/version.sh suggest
+   
+   # Generate changelog preview
+   ./scripts/version.sh changelog
+   
+   # Bump version and create tag
+   ./scripts/version.sh bump minor "Feature Name"
+
+**See:** :doc:`versioning` for complete guide.
+
+Conventional Commits
+~~~~~~~~~~~~~~~~~~~~
+
+Commit messages follow this format:
+
+.. code-block:: text
+
+   type(scope): subject
+   
+   Optional body
+
+**Types:**
+
+- ``feat:`` New feature → MINOR bump
+- ``fix:`` Bug fix → PATCH bump
+- ``docs:`` Documentation → PATCH bump
+- ``perf:`` Performance → MINOR bump
+- ``refactor:``, ``test:``, ``chore:`` → PATCH bump
+- ``BREAKING CHANGE:`` in body → MAJOR bump
+
+**Examples:**
+
+.. code-block:: bash
+
+   git commit -m "feat: add Wikipedia specialist"
+   git commit -m "fix(matrix): handle rate limiting"
+   git commit -m "docs: update getting started guide"
+
+Validation
+~~~~~~~~~~
+
+Install commit message validation (optional):
+
+.. code-block:: bash
+
+   ln -sf ../../scripts/validate-commit.sh .git/hooks/commit-msg
+
+Now invalid commits are rejected:
+
+.. code-block:: bash
+
+   $ git commit -m "fixed bug"  
+   ❌ Invalid commit message format!
+   
+   $ git commit -m "fix: resolve memory leak"
+   ✓ Success!
 
 Scripts Tooling Container
 --------------------------

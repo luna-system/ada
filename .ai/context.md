@@ -205,3 +205,6 @@ All configuration exposed via `/v1/info` endpoint for debugging.
 - Memory consolidation runs nightly (cron in compose.yaml)
 - Backups handled by `scripts/upload_backups_b2.py`
 - ChromaDB migrations via `scripts/migrate_chroma_http.py`
+- Version management via `scripts/version.sh` (Semantic Versioning + Conventional Commits)
+- Changelog generation via `scripts/changelog.sh`
+- Commit validation via `scripts/validate-commit.sh` (optional git hook)
