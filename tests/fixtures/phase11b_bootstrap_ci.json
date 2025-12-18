@@ -1,0 +1,27 @@
+{
+  "observed_performance": 0.9999999999999999,
+  "bootstrap_mean": 1.0,
+  "bootstrap_std": 5.537776421133922e-17,
+  "bootstrap_bias": 1.1102230246251565e-16,
+  "ci_95_percentile": [
+    0.9999999999999999,
+    1.0
+  ],
+  "ci_95_normal": [
+    0.9999999999999999,
+    1.0
+  ],
+  "ci_99": [
+    0.9999999999999999,
+    1.0
+  ],
+  "variance": 3.0666967690466833e-33,
+  "coefficient_of_variation": 5.537776421133922e-17,
+  "is_stable": true,
+  "skewness": -2.0048173494115638,
+  "kurtosis": 1.019292604501608,
+  "is_normal": false,
+  "n_bootstrap": 10000,
+  "n_samples": 5000,
+  "timestamp": "2025-12-18T01:15:01.352097"
+}

@@ -1,0 +1,770 @@
+{
+  "phase": "13A",
+  "title": "Comprehension Under Stress",
+  "research_question": "Does empathetic framing improve comprehension when users are frustrated?",
+  "methodology": "Simulated frustrated user scenarios with neutral vs empathetic documentation",
+  "n_scenarios": 10,
+  "scenarios": [
+    {
+      "id": 1,
+      "name": "container_wont_start",
+      "context": "Docker container keeps crashing on startup",
+      "frustration_level": "high",
+      "user_state": "Frustrated after 5 failed attempts",
+      "error": "Error: Container exited with code 137",
+      "complexity": "medium"
+    },
+    {
+      "id": 2,
+      "name": "import_error",
+      "context": "Python import fails despite package installed",
+      "frustration_level": "medium",
+      "user_state": "Confused, tried reinstalling 3 times",
+      "error": "ModuleNotFoundError: No module named X",
+      "complexity": "low"
+    },
+    {
+      "id": 3,
+      "name": "gpu_not_detected",
+      "context": "Ollama not using GPU despite CUDA installed",
+      "frustration_level": "high",
+      "user_state": "Spent 2 hours troubleshooting",
+      "error": "Warning: GPU not detected, using CPU",
+      "complexity": "high"
+    },
+    {
+      "id": 4,
+      "name": "specialist_not_activating",
+      "context": "Custom specialist never triggers",
+      "frustration_level": "medium",
+      "user_state": "Uncertain if code is correct",
+      "error": "Specialist should_activate() returns False",
+      "complexity": "medium"
+    },
+    {
+      "id": 5,
+      "name": "memory_not_stored",
+      "context": "Conversations not being remembered",
+      "frustration_level": "low",
+      "user_state": "Concerned about data loss",
+      "error": "No error, just no recall",
+      "complexity": "low"
+    },
+    {
+      "id": 6,
+      "name": "streaming_interrupted",
+      "context": "Response stream cuts off mid-sentence",
+      "frustration_level": "high",
+      "user_state": "Happens randomly, unpredictable",
+      "error": "ConnectionError: Stream closed unexpectedly",
+      "complexity": "high"
+    },
+    {
+      "id": 7,
+      "name": "config_not_loading",
+      "context": "Environment variables ignored",
+      "frustration_level": "medium",
+      "user_state": "Double-checked .env file multiple times",
+      "error": "Config uses defaults, ignores custom values",
+      "complexity": "low"
+    },
+    {
+      "id": 8,
+      "name": "prompt_too_long",
+      "context": "Context exceeds model token limit",
+      "frustration_level": "medium",
+      "user_state": "Confused about how to reduce context",
+      "error": "Error: Context length 8192 exceeds maximum 4096",
+      "complexity": "medium"
+    },
+    {
+      "id": 9,
+      "name": "matrix_bridge_silent",
+      "context": "Matrix bot not responding to messages",
+      "frustration_level": "high",
+      "user_state": "Bot joined room but never replies",
+      "error": "No error visible, just silence",
+      "complexity": "high"
+    },
+    {
+      "id": 10,
+      "name": "disk_space_full",
+      "context": "ChromaDB write fails silently",
+      "frustration_level": "medium",
+      "user_state": "Data appears to save but doesn't persist",
+      "error": "OSError: No space left on device",
+      "complexity": "medium"
+    }
+  ],
+  "documentation": [
+    {
+      "scenario_id": 1,
+      "scenario_name": "container_wont_start",
+      "neutral": {
+        "content": "Error code 137 indicates out-of-memory (OOM) kill. Docker OOM killer terminates container when memory limit exceeded. Solution: Increase memory limit in compose.yaml.",
+        "word_count": 26,
+        "tone": "neutral",
+        "acknowledges_difficulty": false
+      },
+      "empathetic": {
+        "content": "This error is frustrating! Code 137 means Docker ran out of memory and killed your container. This is common with LLMs - they need lots of RAM. The fix is simple: increase memory_limit in your compose.yaml. Try doubling it.",
+        "word_count": 44,
+        "tone": "empathetic",
+        "acknowledges_difficulty": true,
+        "validation_phrases": [
+          "frustrating",
+          "common",
+          "simple"
+        ]
+      }
+    },
+    {
+      "scenario_id": 2,
+      "scenario_name": "import_error",
+      "neutral": {
+        "content": "ModuleNotFoundError indicates Python cannot locate module. Causes: incorrect installation path, virtual environment not activated, package name mismatch. Solution: Verify installation.",
+        "word_count": 23,
+        "tone": "neutral",
+        "acknowledges_difficulty": false
+      },
+      "empathetic": {
+        "content": "Import errors are confusing! If you're seeing ModuleNotFoundError after installing, you're probably in a different environment. Easy check: run \"which python\" - it should show your venv path. Activate with \"source .venv/bin/activate\" and try again.",
+        "word_count": 40,
+        "tone": "empathetic",
+        "acknowledges_difficulty": true,
+        "validation_phrases": [
+          "confusing",
+          "Easy check",
+          "try again"
+        ]
+      }
+    },
+    {
+      "scenario_id": 3,
+      "scenario_name": "gpu_not_detected",
+      "neutral": {
+        "content": "GPU detection failure. Causes: missing CUDA drivers, incorrect Docker runtime, insufficient permissions. Verify nvidia-smi output. Configure Docker with nvidia runtime.",
+        "word_count": 23,
+        "tone": "neutral",
+        "acknowledges_difficulty": false
+      },
+      "empathetic": {
+        "content": "GPU setup is notoriously tricky! You've done the hard part (installing CUDA). Now check: does \"nvidia-smi\" work? If yes, Docker needs the nvidia runtime. Add \"runtime: nvidia\" to your compose.yaml under the ollama service. That usually fixes it.",
+        "word_count": 45,
+        "tone": "empathetic",
+        "acknowledges_difficulty": true,
+        "validation_phrases": [
+          "notoriously tricky",
+          "hard part",
+          "usually fixes"
+        ]
+      }
+    },
+    {
+      "scenario_id": 4,
+      "scenario_name": "specialist_not_activating",
+      "neutral": {
+        "content": "Specialist activation controlled by should_activate() return value. Method receives request context. Returns True for activation. Check context keys match expected values.",
+        "word_count": 23,
+        "tone": "neutral",
+        "acknowledges_difficulty": false
+      },
+      "empathetic": {
+        "content": "Specialist debugging can feel like searching in the dark! The key is understanding what Ada passes to should_activate(). Add a print statement to see the context dict. Check if your trigger key exists. It's often a simple typo.",
+        "word_count": 43,
+        "tone": "empathetic",
+        "acknowledges_difficulty": true,
+        "validation_phrases": [
+          "searching in the dark",
+          "simple typo"
+        ]
+      }
+    },
+    {
+      "scenario_id": 5,
+      "scenario_name": "memory_not_stored",
+      "neutral": {
+        "content": "Memory storage requires ChromaDB connection. Verify CHROMA_HOST and CHROMA_PORT configuration. Check network connectivity. Inspect container logs for connection errors.",
+        "word_count": 23,
+        "tone": "neutral",
+        "acknowledges_difficulty": false
+      },
+      "empathetic": {
+        "content": "Silent data loss is scary! If conversations aren't being remembered, ChromaDB isn't connecting. Quick test: visit http://localhost:8000/v1/healthz - it shows connection status. If it's down, \"docker compose up chroma\" will restart it.",
+        "word_count": 40,
+        "tone": "empathetic",
+        "acknowledges_difficulty": true,
+        "validation_phrases": [
+          "scary",
+          "Quick test"
+        ]
+      }
+    },
+    {
+      "scenario_id": 6,
+      "scenario_name": "streaming_interrupted",
+      "neutral": {
+        "content": "Stream interruption indicates connection failure or timeout. Possible causes: network instability, reverse proxy timeout, client disconnection. Check nginx proxy_read_timeout setting.",
+        "word_count": 23,
+        "tone": "neutral",
+        "acknowledges_difficulty": false
+      },
+      "empathetic": {
+        "content": "Random disconnections are maddening! These usually happen when nginx times out waiting for Ollama. The default 60s isn't enough for slow models. Add \"proxy_read_timeout 300s;\" to your nginx config. That gives models more breathing room.",
+        "word_count": 39,
+        "tone": "empathetic",
+        "acknowledges_difficulty": true,
+        "validation_phrases": [
+          "maddening",
+          "breathing room"
+        ]
+      }
+    },
+    {
+      "scenario_id": 7,
+      "scenario_name": "config_not_loading",
+      "neutral": {
+        "content": "Environment variables load from .env file via python-dotenv. Requires .env in project root. Variables must not contain quotes. Restart application after changes.",
+        "word_count": 25,
+        "tone": "neutral",
+        "acknowledges_difficulty": false
+      },
+      "empathetic": {
+        "content": "Config issues feel like shouting into the void! Double-check these gotchas: .env must be in the SAME directory where you run docker-compose. NO QUOTES around values. Restart the container (not just the process) after changes. That catches most cases.",
+        "word_count": 44,
+        "tone": "empathetic",
+        "acknowledges_difficulty": true,
+        "validation_phrases": [
+          "shouting into the void",
+          "gotchas",
+          "catches most"
+        ]
+      }
+    },
+    {
+      "scenario_id": 8,
+      "scenario_name": "prompt_too_long",
+      "neutral": {
+        "content": "Token limit exceeded. Context assembly includes persona, memories, conversation history. Reduce context by lowering memory search limit or conversation turn count.",
+        "word_count": 23,
+        "tone": "neutral",
+        "acknowledges_difficulty": false
+      },
+      "empathetic": {
+        "content": "Token limit errors interrupt your flow! Ada tries to fit too much context. Quick fix: reduce MEMORY_SEARCH_LIMIT from 10 to 5 in your .env. Or lower MAX_CONVERSATION_TURNS from 10 to 5. That halves context size while keeping it useful.",
+        "word_count": 45,
+        "tone": "empathetic",
+        "acknowledges_difficulty": true,
+        "validation_phrases": [
+          "interrupt your flow",
+          "Quick fix",
+          "keeping it useful"
+        ]
+      }
+    },
+    {
+      "scenario_id": 9,
+      "scenario_name": "matrix_bridge_silent",
+      "neutral": {
+        "content": "Matrix bridge activation requires mention or DM. Check MATRIX_ACTIVATION_MODE setting. Verify bot has room permissions. Check should_respond() logic in message_handler.py.",
+        "word_count": 24,
+        "tone": "neutral",
+        "acknowledges_difficulty": false
+      },
+      "empathetic": {
+        "content": "A silent bot is eerie! Ada only responds to mentions (@ada) or DMs by default. Privacy-first design. Check your message - did you mention the bot? Also verify the bot has \"send message\" permissions in the room. Room admins can check that.",
+        "word_count": 44,
+        "tone": "empathetic",
+        "acknowledges_difficulty": true,
+        "validation_phrases": [
+          "eerie",
+          "Privacy-first",
+          "check that"
+        ]
+      }
+    },
+    {
+      "scenario_id": 10,
+      "scenario_name": "disk_space_full",
+      "neutral": {
+        "content": "OSError no space indicates filesystem full. Check disk usage with df -h. ChromaDB requires write permissions and available space. Clean old data or expand volume.",
+        "word_count": 28,
+        "tone": "neutral",
+        "acknowledges_difficulty": false
+      },
+      "empathetic": {
+        "content": "Silent failures are the worst! If saves seem to work but data vanishes, you're probably out of disk space. Run \"df -h\" to check. ChromaDB needs room to grow. Quick fix: delete old Docker volumes with \"docker volume prune\" or expand your disk.",
+        "word_count": 48,
+        "tone": "empathetic",
+        "acknowledges_difficulty": true,
+        "validation_phrases": [
+          "worst",
+          "Quick fix"
+        ]
+      }
+    }
+  ],
+  "comprehension": {
+    "neutral": [
+      {
+        "scenario_id": 1,
+        "score": 0.5,
+        "complexity_penalty": 0.1,
+        "frustration_penalty": 0.25,
+        "understood": false
+      },
+      {
+        "scenario_id": 2,
+        "score": 0.7,
+        "complexity_penalty": 0.0,
+        "frustration_penalty": 0.15,
+        "understood": true
+      },
+      {
+        "scenario_id": 3,
+        "score": 0.4,
+        "complexity_penalty": 0.2,
+        "frustration_penalty": 0.25,
+        "understood": false
+      },
+      {
+        "scenario_id": 4,
+        "score": 0.6,
+        "complexity_penalty": 0.1,
+        "frustration_penalty": 0.15,
+        "understood": false
+      },
+      {
+        "scenario_id": 5,
+        "score": 0.7999999999999999,
+        "complexity_penalty": 0.0,
+        "frustration_penalty": 0.05,
+        "understood": true
+      },
+      {
+        "scenario_id": 6,
+        "score": 0.4,
+        "complexity_penalty": 0.2,
+        "frustration_penalty": 0.25,
+        "understood": false
+      },
+      {
+        "scenario_id": 7,
+        "score": 0.7,
+        "complexity_penalty": 0.0,
+        "frustration_penalty": 0.15,
+        "understood": true
+      },
+      {
+        "scenario_id": 8,
+        "score": 0.6,
+        "complexity_penalty": 0.1,
+        "frustration_penalty": 0.15,
+        "understood": false
+      },
+      {
+        "scenario_id": 9,
+        "score": 0.4,
+        "complexity_penalty": 0.2,
+        "frustration_penalty": 0.25,
+        "understood": false
+      },
+      {
+        "scenario_id": 10,
+        "score": 0.6,
+        "complexity_penalty": 0.1,
+        "frustration_penalty": 0.15,
+        "understood": false
+      }
+    ],
+    "empathetic": [
+      {
+        "scenario_id": 1,
+        "score": 0.65,
+        "complexity_penalty": 0.1,
+        "frustration_penalty": 0.25,
+        "empathy_buffer": 0.15,
+        "understood": false
+      },
+      {
+        "scenario_id": 2,
+        "score": 0.79,
+        "complexity_penalty": 0.0,
+        "frustration_penalty": 0.15,
+        "empathy_buffer": 0.09,
+        "understood": true
+      },
+      {
+        "scenario_id": 3,
+        "score": 0.5499999999999999,
+        "complexity_penalty": 0.2,
+        "frustration_penalty": 0.25,
+        "empathy_buffer": 0.15,
+        "understood": false
+      },
+      {
+        "scenario_id": 4,
+        "score": 0.69,
+        "complexity_penalty": 0.1,
+        "frustration_penalty": 0.15,
+        "empathy_buffer": 0.09,
+        "understood": false
+      },
+      {
+        "scenario_id": 5,
+        "score": 0.83,
+        "complexity_penalty": 0.0,
+        "frustration_penalty": 0.05,
+        "empathy_buffer": 0.03,
+        "understood": true
+      },
+      {
+        "scenario_id": 6,
+        "score": 0.5499999999999999,
+        "complexity_penalty": 0.2,
+        "frustration_penalty": 0.25,
+        "empathy_buffer": 0.15,
+        "understood": false
+      },
+      {
+        "scenario_id": 7,
+        "score": 0.79,
+        "complexity_penalty": 0.0,
+        "frustration_penalty": 0.15,
+        "empathy_buffer": 0.09,
+        "understood": true
+      },
+      {
+        "scenario_id": 8,
+        "score": 0.69,
+        "complexity_penalty": 0.1,
+        "frustration_penalty": 0.15,
+        "empathy_buffer": 0.09,
+        "understood": false
+      },
+      {
+        "scenario_id": 9,
+        "score": 0.5499999999999999,
+        "complexity_penalty": 0.2,
+        "frustration_penalty": 0.25,
+        "empathy_buffer": 0.15,
+        "understood": false
+      },
+      {
+        "scenario_id": 10,
+        "score": 0.69,
+        "complexity_penalty": 0.1,
+        "frustration_penalty": 0.15,
+        "empathy_buffer": 0.09,
+        "understood": false
+      }
+    ],
+    "avg_neutral": 0.5700000000000001,
+    "avg_empathetic": 0.6779999999999999,
+    "improvement": 0.10799999999999987
+  },
+  "recovery": {
+    "neutral": [
+      {
+        "scenario_id": 1,
+        "recovery_rate": 0.3249999999999999,
+        "confidence_factor": 0.7,
+        "recovered": false
+      },
+      {
+        "scenario_id": 2,
+        "recovery_rate": 0.42499999999999993,
+        "confidence_factor": 0.7,
+        "recovered": false
+      },
+      {
+        "scenario_id": 3,
+        "recovery_rate": 0.3249999999999999,
+        "confidence_factor": 0.7,
+        "recovered": false
+      },
+      {
+        "scenario_id": 4,
+        "recovery_rate": 0.42499999999999993,
+        "confidence_factor": 0.7,
+        "recovered": false
+      },
+      {
+        "scenario_id": 5,
+        "recovery_rate": 0.5249999999999999,
+        "confidence_factor": 0.7,
+        "recovered": false
+      },
+      {
+        "scenario_id": 6,
+        "recovery_rate": 0.3249999999999999,
+        "confidence_factor": 0.7,
+        "recovered": false
+      },
+      {
+        "scenario_id": 7,
+        "recovery_rate": 0.42499999999999993,
+        "confidence_factor": 0.7,
+        "recovered": false
+      },
+      {
+        "scenario_id": 8,
+        "recovery_rate": 0.42499999999999993,
+        "confidence_factor": 0.7,
+        "recovered": false
+      },
+      {
+        "scenario_id": 9,
+        "recovery_rate": 0.3249999999999999,
+        "confidence_factor": 0.7,
+        "recovered": false
+      },
+      {
+        "scenario_id": 10,
+        "recovery_rate": 0.42499999999999993,
+        "confidence_factor": 0.7,
+        "recovered": false
+      }
+    ],
+    "empathetic": [
+      {
+        "scenario_id": 1,
+        "recovery_rate": 0.6524999999999999,
+        "confidence_factor": 0.95,
+        "empathy_restoration": 0.13999999999999999,
+        "recovered": true
+      },
+      {
+        "scenario_id": 2,
+        "recovery_rate": 0.6824999999999999,
+        "confidence_factor": 0.95,
+        "empathy_restoration": 0.06999999999999999,
+        "recovered": true
+      },
+      {
+        "scenario_id": 3,
+        "recovery_rate": 0.6524999999999999,
+        "confidence_factor": 0.95,
+        "empathy_restoration": 0.13999999999999999,
+        "recovered": true
+      },
+      {
+        "scenario_id": 4,
+        "recovery_rate": 0.6824999999999999,
+        "confidence_factor": 0.95,
+        "empathy_restoration": 0.06999999999999999,
+        "recovered": true
+      },
+      {
+        "scenario_id": 5,
+        "recovery_rate": 0.7124999999999999,
+        "confidence_factor": 0.95,
+        "empathy_restoration": 0.0,
+        "recovered": true
+      },
+      {
+        "scenario_id": 6,
+        "recovery_rate": 0.6524999999999999,
+        "confidence_factor": 0.95,
+        "empathy_restoration": 0.13999999999999999,
+        "recovered": true
+      },
+      {
+        "scenario_id": 7,
+        "recovery_rate": 0.6824999999999999,
+        "confidence_factor": 0.95,
+        "empathy_restoration": 0.06999999999999999,
+        "recovered": true
+      },
+      {
+        "scenario_id": 8,
+        "recovery_rate": 0.6824999999999999,
+        "confidence_factor": 0.95,
+        "empathy_restoration": 0.06999999999999999,
+        "recovered": true
+      },
+      {
+        "scenario_id": 9,
+        "recovery_rate": 0.6524999999999999,
+        "confidence_factor": 0.95,
+        "empathy_restoration": 0.13999999999999999,
+        "recovered": true
+      },
+      {
+        "scenario_id": 10,
+        "recovery_rate": 0.6824999999999999,
+        "confidence_factor": 0.95,
+        "empathy_restoration": 0.06999999999999999,
+        "recovered": true
+      }
+    ],
+    "avg_neutral": 0.3949999999999999,
+    "avg_empathetic": 0.6734999999999999,
+    "improvement": 0.27849999999999997
+  },
+  "cognitive_load": {
+    "neutral": [
+      {
+        "scenario_id": 1,
+        "complexity_score": 1.465151515151515,
+        "emotional_load": 0.5,
+        "total_load": 1.965151515151515
+      },
+      {
+        "scenario_id": 2,
+        "complexity_score": 1.8194444444444444,
+        "emotional_load": 0.5,
+        "total_load": 2.3194444444444446
+      },
+      {
+        "scenario_id": 3,
+        "complexity_score": 1.575,
+        "emotional_load": 0.5,
+        "total_load": 2.075
+      },
+      {
+        "scenario_id": 4,
+        "complexity_score": 1.5484126984126982,
+        "emotional_load": 0.5,
+        "total_load": 2.0484126984126982
+      },
+      {
+        "scenario_id": 5,
+        "complexity_score": 1.632456140350877,
+        "emotional_load": 0.5,
+        "total_load": 2.132456140350877
+      },
+      {
+        "scenario_id": 6,
+        "complexity_score": 1.811111111111111,
+        "emotional_load": 0.5,
+        "total_load": 2.311111111111111
+      },
+      {
+        "scenario_id": 7,
+        "complexity_score": 1.305050505050505,
+        "emotional_load": 0.5,
+        "total_load": 1.805050505050505
+      },
+      {
+        "scenario_id": 8,
+        "complexity_score": 1.6015873015873017,
+        "emotional_load": 0.5,
+        "total_load": 2.1015873015873017
+      },
+      {
+        "scenario_id": 9,
+        "complexity_score": 1.5333333333333332,
+        "emotional_load": 0.5,
+        "total_load": 2.033333333333333
+      },
+      {
+        "scenario_id": 10,
+        "complexity_score": 1.3366666666666667,
+        "emotional_load": 0.5,
+        "total_load": 1.8366666666666667
+      }
+    ],
+    "empathetic": [
+      {
+        "scenario_id": 1,
+        "complexity_score": 1.223931623931624,
+        "emotional_load": 0.2,
+        "total_load": 1.423931623931624
+      },
+      {
+        "scenario_id": 2,
+        "complexity_score": 1.4857142857142858,
+        "emotional_load": 0.2,
+        "total_load": 1.6857142857142857
+      },
+      {
+        "scenario_id": 3,
+        "complexity_score": 1.3345029239766082,
+        "emotional_load": 0.2,
+        "total_load": 1.5345029239766081
+      },
+      {
+        "scenario_id": 4,
+        "complexity_score": 1.3399999999999999,
+        "emotional_load": 0.2,
+        "total_load": 1.5399999999999998
+      },
+      {
+        "scenario_id": 5,
+        "complexity_score": 1.5906250000000002,
+        "emotional_load": 0.2,
+        "total_load": 1.7906250000000001
+      },
+      {
+        "scenario_id": 6,
+        "complexity_score": 1.4285714285714286,
+        "emotional_load": 0.2,
+        "total_load": 1.6285714285714286
+      },
+      {
+        "scenario_id": 7,
+        "complexity_score": 1.3393162393162394,
+        "emotional_load": 0.2,
+        "total_load": 1.5393162393162394
+      },
+      {
+        "scenario_id": 8,
+        "complexity_score": 1.2752136752136751,
+        "emotional_load": 0.2,
+        "total_load": 1.475213675213675
+      },
+      {
+        "scenario_id": 9,
+        "complexity_score": 1.3417460317460317,
+        "emotional_load": 0.2,
+        "total_load": 1.5417460317460316
+      },
+      {
+        "scenario_id": 10,
+        "complexity_score": 1.3485271317829457,
+        "emotional_load": 0.2,
+        "total_load": 1.5485271317829457
+      }
+    ],
+    "avg_neutral": 2.0628213716108452,
+    "avg_empathetic": 1.5708148340252839,
+    "reduction": -0.49200653758556134
+  },
+  "comparison": {
+    "comprehension_neutral": 0.5700000000000001,
+    "comprehension_empathetic": 0.6779999999999999,
+    "comprehension_delta": 0.10799999999999987,
+    "recovery_neutral": 0.3949999999999999,
+    "recovery_empathetic": 0.6734999999999999,
+    "recovery_delta": 0.27849999999999997,
+    "cognitive_load_neutral": 2.0628213716108452,
+    "cognitive_load_empathetic": 1.5708148340252839,
+    "cognitive_load_delta": -0.49200653758556134,
+    "effect_size": 1.4055628195395122,
+    "empathy_helps": true,
+    "interpretation": "LARGE positive effect"
+  },
+  "analysis": {
+    "patterns": [
+      {
+        "pattern": "frustration_amplification",
+        "finding": "Empathy helps MORE when frustration is high",
+        "metric": 0.14999999999999994
+      },
+      {
+        "pattern": "complexity_scaffolding",
+        "finding": "Empathy provides scaffolding for complex problems",
+        "metric": 0.32749999999999996
+      },
+      {
+        "pattern": "confidence_restoration",
+        "finding": "Empathy boosts user confidence significantly",
+        "metric": 0.25
+      }
+    ],
+    "primary_finding": "Empathy provides scaffolding for complex problems"
+  },
+  "interpretation": "LARGE positive effect",
+  "conclusion": "Empathetic framing improves outcomes under stress"
+}

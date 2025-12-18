@@ -1,0 +1,55 @@
+{
+  "global_sensitivity": {
+    "decay": 0.10000000000000073,
+    "surprise": 0.6000000000000014,
+    "relevance": 0.20000000000000095,
+    "habituation": 0.10000000000000019
+  },
+  "sensitivity_ranking": [
+    "surprise",
+    "relevance",
+    "decay",
+    "habituation"
+  ],
+  "local_sensitivity": {
+    "low": {
+      "decay": 0.09999999999999958,
+      "surprise": 0.5999999999999998,
+      "relevance": 0.19999999999999982,
+      "habituation": 0.09999999999999921
+    },
+    "medium": {
+      "decay": 0.10000000000000088,
+      "surprise": 0.600000000000002,
+      "relevance": 0.20000000000000134,
+      "habituation": 0.10000000000000034
+    },
+    "high": {
+      "decay": 0.10000000000000096,
+      "surprise": 0.5999999999999984,
+      "relevance": 0.19999999999999798,
+      "habituation": 0.09999999999999959
+    }
+  },
+  "critical_regions": {
+    "decay": "high",
+    "surprise": "medium",
+    "relevance": "medium",
+    "habituation": "medium"
+  },
+  "has_interactions": true,
+  "interaction_strength": 625.0000000000014,
+  "cross_derivatives": {
+    "decay\u00d7surprise": 700.0000000000017,
+    "decay\u00d7relevance": 300.0000000000015,
+    "surprise\u00d7relevance": 800.000000000001,
+    "surprise\u00d7habituation": 700.0000000000015
+  },
+  "max_sensitivity": 0.6000000000000014,
+  "min_sensitivity": 0.10000000000000019,
+  "sensitivity_range": 0.5000000000000012,
+  "is_stable": false,
+  "n_samples": 10000,
+  "epsilon": 0.001,
+  "timestamp": "2025-12-18T01:10:52.634766"
+}
