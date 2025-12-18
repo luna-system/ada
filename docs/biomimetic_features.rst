@@ -350,6 +350,103 @@ Complete configuration options:
    CHUNK_SIMILARITY_THRESHOLD=0.8
    MAX_CHUNK_SIZE=5
 
+   # Neuromorphic Context (Phase 1)
+   GRADIENT_THRESHOLD_FULL=0.75
+   GRADIENT_THRESHOLD_CHUNKS=0.50
+   GRADIENT_THRESHOLD_SUMMARY=0.20
+   IMPORTANCE_WEIGHT_DECAY=0.4
+   IMPORTANCE_WEIGHT_SURPRISE=0.3
+   IMPORTANCE_WEIGHT_RELEVANCE=0.2
+   IMPORTANCE_WEIGHT_HABITUATION=0.1
+
+Neuromorphic Context Management (NEW! Phase 1)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+**Biological Model:** The brain doesn't store every detail equally - importance is dynamically calculated from multiple signals (novelty, relevance, recency, repetition). Memory detail degrades smoothly over time, not in discrete batches.
+
+**Ada's Implementation:**
+
+Multi-signal importance scoring combines:
+
+- **Temporal decay (40%):** How recent is this information?
+- **Prediction error (30%):** How surprising/novel is it?
+- **Semantic relevance (20%):** How related to current context?
+- **Context habituation (10%):** Is this a repeated pattern?
+
+Based on importance score, context gets one of four detail levels:
+
+- **FULL (≥0.75):** Keep everything, verbatim
+- **CHUNKS (≥0.50):** Keep semantic units only
+- **SUMMARY (≥0.20):** Condensed version
+- **DROPPED (<0.20):** Let it fade away
+
+**Example:**
+
+::
+
+   from brain.prompt_builder.context_retriever import ContextRetriever
+   
+   retriever = ContextRetriever()
+   
+   # Score a conversation turn
+   turn = {
+       'timestamp': '2025-12-17T10:30:00Z',
+       'content': 'Implemented the new caching system!',
+       'metadata': {
+           'prediction_error': 0.8,  # Surprising progress
+           'importance': 0.9          # Important milestone
+       }
+   }
+   
+   importance = retriever.calculate_importance(turn, query="what did we build?")
+   # Returns: 0.82 (high importance due to novelty + relevance)
+   
+   detail_level = retriever.get_detail_level(importance)
+   # Returns: "FULL" (keep everything for this important turn)
+
+**Benefits:**
+
+- **Smooth degradation:** No jarring batch summarization
+- **Multi-factor:** Not just recency - novelty, relevance, repetition all matter
+- **Configurable:** Tune thresholds and weights per use case
+- **Biologically plausible:** Matches dopaminergic importance signaling
+
+**Performance:**
+
+- Pure Python, no external dependencies
+- 21 unit tests, 0.07s runtime
+- Integrates with existing memory_decay for temperature modulation
+
+**Configuration:**
+
+::
+
+   # Gradient thresholds (what score triggers each level)
+   GRADIENT_THRESHOLD_FULL=0.75      # High importance → keep everything
+   GRADIENT_THRESHOLD_CHUNKS=0.50    # Medium → semantic units
+   GRADIENT_THRESHOLD_SUMMARY=0.20   # Low → condensed version
+   
+   # Signal weights (how much each factor contributes)
+   IMPORTANCE_WEIGHT_DECAY=0.4       # Temporal recency
+   IMPORTANCE_WEIGHT_SURPRISE=0.3    # Novelty/prediction error
+   IMPORTANCE_WEIGHT_RELEVANCE=0.2   # Semantic similarity
+   IMPORTANCE_WEIGHT_HABITUATION=0.1 # Repetition penalty
+
+**Testing:**
+
+::
+
+   pytest tests/test_importance_scoring.py -v    # 21 tests, 0.07s
+
+**Future Phases:**
+
+- **Phase 2:** Background consolidation (pre-compute chunks/summaries)
+- **Phase 3:** GraphRAG with temporal edge decay
+- **Phase 4:** Adaptive threshold learning
+- **Phase 5:** LLM-assisted importance calibration
+
+See `.ai/NEUROMORPHIC_CONTEXT.md` for full research documentation.
+
 Philosophy
 ----------
 
@@ -408,10 +505,16 @@ Key papers that inspired these features:
 - Chase & Simon (1973) - Perception in chess
 - Gobet et al. (2001) - Chunking mechanisms in human learning
 
+**Multi-signal importance:**
+
+- Schultz et al. (1997) - Predictive reward signal of dopamine neurons
+- Ranganath & Rainer (2003) - Neural mechanisms for detecting novelty
+- Niv et al. (2015) - Reinforcement learning and the brain
+
 ---
 
 **Last Updated:** 2025-12-17  
-**Version:** v1.6.0+biomimetic  
+**Version:** v2.2.0+neuromorphic (Phase 1)  
 **Status:** Production-ready, actively maintained
 
 Built with 🧠 by the Ada community
