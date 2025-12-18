@@ -10,6 +10,7 @@ __pycache__/
 .coverage
 coverage.xml
 htmlcov/
+.hypothesis/
 
 # Virtual envs (uv creates .venv by default)
 .venv/
