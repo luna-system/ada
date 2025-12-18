@@ -663,6 +663,11 @@ async def chat_stream(request: Request):
     turns_k = int(data.get('turns_k', RAG_TURN_TOP_K))
     faq_k = int(data.get('faq_k', RAG_FAQ_TOP_K))
     memory_k = int(data.get('memory_k', RAG_MEMORY_TOP_K))
+    
+    # Start latency tracking
+    import time
+    request_start_time = time.time()
+    python_start_time = request_start_time
 
     # PHASE 3: PRE-EXECUTION TOOL ACTIVATION (Tier 1 - Anticipatory/Reflex)
     # Pattern matching happens BEFORE LLM execution - model-agnostic!
@@ -738,6 +743,13 @@ async def chat_stream(request: Request):
     # Generator function for SSE streaming
     async def generate():
         nonlocal conversation_id
+        
+        # Track Python time up to LLM invocation
+        python_overhead_end = time.time()
+        llm_start_time = None
+        llm_end_time = None
+        num_specialists_activated = len(pre_executed_specialists)
+        
         try:
             # PHASE 3: Yield pre-executed specialist results first
             for spec_result in pre_executed_specialists:
@@ -749,6 +761,9 @@ async def chat_stream(request: Request):
             # Initialize bidirectional specialist handler (Tier 3 - deliberative)
             bi_handler = BidirectionalSpecialistHandler(max_calls=5)
             text_buffer = ""
+            
+            # Mark LLM inference start
+            llm_start_time = time.time()
             
             # Stream from Ollama using modularized llm module (async)
             async for chunk in stream_chat_async(final_prompt, model=OLLAMA_MODEL, include_thinking=include_thinking):
@@ -791,6 +806,9 @@ async def chat_stream(request: Request):
                 
                 # Check if stream is done
                 if 'done' in chunk and chunk['done']:
+                    # Mark LLM inference end
+                    llm_end_time = time.time()
+                    
                     assistant_timestamp = datetime.datetime.now(datetime.timezone.utc).isoformat()
                     
                     # Upsert turn after generation completes
@@ -851,6 +869,32 @@ async def chat_stream(request: Request):
                                 import traceback
                                 print("[BRAIN][RAG][memory-upsert] failed:\n" + traceback.format_exc())
 
+                    # Calculate latency breakdown
+                    python_overhead_ms = (python_overhead_end - request_start_time) * 1000
+                    llm_inference_ms = (llm_end_time - llm_start_time) * 1000 if llm_start_time and llm_end_time else 0
+                    total_ms = (time.time() - request_start_time) * 1000
+                    llm_percentage = (llm_inference_ms / total_ms * 100) if total_ms > 0 else 0
+                    
+                    # Get cache hit rate if available
+                    cache_hit_rate = None
+                    if 'cache' in used_context:
+                        cache_stats = used_context['cache']
+                        total_cache_ops = cache_stats.get('hits', 0) + cache_stats.get('misses', 0)
+                        if total_cache_ops > 0:
+                            cache_hit_rate = cache_stats.get('hits', 0) / total_cache_ops
+                    
+                    # Build latency breakdown
+                    from brain.schemas import LatencyBreakdown
+                    latency_breakdown = LatencyBreakdown(
+                        python_overhead_ms=python_overhead_ms,
+                        llm_inference_ms=llm_inference_ms,
+                        total_ms=total_ms,
+                        llm_percentage=llm_percentage,
+                        specialists_activated=num_specialists_activated,
+                        context_retrieved=len(used_context) > 0,
+                        cache_hit_rate=cache_hit_rate,
+                    )
+
                     # Send completion metadata
                     metadata = {
                         'type': 'done',
@@ -859,6 +903,7 @@ async def chat_stream(request: Request):
                         'user_timestamp': user_timestamp,
                         'assistant_timestamp': assistant_timestamp,
                         'request_id': req_id,
+                        'latency_breakdown': latency_breakdown.model_dump(),
                     }
                     yield f"data: {json.dumps(metadata)}\n\n"
                     break
