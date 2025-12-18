@@ -1,0 +1,151 @@
+{
+  "report": {
+    "timestamp": "2025-12-18T15:03:55Z",
+    "hardware": {
+      "gpu_memory_total": 0,
+      "gpu_memory_used": 5804261376,
+      "cpu_cores": 12,
+      "system_memory": 66521018368
+    },
+    "model_profiles_tested": [
+      "qwen2.5-coder:7b",
+      "mistral:7b"
+    ],
+    "results": [
+      {
+        "model": "qwen2.5-coder:7b",
+        "prompt": "Hi!",
+        "ttft_ms": 15413.709878921509,
+        "tokens_generated": 9,
+        "throughput_tps": 0.5460894297025339,
+        "total_time_ms": 16480.817079544067,
+        "temperature": 0.7
+      },
+      {
+        "model": "qwen2.5-coder:7b",
+        "prompt": "Hi!",
+        "ttft_ms": 216.32957458496094,
+        "tokens_generated": 11,
+        "throughput_tps": 6.827450595061222,
+        "total_time_ms": 1611.1431121826172,
+        "temperature": 0.7
+      },
+      {
+        "model": "qwen2.5-coder:7b",
+        "prompt": "What is Python?",
+        "ttft_ms": 61.11764907836914,
+        "tokens_generated": 353,
+        "throughput_tps": 6.649884750368459,
+        "total_time_ms": 53083.62674713135,
+        "temperature": 0.7
+      },
+      {
+        "model": "qwen2.5-coder:7b",
+        "prompt": "What is Python?",
+        "ttft_ms": 123.43358993530273,
+        "tokens_generated": 158,
+        "throughput_tps": 9.178702077018157,
+        "total_time_ms": 17213.762760162354,
+        "temperature": 0.7
+      },
+      {
+        "model": "qwen2.5-coder:7b",
+        "prompt": "Explain machine learning briefly.",
+        "ttft_ms": 15926.94115638733,
+        "tokens_generated": 386,
+        "throughput_tps": 6.708116677710811,
+        "total_time_ms": 57542.23108291626,
+        "temperature": 0.7
+      },
+      {
+        "model": "qwen2.5-coder:7b",
+        "prompt": "Explain machine learning briefly.",
+        "ttft_ms": 230.73482513427734,
+        "tokens_generated": 212,
+        "throughput_tps": 9.257762075263892,
+        "total_time_ms": 22899.702787399292,
+        "temperature": 0.7
+      },
+      {
+        "model": "mistral:7b",
+        "prompt": "Hi!",
+        "ttft_ms": 14086.771965026855,
+        "tokens_generated": 10,
+        "throughput_tps": 0.650869609882073,
+        "total_time_ms": 15364.060401916504,
+        "temperature": 0.7
+      },
+      {
+        "model": "mistral:7b",
+        "prompt": "Hi!",
+        "ttft_ms": 219.33746337890625,
+        "tokens_generated": 10,
+        "throughput_tps": 6.553646080324002,
+        "total_time_ms": 1525.8681774139404,
+        "temperature": 0.7
+      },
+      {
+        "model": "mistral:7b",
+        "prompt": "What is Python?",
+        "ttft_ms": 65.65713882446289,
+        "tokens_generated": 33,
+        "throughput_tps": 1.6276307028474453,
+        "total_time_ms": 20274.869441986084,
+        "temperature": 0.7
+      },
+      {
+        "model": "mistral:7b",
+        "prompt": "What is Python?",
+        "ttft_ms": 98.60420227050781,
+        "tokens_generated": 101,
+        "throughput_tps": 9.0571968178082,
+        "total_time_ms": 11151.353120803833,
+        "temperature": 0.7
+      },
+      {
+        "model": "mistral:7b",
+        "prompt": "Explain machine learning briefly.",
+        "ttft_ms": 15749.574661254883,
+        "tokens_generated": 500,
+        "throughput_tps": 7.107733472358703,
+        "total_time_ms": 70345.91293334961,
+        "temperature": 0.7
+      },
+      {
+        "model": "mistral:7b",
+        "prompt": "Explain machine learning briefly.",
+        "ttft_ms": 229.2923927307129,
+        "tokens_generated": 523,
+        "throughput_tps": 8.950748005212324,
+        "total_time_ms": 58430.87077140808,
+        "temperature": 0.7
+      }
+    ],
+    "analysis": {
+      "qwen2.5-coder:7b": {
+        "avg_ttft_ms": 5328.711112340291,
+        "min_ttft_ms": 61.11764907836914,
+        "max_ttft_ms": 15926.94115638733,
+        "avg_throughput_tps": 6.528000934187513,
+        "avg_tokens": 188.16666666666666
+      },
+      "mistral:7b": {
+        "avg_ttft_ms": 5074.872970581055,
+        "min_ttft_ms": 65.65713882446289,
+        "max_ttft_ms": 15749.574661254883,
+        "avg_throughput_tps": 5.657970781405457,
+        "avg_tokens": 196.16666666666666
+      },
+      "ceiling_analysis": {
+        "fastest_model": "mistral:7b",
+        "fastest_ttft_ms": 5074.872970581055,
+        "best_throughput_tps": 6.528000934187513,
+        "theoretical_gains_available": {
+          "quantization_2x": "Via INT4 quantization",
+          "inference_opt_1_5x": "Via vLLM/TensorRT",
+          "combined_ceiling_3x": "Maximum theoretical on current hardware"
+        }
+      }
+    }
+  }
+}
