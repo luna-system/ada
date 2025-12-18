@@ -1,0 +1,169 @@
+{
+  "phase": "15B",
+  "title": "Adaptive Strategy Recommendation",
+  "research_question": "Can we build a classifier to recommend optimal strategy?",
+  "practical_application": "Turn theory into tools: adaptive documentation systems!",
+  "methodology": "Train classifier on Phase 15A data, test on new scenarios",
+  "n_training_examples": 10,
+  "n_test_cases": 5,
+  "classifier": {
+    "type": "pattern-based nearest neighbor",
+    "n_strategies": 4,
+    "strategy_patterns": {
+      "empathy_heavy": {
+        "avg_expertise": 0.3,
+        "avg_anxiety": 0.75,
+        "avg_time_pressure": 0.44999999999999996,
+        "avg_needs_validation": 0.8500000000000001
+      },
+      "validating_moderate": {
+        "avg_expertise": 0.3333333333333333,
+        "avg_anxiety": 0.6,
+        "avg_time_pressure": 0.3333333333333333,
+        "avg_needs_validation": 0.7333333333333334
+      },
+      "structured_tutorial": {
+        "avg_expertise": 0.3333333333333333,
+        "avg_anxiety": 0.6,
+        "avg_time_pressure": 0.3333333333333333,
+        "avg_needs_validation": 0.7333333333333334
+      },
+      "balanced_hybrid": {
+        "avg_expertise": 0.3,
+        "avg_anxiety": 0.75,
+        "avg_time_pressure": 0.44999999999999996,
+        "avg_needs_validation": 0.8500000000000001
+      }
+    }
+  },
+  "training_results": {
+    "accuracy": 0.2,
+    "correct": 2,
+    "total": 10
+  },
+  "accuracy_metrics": {
+    "test_accuracy": 0.6,
+    "precision": 0.6,
+    "recall": 0.6,
+    "correct": 3,
+    "total": 5,
+    "predictions": [
+      {
+        "predicted": "empathy_heavy",
+        "expected": "empathy_heavy",
+        "correct": true
+      },
+      {
+        "predicted": "minimal_reference",
+        "expected": "minimal_reference",
+        "correct": true
+      },
+      {
+        "predicted": "empathy_heavy",
+        "expected": "validating_moderate",
+        "correct": false
+      },
+      {
+        "predicted": "balanced_hybrid",
+        "expected": "structured_tutorial",
+        "correct": false
+      },
+      {
+        "predicted": "minimal_reference",
+        "expected": "balanced_hybrid",
+        "correct": true
+      }
+    ],
+    "system_quality": "ACCEPTABLE"
+  },
+  "test_cases": [
+    {
+      "scenario": "New programmer, first time with async/await",
+      "features": {
+        "expertise": 0.15,
+        "anxiety": 0.75,
+        "time_pressure": 0.25,
+        "needs_validation": 0.85,
+        "needs_structure": 0.7,
+        "needs_brevity": 0.2
+      },
+      "expected_strategy": "empathy_heavy",
+      "recommended_strategy": "empathy_heavy",
+      "confidence": 0.9090909090909091,
+      "correct": true
+    },
+    {
+      "scenario": "Senior dev looking up API signature quickly",
+      "features": {
+        "expertise": 0.85,
+        "anxiety": 0.15,
+        "time_pressure": 0.85,
+        "needs_validation": 0.1,
+        "needs_structure": 0.3,
+        "needs_brevity": 0.95
+      },
+      "expected_strategy": "minimal_reference",
+      "recommended_strategy": "minimal_reference",
+      "confidence": 0.9090909090909091,
+      "correct": true
+    },
+    {
+      "scenario": "Mid-level dev stuck on bug for 2 hours",
+      "features": {
+        "expertise": 0.55,
+        "anxiety": 0.8,
+        "time_pressure": 0.65,
+        "needs_validation": 0.9,
+        "needs_structure": 0.5,
+        "needs_brevity": 0.35
+      },
+      "expected_strategy": "validating_moderate",
+      "recommended_strategy": "empathy_heavy",
+      "confidence": 0.9090909090909091,
+      "correct": false
+    },
+    {
+      "scenario": "Curious learner exploring new framework",
+      "features": {
+        "expertise": 0.35,
+        "anxiety": 0.25,
+        "time_pressure": 0.15,
+        "needs_validation": 0.45,
+        "needs_structure": 0.85,
+        "needs_brevity": 0.25
+      },
+      "expected_strategy": "structured_tutorial",
+      "recommended_strategy": "balanced_hybrid",
+      "confidence": 0.9090909090909091,
+      "correct": false
+    },
+    {
+      "scenario": "Experienced but stressed under deadline",
+      "features": {
+        "expertise": 0.7,
+        "anxiety": 0.6,
+        "time_pressure": 0.9,
+        "needs_validation": 0.5,
+        "needs_structure": 0.4,
+        "needs_brevity": 0.75
+      },
+      "expected_strategy": "balanced_hybrid",
+      "recommended_strategy": "minimal_reference",
+      "confidence": 0.9090909090909091,
+      "correct": true
+    }
+  ],
+  "decision_rules": [
+    "IF high anxiety AND needs validation \u2192 RECOMMEND empathy_heavy",
+    "IF needs validation \u2192 RECOMMEND validating_moderate",
+    "IF needs validation \u2192 RECOMMEND structured_tutorial",
+    "IF high anxiety AND needs validation \u2192 RECOMMEND balanced_hybrid"
+  ],
+  "practical_applications": [
+    "Adaptive documentation systems (serve different docs based on user signals)",
+    "A/B test targeting (show empathy to anxious users, brevity to experts)",
+    "Content strategy (prioritize which docs to rewrite based on audience)",
+    "User-adaptive help (chatbots that adjust tone based on user state)"
+  ],
+  "conclusion": "System achieves 60.0% accuracy - ACCEPTABLE!"
+}

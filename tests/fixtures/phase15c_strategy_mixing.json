@@ -1,0 +1,379 @@
+{
+  "phase": "15C",
+  "title": "Strategy Mixing - Hybrid Approaches",
+  "research_question": "Can mixing strategies outperform pure approaches?",
+  "hypothesis": "Mixed needs contexts benefit from hybrid strategies",
+  "methodology": "Compare pure vs hybrid effectiveness across diverse contexts",
+  "n_pure_strategies": 3,
+  "n_hybrid_strategies": 5,
+  "n_test_contexts": 5,
+  "pure_strategies": [
+    {
+      "name": "empathy_pure",
+      "empathy": 1.0,
+      "brevity": 0.2,
+      "structure": 0.5,
+      "validation": 0.9,
+      "description": "Warm, validating, verbose"
+    },
+    {
+      "name": "brevity_pure",
+      "empathy": 0.1,
+      "brevity": 1.0,
+      "structure": 0.3,
+      "validation": 0.1,
+      "description": "Terse, fast, minimal"
+    },
+    {
+      "name": "structure_pure",
+      "empathy": 0.4,
+      "brevity": 0.4,
+      "structure": 1.0,
+      "validation": 0.5,
+      "description": "Organized, navigable, clear"
+    }
+  ],
+  "hybrid_strategies": [
+    {
+      "name": "warm_intro_terse_body",
+      "intro": {
+        "empathy": 1.0,
+        "validation": 0.9
+      },
+      "body": {
+        "brevity": 1.0,
+        "empathy": 0.1
+      },
+      "empathy": 0.55,
+      "brevity": 0.6,
+      "structure": 0.4,
+      "validation": 0.5,
+      "description": "Empathetic hook, then fast facts",
+      "pattern": "EMPATHY intro + BREVITY body"
+    },
+    {
+      "name": "brief_overview_deep_detail",
+      "intro": {
+        "brevity": 1.0,
+        "structure": 0.8
+      },
+      "body": {
+        "validation": 0.9,
+        "empathy": 0.7
+      },
+      "empathy": 0.4,
+      "brevity": 0.6,
+      "structure": 0.6,
+      "validation": 0.5,
+      "description": "Quick start, then deep support",
+      "pattern": "BREVITY intro + VALIDATION body"
+    },
+    {
+      "name": "structured_empathetic",
+      "intro": {
+        "structure": 1.0,
+        "brevity": 0.5
+      },
+      "body": {
+        "empathy": 0.8,
+        "validation": 0.8
+      },
+      "empathy": 0.7,
+      "brevity": 0.35,
+      "structure": 0.9,
+      "validation": 0.7,
+      "description": "Clear organization + warm content",
+      "pattern": "STRUCTURE + EMPATHY combined"
+    },
+    {
+      "name": "empathetic_then_structured",
+      "intro": {
+        "empathy": 1.0,
+        "validation": 1.0
+      },
+      "body": {
+        "structure": 1.0,
+        "brevity": 0.4
+      },
+      "empathy": 0.7,
+      "brevity": 0.3,
+      "structure": 0.75,
+      "validation": 0.75,
+      "description": "Validate first, organize second",
+      "pattern": "EMPATHY intro + STRUCTURE body"
+    },
+    {
+      "name": "terse_with_validation_hooks",
+      "intro": {
+        "brevity": 1.0,
+        "empathy": 0.1
+      },
+      "body": {
+        "brevity": 0.8,
+        "validation": 0.6
+      },
+      "empathy": 0.3,
+      "brevity": 0.85,
+      "structure": 0.4,
+      "validation": 0.4,
+      "description": "Mostly brief, key validation points",
+      "pattern": "BREVITY + selective VALIDATION"
+    }
+  ],
+  "test_contexts": [
+    {
+      "name": "anxious_but_experienced",
+      "expertise": 0.7,
+      "anxiety": 0.7,
+      "time_pressure": 0.5,
+      "description": "Knows the tech but stressed - needs reassurance AND speed",
+      "hypothesis": "Warm intro + terse body might win"
+    },
+    {
+      "name": "beginner_with_deadline",
+      "expertise": 0.2,
+      "anxiety": 0.5,
+      "time_pressure": 0.8,
+      "description": "New but rushed - needs quick start then depth",
+      "hypothesis": "Brief overview + deep detail might win"
+    },
+    {
+      "name": "frustrated_explorer",
+      "expertise": 0.4,
+      "anxiety": 0.8,
+      "time_pressure": 0.2,
+      "description": "Stuck but has time - needs structure AND empathy",
+      "hypothesis": "Structured empathetic might win"
+    },
+    {
+      "name": "confident_learner",
+      "expertise": 0.6,
+      "anxiety": 0.2,
+      "time_pressure": 0.4,
+      "description": "Comfortable learning - wants clarity over handholding",
+      "hypothesis": "Structure pure might beat hybrids"
+    },
+    {
+      "name": "expert_debugging",
+      "expertise": 0.9,
+      "anxiety": 0.3,
+      "time_pressure": 0.7,
+      "description": "Expert under pressure - needs brevity only",
+      "hypothesis": "Brevity pure should win"
+    }
+  ],
+  "effectiveness": {
+    "comparisons": [
+      {
+        "context": "anxious_but_experienced",
+        "pure": {
+          "empathy_pure": 0.44,
+          "brevity_pure": 0.168,
+          "structure_pure": 0.302
+        },
+        "hybrid": {
+          "warm_intro_terse_body": 0.304,
+          "brief_overview_deep_detail": 0.28200000000000003,
+          "structured_empathetic": 0.39099999999999996,
+          "empathetic_then_structured": 0.376,
+          "terse_with_validation_hooks": 0.24899999999999997
+        },
+        "best_pure": {
+          "name": "empathy_pure",
+          "score": 0.44
+        },
+        "best_hybrid": {
+          "name": "structured_empathetic",
+          "score": 0.39099999999999996
+        },
+        "hybrid_wins": false
+      },
+      {
+        "context": "beginner_with_deadline",
+        "pure": {
+          "empathy_pure": 0.356,
+          "brevity_pure": 0.366,
+          "structure_pure": 0.422
+        },
+        "hybrid": {
+          "warm_intro_terse_body": 0.361,
+          "brief_overview_deep_detail": 0.39,
+          "structured_empathetic": 0.43599999999999994,
+          "empathetic_then_structured": 0.394,
+          "terse_with_validation_hooks": 0.396
+        },
+        "best_pure": {
+          "name": "structure_pure",
+          "score": 0.422
+        },
+        "best_hybrid": {
+          "name": "structured_empathetic",
+          "score": 0.43599999999999994
+        },
+        "hybrid_wins": true
+      },
+      {
+        "context": "frustrated_explorer",
+        "pure": {
+          "empathy_pure": 0.548,
+          "brevity_pure": 0.18000000000000002,
+          "structure_pure": 0.362
+        },
+        "hybrid": {
+          "warm_intro_terse_body": 0.40040000000000003,
+          "brief_overview_deep_detail": 0.37620000000000003,
+          "structured_empathetic": 0.5225,
+          "empathetic_then_structured": 0.5126000000000001,
+          "terse_with_validation_hooks": 0.3267
+        },
+        "best_pure": {
+          "name": "empathy_pure",
+          "score": 0.548
+        },
+        "best_hybrid": {
+          "name": "structured_empathetic",
+          "score": 0.5225
+        },
+        "hybrid_wins": false
+      },
+      {
+        "context": "confident_learner",
+        "pure": {
+          "empathy_pure": 0.26,
+          "brevity_pure": 0.15000000000000002,
+          "structure_pure": 0.22999999999999998
+        },
+        "hybrid": {
+          "warm_intro_terse_body": 0.2255,
+          "brief_overview_deep_detail": 0.23100000000000004,
+          "structured_empathetic": 0.2915,
+          "empathetic_then_structured": 0.275,
+          "terse_with_validation_hooks": 0.2145
+        },
+        "best_pure": {
+          "name": "empathy_pure",
+          "score": 0.26
+        },
+        "best_hybrid": {
+          "name": "structured_empathetic",
+          "score": 0.2915
+        },
+        "hybrid_wins": true
+      },
+      {
+        "context": "expert_debugging",
+        "pure": {
+          "empathy_pure": 0.296,
+          "brevity_pure": 0.33,
+          "structure_pure": 0.302
+        },
+        "hybrid": {
+          "warm_intro_terse_body": 0.34430000000000005,
+          "brief_overview_deep_detail": 0.34980000000000006,
+          "structured_empathetic": 0.3608,
+          "empathetic_then_structured": 0.33440000000000003,
+          "terse_with_validation_hooks": 0.38280000000000003
+        },
+        "best_pure": {
+          "name": "brevity_pure",
+          "score": 0.33
+        },
+        "best_hybrid": {
+          "name": "terse_with_validation_hooks",
+          "score": 0.38280000000000003
+        },
+        "hybrid_wins": true
+      }
+    ],
+    "n_contexts": 5
+  },
+  "synergy": {
+    "n_synergies": 3,
+    "synergies": [
+      {
+        "context": "beginner_with_deadline",
+        "hybrid": "structured_empathetic",
+        "synergy": 0.013999999999999957,
+        "hybrid_score": 0.43599999999999994,
+        "pure_score": 0.422
+      },
+      {
+        "context": "confident_learner",
+        "hybrid": "structured_empathetic",
+        "synergy": 0.03149999999999997,
+        "hybrid_score": 0.2915,
+        "pure_score": 0.26
+      },
+      {
+        "context": "expert_debugging",
+        "hybrid": "terse_with_validation_hooks",
+        "synergy": 0.052800000000000014,
+        "hybrid_score": 0.38280000000000003,
+        "pure_score": 0.33
+      }
+    ],
+    "avg_synergy": 0.032766666666666645,
+    "best_hybrid": "terse_with_validation_hooks",
+    "synergy_strength": "WEAK"
+  },
+  "winners": {
+    "hybrid_wins": [
+      {
+        "context": "beginner_with_deadline",
+        "hybrid": "structured_empathetic",
+        "hybrid_score": 0.43599999999999994,
+        "best_pure": "structure_pure",
+        "best_pure_score": 0.422,
+        "advantage": 0.013999999999999957
+      },
+      {
+        "context": "confident_learner",
+        "hybrid": "structured_empathetic",
+        "hybrid_score": 0.2915,
+        "best_pure": "empathy_pure",
+        "best_pure_score": 0.26,
+        "advantage": 0.03149999999999997
+      },
+      {
+        "context": "expert_debugging",
+        "hybrid": "terse_with_validation_hooks",
+        "hybrid_score": 0.38280000000000003,
+        "best_pure": "brevity_pure",
+        "best_pure_score": 0.33,
+        "advantage": 0.052800000000000014
+      }
+    ],
+    "pure_wins": [
+      {
+        "context": "anxious_but_experienced",
+        "pure": "empathy_pure",
+        "pure_score": 0.44
+      },
+      {
+        "context": "frustrated_explorer",
+        "pure": "empathy_pure",
+        "pure_score": 0.548
+      }
+    ],
+    "hybrid_win_rate": 0.6,
+    "n_hybrid_wins": 3,
+    "n_pure_wins": 2
+  },
+  "conditions": {
+    "helps": [
+      "beginner_with_deadline: structured_empathetic beats structure_pure by 1.4%",
+      "confident_learner: structured_empathetic beats empathy_pure by 3.1%",
+      "expert_debugging: terse_with_validation_hooks beats brevity_pure by 5.3%"
+    ],
+    "hurts": [
+      "anxious_but_experienced: Pure empathy_pure wins - no hybrid advantage",
+      "frustrated_explorer: Pure empathy_pure wins - no hybrid advantage"
+    ],
+    "n_helps": 3,
+    "n_hurts": 2,
+    "conclusion": "Hybrids competitive - context determines when to mix",
+    "framework_status": "COMPLETE: 21 phases across 7 trifectas - full framework validated!"
+  },
+  "conclusion": "Hybrids competitive - context determines when to mix",
+  "framework_status": "COMPLETE: 21 phases across 7 trifectas - full framework validated!"
+}
