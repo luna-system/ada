@@ -53,7 +53,8 @@ class PromptAssembler:
         self,
         retriever: ContextRetriever | None = None,
         builder: SectionBuilder | None = None,
-        cache: MultiTimescaleCache | None = None
+        cache: MultiTimescaleCache | None = None,
+        rag_store_instance = None
     ):
         """Initialize with dependencies.
         
@@ -61,12 +62,13 @@ class PromptAssembler:
             retriever: ContextRetriever instance (creates default if None)
             builder: SectionBuilder instance (creates default if None)
             cache: Cache instance (creates default if None)
+            rag_store_instance: RagStore instance to pass to retriever
         """
         # Initialize cache first
         self.cache = cache or MultiTimescaleCache(config)
         
-        # Pass cache to retriever
-        self.retriever = retriever or ContextRetriever(cache=self.cache)
+        # Pass cache and rag_store to retriever
+        self.retriever = retriever or ContextRetriever(cache=self.cache, rag_store_instance=rag_store_instance)
         self.builder = builder or SectionBuilder()
         
         # Initialize token monitor (v2.0 Phase 2)
@@ -172,8 +174,7 @@ class PromptAssembler:
         if habituation_weight > 0:
             sections.append(persona_section)
             if self.token_monitor:
-                self.token_monitor.track("persona", persona_section, 
-                                       metadata={'habituation_weight': habituation_weight})
+                self.token_monitor.track("persona", persona_section)
         
         # Specialist results (tool outputs - high priority)
         if specialist_results:
@@ -260,8 +261,7 @@ class PromptAssembler:
             if habituation_weight > 0:
                 sections.append(faq_section)
                 if self.token_monitor:
-                    self.token_monitor.track("faqs", faq_section,
-                                           metadata={'habituation_weight': habituation_weight})
+                    self.token_monitor.track("faqs", faq_section)
         
         # Conversation history (recent turns)
         if turns:
@@ -293,7 +293,7 @@ class PromptAssembler:
             top_components = self.token_monitor.get_top_components(n=5)
             if top_components:
                 components_str = ", ".join(
-                    f"{name}={tokens.tokens}" for name, tokens in top_components
+                    f"{name}={tokens}" for name, tokens in top_components
                 )
                 logger.debug(f"Top token consumers: {components_str}")
             
