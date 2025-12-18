@@ -87,8 +87,15 @@ class SectionBuilder:
         
         formatted_turns = []
         for turn in turns:
-            role = turn.get("role", "unknown")
-            content = turn.get("content", "")
+            # Handle both tuple format (text, metadata) and dict format
+            if isinstance(turn, tuple):
+                # New format from retrieve_turns: (text, metadata)
+                content, metadata = turn
+                role = (metadata or {}).get("role", "unknown")
+            else:
+                # Old format (backwards compatibility): dict with 'role' and 'content'
+                role = turn.get("role", "unknown")
+                content = turn.get("content", "")
             
             # Map role to speaker label
             speaker = "User" if role == "user" else "Ada"
