@@ -1,0 +1,893 @@
+Meaning in context -- 0
+
+Meaning in Context:
+Metacognitive Experiences
+
+Norbert Schwarz
+University of Michigan
+
+Sep 2008
+
+The reference for this paper is:
+Schwarz, N. (2010). Meaning in context: Metacognitive experiences. In B. Mesquita, L. F. Barrett, & E. R.
+Smith (eds.), The mind in context (pp. 105 -125). New York: Guilford
+
+Address correspondence to Norbert Schwarz, Institute for Social Research, University of Michigan, Ann
+Arbor, MI 41806-1248; nschwarz@umich.edu
+
+Meaning in context -- 1
+As psychologists have long been aware, human cognition is highly context sensitive. How we
+perceive simple objects, comprehend texts and utterances, form evaluative judgments, make sense of
+othe s’ eha io and perform a myriad of other tasks is profoundly influenced by the immediate context
+in which the respective task is situated. To account for such influences, researchers commonly assume
+that the context influences the accessibility of applicable knowledge, which is brought to bear on the
+task at hand (for reviews see Förster & Liberman, 2007; Higgins, 1996). Under most natural conditions,
+this context sensitivity is adaptive by privileging information that is relevant in the cur rent situation at
+the expense of other information that may be less germane, given current circumstances (for
+discussions see Schwarz, 2007; Smith & Collins, this volume). However, the common focus on knowledge
+accessibility misses that there is more to thinking than what comes to mind.
+Thinking is accompanied by a host of subjective experiences, from metacognitive feelings of
+ease or difficulty to affective reactions and bodily sensations. As Higgins (1998) noted, people commonly
+assume that any thoughts that come to mind and any feelings they experience while thinking about
+something bear on what they are thinking about – or why else would they have these thoughts and
+feelings now, at this moment? Hence, people draw on their feelings as a source of information, unless
+they become aware that their feelings may be due to an irrelevant source, thus undermining the
+feeli g’s perceived relevance to the task at hand (for a review see Schwarz & Clore, 2007). Accordingly,
+e a
+
+ot p edi t a pe so ’s judg e ts o de isio s
+
+e el k o i g what came to mind without
+
+taking the accompanying subjective experiences into account. Adding further complexity, the meaning
+of subjective experiences is itself malleable and the same experience can convey different information in
+different contexts.
+The present chapter addresses a particular type of subjective experience, namely the
+metacognitive feelings that a ise f o
+
+o ito i g o e’s o
+
+og iti e processes. Not surprisingly,
+
+processing new information, retrieving information from memory and generating thoughts can be
+experienced as easy or difficult. Because numerous different variables – from environmental conditions
+and the i fo
+
+atio ’s presentation format to the nature of the task a d the pe so ’s knowledge and
+
+bodily state – can make processing easy or difficult, the specific meaning of the experience is ambiguous
+and requires interpretation: Is this text diffi ult to
+
+ake se se of e ause I’m distracted, because I know
+
+little about the topic, because the print font is hard to read or because the argument is utter nonsense?
+How people interpret their metacognitive experiences depends on which of many potentially relevant
+variables they attend to and which of many potentially applicable naïve theories of mental processes
+they bring to bear. In most cases, an applicable theory, entailing a specification of relevant variables, is
+
+Meaning in context -- 2
+brought to mind by the task they face; if not, it may be constructed on the spot to make sense of the
+experience in the given context. As in other domains of judgment, people are likely to rely on the most
+accessible theory without considering plausible alternatives, unless the first interpretation tried fails to
+yield a plausible result. This limited exploration of plausible alternatives is consistent with the
+assu ptio that ou feeli gs a e a out
+
+hate e is i the fo us of atte tio . As a result, the meaning
+
+of metacognitive experiences is itself highly malleable and context sensitive.
+As this discussion indicates, the role of contextual influences in judgment is more complex than
+the common focus on knowledge accessibility suggests. At the first level, contextual variables like
+previous exposure, primes or task characteristics influence what comes to mind, as assumed by
+knowledge accessibility models. At the second level, contextual variables also influence the
+metacognitive experience, that is, how easily information can be retrieved from memory, thoughts can
+be generated, or novel material can be processed, giving rise to differential inferences from the same
+declarative inputs. At the third level, contextual variables further influence how the metacognitive
+experience is interpreted, giving rise to differential inferences from the same experience with
+differential downstream implications for inferences from declarative inputs.
+The interplay between these different levels is the topic of the present chapter. The first section
+addresses the fluency with which new information can be processed, whereas the second section
+addresses the fluency of recall and thought generation. Both sections highlight how metacognitive
+experiences give rise to different inferences from declarative inputs and how naïve theories of the mind
+change the conclusions drawn from a given experience. The third section illustrates how metacognitive
+e pe ie es a affe t i di iduals’ hoi e of p o essi g st ategies. The hapte o ludes
+
+oti g
+
+parallels between the use of metacognitive experiences and other feelings as a source of information,
+placing the findings in the context of a general feelings-as-information approach to the interplay of
+declarative and experiential information (Schwarz, 1990; Schwarz & Clore, 2007). Throughout, the
+review is illustrative rather than exhaustive.
+
+THE EASE OF PROCESSING NEW INFORMATION:
+PROCESSING FLUENCY
+Numerous variables can influence the ease or difficulty with which new information can be
+processed. Some of these variables affect the speed and accuracy of low-level processes concerned with
+the identification of a stimulus' physical identity and form; they influence perceptual fluency (e.g.,
+Jacoby, Kelley & Dywan, 1989). Relevant variables include figure-ground contrast, the clarity with which
+
+Meaning in context -- 3
+a stimulus is presented, the duration of its presentation, or the amount of previous exposure to the
+stimulus. Other variables influence the speed and accuracy of high-level processes concerned with the
+identification of stimulus meaning and its relation to semantic knowledge structures; these variables
+influence conceptual fluency (e.g., Whittlesea, 1993). Relevant variables include semantic predictability,
+the consistency between the stimulus and its context, and the availability of appropriate mental
+concepts for stimulus classification. Empirically, both types of fluency tend to show parallel influences
+(for a review see Winkielman, Schwarz, Fazendeiro, & Reber, 2003) and can be subsumed under the
+general term processing fluency.
+What Does the Experience Mean?
+Because the diverse variables that influence processing fluency result in similar
+phenomenological experiences of fluent processing, the meaning of the experience is open to
+interpretation. Which interpretation people choose, and which inferences they draw from their
+experience, depends on which of many applicable naïve theories is brought to mind by the current
+context, most notably by the task posed. Some of these theories pertain to characteristics of the
+stimulus and presentation conditions, whereas othe s pe tai to o e’s o
+
+state of k o ledge.
+
+Stimulus-related theories include, for example, that it is easier to perceive a stimulus when it is
+shown with high rather than low clarity and for a long rather than short duration. These assumptions
+affect judgments of clarity and duration, even when the fluency experience is due to some other
+variable, like previous exposure to the stimulus. Hence, people who saw the stimulus before infer that
+the current presentation lasted longer, or had higher clarity, than people who were not previously
+exposed to the stimulus (e.g., Witherspoon & Allan, 1985; Whittlesea, Jacoby & Girard, 1990). Similarly,
+Masson and Caldwell (1998) observed that participants inferred that a target word was presented for a
+longer duration, or with higher visual clarity, when a preceding semantic task (e.g., complete the
+se te e, "A a he shoots a o a d ____" had e de ed the ta get o d a o
+
+highl a essi le.
+
+In these cases, fluency resulting from previous exposure to the stimulus or related concepts gave rise to
+erroneous inferences about physical characteristics of the stimulus once the physical judgment task
+brought an applicable theory to mind (see Kelley & Rhodes, 2002, for a review).
+Other naïve theories relate processi g flue
+
+to o e’s o
+
+state of k o ledge. The
+
+ost
+
+important one holds that familiar (previously seen) material is easier to process than novel material.
+Accordingly, people erroneously conclude that novel material is familiar when it is easy to process due
+to the influence of other variables. For example, Whittlesea and colleagues (1990) exposed participants
+to a study list of rapidly presented words. Subsequently, participants completed a recognition test that
+
+Meaning in context -- 4
+manipulated the fluency with which test words could be processed through differential visual clarity. As
+expected, test words shown with higher clarity seemed more familiar and were hence more likely to be
+e og ized as ha i g appea ed o the p e ious list. This effe t as eli i ated he pa ticipants were
+aware that the clarity of the visual presentation was manipulated and hence attributed their fluency
+experience to this source, rendering it uninformative for the recognition task.
+Fluency and Familiarity: Judgments of Risk, Consensus, and Truth
+Fluency-based impressions of familiarity have important implications for a wide range of
+judgments that are relevant in daily life, including assessments of risk, social consensus and truth.
+Judgments of Risk
+Not surprisingly, familiarity figures prominently in intuitive assessments of risk – if a stimulus is
+fa ilia a d eli its o egati e
+
+e o ies, it p esu a l has ’t hurt us in the past. Accordingly,
+
+i ide tal a ia les that affe t p o essi g flue
+
+a i flue e peoples’ isk assess e ts. Confirming
+
+this prediction, Song and Schwarz (in press a) observed that ostensible food additives were rated as
+more likely to be hazardous when their names were difficult (e.g., Fluthractnip) rather than easy (e.g.,
+Magnalroxate) to pronounce. Moreover, the effect of ease of pronunciation on risk ratings was
+mediated by the perceived novelty of the stimuli.
+Highlighting the real-world implications of this observation, Alter and Oppenheimer (2006)
+found that initial public offerings on the New York Stock Exchange provided a higher return on
+investment when their ticker symbol was easy (e.g., KAR) rather than difficult to pronounce (e.g., RDO).
+This effect was most pronounced on the first day of trading, when investing $1,000 in a basket of stocks
+with fluent ticker symbols would have yielded an excess profit of $85.35 over a basket with disfluent
+ticker symbols; this advantage was reduced to a still impressive $20.25 by the end of the first year of
+trading, as more information about the companies became available.
+In addition to the mediating role of perceived familiarity observed by Song and Schwarz (in press
+a), intuitive assessments of risk may be further affe ted
+
+pe ei e s’ positive affective response to
+
+fluently processed stimuli (addressed below), consistent with the observation of mood effects on
+judgment of risk (e.g., Johnson & Tversky, 1983) and the beneficial influence of sunny weather on the
+stock market (e.g., Hirshleifer & Schumway, 2003). Future research may fruitfully address the relative
+contributions of familiarity and affect in mediating the observed fluency effects.
+Social Consensus and Truth
+When the objective truth of a statement is difficult to evaluate, people often draw on social
+consensus information to arrive at a judgment, based on the assumption that what many people believe
+
+Meaning in context -- 5
+is p o a l t ue Festi ge , 9
+
+. To dete
+
+i e hethe the
+
+hea d it efo e, people
+
+a assess the
+
+apparent familiarity of the information, drawing on the fluency with which it can be processed as a
+relevant input (e.g., Weaver, Garcia, Schwarz, & Miller, 2007). If so, variables that increase processing
+fluency should increase the perceived truth value of the processed information. Empirically, this is the
+case.
+Not surprisingly, one relevant variable is actual exposure frequency. In a classic study of rumor
+transmission, Allport and Lepkin (1945) observed that the strongest predictor of belief in wartime
+rumors was simple repetition. Numerous subsequent studies demonstrated that a given statement is
+more likel to e judged t ue the
+
+o e ofte it is epeated. This illusio of t uth effe t Begg, A as, &
+
+Farinacci, 1992) has been obtained with trivia statements or words from a foreign language (e.g.,
+Hasher, Goldstein, & Toppino, 1977) as well as advertising materials (e.g., Hawkins & Hoch, 1992).
+Illusions of truth are even observed when participants are explicitly told at the time of exposure
+that the information is false. Skurnik, Yoon, Schwarz, and Park (2005) exposed older and younger adults
+once o th i e to p odu t state e ts like, “ha k a tilage is good fo
+state e ts e e e pli itl
+
+ou a th itis a d these
+
+a ked as t ue o false. As may be expected, all participants were less
+
+likely to accept a statement as true the more often they were told that it is false – but only when they
+were tested immediately. After a three-day delay, repeated warnings backfired for older adults: They
+were now more likely to assume that a statement is true, the more often they were explicitly told that it
+is false. This finding is consistent with the observation that explicit memory declines with age, whereas
+implicit memory remains largely intact (Park, 2000). Hence, after a three day delay, older adults could
+not recall whether the statement was originally marked as true or false, but still experienced its content
+as highly familiar, leading them to accept it as true. Ironically, this mechanism turns warnings into
+recommendations, with important implications for public education campaigns (for a review see
+Schwarz, Sanna, Skurnik, & Yoon, 2007).
+Theoretically, any other variable that increases processing fluency should have the same effect
+as message repetition. Supporting this prediction, Reber and Schwarz (1999) found that participants
+were more likely to accept statements like "Osorno is a city in Chile" as true when the statements were
+presented in colors that made them easy (e.g., dark blue) rather than difficult (e.g., light blue) to read
+against the background. Similarly, McGlone and Tofighbakhsh (2000) manipulated processing fluency by
+presenting substantively equivalent novel aphorisms in a rhyming (e.g., "woes unite foes") or nonrhyming form (e.g., "woes unite enemies"). As expected, participants judged substantively equivalent
+aphorisms as more true when they rhymed than when they did not.
+
+Meaning in context -- 6
+In combination, these findings indicate that processing fluency serves as an experiential basis of
+truth judgments. In the absence of more diagnostic information, people draw on the apparent
+familiarity of the statement to infer its likely truth value. This inference is based on the (usually correct)
+assumption that widely shared opinions are both more likely to be familiar and more likely to be correct
+than more idiosyncratic ones. Hence, if it seems like the hea d it efo e, the e’s p o a l so ethi g to
+it. By the same token, people should infer that apparently familiar information is likely to be false when
+they have reason to believe that false information is more common in the given context. Empirically,
+this is the case and flue
+
+a
+
+esult i i fe e es of t uth o false ess, depe di g o people’s
+
+assumptions about the prevalence of truth and falseness in the relevant environment (e.g., Skurnik,
+Schwarz, & Winkielman, 2000; Unkelbach, 2007).
+
+Fluency and Affect: Judgments of Preference and Beauty
+The judgment effects reviewed so far can be plausibly traced to inferences that are based on the
+experience of fluent processing itself. However, a second factor contributes to the pervasive influence of
+processing fluency. High processing fluency is experienced as pleasant and elicits a positive affective
+reaction that can be captured with psychophysiological measures (Winkielman & Cacioppo, 2001). The
+positive affective reaction, in turn, can itself serve as a basis of judgment, providing an alternative
+pathway for fluency effects that is particularly relevant to judgments of preference (Winkielman,
+Schwarz, Fazendeiro, & Reber, 2003). What is less clear is why processing fluency is experienced as
+affectively positive. Relevant proposals range from the adaptive value of a preference for familiar stimuli
+(Zajonc, 1968) to the adaptive value of fast stimulus identification (Winkielman, Schwarz, & Nowak,
+2002) and their empirical evaluation awaits further research.
+In his classic demonstration of the mere exposure effect, Zajonc (1968; for a review see
+Bornstein, 1989) showed that repeated exposure to a stimulus results in more positive evaluations and
+several researchers suggested that this observation is a function of increased processing fluency (e.g.,
+Jacoby et al., 1989; Seamon, Brody & Kauff, 1983). If so, any variable that facilitates fluent processing
+should also facilitate positive evaluations, even with a single exposure. Numerous studies support this
+prediction. For example, Reber, Winkielman, and Schwarz (1998) presented participants with slightly
+degraded pictures of everyday objects and manipulated processing fluency through a visual priming
+procedure. Depending on conditions, the target picture was preceded by a subliminally presented,
+highly degraded contour of either the target picture or a different picture. As predicted, pictures
+preceded by matched contours were recognized faster, indicating higher fluency, and were liked more
+
+Meaning in context -- 7
+than pictures preceded by mismatched contours. Extending this work, Winkielman and Fazendeiro
+(reported in Winkielman et al. 2003) showed participants unambiguous pictures of common objects and
+manipulated processing fluency through semantic primes. In the high fluency condition, the picture
+e.g., of a lo k
+asso iati el
+s o
+
+as p e eded
+
+a
+
+elated o d e.g., ke
+
+at hi g o d e.g., lo k , i the
+, a d i the lo flue
+
+o ditio
+
+ode ate flue
+
+o ditio
+
+a
+
+a u elated o d e.g.,
+
+. As p edi ted, pictures preceded by matching words were liked more than pictures preceded by
+
+related words, which, in turn, were liked more than pictures preceded by unrelated words. This positive
+effect of processing fluency was eliminated when participants attributed their positive affective
+response to music played in the background, as has previously been observed for the influence of
+moods (Schwarz & Clore, 1983).
+Lee and Labroo (2004; see also Labroo, Dhar, & Schwarz, 2008) obtained similar findings in the
+consumer domain. They found, for example, that consumers reported more positive attitudes toward
+ketchup when they were previously exposed to a closely related product (mayonnaise) rather than an
+unrelated one. Presumably, the closely related product facilitated processing of the target product,
+much as related semantic primes facilitated processing of the target pictures in Winkielman and
+Faze dei o’s stud .
+Numerous other variables that affect processing fluency produce parallel effects, from figureground contrast and presentation duration (e.g., Reber et al. 1998) to the prototypicality of the stimulus
+(e.g., Halberstadt & Rhodes 2000; Langlois & Roggman 1990). Moreover, the influence of many
+variables addressed in the psychology of aesthetics (Arnheim 1974), like figural goodness, symmetry,
+and information density, can be traced to the mediating role of processing fluency: All of these variables
+facilitate stimulus identification and elicit more positive evaluations. Based on these and related
+findings, Reber, Schwarz, and Winkielman (2004) proposed a fluency theory of aesthetic pleasure that
+assigns a central role to the perceiver's processing dynamics: The more fluently perceivers can process a
+stimulus, the more positive is their aesthetic response. This proposal provides an integrative account of
+diverse variables and traces their influence to the same underlying process. First, image variables that
+have long been known to influence aesthetic judgments, like figural goodness, figure-ground contrast,
+symmetry, and prototypicality, exert their influence by facilitating or impairing fluent processing of the
+stimulus. Second, perceiver variables, like a history of previous exposure or a motivational state to which
+the stimulus is relevant, similarly exert their influence through processing fluency. Third, contextual
+variables, like visual or semantic priming, that play no role in traditional theories of aesthetics operate in
+the same fashion and also affect aesthetic appreciation through their influence on processing fluency.
+
+Meaning in context -- 8
+Finally, it is worth noting that the relationship between perceived familiarity and affective
+response is bi-directional. As Monin (2003) demonstrated, stimuli that evoke a positive affective
+response are judged more familiar, even when fluency of processing is controlled for. Similarly, GarciaMarques and Mackie (2001) observed that participants in a good mood are more likely to perceive novel
+arguments as familiar, which may contribute to their acceptance as true.
+Summary
+In sum, processing fluency influences judgment through two related pathways. First, people
+attend to the dynamics of their own information processing and draw on the experience of fluent or
+disfluent processing as a source of information. What they conclude from their fluency experiences,
+however, depends on which of many potentially applicable naïve theories of information processing is
+brought to mind by contextual variables, most notably the task posed.
+Second, high fluency elicits spontaneous positive affective reactions, which provide further experiential
+information, paralleling the influence of moods and emotions. Neither source of experiential
+information exerts an influence when its informational value for the judgment at hand is called into
+question. This is the case when judges are aware that their fluency experience (for a review see Kelley &
+Rhodes, 2002) or apparent affective reaction to the target (for a review see Schwarz & Clore, 2007) is
+due to an irrelevant source.
+Finally, some phenomena are likely to reflect the operation of both processes. For example,
+studying the role of processing fluency in consumer choice, Novemsky and colleagues (2007) presented
+participants with descriptions of two digital cameras. As expected, participants were less likely to defer
+choice when the print font of the description was easy (56% deferral) rather than difficult to read (71%
+deferral), unless their attention was explicitly drawn to the font (57% deferral). This result may reflect
+that the described cameras seemed less attractive under low fluency conditions or that the information
+seemed less familiar and credible, both of which could contribute to a higher rate of deferral.
+THE EASE OF RECALL AND THOUGHT GENERATION:
+ACCESSIBILITY EXPERIENCES
+The same conceptual logic applies to the ease or difficulty of recall and thought generation.
+Information can be easy or difficult to bring to mind for many different reasons and what people
+conclude from these accessibility experiences depends on which of many naïve theories of mental
+processes they bring to bear. Some naïve theories link accessibility experiences to characteristics of the
+object of judgment, like the frequency or temporal distance of events, whereas others link them to the
+state of o e’s o
+
+k o ledge, like o e’s expertise or interest, or to characteristics of the current
+
+Meaning in context -- 9
+situation, like factors that may be distracting. Whenever the experience is attributed to a source that is
+irrelevant to the target judgment, its informational value is discredited and people draw on other inputs,
+usually the declarative information they brought to mind.
+What Does the Experience Mean?
+One widely applicable naïve theory holds that the more exemplars exist, the easier it is to bring
+some to mind. This correct belief is at the heart of T e sk a d Kah e a ’s
+
+97
+
+a aila ilit heu isti
+
+and people infer higher frequency and probability from ease of recall. Because frequent exemplars are
+also more typical for their category, ease of recall further suggests high typicality. Accordingly, people
+infer that they use their bicycles more often after recalling few rather than many instances (Aarts &
+Dijksterhuis, 1999); rate themselves as more assertive after recalling few rather than many of their own
+assertive behaviors (Schwarz et al., 1991); like Tony Blair more after listing few rather than many of
+favorable thoughts about him (Haddock, 2002); hold an attitude with more confidence after generating
+few rather than many supporting arguments (Haddock et al., 1999); consider an event more likely the
+more reasons they generate for why it might not have occurred (Sanna, Schwarz, & Stocker, 2002); and
+are more likely to defer choice after listing many rather than few reasons for making a choice
+(Novemsky et al., 2007).
+When people apply this naïve theory, their inferences are consistent with the implications of
+what comes to mind when recall or thought generation is easy, but opposite to these implications when
+it is difficult. Several lines of evidence indicate that these effects are due to metacognitive experiences
+rather than to differences in the quality of examples listed. First, external raters detect no quality
+difference between the first and last two examples listed (e.g., Schwarz et al., 1991). Second, yoked
+participants, who merely read the thoughts generated by another and are hence deprived of the
+generation experience, are more influenced when their partner lists many rather than few arguments, in
+contrast to the person who lists them (e.g., Wänke, Bless, & Biller, 1996). Third, and most important, the
+impact of metacognitive experiences is eliminated when the experience is misattributed to an external
+influence, like music played in the background. In this case, participants draw on accessible content, and
+rate themselves as more assertive the more examples of assertive behavior they listed, thus reversing
+the otherwise observed pattern (Schwarz et al., 1991; for conceptual replications see Haddock et al.,
+
+Meaning in context -- 10
+1999; Novemsky et al., 2007; Sanna, Schwarz, & Small, 2002).1 Finally, the same effect can be observed
+when all participants list the same number of thoughts and their subjective experience of difficulty is
+manipulated through facial feedback in the form of corrugator contraction, an expression associated
+with mental effort (e.g., Stepper & Strack, 1993; Sanna, Schwarz, & Small, 2002).
+Other naïve theories of memory correctly hold, for example, that it is easier to recall events that
+are well rather than poorly represented in memory; that one found important when they occurred; or
+that happened in the recent rather than distant past. Accordingly, people infer higher childhood
+amnesia after successfully recalling 12 rather than 4 childhood events (Winkielman, Schwarz, & Belli,
+1998) and consider past events less important, and date them as having occurred at a more distant
+time, after recalling many rather than few details (Schwarz & Xu, 2008). People further assume that it is
+easie to e all
+
+ate ial i o e’s do ai of interest and that a lack of expertise renders recall and
+
+thought generation difficult. Hence, they infer, for example, that they are not very interested in politics
+when they find it difficult to answer political knowledge question – unless they can attribute the
+difficulty to an external source, like a lack of media coverage (Schwarz & Schuman, 1997). Conversely,
+attributing any experienced diffi ult to o e’s la k of k o ledge e de s it uninformative judgments
+about states of the world (e.g., Sanna & Schwarz, 2003).
+Determinants and Consequences of Theory Selection
+Given that different naïve theories are applicable to the same accessibility experience, it is
+important to understand the determinants of their use. As in the case of fluency experiences, a key
+determinant is the judgment task itself, which recruits an applicable inference rule that allows the
+pe ei e to get f o
+
+he e the a aila le data to the e the judg e t of i te est . For example,
+
+Schwarz and Xu (2008 asked stude ts to list t o o si
+
+fi e Italia
+
+estau a ts i to
+
+. Whe fi st
+
+asked how many fine Italian restaurants the city has, they inferred from the difficulty of listing six that
+the e a ’t e
+
+a . This i fe e e is o siste t ith T e sk a d Kah e a ’s
+
+97
+
+a aila ilit
+
+These findings also bear on Tormala a d olleagues’
+7 o se atio that pa ti ipa ts ho attempt
+to list many thoughts may also have more unrequested thoughts; for example, those asked to list many
+favorable thoughts may also find a larger number of unfavorable thoughts coming to mind. They
+suggested that these unrequested thoughts, rather than the experience of difficulty per se, may drive
+the e ie ed effe ts. If so, the patte of pa ti ipa ts’ judg e ts should ot e e se he the
+diagnostic value of the metacognitive experience is called into question – att i uti g o e’s diffi ult to
+background music (Schwarz et al., 1991), for example, does nothing to discredit the substantive
+relevance of any unrequested thoughts one might have had. While unrequested thoughts are probably
+part and parcel of the experience of difficulty, they do not provide a coherent account of the available
+findings.
+1
+
+Meaning in context -- 11
+heuristic. However, when first asked how much they know about town, they inferred from the same
+difficulty that they are quite unfamiliar with their college town. Theoretically, each of these judgments
+entails an attribution of the recall experience to a specific source, either to the number of restaurants in
+town o to o e’s o
+
+e pe tise. O e this i pli it att i utio is
+
+ade, the e pe ie e is e plai ed a d
+
+should become uninformative for judgments that require a different theory, making it likely that people
+turn to accessible thought content instead. Confirming this prediction, participants who first concluded
+that there are few fine Italian restaurants in town subsequently reported high expertise—after all, there
+a e ’t
+
+a
+
+su h estau a ts a d the
+
+e e theless ould list uite a fe , so the
+
+ust k o a lot
+
+about town. Conversely, those who first concluded that their difficulty reflects a lack of knowledge
+subsequently inferred that there are many fine Italian restaurants—after all, they had listed quite a few
+and they did ’t even know much about town.
+In a conceptual replication, Schwarz and Xu (2008) asked participants to recall details of the
+Oklahoma City bombing. When first asked to date the event, they inferred that it was more recent after
+recalling two rather than ten details; but when first asked how important the event was to them at the
+time, they inferred higher importance after recalling two rather than ten details. Again, these judgments
+entail an attribution of the experience to a specific cause (here, recency or importance), rendering the
+experience uninformative for other judgments. Accordingly, participants who initially attributed the
+diffi ult of e alli g
+
+a
+
+details to the e e t’s te po al dista e su se ue tl
+
+epo ted that the
+
+event was quite important to them–-after all, they had just recalled numerous details even though the
+event had apparently happened long ago. Conversely, participants who initially attributed difficulty of
+recall to low personal importance subsequently dated the event as closer in time – after all, they could
+still recall numerous details despite the e e t’s lo pe so al i po ta e.
+Summary
+In sum, recall and thought generation can be experienced as easy or difficult. What people
+conclude from these accessibility experiences depends on which of many potentially applicable naïve
+theories of memory and cognition is brought to mind by the present context. In most cases, applicable
+theories are recruited by the judgment task and the same experience can result in different substantive
+conclusions, depending on the specific theory applied. Moreover, every theory-based judgment entails a
+causal attribution of the experience to the source specified in the naïve theory. Accordingly, the first
+judgment can serve as a context that undermines the informational value of the experience for later
+judgments that require the application of a different theory, much as has been observed for other
+(mis)attribution manipulations (for a review see Schwarz & Clore, 2007). Once the informational value of
+
+Meaning in context -- 12
+the experience is called into question, people turn to the content of their thoughts as an alternative
+source of information. Hence, subsequent judgments are content rather than experience based,
+resulting in a reversal of the otherwise observed effects.
+While numerous studies converge on the conclusion that people will only rely on their
+metacognitive experiences when their informational value is not called into question (Schwarz & Clore,
+2007), less is known about the conditions that determine the relative impact of experiential and
+declarative information. On the one hand, some findings are compatible with a conceptualization of
+metacognitive experiences as heuristic cues that are more likely to dominate judgment when processing
+motivation (e.g., Rothman & Schwarz, 1998) or capacity (e.g., Greifeneder & Bless, 2008) are low. On the
+othe ha d, flue t p o essi g usuall i
+
+eases people’s o fide e i the o te t of thei thoughts
+
+(e.g., by suggesting high expertise or a large body of supportive evidence), which exerts more influence
+on judgment when processing motivation and capacity are high (for a review see Petty et al., 2007).
+Hence, metacognitive experiences are likely to influence judgment under heuristic/intuitive as well as
+systematic/analytic processing conditions. A systematic exploration of these contingencies promises
+further insight into the contextualized interplay of experiential and declarative information in human
+reasoning.
+METACOGNITIVE EXPERIENCES AND THE CHOICE OF PROCESSING STRATEGIES
+As already seen, people draw on their metacognitive experiences to assess their own knowledge
+and various task characteristics. These assessments also inform their choice of processing strategies.
+When asked to answer a question, for example, people may feel that they know the correct answer
+even though they are currently unable to bring it to mind. In many cases, this feeling of knowing is based
+on the ease with which partial information comes to mind (Koriat, 1993); in other cases it is based on
+the apparent familiarity of the cues provided in the question (Reder & Ritter, 1992). In either case,
+people are more likely to engage in detailed retrieval efforts the higher their feeling of knowing (e.g.,
+Costermans, Lories, & Ansay, 1992). On the other hand, easy retrieval of a plausible answer results in
+high confidence and truncates the search process, making more detailed scrutiny of the answer unlikely
+(for a discussion see Petty, Brinol, Tormala, & Wegener, 2007).
+While the a o e p o essi g de isio s a e ased o assess e ts of o e’s own knowledge,
+metacognitive experiences are likely to inform a wide range of strategy choices, a possibility that awaits
+systematic investigation. In general, people prefer processing strategies that have been characterized as
+analytic, systematic, bottom-up and detail-oriented when they consider their current situation
+p o le ati ,
+
+ut p efe st ategies that ha e ee
+
+ha a te ized as i tuiti e, heu isti , a d top-down
+
+Meaning in context -- 13
+he the
+
+o side thei u e t situatio as
+
+e ig
+
+(Schwarz, 1990). Numerous variables, from task
+
+characteristics to incidental environmental cues, moods, and bodily approach or avoidance feedback can
+convey this information and have been found to influence processing style (for reviews see Schwarz,
+2002; Schwarz & Clore, 2007). One of these variables is the fluency with which information can be
+p o essed. Fo e a ple, he asked, Ho
+
+a
+
+a i als of ea h ki d did Moses take o the a h?
+
+ost people a s e t o despite k o i g that the i li al a to
+
+as Noah (Erickson & Mattson, 1981).
+
+Presenting this Moses question in a difficult to read print font dramatically reduces reliance on the first
+answer that comes to mind and increases the recognition that the question cannot be answered as
+asked; on the other hand, a difficult to read print font impairs performance when the first spontaneous
+association is correct (Song & Schwarz, in press b). Both observations presumably reflect that familiar
+questions, and the associations they bring to mind, receive less scrutiny than unfamiliar ones. Similarly,
+Alter, Oppenheimer, Epley, and Norwick (2007) reported that manipulations that increased subjective
+p o essi g diffi ult i p o ed pa ti ipa ts’ pe fo
+
+a eo
+
+easo i g tasks that e efit f o
+
+a
+
+oe
+
+analytic processing style.
+Note, however, that the influence of metacognitive experiences on strategy choice is bound to
+be as malleable as their influence on judgment. Inferring that the task is unfamiliar, for example, may
+abort any attempt to engage in effortful analytic processing when the task seems to require background
+knowledge that one is likel to la k, gi e the task’s lo fa ilia it . Future research may fruitfully
+explore how contextual variables that shape the inferences drawn from a given metacognitive
+experience affect subsequent strategy choices.
+CODA
+After decades of pervasive "neglect of conscious experience" (Tulving, 1989, p. 4), it is now
+increasingly acknowledged that an understanding of human cognition requires attention to the
+subjective experiences that accompany cognitive processes. Consideration of these experiences adds
+e
+
+o ple it to theo izi g a out the
+
+i di
+
+o te t, e e if e li it the o te t to the i
+
+ediate
+
+task environment and ignore the broader social and cultural context in which it is embedded. As
+numerous social cognition studies into the effects of knowledge accessibility demonstrated (for reviews
+see Higgins, 1996; Förster & Liberman, 2007), contextual variables influence what comes to mind and
+which declarative information is used in forming a judgment. Knowing the accessible declarative inputs,
+however, is insufficient to predict the final judgment because the implications of the declarative
+information are qualified by accompanying subjective experiences (Schwarz & Clore, 2007), including
+the metacognitive experiences reviewed in this chapter. These metacognitive experiences, in turn, are
+
+Meaning in context -- 14
+themselves a function of contextual variables that influence how easily information can be retrieved
+from memory, thoughts can be generated, or novel material can be processed. Moreover, what people
+conclude from the experience of easy or difficult processing depends on which of many potentially
+applicable naïve theories of mental processes they bring to bear, which is again a function of contextual
+variables, most notably the task on their mind. Finally, application of a given theory to form an initial
+judgment entails an attribution of the experience to a specific source, which renders the experience
+uninformative for subsequent judgments that require the application of a different theory. Hence, the
+final judgment emerges from a systematic interplay of accessible declarative and experiential inputs,
+each of which is subject to multiple contextual influences – and a minor change in context, like the order
+in which two questions are asked (Schwarz & Xu, 2008), may be sufficient to reverse the otherwise
+obtained outcome.
+What are we to make of this contextual malleability of human judgment? Taking the reviewed
+experiments at face value, our perception of reality is subject to numerous haphazard influences,
+leaving one to wonder how we make it through the day. From a broader perspective however, the
+observed contextual malleability is compatible with the assumption that thinking is for doing (James,
+1890), which requires high sensitivity to the context in which things are to be done (see Smith & Collins,
+this volume). Hence, information that is relevant in a given context should indeed be privileged at the
+expense of less relevant information, making context dependent knowledge accessibility an adaptive
+feature. The accompanying metacognitive experience that the information comes to mind easily may
+further highlight its relevance, giving it an advantage over less accessible and presumably less relevant
+information. Similarly, the fluency with which new information can be processed will indeed often
+reflect previous exposure, making it a valid indicator of familiarity. Moreover, the meaning that we
+impose on a given metacognitive experience should indeed be the meaning that is most relevant to the
+task at hand and the recruitment of task-relevant naïve theories facilitates this. From this perspective,
+the basic processes identified in the present chapter are adaptive rather than dysfunctional.
+Unfortunately, however, this is only part of the story. While we are very sensitive to our
+subjective experiences, we are utterly insensitive to their source. We mistake our pre-existing moods as
+our reaction to the object of judgment (e.g., Schwarz & Clore, 1983), fail to recognize that recall is only
+difficult because we are asked to recall too large a number of examples (e.g., Schwarz et al., 1991), and
+we misread the fluency resulting from easy or difficult to read presentation formats (e.g., Reber &
+Schwarz, 1999) as indicative of the actual familiarity of the material. Throughout, we treat our thoughts
+and feelings as bearing on the specific task at hand and rarely consider the possible influence of
+
+Meaning in context -- 15
+incidental variables, unless our attention is explicitly drawn to them (Higgins, 1998; Schwarz, 1990).
+While the resulting errors of judgment may be less common in the wild than in experiments with
+carefully managed incidental influences, the emergence of fluency (Alter & Oppenheimer, 2006) and
+mood (Hirshleifer & Shumway, 2003) effects on stock prices illustrates that they are certainly not
+restricted to laboratory studies with inconsequential tasks. Being blissfully unaware of incidental
+influences and alternative interpretations, we experience our judgments as a compelling reflection of
+reality, although a different question may result in the construction of a different reality from the same
+inputs – a naïve realism that protects us from a continuous sense of uncertainty (see Dunham & Banaji,
+this volume, and Ross & Ward, 1996, for related discussions).
+
+Meaning in context -- 16
+REFERENCES
+Aarts, H. & Dijksterhuis, A. (1999). How often did I do it? Experienced
+ease of retrieval and frequency estimates of past behavior. Acta Psychologica, 103, 77-89.
+Allport, F.H., & Lepkin, M. (1945). Wartime rumors of waste and special privilege: Why some
+people believe them. Journal of Abnormal and Social Psychology, 40, 3-36.
+Alter, A. L. & Oppenheimer, D. M. (2006). Predicting short-term stock fluctuations by using
+processing fluency. Proceedings of the National Academy of Science, 103, 9369-9372.
+Alter, A. A., Oppenheimer, D. M., Epley, N., & Norwick, R. (2007). Overcoming intuition:
+Metacognitive difficulty activates analytic reasoning. Unpublished manuscript, Princeton University.
+Arnheim, R. (1974). Art and visual perception: A psychology of the creative eye. Berkeley, CA:
+University of California Press.
+Begg, I. M., Anas, they are certainly not restricted to experiments as A., & Farinacci, S. (1992).
+Dissociation of processes in belief: Source recollection, statement familiarity, and the illusion of truth.
+Journal of Experimental Psychology: General, 121, 446-458.
+Bornstein, R. F. (1989). Exposure and affect: Overview and meta-analysis of research 1968-1987.
+Psychological Bulletin, 106, 265-289.
+Cacioppo, J. T., Petty, R. E., Losch, M. E., & Kim, H. S. (1986). Electromyographic activity over
+facial muscle regions can differentiate the valence and intensity of affective reactions. Journal of
+Personality and Social Psychology, 50, 260-268.
+Costermans, J., Lories, G., & Ansay, C. (1992). Confidence level and feeling of knowing in
+question answering. Journal of Experimental Psychology: Learning, Memory, and Cognition, 18, 142-150.
+Dunham, Y., & Banaji, M. R. (in press). Platonic blindness and the challenge of understanding
+context. In L. Feldman Barrett, B. Mesquita, & E.R. Smith (eds.), The mind in context (pp. 00 – 00). New
+York: Guilford.
+Erickson, T. A., & Mattson, M. E. (1981). From words to meaning: A semantic illusion. Journal of
+Verbal Learning and Verbal Behavior, 20, 540-552.
+Festinger, L. (1954). A theory of social comparison processes. Human Relations, 7, 123-146.
+Florack, A., & Zoabi, H. (2003). Risikoverhalten bei Aktiengeschäften: Wenn Anleger nachdenklich
+werden. [Risk behavior in share transactions: When investors think about reasons.] Zeitschrift für
+Sozialpsychologie, 34, 65-78.
+Förster, J., & Liberman, N. (2007). Knowledge activation. In A. Kruglanski & E. T. Higgins (eds.),
+Social psychology. Handbook of basic principles (2nd ed.; pp. 201-231). New York: Guilford.
+
+Meaning in context -- 17
+Garcia-Marques, T., & Mackie, D.M. (2001). The feeling of familiarity as a regulator of persuasive
+processing. Social Cognition, 19, 9-34.
+Goldinger, S.D., Kleider, H.M., & Shelley, E. (1999). The marriage of perception and memory:
+Creating two-way illusions between words and voices. Memory & Cognition, 27, 328-338.
+Greifeneder, R. & Bless, H. (2007). Relying on accessible content vs. accessibility experiences:
+The case of processing capacity. Social Cognition, 25, 853-881.
+Haddo k, G.
+
+. It’s eas to like o dislike To
+
+Blai : A essi ilit e pe ie es a d the
+
+favorability of attitude judgments. British Journal of Social Psychology, 93, 257-267.
+Haddock, G., Rothman, A.J., Reber, R., & Schwarz, N. (1999). Forming judgments of attitude
+certainty, importance, and intensity: The role of subjective experiences. Personality and Social
+Psychology Bulletin, 25, 771-782.
+Halberstadt, J., & Rhodes, G. (2000). The attractiveness of nonface average: Implications for an
+evolutionary explanation of the attractiveness of average faces. Psychological Science, 11, 285-289.
+Hasher, L., Goldstein, D., & Toppino, T. (1977). Frequency and the conference of referential
+validity. Journal of Verbal Learning and Verbal Behavior, 16, 107-112.
+Hawkins, S.A., & Hoch, S.J. (1992). Low-involvement learning: Memory without evaluation.
+Journal of Consumer Research, 19, 212-225.
+Higgins, E. T. (1996). Knowledge activation: Accessibility, applicability, and salience. In E. T.
+Higgins & A. Kruglanski (Eds.), Social psychology: Handbook of basic principles (pp. 133-168). New York:
+Guilford Press.
+Higgins, E. T. (1998). The aboutness principle: A pervasive influence on human inference. Social
+Cognition, 16, 173-198.
+Hirshleifer, D., & Shumway, T. (2003). Good day sunshine: Stock returns and the weather.
+Journal of Finance,58, 1009-1032.
+Jacoby, L. L., Allan, L. G., Collins, J. C., Larwill, L. K. (1988). Memory influences subjective
+experience: Noise judgments. Journal of Experimental Psychology: Learning, Memory, and Cognition, 14,
+240-247.
+Jacoby, L.L., Kelley, C.M., Brown, J., & Jaseschko, J. (1989). Becoming famous overnight: Limits
+on the ability to avoid unconscious influences of the past. Journal of Personality and Social Psychology,
+56, 326-338.
+
+Meaning in context -- 18
+Jacoby, L. L., Kelley, C. M., & Dywan, J. (1989). Memory attributions. In H.L. Roediger, & F.I.M.
+Craik (Eds.), Varieties of memory and consciousness: Essays in honour of Endel Tulving (pp. 391-422).
+Hillsdale, NJ: Erlbaum.
+Johnson, E., & Tversky, A. (1983). Affect, generalization, and the perception of risk. Journal of
+Personality and Social Psychology, 45, 20-31.
+Kelley, C. M., & Rhodes, M. G. (2002). Making sense and nonsense of experience: Attributions in
+memory and judgment. The Psychology of Learning and Motivation, 41, 293-320.
+Koriat, A. (1993). How do we know that we know? The accessibility model of the feeling of
+knowing. Psychological Review, 100, 609-639.
+Labroo, A. A., Dhar, R., & Schwarz, N. (2008). Of frog wines and smiling watches: Semantic
+priming of perceptual features and brand evaluation. Journal of Consumer Research, 34, 819-831.
+Langlois, J. H., & Roggman, L.A. (1990). Attractive faces are only average. Psychological Science,
+1, 115-121.
+Lee, A.Y., & Labroo, A.A. (2004). The effect of conceptual and perceptual fluency on brand
+evaluation. Journal of Marketing Research, 41, 151-165.
+Masson, M.E.J., & Caldwell, J.I. (1998). Conceptually driven encoding episodes create perceptual
+misattributions. Acta Psychologica, 98, 183-210.
+McGlone, M. S., & Tofighbakhsh, J. (2000). Birds of a feather flock conjointly (?): Rhyme as
+reason in aphorisms. Psychological Science, 11, 424-428.
+Monin, B. (2003). The warm glow heuristic: When liking leads to familiarity. Journal of
+Personality and Social Psychology, 85, 1035-1048.
+Novemsky, N., Dhar, R., Schwarz, N., & Simonson, I. (2007). Preference fluency in choice. Journal
+of Marketing Research, 44, 347-356.
+Park, D.C. (2000). The basic mechanisms accounting for age-related decline in cognitive function.
+In Park, D. C. & Schwarz, N. (Eds). Cognitive aging: A primer (pp 3-22). Philadelphia, PA: Psychology
+Press.
+Petty, R.E., Brinol, P., Tormala, Z.L., & Wegener, D.T. (2007). The role of metacognition in social
+judgment. In A. Kruglanski & E. T. Higgins (eds.), Social psychology. Handbook of basic principles (2nd ed.;
+pp. 254-284). New York: Guilford.
+Reber, R., & Schwarz, N. (1999). Effects of perceptual fluency on judgments of truth.
+Consciousness and Cognition, 8, 338-342.
+
+Meaning in context -- 19
+Reber, R., Schwarz, N., & Winkielman, P. (2004). Processing fluency and aesthetic pleasure: Is
+beauty in the perceiver's processing experience? Personality and Social Psychology Review, 8, 364-382.
+Reber, R., Winkielman P., & Schwarz N. (1998). Effects of perceptual fluency on affective
+judgments. Psychological Science, 9, 45-48.
+Reder, L. M., & Ritter, F.E. (1992). What determines initial feelings of knowing? Familiarity with
+question terms, not with answers. Journal of Experimental Psychology: Learning, Memory, &
+Cognition,18, 435-451.
+Ross, L., & Ward, A. (1996). Naïve realism in everyday life: Implications for social conflict and
+misunderstanding. In E. S. Reed, E. Turiel, & T. Brown (eds.), Values and knowledge (pp. 103-135).
+Hillsdale, NJ: Erlbaum.
+Rothman, A. J., & Schwarz, N. (1998). Constructing perceptions of vulnerability: Personal
+relevance and the use of experiential information in health judgments. Personality and Social Psychology
+Bulletin, 24, 1053-1064.
+Ruder, M., & Bless, H. (2003). Mood and the reliance on the ease of retrieval heuristic. Journal of
+Personality and Social Psychology, 85, 20-32.
+Sanna, L.J., & Schwarz, N. (2003). Debiasing hindsight: The role of accessibility experiences and
+attributions. Journal of Experimental Social Psychology, 39, 287-295.
+Sanna, L., Schwarz, N., & Small, E. (2002). Accessibility experiences and the hindsight bias: Iknew-it-all-along versus It-could-never-have-happened. Memory & Cognition, 30, 1288-1296.
+Sanna, L.J., Schwarz, N., & Stocker, S.L. (2002). When debiasing backfires: Accessible content and
+accessibility experiences in debiasing hindsight. Journal of Experimental Psychology: Learning, Memory,
+Cognition, 28, 497-502.
+Schwarz, N. (1990). Feelings as information: Informational and motivational functions of
+affective states. In E. T. Higgins & R. M. Sorrentino (Eds.), Handbook of motivation and cognition:
+Foundations of social behavior (Vol. 2; pp. 527-561). New York, NY: Guilford Press.
+Schwarz, N. (2002). Situated cognition and the wisdom of feelings: Cognitive tuning. In L.
+Feldman Barrett & P. Salovey (Eds.), The wisdom in feelings (pp.144-166). New York: Guilford.
+Schwarz, N. (2007). Attitude construction: Evaluation in context. Social Cognition, 25, 638-656.
+Schwarz, N., Bless, H., Strack, F., Klumpp, G., Rittenauer-Schatka, H., & Simons, A. (1991). Ease
+of retrieval as information: Another look at the availability heuristic. Journal of Personality and Social
+Psychology, 61, 195-202.
+
+Meaning in context -- 20
+Schwarz, N., & Clore, G.L. (1983). Mood, misattribution, and judgments of well-being:
+Informative and directive functions of affective states. Journal of Personality and Social Psychology, 45,
+513-523.
+Schwarz, N., & Clore, G. L. (2007). Feelings and phenomenal experiences. In A. Kruglanski & E. T.
+Higgins (eds.), Social psychology. Handbook of basic principles (2nd ed.; pp. 385-407). New York: Guilford.
+Schwarz, N., Sanna, L., Skurnik, I., & Yoon, C. (2007). Metacognitive experiences and the
+intricacies of setting people straight: Implications for debiasing and public information campaigns.
+Advances in Experimental Social Psychology, 39, 127-161.
+Schwarz, N., & Schuman, H. (1997). Political knowledge, attribution, and inferred political
+interest: The operation of buffer items. International Journal of Public Opinion Research, 9, 191-195.
+Schwarz, N., & Xu, J. (2008). Constructing heuristics on the spot: Divergent inferences from ease
+of recall. Manuscript, University of Michigan.
+Seamon, J. G., Brody, N., & Kauff, D. M. (1983). Affective discrimination of stimuli that are not
+recognized: Effects of shadowing, masking, and central laterality. Journal of Experimental Psychology:
+Learning, Memory and Cognition, 9, 544-555.
+Simonson, I. (1989). Choice based on reasons: The case of attraction and compromise effects.
+Journal of Consumer Research, 16, 158-174.
+Sinclair, R.C., Soldat, A.S., & Mark, M. M. (1998). Affective cues and processing strategy: Color
+coded forms influence performance. Teaching of Psychology, 25, 130-132.
+Skurnik, I., Schwarz, N., & Winkielman, P. (2000). Drawing inferences from feelings: The role of
+naive beliefs. In H. Bless & J. Forgas (Eds.), The message within: The role of subjective experience in social
+cognition and behavior (pp. 162-175). Philadelphia, PA: Psychology Press.
+Skurnik, I., Yoon, C., Park, D.C., & Schwarz, N. (2005). How warnings about false claims become
+recommendations. Journal of Consumer Research, 31, 713-724.
+Smith, E.R., & Collins, E.C. (in press). Situated cognition. In L. Feldman Barrett, B. Mesquita, &
+E.R. Smith (eds.), The mind in context (pp. 00 – 00). New York: Guilford.
+Smith, E.R., & Semin, G.R. (2004). Socially situated cognition: Cognition in its social context.
+Advances in Experimental Social Psychology, 36, 53-117.
+Song, H., & Schwarz, N. (in press a). If it’s difficult-to-pronounce, it must be risky: Processing
+fluency and risk perception. Psychological Science.
+Song, H., & Schwarz, N. (in press b). Fluency and the detection of distortions: Low processing
+fluency attenuates the Moses illusion. Social Cognition.
+
+Meaning in context -- 21
+Stepper, S., & Strack F. (1993). Proprioceptive determinants of emotional and nonemotional
+feelings. Journal of Personality and Social Psychology, 64, 211-220.
+Tormala, Z.L., Petty, R.E., & Brinol, P. (2002). Ease of retrieval effects in persuasion: A selfvalidation analysis. Personality and Social Psychology Bulletin, 28, 1700-1712.
+Tormala, Z. L., Falces, C., Brinol, P., & Petty, R.E. (2007). Ease of retrieval effects in social
+judgment: The role of unrequested cognitions. Journal of Personality and Social Psychology, 93,143-157.
+Tulving, E. (1989). Memory: Performance, knowledge, and experience. European Journal of
+Cognitive Psychology, 1, 3-26.
+Tversky, A., & Kahneman, D. (1973). Availability: A heuristic for judging frequency and
+probability. Cognitive Psychology, 5, 207-232.
+Unkelbach, C. (2007). Reversing the truth effect: Learning the interpretation of processing
+fluency in judgments of truth. Journal of Experimental Psychology: Learning, Memory, and Cognition, 33,
+219-230.
+Wänke, M., Bless, H., & Biller, B. (1996). Subjective experience versus content of information in
+the construction of attitude judgments. Personality and Social Psychology Bulletin, 22, 1105-1113.
+Wänke, M., Bohner, G., & Jurkowitsch, A. (1997). There are many reasons to drive a BMW Surely you know one: Ease of Argument Generation influences Brand Attitudes. Journal of Consumer
+Research, 24, 70-77
+Weaver, K., Garcia, S.M., Schwarz, N., & Miller, D. T. (2007). Inferring the popularity of an
+opinion from its familiarity: A repetitive voice can sound like a chorus. Journal of Personality and Social
+Psychology, 92, 821-833.
+Whittlesea, B. W. A. (1993). Illusions of familiarity. Journal of Experimental Psychology: Learning,
+Memory, and Cognition, 19, 1235-1253.
+Whittlesea, B. W. A., Jacoby, L. L., & Girard, K. (1990). Illusions of immediate memory: Evidence
+of an attributional basis for feelings of familiarity and perceptual quality. Journal of Memory and
+Language, 29, 716-732.
+Winkielman, P. & Cacioppo, J. T. (2001). Mind at ease puts a smile on the face:
+Psychophysiological evidence that processing facilitation leads to positive affect. Journal of Personality
+and Social Psychology, 81, 989–1000.
+Winkielman, P., Schwarz, N., & Belli, R.F. (1998). The role of ease of retrieval and attribution in
+memory judgments: Judging your memory as worse despite recalling more events. Psychological
+Science, 9, 124-126.
+
+Meaning in context -- 22
+Winkielman, P., Schwarz, N., Fazendeiro, T, & Reber, R. (2003). The hedonic marking of
+processing fluency: Implications for evaluative judgment. In J. Musch & K.C. Klauer (eds.), The
+psychology of evaluation: Affective processes in cognition and emotion (pp. 189-217). Mahwah, NJ:
+Erlbaum.
+Winkielman, P., Schwarz, N., & Nowak, A. (2002). Affect and processing dynamics. In S. Moore &
+M. Oaksford (eds.), Emotional cognition (Advances in Consciousness Research, Vol. 44, pp. 111-138).
+Amsterdam, NL: John Benjamins.
+Witherspoon, D., & Allan, L.G. (1985). The effects of a prior presentation on temporal
+judgments in a perceptual identification task. Memory and Cognition, 13, 103-111.
+Zajonc, R.B. (1968). Attitudinal effects of mere exposure. Journal of Personality and Social
+Psychology: Monograph Supplement, 9, 1-27.
+
+

@@ -6,6 +6,14 @@
 
 ## Quick Navigation
 
+### 🚀 Handoff Briefs (For Context Transitions)
+**[→ handoffs/ directory](handoffs/README.md)** - Model-to-model continuity briefs
+- **[phase-handoff-4-5.md](handoffs/phase-handoff-4-5.md)** - Phase 4 complete → Phase 5 ready (CURRENT)
+- **[phase-handoff-9-22.md](handoffs/phase-handoff-9-22.md)** - Research program summary
+- **[phase-handoff-5-5.md](handoffs/phase-handoff-5-5.md)** - Code refactoring summary
+
+**👉 START HERE if you're a fresh AI model taking over!**
+
 ### Core Reference (Always Up-to-Date)
 - **[context.md](context.md)** - Architecture overview, data flow, service topology
 - **[codebase-map.json](codebase-map.json)** - Module dependency graph, import relationships
