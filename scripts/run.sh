@@ -13,6 +13,27 @@ BLUE='\033[0;34m'
 YELLOW='\033[1;33m'
 NC='\033[0m' # No Color
 
+# If repository uses Nix flakes, try to update flake.lock to refresh any outdated inputs
+if [ -f flake.lock ]; then
+    echo -e "${BLUE}🔄 flake.lock detected — attempting to update to refresh inputs...${NC}"
+    if command -v nix >/dev/null 2>&1; then
+        # Try the more explicit recreate option first (newer nix)
+        if nix flake update --recreate-lock-file 2>/dev/null; then
+            echo -e "${GREEN}✓ flake.lock recreated successfully${NC}"
+        else
+            # Fallback to basic update for older nix versions
+            if nix flake update 2>/dev/null; then
+                echo -e "${GREEN}✓ flake.lock updated successfully${NC}"
+            else
+                echo -e "${YELLOW}⚠️  nix flake update failed — continuing without updating flake.lock${NC}"
+            fi
+        fi
+    else
+        echo -e "${YELLOW}⚠️  nix not found in PATH — skipping flake.lock update${NC}"
+    fi
+    echo ""
+fi
+
 show_help() {
     echo -e "${BLUE}Ada Scripts Runner${NC}"
     echo ""

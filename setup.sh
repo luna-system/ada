@@ -60,6 +60,27 @@ fi
 echo "✓ All required tools found"
 echo ""
 
+# If repository uses Nix flakes, try to update flake.lock to refresh any outdated GitHub links
+if [ -f flake.lock ]; then
+    echo "🔄 flake.lock detected — attempting to update to refresh inputs..."
+    if command -v nix >/dev/null 2>&1; then
+        # Try the more explicit recreate option first (newer nix)
+        if nix flake update --recreate-lock-file 2>/dev/null; then
+            echo "✓ flake.lock recreated successfully"
+        else
+            # Fallback to basic update for older nix versions
+            if nix flake update 2>/dev/null; then
+                echo "✓ flake.lock updated successfully"
+            else
+                echo "⚠️  nix flake update failed — continuing without updating flake.lock"
+            fi
+        fi
+    else
+        echo "⚠️  nix not found in PATH — skipping flake.lock update"
+    fi
+    echo ""
+fi
+
 echo "✨ Setup complete!"
 echo ""
 echo "Next steps:"
