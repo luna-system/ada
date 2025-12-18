@@ -66,22 +66,31 @@
     },
     "brain/prompt_builder/context_retriever.py": {
       "type": "core-component",
-      "purpose": "Retrieves context from RAG store and configuration",
+      "purpose": "Retrieves context from RAG store with neuromorphic importance scoring (v2.2)",
       "key_functions": [
         "get_persona",
         "get_memories",
         "get_faqs",
         "get_turns",
-        "get_summaries"
+        "get_summaries",
+        "calculate_importance",
+        "get_detail_level"
+      ],
+      "key_features": [
+        "Multi-signal importance: decay (40%) + surprise (30%) + relevance (20%) + habituation (10%)",
+        "Gradient detail levels: FULL (≥0.75), CHUNKS (≥0.50), SUMMARY (≥0.20), DROPPED (<0.20)",
+        "Temperature-modulated temporal decay",
+        "Runtime configurable thresholds and signal weights"
       ],
       "imports": [
         "brain.rag_store",
-        "brain.config"
+        "brain.config",
+        "brain.memory_decay"
       ],
       "imported_by": [
         "brain/prompt_builder/prompt_assembler.py"
       ],
-      "notes": "Pure retrieval logic, no formatting. Tested with 14 tests."
+      "notes": "Phase 1 neuromorphic context: Multi-signal importance scoring replaces batch summarization. Tested with 21 tests (0.07s runtime)."
     },
     "brain/prompt_builder/section_builder.py": {
       "type": "core-component",
