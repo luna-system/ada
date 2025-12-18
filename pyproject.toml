@@ -1,6 +1,6 @@
 [project]
 name = "ada-v1"
-version = "2.2.0"
+version = "2.3.0"
 description = ""
 authors = [
     {name = "luna system",email = "luna@airsi.de"}
@@ -28,6 +28,9 @@ dependencies = [
     "pillow>=10.0.0",
     "tiktoken>=0.12.0",
     "hypothesis>=6.148.7",
+    # Phase 9: Information theory & machine learning
+    "scikit-learn>=1.3.0",
+    "scipy>=1.11.0",
 ]
 
 [project.optional-dependencies]

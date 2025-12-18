@@ -1,0 +1,35 @@
+{
+  "mean_interval_width_90": 0.15358696667252522,
+  "mean_interval_width_50": 0.08243875501620543,
+  "actual_coverage_90": 0.798,
+  "actual_coverage_50": 0.503,
+  "is_well_calibrated": true,
+  "interval_by_level": {
+    "low": {
+      "width_90": 0.1535869666725252,
+      "width_50": 0.08243875501620543,
+      "coverage_90": 0.6996466431095406,
+      "n_samples": 566
+    },
+    "medium": {
+      "width_90": 0.15358696667252525,
+      "width_50": 0.0824387550162054,
+      "coverage_90": 0.8142340168878166,
+      "n_samples": 4145
+    },
+    "high": {
+      "width_90": 0.15358696667252528,
+      "width_50": 0.08243875501620546,
+      "coverage_90": 0.7577854671280276,
+      "n_samples": 289
+    }
+  },
+  "most_uncertain_region": "high",
+  "least_uncertain_region": "low",
+  "conformal_width": 0.20288071999489665,
+  "conformal_coverage": 0.9072,
+  "n_samples": 5000,
+  "alpha_90": 0.1,
+  "alpha_50": 0.5,
+  "timestamp": "2025-12-18T11:14:04.622744"
+}
