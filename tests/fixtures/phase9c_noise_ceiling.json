@@ -1,0 +1,15 @@
+{
+  "split_half_correlation": 0.778247380376132,
+  "spearman_brown_corrected": 0.875297091917007,
+  "noise_ceiling": 0.9355731355254954,
+  "current_performance": 0.884,
+  "percent_of_ceiling": 94.48753565411778,
+  "headroom": 0.05157313552549536,
+  "signal_to_noise_ratio": 3.8751341156139465,
+  "measurement_error_variance": 0.003743479096473403,
+  "true_variance": 0.014506483557831757,
+  "n_replications": 2,
+  "replication_consistency": 0.8811967145304381,
+  "n_samples": 10000,
+  "timestamp": "2025-12-18T11:14:03.084423"
+}

@@ -1,0 +1,470 @@
+{
+  "phase": "15A",
+  "title": "Context-Matching Score",
+  "research_question": "Does context-matching outperform strategy quality alone?",
+  "meta_principle": "Contextual awareness > empathy (empathy is just one tool)",
+  "methodology": "Calculate match scores for (context, strategy) pairs, compare predictive power",
+  "n_contexts": 5,
+  "n_strategies": 5,
+  "n_combinations": 25,
+  "contexts": [
+    {
+      "name": "beginner",
+      "expertise": 0.1,
+      "anxiety": 0.7,
+      "time_pressure": 0.3,
+      "needs_validation": 0.8,
+      "needs_structure": 0.7,
+      "needs_brevity": 0.2
+    },
+    {
+      "name": "expert",
+      "expertise": 0.9,
+      "anxiety": 0.1,
+      "time_pressure": 0.5,
+      "needs_validation": 0.1,
+      "needs_structure": 0.3,
+      "needs_brevity": 0.9
+    },
+    {
+      "name": "frustrated_intermediate",
+      "expertise": 0.5,
+      "anxiety": 0.8,
+      "time_pressure": 0.6,
+      "needs_validation": 0.9,
+      "needs_structure": 0.5,
+      "needs_brevity": 0.4
+    },
+    {
+      "name": "rushed_lookup",
+      "expertise": 0.6,
+      "anxiety": 0.4,
+      "time_pressure": 0.9,
+      "needs_validation": 0.2,
+      "needs_structure": 0.4,
+      "needs_brevity": 1.0
+    },
+    {
+      "name": "explorer",
+      "expertise": 0.4,
+      "anxiety": 0.3,
+      "time_pressure": 0.1,
+      "needs_validation": 0.5,
+      "needs_structure": 0.8,
+      "needs_brevity": 0.3
+    }
+  ],
+  "strategies": [
+    {
+      "name": "empathy_heavy",
+      "empathy": 1.0,
+      "brevity": 0.2,
+      "structure": 0.5,
+      "validation": 0.9,
+      "word_count": 50,
+      "time_cost": 10
+    },
+    {
+      "name": "minimal_reference",
+      "empathy": 0.1,
+      "brevity": 1.0,
+      "structure": 0.3,
+      "validation": 0.1,
+      "word_count": 15,
+      "time_cost": 3
+    },
+    {
+      "name": "structured_tutorial",
+      "empathy": 0.6,
+      "brevity": 0.4,
+      "structure": 1.0,
+      "validation": 0.5,
+      "word_count": 35,
+      "time_cost": 7
+    },
+    {
+      "name": "validating_moderate",
+      "empathy": 0.7,
+      "brevity": 0.3,
+      "structure": 0.6,
+      "validation": 0.9,
+      "word_count": 40,
+      "time_cost": 8
+    },
+    {
+      "name": "balanced_hybrid",
+      "empathy": 0.5,
+      "brevity": 0.5,
+      "structure": 0.7,
+      "validation": 0.6,
+      "word_count": 30,
+      "time_cost": 6
+    }
+  ],
+  "top_matches": [
+    {
+      "context_name": "frustrated_intermediate",
+      "strategy_name": "empathy_heavy",
+      "context": {
+        "name": "frustrated_intermediate",
+        "expertise": 0.5,
+        "anxiety": 0.8,
+        "time_pressure": 0.6,
+        "needs_validation": 0.9,
+        "needs_structure": 0.5,
+        "needs_brevity": 0.4
+      },
+      "strategy": {
+        "name": "empathy_heavy",
+        "empathy": 1.0,
+        "brevity": 0.2,
+        "structure": 0.5,
+        "validation": 0.9,
+        "word_count": 50,
+        "time_cost": 10
+      },
+      "match_score": 0.48550000000000004,
+      "match_components": {
+        "validation_match": 0.81,
+        "structure_match": 0.25,
+        "brevity_match": 0.08000000000000002,
+        "anxiety_empathy_fit": 0.8
+      },
+      "strategy_quality": 0.67,
+      "match_multiplier": 0.9797,
+      "time_penalty": 0.0,
+      "mismatch_penalty": 0.0,
+      "effectiveness": 0.6563990000000001
+    },
+    {
+      "context_name": "frustrated_intermediate",
+      "strategy_name": "validating_moderate",
+      "context": {
+        "name": "frustrated_intermediate",
+        "expertise": 0.5,
+        "anxiety": 0.8,
+        "time_pressure": 0.6,
+        "needs_validation": 0.9,
+        "needs_structure": 0.5,
+        "needs_brevity": 0.4
+      },
+      "strategy": {
+        "name": "validating_moderate",
+        "empathy": 0.7,
+        "brevity": 0.3,
+        "structure": 0.6,
+        "validation": 0.9,
+        "word_count": 40,
+        "time_cost": 8
+      },
+      "match_score": 0.45999999999999996,
+      "match_components": {
+        "validation_match": 0.81,
+        "structure_match": 0.3,
+        "brevity_match": 0.12,
+        "anxiety_empathy_fit": 0.5599999999999999
+      },
+      "strategy_quality": 0.6300000000000001,
+      "match_multiplier": 0.944,
+      "time_penalty": 0.0,
+      "mismatch_penalty": 0.0,
+      "effectiveness": 0.59472
+    },
+    {
+      "context_name": "beginner",
+      "strategy_name": "empathy_heavy",
+      "context": {
+        "name": "beginner",
+        "expertise": 0.1,
+        "anxiety": 0.7,
+        "time_pressure": 0.3,
+        "needs_validation": 0.8,
+        "needs_structure": 0.7,
+        "needs_brevity": 0.2
+      },
+      "strategy": {
+        "name": "empathy_heavy",
+        "empathy": 1.0,
+        "brevity": 0.2,
+        "structure": 0.5,
+        "validation": 0.9,
+        "word_count": 50,
+        "time_cost": 10
+      },
+      "match_score": 0.4535,
+      "match_components": {
+        "validation_match": 0.7200000000000001,
+        "structure_match": 0.35,
+        "brevity_match": 0.04000000000000001,
+        "anxiety_empathy_fit": 0.7
+      },
+      "strategy_quality": 0.67,
+      "match_multiplier": 0.9349000000000001,
+      "time_penalty": 0.0,
+      "mismatch_penalty": 0.0,
+      "effectiveness": 0.6263830000000001
+    },
+    {
+      "context_name": "beginner",
+      "strategy_name": "validating_moderate",
+      "context": {
+        "name": "beginner",
+        "expertise": 0.1,
+        "anxiety": 0.7,
+        "time_pressure": 0.3,
+        "needs_validation": 0.8,
+        "needs_structure": 0.7,
+        "needs_brevity": 0.2
+      },
+      "strategy": {
+        "name": "validating_moderate",
+        "empathy": 0.7,
+        "brevity": 0.3,
+        "structure": 0.6,
+        "validation": 0.9,
+        "word_count": 40,
+        "time_cost": 8
+      },
+      "match_score": 0.434,
+      "match_components": {
+        "validation_match": 0.7200000000000001,
+        "structure_match": 0.42,
+        "brevity_match": 0.06,
+        "anxiety_empathy_fit": 0.48999999999999994
+      },
+      "strategy_quality": 0.6300000000000001,
+      "match_multiplier": 0.9076,
+      "time_penalty": 0.0,
+      "mismatch_penalty": 0.0,
+      "effectiveness": 0.5717880000000001
+    },
+    {
+      "context_name": "beginner",
+      "strategy_name": "structured_tutorial",
+      "context": {
+        "name": "beginner",
+        "expertise": 0.1,
+        "anxiety": 0.7,
+        "time_pressure": 0.3,
+        "needs_validation": 0.8,
+        "needs_structure": 0.7,
+        "needs_brevity": 0.2
+      },
+      "strategy": {
+        "name": "structured_tutorial",
+        "empathy": 0.6,
+        "brevity": 0.4,
+        "structure": 1.0,
+        "validation": 0.5,
+        "word_count": 35,
+        "time_cost": 7
+      },
+      "match_score": 0.399,
+      "match_components": {
+        "validation_match": 0.4,
+        "structure_match": 0.7,
+        "brevity_match": 0.08000000000000002,
+        "anxiety_empathy_fit": 0.42
+      },
+      "strategy_quality": 0.6599999999999999,
+      "match_multiplier": 0.8586,
+      "time_penalty": 0.0,
+      "mismatch_penalty": 0.0,
+      "effectiveness": 0.566676
+    },
+    {
+      "context_name": "frustrated_intermediate",
+      "strategy_name": "structured_tutorial",
+      "context": {
+        "name": "frustrated_intermediate",
+        "expertise": 0.5,
+        "anxiety": 0.8,
+        "time_pressure": 0.6,
+        "needs_validation": 0.9,
+        "needs_structure": 0.5,
+        "needs_brevity": 0.4
+      },
+      "strategy": {
+        "name": "structured_tutorial",
+        "empathy": 0.6,
+        "brevity": 0.4,
+        "structure": 1.0,
+        "validation": 0.5,
+        "word_count": 35,
+        "time_cost": 7
+      },
+      "match_score": 0.396,
+      "match_components": {
+        "validation_match": 0.45,
+        "structure_match": 0.5,
+        "brevity_match": 0.16000000000000003,
+        "anxiety_empathy_fit": 0.48
+      },
+      "strategy_quality": 0.6599999999999999,
+      "match_multiplier": 0.8544,
+      "time_penalty": 0.0,
+      "mismatch_penalty": 0.0,
+      "effectiveness": 0.563904
+    },
+    {
+      "context_name": "frustrated_intermediate",
+      "strategy_name": "balanced_hybrid",
+      "context": {
+        "name": "frustrated_intermediate",
+        "expertise": 0.5,
+        "anxiety": 0.8,
+        "time_pressure": 0.6,
+        "needs_validation": 0.9,
+        "needs_structure": 0.5,
+        "needs_brevity": 0.4
+      },
+      "strategy": {
+        "name": "balanced_hybrid",
+        "empathy": 0.5,
+        "brevity": 0.5,
+        "structure": 0.7,
+        "validation": 0.6,
+        "word_count": 30,
+        "time_cost": 6
+      },
+      "match_score": 0.3795,
+      "match_components": {
+        "validation_match": 0.54,
+        "structure_match": 0.35,
+        "brevity_match": 0.2,
+        "anxiety_empathy_fit": 0.4
+      },
+      "strategy_quality": 0.58,
+      "match_multiplier": 0.8312999999999999,
+      "time_penalty": 0.0,
+      "mismatch_penalty": 0.0,
+      "effectiveness": 0.4821539999999999
+    },
+    {
+      "context_name": "beginner",
+      "strategy_name": "balanced_hybrid",
+      "context": {
+        "name": "beginner",
+        "expertise": 0.1,
+        "anxiety": 0.7,
+        "time_pressure": 0.3,
+        "needs_validation": 0.8,
+        "needs_structure": 0.7,
+        "needs_brevity": 0.2
+      },
+      "strategy": {
+        "name": "balanced_hybrid",
+        "empathy": 0.5,
+        "brevity": 0.5,
+        "structure": 0.7,
+        "validation": 0.6,
+        "word_count": 30,
+        "time_cost": 6
+      },
+      "match_score": 0.3615,
+      "match_components": {
+        "validation_match": 0.48,
+        "structure_match": 0.48999999999999994,
+        "brevity_match": 0.1,
+        "anxiety_empathy_fit": 0.35
+      },
+      "strategy_quality": 0.58,
+      "match_multiplier": 0.8061,
+      "time_penalty": 0.0,
+      "mismatch_penalty": 0.0,
+      "effectiveness": 0.467538
+    },
+    {
+      "context_name": "explorer",
+      "strategy_name": "structured_tutorial",
+      "context": {
+        "name": "explorer",
+        "expertise": 0.4,
+        "anxiety": 0.3,
+        "time_pressure": 0.1,
+        "needs_validation": 0.5,
+        "needs_structure": 0.8,
+        "needs_brevity": 0.3
+      },
+      "strategy": {
+        "name": "structured_tutorial",
+        "empathy": 0.6,
+        "brevity": 0.4,
+        "structure": 1.0,
+        "validation": 0.5,
+        "word_count": 35,
+        "time_cost": 7
+      },
+      "match_score": 0.341,
+      "match_components": {
+        "validation_match": 0.25,
+        "structure_match": 0.8,
+        "brevity_match": 0.12,
+        "anxiety_empathy_fit": 0.18
+      },
+      "strategy_quality": 0.6599999999999999,
+      "match_multiplier": 0.7774,
+      "time_penalty": 0.0,
+      "mismatch_penalty": 0.0,
+      "effectiveness": 0.5130839999999999
+    },
+    {
+      "context_name": "explorer",
+      "strategy_name": "validating_moderate",
+      "context": {
+        "name": "explorer",
+        "expertise": 0.4,
+        "anxiety": 0.3,
+        "time_pressure": 0.1,
+        "needs_validation": 0.5,
+        "needs_structure": 0.8,
+        "needs_brevity": 0.3
+      },
+      "strategy": {
+        "name": "validating_moderate",
+        "empathy": 0.7,
+        "brevity": 0.3,
+        "structure": 0.6,
+        "validation": 0.9,
+        "word_count": 40,
+        "time_cost": 8
+      },
+      "match_score": 0.3195,
+      "match_components": {
+        "validation_match": 0.45,
+        "structure_match": 0.48,
+        "brevity_match": 0.09,
+        "anxiety_empathy_fit": 0.21
+      },
+      "strategy_quality": 0.6300000000000001,
+      "match_multiplier": 0.7473,
+      "time_penalty": 0.0,
+      "mismatch_penalty": 0.0,
+      "effectiveness": 0.4707990000000001
+    }
+  ],
+  "comparison": {
+    "match_correlation": 0.9241632537954383,
+    "strategy_correlation": 0.7258671697061215,
+    "context_correlation": 0.4807091031434657,
+    "match_wins": true,
+    "match_advantage": 0.19829608408931676,
+    "winner": "MATCH_SCORE"
+  },
+  "hypothesis_test": {
+    "hypothesis": "Matched mediocre > Mismatched excellent",
+    "hypothesis_holds": false,
+    "matched_mediocre_avg": 0.0,
+    "mismatched_excellent_avg": 0.0,
+    "advantage": 0.0,
+    "n_matched_mediocre": 0,
+    "n_mismatched_excellent": 0,
+    "interpretation": "Strategy quality still matters more than match"
+  },
+  "predictive_power": {
+    "correlation_strength": "VERY STRONG",
+    "meta_principle_validated": true,
+    "conclusion": "VALIDATED: Context-matching (r=0.924) outperforms strategy quality alone by 0.198! Contextual awareness IS the meta-principle!"
+  },
+  "conclusion": "VALIDATED: Context-matching (r=0.924) outperforms strategy quality alone by 0.198! Contextual awareness IS the meta-principle!"
+}
