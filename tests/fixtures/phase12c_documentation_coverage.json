@@ -1,0 +1,46 @@
+{
+  "total_modules": 38,
+  "documented_modules": 22,
+  "coverage_percentage": 57.89473684210527,
+  "total_specialists": 6,
+  "registered_specialists": 6,
+  "specialist_coverage": 100.0,
+  "files_with_annotations": 17,
+  "annotation_coverage": 44.73684210526316,
+  "consistency_score": 73.91304347826086,
+  "mismatches": [
+    "Annotated but not in map: brain/_legacy_prompt_builder.py",
+    "Annotated but not in map: brain/attention_spotlight.py",
+    "Annotated but not in map: brain/context_habituation.py",
+    "Annotated but not in map: brain/memory_decay.py",
+    "Annotated but not in map: brain/semantic_chunking.py",
+    "In registry but not in map: brain/specialists/now_playing_specialist.py"
+  ],
+  "undocumented_modules": [
+    "brain/gunicorn_config.py",
+    "brain/notices_client.py",
+    "brain/_legacy_prompt_builder.py",
+    "brain/attention_spotlight.py",
+    "brain/context_habituation.py",
+    "brain/memory_decay.py",
+    "brain/semantic_chunking.py",
+    "brain/startup_quotes.py",
+    "brain/context_priming.py",
+    "brain/dynamic_injection.py",
+    "brain/prediction_error.py",
+    "brain/processing_modes.py",
+    "brain/specialists/__init__.py",
+    "brain/specialists/pause_resume.py",
+    "brain/specialists/now_playing_specialist.py",
+    "brain/specialists/specialist_docs.py"
+  ],
+  "missing_registry_entries": [],
+  "completeness_grade": "D",
+  "areas_for_improvement": [
+    "Increase overall module coverage",
+    "Add more source annotations",
+    "Fix documentation inconsistencies",
+    "Document critical modules: ['brain/specialists/__init__.py', 'brain/specialists/pause_resume.py', 'brain/specialists/now_playing_specialist.py']"
+  ],
+  "timestamp": "2025-12-18T11:14:04.687804"
+}

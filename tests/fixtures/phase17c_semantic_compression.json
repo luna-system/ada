@@ -1,0 +1,520 @@
+{
+  "phase": "17C",
+  "title": "Semantic Compression Limits",
+  "compression_levels": [
+    {
+      "name": "full_context",
+      "ratio": 1.0,
+      "description": "Complete information, no compression",
+      "information_loss": 0.0
+    },
+    {
+      "name": "light_compression",
+      "ratio": 0.7,
+      "description": "Summary + key details (30% reduction)",
+      "information_loss": 0.1
+    },
+    {
+      "name": "moderate_compression",
+      "ratio": 0.5,
+      "description": "Key points only (50% reduction)",
+      "information_loss": 0.25
+    },
+    {
+      "name": "aggressive_compression",
+      "ratio": 0.3,
+      "description": "Minimal essential info (70% reduction)",
+      "information_loss": 0.5
+    },
+    {
+      "name": "extreme_compression",
+      "ratio": 0.2,
+      "description": "Bare facts only (80% reduction)",
+      "information_loss": 0.7
+    },
+    {
+      "name": "breaking_point",
+      "ratio": 0.1,
+      "description": "Critical information loss (90% reduction)",
+      "information_loss": 0.9
+    }
+  ],
+  "task_complexities": [
+    {
+      "name": "simple_fact_retrieval",
+      "complexity_score": 0.2,
+      "compression_tolerance": 0.9,
+      "failure_threshold": 0.15
+    },
+    {
+      "name": "structured_lookup",
+      "complexity_score": 0.4,
+      "compression_tolerance": 0.6,
+      "failure_threshold": 0.25
+    },
+    {
+      "name": "multi_step_reasoning",
+      "complexity_score": 0.6,
+      "compression_tolerance": 0.4,
+      "failure_threshold": 0.35
+    },
+    {
+      "name": "nuanced_analysis",
+      "complexity_score": 0.8,
+      "compression_tolerance": 0.3,
+      "failure_threshold": 0.45
+    },
+    {
+      "name": "complex_creative_synthesis",
+      "complexity_score": 1.0,
+      "compression_tolerance": 0.2,
+      "failure_threshold": 0.6
+    }
+  ],
+  "results": [
+    {
+      "compression_ratio": 1.0,
+      "task": "simple_fact_retrieval",
+      "effectiveness": 1.0,
+      "information_preserved": 1.0,
+      "tokens_saved": 0,
+      "status": "optimal"
+    },
+    {
+      "compression_ratio": 1.0,
+      "task": "structured_lookup",
+      "effectiveness": 1.0,
+      "information_preserved": 1.0,
+      "tokens_saved": 0,
+      "status": "optimal"
+    },
+    {
+      "compression_ratio": 1.0,
+      "task": "multi_step_reasoning",
+      "effectiveness": 1.0,
+      "information_preserved": 1.0,
+      "tokens_saved": 0,
+      "status": "optimal"
+    },
+    {
+      "compression_ratio": 1.0,
+      "task": "nuanced_analysis",
+      "effectiveness": 1.0,
+      "information_preserved": 1.0,
+      "tokens_saved": 0,
+      "status": "optimal"
+    },
+    {
+      "compression_ratio": 1.0,
+      "task": "complex_creative_synthesis",
+      "effectiveness": 1.0,
+      "information_preserved": 1.0,
+      "tokens_saved": 0,
+      "status": "optimal"
+    },
+    {
+      "compression_ratio": 0.7,
+      "task": "simple_fact_retrieval",
+      "effectiveness": 0.997,
+      "information_preserved": 0.9,
+      "tokens_saved": 300,
+      "status": "optimal"
+    },
+    {
+      "compression_ratio": 0.7,
+      "task": "structured_lookup",
+      "effectiveness": 0.988,
+      "information_preserved": 0.9,
+      "tokens_saved": 300,
+      "status": "optimal"
+    },
+    {
+      "compression_ratio": 0.7,
+      "task": "multi_step_reasoning",
+      "effectiveness": 0.982,
+      "information_preserved": 0.9,
+      "tokens_saved": 300,
+      "status": "optimal"
+    },
+    {
+      "compression_ratio": 0.7,
+      "task": "nuanced_analysis",
+      "effectiveness": 0.979,
+      "information_preserved": 0.9,
+      "tokens_saved": 300,
+      "status": "optimal"
+    },
+    {
+      "compression_ratio": 0.7,
+      "task": "complex_creative_synthesis",
+      "effectiveness": 0.976,
+      "information_preserved": 0.9,
+      "tokens_saved": 300,
+      "status": "optimal"
+    },
+    {
+      "compression_ratio": 0.5,
+      "task": "simple_fact_retrieval",
+      "effectiveness": 0.985,
+      "information_preserved": 0.75,
+      "tokens_saved": 500,
+      "status": "optimal"
+    },
+    {
+      "compression_ratio": 0.5,
+      "task": "structured_lookup",
+      "effectiveness": 0.94,
+      "information_preserved": 0.75,
+      "tokens_saved": 500,
+      "status": "optimal"
+    },
+    {
+      "compression_ratio": 0.5,
+      "task": "multi_step_reasoning",
+      "effectiveness": 0.91,
+      "information_preserved": 0.75,
+      "tokens_saved": 500,
+      "status": "optimal"
+    },
+    {
+      "compression_ratio": 0.5,
+      "task": "nuanced_analysis",
+      "effectiveness": 0.895,
+      "information_preserved": 0.75,
+      "tokens_saved": 500,
+      "status": "optimal"
+    },
+    {
+      "compression_ratio": 0.5,
+      "task": "complex_creative_synthesis",
+      "effectiveness": 0.083,
+      "information_preserved": 0.75,
+      "tokens_saved": 500,
+      "status": "failed"
+    },
+    {
+      "compression_ratio": 0.3,
+      "task": "simple_fact_retrieval",
+      "effectiveness": 0.95,
+      "information_preserved": 0.5,
+      "tokens_saved": 700,
+      "status": "degraded"
+    },
+    {
+      "compression_ratio": 0.3,
+      "task": "structured_lookup",
+      "effectiveness": 0.8,
+      "information_preserved": 0.5,
+      "tokens_saved": 700,
+      "status": "degraded"
+    },
+    {
+      "compression_ratio": 0.3,
+      "task": "multi_step_reasoning",
+      "effectiveness": 0.086,
+      "information_preserved": 0.5,
+      "tokens_saved": 700,
+      "status": "failed"
+    },
+    {
+      "compression_ratio": 0.3,
+      "task": "nuanced_analysis",
+      "effectiveness": 0.067,
+      "information_preserved": 0.5,
+      "tokens_saved": 700,
+      "status": "failed"
+    },
+    {
+      "compression_ratio": 0.3,
+      "task": "complex_creative_synthesis",
+      "effectiveness": 0.05,
+      "information_preserved": 0.5,
+      "tokens_saved": 700,
+      "status": "failed"
+    },
+    {
+      "compression_ratio": 0.2,
+      "task": "simple_fact_retrieval",
+      "effectiveness": 0.895,
+      "information_preserved": 0.3,
+      "tokens_saved": 800,
+      "status": "critical"
+    },
+    {
+      "compression_ratio": 0.2,
+      "task": "structured_lookup",
+      "effectiveness": 0.08,
+      "information_preserved": 0.3,
+      "tokens_saved": 800,
+      "status": "failed"
+    },
+    {
+      "compression_ratio": 0.2,
+      "task": "multi_step_reasoning",
+      "effectiveness": 0.057,
+      "information_preserved": 0.3,
+      "tokens_saved": 800,
+      "status": "failed"
+    },
+    {
+      "compression_ratio": 0.2,
+      "task": "nuanced_analysis",
+      "effectiveness": 0.044,
+      "information_preserved": 0.3,
+      "tokens_saved": 800,
+      "status": "failed"
+    },
+    {
+      "compression_ratio": 0.2,
+      "task": "complex_creative_synthesis",
+      "effectiveness": 0.033,
+      "information_preserved": 0.3,
+      "tokens_saved": 800,
+      "status": "failed"
+    },
+    {
+      "compression_ratio": 0.1,
+      "task": "simple_fact_retrieval",
+      "effectiveness": 0.067,
+      "information_preserved": 0.1,
+      "tokens_saved": 900,
+      "status": "failed"
+    },
+    {
+      "compression_ratio": 0.1,
+      "task": "structured_lookup",
+      "effectiveness": 0.04,
+      "information_preserved": 0.1,
+      "tokens_saved": 900,
+      "status": "failed"
+    },
+    {
+      "compression_ratio": 0.1,
+      "task": "multi_step_reasoning",
+      "effectiveness": 0.029,
+      "information_preserved": 0.1,
+      "tokens_saved": 900,
+      "status": "failed"
+    },
+    {
+      "compression_ratio": 0.1,
+      "task": "nuanced_analysis",
+      "effectiveness": 0.022,
+      "information_preserved": 0.1,
+      "tokens_saved": 900,
+      "status": "failed"
+    },
+    {
+      "compression_ratio": 0.1,
+      "task": "complex_creative_synthesis",
+      "effectiveness": 0.017,
+      "information_preserved": 0.1,
+      "tokens_saved": 900,
+      "status": "failed"
+    }
+  ],
+  "optimal_compression": {
+    "simple_fact_retrieval": {
+      "ratio": 0.2,
+      "effectiveness": 0.895,
+      "tokens_saved": 800,
+      "status": "critical"
+    },
+    "structured_lookup": {
+      "ratio": 0.3,
+      "effectiveness": 0.8,
+      "tokens_saved": 700,
+      "status": "degraded"
+    },
+    "multi_step_reasoning": {
+      "ratio": 0.5,
+      "effectiveness": 0.91,
+      "tokens_saved": 500,
+      "status": "optimal"
+    },
+    "nuanced_analysis": {
+      "ratio": 0.5,
+      "effectiveness": 0.895,
+      "tokens_saved": 500,
+      "status": "optimal"
+    },
+    "complex_creative_synthesis": {
+      "ratio": 0.7,
+      "effectiveness": 0.976,
+      "tokens_saved": 300,
+      "status": "optimal"
+    }
+  },
+  "breaking_points": {
+    "simple_fact_retrieval": 0.1,
+    "structured_lookup": 0.2,
+    "multi_step_reasoning": 0.3,
+    "nuanced_analysis": 0.3,
+    "complex_creative_synthesis": 0.5
+  },
+  "compression_curves": {
+    "simple_fact_retrieval": [
+      [
+        1.0,
+        1.0
+      ],
+      [
+        0.7,
+        0.997
+      ],
+      [
+        0.5,
+        0.985
+      ],
+      [
+        0.3,
+        0.95
+      ],
+      [
+        0.2,
+        0.895
+      ],
+      [
+        0.1,
+        0.067
+      ]
+    ],
+    "structured_lookup": [
+      [
+        1.0,
+        1.0
+      ],
+      [
+        0.7,
+        0.988
+      ],
+      [
+        0.5,
+        0.94
+      ],
+      [
+        0.3,
+        0.8
+      ],
+      [
+        0.2,
+        0.08
+      ],
+      [
+        0.1,
+        0.04
+      ]
+    ],
+    "multi_step_reasoning": [
+      [
+        1.0,
+        1.0
+      ],
+      [
+        0.7,
+        0.982
+      ],
+      [
+        0.5,
+        0.91
+      ],
+      [
+        0.3,
+        0.086
+      ],
+      [
+        0.2,
+        0.057
+      ],
+      [
+        0.1,
+        0.029
+      ]
+    ],
+    "nuanced_analysis": [
+      [
+        1.0,
+        1.0
+      ],
+      [
+        0.7,
+        0.979
+      ],
+      [
+        0.5,
+        0.895
+      ],
+      [
+        0.3,
+        0.067
+      ],
+      [
+        0.2,
+        0.044
+      ],
+      [
+        0.1,
+        0.022
+      ]
+    ],
+    "complex_creative_synthesis": [
+      [
+        1.0,
+        1.0
+      ],
+      [
+        0.7,
+        0.976
+      ],
+      [
+        0.5,
+        0.083
+      ],
+      [
+        0.3,
+        0.05
+      ],
+      [
+        0.2,
+        0.033
+      ],
+      [
+        0.1,
+        0.017
+      ]
+    ]
+  },
+  "adaptive_compression": {
+    "simple_fact_retrieval": {
+      "ratio": 0.25,
+      "effectiveness": 0.888,
+      "tokens_saved": 750
+    },
+    "structured_lookup": {
+      "ratio": 0.35,
+      "effectiveness": 0.74,
+      "tokens_saved": 650
+    },
+    "multi_step_reasoning": {
+      "ratio": 0.44999999999999996,
+      "effectiveness": 0.67,
+      "tokens_saved": 550
+    },
+    "nuanced_analysis": {
+      "ratio": 0.55,
+      "effectiveness": 0.811,
+      "tokens_saved": 449
+    },
+    "complex_creative_synthesis": {
+      "ratio": 0.7,
+      "effectiveness": 0.928,
+      "tokens_saved": 300
+    }
+  },
+  "key_findings": {
+    "global_sweet_spot": 0.3,
+    "average_breaking_point": 0.28,
+    "most_tolerant_task": "simple_fact_retrieval",
+    "least_tolerant_task": "complex_creative_synthesis"
+  }
+}

@@ -1,0 +1,1617 @@
+{
+  "phase": "13B",
+  "title": "Multi-Entry Point Success",
+  "research_question": "Do multiple documentation entry points improve task completion?",
+  "methodology": "Simulated diverse users with single-mode (tutorial only) vs multi-mode (tutorial+reference+troubleshooting)",
+  "n_tasks": 12,
+  "tasks": [
+    {
+      "id": 1,
+      "name": "first_install",
+      "description": "Install Ada for the first time",
+      "user_type": "beginner",
+      "ideal_entry": "tutorial",
+      "complexity": "low",
+      "requires_context": true
+    },
+    {
+      "id": 2,
+      "name": "first_conversation",
+      "description": "Have first conversation with Ada",
+      "user_type": "beginner",
+      "ideal_entry": "tutorial",
+      "complexity": "low",
+      "requires_context": true
+    },
+    {
+      "id": 3,
+      "name": "configure_memory",
+      "description": "Set up memory persistence",
+      "user_type": "beginner",
+      "ideal_entry": "tutorial",
+      "complexity": "medium",
+      "requires_context": true
+    },
+    {
+      "id": 4,
+      "name": "check_api_endpoint",
+      "description": "Look up API endpoint signature",
+      "user_type": "experienced",
+      "ideal_entry": "reference",
+      "complexity": "low",
+      "requires_context": false
+    },
+    {
+      "id": 5,
+      "name": "find_config_option",
+      "description": "Find specific environment variable",
+      "user_type": "experienced",
+      "ideal_entry": "reference",
+      "complexity": "low",
+      "requires_context": false
+    },
+    {
+      "id": 6,
+      "name": "specialist_parameters",
+      "description": "Check specialist activation parameters",
+      "user_type": "experienced",
+      "ideal_entry": "reference",
+      "complexity": "medium",
+      "requires_context": false
+    },
+    {
+      "id": 7,
+      "name": "debug_connection",
+      "description": "Fix ChromaDB connection error",
+      "user_type": "stuck",
+      "ideal_entry": "troubleshooting",
+      "complexity": "medium",
+      "requires_context": true
+    },
+    {
+      "id": 8,
+      "name": "fix_import_error",
+      "description": "Resolve module import failure",
+      "user_type": "stuck",
+      "ideal_entry": "troubleshooting",
+      "complexity": "low",
+      "requires_context": true
+    },
+    {
+      "id": 9,
+      "name": "diagnose_slow_response",
+      "description": "Figure out why responses are slow",
+      "user_type": "stuck",
+      "ideal_entry": "troubleshooting",
+      "complexity": "high",
+      "requires_context": true
+    },
+    {
+      "id": 10,
+      "name": "build_custom_specialist",
+      "description": "Create new specialist plugin",
+      "user_type": "explorer",
+      "ideal_entry": "tutorial",
+      "complexity": "high",
+      "requires_context": true
+    },
+    {
+      "id": 11,
+      "name": "optimize_performance",
+      "description": "Tune Ada for better performance",
+      "user_type": "explorer",
+      "ideal_entry": "reference",
+      "complexity": "high",
+      "requires_context": true
+    },
+    {
+      "id": 12,
+      "name": "integrate_external_api",
+      "description": "Connect Ada to external service",
+      "user_type": "explorer",
+      "ideal_entry": "tutorial",
+      "complexity": "high",
+      "requires_context": true
+    }
+  ],
+  "documentation": [
+    {
+      "task_id": 1,
+      "task_name": "first_install",
+      "single_mode": {
+        "tutorial": {
+          "type": "tutorial",
+          "title": "How to: Install Ada for the first time",
+          "format": "step-by-step",
+          "length": "long",
+          "context": "high",
+          "quick_reference": "low",
+          "best_for": [
+            "beginner",
+            "explorer"
+          ]
+        },
+        "has_reference": false,
+        "has_troubleshooting": false,
+        "perspectives": 1
+      },
+      "multi_mode": {
+        "tutorial": {
+          "type": "tutorial",
+          "title": "How to: Install Ada for the first time",
+          "format": "step-by-step",
+          "length": "long",
+          "context": "high",
+          "quick_reference": "low",
+          "best_for": [
+            "beginner",
+            "explorer"
+          ]
+        },
+        "reference": {
+          "type": "reference",
+          "title": "Reference: Install Ada for the first time",
+          "format": "structured-list",
+          "length": "short",
+          "context": "low",
+          "quick_reference": "high",
+          "best_for": [
+            "experienced",
+            "explorer"
+          ]
+        },
+        "troubleshooting": {
+          "type": "troubleshooting",
+          "title": "Troubleshooting: Install Ada for the first time",
+          "format": "problem-solution",
+          "length": "medium",
+          "context": "medium",
+          "quick_reference": "medium",
+          "best_for": [
+            "stuck",
+            "explorer"
+          ]
+        },
+        "has_reference": true,
+        "has_troubleshooting": true,
+        "perspectives": 3
+      }
+    },
+    {
+      "task_id": 2,
+      "task_name": "first_conversation",
+      "single_mode": {
+        "tutorial": {
+          "type": "tutorial",
+          "title": "How to: Have first conversation with Ada",
+          "format": "step-by-step",
+          "length": "long",
+          "context": "high",
+          "quick_reference": "low",
+          "best_for": [
+            "beginner",
+            "explorer"
+          ]
+        },
+        "has_reference": false,
+        "has_troubleshooting": false,
+        "perspectives": 1
+      },
+      "multi_mode": {
+        "tutorial": {
+          "type": "tutorial",
+          "title": "How to: Have first conversation with Ada",
+          "format": "step-by-step",
+          "length": "long",
+          "context": "high",
+          "quick_reference": "low",
+          "best_for": [
+            "beginner",
+            "explorer"
+          ]
+        },
+        "reference": {
+          "type": "reference",
+          "title": "Reference: Have first conversation with Ada",
+          "format": "structured-list",
+          "length": "short",
+          "context": "low",
+          "quick_reference": "high",
+          "best_for": [
+            "experienced",
+            "explorer"
+          ]
+        },
+        "troubleshooting": {
+          "type": "troubleshooting",
+          "title": "Troubleshooting: Have first conversation with Ada",
+          "format": "problem-solution",
+          "length": "medium",
+          "context": "medium",
+          "quick_reference": "medium",
+          "best_for": [
+            "stuck",
+            "explorer"
+          ]
+        },
+        "has_reference": true,
+        "has_troubleshooting": true,
+        "perspectives": 3
+      }
+    },
+    {
+      "task_id": 3,
+      "task_name": "configure_memory",
+      "single_mode": {
+        "tutorial": {
+          "type": "tutorial",
+          "title": "How to: Set up memory persistence",
+          "format": "step-by-step",
+          "length": "long",
+          "context": "high",
+          "quick_reference": "low",
+          "best_for": [
+            "beginner",
+            "explorer"
+          ]
+        },
+        "has_reference": false,
+        "has_troubleshooting": false,
+        "perspectives": 1
+      },
+      "multi_mode": {
+        "tutorial": {
+          "type": "tutorial",
+          "title": "How to: Set up memory persistence",
+          "format": "step-by-step",
+          "length": "long",
+          "context": "high",
+          "quick_reference": "low",
+          "best_for": [
+            "beginner",
+            "explorer"
+          ]
+        },
+        "reference": {
+          "type": "reference",
+          "title": "Reference: Set up memory persistence",
+          "format": "structured-list",
+          "length": "short",
+          "context": "low",
+          "quick_reference": "high",
+          "best_for": [
+            "experienced",
+            "explorer"
+          ]
+        },
+        "troubleshooting": {
+          "type": "troubleshooting",
+          "title": "Troubleshooting: Set up memory persistence",
+          "format": "problem-solution",
+          "length": "medium",
+          "context": "medium",
+          "quick_reference": "medium",
+          "best_for": [
+            "stuck",
+            "explorer"
+          ]
+        },
+        "has_reference": true,
+        "has_troubleshooting": true,
+        "perspectives": 3
+      }
+    },
+    {
+      "task_id": 4,
+      "task_name": "check_api_endpoint",
+      "single_mode": {
+        "tutorial": {
+          "type": "tutorial",
+          "title": "How to: Look up API endpoint signature",
+          "format": "step-by-step",
+          "length": "long",
+          "context": "high",
+          "quick_reference": "low",
+          "best_for": [
+            "beginner",
+            "explorer"
+          ]
+        },
+        "has_reference": false,
+        "has_troubleshooting": false,
+        "perspectives": 1
+      },
+      "multi_mode": {
+        "tutorial": {
+          "type": "tutorial",
+          "title": "How to: Look up API endpoint signature",
+          "format": "step-by-step",
+          "length": "long",
+          "context": "high",
+          "quick_reference": "low",
+          "best_for": [
+            "beginner",
+            "explorer"
+          ]
+        },
+        "reference": {
+          "type": "reference",
+          "title": "Reference: Look up API endpoint signature",
+          "format": "structured-list",
+          "length": "short",
+          "context": "low",
+          "quick_reference": "high",
+          "best_for": [
+            "experienced",
+            "explorer"
+          ]
+        },
+        "troubleshooting": {
+          "type": "troubleshooting",
+          "title": "Troubleshooting: Look up API endpoint signature",
+          "format": "problem-solution",
+          "length": "medium",
+          "context": "medium",
+          "quick_reference": "medium",
+          "best_for": [
+            "stuck",
+            "explorer"
+          ]
+        },
+        "has_reference": true,
+        "has_troubleshooting": true,
+        "perspectives": 3
+      }
+    },
+    {
+      "task_id": 5,
+      "task_name": "find_config_option",
+      "single_mode": {
+        "tutorial": {
+          "type": "tutorial",
+          "title": "How to: Find specific environment variable",
+          "format": "step-by-step",
+          "length": "long",
+          "context": "high",
+          "quick_reference": "low",
+          "best_for": [
+            "beginner",
+            "explorer"
+          ]
+        },
+        "has_reference": false,
+        "has_troubleshooting": false,
+        "perspectives": 1
+      },
+      "multi_mode": {
+        "tutorial": {
+          "type": "tutorial",
+          "title": "How to: Find specific environment variable",
+          "format": "step-by-step",
+          "length": "long",
+          "context": "high",
+          "quick_reference": "low",
+          "best_for": [
+            "beginner",
+            "explorer"
+          ]
+        },
+        "reference": {
+          "type": "reference",
+          "title": "Reference: Find specific environment variable",
+          "format": "structured-list",
+          "length": "short",
+          "context": "low",
+          "quick_reference": "high",
+          "best_for": [
+            "experienced",
+            "explorer"
+          ]
+        },
+        "troubleshooting": {
+          "type": "troubleshooting",
+          "title": "Troubleshooting: Find specific environment variable",
+          "format": "problem-solution",
+          "length": "medium",
+          "context": "medium",
+          "quick_reference": "medium",
+          "best_for": [
+            "stuck",
+            "explorer"
+          ]
+        },
+        "has_reference": true,
+        "has_troubleshooting": true,
+        "perspectives": 3
+      }
+    },
+    {
+      "task_id": 6,
+      "task_name": "specialist_parameters",
+      "single_mode": {
+        "tutorial": {
+          "type": "tutorial",
+          "title": "How to: Check specialist activation parameters",
+          "format": "step-by-step",
+          "length": "long",
+          "context": "high",
+          "quick_reference": "low",
+          "best_for": [
+            "beginner",
+            "explorer"
+          ]
+        },
+        "has_reference": false,
+        "has_troubleshooting": false,
+        "perspectives": 1
+      },
+      "multi_mode": {
+        "tutorial": {
+          "type": "tutorial",
+          "title": "How to: Check specialist activation parameters",
+          "format": "step-by-step",
+          "length": "long",
+          "context": "high",
+          "quick_reference": "low",
+          "best_for": [
+            "beginner",
+            "explorer"
+          ]
+        },
+        "reference": {
+          "type": "reference",
+          "title": "Reference: Check specialist activation parameters",
+          "format": "structured-list",
+          "length": "short",
+          "context": "low",
+          "quick_reference": "high",
+          "best_for": [
+            "experienced",
+            "explorer"
+          ]
+        },
+        "troubleshooting": {
+          "type": "troubleshooting",
+          "title": "Troubleshooting: Check specialist activation parameters",
+          "format": "problem-solution",
+          "length": "medium",
+          "context": "medium",
+          "quick_reference": "medium",
+          "best_for": [
+            "stuck",
+            "explorer"
+          ]
+        },
+        "has_reference": true,
+        "has_troubleshooting": true,
+        "perspectives": 3
+      }
+    },
+    {
+      "task_id": 7,
+      "task_name": "debug_connection",
+      "single_mode": {
+        "tutorial": {
+          "type": "tutorial",
+          "title": "How to: Fix ChromaDB connection error",
+          "format": "step-by-step",
+          "length": "long",
+          "context": "high",
+          "quick_reference": "low",
+          "best_for": [
+            "beginner",
+            "explorer"
+          ]
+        },
+        "has_reference": false,
+        "has_troubleshooting": false,
+        "perspectives": 1
+      },
+      "multi_mode": {
+        "tutorial": {
+          "type": "tutorial",
+          "title": "How to: Fix ChromaDB connection error",
+          "format": "step-by-step",
+          "length": "long",
+          "context": "high",
+          "quick_reference": "low",
+          "best_for": [
+            "beginner",
+            "explorer"
+          ]
+        },
+        "reference": {
+          "type": "reference",
+          "title": "Reference: Fix ChromaDB connection error",
+          "format": "structured-list",
+          "length": "short",
+          "context": "low",
+          "quick_reference": "high",
+          "best_for": [
+            "experienced",
+            "explorer"
+          ]
+        },
+        "troubleshooting": {
+          "type": "troubleshooting",
+          "title": "Troubleshooting: Fix ChromaDB connection error",
+          "format": "problem-solution",
+          "length": "medium",
+          "context": "medium",
+          "quick_reference": "medium",
+          "best_for": [
+            "stuck",
+            "explorer"
+          ]
+        },
+        "has_reference": true,
+        "has_troubleshooting": true,
+        "perspectives": 3
+      }
+    },
+    {
+      "task_id": 8,
+      "task_name": "fix_import_error",
+      "single_mode": {
+        "tutorial": {
+          "type": "tutorial",
+          "title": "How to: Resolve module import failure",
+          "format": "step-by-step",
+          "length": "long",
+          "context": "high",
+          "quick_reference": "low",
+          "best_for": [
+            "beginner",
+            "explorer"
+          ]
+        },
+        "has_reference": false,
+        "has_troubleshooting": false,
+        "perspectives": 1
+      },
+      "multi_mode": {
+        "tutorial": {
+          "type": "tutorial",
+          "title": "How to: Resolve module import failure",
+          "format": "step-by-step",
+          "length": "long",
+          "context": "high",
+          "quick_reference": "low",
+          "best_for": [
+            "beginner",
+            "explorer"
+          ]
+        },
+        "reference": {
+          "type": "reference",
+          "title": "Reference: Resolve module import failure",
+          "format": "structured-list",
+          "length": "short",
+          "context": "low",
+          "quick_reference": "high",
+          "best_for": [
+            "experienced",
+            "explorer"
+          ]
+        },
+        "troubleshooting": {
+          "type": "troubleshooting",
+          "title": "Troubleshooting: Resolve module import failure",
+          "format": "problem-solution",
+          "length": "medium",
+          "context": "medium",
+          "quick_reference": "medium",
+          "best_for": [
+            "stuck",
+            "explorer"
+          ]
+        },
+        "has_reference": true,
+        "has_troubleshooting": true,
+        "perspectives": 3
+      }
+    },
+    {
+      "task_id": 9,
+      "task_name": "diagnose_slow_response",
+      "single_mode": {
+        "tutorial": {
+          "type": "tutorial",
+          "title": "How to: Figure out why responses are slow",
+          "format": "step-by-step",
+          "length": "long",
+          "context": "high",
+          "quick_reference": "low",
+          "best_for": [
+            "beginner",
+            "explorer"
+          ]
+        },
+        "has_reference": false,
+        "has_troubleshooting": false,
+        "perspectives": 1
+      },
+      "multi_mode": {
+        "tutorial": {
+          "type": "tutorial",
+          "title": "How to: Figure out why responses are slow",
+          "format": "step-by-step",
+          "length": "long",
+          "context": "high",
+          "quick_reference": "low",
+          "best_for": [
+            "beginner",
+            "explorer"
+          ]
+        },
+        "reference": {
+          "type": "reference",
+          "title": "Reference: Figure out why responses are slow",
+          "format": "structured-list",
+          "length": "short",
+          "context": "low",
+          "quick_reference": "high",
+          "best_for": [
+            "experienced",
+            "explorer"
+          ]
+        },
+        "troubleshooting": {
+          "type": "troubleshooting",
+          "title": "Troubleshooting: Figure out why responses are slow",
+          "format": "problem-solution",
+          "length": "medium",
+          "context": "medium",
+          "quick_reference": "medium",
+          "best_for": [
+            "stuck",
+            "explorer"
+          ]
+        },
+        "has_reference": true,
+        "has_troubleshooting": true,
+        "perspectives": 3
+      }
+    },
+    {
+      "task_id": 10,
+      "task_name": "build_custom_specialist",
+      "single_mode": {
+        "tutorial": {
+          "type": "tutorial",
+          "title": "How to: Create new specialist plugin",
+          "format": "step-by-step",
+          "length": "long",
+          "context": "high",
+          "quick_reference": "low",
+          "best_for": [
+            "beginner",
+            "explorer"
+          ]
+        },
+        "has_reference": false,
+        "has_troubleshooting": false,
+        "perspectives": 1
+      },
+      "multi_mode": {
+        "tutorial": {
+          "type": "tutorial",
+          "title": "How to: Create new specialist plugin",
+          "format": "step-by-step",
+          "length": "long",
+          "context": "high",
+          "quick_reference": "low",
+          "best_for": [
+            "beginner",
+            "explorer"
+          ]
+        },
+        "reference": {
+          "type": "reference",
+          "title": "Reference: Create new specialist plugin",
+          "format": "structured-list",
+          "length": "short",
+          "context": "low",
+          "quick_reference": "high",
+          "best_for": [
+            "experienced",
+            "explorer"
+          ]
+        },
+        "troubleshooting": {
+          "type": "troubleshooting",
+          "title": "Troubleshooting: Create new specialist plugin",
+          "format": "problem-solution",
+          "length": "medium",
+          "context": "medium",
+          "quick_reference": "medium",
+          "best_for": [
+            "stuck",
+            "explorer"
+          ]
+        },
+        "has_reference": true,
+        "has_troubleshooting": true,
+        "perspectives": 3
+      }
+    },
+    {
+      "task_id": 11,
+      "task_name": "optimize_performance",
+      "single_mode": {
+        "tutorial": {
+          "type": "tutorial",
+          "title": "How to: Tune Ada for better performance",
+          "format": "step-by-step",
+          "length": "long",
+          "context": "high",
+          "quick_reference": "low",
+          "best_for": [
+            "beginner",
+            "explorer"
+          ]
+        },
+        "has_reference": false,
+        "has_troubleshooting": false,
+        "perspectives": 1
+      },
+      "multi_mode": {
+        "tutorial": {
+          "type": "tutorial",
+          "title": "How to: Tune Ada for better performance",
+          "format": "step-by-step",
+          "length": "long",
+          "context": "high",
+          "quick_reference": "low",
+          "best_for": [
+            "beginner",
+            "explorer"
+          ]
+        },
+        "reference": {
+          "type": "reference",
+          "title": "Reference: Tune Ada for better performance",
+          "format": "structured-list",
+          "length": "short",
+          "context": "low",
+          "quick_reference": "high",
+          "best_for": [
+            "experienced",
+            "explorer"
+          ]
+        },
+        "troubleshooting": {
+          "type": "troubleshooting",
+          "title": "Troubleshooting: Tune Ada for better performance",
+          "format": "problem-solution",
+          "length": "medium",
+          "context": "medium",
+          "quick_reference": "medium",
+          "best_for": [
+            "stuck",
+            "explorer"
+          ]
+        },
+        "has_reference": true,
+        "has_troubleshooting": true,
+        "perspectives": 3
+      }
+    },
+    {
+      "task_id": 12,
+      "task_name": "integrate_external_api",
+      "single_mode": {
+        "tutorial": {
+          "type": "tutorial",
+          "title": "How to: Connect Ada to external service",
+          "format": "step-by-step",
+          "length": "long",
+          "context": "high",
+          "quick_reference": "low",
+          "best_for": [
+            "beginner",
+            "explorer"
+          ]
+        },
+        "has_reference": false,
+        "has_troubleshooting": false,
+        "perspectives": 1
+      },
+      "multi_mode": {
+        "tutorial": {
+          "type": "tutorial",
+          "title": "How to: Connect Ada to external service",
+          "format": "step-by-step",
+          "length": "long",
+          "context": "high",
+          "quick_reference": "low",
+          "best_for": [
+            "beginner",
+            "explorer"
+          ]
+        },
+        "reference": {
+          "type": "reference",
+          "title": "Reference: Connect Ada to external service",
+          "format": "structured-list",
+          "length": "short",
+          "context": "low",
+          "quick_reference": "high",
+          "best_for": [
+            "experienced",
+            "explorer"
+          ]
+        },
+        "troubleshooting": {
+          "type": "troubleshooting",
+          "title": "Troubleshooting: Connect Ada to external service",
+          "format": "problem-solution",
+          "length": "medium",
+          "context": "medium",
+          "quick_reference": "medium",
+          "best_for": [
+            "stuck",
+            "explorer"
+          ]
+        },
+        "has_reference": true,
+        "has_troubleshooting": true,
+        "perspectives": 3
+      }
+    }
+  ],
+  "navigation": [
+    {
+      "task_id": 1,
+      "user_type": "beginner",
+      "ideal_entry": "tutorial",
+      "single_mode": {
+        "entry_point": "tutorial",
+        "entry_match": true,
+        "paths": [
+          {
+            "perspective": "tutorial",
+            "steps": 4
+          }
+        ],
+        "total_steps": 4,
+        "found_answer": true,
+        "perspectives_used": 1
+      },
+      "multi_mode": {
+        "entry_point": "tutorial",
+        "entry_match": true,
+        "paths": [
+          {
+            "perspective": "tutorial",
+            "steps": 3
+          },
+          {
+            "perspective": "reference",
+            "steps": 1
+          }
+        ],
+        "total_steps": 4,
+        "found_answer": true,
+        "perspectives_used": 2
+      }
+    },
+    {
+      "task_id": 2,
+      "user_type": "beginner",
+      "ideal_entry": "tutorial",
+      "single_mode": {
+        "entry_point": "tutorial",
+        "entry_match": true,
+        "paths": [
+          {
+            "perspective": "tutorial",
+            "steps": 3
+          }
+        ],
+        "total_steps": 3,
+        "found_answer": true,
+        "perspectives_used": 1
+      },
+      "multi_mode": {
+        "entry_point": "tutorial",
+        "entry_match": true,
+        "paths": [
+          {
+            "perspective": "tutorial",
+            "steps": 3
+          }
+        ],
+        "total_steps": 3,
+        "found_answer": true,
+        "perspectives_used": 1
+      }
+    },
+    {
+      "task_id": 3,
+      "user_type": "beginner",
+      "ideal_entry": "tutorial",
+      "single_mode": {
+        "entry_point": "tutorial",
+        "entry_match": true,
+        "paths": [
+          {
+            "perspective": "tutorial",
+            "steps": 3
+          }
+        ],
+        "total_steps": 3,
+        "found_answer": true,
+        "perspectives_used": 1
+      },
+      "multi_mode": {
+        "entry_point": "tutorial",
+        "entry_match": true,
+        "paths": [
+          {
+            "perspective": "tutorial",
+            "steps": 3
+          },
+          {
+            "perspective": "reference",
+            "steps": 1
+          }
+        ],
+        "total_steps": 4,
+        "found_answer": true,
+        "perspectives_used": 2
+      }
+    },
+    {
+      "task_id": 4,
+      "user_type": "experienced",
+      "ideal_entry": "reference",
+      "single_mode": {
+        "entry_point": "tutorial",
+        "entry_match": false,
+        "paths": [
+          {
+            "perspective": "tutorial",
+            "steps": 10
+          }
+        ],
+        "total_steps": 10,
+        "found_answer": true,
+        "perspectives_used": 1
+      },
+      "multi_mode": {
+        "entry_point": "reference",
+        "entry_match": true,
+        "paths": [
+          {
+            "perspective": "reference",
+            "steps": 1
+          }
+        ],
+        "total_steps": 1,
+        "found_answer": true,
+        "perspectives_used": 1
+      }
+    },
+    {
+      "task_id": 5,
+      "user_type": "experienced",
+      "ideal_entry": "reference",
+      "single_mode": {
+        "entry_point": "tutorial",
+        "entry_match": false,
+        "paths": [
+          {
+            "perspective": "tutorial",
+            "steps": 11
+          }
+        ],
+        "total_steps": 11,
+        "found_answer": false,
+        "perspectives_used": 1
+      },
+      "multi_mode": {
+        "entry_point": "reference",
+        "entry_match": true,
+        "paths": [
+          {
+            "perspective": "reference",
+            "steps": 2
+          }
+        ],
+        "total_steps": 2,
+        "found_answer": true,
+        "perspectives_used": 1
+      }
+    },
+    {
+      "task_id": 6,
+      "user_type": "experienced",
+      "ideal_entry": "reference",
+      "single_mode": {
+        "entry_point": "tutorial",
+        "entry_match": false,
+        "paths": [
+          {
+            "perspective": "tutorial",
+            "steps": 8
+          }
+        ],
+        "total_steps": 8,
+        "found_answer": true,
+        "perspectives_used": 1
+      },
+      "multi_mode": {
+        "entry_point": "reference",
+        "entry_match": true,
+        "paths": [
+          {
+            "perspective": "reference",
+            "steps": 1
+          }
+        ],
+        "total_steps": 1,
+        "found_answer": true,
+        "perspectives_used": 1
+      }
+    },
+    {
+      "task_id": 7,
+      "user_type": "stuck",
+      "ideal_entry": "troubleshooting",
+      "single_mode": {
+        "entry_point": "tutorial",
+        "entry_match": false,
+        "paths": [
+          {
+            "perspective": "tutorial",
+            "steps": 8
+          }
+        ],
+        "total_steps": 8,
+        "found_answer": true,
+        "perspectives_used": 1
+      },
+      "multi_mode": {
+        "entry_point": "troubleshooting",
+        "entry_match": true,
+        "paths": [
+          {
+            "perspective": "troubleshooting",
+            "steps": 3
+          },
+          {
+            "perspective": "tutorial",
+            "steps": 2
+          }
+        ],
+        "total_steps": 5,
+        "found_answer": true,
+        "perspectives_used": 2
+      }
+    },
+    {
+      "task_id": 8,
+      "user_type": "stuck",
+      "ideal_entry": "troubleshooting",
+      "single_mode": {
+        "entry_point": "tutorial",
+        "entry_match": false,
+        "paths": [
+          {
+            "perspective": "tutorial",
+            "steps": 8
+          }
+        ],
+        "total_steps": 8,
+        "found_answer": true,
+        "perspectives_used": 1
+      },
+      "multi_mode": {
+        "entry_point": "troubleshooting",
+        "entry_match": true,
+        "paths": [
+          {
+            "perspective": "troubleshooting",
+            "steps": 4
+          },
+          {
+            "perspective": "tutorial",
+            "steps": 2
+          }
+        ],
+        "total_steps": 6,
+        "found_answer": true,
+        "perspectives_used": 2
+      }
+    },
+    {
+      "task_id": 9,
+      "user_type": "stuck",
+      "ideal_entry": "troubleshooting",
+      "single_mode": {
+        "entry_point": "tutorial",
+        "entry_match": false,
+        "paths": [
+          {
+            "perspective": "tutorial",
+            "steps": 8
+          }
+        ],
+        "total_steps": 8,
+        "found_answer": true,
+        "perspectives_used": 1
+      },
+      "multi_mode": {
+        "entry_point": "troubleshooting",
+        "entry_match": true,
+        "paths": [
+          {
+            "perspective": "troubleshooting",
+            "steps": 3
+          },
+          {
+            "perspective": "tutorial",
+            "steps": 1
+          }
+        ],
+        "total_steps": 4,
+        "found_answer": true,
+        "perspectives_used": 2
+      }
+    },
+    {
+      "task_id": 10,
+      "user_type": "explorer",
+      "ideal_entry": "tutorial",
+      "single_mode": {
+        "entry_point": "tutorial",
+        "entry_match": true,
+        "paths": [
+          {
+            "perspective": "tutorial",
+            "steps": 7
+          }
+        ],
+        "total_steps": 7,
+        "found_answer": true,
+        "perspectives_used": 1
+      },
+      "multi_mode": {
+        "entry_point": "tutorial",
+        "entry_match": true,
+        "paths": [
+          {
+            "perspective": "tutorial",
+            "steps": 3
+          },
+          {
+            "perspective": "reference",
+            "steps": 1
+          }
+        ],
+        "total_steps": 4,
+        "found_answer": true,
+        "perspectives_used": 2
+      }
+    },
+    {
+      "task_id": 11,
+      "user_type": "explorer",
+      "ideal_entry": "reference",
+      "single_mode": {
+        "entry_point": "tutorial",
+        "entry_match": false,
+        "paths": [
+          {
+            "perspective": "tutorial",
+            "steps": 7
+          }
+        ],
+        "total_steps": 7,
+        "found_answer": true,
+        "perspectives_used": 1
+      },
+      "multi_mode": {
+        "entry_point": "reference",
+        "entry_match": true,
+        "paths": [
+          {
+            "perspective": "reference",
+            "steps": 2
+          },
+          {
+            "perspective": "tutorial",
+            "steps": 1
+          }
+        ],
+        "total_steps": 3,
+        "found_answer": true,
+        "perspectives_used": 2
+      }
+    },
+    {
+      "task_id": 12,
+      "user_type": "explorer",
+      "ideal_entry": "tutorial",
+      "single_mode": {
+        "entry_point": "tutorial",
+        "entry_match": true,
+        "paths": [
+          {
+            "perspective": "tutorial",
+            "steps": 7
+          }
+        ],
+        "total_steps": 7,
+        "found_answer": true,
+        "perspectives_used": 1
+      },
+      "multi_mode": {
+        "entry_point": "tutorial",
+        "entry_match": true,
+        "paths": [
+          {
+            "perspective": "tutorial",
+            "steps": 2
+          },
+          {
+            "perspective": "reference",
+            "steps": 1
+          }
+        ],
+        "total_steps": 3,
+        "found_answer": true,
+        "perspectives_used": 2
+      }
+    }
+  ],
+  "completion": {
+    "single_mode": [
+      {
+        "task_id": 1,
+        "user_type": "beginner",
+        "completed": true,
+        "entry_match": true
+      },
+      {
+        "task_id": 2,
+        "user_type": "beginner",
+        "completed": true,
+        "entry_match": true
+      },
+      {
+        "task_id": 3,
+        "user_type": "beginner",
+        "completed": true,
+        "entry_match": true
+      },
+      {
+        "task_id": 4,
+        "user_type": "experienced",
+        "completed": true,
+        "entry_match": false
+      },
+      {
+        "task_id": 5,
+        "user_type": "experienced",
+        "completed": false,
+        "entry_match": false
+      },
+      {
+        "task_id": 6,
+        "user_type": "experienced",
+        "completed": true,
+        "entry_match": false
+      },
+      {
+        "task_id": 7,
+        "user_type": "stuck",
+        "completed": true,
+        "entry_match": false
+      },
+      {
+        "task_id": 8,
+        "user_type": "stuck",
+        "completed": true,
+        "entry_match": false
+      },
+      {
+        "task_id": 9,
+        "user_type": "stuck",
+        "completed": true,
+        "entry_match": false
+      },
+      {
+        "task_id": 10,
+        "user_type": "explorer",
+        "completed": true,
+        "entry_match": true
+      },
+      {
+        "task_id": 11,
+        "user_type": "explorer",
+        "completed": true,
+        "entry_match": false
+      },
+      {
+        "task_id": 12,
+        "user_type": "explorer",
+        "completed": true,
+        "entry_match": true
+      }
+    ],
+    "multi_mode": [
+      {
+        "task_id": 1,
+        "user_type": "beginner",
+        "completed": true,
+        "entry_match": true
+      },
+      {
+        "task_id": 2,
+        "user_type": "beginner",
+        "completed": true,
+        "entry_match": true
+      },
+      {
+        "task_id": 3,
+        "user_type": "beginner",
+        "completed": true,
+        "entry_match": true
+      },
+      {
+        "task_id": 4,
+        "user_type": "experienced",
+        "completed": true,
+        "entry_match": true
+      },
+      {
+        "task_id": 5,
+        "user_type": "experienced",
+        "completed": true,
+        "entry_match": true
+      },
+      {
+        "task_id": 6,
+        "user_type": "experienced",
+        "completed": true,
+        "entry_match": true
+      },
+      {
+        "task_id": 7,
+        "user_type": "stuck",
+        "completed": true,
+        "entry_match": true
+      },
+      {
+        "task_id": 8,
+        "user_type": "stuck",
+        "completed": true,
+        "entry_match": true
+      },
+      {
+        "task_id": 9,
+        "user_type": "stuck",
+        "completed": true,
+        "entry_match": true
+      },
+      {
+        "task_id": 10,
+        "user_type": "explorer",
+        "completed": true,
+        "entry_match": true
+      },
+      {
+        "task_id": 11,
+        "user_type": "explorer",
+        "completed": true,
+        "entry_match": true
+      },
+      {
+        "task_id": 12,
+        "user_type": "explorer",
+        "completed": true,
+        "entry_match": true
+      }
+    ],
+    "rate_single": 0.9166666666666666,
+    "rate_multi": 1.0,
+    "improvement": 0.08333333333333337
+  },
+  "timing": {
+    "single_mode": [
+      {
+        "task_id": 1,
+        "steps": 4,
+        "completed": true
+      },
+      {
+        "task_id": 2,
+        "steps": 3,
+        "completed": true
+      },
+      {
+        "task_id": 3,
+        "steps": 3,
+        "completed": true
+      },
+      {
+        "task_id": 4,
+        "steps": 10,
+        "completed": true
+      },
+      {
+        "task_id": 5,
+        "steps": null,
+        "completed": false
+      },
+      {
+        "task_id": 6,
+        "steps": 8,
+        "completed": true
+      },
+      {
+        "task_id": 7,
+        "steps": 8,
+        "completed": true
+      },
+      {
+        "task_id": 8,
+        "steps": 8,
+        "completed": true
+      },
+      {
+        "task_id": 9,
+        "steps": 8,
+        "completed": true
+      },
+      {
+        "task_id": 10,
+        "steps": 7,
+        "completed": true
+      },
+      {
+        "task_id": 11,
+        "steps": 7,
+        "completed": true
+      },
+      {
+        "task_id": 12,
+        "steps": 7,
+        "completed": true
+      }
+    ],
+    "multi_mode": [
+      {
+        "task_id": 1,
+        "steps": 4,
+        "completed": true
+      },
+      {
+        "task_id": 2,
+        "steps": 3,
+        "completed": true
+      },
+      {
+        "task_id": 3,
+        "steps": 4,
+        "completed": true
+      },
+      {
+        "task_id": 4,
+        "steps": 1,
+        "completed": true
+      },
+      {
+        "task_id": 5,
+        "steps": 2,
+        "completed": true
+      },
+      {
+        "task_id": 6,
+        "steps": 1,
+        "completed": true
+      },
+      {
+        "task_id": 7,
+        "steps": 5,
+        "completed": true
+      },
+      {
+        "task_id": 8,
+        "steps": 6,
+        "completed": true
+      },
+      {
+        "task_id": 9,
+        "steps": 4,
+        "completed": true
+      },
+      {
+        "task_id": 10,
+        "steps": 4,
+        "completed": true
+      },
+      {
+        "task_id": 11,
+        "steps": 3,
+        "completed": true
+      },
+      {
+        "task_id": 12,
+        "steps": 3,
+        "completed": true
+      }
+    ],
+    "avg_single": 6.636363636363637,
+    "avg_multi": 3.3333333333333335,
+    "reduction": -3.303030303030303
+  },
+  "entry_analysis": {
+    "by_user_type": {
+      "stuck": {
+        "n_tasks": 3,
+        "single_success": 1.0,
+        "multi_success": 1.0,
+        "improvement": 0.0,
+        "avg_steps_single": 8.0,
+        "avg_steps_multi": 5.0,
+        "best_mode": "single"
+      },
+      "beginner": {
+        "n_tasks": 3,
+        "single_success": 1.0,
+        "multi_success": 1.0,
+        "improvement": 0.0,
+        "avg_steps_single": 3.3333333333333335,
+        "avg_steps_multi": 3.6666666666666665,
+        "best_mode": "single"
+      },
+      "explorer": {
+        "n_tasks": 3,
+        "single_success": 1.0,
+        "multi_success": 1.0,
+        "improvement": 0.0,
+        "avg_steps_single": 7.0,
+        "avg_steps_multi": 3.3333333333333335,
+        "best_mode": "single"
+      },
+      "experienced": {
+        "n_tasks": 3,
+        "single_success": 0.6666666666666666,
+        "multi_success": 1.0,
+        "improvement": 0.33333333333333337,
+        "avg_steps_single": 9.0,
+        "avg_steps_multi": 1.3333333333333333,
+        "best_mode": "multi"
+      }
+    },
+    "entry_match_importance": {
+      "match_success_rate": 1.0,
+      "matters": true
+    }
+  },
+  "comparison": {
+    "completion_single": 0.9166666666666666,
+    "completion_multi": 1.0,
+    "completion_delta": 0.08333333333333337,
+    "time_single": 6.636363636363637,
+    "time_multi": 3.3333333333333335,
+    "time_delta": -3.303030303030303,
+    "match_rate_single": 0.4166666666666667,
+    "match_rate_multi": 1.0,
+    "match_rate_delta": 0.5833333333333333,
+    "effect_size": 1.3375420875420876,
+    "multi_mode_helps": true,
+    "interpretation": "LARGE positive effect",
+    "best_entry_by_type": {
+      "stuck": "troubleshooting",
+      "beginner": "tutorial",
+      "explorer": "flexible (multiple)",
+      "experienced": "reference"
+    }
+  },
+  "interpretation": "LARGE positive effect",
+  "conclusion": "Multiple entry points improve task success"
+}

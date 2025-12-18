@@ -1,0 +1,1209 @@
+{
+  "metadata": {
+    "generated_at": "2025-12-18T04:04:58.988540+00:00",
+    "num_turns": 75,
+    "generator": "ConversationGenerator v1.0"
+  },
+  "turns": [
+    {
+      "timestamp": "2025-12-11T14:35:53.689151+00:00",
+      "content": "had a good meal",
+      "metadata": {
+        "importance": 0.8050341982663574,
+        "prediction_error": 0.5860301292281809,
+        "habituation_penalty": 0.0,
+        "topic": "personal"
+      },
+      "ground_truth": {
+        "true_importance": 0.8050341982663574,
+        "expected_detail_level": "FULL",
+        "should_decay": true,
+        "topic_cluster": "personal"
+      }
+    },
+    {
+      "timestamp": "2025-12-15T00:46:27.591113+00:00",
+      "content": "feeling tired today",
+      "metadata": {
+        "importance": 0.9535465483985075,
+        "prediction_error": 0.8573012247292384,
+        "habituation_penalty": 0.0,
+        "topic": "personal"
+      },
+      "ground_truth": {
+        "true_importance": 0.9535465483985075,
+        "expected_detail_level": "FULL",
+        "should_decay": true,
+        "topic_cluster": "personal"
+      }
+    },
+    {
+      "timestamp": "2025-12-15T02:23:45.534923+00:00",
+      "content": "talked with a friend",
+      "metadata": {
+        "importance": 0.008685954318380495,
+        "prediction_error": 0.0,
+        "habituation_penalty": 0.0,
+        "topic": "personal"
+      },
+      "ground_truth": {
+        "true_importance": 0.008685954318380495,
+        "expected_detail_level": "DROPPED",
+        "should_decay": true,
+        "topic_cluster": "personal"
+      }
+    },
+    {
+      "timestamp": "2025-12-15T08:06:17.774767+00:00",
+      "content": "had a good meal",
+      "metadata": {
+        "importance": 0.042975447102608734,
+        "prediction_error": 0.09302066690654429,
+        "habituation_penalty": 0.3,
+        "topic": "personal"
+      },
+      "ground_truth": {
+        "true_importance": 0.042975447102608734,
+        "expected_detail_level": "DROPPED",
+        "should_decay": true,
+        "topic_cluster": "personal"
+      }
+    },
+    {
+      "timestamp": "2025-12-15T16:40:52.147611+00:00",
+      "content": "read an interesting article",
+      "metadata": {
+        "importance": 0.22383352860171202,
+        "prediction_error": 0.04273662203460277,
+        "habituation_penalty": 0.0,
+        "topic": "personal"
+      },
+      "ground_truth": {
+        "true_importance": 0.22383352860171202,
+        "expected_detail_level": "SUMMARY",
+        "should_decay": true,
+        "topic_cluster": "personal"
+      }
+    },
+    {
+      "timestamp": "2025-12-15T18:37:22.630400+00:00",
+      "content": "had a good meal",
+      "metadata": {
+        "importance": 0.09731486762352795,
+        "prediction_error": 0.24468337692449166,
+        "habituation_penalty": 0.0,
+        "topic": "personal"
+      },
+      "ground_truth": {
+        "true_importance": 0.09731486762352795,
+        "expected_detail_level": "DROPPED",
+        "should_decay": true,
+        "topic_cluster": "personal"
+      }
+    },
+    {
+      "timestamp": "2025-12-15T20:59:46.837777+00:00",
+      "content": "organized my space",
+      "metadata": {
+        "importance": 0.014928747729887148,
+        "prediction_error": 0.0,
+        "habituation_penalty": 0.0,
+        "topic": "personal"
+      },
+      "ground_truth": {
+        "true_importance": 0.014928747729887148,
+        "expected_detail_level": "DROPPED",
+        "should_decay": true,
+        "topic_cluster": "personal"
+      }
+    },
+    {
+      "timestamp": "2025-12-15T23:31:16.987028+00:00",
+      "content": "had a good meal",
+      "metadata": {
+        "importance": 0.08195005330943084,
+        "prediction_error": 0.15934229478394984,
+        "habituation_penalty": 0.0,
+        "topic": "personal"
+      },
+      "ground_truth": {
+        "true_importance": 0.08195005330943084,
+        "expected_detail_level": "DROPPED",
+        "should_decay": true,
+        "topic_cluster": "personal"
+      }
+    },
+    {
+      "timestamp": "2025-12-16T01:39:04.157158+00:00",
+      "content": "this is interesting",
+      "metadata": {
+        "importance": 0.09252581755537694,
+        "prediction_error": 0.0,
+        "habituation_penalty": 0.3,
+        "topic": "meta"
+      },
+      "ground_truth": {
+        "true_importance": 0.09252581755537694,
+        "expected_detail_level": "DROPPED",
+        "should_decay": true,
+        "topic_cluster": "meta"
+      }
+    },
+    {
+      "timestamp": "2025-12-16T02:26:32.498683+00:00",
+      "content": "let me think",
+      "metadata": {
+        "importance": 0.041170441577198104,
+        "prediction_error": 0.0,
+        "habituation_penalty": 0.3,
+        "topic": "meta"
+      },
+      "ground_truth": {
+        "true_importance": 0.041170441577198104,
+        "expected_detail_level": "DROPPED",
+        "should_decay": true,
+        "topic_cluster": "meta"
+      }
+    },
+    {
+      "timestamp": "2025-12-16T03:56:09.012948+00:00",
+      "content": "yes exactly",
+      "metadata": {
+        "importance": 0.038755710527764484,
+        "prediction_error": 0.04016193651640465,
+        "habituation_penalty": 0.0,
+        "topic": "meta"
+      },
+      "ground_truth": {
+        "true_importance": 0.038755710527764484,
+        "expected_detail_level": "DROPPED",
+        "should_decay": true,
+        "topic_cluster": "meta"
+      }
+    },
+    {
+      "timestamp": "2025-12-16T06:58:50.012690+00:00",
+      "content": "this is interesting",
+      "metadata": {
+        "importance": 0.7216226489776473,
+        "prediction_error": 0.6498415990933885,
+        "habituation_penalty": 0.0,
+        "topic": "meta"
+      },
+      "ground_truth": {
+        "true_importance": 0.7216226489776473,
+        "expected_detail_level": "CHUNKS",
+        "should_decay": true,
+        "topic_cluster": "meta"
+      }
+    },
+    {
+      "timestamp": "2025-12-16T09:55:03.699670+00:00",
+      "content": "good point",
+      "metadata": {
+        "importance": 0.09391818920320084,
+        "prediction_error": 0.037456446962574816,
+        "habituation_penalty": 0.0,
+        "topic": "meta"
+      },
+      "ground_truth": {
+        "true_importance": 0.09391818920320084,
+        "expected_detail_level": "DROPPED",
+        "should_decay": true,
+        "topic_cluster": "meta"
+      }
+    },
+    {
+      "timestamp": "2025-12-16T14:16:15.716060+00:00",
+      "content": "I see what you mean",
+      "metadata": {
+        "importance": 0.006256967707424643,
+        "prediction_error": 0.0,
+        "habituation_penalty": 0.0,
+        "topic": "meta"
+      },
+      "ground_truth": {
+        "true_importance": 0.006256967707424643,
+        "expected_detail_level": "DROPPED",
+        "should_decay": true,
+        "topic_cluster": "meta"
+      }
+    },
+    {
+      "timestamp": "2025-12-16T19:19:33.255149+00:00",
+      "content": "good point",
+      "metadata": {
+        "importance": 0.25334530794440907,
+        "prediction_error": 0.07466830549017979,
+        "habituation_penalty": 0.0,
+        "topic": "meta"
+      },
+      "ground_truth": {
+        "true_importance": 0.25334530794440907,
+        "expected_detail_level": "SUMMARY",
+        "should_decay": true,
+        "topic_cluster": "meta"
+      }
+    },
+    {
+      "timestamp": "2025-12-16T20:41:36.495980+00:00",
+      "content": "tell me more",
+      "metadata": {
+        "importance": 0.10185398434453917,
+        "prediction_error": 0.004525238038430177,
+        "habituation_penalty": 0.3,
+        "topic": "meta"
+      },
+      "ground_truth": {
+        "true_importance": 0.10185398434453917,
+        "expected_detail_level": "DROPPED",
+        "should_decay": true,
+        "topic_cluster": "meta"
+      }
+    },
+    {
+      "timestamp": "2025-12-16T20:54:10.354319+00:00",
+      "content": "let me think",
+      "metadata": {
+        "importance": 0.0581711118800701,
+        "prediction_error": 0.1512110700457832,
+        "habituation_penalty": 0.0,
+        "topic": "meta"
+      },
+      "ground_truth": {
+        "true_importance": 0.0581711118800701,
+        "expected_detail_level": "DROPPED",
+        "should_decay": true,
+        "topic_cluster": "meta"
+      }
+    },
+    {
+      "timestamp": "2025-12-16T22:10:28.237113+00:00",
+      "content": "yes exactly",
+      "metadata": {
+        "importance": 0.7708806546840172,
+        "prediction_error": 0.39819414558988975,
+        "habituation_penalty": 0.0,
+        "topic": "meta"
+      },
+      "ground_truth": {
+        "true_importance": 0.7708806546840172,
+        "expected_detail_level": "FULL",
+        "should_decay": true,
+        "topic_cluster": "meta"
+      }
+    },
+    {
+      "timestamp": "2025-12-16T22:11:42.864451+00:00",
+      "content": "I see what you mean",
+      "metadata": {
+        "importance": 0.022605982073723052,
+        "prediction_error": 0.1963410436834389,
+        "habituation_penalty": 0.0,
+        "topic": "meta"
+      },
+      "ground_truth": {
+        "true_importance": 0.022605982073723052,
+        "expected_detail_level": "DROPPED",
+        "should_decay": true,
+        "topic_cluster": "meta"
+      }
+    },
+    {
+      "timestamp": "2025-12-17T00:13:10.272676+00:00",
+      "content": "let me think",
+      "metadata": {
+        "importance": 0.20434004349445012,
+        "prediction_error": 0.29585729308328856,
+        "habituation_penalty": 0.0,
+        "topic": "meta"
+      },
+      "ground_truth": {
+        "true_importance": 0.20434004349445012,
+        "expected_detail_level": "SUMMARY",
+        "should_decay": true,
+        "topic_cluster": "meta"
+      }
+    },
+    {
+      "timestamp": "2025-12-17T01:28:27.062386+00:00",
+      "content": "hmm not sure about that",
+      "metadata": {
+        "importance": 0.020485877548726827,
+        "prediction_error": 0.0,
+        "habituation_penalty": 0.0,
+        "topic": "meta"
+      },
+      "ground_truth": {
+        "true_importance": 0.020485877548726827,
+        "expected_detail_level": "DROPPED",
+        "should_decay": true,
+        "topic_cluster": "meta"
+      }
+    },
+    {
+      "timestamp": "2025-12-17T02:16:08.131064+00:00",
+      "content": "this is interesting",
+      "metadata": {
+        "importance": 0.022257196851986304,
+        "prediction_error": 0.0002770323749720586,
+        "habituation_penalty": 0.3,
+        "topic": "meta"
+      },
+      "ground_truth": {
+        "true_importance": 0.022257196851986304,
+        "expected_detail_level": "DROPPED",
+        "should_decay": true,
+        "topic_cluster": "meta"
+      }
+    },
+    {
+      "timestamp": "2025-12-17T02:33:43.023223+00:00",
+      "content": "good point",
+      "metadata": {
+        "importance": 0.2592750101775717,
+        "prediction_error": 0.3236098557067363,
+        "habituation_penalty": 0.0,
+        "topic": "meta"
+      },
+      "ground_truth": {
+        "true_importance": 0.2592750101775717,
+        "expected_detail_level": "SUMMARY",
+        "should_decay": true,
+        "topic_cluster": "meta"
+      }
+    },
+    {
+      "timestamp": "2025-12-17T03:20:22.810935+00:00",
+      "content": "yes exactly",
+      "metadata": {
+        "importance": 0.2687630296670408,
+        "prediction_error": 0.16802760222729105,
+        "habituation_penalty": 0.0,
+        "topic": "meta"
+      },
+      "ground_truth": {
+        "true_importance": 0.2687630296670408,
+        "expected_detail_level": "SUMMARY",
+        "should_decay": true,
+        "topic_cluster": "meta"
+      }
+    },
+    {
+      "timestamp": "2025-12-17T04:35:12.445096+00:00",
+      "content": "let me think",
+      "metadata": {
+        "importance": 0.018562110030330214,
+        "prediction_error": 0.0,
+        "habituation_penalty": 0.0,
+        "topic": "meta"
+      },
+      "ground_truth": {
+        "true_importance": 0.018562110030330214,
+        "expected_detail_level": "DROPPED",
+        "should_decay": true,
+        "topic_cluster": "meta"
+      }
+    },
+    {
+      "timestamp": "2025-12-17T05:10:05.175087+00:00",
+      "content": "analyzed systems thinking",
+      "metadata": {
+        "importance": 0.21228651129698364,
+        "prediction_error": 0.34499496696664356,
+        "habituation_penalty": 0.0,
+        "topic": "philosophy"
+      },
+      "ground_truth": {
+        "true_importance": 0.21228651129698364,
+        "expected_detail_level": "SUMMARY",
+        "should_decay": true,
+        "topic_cluster": "philosophy"
+      }
+    },
+    {
+      "timestamp": "2025-12-17T06:14:52.997498+00:00",
+      "content": "discussed decomposition theory",
+      "metadata": {
+        "importance": 0.23233943657212064,
+        "prediction_error": 0.23419669382431688,
+        "habituation_penalty": 0.0,
+        "topic": "philosophy"
+      },
+      "ground_truth": {
+        "true_importance": 0.23233943657212064,
+        "expected_detail_level": "SUMMARY",
+        "should_decay": true,
+        "topic_cluster": "philosophy"
+      }
+    },
+    {
+      "timestamp": "2025-12-17T06:28:08.887861+00:00",
+      "content": "examined power structures",
+      "metadata": {
+        "importance": 0.0283517842545283,
+        "prediction_error": 0.0911979869142022,
+        "habituation_penalty": 0.0,
+        "topic": "philosophy"
+      },
+      "ground_truth": {
+        "true_importance": 0.0283517842545283,
+        "expected_detail_level": "DROPPED",
+        "should_decay": true,
+        "topic_cluster": "philosophy"
+      }
+    },
+    {
+      "timestamp": "2025-12-17T06:57:16.235307+00:00",
+      "content": "explored xenofeminist principles",
+      "metadata": {
+        "importance": 0.8808102440981858,
+        "prediction_error": 0.47671650176296787,
+        "habituation_penalty": 0.0,
+        "topic": "philosophy"
+      },
+      "ground_truth": {
+        "true_importance": 0.8808102440981858,
+        "expected_detail_level": "FULL",
+        "should_decay": true,
+        "topic_cluster": "philosophy"
+      }
+    },
+    {
+      "timestamp": "2025-12-17T08:17:15.077591+00:00",
+      "content": "went for a walk",
+      "metadata": {
+        "importance": 0.19681641541081654,
+        "prediction_error": 0.2026255535592435,
+        "habituation_penalty": 0.0,
+        "topic": "personal"
+      },
+      "ground_truth": {
+        "true_importance": 0.19681641541081654,
+        "expected_detail_level": "DROPPED",
+        "should_decay": true,
+        "topic_cluster": "personal"
+      }
+    },
+    {
+      "timestamp": "2025-12-17T08:50:51.176267+00:00",
+      "content": "went for a walk",
+      "metadata": {
+        "importance": 0.11300379181689005,
+        "prediction_error": 0.19576743741724048,
+        "habituation_penalty": 0.0,
+        "topic": "personal"
+      },
+      "ground_truth": {
+        "true_importance": 0.11300379181689005,
+        "expected_detail_level": "DROPPED",
+        "should_decay": true,
+        "topic_cluster": "personal"
+      }
+    },
+    {
+      "timestamp": "2025-12-17T11:05:20.592108+00:00",
+      "content": "read an interesting article",
+      "metadata": {
+        "importance": 0.20562433208327288,
+        "prediction_error": 0.15449436835196062,
+        "habituation_penalty": 0.0,
+        "topic": "personal"
+      },
+      "ground_truth": {
+        "true_importance": 0.20562433208327288,
+        "expected_detail_level": "SUMMARY",
+        "should_decay": true,
+        "topic_cluster": "personal"
+      }
+    },
+    {
+      "timestamp": "2025-12-17T11:10:46.479617+00:00",
+      "content": "discovered neuromorphic patterns",
+      "metadata": {
+        "importance": 0.06425779836267011,
+        "prediction_error": 0.22404776586760783,
+        "habituation_penalty": 0.0,
+        "topic": "neuroscience"
+      },
+      "ground_truth": {
+        "true_importance": 0.06425779836267011,
+        "expected_detail_level": "DROPPED",
+        "should_decay": true,
+        "topic_cluster": "neuroscience"
+      }
+    },
+    {
+      "timestamp": "2025-12-17T12:17:15.194804+00:00",
+      "content": "studied memory consolidation",
+      "metadata": {
+        "importance": 0.08873763049638653,
+        "prediction_error": 0.17736441081603066,
+        "habituation_penalty": 0.0,
+        "topic": "neuroscience"
+      },
+      "ground_truth": {
+        "true_importance": 0.08873763049638653,
+        "expected_detail_level": "DROPPED",
+        "should_decay": true,
+        "topic_cluster": "neuroscience"
+      }
+    },
+    {
+      "timestamp": "2025-12-17T12:39:06.941131+00:00",
+      "content": "learned about hippocampal function",
+      "metadata": {
+        "importance": 0.17917393232148854,
+        "prediction_error": 0.0,
+        "habituation_penalty": 0.0,
+        "topic": "neuroscience"
+      },
+      "ground_truth": {
+        "true_importance": 0.17917393232148854,
+        "expected_detail_level": "DROPPED",
+        "should_decay": true,
+        "topic_cluster": "neuroscience"
+      }
+    },
+    {
+      "timestamp": "2025-12-17T13:38:50.260321+00:00",
+      "content": "researched temporal coding",
+      "metadata": {
+        "importance": 0.7496617497232175,
+        "prediction_error": 0.49983258686159093,
+        "habituation_penalty": 0.0,
+        "topic": "neuroscience"
+      },
+      "ground_truth": {
+        "true_importance": 0.7496617497232175,
+        "expected_detail_level": "CHUNKS",
+        "should_decay": true,
+        "topic_cluster": "neuroscience"
+      }
+    },
+    {
+      "timestamp": "2025-12-17T13:48:36.393499+00:00",
+      "content": "discovered neuromorphic patterns",
+      "metadata": {
+        "importance": 0.8831786266377447,
+        "prediction_error": 0.7191815046910157,
+        "habituation_penalty": 0.0,
+        "topic": "neuroscience"
+      },
+      "ground_truth": {
+        "true_importance": 0.8831786266377447,
+        "expected_detail_level": "FULL",
+        "should_decay": true,
+        "topic_cluster": "neuroscience"
+      }
+    },
+    {
+      "timestamp": "2025-12-17T14:00:51.296055+00:00",
+      "content": "explored synaptic plasticity",
+      "metadata": {
+        "importance": 0.9353110718779615,
+        "prediction_error": 0.8163074855695562,
+        "habituation_penalty": 0.0,
+        "topic": "neuroscience"
+      },
+      "ground_truth": {
+        "true_importance": 0.9353110718779615,
+        "expected_detail_level": "FULL",
+        "should_decay": true,
+        "topic_cluster": "neuroscience"
+      }
+    },
+    {
+      "timestamp": "2025-12-17T14:30:47.001689+00:00",
+      "content": "researched temporal coding",
+      "metadata": {
+        "importance": 0.8385039935322968,
+        "prediction_error": 0.49966148855411785,
+        "habituation_penalty": 0.0,
+        "topic": "neuroscience"
+      },
+      "ground_truth": {
+        "true_importance": 0.8385039935322968,
+        "expected_detail_level": "FULL",
+        "should_decay": true,
+        "topic_cluster": "neuroscience"
+      }
+    },
+    {
+      "timestamp": "2025-12-17T14:35:01.692752+00:00",
+      "content": "analyzed attention mechanisms",
+      "metadata": {
+        "importance": 0.059909319433404246,
+        "prediction_error": 0.08380190263408309,
+        "habituation_penalty": 0.3,
+        "topic": "neuroscience"
+      },
+      "ground_truth": {
+        "true_importance": 0.059909319433404246,
+        "expected_detail_level": "DROPPED",
+        "should_decay": true,
+        "topic_cluster": "neuroscience"
+      }
+    },
+    {
+      "timestamp": "2025-12-17T14:35:21.309300+00:00",
+      "content": "examined dopamine signaling",
+      "metadata": {
+        "importance": 0.2802880661992499,
+        "prediction_error": 0.28076203718707526,
+        "habituation_penalty": 0.0,
+        "topic": "neuroscience"
+      },
+      "ground_truth": {
+        "true_importance": 0.2802880661992499,
+        "expected_detail_level": "SUMMARY",
+        "should_decay": true,
+        "topic_cluster": "neuroscience"
+      }
+    },
+    {
+      "timestamp": "2025-12-17T14:44:54.914183+00:00",
+      "content": "researched temporal coding",
+      "metadata": {
+        "importance": 0.27159186269347235,
+        "prediction_error": 0.049053766282072336,
+        "habituation_penalty": 0.3,
+        "topic": "neuroscience"
+      },
+      "ground_truth": {
+        "true_importance": 0.27159186269347235,
+        "expected_detail_level": "SUMMARY",
+        "should_decay": true,
+        "topic_cluster": "neuroscience"
+      }
+    },
+    {
+      "timestamp": "2025-12-17T14:53:15.956588+00:00",
+      "content": "researched temporal coding",
+      "metadata": {
+        "importance": 0.9653889321154022,
+        "prediction_error": 0.8479610233312915,
+        "habituation_penalty": 0.3,
+        "topic": "neuroscience"
+      },
+      "ground_truth": {
+        "true_importance": 0.9653889321154022,
+        "expected_detail_level": "FULL",
+        "should_decay": true,
+        "topic_cluster": "neuroscience"
+      }
+    },
+    {
+      "timestamp": "2025-12-17T14:58:11.349729+00:00",
+      "content": "studied memory consolidation",
+      "metadata": {
+        "importance": 0.29835760537148737,
+        "prediction_error": 0.15881539312714818,
+        "habituation_penalty": 0.0,
+        "topic": "neuroscience"
+      },
+      "ground_truth": {
+        "true_importance": 0.29835760537148737,
+        "expected_detail_level": "SUMMARY",
+        "should_decay": true,
+        "topic_cluster": "neuroscience"
+      }
+    },
+    {
+      "timestamp": "2025-12-17T15:15:51.242624+00:00",
+      "content": "organized my space",
+      "metadata": {
+        "importance": 0.0412798763177615,
+        "prediction_error": 0.0,
+        "habituation_penalty": 0.0,
+        "topic": "personal"
+      },
+      "ground_truth": {
+        "true_importance": 0.0412798763177615,
+        "expected_detail_level": "DROPPED",
+        "should_decay": true,
+        "topic_cluster": "personal"
+      }
+    },
+    {
+      "timestamp": "2025-12-17T15:23:13.019271+00:00",
+      "content": "hmm not sure about that",
+      "metadata": {
+        "importance": 0.0015753594916853796,
+        "prediction_error": 0.0,
+        "habituation_penalty": 0.0,
+        "topic": "meta"
+      },
+      "ground_truth": {
+        "true_importance": 0.0015753594916853796,
+        "expected_detail_level": "DROPPED",
+        "should_decay": true,
+        "topic_cluster": "meta"
+      }
+    },
+    {
+      "timestamp": "2025-12-17T15:52:26.312517+00:00",
+      "content": "feeling tired today",
+      "metadata": {
+        "importance": 0.08643047341176915,
+        "prediction_error": 0.0,
+        "habituation_penalty": 0.0,
+        "topic": "personal"
+      },
+      "ground_truth": {
+        "true_importance": 0.08643047341176915,
+        "expected_detail_level": "DROPPED",
+        "should_decay": true,
+        "topic_cluster": "personal"
+      }
+    },
+    {
+      "timestamp": "2025-12-17T16:34:30.568598+00:00",
+      "content": "organized my space",
+      "metadata": {
+        "importance": 0.018842145303319145,
+        "prediction_error": 0.1478645899544575,
+        "habituation_penalty": 0.0,
+        "topic": "personal"
+      },
+      "ground_truth": {
+        "true_importance": 0.018842145303319145,
+        "expected_detail_level": "DROPPED",
+        "should_decay": true,
+        "topic_cluster": "personal"
+      }
+    },
+    {
+      "timestamp": "2025-12-17T16:53:35.359911+00:00",
+      "content": "reflected on knowledge production",
+      "metadata": {
+        "importance": 0.08738159633257736,
+        "prediction_error": 0.0,
+        "habituation_penalty": 0.0,
+        "topic": "philosophy"
+      },
+      "ground_truth": {
+        "true_importance": 0.08738159633257736,
+        "expected_detail_level": "DROPPED",
+        "should_decay": true,
+        "topic_cluster": "philosophy"
+      }
+    },
+    {
+      "timestamp": "2025-12-17T17:17:44.079620+00:00",
+      "content": "explored xenofeminist principles",
+      "metadata": {
+        "importance": 0.02568418649617853,
+        "prediction_error": 0.20784072692821365,
+        "habituation_penalty": 0.0,
+        "topic": "philosophy"
+      },
+      "ground_truth": {
+        "true_importance": 0.02568418649617853,
+        "expected_detail_level": "DROPPED",
+        "should_decay": true,
+        "topic_cluster": "philosophy"
+      }
+    },
+    {
+      "timestamp": "2025-12-17T18:45:09.004966+00:00",
+      "content": "synthesized different perspectives",
+      "metadata": {
+        "importance": 0.15228677664880144,
+        "prediction_error": 0.0,
+        "habituation_penalty": 0.3,
+        "topic": "philosophy"
+      },
+      "ground_truth": {
+        "true_importance": 0.15228677664880144,
+        "expected_detail_level": "DROPPED",
+        "should_decay": true,
+        "topic_cluster": "philosophy"
+      }
+    },
+    {
+      "timestamp": "2025-12-17T19:05:19.395642+00:00",
+      "content": "explored xenofeminist principles",
+      "metadata": {
+        "importance": 0.22419497746879358,
+        "prediction_error": 0.09977403483404865,
+        "habituation_penalty": 0.0,
+        "topic": "philosophy"
+      },
+      "ground_truth": {
+        "true_importance": 0.22419497746879358,
+        "expected_detail_level": "SUMMARY",
+        "should_decay": true,
+        "topic_cluster": "philosophy"
+      }
+    },
+    {
+      "timestamp": "2025-12-17T19:05:22.509831+00:00",
+      "content": "reflected on knowledge production",
+      "metadata": {
+        "importance": 0.2314504122329577,
+        "prediction_error": 0.2560900824879949,
+        "habituation_penalty": 0.3,
+        "topic": "philosophy"
+      },
+      "ground_truth": {
+        "true_importance": 0.2314504122329577,
+        "expected_detail_level": "SUMMARY",
+        "should_decay": true,
+        "topic_cluster": "philosophy"
+      }
+    },
+    {
+      "timestamp": "2025-12-17T19:05:31.893884+00:00",
+      "content": "synthesized different perspectives",
+      "metadata": {
+        "importance": 0.19283868486081612,
+        "prediction_error": 0.26714054210801236,
+        "habituation_penalty": 0.0,
+        "topic": "philosophy"
+      },
+      "ground_truth": {
+        "true_importance": 0.19283868486081612,
+        "expected_detail_level": "DROPPED",
+        "should_decay": true,
+        "topic_cluster": "philosophy"
+      }
+    },
+    {
+      "timestamp": "2025-12-17T19:28:00.807124+00:00",
+      "content": "synthesized different perspectives",
+      "metadata": {
+        "importance": 0.040455774358884686,
+        "prediction_error": 0.11473706508969712,
+        "habituation_penalty": 0.3,
+        "topic": "philosophy"
+      },
+      "ground_truth": {
+        "true_importance": 0.040455774358884686,
+        "expected_detail_level": "DROPPED",
+        "should_decay": true,
+        "topic_cluster": "philosophy"
+      }
+    },
+    {
+      "timestamp": "2025-12-17T19:41:49.750873+00:00",
+      "content": "examined power structures",
+      "metadata": {
+        "importance": 0.2657371156854315,
+        "prediction_error": 0.11225430899969216,
+        "habituation_penalty": 0.0,
+        "topic": "philosophy"
+      },
+      "ground_truth": {
+        "true_importance": 0.2657371156854315,
+        "expected_detail_level": "SUMMARY",
+        "should_decay": true,
+        "topic_cluster": "philosophy"
+      }
+    },
+    {
+      "timestamp": "2025-12-17T19:56:35.820663+00:00",
+      "content": "considered ethical implications",
+      "metadata": {
+        "importance": 0.07599412956078522,
+        "prediction_error": 0.15451225822009562,
+        "habituation_penalty": 0.0,
+        "topic": "philosophy"
+      },
+      "ground_truth": {
+        "true_importance": 0.07599412956078522,
+        "expected_detail_level": "DROPPED",
+        "should_decay": true,
+        "topic_cluster": "philosophy"
+      }
+    },
+    {
+      "timestamp": "2025-12-17T20:40:54.529408+00:00",
+      "content": "reflected on knowledge production",
+      "metadata": {
+        "importance": 0.1967194102673039,
+        "prediction_error": 0.0469902296326621,
+        "habituation_penalty": 0.0,
+        "topic": "philosophy"
+      },
+      "ground_truth": {
+        "true_importance": 0.1967194102673039,
+        "expected_detail_level": "DROPPED",
+        "should_decay": true,
+        "topic_cluster": "philosophy"
+      }
+    },
+    {
+      "timestamp": "2025-12-17T21:01:18.106231+00:00",
+      "content": "analyzed systems thinking",
+      "metadata": {
+        "importance": 0.286943615347098,
+        "prediction_error": 0.13647518210623283,
+        "habituation_penalty": 0.0,
+        "topic": "philosophy"
+      },
+      "ground_truth": {
+        "true_importance": 0.286943615347098,
+        "expected_detail_level": "SUMMARY",
+        "should_decay": true,
+        "topic_cluster": "philosophy"
+      }
+    },
+    {
+      "timestamp": "2025-12-17T22:04:20.088629+00:00",
+      "content": "questioned assumptions",
+      "metadata": {
+        "importance": 0.8557827560604826,
+        "prediction_error": 0.7195071642030473,
+        "habituation_penalty": 0.3,
+        "topic": "philosophy"
+      },
+      "ground_truth": {
+        "true_importance": 0.8557827560604826,
+        "expected_detail_level": "FULL",
+        "should_decay": true,
+        "topic_cluster": "philosophy"
+      }
+    },
+    {
+      "timestamp": "2025-12-18T00:02:55.199378+00:00",
+      "content": "explored xenofeminist principles",
+      "metadata": {
+        "importance": 0.8636423192033911,
+        "prediction_error": 0.5330341947282113,
+        "habituation_penalty": 0.0,
+        "topic": "philosophy"
+      },
+      "ground_truth": {
+        "true_importance": 0.8636423192033911,
+        "expected_detail_level": "FULL",
+        "should_decay": true,
+        "topic_cluster": "philosophy"
+      }
+    },
+    {
+      "timestamp": "2025-12-18T00:13:46.546600+00:00",
+      "content": "synthesized different perspectives",
+      "metadata": {
+        "importance": 0.21529887339349701,
+        "prediction_error": 0.017367120201813357,
+        "habituation_penalty": 0.0,
+        "topic": "philosophy"
+      },
+      "ground_truth": {
+        "true_importance": 0.21529887339349701,
+        "expected_detail_level": "SUMMARY",
+        "should_decay": true,
+        "topic_cluster": "philosophy"
+      }
+    },
+    {
+      "timestamp": "2025-12-18T00:44:15.277050+00:00",
+      "content": "feeling tired today",
+      "metadata": {
+        "importance": 0.13048215122794066,
+        "prediction_error": 0.1471252300565506,
+        "habituation_penalty": 0.3,
+        "topic": "personal"
+      },
+      "ground_truth": {
+        "true_importance": 0.13048215122794066,
+        "expected_detail_level": "DROPPED",
+        "should_decay": true,
+        "topic_cluster": "personal"
+      }
+    },
+    {
+      "timestamp": "2025-12-18T00:49:48.055484+00:00",
+      "content": "feeling tired today",
+      "metadata": {
+        "importance": 0.24032879266865098,
+        "prediction_error": 0.2399943979939316,
+        "habituation_penalty": 0.3,
+        "topic": "personal"
+      },
+      "ground_truth": {
+        "true_importance": 0.24032879266865098,
+        "expected_detail_level": "SUMMARY",
+        "should_decay": true,
+        "topic_cluster": "personal"
+      }
+    },
+    {
+      "timestamp": "2025-12-18T00:50:44.132817+00:00",
+      "content": "worked on a project",
+      "metadata": {
+        "importance": 0.010439689739562608,
+        "prediction_error": 0.0,
+        "habituation_penalty": 0.0,
+        "topic": "personal"
+      },
+      "ground_truth": {
+        "true_importance": 0.010439689739562608,
+        "expected_detail_level": "DROPPED",
+        "should_decay": true,
+        "topic_cluster": "personal"
+      }
+    },
+    {
+      "timestamp": "2025-12-18T01:10:00.886081+00:00",
+      "content": "worked on a project",
+      "metadata": {
+        "importance": 0.04603144901781243,
+        "prediction_error": 0.012191041798386273,
+        "habituation_penalty": 0.0,
+        "topic": "personal"
+      },
+      "ground_truth": {
+        "true_importance": 0.04603144901781243,
+        "expected_detail_level": "DROPPED",
+        "should_decay": true,
+        "topic_cluster": "personal"
+      }
+    },
+    {
+      "timestamp": "2025-12-18T01:11:15.466350+00:00",
+      "content": "talked with a friend",
+      "metadata": {
+        "importance": 0.15883796446088688,
+        "prediction_error": 0.0704001935036008,
+        "habituation_penalty": 0.0,
+        "topic": "personal"
+      },
+      "ground_truth": {
+        "true_importance": 0.15883796446088688,
+        "expected_detail_level": "DROPPED",
+        "should_decay": true,
+        "topic_cluster": "personal"
+      }
+    },
+    {
+      "timestamp": "2025-12-18T01:20:28.101050+00:00",
+      "content": "examined power structures",
+      "metadata": {
+        "importance": 0.11609621401177904,
+        "prediction_error": 0.10593643411210416,
+        "habituation_penalty": 0.0,
+        "topic": "philosophy"
+      },
+      "ground_truth": {
+        "true_importance": 0.11609621401177904,
+        "expected_detail_level": "DROPPED",
+        "should_decay": true,
+        "topic_cluster": "philosophy"
+      }
+    },
+    {
+      "timestamp": "2025-12-18T01:27:29.490014+00:00",
+      "content": "synthesized different perspectives",
+      "metadata": {
+        "importance": 0.18356315482909277,
+        "prediction_error": 0.20608646479668244,
+        "habituation_penalty": 0.0,
+        "topic": "philosophy"
+      },
+      "ground_truth": {
+        "true_importance": 0.18356315482909277,
+        "expected_detail_level": "DROPPED",
+        "should_decay": true,
+        "topic_cluster": "philosophy"
+      }
+    },
+    {
+      "timestamp": "2025-12-18T01:47:14.177531+00:00",
+      "content": "fixed the bug in the parser",
+      "metadata": {
+        "importance": 0.26960370923586907,
+        "prediction_error": 0.16676707356209033,
+        "habituation_penalty": 0.0,
+        "topic": "coding"
+      },
+      "ground_truth": {
+        "true_importance": 0.26960370923586907,
+        "expected_detail_level": "SUMMARY",
+        "should_decay": true,
+        "topic_cluster": "coding"
+      }
+    },
+    {
+      "timestamp": "2025-12-18T01:56:29.557558+00:00",
+      "content": "deployed to production",
+      "metadata": {
+        "importance": 0.9003519371466904,
+        "prediction_error": 0.7140625507305185,
+        "habituation_penalty": 0.0,
+        "topic": "coding"
+      },
+      "ground_truth": {
+        "true_importance": 0.9003519371466904,
+        "expected_detail_level": "FULL",
+        "should_decay": true,
+        "topic_cluster": "coding"
+      }
+    },
+    {
+      "timestamp": "2025-12-18T02:30:25.294077+00:00",
+      "content": "reviewed the pull request",
+      "metadata": {
+        "importance": 0.2781973370169533,
+        "prediction_error": 0.2498181449374738,
+        "habituation_penalty": 0.0,
+        "topic": "coding"
+      },
+      "ground_truth": {
+        "true_importance": 0.2781973370169533,
+        "expected_detail_level": "SUMMARY",
+        "should_decay": true,
+        "topic_cluster": "coding"
+      }
+    },
+    {
+      "timestamp": "2025-12-18T02:35:54.699672+00:00",
+      "content": "investigated prediction error",
+      "metadata": {
+        "importance": 0.07102085528606114,
+        "prediction_error": 0.047323373679011696,
+        "habituation_penalty": 0.0,
+        "topic": "neuroscience"
+      },
+      "ground_truth": {
+        "true_importance": 0.07102085528606114,
+        "expected_detail_level": "DROPPED",
+        "should_decay": true,
+        "topic_cluster": "neuroscience"
+      }
+    },
+    {
+      "timestamp": "2025-12-18T02:48:55.628161+00:00",
+      "content": "examined dopamine signaling",
+      "metadata": {
+        "importance": 0.8654940801779283,
+        "prediction_error": 0.6506252011727581,
+        "habituation_penalty": 0.3,
+        "topic": "neuroscience"
+      },
+      "ground_truth": {
+        "true_importance": 0.8654940801779283,
+        "expected_detail_level": "FULL",
+        "should_decay": true,
+        "topic_cluster": "neuroscience"
+      }
+    },
+    {
+      "timestamp": "2025-12-18T03:19:24.759848+00:00",
+      "content": "researched temporal coding",
+      "metadata": {
+        "importance": 0.14359953297457617,
+        "prediction_error": 0.06483772134827008,
+        "habituation_penalty": 0.0,
+        "topic": "neuroscience"
+      },
+      "ground_truth": {
+        "true_importance": 0.14359953297457617,
+        "expected_detail_level": "DROPPED",
+        "should_decay": true,
+        "topic_cluster": "neuroscience"
+      }
+    }
+  ]
+}

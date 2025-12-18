@@ -1,0 +1,47 @@
+{
+  "success_rate_no_ai": 0.4666666666666667,
+  "success_rate_context_only": 1.0,
+  "success_rate_map_only": 0.7333333333333333,
+  "success_rate_full_ai": 1.0,
+  "success_by_type": {
+    "architecture": {
+      "no_ai": 0.0,
+      "context": 1.0,
+      "map": 0.5,
+      "full": 1.0
+    },
+    "location": {
+      "no_ai": 0.75,
+      "context": 1.0,
+      "map": 0.75,
+      "full": 1.0
+    },
+    "pattern": {
+      "no_ai": 0.3333333333333333,
+      "context": 1.0,
+      "map": 0.3333333333333333,
+      "full": 1.0
+    },
+    "relationship": {
+      "no_ai": 0.3333333333333333,
+      "context": 1.0,
+      "map": 1.0,
+      "full": 1.0
+    },
+    "purpose": {
+      "no_ai": 0.6666666666666666,
+      "context": 1.0,
+      "map": 1.0,
+      "full": 1.0
+    }
+  },
+  "improvement_context_over_baseline": 0.5333333333333333,
+  "improvement_map_over_baseline": 0.2666666666666666,
+  "improvement_full_over_baseline": 0.5333333333333333,
+  "easiest_query": "Where is specialist activation logic?",
+  "hardest_query": "Where are memory decay calculations?",
+  "structure_matters": true,
+  "effect_size": 1.511857892036909,
+  "n_queries": 15,
+  "timestamp": "2025-12-18T11:14:04.625222"
+}

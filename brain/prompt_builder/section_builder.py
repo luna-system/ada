@@ -20,15 +20,17 @@ class SectionBuilder:
     - Appropriate handling of empty data
     """
     
-    def format_persona(self, persona_text: str) -> str:
+    def format_persona(self, persona_text: str | None) -> str:
         """Format persona text with header.
         
         Args:
-            persona_text: Raw persona description
+            persona_text: Raw persona description (can be None)
             
         Returns:
-            Formatted persona section with header
+            Formatted persona section with header, or empty string if None
         """
+        if not persona_text:
+            return ""
         header = "# Ada's Persona\n\n"
         return header + persona_text
     
