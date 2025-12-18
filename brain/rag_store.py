@@ -14,6 +14,8 @@ from urllib.parse import urlparse
 import requests
 import chromadb
 
+from brain.timestamp_utils import TimestampUtils
+
 
 class OllamaEmbeddingFunction:
     """
@@ -336,18 +338,6 @@ class RagStore:
         half_life = float(os.getenv("RAG_RECENCY_HALF_LIFE_SECONDS", "3600"))
         now = datetime.datetime.now(datetime.timezone.utc)
 
-        def recency_score(ts_iso: Optional[str]) -> float:
-            if not ts_iso:
-                return 0.0
-            try:
-                ts = datetime.datetime.fromisoformat(ts_iso)
-                age = (now - ts).total_seconds()
-                if age < 0:
-                    age = 0
-                return 0.5 ** (age / half_life) if half_life > 0 else 0.0
-            except Exception:
-                return 0.0
-
         def importance_norm(meta: dict) -> float:
             imp = (meta or {}).get("importance")
             try:
@@ -358,7 +348,7 @@ class RagStore:
 
         w_imp = float(os.getenv("RAG_MEMORY_IMPORTANCE_WEIGHT", "0.5"))
         items.sort(
-            key=lambda it: (w_imp * importance_norm(it[1] or {})) + ((1 - w_imp) * recency_score((it[1] or {}).get("timestamp"))),
+            key=lambda it: (w_imp * importance_norm(it[1] or {})) + ((1 - w_imp) * TimestampUtils.recency_score((it[1] or {}).get("timestamp"), now, half_life)),
             reverse=True,
         )
         return items[:k]
@@ -382,15 +372,14 @@ class RagStore:
             docs = got.get("documents", [])
             metas = got.get("metadatas", [])
             pairs = list(zip(docs, metas))
-            # order by timestamp desc
-            def ts_of(meta: dict) -> float:
-                try:
-                    ts = datetime.datetime.fromisoformat((meta or {}).get("timestamp"))
-                    return ts.timestamp()
-                except Exception:
-                    return 0.0
-            pairs.sort(key=lambda p: ts_of(p[1] or {}), reverse=True)
-            return pairs[:k]
+            # Order by timestamp desc using TimestampUtils
+            sorted_metas = TimestampUtils.sort_by_timestamp(metas, reverse=True)
+            # Reconstruct pairs in sorted order
+            sorted_metas_set = set(id(m) for m in sorted_metas)
+            sorted_pairs = [(d, m) for d, m in pairs if id(m) in sorted_metas_set]
+            # Simpler approach: just sort the pairs directly
+            sorted_pairs = sorted(pairs, key=lambda p: TimestampUtils.timestamp_to_float(TimestampUtils.parse_iso((p[1] or {}).get("timestamp"))), reverse=True)
+            return sorted_pairs[:k]
         except Exception:
             return []
 
@@ -409,15 +398,9 @@ class RagStore:
             docs = got.get("documents", [])
             metas = got.get("metadatas", [])
             pairs = list(zip(docs, metas))
-            # order by timestamp desc and take last N in chronological order
-            def ts_of(meta: dict) -> float:
-                try:
-                    ts = datetime.datetime.fromisoformat((meta or {}).get("timestamp"))
-                    return ts.timestamp()
-                except Exception:
-                    return 0.0
-            pairs.sort(key=lambda p: ts_of(p[1] or {}), reverse=True)
-            latest = pairs[:limit]
+            # Order by timestamp desc and take last N in chronological order
+            sorted_pairs = sorted(pairs, key=lambda p: TimestampUtils.timestamp_to_float(TimestampUtils.parse_iso((p[1] or {}).get("timestamp"))), reverse=True)
+            latest = sorted_pairs[:limit]
             latest.reverse()  # chronological
             return latest
         except Exception:
@@ -502,21 +485,8 @@ class RagStore:
         half_life = float(os.getenv("RAG_RECENCY_HALF_LIFE_SECONDS", "3600"))
         now = datetime.datetime.now(datetime.timezone.utc)
 
-        def recency_score(ts_iso: Optional[str]) -> float:
-            if not ts_iso:
-                return 0.0
-            try:
-                ts = datetime.datetime.fromisoformat(ts_iso)
-                age = (now - ts).total_seconds()
-                if age < 0:
-                    age = 0
-                # exponential decay: half-life
-                return 0.5 ** (age / half_life) if half_life > 0 else 0.0
-            except Exception:
-                return 0.0
-
         # Rank purely by recency since similarity scores aren't exposed.
-        items.sort(key=lambda it: recency_score((it[1] or {}).get("timestamp")), reverse=True)
+        items.sort(key=lambda it: TimestampUtils.recency_score((it[1] or {}).get("timestamp"), now, half_life), reverse=True)
         return items[:k]
 
     def retrieve_faqs(self, query: str, k: int = 2) -> List[Tuple[str, dict]]:
@@ -540,14 +510,8 @@ class RagStore:
             return None
         # Pair and select by timestamp desc
         pairs = list(zip(docs, metas))
-        def ts_of(meta: dict) -> float:
-            try:
-                ts = datetime.datetime.fromisoformat(meta.get("timestamp"))
-                return ts.timestamp()
-            except Exception:
-                return 0.0
-        pairs.sort(key=lambda p: ts_of(p[1] or {}), reverse=True)
-        return pairs[0]
+        sorted_pairs = sorted(pairs, key=lambda p: TimestampUtils.timestamp_to_float(TimestampUtils.parse_iso((p[1] or {}).get("timestamp"))), reverse=True)
+        return sorted_pairs[0] if sorted_pairs else None
 
     def get_recent_conversations(self, limit: int = 10) -> List[Dict[str, Any]]:
         """Return a list of recent conversations with metadata.
