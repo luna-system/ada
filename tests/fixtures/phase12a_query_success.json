@@ -4,10 +4,10 @@
   "success_rate_map_only": 0.7333333333333333,
   "success_rate_full_ai": 1.0,
   "success_by_type": {
-    "pattern": {
-      "no_ai": 0.3333333333333333,
+    "architecture": {
+      "no_ai": 0.0,
       "context": 1.0,
-      "map": 0.3333333333333333,
+      "map": 0.5,
       "full": 1.0
     },
     "location": {
@@ -16,20 +16,20 @@
       "map": 0.75,
       "full": 1.0
     },
-    "architecture": {
-      "no_ai": 0.0,
+    "pattern": {
+      "no_ai": 0.3333333333333333,
       "context": 1.0,
-      "map": 0.5,
-      "full": 1.0
-    },
-    "purpose": {
-      "no_ai": 0.6666666666666666,
-      "context": 1.0,
-      "map": 1.0,
+      "map": 0.3333333333333333,
       "full": 1.0
     },
     "relationship": {
       "no_ai": 0.3333333333333333,
+      "context": 1.0,
+      "map": 1.0,
+      "full": 1.0
+    },
+    "purpose": {
+      "no_ai": 0.6666666666666666,
       "context": 1.0,
       "map": 1.0,
       "full": 1.0
@@ -43,5 +43,5 @@
   "structure_matters": true,
   "effect_size": 1.511857892036909,
   "n_queries": 15,
-  "timestamp": "2025-12-18T01:20:11.924617"
+  "timestamp": "2025-12-18T11:14:04.625222"
 }

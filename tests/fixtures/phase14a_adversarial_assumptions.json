@@ -317,10 +317,10 @@
       "empathy_heavy": [
         {
           "scenario_id": 1,
-          "effectiveness": 0.85,
+          "effectiveness": 0.95,
           "time_seconds": 10,
-          "feels_patronized": true,
-          "satisfied": false
+          "feels_patronized": false,
+          "satisfied": true
         },
         {
           "scenario_id": 2,
@@ -331,10 +331,10 @@
         },
         {
           "scenario_id": 3,
-          "effectiveness": 0.95,
+          "effectiveness": 0.85,
           "time_seconds": 10,
-          "feels_patronized": false,
-          "satisfied": true
+          "feels_patronized": true,
+          "satisfied": false
         }
       ]
     },
@@ -484,7 +484,7 @@
   "negative_effects": {
     "condescension_cases": [
       {
-        "scenario_id": 1,
+        "scenario_id": 3,
         "effectiveness": 0.85,
         "time_seconds": 10,
         "feels_patronized": true,
