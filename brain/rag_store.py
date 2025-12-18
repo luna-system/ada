@@ -87,6 +87,53 @@ class RagStore:
     def _ensure_id(cid: Optional[str]) -> str:
         return cid or str(uuid.uuid4())
 
+    def _query_collection(
+        self,
+        query: str,
+        k: int,
+        where: Optional[Dict[str, Any]] = None,
+    ) -> Dict[str, Any]:
+        """
+        Unified query interface abstracting HTTP vs embedded Chroma mode.
+
+        Handles embedding generation for HTTP mode and passes through query parameters.
+        Automatically annotates results with distance values in metadata.
+
+        Args:
+            query: Query text to search for
+            k: Maximum number of results to return
+            where: Chroma where filter dict
+
+        Returns:
+            Dict with keys: "documents", "metadatas" (with distance added), "distances"
+        """
+        where = where or {}
+
+        if self.use_http:
+            # HTTP mode: generate embeddings explicitly, pass to query_embeddings
+            qemb = self.embedding_fn([query])
+            result = self.col.query(query_embeddings=qemb, n_results=k, where=where)
+        else:
+            # Embedded mode: pass query text directly, let client-side embedding function handle it
+            result = self.col.query(query_texts=[query], n_results=k, where=where)
+
+        # Extract and annotate with distance values
+        docs = result.get("documents", [[]])[0]
+        metas = result.get("metadatas", [[]])[0]
+        distances = result.get("distances", [[]])[0]
+
+        # Annotate each metadata with its corresponding distance
+        for i, meta in enumerate(metas):
+            # meta can be dict (including empty {}) or None; only skip None
+            if meta is not None and i < len(distances):
+                meta["distance"] = distances[i]
+
+        return {
+            "documents": docs,
+            "metadatas": metas,
+            "distances": distances,
+        }
+
     def upsert_turn(
         self,
         conversation_id: Optional[str],
@@ -230,56 +277,43 @@ class RagStore:
         If `entity` is provided, prefer scope="entity:<entity>" but also allow global as backfill.
         """
         entity_scope = f"entity:{entity}" if entity else None
-        where: Dict[str, Any] = {"type": "memory"}
+        items: List[Tuple[str, dict]] = []
+
         try:
+            # Try entity-scoped first if entity provided
             if entity_scope:
-                # Try entity-scoped first
                 w_ent: Dict[str, Any] = {"$and": [{"type": "memory"}, {"scope": {"$eq": entity_scope}}]}
-                if self.use_http:
-                    qemb = self.embedding_fn([query])
-                    result = self.col.query(query_embeddings=qemb, n_results=max(k, 6), where=w_ent)
-                else:
-                    result = self.col.query(query_texts=[query], n_results=max(k, 6), where=w_ent)
+                result = self._query_collection(query, max(k, 6), w_ent)
+                docs = result["documents"]
+                metas = result["metadatas"]
+                items = list(zip(docs, metas))
+
+                # Backfill with global memories if needed
+                if len(items) < k:
+                    w_global = {"$and": [{"type": "memory"}, {"scope": {"$eq": "global"}}]}
+                    res2 = self._query_collection(query, max(k, 6), w_global)
+                    docs2 = res2["documents"]
+                    metas2 = res2["metadatas"]
+                    items2 = list(zip(docs2, metas2))
+
+                    # Merge unique, preserving order
+                    seen = set()
+                    merged: List[Tuple[str, dict]] = []
+                    for d, m in items + items2:
+                        key = (d, (m or {}).get("timestamp"))
+                        if key in seen:
+                            continue
+                        seen.add(key)
+                        merged.append((d, m))
+                    items = merged
             else:
-                if self.use_http:
-                    qemb = self.embedding_fn([query])
-                    result = self.col.query(query_embeddings=qemb, n_results=max(k, 6), where=where)
-                else:
-                    result = self.col.query(query_texts=[query], n_results=max(k, 6), where=where)
-            docs = result.get("documents", [[]])[0]
-            metas = result.get("metadatas", [[]])[0]
-            distances = result.get("distances", [[]])[0]
-            # Add distance to metadata for downstream consumers (decay weighting, attention spotlight)
-            for i, meta in enumerate(metas):
-                if meta and i < len(distances):
-                    meta["distance"] = distances[i]
-            items = list(zip(docs, metas))
-            # If entity-scoped yielded too few, backfill with global memories
-            if entity_scope and len(items) < k:
-                w_global = {"$and": [{"type": "memory"}, {"scope": {"$eq": "global"}}]}
-                if self.use_http:
-                    qemb = self.embedding_fn([query])
-                    res2 = self.col.query(query_embeddings=qemb, n_results=max(k, 6), where=w_global)
-                else:
-                    res2 = self.col.query(query_texts=[query], n_results=max(k, 6), where=w_global)
-                docs2 = res2.get("documents", [[]])[0]
-                metas2 = res2.get("metadatas", [[]])[0]
-                distances2 = res2.get("distances", [[]])[0]
-                # Add distance to metadata
-                for i, meta in enumerate(metas2):
-                    if meta and i < len(distances2):
-                        meta["distance"] = distances2[i]
-                items2 = list(zip(docs2, metas2))
-                # merge unique preserving order
-                seen = set()
-                merged: List[Tuple[str, dict]] = []
-                for d,m in items + items2:
-                    key = (d, (m or {}).get("timestamp"))
-                    if key in seen:
-                        continue
-                    seen.add(key)
-                    merged.append((d,m))
-                items = merged
+                # No entity scope, query global memories
+                where: Dict[str, Any] = {"type": "memory"}
+                result = self._query_collection(query, max(k, 6), where)
+                docs = result["documents"]
+                metas = result["metadatas"]
+                items = list(zip(docs, metas))
+
         except Exception:
             # Fallback to listing all memories
             try:
@@ -292,6 +326,7 @@ class RagStore:
                         got2 = self.col.get(where={"$and": [{"type": "memory"}, {"scope": {"$eq": "global"}}]})
                         items += list(zip(got2.get("documents", []), got2.get("metadatas", [])))
                 else:
+                    where: Dict[str, Any] = {"type": "memory"}
                     got = self.col.get(where=where)
                     items = list(zip(got.get("documents", []), got.get("metadatas", [])))
             except Exception:
@@ -450,16 +485,12 @@ class RagStore:
         # If we didn't get enough items yet, backfill with similarity search
         if len(items) < k:
             try:
-                if self.use_http:
-                    qemb = self.embedding_fn([query])
-                    result = self.col.query(query_embeddings=qemb, n_results=k, where=where)
-                else:
-                    result = self.col.query(query_texts=[query], n_results=k, where=where)
-                docs = result.get("documents", [[]])[0]
-                metas = result.get("metadatas", [[]])[0]
+                result = self._query_collection(query, k, where)
+                docs = result["documents"]
+                metas = result["metadatas"]
                 sim_items = list(zip(docs, metas))
                 # Merge unique by (text, timestamp) to avoid dupes
-                seen = set(( (m or {}).get("timestamp"), d) for d, m in items)
+                seen = set(((m or {}).get("timestamp"), d) for d, m in items)
                 for d, m in sim_items:
                     key = ((m or {}).get("timestamp"), d)
                     if key not in seen:
@@ -491,13 +522,9 @@ class RagStore:
     def retrieve_faqs(self, query: str, k: int = 2) -> List[Tuple[str, dict]]:
         """Retrieve FAQs (type=faq), global scope, similarity-only."""
         where: Dict[str, Any] = {"type": "faq"}
-        if self.use_http:
-            qemb = self.embedding_fn([query])
-            result = self.col.query(query_embeddings=qemb, n_results=k, where=where)
-        else:
-            result = self.col.query(query_texts=[query], n_results=k, where=where)
-        docs = result.get("documents", [[]])[0]
-        metas = result.get("metadatas", [[]])[0]
+        result = self._query_collection(query, k, where)
+        docs = result["documents"]
+        metas = result["metadatas"]
         return list(zip(docs, metas))
 
     def load_persona_block(self) -> Optional[Tuple[str, dict]]:
