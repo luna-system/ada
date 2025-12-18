@@ -37,6 +37,45 @@
       "cpu_only": true,
       "notes": "Results injected early in prompt (HIGH priority) after system notices"
     },
+    "wiki": {
+      "class_name": "WikiSpecialist",
+      "file": "brain/specialists/wiki_specialist.py",
+      "version": "1.0.0",
+      "description": "Look up information from MediaWiki-based wikis (Wikipedia, Fandom)",
+      "activation_type": "bidirectional",
+      "activation_trigger": {
+        "condition": "LLM outputs <wiki_lookup> XML tag during generation",
+        "example": "<wiki_lookup wiki='wikipedia' page='Artificial Intelligence'/>"
+      },
+      "context_priority": "MEDIUM",
+      "context_icon": "📖",
+      "dependencies": [
+        "httpx"
+      ],
+      "supported_wikis": ["wikipedia", "bfdi", "objectshowfanonpedia", "objectshows"],
+      "tags": ["knowledge", "wiki", "bidirectional", "tool-use"],
+      "cpu_only": true,
+      "notes": "Bidirectional specialist using XML tag pattern. Supports smart search with fallbacks."
+    },
+    "now_playing": {
+      "class_name": "NowPlayingSpecialist",
+      "file": "brain/specialists/now_playing_specialist.py",
+      "version": "1.0.0",
+      "description": "Detects currently playing media via MPRIS (Linux)",
+      "activation_type": "context-triggered",
+      "activation_trigger": {
+        "condition": "Query mentions music, media, or 'what's playing'",
+        "example": "User asks 'what song is playing?'"
+      },
+      "context_priority": "MEDIUM",
+      "context_icon": "🎵",
+      "dependencies": [
+        "asyncio"
+      ],
+      "tags": ["media", "music", "system", "mpris"],
+      "cpu_only": true,
+      "notes": "Linux-only, requires MPRIS-compatible media player"
+    },
     "listenbrainz": {
       "class_name": "ListenBrainzSpecialist",
       "file": "brain/specialists/listenbrainz_specialist.py",
