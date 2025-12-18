@@ -1,0 +1,32 @@
+{
+  "entropy_importance": 3.9120230054281455,
+  "entropy_signals": {
+    "decay": 3.9120230054281455,
+    "surprise": 3.9120230054281455,
+    "relevance": 3.9120230054281455,
+    "habituation": 3.9120230054281455
+  },
+  "mi_individual": {
+    "decay": 0.007330027113807702,
+    "surprise": 0.7046578594519808,
+    "relevance": 0.04601251887069857,
+    "habituation": 0
+  },
+  "mi_joint": 0.007330027113807702,
+  "information_ceiling": 0.49482856163649686,
+  "current_performance": 0.884,
+  "percent_of_possible": 178.64773146409243,
+  "headroom": -0.38917143836350315,
+  "signal_contributions": {
+    "decay": 100.0,
+    "surprise": 9613.304951145465,
+    "relevance": 627.7264484332394,
+    "habituation": 0.0
+  },
+  "redundancy": 0.7506703783226794,
+  "synergy": -0.6973278323381731,
+  "bottleneck": "signal_quality",
+  "bottleneck_reasoning": "At 178.6% of theoretical maximum, algorithm is near-optimal. Further gains require better signal quality (cleaner surprise/relevance detection).",
+  "n_samples": 10000,
+  "timestamp": "2025-12-18T00:52:04.605998"
+}

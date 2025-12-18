@@ -1,0 +1,577 @@
+{
+  "phase": "14A",
+  "title": "Adversarial Assumptions Testing",
+  "research_question": "Are there contexts where empathy HURTS rather than helps?",
+  "methodology": "Adversarial testing with expert users, time pressure, and API reference contexts",
+  "adversarial_mindset": "Actively trying to BREAK the empathy thesis",
+  "n_scenarios": 10,
+  "scenarios": [
+    {
+      "id": 1,
+      "name": "expert_api_design",
+      "description": "Senior engineer designing API architecture",
+      "user_expertise": "expert",
+      "context_type": "technical_reference",
+      "time_pressure": "low",
+      "expected_empathy_preference": "minimal",
+      "reason": "Expert knows the pain points, wants facts fast"
+    },
+    {
+      "id": 2,
+      "name": "expert_debugging",
+      "description": "Senior dev debugging production issue",
+      "user_expertise": "expert",
+      "context_type": "troubleshooting",
+      "time_pressure": "high",
+      "expected_empathy_preference": "minimal",
+      "reason": "Crisis mode - every word counts"
+    },
+    {
+      "id": 3,
+      "name": "expert_code_review",
+      "description": "Expert reviewing PR, checking implementation details",
+      "user_expertise": "expert",
+      "context_type": "reference",
+      "time_pressure": "medium",
+      "expected_empathy_preference": "minimal",
+      "reason": "Wants precise technical specs, not reassurance"
+    },
+    {
+      "id": 4,
+      "name": "rushed_hotfix",
+      "description": "Developer pushing critical hotfix",
+      "user_expertise": "intermediate",
+      "context_type": "troubleshooting",
+      "time_pressure": "critical",
+      "expected_empathy_preference": "minimal",
+      "reason": "Every second matters, just need the fix"
+    },
+    {
+      "id": 5,
+      "name": "rushed_demo",
+      "description": "Preparing demo for imminent client meeting",
+      "user_expertise": "intermediate",
+      "context_type": "tutorial",
+      "time_pressure": "high",
+      "expected_empathy_preference": "minimal",
+      "reason": "Deadline pressure, wants quick answer"
+    },
+    {
+      "id": 6,
+      "name": "api_parameter_lookup",
+      "description": "Looking up function signature",
+      "user_expertise": "intermediate",
+      "context_type": "reference",
+      "time_pressure": "low",
+      "expected_empathy_preference": "minimal",
+      "reason": "Just needs parameter names and types"
+    },
+    {
+      "id": 7,
+      "name": "api_return_value",
+      "description": "Checking what function returns",
+      "user_expertise": "intermediate",
+      "context_type": "reference",
+      "time_pressure": "low",
+      "expected_empathy_preference": "minimal",
+      "reason": "One-line answer, empathy is noise"
+    },
+    {
+      "id": 8,
+      "name": "direct_communication_preference",
+      "description": "User with direct communication style preference",
+      "user_expertise": "intermediate",
+      "context_type": "tutorial",
+      "time_pressure": "low",
+      "expected_empathy_preference": "minimal",
+      "reason": "Some personalities/cultures prefer directness"
+    },
+    {
+      "id": 9,
+      "name": "excessive_validation",
+      "description": "Documentation with over-the-top empathy",
+      "user_expertise": "beginner",
+      "context_type": "tutorial",
+      "time_pressure": "low",
+      "expected_empathy_preference": "moderate",
+      "reason": "Even beginners can be overwhelmed by excessive warmth"
+    },
+    {
+      "id": 10,
+      "name": "repeated_reference",
+      "description": "User checking same docs for 10th time",
+      "user_expertise": "intermediate",
+      "context_type": "reference",
+      "time_pressure": "low",
+      "expected_empathy_preference": "minimal",
+      "reason": "Repetition makes empathy feel patronizing"
+    }
+  ],
+  "documentation": [
+    {
+      "scenario_id": 1,
+      "scenario_name": "expert_api_design",
+      "minimal": {
+        "content": "Function signature: process(data: Dict, options: Options) -> Result. Returns processed data object. Raises ValueError if data invalid.",
+        "word_count": 17,
+        "empathy_markers": 0,
+        "reading_time_seconds": 3,
+        "style": "minimal"
+      },
+      "empathy_heavy": {
+        "content": "Hey! The process() function can feel complex at first. It takes a data dictionary and options object - don't worry if that seems overwhelming! It returns a processed Result. Common gotcha: it raises ValueError for invalid data, which trips everyone up initially. You're doing great by checking the docs!",
+        "word_count": 51,
+        "empathy_markers": 4,
+        "reading_time_seconds": 10,
+        "style": "empathy_heavy"
+      }
+    },
+    {
+      "scenario_id": 2,
+      "scenario_name": "expert_debugging",
+      "minimal": {
+        "content": "Function signature: process(data: Dict, options: Options) -> Result. Returns processed data object. Raises ValueError if data invalid.",
+        "word_count": 17,
+        "empathy_markers": 0,
+        "reading_time_seconds": 3,
+        "style": "minimal"
+      },
+      "empathy_heavy": {
+        "content": "Hey! The process() function can feel complex at first. It takes a data dictionary and options object - don't worry if that seems overwhelming! It returns a processed Result. Common gotcha: it raises ValueError for invalid data, which trips everyone up initially. You're doing great by checking the docs!",
+        "word_count": 51,
+        "empathy_markers": 4,
+        "reading_time_seconds": 10,
+        "style": "empathy_heavy"
+      }
+    },
+    {
+      "scenario_id": 3,
+      "scenario_name": "expert_code_review",
+      "minimal": {
+        "content": "Function signature: process(data: Dict, options: Options) -> Result. Returns processed data object. Raises ValueError if data invalid.",
+        "word_count": 17,
+        "empathy_markers": 0,
+        "reading_time_seconds": 3,
+        "style": "minimal"
+      },
+      "empathy_heavy": {
+        "content": "Hey! The process() function can feel complex at first. It takes a data dictionary and options object - don't worry if that seems overwhelming! It returns a processed Result. Common gotcha: it raises ValueError for invalid data, which trips everyone up initially. You're doing great by checking the docs!",
+        "word_count": 51,
+        "empathy_markers": 4,
+        "reading_time_seconds": 10,
+        "style": "empathy_heavy"
+      }
+    },
+    {
+      "scenario_id": 4,
+      "scenario_name": "rushed_hotfix",
+      "minimal": {
+        "content": "Function signature: process(data: Dict, options: Options) -> Result. Returns processed data object. Raises ValueError if data invalid.",
+        "word_count": 17,
+        "empathy_markers": 0,
+        "reading_time_seconds": 3,
+        "style": "minimal"
+      },
+      "empathy_heavy": {
+        "content": "Hey! The process() function can feel complex at first. It takes a data dictionary and options object - don't worry if that seems overwhelming! It returns a processed Result. Common gotcha: it raises ValueError for invalid data, which trips everyone up initially. You're doing great by checking the docs!",
+        "word_count": 51,
+        "empathy_markers": 4,
+        "reading_time_seconds": 10,
+        "style": "empathy_heavy"
+      }
+    },
+    {
+      "scenario_id": 5,
+      "scenario_name": "rushed_demo",
+      "minimal": {
+        "content": "Function signature: process(data: Dict, options: Options) -> Result. Returns processed data object. Raises ValueError if data invalid.",
+        "word_count": 17,
+        "empathy_markers": 0,
+        "reading_time_seconds": 3,
+        "style": "minimal"
+      },
+      "empathy_heavy": {
+        "content": "Hey! The process() function can feel complex at first. It takes a data dictionary and options object - don't worry if that seems overwhelming! It returns a processed Result. Common gotcha: it raises ValueError for invalid data, which trips everyone up initially. You're doing great by checking the docs!",
+        "word_count": 51,
+        "empathy_markers": 4,
+        "reading_time_seconds": 10,
+        "style": "empathy_heavy"
+      }
+    },
+    {
+      "scenario_id": 6,
+      "scenario_name": "api_parameter_lookup",
+      "minimal": {
+        "content": "Function signature: process(data: Dict, options: Options) -> Result. Returns processed data object. Raises ValueError if data invalid.",
+        "word_count": 17,
+        "empathy_markers": 0,
+        "reading_time_seconds": 3,
+        "style": "minimal"
+      },
+      "empathy_heavy": {
+        "content": "Hey! The process() function can feel complex at first. It takes a data dictionary and options object - don't worry if that seems overwhelming! It returns a processed Result. Common gotcha: it raises ValueError for invalid data, which trips everyone up initially. You're doing great by checking the docs!",
+        "word_count": 51,
+        "empathy_markers": 4,
+        "reading_time_seconds": 10,
+        "style": "empathy_heavy"
+      }
+    },
+    {
+      "scenario_id": 7,
+      "scenario_name": "api_return_value",
+      "minimal": {
+        "content": "Function signature: process(data: Dict, options: Options) -> Result. Returns processed data object. Raises ValueError if data invalid.",
+        "word_count": 17,
+        "empathy_markers": 0,
+        "reading_time_seconds": 3,
+        "style": "minimal"
+      },
+      "empathy_heavy": {
+        "content": "Hey! The process() function can feel complex at first. It takes a data dictionary and options object - don't worry if that seems overwhelming! It returns a processed Result. Common gotcha: it raises ValueError for invalid data, which trips everyone up initially. You're doing great by checking the docs!",
+        "word_count": 51,
+        "empathy_markers": 4,
+        "reading_time_seconds": 10,
+        "style": "empathy_heavy"
+      }
+    },
+    {
+      "scenario_id": 8,
+      "scenario_name": "direct_communication_preference",
+      "minimal": {
+        "content": "Function signature: process(data: Dict, options: Options) -> Result. Returns processed data object. Raises ValueError if data invalid.",
+        "word_count": 17,
+        "empathy_markers": 0,
+        "reading_time_seconds": 3,
+        "style": "minimal"
+      },
+      "empathy_heavy": {
+        "content": "Hey! The process() function can feel complex at first. It takes a data dictionary and options object - don't worry if that seems overwhelming! It returns a processed Result. Common gotcha: it raises ValueError for invalid data, which trips everyone up initially. You're doing great by checking the docs!",
+        "word_count": 51,
+        "empathy_markers": 4,
+        "reading_time_seconds": 10,
+        "style": "empathy_heavy"
+      }
+    },
+    {
+      "scenario_id": 9,
+      "scenario_name": "excessive_validation",
+      "minimal": {
+        "content": "Function signature: process(data: Dict, options: Options) -> Result. Returns processed data object. Raises ValueError if data invalid.",
+        "word_count": 17,
+        "empathy_markers": 0,
+        "reading_time_seconds": 3,
+        "style": "minimal"
+      },
+      "empathy_heavy": {
+        "content": "Hey! The process() function can feel complex at first. It takes a data dictionary and options object - don't worry if that seems overwhelming! It returns a processed Result. Common gotcha: it raises ValueError for invalid data, which trips everyone up initially. You're doing great by checking the docs!",
+        "word_count": 51,
+        "empathy_markers": 4,
+        "reading_time_seconds": 10,
+        "style": "empathy_heavy"
+      }
+    },
+    {
+      "scenario_id": 10,
+      "scenario_name": "repeated_reference",
+      "minimal": {
+        "content": "Function signature: process(data: Dict, options: Options) -> Result. Returns processed data object. Raises ValueError if data invalid.",
+        "word_count": 17,
+        "empathy_markers": 0,
+        "reading_time_seconds": 3,
+        "style": "minimal"
+      },
+      "empathy_heavy": {
+        "content": "Hey! The process() function can feel complex at first. It takes a data dictionary and options object - don't worry if that seems overwhelming! It returns a processed Result. Common gotcha: it raises ValueError for invalid data, which trips everyone up initially. You're doing great by checking the docs!",
+        "word_count": 51,
+        "empathy_markers": 4,
+        "reading_time_seconds": 10,
+        "style": "empathy_heavy"
+      }
+    }
+  ],
+  "users": {
+    "expert": {
+      "minimal": [
+        {
+          "scenario_id": 1,
+          "effectiveness": 0.95,
+          "time_seconds": 3,
+          "feels_patronized": false,
+          "satisfied": true
+        },
+        {
+          "scenario_id": 2,
+          "effectiveness": 0.95,
+          "time_seconds": 3,
+          "feels_patronized": false,
+          "satisfied": true
+        },
+        {
+          "scenario_id": 3,
+          "effectiveness": 0.95,
+          "time_seconds": 3,
+          "feels_patronized": false,
+          "satisfied": true
+        }
+      ],
+      "empathy_heavy": [
+        {
+          "scenario_id": 1,
+          "effectiveness": 0.85,
+          "time_seconds": 10,
+          "feels_patronized": true,
+          "satisfied": false
+        },
+        {
+          "scenario_id": 2,
+          "effectiveness": 0.95,
+          "time_seconds": 10,
+          "feels_patronized": false,
+          "satisfied": true
+        },
+        {
+          "scenario_id": 3,
+          "effectiveness": 0.95,
+          "time_seconds": 10,
+          "feels_patronized": false,
+          "satisfied": true
+        }
+      ]
+    },
+    "rushed": {
+      "minimal": [
+        {
+          "scenario_id": 2,
+          "effectiveness": 0.85,
+          "time_seconds": 3,
+          "perceived_overhead": 0.0,
+          "satisfied": true
+        },
+        {
+          "scenario_id": 4,
+          "effectiveness": 0.85,
+          "time_seconds": 3,
+          "perceived_overhead": 0.0,
+          "satisfied": true
+        },
+        {
+          "scenario_id": 5,
+          "effectiveness": 0.85,
+          "time_seconds": 3,
+          "perceived_overhead": 0.0,
+          "satisfied": true
+        }
+      ],
+      "empathy_heavy": [
+        {
+          "scenario_id": 2,
+          "effectiveness": 0.95,
+          "time_seconds": 10,
+          "perceived_overhead": 14.0,
+          "satisfied": false
+        },
+        {
+          "scenario_id": 4,
+          "effectiveness": 0.95,
+          "time_seconds": 10,
+          "perceived_overhead": 14.0,
+          "satisfied": false
+        },
+        {
+          "scenario_id": 5,
+          "effectiveness": 0.95,
+          "time_seconds": 10,
+          "perceived_overhead": 14.0,
+          "satisfied": false
+        }
+      ]
+    },
+    "lookup": {
+      "minimal": [
+        {
+          "scenario_id": 3,
+          "effectiveness": 0.9,
+          "time_seconds": 2,
+          "found_quickly": true,
+          "satisfied": true
+        },
+        {
+          "scenario_id": 6,
+          "effectiveness": 0.9,
+          "time_seconds": 2,
+          "found_quickly": true,
+          "satisfied": true
+        },
+        {
+          "scenario_id": 7,
+          "effectiveness": 0.9,
+          "time_seconds": 2,
+          "found_quickly": true,
+          "satisfied": true
+        },
+        {
+          "scenario_id": 10,
+          "effectiveness": 0.9,
+          "time_seconds": 2,
+          "found_quickly": true,
+          "satisfied": true
+        }
+      ],
+      "empathy_heavy": [
+        {
+          "scenario_id": 3,
+          "effectiveness": 0.8,
+          "time_seconds": 10,
+          "found_quickly": false,
+          "satisfied": false
+        },
+        {
+          "scenario_id": 6,
+          "effectiveness": 0.8,
+          "time_seconds": 10,
+          "found_quickly": false,
+          "satisfied": false
+        },
+        {
+          "scenario_id": 7,
+          "effectiveness": 0.8,
+          "time_seconds": 10,
+          "found_quickly": false,
+          "satisfied": false
+        },
+        {
+          "scenario_id": 10,
+          "effectiveness": 0.8,
+          "time_seconds": 10,
+          "found_quickly": false,
+          "satisfied": false
+        }
+      ]
+    }
+  },
+  "effectiveness": {
+    "expert": {
+      "minimal_effectiveness": 0.9499999999999998,
+      "heavy_effectiveness": 0.9166666666666666,
+      "minimal_time": 3.0,
+      "heavy_time": 10.0,
+      "winner": "minimal",
+      "empathy_helps": false
+    },
+    "rushed": {
+      "minimal_effectiveness": 0.85,
+      "heavy_effectiveness": 0.9499999999999998,
+      "minimal_time": 3.0,
+      "heavy_time": 10.0,
+      "winner": "empathy_heavy",
+      "empathy_helps": true
+    },
+    "lookup": {
+      "minimal_effectiveness": 0.9,
+      "heavy_effectiveness": 0.8,
+      "minimal_time": 2.0,
+      "heavy_time": 10.0,
+      "winner": "minimal",
+      "empathy_helps": false
+    }
+  },
+  "overhead": {
+    "word_overhead_percent": 2.0,
+    "time_overhead_percent": 2.8461538461538463,
+    "empathy_markers_per_doc": 4,
+    "overhead_acceptable": false
+  },
+  "negative_effects": {
+    "condescension_cases": [
+      {
+        "scenario_id": 1,
+        "effectiveness": 0.85,
+        "time_seconds": 10,
+        "feels_patronized": true,
+        "satisfied": false
+      }
+    ],
+    "annoyance_cases": [
+      {
+        "scenario_id": 2,
+        "effectiveness": 0.95,
+        "time_seconds": 10,
+        "perceived_overhead": 14.0,
+        "satisfied": false
+      },
+      {
+        "scenario_id": 4,
+        "effectiveness": 0.95,
+        "time_seconds": 10,
+        "perceived_overhead": 14.0,
+        "satisfied": false
+      },
+      {
+        "scenario_id": 5,
+        "effectiveness": 0.95,
+        "time_seconds": 10,
+        "perceived_overhead": 14.0,
+        "satisfied": false
+      }
+    ],
+    "overhead_frustration": [
+      {
+        "scenario_id": 3,
+        "effectiveness": 0.8,
+        "time_seconds": 10,
+        "found_quickly": false,
+        "satisfied": false
+      },
+      {
+        "scenario_id": 6,
+        "effectiveness": 0.8,
+        "time_seconds": 10,
+        "found_quickly": false,
+        "satisfied": false
+      },
+      {
+        "scenario_id": 7,
+        "effectiveness": 0.8,
+        "time_seconds": 10,
+        "found_quickly": false,
+        "satisfied": false
+      },
+      {
+        "scenario_id": 10,
+        "effectiveness": 0.8,
+        "time_seconds": 10,
+        "found_quickly": false,
+        "satisfied": false
+      }
+    ],
+    "condescension_rate": 0.1,
+    "annoyance_rate": 0.3,
+    "frustration_rate": 0.4,
+    "total_negative_rate": 0.8,
+    "has_negative_effects": true
+  },
+  "boundaries": {
+    "expert_minimal_score": 0.9499999999999998,
+    "expert_heavy_score": 0.9166666666666666,
+    "expert_winner": "minimal",
+    "rushed_minimal_score": 0.85,
+    "rushed_heavy_score": 0.9499999999999998,
+    "rushed_winner": "empathy_heavy",
+    "lookup_minimal_score": 0.9,
+    "lookup_heavy_score": 0.8,
+    "lookup_winner": "minimal",
+    "condescension_rate": 0.1,
+    "annoyance_rate": 0.3,
+    "overhead_penalty": 2.6,
+    "failure_modes": [
+      "expert: Minimal empathy wins (effectiveness 0.95 vs 0.92)",
+      "lookup: Minimal empathy wins (effectiveness 0.90 vs 0.80)",
+      "Annoyance: 30.0% frustrated by overhead",
+      "Lookup friction: 40.0% can't find quick answer"
+    ],
+    "empathy_universally_wins": false,
+    "summary": "Significant boundaries: 4 contexts where empathy fails"
+  },
+  "conclusion": "Significant boundaries: 4 contexts where empathy fails",
+  "thesis_survives": false
+}

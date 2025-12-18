@@ -1,0 +1,27 @@
+{
+  "in_domain_performance": 1.0,
+  "transfer_performances": {
+    "normal": 1.0,
+    "uniform": 1.0,
+    "exponential": 1.0,
+    "mixed": 1.0,
+    "shifted_beta": 1.0
+  },
+  "average_transfer": 1.0,
+  "worst_case_transfer": 1.0,
+  "best_case_transfer": 1.0,
+  "distribution_families": [
+    "normal",
+    "uniform",
+    "exponential",
+    "mixed",
+    "shifted_beta"
+  ],
+  "most_transferable": "normal",
+  "least_transferable": "shifted_beta",
+  "generalization_gap": 0.0,
+  "is_generalizable": true,
+  "n_samples": 10000,
+  "n_distributions": 5,
+  "timestamp": "2025-12-18T01:09:54.206338"
+}

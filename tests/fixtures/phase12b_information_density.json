@@ -1,0 +1,20 @@
+{
+  "entropy_ai": 10.50811865316315,
+  "entropy_docs": 10.35192665663922,
+  "entropy_comments": 9.718436438873765,
+  "knowledge_density_ai": 7.859888936351986,
+  "knowledge_density_docs": 25.459251675713265,
+  "knowledge_density_comments": 15.39456662354463,
+  "total_tokens_ai": 46820,
+  "total_tokens_docs": 51769,
+  "total_tokens_comments": 30920,
+  "knowledge_units_ai": 368,
+  "knowledge_units_docs": 1318,
+  "knowledge_units_comments": 476,
+  "entropy_ratio_ai_to_docs": 1.015088205481417,
+  "density_ratio_ai_to_docs": 0.3087242718861957,
+  "most_dense": "docs/",
+  "least_dense": ".ai/",
+  "structure_advantage": -0.6152188821726482,
+  "timestamp": "2025-12-18T01:21:15.700047"
+}

@@ -1,0 +1,214 @@
+{
+  "phase": "17A",
+  "title": "LLM-to-LLM Information Density",
+  "formats": [
+    {
+      "name": "json_schema",
+      "description": "Pure structured data: {\"facts\": [...], \"confidence\": 0.9}",
+      "token_efficiency": 0.9,
+      "structure_clarity": 1.0,
+      "reasoning_support": 0.2
+    },
+    {
+      "name": "prose_narrative",
+      "description": "Natural language: 'The analysis shows that...'",
+      "token_efficiency": 0.4,
+      "structure_clarity": 0.3,
+      "reasoning_support": 0.9
+    },
+    {
+      "name": "hybrid_structured_prose",
+      "description": "Structured facts + narrative: {\"facts\": [...], \"analysis\": \"...\"}",
+      "token_efficiency": 0.7,
+      "structure_clarity": 0.7,
+      "reasoning_support": 0.7
+    }
+  ],
+  "tasks": [
+    {
+      "name": "fact_lookup",
+      "requires_facts": 0.95,
+      "requires_reasoning": 0.1,
+      "requires_context": 0.2
+    },
+    {
+      "name": "complex_reasoning",
+      "requires_facts": 0.3,
+      "requires_reasoning": 0.95,
+      "requires_context": 0.7
+    },
+    {
+      "name": "summarization",
+      "requires_facts": 0.6,
+      "requires_reasoning": 0.5,
+      "requires_context": 0.8
+    },
+    {
+      "name": "decision_making",
+      "requires_facts": 0.8,
+      "requires_reasoning": 0.7,
+      "requires_context": 0.5
+    },
+    {
+      "name": "creative_generation",
+      "requires_facts": 0.2,
+      "requires_reasoning": 0.8,
+      "requires_context": 0.6
+    }
+  ],
+  "results": [
+    {
+      "format": "json_schema",
+      "task": "fact_lookup",
+      "effectiveness": 0.412,
+      "tokens_used": 1111,
+      "efficiency_score": 0.371
+    },
+    {
+      "format": "json_schema",
+      "task": "complex_reasoning",
+      "effectiveness": 0.28,
+      "tokens_used": 1111,
+      "efficiency_score": 0.252
+    },
+    {
+      "format": "json_schema",
+      "task": "summarization",
+      "effectiveness": 0.376,
+      "tokens_used": 1111,
+      "efficiency_score": 0.338
+    },
+    {
+      "format": "json_schema",
+      "task": "decision_making",
+      "effectiveness": 0.436,
+      "tokens_used": 1111,
+      "efficiency_score": 0.392
+    },
+    {
+      "format": "json_schema",
+      "task": "creative_generation",
+      "effectiveness": 0.216,
+      "tokens_used": 1111,
+      "efficiency_score": 0.194
+    },
+    {
+      "format": "prose_narrative",
+      "task": "fact_lookup",
+      "effectiveness": 0.174,
+      "tokens_used": 2500,
+      "efficiency_score": 0.07
+    },
+    {
+      "format": "prose_narrative",
+      "task": "complex_reasoning",
+      "effectiveness": 0.462,
+      "tokens_used": 2500,
+      "efficiency_score": 0.185
+    },
+    {
+      "format": "prose_narrative",
+      "task": "summarization",
+      "effectiveness": 0.348,
+      "tokens_used": 2500,
+      "efficiency_score": 0.139
+    },
+    {
+      "format": "prose_narrative",
+      "task": "decision_making",
+      "effectiveness": 0.408,
+      "tokens_used": 2500,
+      "efficiency_score": 0.163
+    },
+    {
+      "format": "prose_narrative",
+      "task": "creative_generation",
+      "effectiveness": 0.384,
+      "tokens_used": 2500,
+      "efficiency_score": 0.154
+    },
+    {
+      "format": "hybrid_structured_prose",
+      "task": "fact_lookup",
+      "effectiveness": 0.338,
+      "tokens_used": 1428,
+      "efficiency_score": 0.237
+    },
+    {
+      "format": "hybrid_structured_prose",
+      "task": "complex_reasoning",
+      "effectiveness": 0.47,
+      "tokens_used": 1428,
+      "efficiency_score": 0.329
+    },
+    {
+      "format": "hybrid_structured_prose",
+      "task": "summarization",
+      "effectiveness": 0.441,
+      "tokens_used": 1428,
+      "efficiency_score": 0.309
+    },
+    {
+      "format": "hybrid_structured_prose",
+      "task": "decision_making",
+      "effectiveness": 0.514,
+      "tokens_used": 1428,
+      "efficiency_score": 0.36
+    },
+    {
+      "format": "hybrid_structured_prose",
+      "task": "creative_generation",
+      "effectiveness": 0.382,
+      "tokens_used": 1428,
+      "efficiency_score": 0.268
+    }
+  ],
+  "optimal_formats": {
+    "fact_lookup": "json_schema",
+    "complex_reasoning": "hybrid_structured_prose",
+    "summarization": "hybrid_structured_prose",
+    "decision_making": "hybrid_structured_prose",
+    "creative_generation": "prose_narrative"
+  },
+  "format_dominance": {
+    "json_schema": 20.0,
+    "prose_narrative": 20.0,
+    "hybrid_structured_prose": 60.0
+  },
+  "efficiency_comparison": {
+    "json_schema": {
+      "effectiveness": 0.344,
+      "avg_tokens": 1111,
+      "efficiency_score": 0.31
+    },
+    "prose_narrative": {
+      "effectiveness": 0.355,
+      "avg_tokens": 2500,
+      "efficiency_score": 0.142
+    },
+    "hybrid_structured_prose": {
+      "effectiveness": 0.429,
+      "avg_tokens": 1428,
+      "efficiency_score": 0.301
+    }
+  },
+  "usage_patterns": {
+    "json_schema": [
+      "fact_lookup"
+    ],
+    "prose_narrative": [
+      "creative_generation"
+    ],
+    "hybrid_structured_prose": [
+      "complex_reasoning",
+      "summarization",
+      "decision_making"
+    ]
+  },
+  "key_findings": {
+    "dominant_format": "hybrid_structured_prose",
+    "most_efficient": "json_schema",
+    "fact_tasks_prefer": "json_schema",
+    "reasoning_tasks_prefer": "hybrid_structured_prose"
+  }
+}
