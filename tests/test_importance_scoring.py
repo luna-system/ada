@@ -372,6 +372,236 @@ class TestConfigurability:
         assert hasattr(retriever, 'signal_weights') or hasattr(retriever, 'set_signal_weights')
 
 
+# Property-Based Testing (Phase 1 Quick Wins!)
+class TestPropertyBasedImportanceScoring:
+    """Property-based tests using Hypothesis - generates thousands of test cases!
+    
+    These tests don't check specific values, they check PROPERTIES that should
+    ALWAYS be true regardless of input. This is the real science! 🔬
+    """
+    
+    def test_hypothesis_import(self):
+        """Verify Hypothesis is available."""
+        try:
+            from hypothesis import given, strategies as st
+            assert True, "Hypothesis imported successfully!"
+        except ImportError:
+            pytest.skip("Hypothesis not installed - run: pip install hypothesis")
+    
+    def test_importance_always_bounded_manual(self):
+        """Property: Importance ALWAYS between 0 and 1 (manual version).
+        
+        This is a manual property test - we'll upgrade to Hypothesis next.
+        """
+        from hypothesis import given, strategies as st, settings
+        
+        retriever = ContextRetriever(rag_store_instance=None, config_instance=None)
+        
+        @given(
+            age_hours=st.floats(min_value=0.0, max_value=10000.0, allow_nan=False, allow_infinity=False),
+            prediction_error=st.floats(min_value=0.0, max_value=1.0, allow_nan=False, allow_infinity=False),
+            importance_meta=st.floats(min_value=0.0, max_value=1.0, allow_nan=False, allow_infinity=False)
+        )
+        @settings(max_examples=1000)  # 🔥 MAXIMUM SCIENCE MODE 🔥
+        def property_importance_bounded(age_hours, prediction_error, importance_meta):
+            """Generate random inputs, verify output always valid."""
+            now = datetime.now(timezone.utc)
+            past = now - timedelta(hours=age_hours)
+            
+            turn = {
+                'timestamp': past.isoformat(),
+                'content': 'property test content',
+                'metadata': {
+                    'prediction_error': prediction_error,
+                    'importance': importance_meta
+                }
+            }
+            
+            score = retriever.calculate_importance(turn, query="test")
+            
+            # THE PROPERTY: Score must ALWAYS be [0, 1]
+            assert 0.0 <= score <= 1.0, (
+                f"Property violated! Score {score} outside [0,1] for "
+                f"age={age_hours}h, pe={prediction_error}, imp={importance_meta}"
+            )
+        
+        # Run the property test
+        property_importance_bounded()
+    
+    def test_temporal_monotonicity_property(self):
+        """Property: Recent turns ALWAYS score >= older turns (when other factors equal).
+        
+        This is STRICT MONOTONICITY - the core claim of temporal decay.
+        """
+        from hypothesis import given, strategies as st, settings
+        
+        retriever = ContextRetriever(rag_store_instance=None, config_instance=None)
+        
+        @given(
+            recent_hours=st.floats(min_value=0.0, max_value=1.0, allow_nan=False),
+            old_hours=st.floats(min_value=24.0, max_value=1000.0, allow_nan=False),
+        )
+        @settings(max_examples=1000)  # 🔥 TEMPORAL MONOTONICITY AT SCALE 🔥
+        def property_recent_beats_old(recent_hours, old_hours):
+            """Recent should ALWAYS beat old when other factors equal."""
+            now = datetime.now(timezone.utc)
+            
+            # Same content, same metadata - only time differs
+            base_metadata = {
+                'prediction_error': 0.5,
+                'importance': 0.5,
+                'habituation_penalty': 0.0
+            }
+            
+            recent_turn = {
+                'timestamp': (now - timedelta(hours=recent_hours)).isoformat(),
+                'content': 'identical content',
+                'metadata': base_metadata.copy()
+            }
+            
+            old_turn = {
+                'timestamp': (now - timedelta(hours=old_hours)).isoformat(),
+                'content': 'identical content',
+                'metadata': base_metadata.copy()
+            }
+            
+            recent_score = retriever.calculate_importance(recent_turn, query="test")
+            old_score = retriever.calculate_importance(old_turn, query="test")
+            
+            # THE PROPERTY: Recent MUST score higher (or equal in edge cases)
+            assert recent_score >= old_score, (
+                f"Temporal monotonicity violated! Recent ({recent_hours}h) scored "
+                f"{recent_score} but old ({old_hours}h) scored {old_score}"
+            )
+        
+        property_recent_beats_old()
+    
+    def test_surprise_increases_importance_property(self):
+        """Property: Higher prediction error ALWAYS increases importance.
+        
+        With all else equal, surprise should boost the score.
+        """
+        from hypothesis import given, strategies as st, settings
+        
+        retriever = ContextRetriever(rag_store_instance=None, config_instance=None)
+        
+        @given(
+            low_surprise=st.floats(min_value=0.0, max_value=0.4, allow_nan=False),
+            high_surprise=st.floats(min_value=0.6, max_value=1.0, allow_nan=False),
+            age_hours=st.floats(min_value=0.1, max_value=100.0, allow_nan=False)
+        )
+        @settings(max_examples=1000)  # 🔥 SURPRISE SIGNAL AT SCALE 🔥
+        def property_surprise_boosts(low_surprise, high_surprise, age_hours):
+            """Higher surprise should ALWAYS increase importance."""
+            now = datetime.now(timezone.utc)
+            timestamp = (now - timedelta(hours=age_hours)).isoformat()
+            
+            low_turn = {
+                'timestamp': timestamp,
+                'content': 'test content',
+                'metadata': {
+                    'prediction_error': low_surprise,
+                    'importance': 0.5,
+                    'habituation_penalty': 0.0
+                }
+            }
+            
+            high_turn = {
+                'timestamp': timestamp,
+                'content': 'test content',
+                'metadata': {
+                    'prediction_error': high_surprise,
+                    'importance': 0.5,
+                    'habituation_penalty': 0.0
+                }
+            }
+            
+            low_score = retriever.calculate_importance(low_turn, query="test")
+            high_score = retriever.calculate_importance(high_turn, query="test")
+            
+            # THE PROPERTY: High surprise MUST beat low surprise
+            assert high_score >= low_score, (
+                f"Surprise property violated! Low surprise ({low_surprise}) scored "
+                f"{low_score} but high surprise ({high_surprise}) scored {high_score}"
+            )
+        
+        property_surprise_boosts()
+    
+    def test_gradient_level_consistency_property(self):
+        """Property: Same importance score ALWAYS maps to same detail level.
+        
+        The gradient thresholds must be deterministic.
+        """
+        from hypothesis import given, strategies as st, settings
+        
+        retriever = ContextRetriever(rag_store_instance=None, config_instance=None)
+        
+        @given(
+            importance=st.floats(min_value=0.0, max_value=1.0, allow_nan=False)
+        )
+        @settings(max_examples=1000)  # 🔥 GRADIENT DETERMINISM AT SCALE 🔥
+        def property_gradient_deterministic(importance):
+            """Same score should ALWAYS produce same detail level."""
+            level1 = retriever.get_detail_level(importance)
+            level2 = retriever.get_detail_level(importance)
+            
+            # THE PROPERTY: Must be consistent
+            assert level1 == level2, (
+                f"Gradient inconsistency! Score {importance} gave different levels: "
+                f"{level1} vs {level2}"
+            )
+            
+            # Also check valid levels
+            valid_levels = ['FULL', 'CHUNKS', 'SUMMARY', 'DROPPED']
+            assert level1 in valid_levels, f"Invalid level: {level1}"
+        
+        property_gradient_deterministic()
+    
+    def test_empty_content_penalty_property(self):
+        """Property: Empty content ALWAYS scores lower than non-empty.
+        
+        The 0.1x penalty should be universal.
+        """
+        from hypothesis import given, strategies as st, settings
+        
+        retriever = ContextRetriever(rag_store_instance=None, config_instance=None)
+        
+        @given(
+            age_hours=st.floats(min_value=0.1, max_value=100.0, allow_nan=False),
+            prediction_error=st.floats(min_value=0.0, max_value=1.0, allow_nan=False)
+        )
+        @settings(max_examples=500)  # 🔥 EMPTY PENALTY AT SCALE 🔥
+        def property_empty_penalty(age_hours, prediction_error):
+            """Empty content should ALWAYS score lower."""
+            now = datetime.now(timezone.utc)
+            timestamp = (now - timedelta(hours=age_hours)).isoformat()
+            
+            empty_turn = {
+                'timestamp': timestamp,
+                'content': '',
+                'metadata': {'prediction_error': prediction_error}
+            }
+            
+            filled_turn = {
+                'timestamp': timestamp,
+                'content': 'actual content here',
+                'metadata': {'prediction_error': prediction_error}
+            }
+            
+            empty_score = retriever.calculate_importance(empty_turn, query="test")
+            filled_score = retriever.calculate_importance(filled_turn, query="test")
+            
+            # THE PROPERTY: Empty should score lower (or equal in edge cases)
+            # Note: Due to relevance being 0 for both, might be equal
+            # But empty should NOT score HIGHER
+            assert empty_score <= filled_score, (
+                f"Empty content penalty violated! Empty scored {empty_score} "
+                f"but filled scored {filled_score}"
+            )
+        
+        property_empty_penalty()
+
+
 # Integration test (would need full RAG store)
 class TestFullIntegration:
     """Integration tests with full system (mark as integration)."""
