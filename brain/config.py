@@ -11,8 +11,21 @@ load_dotenv()
 
 # ============= LLM (Ollama) Configuration =============
 OLLAMA_API_URL = os.getenv("OLLAMA_API_URL", "http://localhost:11434/api/generate")
-OLLAMA_MODEL = os.getenv("OLLAMA_MODEL", "deepseek-r1")
+# Default model: qwen2.5-coder:7b - Fast, excellent for code + chat, 5-10x faster than deepseek-r1
+OLLAMA_MODEL = os.getenv("OLLAMA_MODEL", "qwen2.5-coder:7b")
 OLLAMA_BASE_URL = os.getenv("OLLAMA_BASE_URL", "http://localhost:11434")
+
+# Model profiles for different use cases (can be selected per-request)
+MODEL_PROFILES = {
+    "fast": "qwen2.5-coder:7b",      # Default: Fast, code-focused, excellent quality
+    "balanced": "mistral:7b",         # Good balance of speed and capability
+    "reasoning": "deepseek-r1:14b",  # Deep thinking, slower, verbose (original default)
+    "creative": "llama3.2:3b",       # Very fast, creative, lower quality
+    "tiny": "phi3:mini",              # Fastest, minimal VRAM, adequate quality
+}
+
+# Allow per-request model override via model_profile parameter
+DEFAULT_MODEL_PROFILE = os.getenv("DEFAULT_MODEL_PROFILE", "fast")
 
 # ============= RAG (Vector DB) Configuration =============
 RAG_ENABLED = os.getenv("RAG_ENABLED", "true").lower() == "true"
