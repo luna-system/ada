@@ -22,6 +22,7 @@ import os
 import datetime
 import json
 import csv
+import logging
 from pathlib import Path
 from typing import List, Dict, Any, Optional
 import sys
@@ -34,6 +35,9 @@ from fastapi.responses import JSONResponse, StreamingResponse
 # System notice manager
 from brain.notices import notice_manager
 from pydantic import BaseModel
+
+# Initialize logger
+logger = logging.getLogger(__name__)
 
 from fastapi import APIRouter
 
@@ -652,8 +656,8 @@ async def chat_stream(request: Request):
         # Get active notices
         notices = get_active_notices()
         
-        # Create assembler (initializes cache internally)
-        assembler = PromptAssembler()
+        # Create assembler (initializes cache internally, pass rag_store instance)
+        assembler = PromptAssembler(rag_store_instance=rag_store)
         
         # Build request context for specialists
         request_context = {
