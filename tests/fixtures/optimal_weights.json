@@ -1,0 +1,25 @@
+{
+  "importance_weights": {
+    "decay": 0.1,
+    "surprise": 0.6,
+    "relevance": 0.2,
+    "habituation": 0.1
+  },
+  "rationale": {
+    "discovery": "Phase 4 weight optimization found these weights",
+    "improvement": "12-38% better correlation with ground truth",
+    "trade_off": "Optimizes for importance over recency",
+    "datasets_tested": [
+      "realistic_100",
+      "recency_bias_75",
+      "uniform_50"
+    ],
+    "validation": "Phase 5 production validation passed"
+  },
+  "rollout_plan": {
+    "phase_1": "A/B test: 10% of requests use optimal weights",
+    "phase_2": "Monitor: token usage, user feedback, quality metrics",
+    "phase_3": "Expand: 50% if metrics improve",
+    "phase_4": "Default: 100% rollout if successful"
+  }
+}
