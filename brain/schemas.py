@@ -25,6 +25,41 @@ from typing import Optional, List, Literal, Dict, Any
 from datetime import datetime
 from pydantic import BaseModel, Field, field_validator
 from enum import Enum
+import time
+
+
+# ============= Latency & Performance =============
+
+class LatencyBreakdown(BaseModel):
+    """Detailed timing breakdown for a chat request (milliseconds)."""
+    
+    python_overhead_ms: float = Field(
+        description="Time spent in Python code (context retrieval, prompt building, specialist activation)"
+    )
+    llm_inference_ms: float = Field(
+        description="Time spent waiting for LLM to generate response (the neural net)"
+    )
+    total_ms: float = Field(
+        description="Total request time (sum of all components)"
+    )
+    llm_percentage: float = Field(
+        description="Percentage of total time spent in LLM inference (0-100)"
+    )
+    
+    specialists_activated: int = Field(
+        default=0,
+        description="Number of specialists invoked during this request"
+    )
+    
+    context_retrieved: bool = Field(
+        default=False,
+        description="Whether RAG context was retrieved"
+    )
+    
+    cache_hit_rate: Optional[float] = Field(
+        default=None,
+        description="Hit rate for context cache (0-1) if caching is enabled"
+    )
 
 
 # ============= Document Types =============
