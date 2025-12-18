@@ -2,6 +2,7 @@
 
 import asyncio
 import os
+import sys
 from typing import Any
 
 from dotenv import load_dotenv
@@ -50,22 +51,23 @@ async def main():
         # Return the text content
         return contents[0].text if contents else ""
 
+    print(f"📚 Documentation resources: {len(RESOURCES)} available", file=sys.stderr)
+    
     # Run server with stdio transport
     async with stdio_server() as (read_stream, write_stream):
-        await server.run(
-            read_stream,
-            write_stream,
-            server.create_initialization_options(),
-        )
-        print(f"📚 Documentation resources: {len(RESOURCES)} available", file=sys.stderr)
-        
-        # Cleanup
-        await ada.close()
+        try:
+            await server.run(
+                read_stream,
+                write_stream,
+                server.create_initialization_options(),
+            )
+        finally:
+            # Cleanup
+            await ada.close()
 
 
 def run():
     """Entry point for command-line execution."""
-    import sys
     # Print startup message to stderr so it doesn't interfere with stdio protocol
     print("🤖 Ada MCP Server starting...", file=sys.stderr)
     print(f"📡 Listening on stdio for MCP protocol messages", file=sys.stderr)
