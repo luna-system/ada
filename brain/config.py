@@ -199,6 +199,22 @@ SEMANTIC_CHUNKING_THRESHOLD = float(os.getenv("SEMANTIC_CHUNKING_THRESHOLD", "0.
 SEMANTIC_CHUNKING_MIN_SIZE = int(os.getenv("SEMANTIC_CHUNKING_MIN_SIZE", "2"))  # Min memories to form chunk
 SEMANTIC_CHUNKING_MAX_SIZE = int(os.getenv("SEMANTIC_CHUNKING_MAX_SIZE", "10"))  # Max memories per chunk
 
+# === Biomimetic Context Management (Phase 3) ===
+# Context priming (pre-activate likely topics based on semantic network)
+CONTEXT_PRIMING_ENABLED = os.getenv("CONTEXT_PRIMING_ENABLED", "false").lower() == "true"  # Experimental
+CONTEXT_PRIMING_THRESHOLD = float(os.getenv("CONTEXT_PRIMING_THRESHOLD", "0.5"))  # Minimum relationship strength
+CONTEXT_PRIMING_LEARN_FROM_MEMORIES = os.getenv("CONTEXT_PRIMING_LEARN_FROM_MEMORIES", "false").lower() == "true"  # Learn semantic network
+
+# Prediction error detection (monitor LLM output for uncertainty)
+PREDICTION_ERROR_ENABLED = os.getenv("PREDICTION_ERROR_ENABLED", "false").lower() == "true"  # Experimental
+PREDICTION_ERROR_UNCERTAINTY_THRESHOLD = float(os.getenv("PREDICTION_ERROR_UNCERTAINTY_THRESHOLD", "0.7"))  # Min confidence
+PREDICTION_ERROR_MIN_SIGNALS = int(os.getenv("PREDICTION_ERROR_MIN_SIGNALS", "2"))  # Min signals to trigger
+
+# Dynamic context injection (inject additional context mid-stream)
+DYNAMIC_INJECTION_ENABLED = os.getenv("DYNAMIC_INJECTION_ENABLED", "false").lower() == "true"  # Experimental
+DYNAMIC_INJECTION_MAX_INJECTIONS = int(os.getenv("DYNAMIC_INJECTION_MAX_INJECTIONS", "3"))  # Max injections per response
+DYNAMIC_INJECTION_STRATEGY = os.getenv("DYNAMIC_INJECTION_STRATEGY", "inline")  # inline, system, or hybrid
+
 def get_config_dict() -> Dict[str, Any]:
     """Return active configuration as a dictionary for health checks."""
     return {
