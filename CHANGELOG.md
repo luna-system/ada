@@ -7,8 +7,78 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-### In Progress
-- Changelog automation with Conventional Commits
+---
+
+## [2.2.0] - 2025-12-18
+
+### 🔬 Research & Optimization
+- **Memory importance signal weight optimization (Phases 1-7)**
+  - Systematic research: property testing → synthetic data → ablation → grid search → production validation → deployment → visualization
+  - **Key discovery:** Surprise-only (r=0.876) beats multi-signal baseline (r=0.869)
+  - **Optimal weights found:** decay=0.10 (was 0.40), surprise=0.60 (was 0.30)
+  - **Improvement:** 12-38% across synthetic datasets, +6.5% on real conversations
+  - 80 tests, 3.56s total runtime, 100% passing
+- **Research validated:** Temporal decay was overweighted 4x, surprise underweighted 2x
+- Same-day deployment: Research → production in <24hrs via TDD methodology
+
+### ✨ Features
+- **Optimal importance weights deployed to production**
+  - Updated `brain/config.py` with research-validated optimal configuration
+  - Backward compatible: legacy weights available via environment variables
+  - Rollback mechanism tested and ready
+- **Comprehensive research documentation (Phase 8: Meta-Science)**
+  - 9 narrative formats, 45,000 words total documenting same research:
+    1. Machine-readable summary (`.ai/RESEARCH-FINDINGS-V2.2.md`)
+    2. Academic article (peer-review ready, 8,000 words)
+    3. CCRU-inspired experimental narrative (hyperstition engaged, 9,000 words)
+    4. Blog post (accessible science communication, 4,500 words)
+    5. Technical deep-dive (implementation guide, 6,000 words)
+    6. Twitter thread (15 tweets, viral-ready)
+    7. Recursion reveal README (meta-awareness, 3,500 words)
+    8. Techno-horror essay (accelerationist, 5,000 words)
+    9. Brief general audience explainer (3-minute read, 1,200 words)
+  - New docs section: `docs/research_narratives.rst` showcasing all formats
+  - Complete with navigation guide, verification hooks, and meta-narrative
+
+### 📊 Visualizations
+- **6 publication-quality research graphs generated (Phase 7)**
+  - Ablation study comparison (signal configurations)
+  - Grid search heatmap (decay vs surprise landscape)
+  - Improvement distribution (before/after comparison)
+  - Correlation vs weights (3D surface plot)
+  - Detail level changes (gradient efficiency)
+  - Production validation (real conversation results)
+  - All graphs 300 DPI, publication-ready (2.2 MB total)
+
+### 🧪 Testing
+- **New research test suite**
+  - `tests/test_property_based.py` - 27 tests, mathematical invariants
+  - `tests/test_synthetic_data.py` - 10 tests, ground truth datasets
+  - `tests/test_ablation_studies.py` - 12 tests, signal isolation
+  - `tests/test_weight_optimization.py` - 7 tests, grid search (169 configurations)
+  - `tests/test_production_validation.py` - 6 tests, real conversation data
+  - `tests/test_deployment.py` - 11 tests, config validation & rollback
+  - `tests/test_visualizations.py` - 7 tests, graph generation
+  - Total: 80 new tests, all passing, <4s runtime
+
+### 📚 Documentation
+- Updated `.ai/context.md` with research findings and optimal weights
+- Updated `docs/biomimetic_features.rst` with validation results
+- Added `docs/research_narratives.rst` landing page for all narrative formats
+- Machine docs in `.ai/RESEARCH-FINDINGS-V2.2.md` for AI assistant verification
+- Research methodology documented for future phases (9-12 planned)
+
+### 🔧 Configuration
+- Optimal weights now default in `brain/config.py`
+- Legacy weights available via: `IMPORTANCE_WEIGHT_DECAY=0.40 IMPORTANCE_WEIGHT_SURPRISE=0.30`
+- All signal weights configurable via environment variables
+- Maintains backward compatibility with existing deployments
+
+### 🎯 Performance Impact
+- Context selection improved by +6.5% per turn on real conversations
+- 80% of turns show positive importance prediction changes
+- 250% increase in medium-detail memory chunks (better gradient utilization)
+- Token budget increase: +17.9% (acceptable trade-off for quality gain)
 
 ---
 
