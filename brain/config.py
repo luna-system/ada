@@ -199,6 +199,18 @@ SEMANTIC_CHUNKING_THRESHOLD = float(os.getenv("SEMANTIC_CHUNKING_THRESHOLD", "0.
 SEMANTIC_CHUNKING_MIN_SIZE = int(os.getenv("SEMANTIC_CHUNKING_MIN_SIZE", "2"))  # Min memories to form chunk
 SEMANTIC_CHUNKING_MAX_SIZE = int(os.getenv("SEMANTIC_CHUNKING_MAX_SIZE", "10"))  # Max memories per chunk
 
+# === Importance Signal Weights (Phase 4 Optimization) ===
+# Multi-signal importance scoring weights (must sum to 1.0)
+# Default values are OPTIMAL weights from Phase 4 weight optimization study
+# See tests/test_weight_optimization.py for empirical validation
+IMPORTANCE_WEIGHT_DECAY = float(os.getenv("IMPORTANCE_WEIGHT_DECAY", "0.10"))          # Temporal decay (recency bias)
+IMPORTANCE_WEIGHT_SURPRISE = float(os.getenv("IMPORTANCE_WEIGHT_SURPRISE", "0.60"))    # Prediction error (novelty)
+IMPORTANCE_WEIGHT_RELEVANCE = float(os.getenv("IMPORTANCE_WEIGHT_RELEVANCE", "0.20"))  # Semantic similarity
+IMPORTANCE_WEIGHT_HABITUATION = float(os.getenv("IMPORTANCE_WEIGHT_HABITUATION", "0.10"))  # Repetition penalty
+
+# Legacy production weights (pre-optimization): decay=0.40, surprise=0.30
+# To revert to legacy: IMPORTANCE_WEIGHT_DECAY=0.40 IMPORTANCE_WEIGHT_SURPRISE=0.30
+
 # === Biomimetic Context Management (Phase 3) ===
 # Context priming (pre-activate likely topics based on semantic network)
 CONTEXT_PRIMING_ENABLED = os.getenv("CONTEXT_PRIMING_ENABLED", "false").lower() == "true"  # Experimental
