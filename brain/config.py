@@ -215,6 +215,11 @@ DYNAMIC_INJECTION_ENABLED = os.getenv("DYNAMIC_INJECTION_ENABLED", "false").lowe
 DYNAMIC_INJECTION_MAX_INJECTIONS = int(os.getenv("DYNAMIC_INJECTION_MAX_INJECTIONS", "3"))  # Max injections per response
 DYNAMIC_INJECTION_STRATEGY = os.getenv("DYNAMIC_INJECTION_STRATEGY", "inline")  # inline, system, or hybrid
 
+# === Biomimetic Context Management (Phase 4) ===
+# Processing modes / Hemispheric specialization (adaptive context strategies)
+PROCESSING_MODES_ENABLED = os.getenv("PROCESSING_MODES_ENABLED", "false").lower() == "true"  # Experimental
+PROCESSING_MODES_DEFAULT_MODE = os.getenv("PROCESSING_MODES_DEFAULT_MODE", "conversational")  # Default when detection disabled
+
 def get_config_dict() -> Dict[str, Any]:
     """Return active configuration as a dictionary for health checks."""
     return {
