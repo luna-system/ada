@@ -73,13 +73,25 @@ See `docs/adapters.rst` for building new adapters.
 
 ### Core Logic
 - `brain/llm.py` - LLM client (Ollama), streaming generation
-- `brain/prompt_builder/` - **v2.1:** Modular prompt building with caching
-  - `context_retriever.py` - RAG data retrieval (cache-aware)
+- `brain/prompt_builder/` - **v2.2:** Modular prompt building with neuromorphic context
+  - `context_retriever.py` - RAG data retrieval with multi-signal importance scoring
   - `section_builder.py` - Section formatting
   - `prompt_assembler.py` - Final orchestration with MultiTimescaleCache
-- `brain/context_cache.py` - **NEW (v2.1):** Multi-timescale caching (personas, FAQs, memories)
+- `brain/context_cache.py` - Multi-timescale caching (personas, FAQs, memories)
 - `brain/rag_store.py` - Vector storage interface (ChromaDB)
 - `brain/schemas.py` - All Pydantic models, self-documenting via `/v1/schema`
+
+### Neuromorphic Features (Biomimetic Memory System)
+- `brain/memory_decay.py` - Exponential decay with temperature modulation
+- `brain/context_habituation.py` - Repeated pattern detection
+- `brain/prediction_error.py` - Surprise/novelty weighting
+- `brain/attention_spotlight.py` - Recency + relevance prioritization
+- `brain/semantic_chunking.py` - Semantic boundary detection
+- `brain/processing_modes.py` - ANALYTICAL/CREATIVE/CONVERSATIONAL modes
+- **NEW (v2.2):** Multi-signal importance scoring in context_retriever.py
+  - Combines decay (40%) + surprise (30%) + relevance (20%) + habituation (10%)
+  - Gradient detail levels: FULL/CHUNKS/SUMMARY/DROPPED
+  - Temperature-modulated temporal decay
 
 ### Specialist System (Plugin Architecture)
 - `brain/specialists/protocol.py` - Base interfaces, MCP-inspired
