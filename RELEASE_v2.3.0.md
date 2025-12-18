@@ -1,5 +1,7 @@
 # Release v2.3.0 - Contextual Documentation Framework & Theoretical Validation
 
+> **Research Ethics Note:** This release contains academic research on documentation effectiveness and communication optimization. All "adversarial" terminology refers to scientific validation methods (testing boundaries, seeking falsification) - not security attacks or harmful use cases. We actively seek to find where our hypotheses fail, which is standard rigorous science practice.
+
 **Release Date:** 2025-12-18  
 **Branch:** feature/phase9-theoretical-limits  
 **Commit:** a4fffba  
