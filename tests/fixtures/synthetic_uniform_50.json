@@ -1,0 +1,809 @@
+{
+  "metadata": {
+    "generated_at": "2025-12-18T04:04:58.987990+00:00",
+    "num_turns": 50,
+    "generator": "ConversationGenerator v1.0"
+  },
+  "turns": [
+    {
+      "timestamp": "2025-11-18T06:16:56.315138+00:00",
+      "content": "read an interesting article",
+      "metadata": {
+        "importance": 0.291861560261786,
+        "prediction_error": 0.28646774415359166,
+        "habituation_penalty": 0.0,
+        "topic": "personal"
+      },
+      "ground_truth": {
+        "true_importance": 0.291861560261786,
+        "expected_detail_level": "SUMMARY",
+        "should_decay": true,
+        "topic_cluster": "personal"
+      }
+    },
+    {
+      "timestamp": "2025-11-19T02:21:47.814281+00:00",
+      "content": "read an interesting article",
+      "metadata": {
+        "importance": 0.24373090607513836,
+        "prediction_error": 0.19111766500478472,
+        "habituation_penalty": 0.0,
+        "topic": "personal"
+      },
+      "ground_truth": {
+        "true_importance": 0.24373090607513836,
+        "expected_detail_level": "SUMMARY",
+        "should_decay": true,
+        "topic_cluster": "personal"
+      }
+    },
+    {
+      "timestamp": "2025-11-19T18:11:57.541968+00:00",
+      "content": "had a good meal",
+      "metadata": {
+        "importance": 0.7462925454923977,
+        "prediction_error": 0.3770081196810241,
+        "habituation_penalty": 0.0,
+        "topic": "personal"
+      },
+      "ground_truth": {
+        "true_importance": 0.7462925454923977,
+        "expected_detail_level": "CHUNKS",
+        "should_decay": true,
+        "topic_cluster": "personal"
+      }
+    },
+    {
+      "timestamp": "2025-11-20T04:34:22.254814+00:00",
+      "content": "talked with a friend",
+      "metadata": {
+        "importance": 0.41494242355134514,
+        "prediction_error": 0.46415905395894963,
+        "habituation_penalty": 0.0,
+        "topic": "personal"
+      },
+      "ground_truth": {
+        "true_importance": 0.41494242355134514,
+        "expected_detail_level": "SUMMARY",
+        "should_decay": true,
+        "topic_cluster": "personal"
+      }
+    },
+    {
+      "timestamp": "2025-11-21T17:52:24.553972+00:00",
+      "content": "organized my space",
+      "metadata": {
+        "importance": 0.2985558497717672,
+        "prediction_error": 0.24376418380590148,
+        "habituation_penalty": 0.0,
+        "topic": "personal"
+      },
+      "ground_truth": {
+        "true_importance": 0.2985558497717672,
+        "expected_detail_level": "SUMMARY",
+        "should_decay": true,
+        "topic_cluster": "personal"
+      }
+    },
+    {
+      "timestamp": "2025-11-22T02:08:18.466804+00:00",
+      "content": "read an interesting article",
+      "metadata": {
+        "importance": 0.48434138555172035,
+        "prediction_error": 0.272014952170504,
+        "habituation_penalty": 0.0,
+        "topic": "personal"
+      },
+      "ground_truth": {
+        "true_importance": 0.48434138555172035,
+        "expected_detail_level": "SUMMARY",
+        "should_decay": true,
+        "topic_cluster": "personal"
+      }
+    },
+    {
+      "timestamp": "2025-11-22T05:20:50.752301+00:00",
+      "content": "read an interesting article",
+      "metadata": {
+        "importance": 0.18865237370710541,
+        "prediction_error": 0.2110560326432023,
+        "habituation_penalty": 0.0,
+        "topic": "personal"
+      },
+      "ground_truth": {
+        "true_importance": 0.18865237370710541,
+        "expected_detail_level": "DROPPED",
+        "should_decay": true,
+        "topic_cluster": "personal"
+      }
+    },
+    {
+      "timestamp": "2025-11-22T22:16:15.459412+00:00",
+      "content": "read an interesting article",
+      "metadata": {
+        "importance": 0.04364729909730192,
+        "prediction_error": 0.1284351699941897,
+        "habituation_penalty": 0.0,
+        "topic": "personal"
+      },
+      "ground_truth": {
+        "true_importance": 0.04364729909730192,
+        "expected_detail_level": "DROPPED",
+        "should_decay": true,
+        "topic_cluster": "personal"
+      }
+    },
+    {
+      "timestamp": "2025-11-23T10:08:07.675291+00:00",
+      "content": "organized my space",
+      "metadata": {
+        "importance": 0.820747551709555,
+        "prediction_error": 0.7668505416606025,
+        "habituation_penalty": 0.0,
+        "topic": "personal"
+      },
+      "ground_truth": {
+        "true_importance": 0.820747551709555,
+        "expected_detail_level": "FULL",
+        "should_decay": true,
+        "topic_cluster": "personal"
+      }
+    },
+    {
+      "timestamp": "2025-11-23T17:49:36.089914+00:00",
+      "content": "had a good meal",
+      "metadata": {
+        "importance": 0.9653535901768537,
+        "prediction_error": 0.6085453946963431,
+        "habituation_penalty": 0.0,
+        "topic": "personal"
+      },
+      "ground_truth": {
+        "true_importance": 0.9653535901768537,
+        "expected_detail_level": "FULL",
+        "should_decay": true,
+        "topic_cluster": "personal"
+      }
+    },
+    {
+      "timestamp": "2025-11-24T04:34:37.789516+00:00",
+      "content": "went for a walk",
+      "metadata": {
+        "importance": 0.5259510868075614,
+        "prediction_error": 0.35093699055498984,
+        "habituation_penalty": 0.0,
+        "topic": "personal"
+      },
+      "ground_truth": {
+        "true_importance": 0.5259510868075614,
+        "expected_detail_level": "CHUNKS",
+        "should_decay": true,
+        "topic_cluster": "personal"
+      }
+    },
+    {
+      "timestamp": "2025-11-24T23:50:54.761868+00:00",
+      "content": "talked with a friend",
+      "metadata": {
+        "importance": 0.15436121877154885,
+        "prediction_error": 0.09584909353397696,
+        "habituation_penalty": 0.0,
+        "topic": "personal"
+      },
+      "ground_truth": {
+        "true_importance": 0.15436121877154885,
+        "expected_detail_level": "DROPPED",
+        "should_decay": true,
+        "topic_cluster": "personal"
+      }
+    },
+    {
+      "timestamp": "2025-11-25T08:31:23.576990+00:00",
+      "content": "read an interesting article",
+      "metadata": {
+        "importance": 0.6498366525792726,
+        "prediction_error": 0.5955917737457673,
+        "habituation_penalty": 0.0,
+        "topic": "personal"
+      },
+      "ground_truth": {
+        "true_importance": 0.6498366525792726,
+        "expected_detail_level": "CHUNKS",
+        "should_decay": true,
+        "topic_cluster": "personal"
+      }
+    },
+    {
+      "timestamp": "2025-11-26T21:02:21.903503+00:00",
+      "content": "feeling tired today",
+      "metadata": {
+        "importance": 0.8874386829093233,
+        "prediction_error": 0.6163860721925978,
+        "habituation_penalty": 0.0,
+        "topic": "personal"
+      },
+      "ground_truth": {
+        "true_importance": 0.8874386829093233,
+        "expected_detail_level": "FULL",
+        "should_decay": true,
+        "topic_cluster": "personal"
+      }
+    },
+    {
+      "timestamp": "2025-11-28T07:01:22.458281+00:00",
+      "content": "listened to music",
+      "metadata": {
+        "importance": 0.6843995744059167,
+        "prediction_error": 0.39403130370095907,
+        "habituation_penalty": 0.0,
+        "topic": "personal"
+      },
+      "ground_truth": {
+        "true_importance": 0.6843995744059167,
+        "expected_detail_level": "CHUNKS",
+        "should_decay": true,
+        "topic_cluster": "personal"
+      }
+    },
+    {
+      "timestamp": "2025-11-28T17:43:55.472835+00:00",
+      "content": "had a good meal",
+      "metadata": {
+        "importance": 0.09844312638319797,
+        "prediction_error": 0.12240931998055507,
+        "habituation_penalty": 0.0,
+        "topic": "personal"
+      },
+      "ground_truth": {
+        "true_importance": 0.09844312638319797,
+        "expected_detail_level": "DROPPED",
+        "should_decay": true,
+        "topic_cluster": "personal"
+      }
+    },
+    {
+      "timestamp": "2025-11-29T06:28:01.244168+00:00",
+      "content": "feeling tired today",
+      "metadata": {
+        "importance": 0.903424062050486,
+        "prediction_error": 0.45079323090622525,
+        "habituation_penalty": 0.0,
+        "topic": "personal"
+      },
+      "ground_truth": {
+        "true_importance": 0.903424062050486,
+        "expected_detail_level": "FULL",
+        "should_decay": true,
+        "topic_cluster": "personal"
+      }
+    },
+    {
+      "timestamp": "2025-11-29T11:47:11.988379+00:00",
+      "content": "went for a walk",
+      "metadata": {
+        "importance": 0.14556979569939843,
+        "prediction_error": 0.11436538424908291,
+        "habituation_penalty": 0.0,
+        "topic": "personal"
+      },
+      "ground_truth": {
+        "true_importance": 0.14556979569939843,
+        "expected_detail_level": "DROPPED",
+        "should_decay": true,
+        "topic_cluster": "personal"
+      }
+    },
+    {
+      "timestamp": "2025-12-02T14:48:24.080905+00:00",
+      "content": "listened to music",
+      "metadata": {
+        "importance": 0.8708395986448548,
+        "prediction_error": 0.6574718664663645,
+        "habituation_penalty": 0.0,
+        "topic": "personal"
+      },
+      "ground_truth": {
+        "true_importance": 0.8708395986448548,
+        "expected_detail_level": "FULL",
+        "should_decay": true,
+        "topic_cluster": "personal"
+      }
+    },
+    {
+      "timestamp": "2025-12-03T05:10:04.864788+00:00",
+      "content": "organized my space",
+      "metadata": {
+        "importance": 0.23218844429515229,
+        "prediction_error": 0.21769376340803398,
+        "habituation_penalty": 0.0,
+        "topic": "personal"
+      },
+      "ground_truth": {
+        "true_importance": 0.23218844429515229,
+        "expected_detail_level": "SUMMARY",
+        "should_decay": true,
+        "topic_cluster": "personal"
+      }
+    },
+    {
+      "timestamp": "2025-12-03T07:20:43.283823+00:00",
+      "content": "went for a walk",
+      "metadata": {
+        "importance": 0.8046330769751463,
+        "prediction_error": 0.7237269233221556,
+        "habituation_penalty": 0.3,
+        "topic": "personal"
+      },
+      "ground_truth": {
+        "true_importance": 0.8046330769751463,
+        "expected_detail_level": "FULL",
+        "should_decay": true,
+        "topic_cluster": "personal"
+      }
+    },
+    {
+      "timestamp": "2025-12-03T15:05:26.008469+00:00",
+      "content": "read an interesting article",
+      "metadata": {
+        "importance": 0.9876516952184714,
+        "prediction_error": 0.6110178863024388,
+        "habituation_penalty": 0.0,
+        "topic": "personal"
+      },
+      "ground_truth": {
+        "true_importance": 0.9876516952184714,
+        "expected_detail_level": "FULL",
+        "should_decay": true,
+        "topic_cluster": "personal"
+      }
+    },
+    {
+      "timestamp": "2025-12-04T01:40:32.042426+00:00",
+      "content": "organized my space",
+      "metadata": {
+        "importance": 0.3021216705383136,
+        "prediction_error": 0.41123459557689124,
+        "habituation_penalty": 0.3,
+        "topic": "personal"
+      },
+      "ground_truth": {
+        "true_importance": 0.3021216705383136,
+        "expected_detail_level": "SUMMARY",
+        "should_decay": true,
+        "topic_cluster": "personal"
+      }
+    },
+    {
+      "timestamp": "2025-12-04T07:27:36.299969+00:00",
+      "content": "talked with a friend",
+      "metadata": {
+        "importance": 0.35895915757724584,
+        "prediction_error": 0.1696203663903859,
+        "habituation_penalty": 0.3,
+        "topic": "personal"
+      },
+      "ground_truth": {
+        "true_importance": 0.35895915757724584,
+        "expected_detail_level": "SUMMARY",
+        "should_decay": true,
+        "topic_cluster": "personal"
+      }
+    },
+    {
+      "timestamp": "2025-12-04T21:48:48.828931+00:00",
+      "content": "feeling tired today",
+      "metadata": {
+        "importance": 0.39580574091136733,
+        "prediction_error": 0.08030320494255319,
+        "habituation_penalty": 0.0,
+        "topic": "personal"
+      },
+      "ground_truth": {
+        "true_importance": 0.39580574091136733,
+        "expected_detail_level": "SUMMARY",
+        "should_decay": true,
+        "topic_cluster": "personal"
+      }
+    },
+    {
+      "timestamp": "2025-12-05T02:14:45.099659+00:00",
+      "content": "listened to music",
+      "metadata": {
+        "importance": 0.8328388996731884,
+        "prediction_error": 0.744161197151142,
+        "habituation_penalty": 0.0,
+        "topic": "personal"
+      },
+      "ground_truth": {
+        "true_importance": 0.8328388996731884,
+        "expected_detail_level": "FULL",
+        "should_decay": true,
+        "topic_cluster": "personal"
+      }
+    },
+    {
+      "timestamp": "2025-12-05T19:41:54.913433+00:00",
+      "content": "went for a walk",
+      "metadata": {
+        "importance": 0.6366178780058919,
+        "prediction_error": 0.4939889798562459,
+        "habituation_penalty": 0.0,
+        "topic": "personal"
+      },
+      "ground_truth": {
+        "true_importance": 0.6366178780058919,
+        "expected_detail_level": "CHUNKS",
+        "should_decay": true,
+        "topic_cluster": "personal"
+      }
+    },
+    {
+      "timestamp": "2025-12-05T22:04:20.727992+00:00",
+      "content": "organized my space",
+      "metadata": {
+        "importance": 0.6463406088905228,
+        "prediction_error": 0.37601157980442035,
+        "habituation_penalty": 0.3,
+        "topic": "personal"
+      },
+      "ground_truth": {
+        "true_importance": 0.6463406088905228,
+        "expected_detail_level": "CHUNKS",
+        "should_decay": true,
+        "topic_cluster": "personal"
+      }
+    },
+    {
+      "timestamp": "2025-12-05T22:19:47.124708+00:00",
+      "content": "worked on a project",
+      "metadata": {
+        "importance": 0.13141180642048544,
+        "prediction_error": 0.2558393894220705,
+        "habituation_penalty": 0.0,
+        "topic": "personal"
+      },
+      "ground_truth": {
+        "true_importance": 0.13141180642048544,
+        "expected_detail_level": "DROPPED",
+        "should_decay": true,
+        "topic_cluster": "personal"
+      }
+    },
+    {
+      "timestamp": "2025-12-06T03:45:26.741686+00:00",
+      "content": "worked on a project",
+      "metadata": {
+        "importance": 0.13215979774678355,
+        "prediction_error": 0.1082749620165169,
+        "habituation_penalty": 0.0,
+        "topic": "personal"
+      },
+      "ground_truth": {
+        "true_importance": 0.13215979774678355,
+        "expected_detail_level": "DROPPED",
+        "should_decay": true,
+        "topic_cluster": "personal"
+      }
+    },
+    {
+      "timestamp": "2025-12-08T12:55:15.986724+00:00",
+      "content": "organized my space",
+      "metadata": {
+        "importance": 0.8304726195673974,
+        "prediction_error": 0.484118867522483,
+        "habituation_penalty": 0.0,
+        "topic": "personal"
+      },
+      "ground_truth": {
+        "true_importance": 0.8304726195673974,
+        "expected_detail_level": "FULL",
+        "should_decay": true,
+        "topic_cluster": "personal"
+      }
+    },
+    {
+      "timestamp": "2025-12-08T20:20:34.627447+00:00",
+      "content": "organized my space",
+      "metadata": {
+        "importance": 0.8703969593250397,
+        "prediction_error": 0.7309708869693321,
+        "habituation_penalty": 0.0,
+        "topic": "personal"
+      },
+      "ground_truth": {
+        "true_importance": 0.8703969593250397,
+        "expected_detail_level": "FULL",
+        "should_decay": true,
+        "topic_cluster": "personal"
+      }
+    },
+    {
+      "timestamp": "2025-12-09T12:42:07.442353+00:00",
+      "content": "read an interesting article",
+      "metadata": {
+        "importance": 0.9665002094627521,
+        "prediction_error": 0.8206063853834551,
+        "habituation_penalty": 0.0,
+        "topic": "personal"
+      },
+      "ground_truth": {
+        "true_importance": 0.9665002094627521,
+        "expected_detail_level": "FULL",
+        "should_decay": true,
+        "topic_cluster": "personal"
+      }
+    },
+    {
+      "timestamp": "2025-12-09T19:48:37.150392+00:00",
+      "content": "feeling tired today",
+      "metadata": {
+        "importance": 0.3657750494055664,
+        "prediction_error": 0.3723153220194715,
+        "habituation_penalty": 0.0,
+        "topic": "personal"
+      },
+      "ground_truth": {
+        "true_importance": 0.3657750494055664,
+        "expected_detail_level": "SUMMARY",
+        "should_decay": true,
+        "topic_cluster": "personal"
+      }
+    },
+    {
+      "timestamp": "2025-12-10T03:48:09.216560+00:00",
+      "content": "talked with a friend",
+      "metadata": {
+        "importance": 0.368585658616039,
+        "prediction_error": 0.3576146024459316,
+        "habituation_penalty": 0.0,
+        "topic": "personal"
+      },
+      "ground_truth": {
+        "true_importance": 0.368585658616039,
+        "expected_detail_level": "SUMMARY",
+        "should_decay": true,
+        "topic_cluster": "personal"
+      }
+    },
+    {
+      "timestamp": "2025-12-10T14:21:21.164521+00:00",
+      "content": "listened to music",
+      "metadata": {
+        "importance": 0.9402918917795542,
+        "prediction_error": 0.5015427651253801,
+        "habituation_penalty": 0.0,
+        "topic": "personal"
+      },
+      "ground_truth": {
+        "true_importance": 0.9402918917795542,
+        "expected_detail_level": "FULL",
+        "should_decay": true,
+        "topic_cluster": "personal"
+      }
+    },
+    {
+      "timestamp": "2025-12-11T10:17:54.876854+00:00",
+      "content": "listened to music",
+      "metadata": {
+        "importance": 0.943169136057849,
+        "prediction_error": 0.5914209079674446,
+        "habituation_penalty": 0.0,
+        "topic": "personal"
+      },
+      "ground_truth": {
+        "true_importance": 0.943169136057849,
+        "expected_detail_level": "FULL",
+        "should_decay": true,
+        "topic_cluster": "personal"
+      }
+    },
+    {
+      "timestamp": "2025-12-13T08:17:20.968071+00:00",
+      "content": "read an interesting article",
+      "metadata": {
+        "importance": 0.46426753632268036,
+        "prediction_error": 0.4054181416142539,
+        "habituation_penalty": 0.3,
+        "topic": "personal"
+      },
+      "ground_truth": {
+        "true_importance": 0.46426753632268036,
+        "expected_detail_level": "SUMMARY",
+        "should_decay": true,
+        "topic_cluster": "personal"
+      }
+    },
+    {
+      "timestamp": "2025-12-13T13:13:25.831645+00:00",
+      "content": "had a good meal",
+      "metadata": {
+        "importance": 0.03721212822470499,
+        "prediction_error": 0.2244194396593053,
+        "habituation_penalty": 0.3,
+        "topic": "personal"
+      },
+      "ground_truth": {
+        "true_importance": 0.03721212822470499,
+        "expected_detail_level": "DROPPED",
+        "should_decay": true,
+        "topic_cluster": "personal"
+      }
+    },
+    {
+      "timestamp": "2025-12-14T05:45:12.696723+00:00",
+      "content": "read an interesting article",
+      "metadata": {
+        "importance": 0.13566404870633653,
+        "prediction_error": 0.07642233684999261,
+        "habituation_penalty": 0.0,
+        "topic": "personal"
+      },
+      "ground_truth": {
+        "true_importance": 0.13566404870633653,
+        "expected_detail_level": "DROPPED",
+        "should_decay": true,
+        "topic_cluster": "personal"
+      }
+    },
+    {
+      "timestamp": "2025-12-14T16:37:10.195254+00:00",
+      "content": "organized my space",
+      "metadata": {
+        "importance": 0.8854137838995794,
+        "prediction_error": 0.6817584077270911,
+        "habituation_penalty": 0.0,
+        "topic": "personal"
+      },
+      "ground_truth": {
+        "true_importance": 0.8854137838995794,
+        "expected_detail_level": "FULL",
+        "should_decay": true,
+        "topic_cluster": "personal"
+      }
+    },
+    {
+      "timestamp": "2025-12-14T18:23:27.768555+00:00",
+      "content": "listened to music",
+      "metadata": {
+        "importance": 0.2797401400857886,
+        "prediction_error": 0.27193036355907746,
+        "habituation_penalty": 0.0,
+        "topic": "personal"
+      },
+      "ground_truth": {
+        "true_importance": 0.2797401400857886,
+        "expected_detail_level": "SUMMARY",
+        "should_decay": true,
+        "topic_cluster": "personal"
+      }
+    },
+    {
+      "timestamp": "2025-12-15T00:46:16.085325+00:00",
+      "content": "worked on a project",
+      "metadata": {
+        "importance": 0.8554501933059546,
+        "prediction_error": 0.43855698515662034,
+        "habituation_penalty": 0.0,
+        "topic": "personal"
+      },
+      "ground_truth": {
+        "true_importance": 0.8554501933059546,
+        "expected_detail_level": "FULL",
+        "should_decay": true,
+        "topic_cluster": "personal"
+      }
+    },
+    {
+      "timestamp": "2025-12-15T12:40:48.003288+00:00",
+      "content": "listened to music",
+      "metadata": {
+        "importance": 0.35867384121231793,
+        "prediction_error": 0.21032754594637176,
+        "habituation_penalty": 0.0,
+        "topic": "personal"
+      },
+      "ground_truth": {
+        "true_importance": 0.35867384121231793,
+        "expected_detail_level": "SUMMARY",
+        "should_decay": true,
+        "topic_cluster": "personal"
+      }
+    },
+    {
+      "timestamp": "2025-12-16T13:03:21.996867+00:00",
+      "content": "listened to music",
+      "metadata": {
+        "importance": 0.8241910819315714,
+        "prediction_error": 0.4136031268791083,
+        "habituation_penalty": 0.0,
+        "topic": "personal"
+      },
+      "ground_truth": {
+        "true_importance": 0.8241910819315714,
+        "expected_detail_level": "FULL",
+        "should_decay": true,
+        "topic_cluster": "personal"
+      }
+    },
+    {
+      "timestamp": "2025-12-16T14:55:21.264880+00:00",
+      "content": "listened to music",
+      "metadata": {
+        "importance": 0.02135745473637063,
+        "prediction_error": 0.12966805449730617,
+        "habituation_penalty": 0.0,
+        "topic": "personal"
+      },
+      "ground_truth": {
+        "true_importance": 0.02135745473637063,
+        "expected_detail_level": "DROPPED",
+        "should_decay": true,
+        "topic_cluster": "personal"
+      }
+    },
+    {
+      "timestamp": "2025-12-17T01:39:40.024390+00:00",
+      "content": "listened to music",
+      "metadata": {
+        "importance": 0.2052055751428764,
+        "prediction_error": 0.2755710374868665,
+        "habituation_penalty": 0.0,
+        "topic": "personal"
+      },
+      "ground_truth": {
+        "true_importance": 0.2052055751428764,
+        "expected_detail_level": "SUMMARY",
+        "should_decay": true,
+        "topic_cluster": "personal"
+      }
+    },
+    {
+      "timestamp": "2025-12-17T07:17:49.391354+00:00",
+      "content": "feeling tired today",
+      "metadata": {
+        "importance": 0.23299867904603144,
+        "prediction_error": 0.27284650645415004,
+        "habituation_penalty": 0.0,
+        "topic": "personal"
+      },
+      "ground_truth": {
+        "true_importance": 0.23299867904603144,
+        "expected_detail_level": "SUMMARY",
+        "should_decay": true,
+        "topic_cluster": "personal"
+      }
+    },
+    {
+      "timestamp": "2025-12-17T18:14:14.774267+00:00",
+      "content": "went for a walk",
+      "metadata": {
+        "importance": 0.9875273043661723,
+        "prediction_error": 0.7073552958015812,
+        "habituation_penalty": 0.3,
+        "topic": "personal"
+      },
+      "ground_truth": {
+        "true_importance": 0.9875273043661723,
+        "expected_detail_level": "FULL",
+        "should_decay": true,
+        "topic_cluster": "personal"
+      }
+    },
+    {
+      "timestamp": "2025-12-18T03:15:15.419337+00:00",
+      "content": "listened to music",
+      "metadata": {
+        "importance": 0.1318032295618975,
+        "prediction_error": 0.035559172379941384,
+        "habituation_penalty": 0.0,
+        "topic": "personal"
+      },
+      "ground_truth": {
+        "true_importance": 0.1318032295618975,
+        "expected_detail_level": "DROPPED",
+        "should_decay": true,
+        "topic_cluster": "personal"
+      }
+    }
+  ]
+}

@@ -1,0 +1,1609 @@
+{
+  "metadata": {
+    "generated_at": "2025-12-18T04:04:58.986882+00:00",
+    "num_turns": 100,
+    "generator": "ConversationGenerator v1.0"
+  },
+  "turns": [
+    {
+      "timestamp": "2025-11-18T04:12:39.423433+00:00",
+      "content": "wrote tests for the API",
+      "metadata": {
+        "importance": 0.7895334374345898,
+        "prediction_error": 0.6082532041506148,
+        "habituation_penalty": 0.0,
+        "topic": "coding"
+      },
+      "ground_truth": {
+        "true_importance": 0.7895334374345898,
+        "expected_detail_level": "FULL",
+        "should_decay": true,
+        "topic_cluster": "coding"
+      }
+    },
+    {
+      "timestamp": "2025-11-18T04:15:51.665034+00:00",
+      "content": "implemented the new feature",
+      "metadata": {
+        "importance": 0.23358794358916746,
+        "prediction_error": 0.1756530293904882,
+        "habituation_penalty": 0.0,
+        "topic": "coding"
+      },
+      "ground_truth": {
+        "true_importance": 0.23358794358916746,
+        "expected_detail_level": "SUMMARY",
+        "should_decay": true,
+        "topic_cluster": "coding"
+      }
+    },
+    {
+      "timestamp": "2025-11-18T04:18:07.015515+00:00",
+      "content": "deployed to production",
+      "metadata": {
+        "importance": 0.10889423015428006,
+        "prediction_error": 0.2703545126855209,
+        "habituation_penalty": 0.0,
+        "topic": "coding"
+      },
+      "ground_truth": {
+        "true_importance": 0.10889423015428006,
+        "expected_detail_level": "DROPPED",
+        "should_decay": true,
+        "topic_cluster": "coding"
+      }
+    },
+    {
+      "timestamp": "2025-11-18T04:20:02.362910+00:00",
+      "content": "fixed the bug in the parser",
+      "metadata": {
+        "importance": 0.02362711448740983,
+        "prediction_error": 0.109302018079038,
+        "habituation_penalty": 0.0,
+        "topic": "coding"
+      },
+      "ground_truth": {
+        "true_importance": 0.02362711448740983,
+        "expected_detail_level": "DROPPED",
+        "should_decay": true,
+        "topic_cluster": "coding"
+      }
+    },
+    {
+      "timestamp": "2025-11-18T04:27:42.323492+00:00",
+      "content": "refactored the database layer",
+      "metadata": {
+        "importance": 0.19792524682421023,
+        "prediction_error": 0.3172871446589435,
+        "habituation_penalty": 0.0,
+        "topic": "coding"
+      },
+      "ground_truth": {
+        "true_importance": 0.19792524682421023,
+        "expected_detail_level": "DROPPED",
+        "should_decay": true,
+        "topic_cluster": "coding"
+      }
+    },
+    {
+      "timestamp": "2025-11-21T08:53:48.835338+00:00",
+      "content": "wrote tests for the API",
+      "metadata": {
+        "importance": 0.06353946163262461,
+        "prediction_error": 0.06019605865462056,
+        "habituation_penalty": 0.0,
+        "topic": "coding"
+      },
+      "ground_truth": {
+        "true_importance": 0.06353946163262461,
+        "expected_detail_level": "DROPPED",
+        "should_decay": true,
+        "topic_cluster": "coding"
+      }
+    },
+    {
+      "timestamp": "2025-11-21T08:55:04.925836+00:00",
+      "content": "debugged the memory leak",
+      "metadata": {
+        "importance": 0.11202615075878815,
+        "prediction_error": 0.2382639393883299,
+        "habituation_penalty": 0.3,
+        "topic": "coding"
+      },
+      "ground_truth": {
+        "true_importance": 0.11202615075878815,
+        "expected_detail_level": "DROPPED",
+        "should_decay": true,
+        "topic_cluster": "coding"
+      }
+    },
+    {
+      "timestamp": "2025-11-21T08:58:02.990342+00:00",
+      "content": "wrote tests for the API",
+      "metadata": {
+        "importance": 0.17649261553717,
+        "prediction_error": 0.015590723914649787,
+        "habituation_penalty": 0.3,
+        "topic": "coding"
+      },
+      "ground_truth": {
+        "true_importance": 0.17649261553717,
+        "expected_detail_level": "DROPPED",
+        "should_decay": true,
+        "topic_cluster": "coding"
+      }
+    },
+    {
+      "timestamp": "2025-11-21T09:03:35.882198+00:00",
+      "content": "reviewed the pull request",
+      "metadata": {
+        "importance": 0.02022009843309225,
+        "prediction_error": 0.0,
+        "habituation_penalty": 0.3,
+        "topic": "coding"
+      },
+      "ground_truth": {
+        "true_importance": 0.02022009843309225,
+        "expected_detail_level": "DROPPED",
+        "should_decay": true,
+        "topic_cluster": "coding"
+      }
+    },
+    {
+      "timestamp": "2025-11-21T09:04:50.211622+00:00",
+      "content": "debugged the memory leak",
+      "metadata": {
+        "importance": 0.06427104221113157,
+        "prediction_error": 0.0,
+        "habituation_penalty": 0.0,
+        "topic": "coding"
+      },
+      "ground_truth": {
+        "true_importance": 0.06427104221113157,
+        "expected_detail_level": "DROPPED",
+        "should_decay": true,
+        "topic_cluster": "coding"
+      }
+    },
+    {
+      "timestamp": "2025-11-21T09:07:37.583953+00:00",
+      "content": "reviewed the pull request",
+      "metadata": {
+        "importance": 0.028297738947564665,
+        "prediction_error": 0.08340151706916052,
+        "habituation_penalty": 0.0,
+        "topic": "coding"
+      },
+      "ground_truth": {
+        "true_importance": 0.028297738947564665,
+        "expected_detail_level": "DROPPED",
+        "should_decay": true,
+        "topic_cluster": "coding"
+      }
+    },
+    {
+      "timestamp": "2025-11-21T09:14:28.521549+00:00",
+      "content": "fixed the bug in the parser",
+      "metadata": {
+        "importance": 0.20200936418799045,
+        "prediction_error": 0.3350726394779798,
+        "habituation_penalty": 0.3,
+        "topic": "coding"
+      },
+      "ground_truth": {
+        "true_importance": 0.20200936418799045,
+        "expected_detail_level": "SUMMARY",
+        "should_decay": true,
+        "topic_cluster": "coding"
+      }
+    },
+    {
+      "timestamp": "2025-11-21T09:20:22.789949+00:00",
+      "content": "debugged the memory leak",
+      "metadata": {
+        "importance": 0.7327807096734411,
+        "prediction_error": 0.3895825256280704,
+        "habituation_penalty": 0.3,
+        "topic": "coding"
+      },
+      "ground_truth": {
+        "true_importance": 0.7327807096734411,
+        "expected_detail_level": "CHUNKS",
+        "should_decay": true,
+        "topic_cluster": "coding"
+      }
+    },
+    {
+      "timestamp": "2025-11-21T09:23:21.827885+00:00",
+      "content": "fixed the bug in the parser",
+      "metadata": {
+        "importance": 0.262345786221174,
+        "prediction_error": 0.013796005704537512,
+        "habituation_penalty": 0.3,
+        "topic": "coding"
+      },
+      "ground_truth": {
+        "true_importance": 0.262345786221174,
+        "expected_detail_level": "SUMMARY",
+        "should_decay": true,
+        "topic_cluster": "coding"
+      }
+    },
+    {
+      "timestamp": "2025-11-21T09:29:40.031354+00:00",
+      "content": "wrote tests for the API",
+      "metadata": {
+        "importance": 0.9906988771854254,
+        "prediction_error": 0.8640360072330487,
+        "habituation_penalty": 0.0,
+        "topic": "coding"
+      },
+      "ground_truth": {
+        "true_importance": 0.9906988771854254,
+        "expected_detail_level": "FULL",
+        "should_decay": true,
+        "topic_cluster": "coding"
+      }
+    },
+    {
+      "timestamp": "2025-11-21T09:37:57.123801+00:00",
+      "content": "optimized the query performance",
+      "metadata": {
+        "importance": 0.12031208776483578,
+        "prediction_error": 0.0,
+        "habituation_penalty": 0.3,
+        "topic": "coding"
+      },
+      "ground_truth": {
+        "true_importance": 0.12031208776483578,
+        "expected_detail_level": "DROPPED",
+        "should_decay": true,
+        "topic_cluster": "coding"
+      }
+    },
+    {
+      "timestamp": "2025-11-21T09:39:00.633131+00:00",
+      "content": "debugged the memory leak",
+      "metadata": {
+        "importance": 0.9355388070382364,
+        "prediction_error": 0.5689768565055336,
+        "habituation_penalty": 0.0,
+        "topic": "coding"
+      },
+      "ground_truth": {
+        "true_importance": 0.9355388070382364,
+        "expected_detail_level": "FULL",
+        "should_decay": true,
+        "topic_cluster": "coding"
+      }
+    },
+    {
+      "timestamp": "2025-11-21T09:47:15.775527+00:00",
+      "content": "reviewed the pull request",
+      "metadata": {
+        "importance": 0.8737540872448768,
+        "prediction_error": 0.6285059416211234,
+        "habituation_penalty": 0.3,
+        "topic": "coding"
+      },
+      "ground_truth": {
+        "true_importance": 0.8737540872448768,
+        "expected_detail_level": "FULL",
+        "should_decay": true,
+        "topic_cluster": "coding"
+      }
+    },
+    {
+      "timestamp": "2025-11-21T09:54:32.770800+00:00",
+      "content": "fixed the bug in the parser",
+      "metadata": {
+        "importance": 0.2558159676144856,
+        "prediction_error": 0.04204426850593321,
+        "habituation_penalty": 0.0,
+        "topic": "coding"
+      },
+      "ground_truth": {
+        "true_importance": 0.2558159676144856,
+        "expected_detail_level": "SUMMARY",
+        "should_decay": true,
+        "topic_cluster": "coding"
+      }
+    },
+    {
+      "timestamp": "2025-11-23T18:37:19.618741+00:00",
+      "content": "considered ethical implications",
+      "metadata": {
+        "importance": 0.07056116850027935,
+        "prediction_error": 0.0,
+        "habituation_penalty": 0.0,
+        "topic": "philosophy"
+      },
+      "ground_truth": {
+        "true_importance": 0.07056116850027935,
+        "expected_detail_level": "DROPPED",
+        "should_decay": true,
+        "topic_cluster": "philosophy"
+      }
+    },
+    {
+      "timestamp": "2025-11-23T18:45:11.905571+00:00",
+      "content": "deployed to production",
+      "metadata": {
+        "importance": 0.1751016867873674,
+        "prediction_error": 0.13168426696394073,
+        "habituation_penalty": 0.0,
+        "topic": "coding"
+      },
+      "ground_truth": {
+        "true_importance": 0.1751016867873674,
+        "expected_detail_level": "DROPPED",
+        "should_decay": true,
+        "topic_cluster": "coding"
+      }
+    },
+    {
+      "timestamp": "2025-11-23T18:47:07.099120+00:00",
+      "content": "deployed to production",
+      "metadata": {
+        "importance": 0.11873575403737635,
+        "prediction_error": 0.1517911170101519,
+        "habituation_penalty": 0.0,
+        "topic": "coding"
+      },
+      "ground_truth": {
+        "true_importance": 0.11873575403737635,
+        "expected_detail_level": "DROPPED",
+        "should_decay": true,
+        "topic_cluster": "coding"
+      }
+    },
+    {
+      "timestamp": "2025-11-23T18:51:32.259862+00:00",
+      "content": "fixed the bug in the parser",
+      "metadata": {
+        "importance": 0.7027946370652739,
+        "prediction_error": 0.5404199481429288,
+        "habituation_penalty": 0.3,
+        "topic": "coding"
+      },
+      "ground_truth": {
+        "true_importance": 0.7027946370652739,
+        "expected_detail_level": "CHUNKS",
+        "should_decay": true,
+        "topic_cluster": "coding"
+      }
+    },
+    {
+      "timestamp": "2025-11-23T18:55:46.108727+00:00",
+      "content": "wrote tests for the API",
+      "metadata": {
+        "importance": 0.27997781339811273,
+        "prediction_error": 0.3483301388532547,
+        "habituation_penalty": 0.0,
+        "topic": "coding"
+      },
+      "ground_truth": {
+        "true_importance": 0.27997781339811273,
+        "expected_detail_level": "SUMMARY",
+        "should_decay": true,
+        "topic_cluster": "coding"
+      }
+    },
+    {
+      "timestamp": "2025-11-23T18:59:51.844817+00:00",
+      "content": "implemented the new feature",
+      "metadata": {
+        "importance": 0.9110619775262112,
+        "prediction_error": 0.6824144905587278,
+        "habituation_penalty": 0.0,
+        "topic": "coding"
+      },
+      "ground_truth": {
+        "true_importance": 0.9110619775262112,
+        "expected_detail_level": "FULL",
+        "should_decay": true,
+        "topic_cluster": "coding"
+      }
+    },
+    {
+      "timestamp": "2025-11-23T19:03:14.686085+00:00",
+      "content": "deployed to production",
+      "metadata": {
+        "importance": 0.7310759505754634,
+        "prediction_error": 0.6630039513922612,
+        "habituation_penalty": 0.3,
+        "topic": "coding"
+      },
+      "ground_truth": {
+        "true_importance": 0.7310759505754634,
+        "expected_detail_level": "CHUNKS",
+        "should_decay": true,
+        "topic_cluster": "coding"
+      }
+    },
+    {
+      "timestamp": "2025-11-24T23:19:20.722328+00:00",
+      "content": "reviewed the pull request",
+      "metadata": {
+        "importance": 0.0817044636944449,
+        "prediction_error": 0.09912505539820099,
+        "habituation_penalty": 0.0,
+        "topic": "coding"
+      },
+      "ground_truth": {
+        "true_importance": 0.0817044636944449,
+        "expected_detail_level": "DROPPED",
+        "should_decay": true,
+        "topic_cluster": "coding"
+      }
+    },
+    {
+      "timestamp": "2025-11-24T23:29:06.204841+00:00",
+      "content": "implemented the new feature",
+      "metadata": {
+        "importance": 0.14655955564481296,
+        "prediction_error": 0.26472628538309834,
+        "habituation_penalty": 0.3,
+        "topic": "coding"
+      },
+      "ground_truth": {
+        "true_importance": 0.14655955564481296,
+        "expected_detail_level": "DROPPED",
+        "should_decay": true,
+        "topic_cluster": "coding"
+      }
+    },
+    {
+      "timestamp": "2025-11-24T23:33:30.613405+00:00",
+      "content": "deployed to production",
+      "metadata": {
+        "importance": 0.0010637067263346899,
+        "prediction_error": 0.10919228391628515,
+        "habituation_penalty": 0.0,
+        "topic": "coding"
+      },
+      "ground_truth": {
+        "true_importance": 0.0010637067263346899,
+        "expected_detail_level": "DROPPED",
+        "should_decay": true,
+        "topic_cluster": "coding"
+      }
+    },
+    {
+      "timestamp": "2025-11-24T23:39:28.715346+00:00",
+      "content": "refactored the database layer",
+      "metadata": {
+        "importance": 0.1682720594324239,
+        "prediction_error": 0.0,
+        "habituation_penalty": 0.0,
+        "topic": "coding"
+      },
+      "ground_truth": {
+        "true_importance": 0.1682720594324239,
+        "expected_detail_level": "DROPPED",
+        "should_decay": true,
+        "topic_cluster": "coding"
+      }
+    },
+    {
+      "timestamp": "2025-11-24T23:47:56.593865+00:00",
+      "content": "deployed to production",
+      "metadata": {
+        "importance": 0.04442813567024479,
+        "prediction_error": 0.0,
+        "habituation_penalty": 0.0,
+        "topic": "coding"
+      },
+      "ground_truth": {
+        "true_importance": 0.04442813567024479,
+        "expected_detail_level": "DROPPED",
+        "should_decay": true,
+        "topic_cluster": "coding"
+      }
+    },
+    {
+      "timestamp": "2025-11-24T23:54:30.594531+00:00",
+      "content": "wrote tests for the API",
+      "metadata": {
+        "importance": 0.7119684634333654,
+        "prediction_error": 0.4415016173035262,
+        "habituation_penalty": 0.0,
+        "topic": "coding"
+      },
+      "ground_truth": {
+        "true_importance": 0.7119684634333654,
+        "expected_detail_level": "CHUNKS",
+        "should_decay": true,
+        "topic_cluster": "coding"
+      }
+    },
+    {
+      "timestamp": "2025-11-25T00:03:15.916257+00:00",
+      "content": "refactored the database layer",
+      "metadata": {
+        "importance": 0.26241381706232736,
+        "prediction_error": 0.37322448099854477,
+        "habituation_penalty": 0.0,
+        "topic": "coding"
+      },
+      "ground_truth": {
+        "true_importance": 0.26241381706232736,
+        "expected_detail_level": "SUMMARY",
+        "should_decay": true,
+        "topic_cluster": "coding"
+      }
+    },
+    {
+      "timestamp": "2025-11-25T00:09:27.686415+00:00",
+      "content": "optimized the query performance",
+      "metadata": {
+        "importance": 0.239966108972069,
+        "prediction_error": 0.038797224408600756,
+        "habituation_penalty": 0.3,
+        "topic": "coding"
+      },
+      "ground_truth": {
+        "true_importance": 0.239966108972069,
+        "expected_detail_level": "SUMMARY",
+        "should_decay": true,
+        "topic_cluster": "coding"
+      }
+    },
+    {
+      "timestamp": "2025-11-25T00:16:48.155207+00:00",
+      "content": "wrote tests for the API",
+      "metadata": {
+        "importance": 0.27924476581449764,
+        "prediction_error": 0.31636539164500393,
+        "habituation_penalty": 0.0,
+        "topic": "coding"
+      },
+      "ground_truth": {
+        "true_importance": 0.27924476581449764,
+        "expected_detail_level": "SUMMARY",
+        "should_decay": true,
+        "topic_cluster": "coding"
+      }
+    },
+    {
+      "timestamp": "2025-11-25T00:18:12.900374+00:00",
+      "content": "wrote tests for the API",
+      "metadata": {
+        "importance": 0.2616500348718269,
+        "prediction_error": 0.3265923249453915,
+        "habituation_penalty": 0.0,
+        "topic": "coding"
+      },
+      "ground_truth": {
+        "true_importance": 0.2616500348718269,
+        "expected_detail_level": "SUMMARY",
+        "should_decay": true,
+        "topic_cluster": "coding"
+      }
+    },
+    {
+      "timestamp": "2025-11-25T00:21:15.965443+00:00",
+      "content": "wrote tests for the API",
+      "metadata": {
+        "importance": 0.24616091429146858,
+        "prediction_error": 0.3208418543492313,
+        "habituation_penalty": 0.3,
+        "topic": "coding"
+      },
+      "ground_truth": {
+        "true_importance": 0.24616091429146858,
+        "expected_detail_level": "SUMMARY",
+        "should_decay": true,
+        "topic_cluster": "coding"
+      }
+    },
+    {
+      "timestamp": "2025-11-25T00:24:52.234943+00:00",
+      "content": "deployed to production",
+      "metadata": {
+        "importance": 0.2593058826090859,
+        "prediction_error": 0.3682697594457046,
+        "habituation_penalty": 0.0,
+        "topic": "coding"
+      },
+      "ground_truth": {
+        "true_importance": 0.2593058826090859,
+        "expected_detail_level": "SUMMARY",
+        "should_decay": true,
+        "topic_cluster": "coding"
+      }
+    },
+    {
+      "timestamp": "2025-11-26T08:13:16.243348+00:00",
+      "content": "implemented the new feature",
+      "metadata": {
+        "importance": 0.2530983489816242,
+        "prediction_error": 0.10962879157289973,
+        "habituation_penalty": 0.3,
+        "topic": "coding"
+      },
+      "ground_truth": {
+        "true_importance": 0.2530983489816242,
+        "expected_detail_level": "SUMMARY",
+        "should_decay": true,
+        "topic_cluster": "coding"
+      }
+    },
+    {
+      "timestamp": "2025-11-26T08:17:41.511510+00:00",
+      "content": "fixed the bug in the parser",
+      "metadata": {
+        "importance": 0.28876029472846665,
+        "prediction_error": 0.10831875131911409,
+        "habituation_penalty": 0.0,
+        "topic": "coding"
+      },
+      "ground_truth": {
+        "true_importance": 0.28876029472846665,
+        "expected_detail_level": "SUMMARY",
+        "should_decay": true,
+        "topic_cluster": "coding"
+      }
+    },
+    {
+      "timestamp": "2025-11-26T08:22:46.353073+00:00",
+      "content": "fixed the bug in the parser",
+      "metadata": {
+        "importance": 0.13091816516118238,
+        "prediction_error": 0.28533705533946363,
+        "habituation_penalty": 0.0,
+        "topic": "coding"
+      },
+      "ground_truth": {
+        "true_importance": 0.13091816516118238,
+        "expected_detail_level": "DROPPED",
+        "should_decay": true,
+        "topic_cluster": "coding"
+      }
+    },
+    {
+      "timestamp": "2025-11-26T08:31:16.772703+00:00",
+      "content": "wrote tests for the API",
+      "metadata": {
+        "importance": 0.2126355851502512,
+        "prediction_error": 0.0,
+        "habituation_penalty": 0.0,
+        "topic": "coding"
+      },
+      "ground_truth": {
+        "true_importance": 0.2126355851502512,
+        "expected_detail_level": "SUMMARY",
+        "should_decay": true,
+        "topic_cluster": "coding"
+      }
+    },
+    {
+      "timestamp": "2025-11-26T08:33:44.605915+00:00",
+      "content": "talked with a friend",
+      "metadata": {
+        "importance": 0.19901624287966327,
+        "prediction_error": 0.0,
+        "habituation_penalty": 0.0,
+        "topic": "personal"
+      },
+      "ground_truth": {
+        "true_importance": 0.19901624287966327,
+        "expected_detail_level": "DROPPED",
+        "should_decay": true,
+        "topic_cluster": "personal"
+      }
+    },
+    {
+      "timestamp": "2025-11-26T08:37:56.452093+00:00",
+      "content": "listened to music",
+      "metadata": {
+        "importance": 0.20916252425831972,
+        "prediction_error": 0.16817875804754126,
+        "habituation_penalty": 0.0,
+        "topic": "personal"
+      },
+      "ground_truth": {
+        "true_importance": 0.20916252425831972,
+        "expected_detail_level": "SUMMARY",
+        "should_decay": true,
+        "topic_cluster": "personal"
+      }
+    },
+    {
+      "timestamp": "2025-11-26T08:44:58.346687+00:00",
+      "content": "talked with a friend",
+      "metadata": {
+        "importance": 0.2708416637197748,
+        "prediction_error": 0.23579513098439456,
+        "habituation_penalty": 0.0,
+        "topic": "personal"
+      },
+      "ground_truth": {
+        "true_importance": 0.2708416637197748,
+        "expected_detail_level": "SUMMARY",
+        "should_decay": true,
+        "topic_cluster": "personal"
+      }
+    },
+    {
+      "timestamp": "2025-11-26T08:52:17.329656+00:00",
+      "content": "worked on a project",
+      "metadata": {
+        "importance": 0.06305480546479257,
+        "prediction_error": 0.15844189481638682,
+        "habituation_penalty": 0.0,
+        "topic": "personal"
+      },
+      "ground_truth": {
+        "true_importance": 0.06305480546479257,
+        "expected_detail_level": "DROPPED",
+        "should_decay": true,
+        "topic_cluster": "personal"
+      }
+    },
+    {
+      "timestamp": "2025-11-30T02:36:00.333608+00:00",
+      "content": "went for a walk",
+      "metadata": {
+        "importance": 0.14195585577279787,
+        "prediction_error": 0.2598414293722602,
+        "habituation_penalty": 0.0,
+        "topic": "personal"
+      },
+      "ground_truth": {
+        "true_importance": 0.14195585577279787,
+        "expected_detail_level": "DROPPED",
+        "should_decay": true,
+        "topic_cluster": "personal"
+      }
+    },
+    {
+      "timestamp": "2025-11-30T02:38:32.748478+00:00",
+      "content": "listened to music",
+      "metadata": {
+        "importance": 0.18577824160871265,
+        "prediction_error": 0.0,
+        "habituation_penalty": 0.0,
+        "topic": "personal"
+      },
+      "ground_truth": {
+        "true_importance": 0.18577824160871265,
+        "expected_detail_level": "DROPPED",
+        "should_decay": true,
+        "topic_cluster": "personal"
+      }
+    },
+    {
+      "timestamp": "2025-11-30T02:46:06.476949+00:00",
+      "content": "organized my space",
+      "metadata": {
+        "importance": 0.007327616318047903,
+        "prediction_error": 0.0,
+        "habituation_penalty": 0.0,
+        "topic": "personal"
+      },
+      "ground_truth": {
+        "true_importance": 0.007327616318047903,
+        "expected_detail_level": "DROPPED",
+        "should_decay": true,
+        "topic_cluster": "personal"
+      }
+    },
+    {
+      "timestamp": "2025-11-30T02:48:34.714296+00:00",
+      "content": "read an interesting article",
+      "metadata": {
+        "importance": 0.26584107271529445,
+        "prediction_error": 0.21635711066443336,
+        "habituation_penalty": 0.0,
+        "topic": "personal"
+      },
+      "ground_truth": {
+        "true_importance": 0.26584107271529445,
+        "expected_detail_level": "SUMMARY",
+        "should_decay": true,
+        "topic_cluster": "personal"
+      }
+    },
+    {
+      "timestamp": "2025-11-30T02:52:59.620235+00:00",
+      "content": "had a good meal",
+      "metadata": {
+        "importance": 0.0016634454414095278,
+        "prediction_error": 0.10155020245637585,
+        "habituation_penalty": 0.0,
+        "topic": "personal"
+      },
+      "ground_truth": {
+        "true_importance": 0.0016634454414095278,
+        "expected_detail_level": "DROPPED",
+        "should_decay": true,
+        "topic_cluster": "personal"
+      }
+    },
+    {
+      "timestamp": "2025-11-30T03:02:53.962844+00:00",
+      "content": "listened to music",
+      "metadata": {
+        "importance": 0.9087735329224715,
+        "prediction_error": 0.6219614268754309,
+        "habituation_penalty": 0.0,
+        "topic": "personal"
+      },
+      "ground_truth": {
+        "true_importance": 0.9087735329224715,
+        "expected_detail_level": "FULL",
+        "should_decay": true,
+        "topic_cluster": "personal"
+      }
+    },
+    {
+      "timestamp": "2025-12-03T16:32:16.472044+00:00",
+      "content": "worked on a project",
+      "metadata": {
+        "importance": 0.139392971249471,
+        "prediction_error": 0.11002783421686517,
+        "habituation_penalty": 0.0,
+        "topic": "personal"
+      },
+      "ground_truth": {
+        "true_importance": 0.139392971249471,
+        "expected_detail_level": "DROPPED",
+        "should_decay": true,
+        "topic_cluster": "personal"
+      }
+    },
+    {
+      "timestamp": "2025-12-03T16:36:11.584721+00:00",
+      "content": "organized my space",
+      "metadata": {
+        "importance": 0.21578218838279012,
+        "prediction_error": 0.15295879779771387,
+        "habituation_penalty": 0.0,
+        "topic": "personal"
+      },
+      "ground_truth": {
+        "true_importance": 0.21578218838279012,
+        "expected_detail_level": "SUMMARY",
+        "should_decay": true,
+        "topic_cluster": "personal"
+      }
+    },
+    {
+      "timestamp": "2025-12-03T16:44:06.474053+00:00",
+      "content": "talked with a friend",
+      "metadata": {
+        "importance": 0.0777574645395058,
+        "prediction_error": 0.0,
+        "habituation_penalty": 0.0,
+        "topic": "personal"
+      },
+      "ground_truth": {
+        "true_importance": 0.0777574645395058,
+        "expected_detail_level": "DROPPED",
+        "should_decay": true,
+        "topic_cluster": "personal"
+      }
+    },
+    {
+      "timestamp": "2025-12-03T16:45:36.680545+00:00",
+      "content": "talked with a friend",
+      "metadata": {
+        "importance": 0.08237923407526149,
+        "prediction_error": 0.0,
+        "habituation_penalty": 0.0,
+        "topic": "personal"
+      },
+      "ground_truth": {
+        "true_importance": 0.08237923407526149,
+        "expected_detail_level": "DROPPED",
+        "should_decay": true,
+        "topic_cluster": "personal"
+      }
+    },
+    {
+      "timestamp": "2025-12-03T16:54:00.453946+00:00",
+      "content": "read an interesting article",
+      "metadata": {
+        "importance": 0.7241732972973005,
+        "prediction_error": 0.3672535713133449,
+        "habituation_penalty": 0.0,
+        "topic": "personal"
+      },
+      "ground_truth": {
+        "true_importance": 0.7241732972973005,
+        "expected_detail_level": "CHUNKS",
+        "should_decay": true,
+        "topic_cluster": "personal"
+      }
+    },
+    {
+      "timestamp": "2025-12-03T17:02:15.178678+00:00",
+      "content": "read an interesting article",
+      "metadata": {
+        "importance": 0.12227981089997601,
+        "prediction_error": 0.10264032383154935,
+        "habituation_penalty": 0.3,
+        "topic": "personal"
+      },
+      "ground_truth": {
+        "true_importance": 0.12227981089997601,
+        "expected_detail_level": "DROPPED",
+        "should_decay": true,
+        "topic_cluster": "personal"
+      }
+    },
+    {
+      "timestamp": "2025-12-03T17:06:51.807663+00:00",
+      "content": "feeling tired today",
+      "metadata": {
+        "importance": 0.23093873169439896,
+        "prediction_error": 0.3400819256221195,
+        "habituation_penalty": 0.0,
+        "topic": "personal"
+      },
+      "ground_truth": {
+        "true_importance": 0.23093873169439896,
+        "expected_detail_level": "SUMMARY",
+        "should_decay": true,
+        "topic_cluster": "personal"
+      }
+    },
+    {
+      "timestamp": "2025-12-03T17:08:27.549510+00:00",
+      "content": "read an interesting article",
+      "metadata": {
+        "importance": 0.0017688250751979216,
+        "prediction_error": 0.0,
+        "habituation_penalty": 0.0,
+        "topic": "personal"
+      },
+      "ground_truth": {
+        "true_importance": 0.0017688250751979216,
+        "expected_detail_level": "DROPPED",
+        "should_decay": true,
+        "topic_cluster": "personal"
+      }
+    },
+    {
+      "timestamp": "2025-12-03T17:17:40.643017+00:00",
+      "content": "listened to music",
+      "metadata": {
+        "importance": 0.22425470069341522,
+        "prediction_error": 0.17543121437892628,
+        "habituation_penalty": 0.0,
+        "topic": "personal"
+      },
+      "ground_truth": {
+        "true_importance": 0.22425470069341522,
+        "expected_detail_level": "SUMMARY",
+        "should_decay": true,
+        "topic_cluster": "personal"
+      }
+    },
+    {
+      "timestamp": "2025-12-03T17:23:46.920245+00:00",
+      "content": "read an interesting article",
+      "metadata": {
+        "importance": 0.11665716097383841,
+        "prediction_error": 0.14920946093085374,
+        "habituation_penalty": 0.0,
+        "topic": "personal"
+      },
+      "ground_truth": {
+        "true_importance": 0.11665716097383841,
+        "expected_detail_level": "DROPPED",
+        "should_decay": true,
+        "topic_cluster": "personal"
+      }
+    },
+    {
+      "timestamp": "2025-12-03T17:31:14.593951+00:00",
+      "content": "read an interesting article",
+      "metadata": {
+        "importance": 0.994216593255677,
+        "prediction_error": 0.7096010670919757,
+        "habituation_penalty": 0.0,
+        "topic": "personal"
+      },
+      "ground_truth": {
+        "true_importance": 0.994216593255677,
+        "expected_detail_level": "FULL",
+        "should_decay": true,
+        "topic_cluster": "personal"
+      }
+    },
+    {
+      "timestamp": "2025-12-03T17:34:09.412285+00:00",
+      "content": "went for a walk",
+      "metadata": {
+        "importance": 0.12858383089832845,
+        "prediction_error": 0.23674922386688196,
+        "habituation_penalty": 0.3,
+        "topic": "personal"
+      },
+      "ground_truth": {
+        "true_importance": 0.12858383089832845,
+        "expected_detail_level": "DROPPED",
+        "should_decay": true,
+        "topic_cluster": "personal"
+      }
+    },
+    {
+      "timestamp": "2025-12-03T17:39:38.997165+00:00",
+      "content": "read an interesting article",
+      "metadata": {
+        "importance": 0.09805374146439257,
+        "prediction_error": 0.17312950218268566,
+        "habituation_penalty": 0.0,
+        "topic": "personal"
+      },
+      "ground_truth": {
+        "true_importance": 0.09805374146439257,
+        "expected_detail_level": "DROPPED",
+        "should_decay": true,
+        "topic_cluster": "personal"
+      }
+    },
+    {
+      "timestamp": "2025-12-08T06:40:33.275148+00:00",
+      "content": "feeling tired today",
+      "metadata": {
+        "importance": 0.2504732744736364,
+        "prediction_error": 0.1634540266167642,
+        "habituation_penalty": 0.0,
+        "topic": "personal"
+      },
+      "ground_truth": {
+        "true_importance": 0.2504732744736364,
+        "expected_detail_level": "SUMMARY",
+        "should_decay": true,
+        "topic_cluster": "personal"
+      }
+    },
+    {
+      "timestamp": "2025-12-08T06:43:56.310438+00:00",
+      "content": "feeling tired today",
+      "metadata": {
+        "importance": 0.23436991488326847,
+        "prediction_error": 0.2247608025158437,
+        "habituation_penalty": 0.0,
+        "topic": "personal"
+      },
+      "ground_truth": {
+        "true_importance": 0.23436991488326847,
+        "expected_detail_level": "SUMMARY",
+        "should_decay": true,
+        "topic_cluster": "personal"
+      }
+    },
+    {
+      "timestamp": "2025-12-08T06:47:09.489292+00:00",
+      "content": "had a good meal",
+      "metadata": {
+        "importance": 0.04571470373543711,
+        "prediction_error": 0.0,
+        "habituation_penalty": 0.0,
+        "topic": "personal"
+      },
+      "ground_truth": {
+        "true_importance": 0.04571470373543711,
+        "expected_detail_level": "DROPPED",
+        "should_decay": true,
+        "topic_cluster": "personal"
+      }
+    },
+    {
+      "timestamp": "2025-12-08T06:53:12.628084+00:00",
+      "content": "had a good meal",
+      "metadata": {
+        "importance": 0.23006942950687223,
+        "prediction_error": 0.028164258001931453,
+        "habituation_penalty": 0.0,
+        "topic": "personal"
+      },
+      "ground_truth": {
+        "true_importance": 0.23006942950687223,
+        "expected_detail_level": "SUMMARY",
+        "should_decay": true,
+        "topic_cluster": "personal"
+      }
+    },
+    {
+      "timestamp": "2025-12-08T06:56:34.508553+00:00",
+      "content": "read an interesting article",
+      "metadata": {
+        "importance": 0.17360541975277308,
+        "prediction_error": 0.29307866118978976,
+        "habituation_penalty": 0.0,
+        "topic": "personal"
+      },
+      "ground_truth": {
+        "true_importance": 0.17360541975277308,
+        "expected_detail_level": "DROPPED",
+        "should_decay": true,
+        "topic_cluster": "personal"
+      }
+    },
+    {
+      "timestamp": "2025-12-08T07:02:50.184988+00:00",
+      "content": "had a good meal",
+      "metadata": {
+        "importance": 0.2071843247798941,
+        "prediction_error": 0.19592598558634364,
+        "habituation_penalty": 0.0,
+        "topic": "personal"
+      },
+      "ground_truth": {
+        "true_importance": 0.2071843247798941,
+        "expected_detail_level": "SUMMARY",
+        "should_decay": true,
+        "topic_cluster": "personal"
+      }
+    },
+    {
+      "timestamp": "2025-12-08T07:11:55.009345+00:00",
+      "content": "feeling tired today",
+      "metadata": {
+        "importance": 0.2416583890938499,
+        "prediction_error": 0.2876517590057798,
+        "habituation_penalty": 0.0,
+        "topic": "personal"
+      },
+      "ground_truth": {
+        "true_importance": 0.2416583890938499,
+        "expected_detail_level": "SUMMARY",
+        "should_decay": true,
+        "topic_cluster": "personal"
+      }
+    },
+    {
+      "timestamp": "2025-12-08T07:16:30.685618+00:00",
+      "content": "read an interesting article",
+      "metadata": {
+        "importance": 0.15178823690312337,
+        "prediction_error": 0.04274423577669963,
+        "habituation_penalty": 0.0,
+        "topic": "personal"
+      },
+      "ground_truth": {
+        "true_importance": 0.15178823690312337,
+        "expected_detail_level": "DROPPED",
+        "should_decay": true,
+        "topic_cluster": "personal"
+      }
+    },
+    {
+      "timestamp": "2025-12-08T07:19:29.118828+00:00",
+      "content": "went for a walk",
+      "metadata": {
+        "importance": 0.8906755318304338,
+        "prediction_error": 0.754955796682287,
+        "habituation_penalty": 0.0,
+        "topic": "personal"
+      },
+      "ground_truth": {
+        "true_importance": 0.8906755318304338,
+        "expected_detail_level": "FULL",
+        "should_decay": true,
+        "topic_cluster": "personal"
+      }
+    },
+    {
+      "timestamp": "2025-12-08T07:29:27.789136+00:00",
+      "content": "organized my space",
+      "metadata": {
+        "importance": 0.7810247189162203,
+        "prediction_error": 0.6699969907640566,
+        "habituation_penalty": 0.0,
+        "topic": "personal"
+      },
+      "ground_truth": {
+        "true_importance": 0.7810247189162203,
+        "expected_detail_level": "FULL",
+        "should_decay": true,
+        "topic_cluster": "personal"
+      }
+    },
+    {
+      "timestamp": "2025-12-08T07:35:02.933335+00:00",
+      "content": "had a good meal",
+      "metadata": {
+        "importance": 0.09669137489433545,
+        "prediction_error": 0.0,
+        "habituation_penalty": 0.0,
+        "topic": "personal"
+      },
+      "ground_truth": {
+        "true_importance": 0.09669137489433545,
+        "expected_detail_level": "DROPPED",
+        "should_decay": true,
+        "topic_cluster": "personal"
+      }
+    },
+    {
+      "timestamp": "2025-12-08T07:36:52.024418+00:00",
+      "content": "worked on a project",
+      "metadata": {
+        "importance": 0.17095489340349665,
+        "prediction_error": 0.1869438135606451,
+        "habituation_penalty": 0.3,
+        "topic": "personal"
+      },
+      "ground_truth": {
+        "true_importance": 0.17095489340349665,
+        "expected_detail_level": "DROPPED",
+        "should_decay": true,
+        "topic_cluster": "personal"
+      }
+    },
+    {
+      "timestamp": "2025-12-08T07:38:17.467261+00:00",
+      "content": "worked on a project",
+      "metadata": {
+        "importance": 0.0636359550539217,
+        "prediction_error": 0.16367811126898377,
+        "habituation_penalty": 0.0,
+        "topic": "personal"
+      },
+      "ground_truth": {
+        "true_importance": 0.0636359550539217,
+        "expected_detail_level": "DROPPED",
+        "should_decay": true,
+        "topic_cluster": "personal"
+      }
+    },
+    {
+      "timestamp": "2025-12-08T07:40:16.677791+00:00",
+      "content": "listened to music",
+      "metadata": {
+        "importance": 0.8667373083758751,
+        "prediction_error": 0.6133670165490863,
+        "habituation_penalty": 0.3,
+        "topic": "personal"
+      },
+      "ground_truth": {
+        "true_importance": 0.8667373083758751,
+        "expected_detail_level": "FULL",
+        "should_decay": true,
+        "topic_cluster": "personal"
+      }
+    },
+    {
+      "timestamp": "2025-12-08T07:46:55.498654+00:00",
+      "content": "organized my space",
+      "metadata": {
+        "importance": 0.2274493960447399,
+        "prediction_error": 0.23545831300992714,
+        "habituation_penalty": 0.0,
+        "topic": "personal"
+      },
+      "ground_truth": {
+        "true_importance": 0.2274493960447399,
+        "expected_detail_level": "SUMMARY",
+        "should_decay": true,
+        "topic_cluster": "personal"
+      }
+    },
+    {
+      "timestamp": "2025-12-12T11:55:40.187855+00:00",
+      "content": "investigated prediction error",
+      "metadata": {
+        "importance": 0.20753614658856054,
+        "prediction_error": 0.06775771466402772,
+        "habituation_penalty": 0.0,
+        "topic": "neuroscience"
+      },
+      "ground_truth": {
+        "true_importance": 0.20753614658856054,
+        "expected_detail_level": "SUMMARY",
+        "should_decay": true,
+        "topic_cluster": "neuroscience"
+      }
+    },
+    {
+      "timestamp": "2025-12-12T12:00:07.962203+00:00",
+      "content": "discovered neuromorphic patterns",
+      "metadata": {
+        "importance": 0.22378063101408288,
+        "prediction_error": 0.08896296058823006,
+        "habituation_penalty": 0.0,
+        "topic": "neuroscience"
+      },
+      "ground_truth": {
+        "true_importance": 0.22378063101408288,
+        "expected_detail_level": "SUMMARY",
+        "should_decay": true,
+        "topic_cluster": "neuroscience"
+      }
+    },
+    {
+      "timestamp": "2025-12-12T12:06:29.741954+00:00",
+      "content": "learned about hippocampal function",
+      "metadata": {
+        "importance": 0.057775288035455216,
+        "prediction_error": 0.0,
+        "habituation_penalty": 0.0,
+        "topic": "neuroscience"
+      },
+      "ground_truth": {
+        "true_importance": 0.057775288035455216,
+        "expected_detail_level": "DROPPED",
+        "should_decay": true,
+        "topic_cluster": "neuroscience"
+      }
+    },
+    {
+      "timestamp": "2025-12-12T12:11:42.488893+00:00",
+      "content": "analyzed attention mechanisms",
+      "metadata": {
+        "importance": 0.17687607178823725,
+        "prediction_error": 0.22789640840099915,
+        "habituation_penalty": 0.0,
+        "topic": "neuroscience"
+      },
+      "ground_truth": {
+        "true_importance": 0.17687607178823725,
+        "expected_detail_level": "DROPPED",
+        "should_decay": true,
+        "topic_cluster": "neuroscience"
+      }
+    },
+    {
+      "timestamp": "2025-12-12T12:14:58.252518+00:00",
+      "content": "learned about hippocampal function",
+      "metadata": {
+        "importance": 0.10826432074481593,
+        "prediction_error": 0.0,
+        "habituation_penalty": 0.0,
+        "topic": "neuroscience"
+      },
+      "ground_truth": {
+        "true_importance": 0.10826432074481593,
+        "expected_detail_level": "DROPPED",
+        "should_decay": true,
+        "topic_cluster": "neuroscience"
+      }
+    },
+    {
+      "timestamp": "2025-12-12T12:20:56.994502+00:00",
+      "content": "discovered neuromorphic patterns",
+      "metadata": {
+        "importance": 0.20922521787305834,
+        "prediction_error": 0.0,
+        "habituation_penalty": 0.3,
+        "topic": "neuroscience"
+      },
+      "ground_truth": {
+        "true_importance": 0.20922521787305834,
+        "expected_detail_level": "SUMMARY",
+        "should_decay": true,
+        "topic_cluster": "neuroscience"
+      }
+    },
+    {
+      "timestamp": "2025-12-12T12:30:25.907167+00:00",
+      "content": "feeling tired today",
+      "metadata": {
+        "importance": 0.13214063944080306,
+        "prediction_error": 0.0,
+        "habituation_penalty": 0.0,
+        "topic": "personal"
+      },
+      "ground_truth": {
+        "true_importance": 0.13214063944080306,
+        "expected_detail_level": "DROPPED",
+        "should_decay": true,
+        "topic_cluster": "personal"
+      }
+    },
+    {
+      "timestamp": "2025-12-12T12:37:33.260209+00:00",
+      "content": "feeling tired today",
+      "metadata": {
+        "importance": 0.019603030534179743,
+        "prediction_error": 0.010420745490353026,
+        "habituation_penalty": 0.0,
+        "topic": "personal"
+      },
+      "ground_truth": {
+        "true_importance": 0.019603030534179743,
+        "expected_detail_level": "DROPPED",
+        "should_decay": true,
+        "topic_cluster": "personal"
+      }
+    },
+    {
+      "timestamp": "2025-12-12T12:39:35.118150+00:00",
+      "content": "read an interesting article",
+      "metadata": {
+        "importance": 0.725554272518869,
+        "prediction_error": 0.4071643728472547,
+        "habituation_penalty": 0.0,
+        "topic": "personal"
+      },
+      "ground_truth": {
+        "true_importance": 0.725554272518869,
+        "expected_detail_level": "CHUNKS",
+        "should_decay": true,
+        "topic_cluster": "personal"
+      }
+    },
+    {
+      "timestamp": "2025-12-12T12:48:32.903913+00:00",
+      "content": "organized my space",
+      "metadata": {
+        "importance": 0.15677176053906536,
+        "prediction_error": 0.08994601833284745,
+        "habituation_penalty": 0.0,
+        "topic": "personal"
+      },
+      "ground_truth": {
+        "true_importance": 0.15677176053906536,
+        "expected_detail_level": "DROPPED",
+        "should_decay": true,
+        "topic_cluster": "personal"
+      }
+    },
+    {
+      "timestamp": "2025-12-12T12:56:18.377925+00:00",
+      "content": "had a good meal",
+      "metadata": {
+        "importance": 0.17058884118726994,
+        "prediction_error": 0.0,
+        "habituation_penalty": 0.0,
+        "topic": "personal"
+      },
+      "ground_truth": {
+        "true_importance": 0.17058884118726994,
+        "expected_detail_level": "DROPPED",
+        "should_decay": true,
+        "topic_cluster": "personal"
+      }
+    },
+    {
+      "timestamp": "2025-12-16T14:45:26.338105+00:00",
+      "content": "went for a walk",
+      "metadata": {
+        "importance": 0.198128441157611,
+        "prediction_error": 0.0015127461626785466,
+        "habituation_penalty": 0.0,
+        "topic": "personal"
+      },
+      "ground_truth": {
+        "true_importance": 0.198128441157611,
+        "expected_detail_level": "DROPPED",
+        "should_decay": true,
+        "topic_cluster": "personal"
+      }
+    },
+    {
+      "timestamp": "2025-12-16T14:50:21.111340+00:00",
+      "content": "feeling tired today",
+      "metadata": {
+        "importance": 0.20681134073543067,
+        "prediction_error": 0.1327329301178758,
+        "habituation_penalty": 0.0,
+        "topic": "personal"
+      },
+      "ground_truth": {
+        "true_importance": 0.20681134073543067,
+        "expected_detail_level": "SUMMARY",
+        "should_decay": true,
+        "topic_cluster": "personal"
+      }
+    },
+    {
+      "timestamp": "2025-12-16T14:55:26.122141+00:00",
+      "content": "talked with a friend",
+      "metadata": {
+        "importance": 0.13620939792211298,
+        "prediction_error": 0.17030054657397614,
+        "habituation_penalty": 0.0,
+        "topic": "personal"
+      },
+      "ground_truth": {
+        "true_importance": 0.13620939792211298,
+        "expected_detail_level": "DROPPED",
+        "should_decay": true,
+        "topic_cluster": "personal"
+      }
+    },
+    {
+      "timestamp": "2025-12-16T15:05:01.182742+00:00",
+      "content": "listened to music",
+      "metadata": {
+        "importance": 0.280100537533654,
+        "prediction_error": 0.16612596271524244,
+        "habituation_penalty": 0.0,
+        "topic": "personal"
+      },
+      "ground_truth": {
+        "true_importance": 0.280100537533654,
+        "expected_detail_level": "SUMMARY",
+        "should_decay": true,
+        "topic_cluster": "personal"
+      }
+    },
+    {
+      "timestamp": "2025-12-16T15:13:54.143330+00:00",
+      "content": "talked with a friend",
+      "metadata": {
+        "importance": 0.7214229510567443,
+        "prediction_error": 0.3713651814280109,
+        "habituation_penalty": 0.0,
+        "topic": "personal"
+      },
+      "ground_truth": {
+        "true_importance": 0.7214229510567443,
+        "expected_detail_level": "CHUNKS",
+        "should_decay": true,
+        "topic_cluster": "personal"
+      }
+    },
+    {
+      "timestamp": "2025-12-16T15:17:16.373417+00:00",
+      "content": "talked with a friend",
+      "metadata": {
+        "importance": 0.8317460346021213,
+        "prediction_error": 0.5697014123319496,
+        "habituation_penalty": 0.0,
+        "topic": "personal"
+      },
+      "ground_truth": {
+        "true_importance": 0.8317460346021213,
+        "expected_detail_level": "FULL",
+        "should_decay": true,
+        "topic_cluster": "personal"
+      }
+    },
+    {
+      "timestamp": "2025-12-16T15:22:46.689918+00:00",
+      "content": "feeling tired today",
+      "metadata": {
+        "importance": 0.14813856580352527,
+        "prediction_error": 0.0,
+        "habituation_penalty": 0.0,
+        "topic": "personal"
+      },
+      "ground_truth": {
+        "true_importance": 0.14813856580352527,
+        "expected_detail_level": "DROPPED",
+        "should_decay": true,
+        "topic_cluster": "personal"
+      }
+    },
+    {
+      "timestamp": "2025-12-16T15:25:23.161933+00:00",
+      "content": "feeling tired today",
+      "metadata": {
+        "importance": 0.007759467716500634,
+        "prediction_error": 0.0,
+        "habituation_penalty": 0.0,
+        "topic": "personal"
+      },
+      "ground_truth": {
+        "true_importance": 0.007759467716500634,
+        "expected_detail_level": "DROPPED",
+        "should_decay": true,
+        "topic_cluster": "personal"
+      }
+    },
+    {
+      "timestamp": "2025-12-16T15:34:35.980966+00:00",
+      "content": "organized my space",
+      "metadata": {
+        "importance": 0.012069501943384853,
+        "prediction_error": 0.11095618352539224,
+        "habituation_penalty": 0.0,
+        "topic": "personal"
+      },
+      "ground_truth": {
+        "true_importance": 0.012069501943384853,
+        "expected_detail_level": "DROPPED",
+        "should_decay": true,
+        "topic_cluster": "personal"
+      }
+    }
+  ]
+}
