@@ -95,6 +95,12 @@ Welcome to Ada! Your personal AI assistant that runs entirely on your hardware.
    empathetic_documentation
    xenofeminism
 
+.. toctree::
+   :maxdepth: 1
+   :caption: Research & Validation
+
+   research_narratives
+
 
 Overview
 --------
