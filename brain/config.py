@@ -219,16 +219,92 @@ SEMANTIC_CHUNKING_MIN_SIZE = int(os.getenv("SEMANTIC_CHUNKING_MIN_SIZE", "2"))  
 SEMANTIC_CHUNKING_MAX_SIZE = int(os.getenv("SEMANTIC_CHUNKING_MAX_SIZE", "10"))  # Max memories per chunk
 
 # === Importance Signal Weights (Phase 4 Optimization) ===
-# Multi-signal importance scoring weights (must sum to 1.0)
-# Default values are OPTIMAL weights from Phase 4 weight optimization study
-# See tests/test_weight_optimization.py for empirical validation
-IMPORTANCE_WEIGHT_DECAY = float(os.getenv("IMPORTANCE_WEIGHT_DECAY", "0.10"))          # Temporal decay (recency bias)
-IMPORTANCE_WEIGHT_SURPRISE = float(os.getenv("IMPORTANCE_WEIGHT_SURPRISE", "0.60"))    # Prediction error (novelty)
-IMPORTANCE_WEIGHT_RELEVANCE = float(os.getenv("IMPORTANCE_WEIGHT_RELEVANCE", "0.20"))  # Semantic similarity
-IMPORTANCE_WEIGHT_HABITUATION = float(os.getenv("IMPORTANCE_WEIGHT_HABITUATION", "0.10"))  # Repetition penalty
+# Multi-signal importance scoring weights (MUST sum to 1.0)
+#
+# These weights determine how Ada decides which memories matter. Adjust them to change
+# what Ada prioritizes. All are environment-configurable for experimentation.
+#
+# OPTIMAL values (from Phase 4 weight optimization research, December 2025):
+# - Based on 169-configuration grid search + ablation studies
+# - Empirical correlation improvement: 12-38% over baseline
+# - See tests/test_weight_optimization.py for validation
+# - Documented in .ai/RESEARCH-FINDINGS-V2.2.md
+#
+# TINKER GUIDE: docs/contextual_malleability_guide.rst
+#
+IMPORTANCE_WEIGHT_DECAY = float(os.getenv("IMPORTANCE_WEIGHT_DECAY", "0.10"))
+    # Temporal decay - How old is this memory? (10% weight)
+    # - Higher: Older memories fade faster (recency bias)
+    # - Lower: Memories persist longer (better long-term retention)
+    # DEFAULT 0.10: Optimal from research (was 0.40 intuitive default)
+    # INTUITION: "Recent is important"
+    # REALITY: Novelty matters more than recency
+    # TRY: 0.05 (very permissive) to 0.30 (aggressive decay)
 
-# Legacy production weights (pre-optimization): decay=0.40, surprise=0.30
-# To revert to legacy: IMPORTANCE_WEIGHT_DECAY=0.40 IMPORTANCE_WEIGHT_SURPRISE=0.30
+IMPORTANCE_WEIGHT_SURPRISE = float(os.getenv("IMPORTANCE_WEIGHT_SURPRISE", "0.60"))
+    # Prediction error / Novelty - How unexpected is this? (60% weight - DOMINANT!)
+    # - Higher: Ada prioritizes novel/surprising content
+    # - Lower: Ada focuses on expected/common patterns
+    # DEFAULT 0.60: Optimal from research (was 0.30 intuitive default)
+    # INTUITION: "Mix everything equally"
+    # REALITY: Humans/AIs prioritize surprises
+    # CITE: Schwarz (2010) "disfluency triggers analysis"
+    # TRY: 0.40 (balanced) to 0.80 (ultra-novel-focused)
+
+IMPORTANCE_WEIGHT_RELEVANCE = float(os.getenv("IMPORTANCE_WEIGHT_RELEVANCE", "0.20"))
+    # Semantic relevance - How related to current query? (20% weight)
+    # - Higher: Focus on directly relevant memories
+    # - Lower: Include tangential context
+    # DEFAULT 0.20: Optimal from research
+    # LIMITATION: Currently uses keyword overlap, not embeddings
+    # TRY: 0.10 (permissive) to 0.50 (strict relevance matching)
+    # IMPROVE: Replace keyword overlap with embedding similarity
+
+IMPORTANCE_WEIGHT_HABITUATION = float(os.getenv("IMPORTANCE_WEIGHT_HABITUATION", "0.10"))
+    # Context habituation - How repetitive/familiar? (10% weight)
+    # - Higher: Penalize repetitive topics
+    # - Lower: Allow repeated discussion
+    # DEFAULT 0.10: Optimal from research
+    # CITE: Mertens et al. (2018) "Contextual malleability..."
+    # TRY: 0.05 (permissive) to 0.30 (aggressive repetition penalty)
+
+# === Historical Comparison ===
+# Legacy production weights (pre-optimization, intuition-based):
+#   IMPORTANCE_WEIGHT_DECAY=0.40         (4x heavier than optimal!)
+#   IMPORTANCE_WEIGHT_SURPRISE=0.30      (half of optimal!)
+#   IMPORTANCE_WEIGHT_RELEVANCE=0.20     (same as optimal)
+#   IMPORTANCE_WEIGHT_HABITUATION=0.10   (same as optimal)
+#
+# Impact: Legacy weighted recency 4x too heavily, novelty 2x too lightly
+# Research improvement: +6.5% context selection accuracy per turn
+#
+# To revert to legacy for comparison:
+#   export IMPORTANCE_WEIGHT_DECAY=0.40
+#   export IMPORTANCE_WEIGHT_SURPRISE=0.30
+
+# === Gradient Detail Levels (Context Inclusion Strategy) ===
+# After scoring importance, Ada decides how much detail to include.
+# These thresholds create a gradient: FULL → CHUNKS → SUMMARY → DROPPED
+#
+# See docs/contextual_malleability_guide.rst for detailed explanation
+#
+GRADIENT_THRESHOLD_FULL = float(os.getenv("GRADIENT_THRESHOLD_FULL", "0.75"))
+    # Importance >= this: Include complete memory
+    # DEFAULT 0.75: Only very important things included fully
+    # TRY: 0.60 (more permissive) to 0.90 (ultra-selective)
+    # EFFECT: Lower threshold = more full memories = longer prompts
+
+GRADIENT_THRESHOLD_CHUNKS = float(os.getenv("GRADIENT_THRESHOLD_CHUNKS", "0.50"))
+    # Importance >= this (but < FULL): Include key excerpts
+    # DEFAULT 0.50: Moderate memories get compressed
+    # TRY: 0.30 (permissive) to 0.70 (strict)
+    # EFFECT: Balances context preservation with token efficiency
+
+GRADIENT_THRESHOLD_SUMMARY = float(os.getenv("GRADIENT_THRESHOLD_SUMMARY", "0.20"))
+    # Importance >= this (but < CHUNKS): Include 1-2 sentence summary
+    # DEFAULT 0.20: Weak memories barely included
+    # TRY: 0.10 (permissive) to 0.40 (strict)
+    # EFFECT: Everything below SUMMARY is dropped entirely
 
 # === Biomimetic Context Management (Phase 3) ===
 # Context priming (pre-activate likely topics based on semantic network)

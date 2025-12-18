@@ -1,0 +1,352 @@
+Facing Alexa, the powerful lower their guard: anthropomorphization of
+smart personal assistants decreases privacy concerns for people with
+high sense of power
+Ertugrul Uysal
+University of Neuchâtel
+Valéry Bezençon
+University of Neuchâtel
+Sascha Alavi
+University of Bochum
+
+Cite as:
+Uysal Ertugrul, Bezençon Valéry, Alavi Sascha (2020), Facing Alexa, the powerful
+lower their guard: anthropomorphization of smart personal assistants decreases privacy
+concerns for people with high sense of power. Proceedings of the European Marketing
+Academy, 49th, (64283)
+
+1
+
+Facing Alexa, the powerful lower their guard: anthropomorphization of
+smart personal assistants decreases privacy concerns for people with high
+sense of power
+
+Abstract
+
+With rapidly increasing popularity, Smart Personal Assistants (SPA) are becoming prominent
+characters in our daily lives. Their ubiquity raises concern for data privacy as SPAs may be
+listening to our most intimate conversations at home. Due to their salient human-like features
+(e.g., human voice, name) we are inclined to anthropomorphize them. We investigated the
+influence of anthropomorphization of SPAs on consumer’s privacy concerns and the
+moderating role of sense of power in this relationship. People with high (low) power
+exhibited lower (higher) levels of privacy concerns when the perceived anthropomorphization
+was higher. We suggest that high power increases the perceived control and this illusion of
+control decreases privacy concerns. We extend this result by showing that lower privacy
+concerns lead to a greater frequency of use. Finally, we discuss the importance of
+understanding power in relation to increasingly human-like technologies and ramifications for
+consumer protection.
+
+Keywords: Smart Personal Assistants, Anthropomorphization, Sense of Power
+
+Target Track: Social Responsibility & Ethics
+
+2
+1. Introduction
+
+Smart personal assistant (SPA) users have surpassed 100 million in the US alone,
+which is almost one third of the population of the country. In January 2019, Amazon
+announced that they have sold 100 million Alexa devices. With such strong penetration rate,
+smart personal assistants are becoming a prominent character of our daily lives. They run our
+errands, facilitate our entertainment and recommend us what to buy. Relying on artificial
+intelligence and natural language processing, they are the latest artifact of digital age that
+aims to enhance comfort and convenience.
+Voice-controlled technologies have been around for some time, but the latest
+generation of these devices have increasingly human-like features and occupy our most
+private spaces. Their ability to speak back to us gives them a special status and leads us to
+attribute human-like features to them (Purington, Taft, Sannon, Bazarova and Taylor, 2017).
+We have ingrained over-learned rules about how to interact with other people as social
+beings. Attributing human-like features to non-human entities changes the way we behave
+towards them (Epley, Waytz and Cacioppo, 2007). It has been reported that 500,000 people
+have said ‘I love you’ to Amazon’s Alexa and some even perceive Alexa as a companion
+(Turk, 2016). Anthropomorphized agents are seen as more social beings and people are more
+likely to cooperate with them (Waytz, Cacioppo and Epley, 2010; Goetz & Kiesler, 2002). On
+the other hand, anthropomorphization might also lead to greater feelings of discomfort,
+eeriness and a threat to human identity (Mende, Scott, van Doorn, Grewal and Shanks, 2019).
+Also, people’s risk perceptions are influenced by anthropomorphization (Kim & McGill,
+2011). An important distinction of our study from previous work is examining the SPAs, an
+entity with highly anthropomorphized features yet lacking an established ontological position.
+In analyzing the human-SPA relationships, we draw insights from human
+relationships. We identify sense of power as an important factor that shapes our behavior and
+social interactions. Literature suggests that when we interact with an anthropomorphized
+entity, we bring with us our preconceptions and our “default settings” of social interaction
+with humans. We may not thank a vending machine, but “Thank you, Siri” is apparently a
+common phrase heard by the SPAs (for a discussion of politeness towards SPAs, see Burton
+& Gaskin, 2019). This suggests that sense of power which is an important concept in human
+relationships may potentially extend and influence human to human-like technology
+relationships.
+
+3
+Just like any new technology, there are barriers to accepting the SPAs in our lives.
+Perhaps the most relevant of these barriers, given the digital age we are living in, is the
+privacy concerns. Müller-Seitz, Dautzenberg, Creusen and Stromereder (2009) proposed a
+revised acceptance model of technology and highlighted security concerns related to the
+privacy of user data as an important factor in the acceptance and subsequent use of a new
+technology. With many digital industry giants facing severe criticism over proper use of
+consumers’ data, an ‘assistant’ residing in your living room, listening to you all day will
+surely need to tackle the concerns of privacy to be able to hold its place.
+In this research, we examine the influence of anthropomorphization of SPAs on
+people’s privacy concerns and subsequent usage frequency as well as the essential moderating
+role of sense of power in this relationship. We recruited SPA users on an online survey
+platform and asked them about their habits of use and perceptions of their assistant. Our
+results showed that sense of power has a negative moderating effect on the relationship
+between anthropomorphization and privacy concerns. We also show that lower privacy
+concerns lead to a greater frequency of use. Considering the contextual malleability of power
+perceptions (Galinsky, Gruenfeld and Magee, 2003), our research highlights the importance
+of understanding social power in relation to increasingly human-like technologies. The
+pervasive and almost unescapable use of online technology has sparked increasing concerns
+related to data privacy (e.g., Banerjee, 2019), vulnerable (i.e., powerless) groups of consumers
+(e.g., Nunan & Di Domenico, 2019) and digital addiction (e.g., Berthon, Pitt and Campbell,
+2019). We believe that our results contribute to a better understanding of the effect of
+anthropomorphized technologies on consumers and generate interesting implications for the
+protection of the well-being of the consumer. We contribute to sense of power literature by
+showing that the role of power in human relationships extends to relations with human-like
+technologies. This study adds to the previous findings on the interplay between
+anthropomorphization and sense of power influencing behavior, including our sensitivity to
+risk (Kim et al., 2011). Finally, we highlight the importance of mitigating privacy concerns in
+user acceptance of new technologies.
+
+2. Theoretical development
+
+In this section, we build our hypotheses with inspirations from psychology,
+personality and consumer research literatures on anthropomorphization and its behavioral
+outcomes (e.g., Epley et al., 2008; Kim et al., 2011; Mende et al., 2019).
+
+4
+
+Figure 1. Overview of the conceptual framework and the results of the model estimation.
+
+2.1 Anthropomorphization. Anthropomorphization has been defined as attributing
+human-like features and mental states to non-human entities (Epley et al., 2007; Waytz et al.,
+2010). We do this almost automatically; as children we speak to our toys endlessly, give them
+distinct personalities and imagine how they are feeling. Even simple lines resembling a face
+seem to elicit anthropomorphizing responses (Kim & McGill, 2011). Anthropomorphizing
+non-human agents has been reported to have positive effects. People were more likely to
+cooperate with robots that are more human-like (Goetz & Kiesler, 2002), and greater
+perceived human-likeness of Amazon’s Alexa was associated with greater satisfaction
+(Purington et al., 2017). An alternative stream of research suggests, however, that human-like
+features could also lead to aversive responses. The concept of uncanny valley (Mori,
+MacDorman and Kageki, 2012) proposes that an entity that exhibits human-like features but
+fails to completely meet the requirements of being a human may elicit feelings of discomfort.
+A recent work on humanoid service robots provides evidence for this concept by showing that
+consumer reported greater feelings of discomfort and more compensatory responses when
+interacting with humanoid service robots (Mende et al., 2019). When the anthropomorphizing
+cues were reduced (e.g. not giving it a human name, emphasizing that it’s a robot), though,
+the compensatory responses were mitigated.
+In our social interactions, we carry certain social expectations and adhere to generally
+accepted social rules. Literature suggests that we apply social expectations to the interaction
+when we anthropomorphize the entities (Kim & McGill, 2011). With a nonanthropomorphized entity, our expectations of a social interaction and sensitivity to risk are
+clearer; so we form accurate expectations according to the machine’s settings and non-social
+disposition. However, with an anthropomorphized entity, we could perceive a mismatch
+
+5
+between the anticipated human qualities and the perceived imperfect qualities. For example,
+the human voice of a SPA would signal its human likeness, but when you get a generic,
+scripted answer such as “I’m not sure I understand” several times in a row, you see that the
+anticipated human quality is imperfect. This mismatch might be realized more saliently
+especially when the ontological position of the entity is not well established, as in the case of
+SPAs. Since consumers are all different in their perceptions and expectations in social
+interactions, it is important to understand how different perceptions lead to different consumer
+behaviors. Kim et al. (2011) provides evidence for this stream of thought by showing that risk
+perceptions are influenced by anthropomorphization. We next introduce sense of power and
+its potential role on our relationships with anthropomorphized objects.
+
+2.2 The Role of Sense of Power. Power is a fundamental concept in social sciences that
+shapes our social interactions. A large body of literature suggests that power has a pervasive
+presence, ubiquitous in most aspects of our lives (Keltner, Gruenfeld, and Anderson, 2003;
+Anderson, John and Keltner, 2012). Power has been defined as the control over valued
+resources (Fiske, 1993), ability to influence others (Weber, 2009) and ability to do what you
+want without being influenced by others (French, Raven and Cartwright, 1959; Emerson,
+1962). As broad as it is in its definitions, we focus on the social aspect of power; the ability to
+influence, have control over others, as delineated by Lammers, Stoker and Stapel (2009). In
+our daily lives, all our relationships function in relation to certain power dynamics (Keltner et
+al., 2003). Moreover, literature provides evidence that the customs of our social interactions
+transfer to our interactions with anthropomorphized entities. (Kim et al., 2011) Therefore, we
+are interested in investigating our relationship with the highly anthropomorphized SPAs in
+relation to our sense of power.
+Kim et al. (2011) has shown that an individual’s sense of power moderates the effect
+of anthropomorphization on risk perception. Specifically, they show that people with low
+(high) power perceived a higher (lower) risk when the risk-bearing entity was highly
+anthropomorphized. They propose that those with high power perceived greater control over
+the anthropomorphized entity. Previous literature provides support for this explanation;
+people believe they have more control when they have more power over others (Fast,
+Gruenfeld, Sivanathan and Galinsky, 2009). As their stimuli, Kim et al. (2011) used a casino
+slot machine with or without physical features that resemble a face (Experiment 1). In the
+second experiment, they anthropomorphized a disease, phrasing the details of the disease in
+the way of an anthropomorphized story (Experiment 2). Given that we are readily inclined to
+
+6
+attribute human-like features to non-human agents, we believe that the anthropomorphic
+nature of the SPA are far from subtle. Even though the SPAs do not have a physical presence
+(yet!), they possess highly anthropomorphic features such as a human voice and (in some
+cases) a human name. Although SPAs may not appear as overtly risky as a slot machine or a
+disease, consumers may consider the underlying risks of using SPAs related to data privacy.
+Security concerns related to the privacy of the user data has been shown as a crucial
+part of accepting a new technology (Müller-Seitz et al., 2009). In their study, Müller-Seitz et
+al. investigated the acceptance of then new Radio Frequency Identification (RFID) technology
+and they propose that the overall attitude of consumers toward novel technologies and the
+intention to use this new technology is strongly tied to the privacy concerns about the use of
+their personal data. Concerns over consent and the protection of private data directly translate
+to SPAs. We use SPAs for highly personal tasks, locate them at the center of our living space
+and connect them with every other ‘smart’ part of our lives. This means data for almost every
+aspect of our lives, collected and analyzed for making the algorithm, and subsequently our
+experience, better. Confiding in an entity with such rich personal data would certainly not be
+without concerns.
+We hypothesize:
+H1:
+
+Sense of power negatively moderates the effect of anthropomorphization on privacy
+concerns. Specifically, the effect of anthropomorphization on privacy concerns is
+more negative (i.e., less concerns) when the sense of power is high.
+
+H2:
+
+Privacy concerns has a negative direct effect on the frequency of use of the SPAs.
+Specifically, when the privacy concerns are low, the frequency of use increases.
+
+3. Methodology
+
+3.1 Measurements
+The measurements included scales from prior research, with appropriate adjustments
+to the context. The 8-item Anthropomorphization scale was adopted from Epley, Akalis,
+Waytz and Cacioppo (2008). The 8-item Sense of Power scale was adopted from Anderson &
+Galinsky (2006). Privacy concerns were measured with 4 items asking about concerns related
+to personal data. Frequency of use was measured using 5 items. The frequency of use
+question was broken down into five categories to ensure that users think exhaustively of their
+use of the SPA (Entertainment, Personal Organization, Seeking Information, Device
+Management, Purchase-related).
+
+7
+Subsequently, a questionnaire was created on online survey software Qualtrics and all
+the items were pre-tested to ensure the understandability of the questions. Survey participants
+responded to seven-point Likert scales anchored at “strongly disagree” (1) and “strongly
+agree” (7) for Sense of Power and Privacy Concerns measures; “not at all” (1) and “very
+much” (7) for the Anthropomorphization measure. The frequency of use measures provided 8
+choices from ‘Never’ (1) and Less than once a day (2) to More than 5 times a day (8).
+We argue that using survey data provided us with high external validity, as we
+included only real SPA owners in this data set. This ensured familiarity of the products and a
+more realistic context to investigate the phenomenon. In a fictive scenario or a lab
+experiment, capturing the privacy concerns might have been less reliable. Instead of
+imagining a privacy rating, our participants are active users of SPAs and their data provides
+us with a first-hand, directly experienced information on privacy concerns. We believe that
+this approach is able to provide results with high validity.
+
+3.2 Data Collection and Sample
+400 participants were recruited from online survey platform Prolific. Currently
+owning a home assistant (e.g. Amazon Echo, Google Assistant) was used as pre-screening
+criterion. This pre-screening was provided by the platform by default. Four participants were
+excluded from the analysis due to facing technical problems during the survey resulting in
+incomplete recording of data. The final sample contained 396 usable responses. Participants
+included 62.1% women with overall sample age ranging from 18 to 78 (mean age: 35.6).
+
+3.3 Results
+To test our conceptual model we used structural equation path modeling by using a maximum
+likelihood estimator. We specified the model as depicted in Figure 1. Results of our model
+show that there is a negative moderating influence of sense of power on the effect of
+anthropomorphization on privacy concerns (H1: 1 = -.138, p <.05). This confirms our
+hypothesis, showing that people with high (low) sense of power have decreased (increased)
+privacy concerns when the degree of anthropomorphization is high. This effect is shown in
+the interaction plot in Figure 2. Moreover, our results confirm that greater privacy concerns
+decrease the frequency of use (H2: 2 = -.397, p <.05). However, Anthropomorphization and
+Sense of Power did not have direct effect on privacy concerns. Control variables Age, Income
+and Level of Education also did not have any influence on the privacy concerns. Gender had a
+significant effect on privacy concerns, with being female predicting higher privacy concerns
+
+8
+(3 = -.389, p <.01). Gender also had a significant effect on Frequency of Use, with males
+using the SPA more overall (4 = 1.913, p <.01). Results of the model estimation are shown in
+the conceptual framework on Figure 1 (Model Fit Information: CFI: .862; TLI: .654;
+RMSEA= .045).
+
+Figure 2. The interaction plot for the moderating effect of sense of power on the relationship
+between anthropomorphization and privacy concerns.
+
+4. Discussion
+
+Previous work has shown the influence of anthropomorphization on consumer
+behavior. Our first contribution is to investigate this established phenomenon in the context of
+risks associated with Smart Personal Assistants. Nowadays with an intimate place in our
+homes, it is important to understand this highly anthropomorphized technology. In the digital
+age we’re living in, consumers are increasingly worried about the protection of their personal
+data. It’s all very new; most consumers don’t even have a clue about how to be protected
+against the negative consequences of online technologies. Major platforms are heavily
+criticized for not taking the issue of privacy protection seriously and governments are starting
+to come up with regulations on protecting the privacy of the consumer. We suggest that Smart
+Personal Assistants may indeed have a special status, often perceived to be more than an
+algorithm. We believe that consumer relationship with SPAs is a fruitful avenue for future
+research.
+Second, drawing from the literature on the important role of power in human
+interactions, we bring sense of power into the discussion to probe into consumers’ perception
+of the SPAs (Keltner, Gruenfeld, and Anderson, 2003; Anderson, John and Keltner, 2012).
+
+9
+We suggest that, just as influential as it is in human interactions, sense of power may indeed
+play a crucial role in shaping consumer perceptions and interactions of the SPAs. We provide
+evidence for the moderating role of power on the relationship between anthropomorphization
+and privacy concerns. In line with previous work, we suggest that high power increases the
+perceived control over the entity and this illusion of control decreases the privacy concerns
+(Kim et al., 2011). Understanding the role of sense of power in relation to SPAs might have
+important practical implications for marketers because power perceptions are highly
+susceptible to influence. Therefore, the fact consumers might be easily manipulated in line
+with the strategies of marketers is a worrying implication.
+Finally, our results give insights into privacy concerns related to emerging
+technologies that are far from being completely understood. A better understanding of
+consumers’ relationship with the anthropomorphized technologies will also generate
+important implications for the protection of the well-being of the customer.
+
+5. References
+Anderson, C., & Galinsky, A. D. (2006). Power, optimism, and risk‐taking. European journal
+of social psychology, 36(4), 511-536.
+Anderson, C., John, O. P., & Keltner, D. (2012). The personal sense of power. Journal of
+personality, 80(2), 313-344.
+Banerjee, S. (2019). Geosurveillance, Location Privacy, and Personalization. Journal of
+Public Policy & Marketing, 38(4), 484-499.
+Berthon, P., Pitt, L., & Campbell, C. (2019). Addictive De-Vices: A Public Policy Analysis of
+Sources and Solutions to Digital Addiction. Journal of Public Policy & Marketing, 38(4),
+451-468.
+Burton, N. G., & Gaskin, J. (2019). “Thank You, Siri”: Politeness and Intelligent Digital
+Assistants. AMCIS 2019 Proceedings.
+Emerson, R. M. (1962). Power-dependence relations. American sociological review, 31-41.
+Epley, N., Akalis, S., Waytz, A., & Cacioppo, J. T. (2008). Creating social connection
+through inferential reproduction: Loneliness and perceived agency in gadgets, gods, and
+greyhounds. Psychological science, 19(2), 114-120.
+Epley, N., Waytz, A., & Cacioppo, J. T. (2007). On seeing human: a three-factor theory of
+anthropomorphism. Psychological review, 114(4), 864.
+Fast, N. J., Gruenfeld, D. H., Sivanathan, N., & Galinsky, A. D. (2009). Illusory control: A
+generative force behind power's far-reaching effects. Psychological Science, 20(4), 502-508.
+
+10
+Fiske, S. T. (1993). Social cognition and social perception. Annual review of psychology,
+44(1), 155-194.
+French, J. R., Raven, B., & Cartwright, D. (1959). The bases of social power. Classics of
+organization theory, 7, 311-320.
+Galinsky, A. D., Gruenfeld, D. H., & Magee, J. C. (2003). From power to action. Journal of
+personality and social psychology, 85(3), 453.
+Goetz, J., & Kiesler, S. (2002). Cooperation with a robotic assistant. In CHI'02 Extended
+Abstracts on Human Factors in Computing Systems (pp. 578-579). ACM.
+Keltner, D., Gruenfeld, D. H., & Anderson, C. (2003). Power, approach, and inhibition.
+Psychological review, 110(2), 265.
+Kim, S., & McGill, A. L. (2011). Gaming with Mr. Slot or gaming the slot machine? Power,
+anthropomorphism, and risk perception. Journal of Consumer Research, 38(1), 94-107.
+Lammers, J., Stoker, J. I., & Stapel, D. A. (2009). Differentiating social and personal power:
+Opposite effects on stereotyping, but parallel effects on behavioral approach tendencies.
+Psychological Science, 20(12), 1543-1548.
+Mende, M., Scott, M. L., van Doorn, J., Grewal, D., & Shanks, I. (2019). Service robots
+rising: How humanoid robots influence service experiences and elicit compensatory consumer
+responses. Journal of Marketing Research, 0022243718822827.
+Mori, M., MacDorman, K. F., & Kageki, N. (2012). The uncanny valley [from the field].
+IEEE Robotics & Automation Magazine, 19(2), 98-100.
+Müller-Seitz, G., Dautzenberg, K., Creusen, U., & Stromereder, C. (2009). Customer
+acceptance of RFID technology: Evidence from the German electronic retail sector. Journal
+of retailing and consumer services, 16(1), 31-39.
+Nunan, D., & Di Domenico, M. (2019). Older Consumers, Digital Marketing and Public
+Policy A Review and Research Agenda. Journal of Public Policy and Marketing.
+Purington, A., Taft, J. G., Sannon, S., Bazarova, N. N., & Taylor, S. H. (2017). Alexa is my
+new BFF: social roles, user satisfaction, and personification of the amazon echo. In
+Proceedings of the 2017 CHI Conference Extended Abstracts on Human Factors in
+Computing Systems (pp. 2853-2859). ACM.
+Turk, V. (2016). Home invasion. New Sci, 232, 16-17.
+Waytz, A., Cacioppo, J., & Epley, N. (2010). Who sees human? The stability and importance
+of individual differences in anthropomorphism. Perspectives on Psychological Science, 5(3),
+219-232.
+Weber, M. (2009). The theory of social and economic organization. Simon and Schuster.
+
+
