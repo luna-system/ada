@@ -43,6 +43,8 @@ Welcome to Ada! Your personal AI assistant that runs entirely on your hardware.
    data_model
    streaming
    memory
+   biomimetic_features
+   memory_augmentation
    token_monitoring
 
 .. toctree::
@@ -51,6 +53,7 @@ Welcome to Ada! Your personal AI assistant that runs entirely on your hardware.
 
    adapters
    adapter_development
+   neovim_integration
    matrix_integration
    api_usage
    api_reference
