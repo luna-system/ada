@@ -1,0 +1,90 @@
+{
+  "posterior_means": {
+    "decay": 0.09727683219352716,
+    "surprise": 0.5954662028544897,
+    "relevance": 0.2032697212148782,
+    "habituation": 0.10398724373710498
+  },
+  "posterior_stds": {
+    "decay": 0.015991811456663823,
+    "surprise": 0.014075409528792463,
+    "relevance": 0.009982046719759352,
+    "habituation": 0.013930012756701
+  },
+  "credible_intervals_95": {
+    "decay": [
+      0.06514167711540747,
+      0.13060139759986888
+    ],
+    "surprise": [
+      0.5693639032244441,
+      0.6239287640373323
+    ],
+    "relevance": [
+      0.18246160989891108,
+      0.2219177279963067
+    ],
+    "habituation": [
+      0.07617691636890903,
+      0.13104119283922205
+    ]
+  },
+  "credible_intervals_50": {
+    "decay": [
+      0.0866156135724907,
+      0.10760898349387797
+    ],
+    "surprise": [
+      0.585731832068394,
+      0.6045082172063447
+    ],
+    "relevance": [
+      0.1968402158614415,
+      0.21010346194752078
+    ],
+    "habituation": [
+      0.09531497181239665,
+      0.11257749744629295
+    ]
+  },
+  "total_uncertainty": 0.013494820115479159,
+  "most_certain_weight": "relevance",
+  "least_certain_weight": "decay",
+  "n_samples": 10000,
+  "n_burn_in": 2000,
+  "acceptance_rate": 0.231375,
+  "converged": true,
+  "posterior_vs_optimal": {
+    "decay": {
+      "optimal": 0.1,
+      "posterior": 0.09727683219352716,
+      "difference": -0.0027231678064728454,
+      "in_95_ci": true
+    },
+    "surprise": {
+      "optimal": 0.6,
+      "posterior": 0.5954662028544897,
+      "difference": -0.004533797145510277,
+      "in_95_ci": true
+    },
+    "relevance": {
+      "optimal": 0.2,
+      "posterior": 0.2032697212148782,
+      "difference": 0.0032697212148782018,
+      "in_95_ci": true
+    },
+    "habituation": {
+      "optimal": 0.1,
+      "posterior": 0.10398724373710498,
+      "difference": 0.003987243737104976,
+      "in_95_ci": true
+    }
+  },
+  "weights_in_credible_interval": {
+    "decay": true,
+    "surprise": true,
+    "relevance": true,
+    "habituation": true
+  },
+  "timestamp": "2025-12-18T01:14:01.207837"
+}
