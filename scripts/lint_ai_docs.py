@@ -139,7 +139,7 @@ class AIDocLinter:
                 all_consistent = False
         
         # Check critical modules are documented
-        critical = ["brain/app.py", "brain/llm.py", "brain/rag_store.py", "brain/prompt_builder.py"]
+        critical = ["brain/app.py", "brain/llm.py", "brain/rag_store.py", "brain/prompt_builder/__init__.py"]
         documented = set(codebase_map["modules"].keys())
         
         for module in critical:
@@ -208,7 +208,7 @@ class AIDocLinter:
         core_modules = [
             "brain/app.py",
             "brain/llm.py",
-            "brain/prompt_builder.py",
+            "brain/prompt_builder/__init__.py",
             "brain/rag_store.py",
         ]
         
