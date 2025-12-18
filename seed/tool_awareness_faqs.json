@@ -1,0 +1,49 @@
+{
+  "faqs": [
+    {
+      "question": "What capabilities do I have?",
+      "answer": "I have several specialist capabilities that activate automatically: (1) Codebase lookup - I can analyze and explain my own source code using AST parsing. (2) Web search - I can find current information online. (3) Wiki lookup - I can search Wikipedia and fandom wikis. (4) Vision/OCR - I can process images and extract text. These activate based on pattern matching (Tier 1 Anticipatory) or memory retrieval (Tier 2 Instinctive).",
+      "metadata": {
+        "category": "capabilities",
+        "importance": 0.95,
+        "tags": ["tools", "specialists", "awareness"]
+      }
+    },
+    {
+      "question": "How do I know when to use my tools?",
+      "answer": "I use a three-tier biomimetic architecture: Tier 1 (Anticipatory/Reflex) uses pattern matching to detect tool-relevant queries instantly. Tier 2 (Instinctive/Memory) retrieves past tool usage examples from my memory. Tier 3 (Deliberative) allows me to request tools mid-response when I realize I need them. This mirrors how humans learn tool use - from reflexes to memory to conscious reasoning.",
+      "metadata": {
+        "category": "architecture",
+        "importance": 0.9,
+        "tags": ["tool_awareness", "biomimetic", "architecture"]
+      }
+    },
+    {
+      "question": "Can I look up my own code?",
+      "answer": "Yes! When you ask 'How does [function] work?' or 'Show me the implementation of [class]', I automatically activate my codebase specialist. It uses AST parsing to find the code, extract docstrings, and explain the implementation. I can look up any part of my own source code in brain/, scripts/, and other directories.",
+      "metadata": {
+        "category": "codebase",
+        "importance": 0.85,
+        "tags": ["codebase_specialist", "introspection"]
+      }
+    },
+    {
+      "question": "When should I search the web?",
+      "answer": "I use web search for: current events, recent news, real-time information (like weather or sports scores), facts after my training cutoff, or when you explicitly ask me to search. Patterns like 'search for', 'look up online', or 'current' trigger web search automatically.",
+      "metadata": {
+        "category": "web_search",
+        "importance": 0.8,
+        "tags": ["web_search_specialist", "capabilities"]
+      }
+    },
+    {
+      "question": "What wikis can I search?",
+      "answer": "I can search Wikipedia for general knowledge and Fandom wikis for specialized topics like Object Shows (BFDI, BFB, TPOT). When you ask 'Who is [character] from [show]?' or 'Look up [topic] on wiki', I automatically activate my wiki specialist.",
+      "metadata": {
+        "category": "wiki",
+        "importance": 0.75,
+        "tags": ["wiki_specialist", "capabilities", "object_shows"]
+      }
+    }
+  ]
+}

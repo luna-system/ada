@@ -12,7 +12,8 @@ import logging
 from datetime import datetime, timezone
 from dateutil import parser
 
-from brain import rag_store, config
+from brain.rag_store import RagStore
+from brain import config
 from brain.memory_decay import MemoryDecayWeighter
 
 logger = logging.getLogger(__name__)
@@ -29,11 +30,12 @@ class ContextRetriever:
         """Initialize the context retriever.
         
         Args:
-            rag_store_instance: Optional RAG store (for testing)
+            rag_store_instance: Optional RAG store instance (for testing)
             config_instance: Optional config (for testing)
             cache: Optional MultiTimescaleCache instance
         """
-        self.rag_store = rag_store_instance or rag_store
+        # Create RagStore instance if not provided
+        self.rag_store = rag_store_instance or RagStore(collection_name="conversations")
         self.config = config_instance or config
         self.cache = cache
         

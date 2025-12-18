@@ -188,7 +188,12 @@ class RagStore:
             if imp is not None:
                 meta["importance"] = imp
         if tags:
-            meta["tags"] = tags
+            # ChromaDB requires metadata values to be str/int/float/bool, not lists
+            # Convert tag list to comma-separated string
+            if isinstance(tags, list):
+                meta["tags"] = ",".join(tags)
+            else:
+                meta["tags"] = tags
         if extra_meta:
             meta.update(extra_meta)
 

@@ -97,7 +97,7 @@ def fetch_listenbrainz(user: Optional[str], token: Optional[str]) -> tuple[Optio
 
 def format_media_for_prompt(media_info: Optional[Dict[str, Any]]) -> Optional[str]:
     """
-    Format ListenBrainz media info as natural language for the LLM prompt.
+    Format ListenBrainz media info as human language for the LLM prompt.
     Returns None if media_info is empty or incomplete.
     """
     if not media_info or not isinstance(media_info, dict):
