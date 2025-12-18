@@ -5,6 +5,10 @@ This package provides modular components for building prompts:
 - SectionBuilder: Formats context into prompt sections
 - PromptAssembler: Assembles sections into final prompt (with caching!)
 """
+# @ai-indexable: core-package
+# @ai-purpose: Modular prompt building system with ContextRetriever, SectionBuilder, PromptAssembler
+# @ai-dependencies: brain.rag_store, brain.config, brain.context_cache, brain.specialists
+# @ai-related: brain/llm.py, brain/app.py
 
 from brain.prompt_builder.context_retriever import ContextRetriever
 from brain.prompt_builder.section_builder import SectionBuilder

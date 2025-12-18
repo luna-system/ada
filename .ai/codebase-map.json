@@ -66,22 +66,31 @@
     },
     "brain/prompt_builder/context_retriever.py": {
       "type": "core-component",
-      "purpose": "Retrieves context from RAG store and configuration",
+      "purpose": "Retrieves context from RAG store with neuromorphic importance scoring (v2.2)",
       "key_functions": [
         "get_persona",
         "get_memories",
         "get_faqs",
         "get_turns",
-        "get_summaries"
+        "get_summaries",
+        "calculate_importance",
+        "get_detail_level"
+      ],
+      "key_features": [
+        "Multi-signal importance: decay (40%) + surprise (30%) + relevance (20%) + habituation (10%)",
+        "Gradient detail levels: FULL (≥0.75), CHUNKS (≥0.50), SUMMARY (≥0.20), DROPPED (<0.20)",
+        "Temperature-modulated temporal decay",
+        "Runtime configurable thresholds and signal weights"
       ],
       "imports": [
         "brain.rag_store",
-        "brain.config"
+        "brain.config",
+        "brain.memory_decay"
       ],
       "imported_by": [
         "brain/prompt_builder/prompt_assembler.py"
       ],
-      "notes": "Pure retrieval logic, no formatting. Tested with 14 tests."
+      "notes": "Phase 1 neuromorphic context: Multi-signal importance scoring replaces batch summarization. Tested with 21 tests (0.07s runtime)."
     },
     "brain/prompt_builder/section_builder.py": {
       "type": "core-component",
@@ -522,7 +531,6 @@
       "imported_by": [
         "matrix-bridge/bridge.py",
         "matrix-bridge/identity.py",
-        "matrix-bridge/ada_client.py",
         "matrix-bridge/message_handler.py"
       ],
       "notes": "Bot identity, behavior, privacy settings, Matrix connection params"
@@ -542,26 +550,6 @@
         "matrix-bridge/bridge.py"
       ],
       "notes": "Ensures Ada is clearly identified as AI bot with opt-out instructions"
-    },
-    "matrix-bridge/ada_client.py": {
-      "type": "client",
-      "purpose": "HTTP client for Ada's brain API with clean non-streaming interface",
-      "key_classes": [
-        "AdaBrainClient"
-      ],
-      "key_functions": [
-        "chat_stream",
-        "chat",
-        "healthcheck"
-      ],
-      "imports": [
-        "httpx",
-        "matrix-bridge.config"
-      ],
-      "imported_by": [
-        "matrix-bridge/bridge.py"
-      ],
-      "notes": "chat() method internally uses streaming but returns complete text - JSON parsing abstracted away from bridge logic"
     },
     "matrix-bridge/message_handler.py": {
       "type": "core-service",
@@ -585,9 +573,9 @@
       ],
       "notes": "Per-room context storage, privacy opt-out, activation logic"
     },
-    "adapters/cli/ada_cli/client.py": {
+    "ada-client/src/ada_client/__init__.py": {
       "type": "adapter",
-      "purpose": "Reference implementation HTTP client for Ada's brain API",
+      "purpose": "Shared HTTP client library for Ada's brain API",
       "key_classes": [
         "AdaClient",
         "AdaBrainError",
@@ -603,9 +591,10 @@
         "httpx"
       ],
       "imported_by": [
-        "adapters/cli/ada_cli/cli.py"
+        "adapters/cli/ada_cli/cli.py",
+        "ada-mcp/src/ada_mcp/tools.py"
       ],
-      "notes": "Simplest adapter implementation, demonstrates both streaming and non-streaming patterns. Will become foundation for shared ada-client library in Phase 2."
+      "notes": "Standalone package providing reusable Ada client for all adapters. Demonstrates both streaming and non-streaming patterns."
     },
     "adapters/cli/ada_cli/cli.py": {
       "type": "adapter",
@@ -638,11 +627,10 @@
   },
   "dependency_clusters": {
     "adapters": [
-      "adapters/cli/ada_cli/client.py",
+      "ada-client/src/ada_client/__init__.py",
       "adapters/cli/ada_cli/cli.py",
       "frontend/public/app.js",
       "matrix-bridge/bridge.py",
-      "matrix-bridge/ada_client.py",
       "ada-mcp/src/ada_mcp/server.py"
     ],
     "core_api": [
@@ -676,14 +664,13 @@
       "matrix-bridge/bridge.py",
       "matrix-bridge/config.py",
       "matrix-bridge/identity.py",
-      "matrix-bridge/ada_client.py",
       "matrix-bridge/message_handler.py"
     ]
   },
   "data_flow": {
     "cli_chat_request": [
       "adapters/cli/ada_cli/cli.py::main",
-      "adapters/cli/ada_cli/client.py::chat_stream",
+      "ada-client/src/ada_client/__init__.py::chat_stream",
       "brain/app.py::chat_stream_v1",
       "brain/prompt_builder.py::build_prompt",
       "brain/rag_store.py::search_memories",
@@ -705,9 +692,9 @@
       "matrix-bridge/bridge.py::on_message",
       "matrix-bridge/message_handler.py::should_respond",
       "matrix-bridge/message_handler.py::get_context",
-      "matrix-bridge/ada_client.py::chat",
+      "ada-client/src/ada_client/__init__.py::chat",
       "brain/app.py::chat_stream_v1",
-      "brain/prompt_builder.py::build_prompt",
+      "brain/prompt_builder/__init__.py::build_prompt",
       "brain/llm.py::generate_stream",
       "matrix-bridge/bridge.py::send_response"
     ],
