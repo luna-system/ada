@@ -1,0 +1,26 @@
+{
+  "patterns": [
+    {
+      "tool_name": "codebase",
+      "activation_patterns": [
+        {
+          "regex": "(?:how does|what does|show me|look up|find).*?([a-z_]+).*?(?:work|function|class|method)",
+          "confidence_base": 0.9,
+          "param_extraction": {
+            "query": "group1"
+          }
+        },
+        {
+          "regex": "(?:code for|implementation of|definition of)\\s+([a-z_]+)",
+          "confidence_base": 0.95,
+          "param_extraction": {
+            "query": "group1"
+          }
+        }
+      ],
+      "negative_patterns": [
+        "(?:think|believe|interesting|opinion) about"
+      ]
+    }
+  ]
+}

@@ -32,12 +32,24 @@ from contextlib import asynccontextmanager
 from fastapi import FastAPI, Query, Request
 from fastapi.responses import JSONResponse, StreamingResponse
 
+# Initialize logger FIRST (needed by initialization code)
+logger = logging.getLogger(__name__)
+
 # System notice manager
 from brain.notices import notice_manager
 from pydantic import BaseModel
 
-# Initialize logger
-logger = logging.getLogger(__name__)
+# Bidirectional specialist system
+from brain.specialists.bidirectional import BidirectionalSpecialistHandler
+
+# Tool Awareness Framework (Tier 1 - Anticipatory/Reflex)
+from brain.specialists.tool_activation import ToolPatternMatcher
+pattern_file_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), "data", "tool_patterns.json")
+tool_matcher = ToolPatternMatcher(patterns_file=pattern_file_path if os.path.exists(pattern_file_path) else None)
+if tool_matcher.ready():
+    logger.info(f"Tool awareness framework initialized with {len(tool_matcher.patterns)} pattern groups")
+else:
+    logger.warning("Tool awareness framework running without patterns (file not found)")
 
 from fastapi import APIRouter
 
@@ -636,9 +648,10 @@ async def chat_stream(request: Request):
     except Exception:
         return JSONResponse(status_code=400, content={'error': 'invalid json'})
     
-    prompt = (data.get('prompt') or '').strip()
+    # Accept both 'prompt' and 'message' for ergonomics
+    prompt = (data.get('prompt') or data.get('message') or '').strip()
     if not prompt:
-        return JSONResponse(status_code=400, content={'error': 'prompt required'})
+        return JSONResponse(status_code=400, content={'error': 'prompt or message required'})
 
     req_id = str(uuid.uuid4())[:8]
     conversation_id = data.get('conversation_id') or str(uuid.uuid4())
@@ -651,6 +664,13 @@ async def chat_stream(request: Request):
     faq_k = int(data.get('faq_k', RAG_FAQ_TOP_K))
     memory_k = int(data.get('memory_k', RAG_MEMORY_TOP_K))
 
+    # PHASE 3: PRE-EXECUTION TOOL ACTIVATION (Tier 1 - Anticipatory/Reflex)
+    # Pattern matching happens BEFORE LLM execution - model-agnostic!
+    tool_matches = tool_matcher.match(prompt)
+    pre_executed_specialists = []
+    
+    logger.info(f"Request {req_id}: Found {len(tool_matches)} tool matches")
+    
     # Build prompt using new modular PromptAssembler with caching
     if RAG_ENABLED and rag_store is not None:
         # Get active notices
@@ -666,11 +686,41 @@ async def chat_stream(request: Request):
             'ocr_context': data.get('ocr_context') if isinstance(data.get('ocr_context'), dict) else None,
         }
         
-        # Build prompt (clean new API!)
+        # Execute high-confidence tool matches BEFORE LLM
+        CONFIDENCE_THRESHOLD = 0.5
+        for match in tool_matches:
+            if match.confidence >= CONFIDENCE_THRESHOLD:
+                logger.info(f"Request {req_id}: Activating {match.tool_name} (confidence={match.confidence:.2f})")
+                try:
+                    # Get specialist by name
+                    from brain.specialists import get_specialist
+                    specialist = get_specialist(match.tool_name)
+                    
+                    if specialist:
+                        # Execute specialist with extracted params merged into context
+                        specialist_context = {**request_context, **match.extracted_params}
+                        # Handle both async and sync specialists
+                        import asyncio
+                        import inspect
+                        if inspect.iscoroutinefunction(specialist.process):
+                            result = await specialist.process(request_context=specialist_context)
+                        else:
+                            result = specialist.process(request_context=specialist_context)
+                        
+                        pre_executed_specialists.append({
+                            'specialist': match.tool_name,
+                            'confidence': match.confidence,
+                            'result': result
+                        })
+                        logger.info(f"Request {req_id}: {match.tool_name} executed successfully")
+                except Exception as e:
+                    logger.error(f"Request {req_id}: Failed to execute {match.tool_name}: {e}")
+        
+        # Build prompt with pre-executed specialist results
         final_prompt = assembler.build_prompt(
             user_message=prompt,
             conversation_id=conversation_id,
-            specialists=[],  # TODO: Load actual specialists
+            pre_executed_results=pre_executed_specialists,  # Pass pre-executed results!
             notices=notices,
             request_context=request_context
         )
@@ -689,8 +739,16 @@ async def chat_stream(request: Request):
     async def generate():
         nonlocal conversation_id
         try:
+            # PHASE 3: Yield pre-executed specialist results first
+            for spec_result in pre_executed_specialists:
+                yield f"event: specialist_result\ndata: {json.dumps({'specialist': spec_result['specialist'], 'confidence': spec_result['confidence']})}\n\n"
+            
             accumulated_text = ""
             accumulated_thinking = ""
+            
+            # Initialize bidirectional specialist handler (Tier 3 - deliberative)
+            bi_handler = BidirectionalSpecialistHandler(max_calls=5)
+            text_buffer = ""
             
             # Stream from Ollama using modularized llm module (async)
             async for chunk in stream_chat_async(final_prompt, model=OLLAMA_MODEL, include_thinking=include_thinking):
@@ -702,6 +760,27 @@ async def chat_stream(request: Request):
                 if 'token' in chunk:
                     token = chunk['token']
                     accumulated_text += token
+                    text_buffer += token
+                    
+                    # Check for specialist requests in buffer
+                    specialist_request = bi_handler.detect_request(text_buffer)
+                    if specialist_request:
+                        logger.info(f"[{req_id}] Detected specialist request: {specialist_request['specialist']}")
+                        
+                        # Execute specialist
+                        specialist_result = await bi_handler.execute_request(
+                            specialist_request['specialist'],
+                            specialist_request['params'],
+                            request_context
+                        )
+                        
+                        # Inject result if successful
+                        if specialist_result:
+                            yield f"data: {json.dumps({'type': 'specialist_result', 'content': specialist_result})}\n\n"
+                        
+                        # Clear buffer after processing request
+                        text_buffer = ""
+                    
                     yield f"data: {json.dumps({'type': 'token', 'content': token})}\n\n"
                 
                 # Send thinking tokens if enabled

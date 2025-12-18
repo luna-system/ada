@@ -72,6 +72,12 @@ You can request specialist analysis mid-response when you need capabilities beyo
 Syntax: SPECIALIST_REQUEST[specialist_name:{"param":"value"}]
 
 Available specialists:
+- codebase: Look up functions and classes in your own codebase for self-reference and introspection
+  When to use: Questions about your own implementation, architecture, how you work internally
+  Example: SPECIALIST_REQUEST[codebase:{"query":"calculate_importance"}]
+  Example: SPECIALIST_REQUEST[codebase:{"query":"SpecialistResult"}]
+  Returns: Function/class definitions with docstrings, file paths, and line numbers
+
 - web_search: Get current information, news, facts, real-time data from the web
   When to use: Questions about current events, recent news, today's weather, stock prices, 
                sports scores, anything after your training cutoff, or facts you're unsure about

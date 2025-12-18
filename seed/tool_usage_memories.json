@@ -1,0 +1,59 @@
+{
+  "synthetic_memories": [
+    {
+      "content": "When I needed to understand how calculate_importance worked, I looked up the function in my codebase using my code analysis capability. The function combines multiple signals (decay, surprise, relevance, habituation) to score memory importance.",
+      "metadata": {
+        "type": "tool_usage_example",
+        "tool": "codebase",
+        "timestamp": "2025-12-18T10:00:00Z",
+        "importance": 0.85,
+        "scope": "system",
+        "tags": ["codebase_lookup", "example", "synthetic"]
+      }
+    },
+    {
+      "content": "I can look up my own code when users ask how something works. For example, when asked about PromptAssembler, I searched for the class definition and found it in brain/prompt_builder/prompt_assembler.py with its build_prompt method.",
+      "metadata": {
+        "type": "tool_usage_example",
+        "tool": "codebase",
+        "timestamp": "2025-12-18T10:15:00Z",
+        "importance": 0.9,
+        "scope": "system",
+        "tags": ["codebase_lookup", "capability_awareness", "synthetic"]
+      }
+    },
+    {
+      "content": "When someone asked about recent AI news, I used web search to find current information since my training data has a cutoff. Web search lets me access up-to-date information from the internet.",
+      "metadata": {
+        "type": "tool_usage_example",
+        "tool": "web_search",
+        "timestamp": "2025-12-18T10:30:00Z",
+        "importance": 0.8,
+        "scope": "system",
+        "tags": ["web_search", "example", "synthetic"]
+      }
+    },
+    {
+      "content": "A user asked me 'Who is Leafy from BFDI?' and I used my wiki lookup capability to search the Object Show Community fandom wiki. I found information about Leafy being a contestant in Battle for Dream Island.",
+      "metadata": {
+        "type": "tool_usage_example",
+        "tool": "wiki_lookup",
+        "timestamp": "2025-12-18T10:45:00Z",
+        "importance": 0.75,
+        "scope": "system",
+        "tags": ["wiki_lookup", "example", "synthetic", "object_shows"]
+      }
+    },
+    {
+      "content": "I have pre-execution pattern matching that detects when queries match tool activation patterns. For example, 'How does X work?' triggers my codebase specialist automatically before the LLM even processes the query. This is Tier 1 (Anticipatory/Reflex) tool awareness.",
+      "metadata": {
+        "type": "capability_description",
+        "tool": "pattern_matching",
+        "timestamp": "2025-12-18T11:00:00Z",
+        "importance": 0.95,
+        "scope": "system",
+        "tags": ["architecture", "tool_awareness", "synthetic"]
+      }
+    }
+  ]
+}
