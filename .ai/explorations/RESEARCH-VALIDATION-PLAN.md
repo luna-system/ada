@@ -272,6 +272,90 @@ Need to add:
 - `numpy` - Numerical operations
 - `pandas` - Data manipulation (optional, makes life easier)
 
+## Phase 6: Meta-Science - Documentation Effectiveness Study 🐢⬇️
+
+**Status:** 🔥 THE ULTIMATE RECURSIVE EXPERIMENT  
+**Tagline:** "We dare you to have your coding assistant look at our project"  
+**Vibe:** Using AI to prove structured docs help AI understand code (turtles all the way down)
+
+### Hypothesis
+
+**Structured machine-readable documentation (`.ai/` system) significantly uplifts coding model performance across capability tiers.**
+
+Key claim: Weaker models with `.ai/` docs > stronger models without
+
+### Experiment Design
+
+#### Test Matrix
+
+| Model Tier | Without .ai/ | With .ai/ | Uplift % |
+|------------|--------------|-----------|----------|
+| **Strong** (Claude 3.5, GPT-4) | Baseline | ? | ? |
+| **Mid** (GPT-3.5, Claude 3 Haiku) | ? | ? | ? |
+| **Weak** (Mistral 7B, CodeLlama 13B) | ? | ? | ? |
+| **Local** (DeepSeek-Coder, Qwen-Coder) | ? | ? | ? |
+
+#### Benchmark Tasks
+
+10 common codebase operations with ground truth:
+
+1. **Navigation:** "Find where specialists are registered" (grep-like)
+2. **Architecture:** "Explain data flow from CLI to LLM response" (graph traversal)
+3. **Implementation:** "Add a new specialist for X capability" (pattern matching)
+4. **Debugging:** "Fix bug in memory_decay.py" (dependency understanding)
+5. **Integration:** "Connect new biomimetic feature to prompt builder" (module relationships)
+6. **Testing:** "Write tests for importance scoring" (test pattern understanding)
+7. **Documentation:** "Add section to biomimetic_features.rst" (style matching)
+8. **Refactoring:** "Extract shared specialist code to utils" (anti-pattern awareness)
+9. **Extension:** "Add new config option with validation" (config patterns)
+10. **Analysis:** "Explain why turns stored separately from memories" (design rationale)
+
+#### Measurements
+
+For each task + model + condition:
+
+1. **Correctness** (0-1): Does the solution work?
+2. **Efficiency** (int): Number of tool calls needed
+3. **Token Usage** (int): Context consumed
+4. **Confidence** (0-1): Does it hedge or proceed decisively?
+5. **Time to Solution** (seconds): Wall clock time
+6. **Pattern Matching** (0-1): Follows Ada conventions?
+
+### Expected Outcomes
+
+**Primary Hypothesis:** Uplift inversely correlates with model capability
+- Strong models: 10-20% improvement (already good, docs optimize)
+- Mid models: 30-50% improvement (significant boost)
+- Weak models: 100-200% improvement (fail → succeed)
+
+**Secondary Hypotheses:**
+1. Uplift highest on architecture/navigation (graph traversal benefits most)
+2. Efficiency gains even when correctness unchanged (fewer tool calls)
+3. Pattern matching improves dramatically (conventions guide behavior)
+4. Confidence increases with docs (less hedging, more decisive)
+
+### Graphs to Generate
+
+1. **Uplift Heatmap:** Model tier × Task type → uplift %
+2. **Efficiency Scatter:** Tool calls (without) vs (with)
+3. **Correctness by Tier:** Bar chart success rate ± docs
+4. **Token Economy:** Token usage reduction
+5. **Time Series:** Solution speed improvement
+6. **Capability Amplification:** Weak+docs vs Strong-docs
+
+### Why This Is Meta-Cool
+
+1. **Self-documenting research:** The `.ai/` system we test explains the test
+2. **Infrastructure as intervention:** Documentation = scientific instrument
+3. **Capability democratization:** Makes weaker models viable
+4. **Reproducible infrastructure:** Any project can adopt `.ai/` pattern
+5. **Economic implications:** Local/cheap models viable with good docs
+6. **Community contribution:** Benefits entire AI tooling ecosystem
+
+**Connection to biomimetic research:** Both study how **structure** (biological or informational) enables **intelligence**. Both are falsifiable, measurable, practical, and demonstrate emergent capabilities from simple principles.
+
+It's turtles all the way down, but each turtle is **load-bearing science**! 🐢🔬✨
+
 ## Why This Is Cool
 
 1. **Falsifiable claims:** We can actually be *wrong* and learn from it
@@ -279,16 +363,20 @@ Need to add:
 3. **Publishable:** Real research, not just engineering
 4. **Community contribution:** Shows local-first AI can be rigorous
 5. **Self-improvement:** Data guides future feature development
+6. **Meta-recursive:** Research infrastructure documents itself scientifically
 
 ## Next Steps
 
 1. ✅ Finish Phase 1 (importance scoring implementation)
 2. ✅ Commit and document Phase 1
-3. 🎯 **Start property-based testing** (this plan, Phase 1)
-4. Generate synthetic data (Phase 2)
-5. Run ablation studies (Phase 3)
-6. Make pretty graphs (Phase 4)
-7. Write it up (Phase 5)
+3. ✅ Add meta-science phase to research plan
+4. 🎯 **Merge to trunk, tag v2.2.0, RELEASE!**
+5. Start property-based testing (Phase 1)
+6. Generate synthetic data (Phase 2)
+7. Run ablation studies (Phase 3)
+8. Make pretty graphs (Phase 4)
+9. Write it up (Phase 5)
+10. Run meta-science experiments (Phase 6) - The ultimate recursion!
 
 ## Philosophy
 
