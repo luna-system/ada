@@ -427,7 +427,7 @@ LLMs communicate constantly in modern systems:
 **Research Questions:**
 
 **Phase 17A: Information Density for Machines**
-- Do LLMs prefer dense structured data over natural language prose?
+- Do LLMs prefer dense structured data over human language prose?
 - Test formats: JSON schema vs markdown vs prose vs hybrid
 - Hypothesis: Schema wins for facts, prose for complex reasoning
 - Measure: task completion, token usage, error rates

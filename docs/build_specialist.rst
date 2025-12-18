@@ -396,7 +396,7 @@ Key Patterns
        message="Temperature: 72°F, sunny skies"   # Formatted
    )
 
-The AI gets both - structured for processing, formatted for natural language.
+The AI gets both - structured for processing, formatted for human language.
 
 ----
 

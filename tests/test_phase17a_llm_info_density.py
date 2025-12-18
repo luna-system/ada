@@ -3,7 +3,7 @@
 Phase 17A: Information Density for Machine Communication
 
 Research Question:
-Do LLMs prefer dense structured data (JSON) over natural language prose?
+Do LLMs prefer dense structured data (JSON) over human language prose?
 Or do different task types favor different formats?
 
 Hypothesis:

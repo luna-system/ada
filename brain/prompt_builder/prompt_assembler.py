@@ -119,7 +119,8 @@ class PromptAssembler:
         conversation_id: str,
         specialists: list[Any] | None = None,
         notices: list[dict[str, Any]] | None = None,
-        request_context: dict[str, Any] | None = None
+        request_context: dict[str, Any] | None = None,
+        pre_executed_results: list[dict[str, Any]] | None = None
     ) -> str:
         """Build complete prompt from all components.
         
@@ -129,6 +130,7 @@ class PromptAssembler:
             specialists: List of specialist instances to check for activation
             notices: System notices to include
             request_context: Additional context for specialist activation
+            pre_executed_results: Already-executed specialist results from pattern matching
             
         Returns:
             Complete formatted prompt string
@@ -136,19 +138,23 @@ class PromptAssembler:
         specialists = specialists or []
         notices = notices or []
         request_context = request_context or {}
+        pre_executed_results = pre_executed_results or []
         
         # 1. Retrieve RAG context
         persona = self.retriever.get_persona()
         memories = self.retriever.get_memories(query=user_message, k=5)
-        faqs = self.retriever.get_faqs(query=user_message, k=3)
+        faqs_raw = self.retriever.get_faqs(query=user_message, k=3)
         turns = self.retriever.get_turns(query=user_message, conversation_id=conversation_id, k=10)
         
-        # 2. Activate specialists
-        specialist_results = self._activate_specialists(
-            specialists,
-            user_message,
-            request_context
-        )
+        # 2. Get specialist results (use pre-executed if available, otherwise activate)
+        if pre_executed_results:
+            specialist_results = pre_executed_results
+        else:
+            specialist_results = self._activate_specialists(
+                specialists,
+                user_message,
+                request_context
+            )
         
         # 3. Format sections
         sections = []
@@ -198,31 +204,28 @@ class PromptAssembler:
             
             # Apply semantic chunking if enabled (after decay, before attention)
             if self.chunker:
-                chunks = self.chunker.chunk_memories(memory_dicts)
+                # chunk_memories expects List[Tuple[str, Dict]], not List[Dict]
+                memory_tuples = [(d['content'], d['metadata']) for d in memory_dicts]
+                chunks = self.chunker.chunk_memories(memory_tuples)
                 logger.info(
                     f"Semantic chunking: {len(memory_dicts)} memories → {len(chunks)} chunks"
                 )
                 
-                # Collapse chunks to fit attention budget if needed
-                if self.spotlight:
-                    budget = self.spotlight.spotlight_budget + self.spotlight.periphery_budget
-                    chunks = self.chunker.collapse_chunks(chunks, max_tokens=budget)
-                    logger.info(f"Collapsed to {len(chunks)} chunks within budget")
-                
-                # Convert chunks back to memory dict format for attention spotlight
+                # Convert MemoryChunk objects back to memory dict format for processing
                 # Each chunk becomes a representative memory with summary
-                memory_dicts = [
-                    {
-                        'content': chunk.representative['content'],
+                # Note: chunks are MemoryChunk objects with .representative as (content, metadata) tuple
+                memory_dicts = []
+                for chunk in chunks:
+                    rep_content, rep_metadata = chunk.representative
+                    memory_dicts.append({
+                        'content': rep_content,
                         'metadata': {
-                            **chunk.representative['metadata'],
+                            **rep_metadata,
                             'chunk_size': chunk.size,
-                            'chunk_summary': self.chunker.format_summary(chunk)
+                            'chunk_summary': chunk.format_summary()
                         },
                         'distance': chunk.centroid_distance
-                    }
-                    for chunk in chunks
-                ]
+                    })
             
             # Apply attention spotlight if enabled
             if self.spotlight:
@@ -248,7 +251,9 @@ class PromptAssembler:
                 self.token_monitor.track("memories", memory_section)
         
         # FAQs (reference information) - with habituation
-        if faqs:
+        if faqs_raw:
+            # Extract just the text from (text, metadata) tuples
+            faqs = [text for text, _ in faqs_raw]
             faq_section = self.builder.format_faqs(faqs)
             habituation_weight = 1.0
             

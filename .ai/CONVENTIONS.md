@@ -212,7 +212,7 @@ def process_request(user_id: str, query: str) -> Response:
     
     Args:
         user_id: Unique identifier for the user
-        query: Natural language query text
+        query: Human language query text
         
     Returns:
         Response object with generated text and metadata
