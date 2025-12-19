@@ -70,7 +70,8 @@ class AdaClient:
         self,
         message: str,
         conversation_id: str = "default",
-        include_thinking: bool = False
+        include_thinking: bool = False,
+        model: str | None = None
     ) -> AsyncIterator[str]:
         """Stream chat response chunks from Ada's brain.
         
@@ -81,6 +82,7 @@ class AdaClient:
             message: User's message/prompt
             conversation_id: Unique conversation identifier for context
             include_thinking: Whether to include <think> tags in output
+            model: Optional model override (e.g., 'qwen2.5-coder:7b' for code completion)
             
         Yields:
             Response text chunks as they arrive
@@ -99,6 +101,10 @@ class AdaClient:
             "conversation_id": conversation_id,
             "stream": True
         }
+        
+        # Add model override if specified
+        if model:
+            payload["model"] = model
         
         client = self._get_client()
         
@@ -153,7 +159,8 @@ class AdaClient:
         self,
         message: str,
         conversation_id: str = "default",
-        include_thinking: bool = False
+        include_thinking: bool = False,
+        model: str | None = None
     ) -> str:
         """Get complete chat response from Ada's brain (non-streaming).
         
@@ -164,6 +171,7 @@ class AdaClient:
             message: User's message/prompt
             conversation_id: Unique conversation identifier for context
             include_thinking: Whether to include <think> tags in output
+            model: Optional model override (e.g., 'qwen2.5-coder:7b' for code completion)
             
         Returns:
             Complete response text
@@ -177,7 +185,7 @@ class AdaClient:
             >>> print(response)
         """
         chunks = []
-        async for chunk in self.chat_stream(message, conversation_id, include_thinking):
+        async for chunk in self.chat_stream(message, conversation_id, include_thinking, model):
             chunks.append(chunk)
         return "".join(chunks)
     

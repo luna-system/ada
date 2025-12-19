@@ -1,0 +1,90 @@
+
+🔥 Ada Code Completion Benchmark Suite
+======================================================================
+Scenarios: 8
+Warmup runs: 2
+Test runs per scenario: 3
+
+🔥 Warming up (loading model, caching)...
+   Warmup 1/2: 17.56s
+   Warmup 2/2: 17.01s
+
+📊 Testing: Simple Function (simple)
+   Run 1: ✅ 65881ms | Quality: 75.0% | Tokens: 2
+   Run 2: ✅ 29492ms | Quality: 75.0% | Tokens: 2
+   Run 3: ✅ 16186ms | Quality: 75.0% | Tokens: 2
+   ⚡ Avg: 37186ms | Quality: 75.0%
+
+📊 Testing: Class Method (simple)
+   Run 1: ✅ 14761ms | Quality: 100.0% | Tokens: 10
+   Run 2: ✅ 18747ms | Quality: 100.0% | Tokens: 10
+   Run 3: ✅ 14870ms | Quality: 100.0% | Tokens: 10
+   ⚡ Avg: 16126ms | Quality: 100.0%
+
+📊 Testing: Loop Logic (medium)
+   Run 1: ✅ 11830ms | Quality: 100.0% | Tokens: 3
+   Run 2: ✅ 17533ms | Quality: 100.0% | Tokens: 3
+   Run 3: ✅ 59420ms | Quality: 100.0% | Tokens: 3
+   ⚡ Avg: 29594ms | Quality: 100.0%
+
+📊 Testing: Error Handling (medium)
+   Run 1: ✅ 31642ms | Quality: 100.0% | Tokens: 4
+   Run 2: ✅ 18756ms | Quality: 100.0% | Tokens: 4
+   Run 3: ✅ 16369ms | Quality: 100.0% | Tokens: 4
+   ⚡ Avg: 22255ms | Quality: 100.0%
+
+📊 Testing: List Comprehension (complex)
+   Run 1: ✅ 15412ms | Quality: 100.0% | Tokens: 14
+   Run 2: ✅ 21524ms | Quality: 100.0% | Tokens: 17
+   Run 3: ✅ 22032ms | Quality: 100.0% | Tokens: 13
+   ⚡ Avg: 19656ms | Quality: 100.0%
+
+📊 Testing: Dictionary Creation (complex)
+   Run 1: ✅ 21967ms | Quality: 50.0% | Tokens: 9
+   Run 2: ✅ 75483ms | Quality: 50.0% | Tokens: 9
+   Run 3: ✅ 37057ms | Quality: 50.0% | Tokens: 9
+   ⚡ Avg: 44836ms | Quality: 50.0%
+
+📊 Testing: Recursive Function (complex)
+   Run 1: ✅ 16489ms | Quality: 100.0% | Tokens: 11
+   Run 2: ✅ 21486ms | Quality: 100.0% | Tokens: 11
+   Run 3: ✅ 18425ms | Quality: 100.0% | Tokens: 11
+   ⚡ Avg: 18800ms | Quality: 100.0%
+
+📊 Testing: Import Statement (simple)
+   Run 1: ✅ 1049794ms | Quality: 0.0% | Tokens: 2496
+   Run 2: ✅ 33245ms | Quality: 0.0% | Tokens: 7
+   Run 3: ✅ 19513ms | Quality: 0.0% | Tokens: 4
+   ⚡ Avg: 367517ms | Quality: 0.0%
+
+======================================================================
+📈 OVERALL RESULTS
+======================================================================
+Success Rate: 24/24 (100.0%)
+
+⚡ LATENCY (ms):
+   Min:     11830ms
+   Max:     1049794ms
+   Mean:    69496ms
+   Median:  20500ms
+   Stdev:   209483ms
+   Target:  <500ms ❌ MISSED
+
+🎯 QUALITY:
+   Mean:    78.1%
+   Median:  100.0%
+   Target:  >70% ✅ MET
+
+📊 TOKEN EFFICIENCY:
+   Avg Prompt:     9 tokens
+   Avg Completion: 111 tokens
+   Total Avg:      120 tokens
+
+📈 BY COMPLEXITY:
+   Simple   - 140277ms | Quality: 58.3%
+   Medium   - 25925ms | Quality: 100.0%
+   Complex  - 27764ms | Quality: 83.3%
+
+======================================================================
+🎉 Benchmark complete!
+❌ Performance below targets
