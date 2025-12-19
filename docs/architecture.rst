@@ -234,36 +234,167 @@ The scripts container provides isolated testing environment:
        health -> brain;
    }
 
-Data Flow: Conversation Turn
-----------------------------
+Contextual Router Architecture (v2.7+)
+--------------------------------------
 
-Complete flow for processing and storing a conversation turn:
+Intelligent query routing based on 22 patterns across 5 categories:
 
 .. graphviz::
 
-   digraph conversation_turn {
+   digraph contextual_router {
+       rankdir=TB;
+       node [shape=box, style=filled, fillcolor=lightblue];
+       
+       user_msg [label="User Message", fillcolor=lightgreen];
+       router [label="Contextual Router\n22 Patterns", fillcolor=orange];
+       
+       trivial [label="TRIVIAL\n(greetings, thanks)"];
+       fact [label="FACT RECALL\n(recent memories)"];
+       analytical [label="ANALYTICAL\n(requires reasoning)"];
+       creative [label="CREATIVE\n(needs inspiration)"];
+       code [label="CODE\n(development tasks)"];
+       
+       lightweight [label="Lightweight RAG\n(persona only)", fillcolor=lightyellow];
+       focused [label="Focused RAG\n(recent memories)", fillcolor=lightyellow];
+       full [label="Full RAG\n(all context)", fillcolor=lightyellow];
+       
+       user_msg -> router;
+       router -> trivial [label="Pattern:\nhello|thanks"];
+       router -> fact [label="Pattern:\nwhat did I"];
+       router -> analytical [label="Pattern:\nwhy|how|explain"];
+       router -> creative [label="Pattern:\nwrite|imagine"];
+       router -> code [label="Pattern:\nfunction|class"];
+       
+       trivial -> lightweight;
+       fact -> focused;
+       analytical -> full;
+       creative -> full;
+       code -> full;
+   }
+
+Multi-Timescale Cache Architecture (v2.1+)
+-------------------------------------------
+
+Three-tier caching for performance optimization:
+
+.. graphviz::
+
+   digraph caching {
+       rankdir=LR;
+       node [shape=box, style=filled, fillcolor=lightblue];
+       
+       request [label="Chat Request", fillcolor=lightgreen];
+       cache_check [label="Check Caches", fillcolor=orange];
+       
+       persona_cache [label="Persona Cache\nTTL: 24hr", fillcolor=lightyellow];
+       faq_cache [label="FAQ Cache\nTTL: 24hr", fillcolor=lightyellow];
+       memory_cache [label="Memory Cache\nTTL: 5min", fillcolor=lightyellow];
+       response_cache [label="Response Cache\nTTL: 1hr\n(v2.8+)", fillcolor=lightyellow];
+       
+       chroma [label="ChromaDB\n(Miss)"];
+       
+       request -> cache_check;
+       cache_check -> persona_cache [label="HIT"];
+       cache_check -> faq_cache [label="HIT"];
+       cache_check -> memory_cache [label="HIT"];
+       cache_check -> response_cache [label="HIT\n(full response)"];
+       cache_check -> chroma [label="MISS"];
+       
+       {rank=same; persona_cache; faq_cache; memory_cache; response_cache;}
+   }
+
+Parallel Optimization Architecture (v2.9+)
+-------------------------------------------
+
+2.5x speedup through parallel RAG retrieval and specialist execution:
+
+.. graphviz::
+
+   digraph parallel {
+       rankdir=TB;
+       node [shape=box, style=filled, fillcolor=lightblue];
+       
+       request [label="Chat Request", fillcolor=lightgreen];
+       parallel [label="ThreadPoolExecutor\n4 Workers", fillcolor=orange];
+       
+       subgraph cluster_rag {
+           label="Parallel RAG (3.96x speedup)";
+           style=filled;
+           fillcolor=lightgray;
+           
+           persona [label="Get Persona\n20ms"];
+           memories [label="Get Memories\n80ms"];
+           faqs [label="Get FAQs\n40ms"];
+           turns [label="Get Turns\n60ms"];
+       }
+       
+       subgraph cluster_specialists {
+           label="Parallel Specialists (2.98x speedup)";
+           style=filled;
+           fillcolor=lightgray;
+           
+           ocr [label="OCR\n(HIGH priority)"];
+           web [label="Web Search\n(HIGH priority)"];
+           media [label="Media\n(MEDIUM priority)"];
+       }
+       
+       gather [label="Gather Results\n80ms total\n(was 200ms)", fillcolor=lightgreen];
+       llm [label="LLM Inference"];
+       
+       request -> parallel;
+       parallel -> persona;
+       parallel -> memories;
+       parallel -> faqs;
+       parallel -> turns;
+       parallel -> ocr;
+       parallel -> web;
+       
+       persona -> gather;
+       memories -> gather;
+       faqs -> gather;
+       turns -> gather;
+       ocr -> gather;
+       web -> gather;
+       media -> gather [style=dashed, label="Sequential"];
+       
+       gather -> llm;
+   }
+
+Data Flow: Conversation Turn (Optimized v2.9)
+----------------------------------------------
+
+Complete flow with router, caching, and parallel optimizations:
+
+.. graphviz::
+
+   digraph conversation_turn_v29 {
        rankdir=TB;
        node [shape=box, style=filled, fillcolor=lightblue];
        
        user_msg [label="User Message", fillcolor=lightgreen];
        api [label="POST /v1/chat/stream"];
-       context [label="Build Request\nContext"];
+       router [label="Contextual Router\n~10ms", fillcolor=orange];
+       response_cache [label="Response Cache\nCheck", fillcolor=lightyellow];
+       parallel [label="Parallel Context\n~80ms", fillcolor=orange];
        specialists [label="Execute\nSpecialists"];
-       rag_query [label="RAG Query\n(Persona, FAQ,\nMemory, Turns)"];
        prompt [label="Build Final\nPrompt"];
        llm [label="Stream LLM\nResponse"];
        store_turn [label="Store Turn\nin Chroma"];
+       cache_response [label="Cache Response", fillcolor=lightyellow];
        user_response [label="User Sees\nResponse", fillcolor=lightgreen];
        
        user_msg -> api;
-       api -> context;
-       context -> specialists;
-       specialists -> rag_query;
-       rag_query -> prompt;
+       api -> router;
+       router -> response_cache;
+       response_cache -> user_response [label="HIT (~40%)", style=dashed, color=green];
+       response_cache -> parallel [label="MISS"];
+       parallel -> specialists;
+       specialists -> prompt;
        prompt -> llm;
        llm -> store_turn;
+       llm -> cache_response;
        llm -> user_response;
-       store_turn -> rag_query [label="Available for\nNext Query", style=dashed];
+       store_turn -> parallel [label="Available for\nNext Query", style=dashed];
    }
 
 Deployment Architecture
