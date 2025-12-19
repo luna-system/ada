@@ -9,6 +9,143 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [2.9.0] - 2025-12-19
+
+### ⚡ Performance - Phase 2C: Parallel Optimizations
+- **2.5x speedup in prompt building** - Parallel RAG retrieval and specialist execution
+  - 3.96x speedup in RAG context retrieval (200ms → 50ms)
+  - 2.98x speedup in specialist execution (150ms → 50ms)
+  - Real-world benchmark: 200ms → 80ms (saves 120ms per request)
+- **ThreadPoolExecutor** for concurrent RAG operations (persona, memories, FAQs, turns)
+- **Smart specialist prioritization** - HIGH/CRITICAL run parallel, MEDIUM/LOW sequential
+
+### 🧪 Testing
+- 17 new tests for parallel operations (100% passing)
+- Performance benchmarks with ThreadPoolExecutor mocking
+- Real-world latency simulations (20ms-80ms range)
+
+### 📚 Documentation
+- Updated architecture diagrams with parallel flow
+- Performance comparison charts (before/after)
+- Complete release notes in `RELEASE_v2.9.0.md`
+
+---
+
+## [2.8.0] - 2025-12-19
+
+### 🚀 Performance - Response Caching Layer (Phase 2B)
+- **Cache frequently asked questions** - Instant responses for repeated queries
+- **LRU eviction** with configurable max size (default: 100 entries)
+- **TTL-based expiration** - Configurable cache lifetime
+- **Cache statistics** - Hit rate tracking and logging
+- Expected ~40% hit rate on repetitive workflows
+
+### 🧪 Testing
+- 8 new cache layer tests (eviction, TTL, hit rate)
+- Integration with contextual router tests
+- Cache statistics validation
+
+### 📚 Documentation
+- Cache architecture documentation
+- Performance tuning guide
+- Complete release notes in `RELEASE_v2.8.0.md`
+
+---
+
+## [2.7.0] - 2025-12-19
+
+### 🎯 Features - Contextual Router & Ada Log Intelligence
+- **Contextual router** - 22 patterns across 5 categories for intelligent routing
+  - Trivial questions (greetings, thanks)
+  - Fact recall (recent memories)
+  - Analytical queries (requires reasoning)
+  - Creative requests (needs inspiration)
+  - Code-related (development tasks)
+- **Dynamic specialist activation** - Router determines which specialists are needed
+- **Ada Log Intelligence** - Biomimetic log analysis specialist
+  - Minecraft crash report parser (kid-friendly explanations!)
+  - Pattern matching for common errors (OptiFine conflicts, OutOfMemory)
+  - Foundation for 100:1 log compression using signal weights
+  - Standalone `ada-logs` Python package
+
+### ⚡ Performance
+- Contextual router reduces unnecessary specialist overhead
+- 22 tests, 0.08s runtime, 100% passing
+- Smart RAG context selection based on query type
+
+### 🧪 Testing
+- 22 router tests (pattern matching, specialist selection)
+- Minecraft crash parser tests
+- Integration tests with log specialist
+
+### 📦 New Package
+- **ada-logs** - Standalone log analysis library
+  - Pure Python (3.11+), CC0 license
+  - CLI tool: `ada-logs analyze crash.log --for-kids`
+  - Extensible parser system (JSON, syslog, custom formats)
+
+### 📚 Documentation
+- Router pattern documentation
+- Minecraft crash analysis examples
+- Complete release notes in `RELEASE_v2.7.0.md`
+
+---
+
+## [2.6.0] - 2025-12-19
+
+### 🚀 Major Feature - Code Completion MVP
+- **Native code completion in Neovim** - Copilot-style autocomplete with Ada!
+  - Press `<C-x><C-a>` in insert mode for completions
+  - 2.6s mean latency, 77% quality score
+  - 100% success rate across 24 diverse code scenarios
+  - Works with Python, JavaScript, Lua, Rust, and more
+- **10.6x speedup** - Optimized for code models with FIM format (27.7s → 2.6s)
+- **Model optimization** - qwen2.5-coder:7b specialized code model (4.7GB)
+- **MCP integration** - New `complete_code` tool bypasses RAG overhead
+
+### ✨ Features
+- **ada.nvim completion module** - `lua/ada/completion.lua`
+- **Context-aware completion** - Sees code before AND after cursor
+- **Language-aware** - Auto-detects from filetype
+- **Privacy-first** - Runs entirely on your machine
+
+### 📊 Benchmarks
+- Complete latency analysis (mean, median, best, worst)
+- Quality scoring across 24 real-world test cases
+- Model comparison (DeepSeek-R1 vs Qwen2.5-Coder)
+- FIM format validation
+
+### 🧪 Testing
+- `benchmarks/benchmark_completion.py` - Reproducible test suite
+- 24 diverse code scenarios (functions, loops, error handling, etc.)
+- Quality scoring system with detailed metrics
+
+### 📚 Documentation
+- `ada.nvim/COMPLETION_QUICKSTART.md` - 5-minute setup guide
+- `benchmarks/BENCHMARK_RESULTS_QWEN_FIM.md` - Complete analysis
+- 13 real-world completion examples
+- Updated `DOCUMENTATION_INDEX.md`
+
+---
+
+## [2.5.0] - 2025-12-18
+
+### 🔧 Internal Improvements
+- Refactoring and optimization prep for Phase 2
+- Code quality improvements
+- Testing infrastructure enhancements
+
+---
+
+## [2.4.0] - 2025-12-18
+
+### 🔧 Internal Improvements
+- Architecture refinements
+- Performance monitoring baseline
+- Preparation for contextual routing
+
+---
+
 ## [2.3.0] - 2025-12-18
 
 ### 🔬 Research & Validation

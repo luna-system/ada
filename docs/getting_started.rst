@@ -416,13 +416,21 @@ Verify all dependencies are installed:
 Next Steps
 ==========
 
+**Quick Wins:**
+
+- :doc:`code_completion` - **NEW!** Copilot-style autocomplete in Neovim (v2.6+)
+- :doc:`ada_logs` - **NEW!** Minecraft crash analysis + DevOps log intelligence (v2.7+)
 - :doc:`api_reference` - Complete endpoint documentation
+- :doc:`examples` - Code examples in multiple languages
+
+**Core Features:**
+
 - :doc:`streaming` - Real-time SSE streaming implementation
 - :doc:`memory` - Long-term memory management
 - :doc:`specialists` - Plugin system for extended capabilities
+
+**Configuration & Development:**
+
 - :doc:`configuration` - Full configuration reference
 - :doc:`testing` - Testing guide and best practices
-- :doc:`examples` - Code examples in multiple languages
-- See :doc:`streaming` for real-time response handling
-- See :doc:`memory` for memory management
-- See :doc:`examples` for code examples
+- :doc:`development` - Contributing guide
