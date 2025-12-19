@@ -3,6 +3,7 @@
 from typing import Any
 from mcp.types import Tool, TextContent
 from .ada_client import AdaClient, AdaBrainError, AdaBrainConnectionError
+from .tools.complete_code import complete_code
 
 
 # Tool definitions (exposed to MCP clients)
@@ -94,6 +95,36 @@ TOOLS = [
             "properties": {},
         },
     ),
+    Tool(
+        name="ada_complete_code",
+        description=(
+            "Complete code at cursor position. Takes code before and after cursor, "
+            "returns completion that fits in between. Optimized for inline completions "
+            "during typing. Uses terse prompting for fast, focused completions."
+        ),
+        inputSchema={
+            "type": "object",
+            "properties": {
+                "code_before": {
+                    "type": "string",
+                    "description": "Code before cursor position",
+                },
+                "code_after": {
+                    "type": "string",
+                    "description": "Code after cursor position (empty string if end of file)",
+                },
+                "language": {
+                    "type": "string",
+                    "description": "Programming language (default: python)",
+                },
+                "max_tokens": {
+                    "type": "integer",
+                    "description": "Maximum tokens to generate (default: 150)",
+                },
+            },
+            "required": ["code_before"],
+        },
+    ),
 ]
 
 
@@ -172,6 +203,28 @@ async def handle_tool_call(name: str, arguments: dict[str, Any], ada: AdaClient)
             return [TextContent(type="text", text=f"✗ Cannot connect to Ada Brain: {e}")]
         except AdaBrainError as e:
             return [TextContent(type="text", text=f"✗ Health check failed: {e}")]
+
+    elif name == "ada_complete_code":
+        code_before = arguments["code_before"]
+        code_after = arguments.get("code_after", "")
+        language = arguments.get("language", "python")
+        max_tokens = arguments.get("max_tokens", 150)
+
+        try:
+            result = await complete_code(
+                code_before=code_before,
+                code_after=code_after,
+                language=language,
+                max_tokens=max_tokens,
+            )
+            
+            if result.success:
+                return [TextContent(type="text", text=result.content)]
+            else:
+                return [TextContent(type="text", text=f"Completion failed: {result.error}")]
+                
+        except Exception as e:
+            return [TextContent(type="text", text=f"Error generating completion: {e}")]
 
     else:
         return [TextContent(type="text", text=f"Unknown tool: {name}")]

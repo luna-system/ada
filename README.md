@@ -13,6 +13,7 @@ Named after Ada Lovelace, the first programmer.
 
 ## 📖 Documentation
 
+**[→ DOCUMENTATION INDEX](DOCUMENTATION_INDEX.md)** - Complete navigation guide  
 **[→ Read the full docs online](https://luna-system.github.io/ada/)**  
 *Or browse the [visual introduction](https://luna-system.github.io/ada/_static/garden.html) 🌱*
 
@@ -23,6 +24,7 @@ Named after Ada Lovelace, the first programmer.
 - [Build a Specialist](https://luna-system.github.io/ada/build_specialist.html) - Add custom capabilities
 - [API Reference](https://luna-system.github.io/ada/api_reference.html) - REST endpoints
 - [Changelog](https://luna-system.github.io/ada/changelog.html) - Version history
+- [Research](docs/research/) - Biomimetic memory system, contextual malleability
 
 ---
 
