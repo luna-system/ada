@@ -213,3 +213,21 @@ If this gets traction, prepare:
 ---
 
 *Remember: The goal is good discussion, not karma. If this generates thoughtful debate about AI reasoning capabilities, it's a success regardless of upvotes.*
+
+---
+
+## License
+
+**CC0 1.0 Universal (Public Domain Dedication)**
+
+This guide is released into the public domain. Use it however you want:
+- Post to HN using this text verbatim
+- Adapt for other platforms (Reddit, Twitter, etc.)
+- Modify for your own similar projects
+- No attribution required (though appreciated!)
+
+**Why CC0?**
+
+This is a practical guide, not research. Maximum utility means no barriers to use. If this helps others share their work effectively, that's the goal.
+
+The research documents (Part 1 & 2) use CC BY 4.0 for proper attribution. This guide is just a tool - use it freely.
