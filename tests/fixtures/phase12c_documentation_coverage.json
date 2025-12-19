@@ -1,19 +1,21 @@
 {
-  "total_modules": 38,
+  "total_modules": 42,
   "documented_modules": 22,
-  "coverage_percentage": 57.89473684210527,
-  "total_specialists": 6,
+  "coverage_percentage": 52.38095238095239,
+  "total_specialists": 8,
   "registered_specialists": 6,
-  "specialist_coverage": 100.0,
-  "files_with_annotations": 17,
-  "annotation_coverage": 44.73684210526316,
-  "consistency_score": 73.91304347826086,
+  "specialist_coverage": 75.0,
+  "files_with_annotations": 19,
+  "annotation_coverage": 45.23809523809524,
+  "consistency_score": 68.0,
   "mismatches": [
     "Annotated but not in map: brain/_legacy_prompt_builder.py",
     "Annotated but not in map: brain/attention_spotlight.py",
     "Annotated but not in map: brain/context_habituation.py",
     "Annotated but not in map: brain/memory_decay.py",
     "Annotated but not in map: brain/semantic_chunking.py",
+    "Annotated but not in map: brain/timestamp_utils.py",
+    "Annotated but not in map: brain/specialists/codebase_specialist.py",
     "In registry but not in map: brain/specialists/now_playing_specialist.py"
   ],
   "undocumented_modules": [
@@ -29,18 +31,26 @@
     "brain/dynamic_injection.py",
     "brain/prediction_error.py",
     "brain/processing_modes.py",
+    "brain/timestamp_utils.py",
     "brain/specialists/__init__.py",
     "brain/specialists/pause_resume.py",
     "brain/specialists/now_playing_specialist.py",
-    "brain/specialists/specialist_docs.py"
+    "brain/specialists/specialist_docs.py",
+    "brain/specialists/codebase_specialist.py",
+    "brain/specialists/tool_activation.py",
+    "brain/specialists/terminal_specialist.py"
   ],
-  "missing_registry_entries": [],
+  "missing_registry_entries": [
+    "brain/specialists/codebase_specialist.py",
+    "brain/specialists/terminal_specialist.py"
+  ],
   "completeness_grade": "D",
   "areas_for_improvement": [
     "Increase overall module coverage",
+    "Complete specialist registry",
     "Add more source annotations",
     "Fix documentation inconsistencies",
     "Document critical modules: ['brain/specialists/__init__.py', 'brain/specialists/pause_resume.py', 'brain/specialists/now_playing_specialist.py']"
   ],
-  "timestamp": "2025-12-18T11:14:04.687804"
+  "timestamp": "2025-12-18T21:23:34.179302"
 }
