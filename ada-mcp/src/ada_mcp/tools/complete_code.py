@@ -58,17 +58,36 @@ async def complete_code(
     )
     
     try:
-        client = get_ada_client()
+        # For code completion, bypass Ada brain and hit Ollama directly
+        # This avoids RAG overhead and special token encoding issues with FIM syntax
+        import httpx
         
-        # Use brain's chat endpoint (simple version without extra params for now)
-        # Note: max_tokens, temperature, etc. will be added to Ada brain API later
-        response = await client.chat(
-            message=prompt,
-            conversation_id=f"completion_{language}",  # Light context per language
-        )
+        ollama_url = "http://localhost:11434/api/generate"
+        
+        async with httpx.AsyncClient(timeout=30.0) as http_client:
+            # Stream from Ollama using FIM format
+            response = await http_client.post(
+                ollama_url,
+                json={
+                    "model": "qwen2.5-coder:7b",
+                    "prompt": prompt,
+                    "stream": False,  # Non-streaming for simplicity
+                    "options": {
+                        "temperature": 0.2,  # Low temperature for focused completions
+                        "top_p": 0.95,
+                        "num_predict": max_tokens,
+                    }
+                }
+            )
+            
+            if response.status_code != 200:
+                raise Exception(f"Ollama returned {response.status_code}: {response.text}")
+            
+            result = response.json()
+            completion_text = result.get("response", "")
         
         # Extract just the code from response
-        completion = _extract_code(response, language)
+        completion = _extract_code(completion_text, language)
         
         return ToolResult(
             success=True,
@@ -95,47 +114,22 @@ def _build_completion_prompt(
     language: str,
     **kwargs: Any
 ) -> str:
-    """Build specialized prompt for code completion.
+    """Build specialized prompt for code completion using FIM (Fill-In-Middle) format.
     
-    This prompt is designed to be terse and focused on generating
-    only the completion, not explanations or alternatives.
+    Uses the qwen2.5-coder FIM syntax for precise, explanation-free completions:
+    <|fim_prefix|>code_before<|fim_suffix|>code_after<|fim_middle|>
+    
+    This format is specifically designed for code completion models and prevents
+    verbose explanations that slow down completion.
     """
-    filename = kwargs.get('filename', f'file.{language}')
-    
-    prompt_parts = [
-        "Complete the following code. Respond ONLY with the completion, no explanation.",
-        "",
-        f"Language: {language}",
-        f"File: {filename}",
-        "",
-        "Code:",
-        "```" + language,
-        code_before.rstrip(),
-        "[COMPLETE HERE]",
-    ]
-    
+    # Use FIM (Fill-In-Middle) format for qwen2.5-coder
+    # This is what the model was trained on and produces MUCH faster, terser completions
     if code_after:
-        prompt_parts.extend([
-            code_after.lstrip(),
-            "```",
-            "",
-            "Complete the [COMPLETE HERE] section to connect the code before and after.",
-        ])
+        # Fill-in-middle case
+        return f"<|fim_prefix|>{code_before}<|fim_suffix|>{code_after}<|fim_middle|>"
     else:
-        prompt_parts.extend([
-            "```",
-            "",
-            "Complete the code after [COMPLETE HERE].",
-        ])
-    
-    # Add context hints if available
-    if project_type := kwargs.get('project_type'):
-        prompt_parts.append(f"Project type: {project_type}")
-    
-    if function_context := kwargs.get('function_context'):
-        prompt_parts.append(f"Current function: {function_context}")
-    
-    return "\n".join(prompt_parts)
+        # Continue from cursor (no suffix)
+        return f"<|fim_prefix|>{code_before}<|fim_suffix|><|fim_middle|>"
 
 
 def _extract_code(response: str, language: str) -> str:
