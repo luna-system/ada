@@ -315,6 +315,202 @@ def logs(service: Optional[str], follow: bool):
 
 
 @cli.command()
+@click.option("--error", "-e", help="Paste error message directly")
+@click.option("--file", "-f", type=click.Path(exists=True), help="Read error from file")
+@click.option("--last", is_flag=True, help="Analyze last command output")
+def rescue(error: Optional[str], file: Optional[str], last: bool):
+    """🚑 Code ambulance - Emergency debugging help (on-device!)
+    
+    Drop in when your code is broken. Ada will diagnose and suggest fixes.
+    Works on ANY codebase - no prior knowledge needed.
+    
+    Examples:
+      ada rescue                           # Interactive mode
+      ada rescue -e "KeyError: 'lines'"    # Quick diagnosis
+      ada rescue -f error.log              # Analyze error file
+      ada rescue --last                    # Check last command
+    """
+    click.echo(f"\n{BOLD}🚑 Ada Code Ambulance{RESET}\n")
+    click.echo("On-device emergency code help\n")
+    
+    # Get error message from various sources
+    error_text = None
+    context_info = ""
+    
+    if error:
+        error_text = error
+        context_info = "Direct input"
+    elif file:
+        error_text = Path(file).read_text()
+        context_info = f"From {file}"
+    elif last:
+        # Try to get last command output from shell history
+        try:
+            result = subprocess.run(
+                ["bash", "-c", "fc -ln -1"],
+                capture_output=True,
+                text=True
+            )
+            if result.returncode == 0:
+                error_text = result.stdout
+                context_info = "Last command"
+            else:
+                warning("Could not read last command")
+        except Exception:
+            warning("Could not read shell history")
+    
+    if not error_text:
+        # Interactive mode
+        click.echo("What happened? Paste your error message:")
+        click.echo("(Press Ctrl+D when done, or Ctrl+C to cancel)\n")
+        
+        try:
+            lines = []
+            while True:
+                try:
+                    line = input()
+                    lines.append(line)
+                except EOFError:
+                    break
+            error_text = "\n".join(lines)
+            context_info = "Interactive input"
+        except KeyboardInterrupt:
+            click.echo("\n\nCancelled.")
+            return
+    
+    if not error_text or not error_text.strip():
+        error("No error message provided")
+        return
+    
+    info(f"Analyzing error ({context_info})...")
+    click.echo()
+    
+    # Quick pattern-based diagnosis
+    error_lower = error_text.lower()
+    
+    diagnoses = []
+    
+    # Pattern matching for common issues
+    if "keyerror" in error_lower:
+        diagnoses.append({
+            "pattern": "Dictionary KeyError",
+            "confidence": 0.9,
+            "fix": "Key doesn't exist in dictionary. Use .get() or check with 'if key in dict'",
+            "example": "result.metadata.get('key', 'default')"
+        })
+    
+    if "modulenotfounderror" in error_lower or "no module named" in error_lower:
+        diagnoses.append({
+            "pattern": "Import/Module Error",
+            "confidence": 0.85,
+            "fix": "Module not found. Check: 1) Module installed? 2) PYTHONPATH set? 3) Import path correct?",
+            "example": "pip install <module> or check sys.path"
+        })
+    
+    if ("typeerror" in error_lower and "nonetype" in error_lower) or "attributeerror" in error_lower:
+        diagnoses.append({
+            "pattern": "Unexpected None Value",
+            "confidence": 0.8,
+            "fix": "Variable is None. Add None check before using",
+            "example": "if obj is not None: obj.method()"
+        })
+    
+    if "indentationerror" in error_lower:
+        diagnoses.append({
+            "pattern": "Python Indentation",
+            "confidence": 0.95,
+            "fix": "Inconsistent indentation. Use 4 spaces per level",
+            "example": "Run: autopep8 --in-place --select=E1 <file>"
+        })
+    
+    if "await" in error_lower and ("was never awaited" in error_lower or "coroutine" in error_lower):
+        diagnoses.append({
+            "pattern": "Missing await",
+            "confidence": 0.9,
+            "fix": "Async function not awaited. Add 'await' keyword",
+            "example": "result = await async_function()"
+        })
+    
+    if diagnoses:
+        click.echo(f"{GREEN}💡 Diagnosis:{RESET}\n")
+        
+        for i, diag in enumerate(diagnoses, 1):
+            click.echo(f"{BOLD}{i}. {diag['pattern']}{RESET}")
+            click.echo(f"   Confidence: {int(diag['confidence']*100)}%")
+            click.echo(f"   {BLUE}Fix:{RESET} {diag['fix']}")
+            if 'example' in diag:
+                click.echo(f"   {YELLOW}Example:{RESET} {diag['example']}")
+            click.echo()
+        
+        click.echo(f"{GREEN}✓ Analysis complete{RESET}")
+        click.echo(f"\n{BLUE}💭 Pro tip:{RESET} These patterns work on ANY codebase, on-device!")
+        click.echo("   No internet needed. Just local pattern matching.\n")
+    else:
+        click.echo(f"{YELLOW}⚠️  No matching patterns found{RESET}")
+        click.echo("\nError message (first 500 chars):")
+        click.echo(error_text[:500])
+        click.echo("\n💡 Tips for debugging:")
+        click.echo("   1. Read the error carefully - it tells you what went wrong")
+        click.echo("   2. Check the file and line number mentioned")
+        click.echo("   3. Search for the error type online")
+        click.echo("   4. Ask Ada in chat mode: ada chat 'explain this error'")
+        click.echo()
+
+
+@cli.command()
+@click.option("--focus", type=click.Choice(["general", "architecture", "features", "testing", "docs"]),
+              default="general", help="What to focus on")
+def introspect(focus: str):
+    """🔮 Ada reads herself and suggests next steps
+    
+    Self-awareness mode - Ada analyzes her own state and recommends priorities.
+    Great for: "What should I work on next?" or understanding the codebase.
+    
+    Examples:
+      ada introspect                    # General overview
+      ada introspect --focus architecture  # Architecture review
+      ada introspect --focus testing    # Test coverage analysis
+    """
+    click.echo(f"\n{BOLD}🔮 Ada Introspection{RESET}\n")
+    
+    # Check if we're in Ada's workspace
+    if not Path(".ai").exists():
+        warning("Not in Ada's workspace (.ai/ directory not found)")
+        click.echo("\nThis command works best in Ada's codebase.")
+        click.echo("But the principle works anywhere: structure your docs as .ai/ and Ada can read them!")
+        return
+    
+    info(f"Focus: {focus}")
+    info("Reading .ai/ documentation...")
+    click.echo()
+    
+    # Import the introspection tool
+    try:
+        sys.path.insert(0, str(Path(__file__).parent / "ada-mcp" / "src"))
+        from ada_mcp.tools.introspection import ada_introspect
+        import asyncio
+        
+        result = asyncio.run(ada_introspect(
+            focus=focus,
+            workspace_root=str(Path.cwd())
+        ))
+        
+        if result.success:
+            click.echo(result.content)
+            click.echo(f"\n{GREEN}✓ Introspection complete{RESET}")
+            click.echo(f"\n{BLUE}💭 Pro tip:{RESET} Ada just read her own docs and analyzed herself.")
+            click.echo("   This is pure Python file reading - works on any structured docs!")
+        else:
+            error(f"Introspection failed: {result.content}")
+    
+    except ImportError as e:
+        error(f"Could not load introspection tool: {e}")
+        info("Make sure ada-mcp is installed: pip install -e ada-mcp/")
+    except Exception as e:
+        error(f"Introspection error: {e}")
+
+
+@cli.command()
 def setup():
     """Initial setup wizard."""
     click.echo(f"\n{BOLD}Ada Setup Wizard{RESET}\n")
