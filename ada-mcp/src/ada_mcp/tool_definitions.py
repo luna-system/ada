@@ -6,6 +6,7 @@ from .ada_client import AdaClient, AdaBrainError, AdaBrainConnectionError
 from .tools.complete_code import complete_code
 from .tools.validate_architecture import validate_architecture
 from .tools.file_operations import ada_read_file, ada_write_file, ada_run_command
+from .tools.introspection import ada_introspect
 
 
 # Tool definitions (exposed to MCP clients)
@@ -238,6 +239,29 @@ TOOLS = [
             "required": ["command"],
         },
     ),
+    Tool(
+        name="ada_introspect",
+        description=(
+            "Introspect Ada's current state and suggest next steps. "
+            "Ada reads her own documentation (.ai/ directory) to understand capabilities, "
+            "identify gaps, and recommend priorities. This enables Ada to direct her own development."
+        ),
+        inputSchema={
+            "type": "object",
+            "properties": {
+                "focus": {
+                    "type": "string",
+                    "description": "What to focus on: 'general', 'architecture', 'features', 'testing', or 'documentation'",
+                    "enum": ["general", "architecture", "features", "testing", "documentation"],
+                },
+                "workspace_root": {
+                    "type": "string",
+                    "description": "Optional: Path to Ada's codebase (defaults to current directory)",
+                },
+            },
+            "required": [],
+        },
+    ),
 ]
 
 
@@ -449,6 +473,24 @@ async def handle_tool_call(name: str, arguments: dict[str, Any], ada: AdaClient)
                 
         except Exception as e:
             return [TextContent(type="text", text=f"Error running command: {e}")]
+
+    elif name == "ada_introspect":
+        focus = arguments.get("focus", "general")
+        workspace_root = arguments.get("workspace_root")
+
+        try:
+            result = await ada_introspect(
+                focus=focus,
+                workspace_root=workspace_root,
+            )
+            
+            if result.success:
+                return [TextContent(type="text", text=result.content)]
+            else:
+                return [TextContent(type="text", text=f"❌ Introspection failed: {result.content}")]
+                
+        except Exception as e:
+            return [TextContent(type="text", text=f"Error during introspection: {e}")]
 
     else:
         return [TextContent(type="text", text=f"Unknown tool: {name}")]
