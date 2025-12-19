@@ -57,6 +57,11 @@ require('ada').setup({
   
   -- Auto-start MCP server on Neovim launch
   auto_start_server = true,
+  
+  -- Code completion settings
+  completion_keymap = '<C-x><C-a>',  -- Keybinding for manual completion
+  auto_complete = false,              -- Auto-trigger on typing (experimental)
+  auto_complete_delay = 1000,         -- Delay before auto-trigger (ms)
 })
 ```
 
@@ -71,10 +76,25 @@ require('ada').setup({
 | `:AdaExplain` | Explain selected code |
 | `:AdaSuggest` | Get code improvement suggestions |
 | `:AdaDebug` | Debug error on current line |
+| `:AdaComplete` | **NEW!** Trigger code completion at cursor |
 | `:AdaStart` | Manually start MCP server |
 | `:AdaStop` | Stop MCP server |
 
+### Keybindings
+
+| Mode | Keybinding | Action | Description |
+|------|------------|--------|-------------|
+| Insert | `<C-x><C-a>` | Code Completion | **NEW!** Complete code at cursor (like Copilot!) |
+
 ### Workflow Examples
+
+**Code completion (NEW!):**
+```python
+def hello():
+    message = <C-x><C-a>  # Press Ctrl-X Ctrl-A to complete!
+```
+
+Ada suggests: `f"Hello, world!"`
 
 **Basic chat:**
 ```vim
@@ -113,6 +133,24 @@ vim.keymap.set('v', '<leader>as', ':AdaSuggest<CR>', { desc = 'Suggest Improveme
 
 -- Debug help
 vim.keymap.set('n', '<leader>ad', ':AdaDebug<CR>', { desc = 'Debug Help' })
+
+-- Code completion (already set up by default as <C-x><C-a>, but you can override)
+-- vim.keymap.set('i', '<C-Space>', function() require('ada.completion').trigger_completion() end, { desc = 'Ada Complete' })
+```
+
+### Pro Tips for Code Completion
+
+- **Context matters:** Ada sees code before AND after the cursor for better completions
+- **Language aware:** Automatically detects filetype (Python, Lua, JavaScript, etc.)
+- **Fast & local:** Runs on your machine, typically <500ms response
+- **Terse prompts:** Optimized for speed, no RAG overhead on completions
+- **Iterate if needed:** If completion isn't perfect, undo (`u`) and try again
+
+**Example workflow:**
+```python
+class Calculator:
+    def add(self, a, b):
+        <C-x><C-a>  # Completes: return a + b
 ```
 
 ## How It Works

@@ -1,0 +1,111 @@
+Code completion failed: Brain returned 500: Internal Server Error
+Code completion failed: Brain returned 500: Internal Server Error
+Code completion failed: Brain returned 500: Internal Server Error
+Code completion failed: Brain returned 500: Internal Server Error
+Code completion failed: Brain returned 500: Internal Server Error
+Code completion failed: Brain returned 500: Internal Server Error
+Code completion failed: Brain returned 500: Internal Server Error
+Code completion failed: Brain returned 500: Internal Server Error
+Code completion failed: Brain returned 500: Internal Server Error
+Code completion failed: Brain returned 500: Internal Server Error
+Code completion failed: Brain returned 500: Internal Server Error
+Code completion failed: Brain returned 500: Internal Server Error
+Code completion failed: Brain returned 500: Internal Server Error
+Code completion failed: Brain returned 500: Internal Server Error
+Code completion failed: Brain returned 500: Internal Server Error
+Code completion failed: Brain returned 500: Internal Server Error
+Code completion failed: Brain returned 500: Internal Server Error
+Code completion failed: Brain returned 500: Internal Server Error
+Code completion failed: Brain returned 500: Internal Server Error
+Code completion failed: Brain returned 500: Internal Server Error
+Code completion failed: Brain returned 500: Internal Server Error
+Code completion failed: Brain returned 500: Internal Server Error
+Code completion failed: Brain returned 500: Internal Server Error
+Code completion failed: Brain returned 500: Internal Server Error
+Code completion failed: Brain returned 500: Internal Server Error
+Code completion failed: Brain returned 500: Internal Server Error
+
+🔥 Ada Code Completion Benchmark Suite
+======================================================================
+Scenarios: 8
+Warmup runs: 2
+Test runs per scenario: 3
+
+🔥 Warming up (loading model, caching)...
+   Warmup 1/2: 0.34s
+   Warmup 2/2: 0.11s
+
+📊 Testing: Simple Function (simple)
+   Run 1: ❌ 100ms | Quality: 0.0% | Tokens: 0
+   Run 2: ❌ 112ms | Quality: 0.0% | Tokens: 0
+   Run 3: ❌ 101ms | Quality: 0.0% | Tokens: 0
+
+📊 Testing: Class Method (simple)
+   Run 1: ❌ 114ms | Quality: 0.0% | Tokens: 0
+   Run 2: ❌ 117ms | Quality: 0.0% | Tokens: 0
+   Run 3: ❌ 108ms | Quality: 0.0% | Tokens: 0
+
+📊 Testing: Loop Logic (medium)
+   Run 1: ❌ 136ms | Quality: 0.0% | Tokens: 0
+   Run 2: ❌ 137ms | Quality: 0.0% | Tokens: 0
+   Run 3: ❌ 283ms | Quality: 0.0% | Tokens: 0
+
+📊 Testing: Error Handling (medium)
+   Run 1: ❌ 120ms | Quality: 0.0% | Tokens: 0
+   Run 2: ❌ 113ms | Quality: 0.0% | Tokens: 0
+   Run 3: ❌ 109ms | Quality: 0.0% | Tokens: 0
+
+📊 Testing: List Comprehension (complex)
+   Run 1: ❌ 125ms | Quality: 0.0% | Tokens: 0
+   Run 2: ❌ 144ms | Quality: 0.0% | Tokens: 0
+   Run 3: ❌ 123ms | Quality: 0.0% | Tokens: 0
+
+📊 Testing: Dictionary Creation (complex)
+   Run 1: ❌ 145ms | Quality: 0.0% | Tokens: 0
+   Run 2: ❌ 133ms | Quality: 0.0% | Tokens: 0
+   Run 3: ❌ 147ms | Quality: 0.0% | Tokens: 0
+
+📊 Testing: Recursive Function (complex)
+   Run 1: ❌ 109ms | Quality: 0.0% | Tokens: 0
+   Run 2: ❌ 106ms | Quality: 0.0% | Tokens: 0
+   Run 3: ❌ 106ms | Quality: 0.0% | Tokens: 0
+
+📊 Testing: Import Statement (simple)
+   Run 1: ❌ 93ms | Quality: 0.0% | Tokens: 0
+   Run 2: ❌ 104ms | Quality: 0.0% | Tokens: 0
+   Run 3: ❌ 103ms | Quality: 0.0% | Tokens: 0
+
+======================================================================
+📈 OVERALL RESULTS
+======================================================================
+Success Rate: 0/24 (0.0%)
+
+❌ FAILURES:
+   Simple Function: Completion error: Brain returned 500: Internal Server Error
+   Simple Function: Completion error: Brain returned 500: Internal Server Error
+   Simple Function: Completion error: Brain returned 500: Internal Server Error
+   Class Method: Completion error: Brain returned 500: Internal Server Error
+   Class Method: Completion error: Brain returned 500: Internal Server Error
+   Class Method: Completion error: Brain returned 500: Internal Server Error
+   Loop Logic: Completion error: Brain returned 500: Internal Server Error
+   Loop Logic: Completion error: Brain returned 500: Internal Server Error
+   Loop Logic: Completion error: Brain returned 500: Internal Server Error
+   Error Handling: Completion error: Brain returned 500: Internal Server Error
+   Error Handling: Completion error: Brain returned 500: Internal Server Error
+   Error Handling: Completion error: Brain returned 500: Internal Server Error
+   List Comprehension: Completion error: Brain returned 500: Internal Server Error
+   List Comprehension: Completion error: Brain returned 500: Internal Server Error
+   List Comprehension: Completion error: Brain returned 500: Internal Server Error
+   Dictionary Creation: Completion error: Brain returned 500: Internal Server Error
+   Dictionary Creation: Completion error: Brain returned 500: Internal Server Error
+   Dictionary Creation: Completion error: Brain returned 500: Internal Server Error
+   Recursive Function: Completion error: Brain returned 500: Internal Server Error
+   Recursive Function: Completion error: Brain returned 500: Internal Server Error
+   Recursive Function: Completion error: Brain returned 500: Internal Server Error
+   Import Statement: Completion error: Brain returned 500: Internal Server Error
+   Import Statement: Completion error: Brain returned 500: Internal Server Error
+   Import Statement: Completion error: Brain returned 500: Internal Server Error
+
+======================================================================
+🎉 Benchmark complete!
+❌ All tests failed
