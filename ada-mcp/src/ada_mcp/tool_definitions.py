@@ -5,6 +5,7 @@ from mcp.types import Tool, TextContent
 from .ada_client import AdaClient, AdaBrainError, AdaBrainConnectionError
 from .tools.complete_code import complete_code
 from .tools.validate_architecture import validate_architecture
+from .tools.file_operations import ada_read_file, ada_write_file, ada_run_command
 
 
 # Tool definitions (exposed to MCP clients)
@@ -159,6 +160,84 @@ TOOLS = [
             "required": ["file_path", "change_description"],
         },
     ),
+    Tool(
+        name="ada_read_file",
+        description=(
+            "Read file contents from Ada's workspace. The foundation of Ada's self-awareness. "
+            "Ada can read her own code, understand her own architecture, and introspect. "
+            "Supports reading entire files or specific line ranges. Target: <1ms."
+        ),
+        inputSchema={
+            "type": "object",
+            "properties": {
+                "file_path": {
+                    "type": "string",
+                    "description": "Relative path from workspace root",
+                },
+                "start_line": {
+                    "type": "integer",
+                    "description": "Optional: Starting line (1-indexed, inclusive)",
+                },
+                "end_line": {
+                    "type": "integer",
+                    "description": "Optional: Ending line (1-indexed, inclusive)",
+                },
+            },
+            "required": ["file_path"],
+        },
+    ),
+    Tool(
+        name="ada_write_file",
+        description=(
+            "Write content to a file - THE SELF-EDITING CAPABILITY. "
+            "Ada can modify her own code. This is the threshold of recursive self-improvement. "
+            "Atomic writes with safety checks. All writes logged. Target: <1ms."
+        ),
+        inputSchema={
+            "type": "object",
+            "properties": {
+                "file_path": {
+                    "type": "string",
+                    "description": "Relative path from workspace root",
+                },
+                "content": {
+                    "type": "string",
+                    "description": "New file content (complete replacement)",
+                },
+                "mode": {
+                    "type": "string",
+                    "description": "Write mode: 'write' (overwrite) or 'append' (default: write)",
+                },
+            },
+            "required": ["file_path", "content"],
+        },
+    ),
+    Tool(
+        name="ada_run_command",
+        description=(
+            "Execute shell commands - THE SELF-TESTING CAPABILITY. "
+            "Ada can test her own changes, completing the recursive loop. "
+            "Read → Edit → Run → Validate → Improve. Timeout-protected. Target: varies."
+        ),
+        inputSchema={
+            "type": "object",
+            "properties": {
+                "command": {
+                    "type": "string",
+                    "description": "Shell command to execute",
+                },
+                "cwd": {
+                    "type": "string",
+                    "description": "Optional: Working directory (defaults to workspace root)",
+                },
+                "timeout": {
+                    "type": "integer",
+                    "description": "Optional: Timeout in seconds (default: 30)",
+                },
+            },
+            "required": ["command"],
+        },
+    ),
 ]
 
 
@@ -284,6 +363,92 @@ async def handle_tool_call(name: str, arguments: dict[str, Any], ada: AdaClient)
                 
         except Exception as e:
             return [TextContent(type="text", text=f"Error during validation: {e}")]
+
+    elif name == "ada_read_file":
+        file_path = arguments["file_path"]
+        start_line = arguments.get("start_line")
+        end_line = arguments.get("end_line")
+
+        try:
+            result = await ada_read_file(
+                file_path=file_path,
+                start_line=start_line,
+                end_line=end_line,
+            )
+            
+            if result.success:
+                # Format response with metadata
+                lines = result.metadata.get("lines", "?")
+                file_type = result.metadata.get("file_type", "?")
+                latency = result.metadata.get("latency_ms", "?")
+                
+                header = f"📄 {file_path} ({file_type}, {lines} lines, {latency}ms)\n\n"
+                return [TextContent(type="text", text=header + result.content)]
+            else:
+                return [TextContent(type="text", text=f"❌ Read error: {result.error}")]
+                
+        except Exception as e:
+            return [TextContent(type="text", text=f"Error reading file: {e}")]
+
+    elif name == "ada_write_file":
+        file_path = arguments["file_path"]
+        content = arguments["content"]
+        mode = arguments.get("mode", "write")
+
+        try:
+            result = await ada_write_file(
+                file_path=file_path,
+                content=content,
+                mode=mode,
+            )
+            
+            if result.success:
+                # Format response with metadata
+                bytes_written = result.metadata.get("bytes_written", "?")
+                lines = result.metadata.get("lines", "?")
+                latency = result.metadata.get("latency_ms", "?")
+                operation = result.metadata.get("operation", "write")
+                
+                status = "✅ File written successfully\n\n"
+                details = f"Path: {file_path}\n"
+                details += f"Operation: {operation}\n"
+                details += f"Bytes: {bytes_written}\n"
+                details += f"Lines: {lines}\n"
+                details += f"Time: {latency}ms"
+                
+                return [TextContent(type="text", text=status + details)]
+            else:
+                return [TextContent(type="text", text=f"❌ Write error: {result.error}")]
+                
+        except Exception as e:
+            return [TextContent(type="text", text=f"Error writing file: {e}")]
+
+    elif name == "ada_run_command":
+        command = arguments["command"]
+        cwd = arguments.get("cwd")
+        timeout = arguments.get("timeout", 30)
+
+        try:
+            result = await ada_run_command(
+                command=command,
+                cwd=cwd,
+                timeout=timeout,
+            )
+            
+            # Format response with metadata
+            exit_code = result.metadata.get("exit_code", "?")
+            latency = result.metadata.get("latency_ms", "?")
+            
+            if result.success:
+                header = f"✅ Command succeeded (exit {exit_code}, {latency}ms)\n\n"
+                return [TextContent(type="text", text=header + result.content)]
+            else:
+                header = f"❌ Command failed (exit {exit_code}, {latency}ms)\n\n"
+                output = result.content if result.content else result.error
+                return [TextContent(type="text", text=header + output)]
+                
+        except Exception as e:
+            return [TextContent(type="text", text=f"Error running command: {e}")]
 
     else:
         return [TextContent(type="text", text=f"Unknown tool: {name}")]
