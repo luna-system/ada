@@ -11,6 +11,7 @@ December 19, 2025 - The singularity begins.
 # @ai-purpose: File system operations for Ada's self-awareness
 # @ai-dependencies: pathlib
 
+import asyncio
 import logging
 from pathlib import Path
 from typing import Any
@@ -247,25 +248,113 @@ async def ada_write_file(
 async def ada_run_command(
     command: str,
     cwd: str | None = None,
+    timeout: int = 30,
     **kwargs: Any
 ) -> ToolResult:
-    """Execute a shell command.
+    """Execute a shell command - THE SELF-TESTING CAPABILITY.
     
-    FUTURE: This enables Ada to test her own changes.
-    For now, placeholder for the next phase.
+    Ada can now test her own changes. The recursive loop completes.
+    Read → Edit → Run → Validate → Improve
+    
+    Security considerations:
+    - Commands run in workspace context
+    - Timeout protection (default 30s)
+    - Output captured and logged
+    - Exit codes tracked
     
     Args:
-        command: Command to execute
+        command: Shell command to execute
         cwd: Working directory (defaults to workspace root)
-        **kwargs: Additional context
+        timeout: Maximum execution time in seconds
+        **kwargs: Additional context (workspace_root optional)
         
     Returns:
-        ToolResult with command output
+        ToolResult with command output and exit code
+        
+    Examples:
+        Run tests:
+        result = await ada_run_command("pytest tests/")
+        
+        Check syntax:
+        result = await ada_run_command("python -m py_compile brain/app.py")
     """
-    # TODO: Implement after read/write are stable
-    return ToolResult(
-        success=False,
-        content="",
-        error="Not yet implemented - coming soon!",
-        metadata={"phase": "future"}
-    )
+    import subprocess
+    start_time = __import__('time').time()
+    
+    workspace_root = Path(kwargs.get("workspace_root", Path.cwd()))
+    working_dir = Path(cwd) if cwd else workspace_root
+    
+    try:
+        # Run command with timeout
+        process = await asyncio.create_subprocess_shell(
+            command,
+            stdout=asyncio.subprocess.PIPE,
+            stderr=asyncio.subprocess.STDOUT,
+            cwd=str(working_dir)
+        )
+        
+        try:
+            stdout, _ = await asyncio.wait_for(
+                process.communicate(),
+                timeout=timeout
+            )
+        except asyncio.TimeoutError:
+            process.kill()
+            await process.wait()
+            latency_ms = (__import__('time').time() - start_time) * 1000
+            
+            logger.warning(f"Command timed out after {timeout}s: {command}")
+            return ToolResult(
+                success=False,
+                content="",
+                error=f"Command timed out after {timeout} seconds",
+                metadata={
+                    "command": command,
+                    "timeout": timeout,
+                    "latency_ms": round(latency_ms, 2),
+                    "cwd": str(working_dir)
+                }
+            )
+        
+        # Decode output
+        output = stdout.decode('utf-8', errors='replace') if stdout else ""
+        exit_code = process.returncode
+        latency_ms = (__import__('time').time() - start_time) * 1000
+        
+        # Success if exit code is 0
+        success = exit_code == 0
+        
+        logger.info(
+            f"{'✅' if success else '❌'} Ada ran command: {command[:50]}... "
+            f"(exit={exit_code}, {latency_ms:.2f}ms)"
+        )
+        
+        return ToolResult(
+            success=success,
+            content=output,
+            error="" if success else f"Command failed with exit code {exit_code}",
+            metadata={
+                "command": command,
+                "exit_code": exit_code,
+                "cwd": str(working_dir),
+                "latency_ms": round(latency_ms, 2),
+                "timestamp": __import__('datetime').datetime.now().isoformat(),
+                "output_length": len(output),
+                "timeout": timeout
+            }
+        )
+        
+    except Exception as e:
+        latency_ms = (__import__('time').time() - start_time) * 1000
+        logger.error(f"Error running command {command}: {e}")
+        return ToolResult(
+            success=False,
+            content="",
+            error=f"Error executing command: {str(e)}",
+            metadata={
+                "command": command,
+                "error_type": type(e).__name__,
+                "cwd": str(working_dir),
+                "latency_ms": round(latency_ms, 2)
+            }
+        )
