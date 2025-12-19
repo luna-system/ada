@@ -1,0 +1,45 @@
+{
+  "benchmark": "multi_model_ai_docs_comprehension",
+  "date": "2025-12-19",
+  "hypothesis": ".ai/ docs enable any LLM to understand codebase on-device",
+  "workspace": "/home/luna/Code/ada-v1",
+  "models_tested": 4,
+  "results": [
+    {
+      "model": "llama3.2:1b",
+      "task": "introspection_general",
+      "success": true,
+      "latency_ms": 0.3332530031912029,
+      "accuracy_score": 1.0,
+      "suggestions_count": 6,
+      "error": ""
+    },
+    {
+      "model": "qwen2.5:3b",
+      "task": "introspection_general",
+      "success": true,
+      "latency_ms": 0.24182299966923892,
+      "accuracy_score": 1.0,
+      "suggestions_count": 6,
+      "error": ""
+    },
+    {
+      "model": "qwen2.5:7b",
+      "task": "introspection_general",
+      "success": true,
+      "latency_ms": 0.2287279930897057,
+      "accuracy_score": 1.0,
+      "suggestions_count": 6,
+      "error": ""
+    },
+    {
+      "model": "deepseek-r1:latest",
+      "task": "introspection_general",
+      "success": true,
+      "latency_ms": 0.2180880110245198,
+      "accuracy_score": 1.0,
+      "suggestions_count": 6,
+      "error": ""
+    }
+  ]
+}
