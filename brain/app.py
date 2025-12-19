@@ -664,6 +664,9 @@ async def chat_stream(request: Request):
     faq_k = int(data.get('faq_k', RAG_FAQ_TOP_K))
     memory_k = int(data.get('memory_k', RAG_MEMORY_TOP_K))
     
+    # Model override support (for specialized tasks like code completion)
+    model = (data.get('model') or '').strip() or OLLAMA_MODEL
+    
     # Start latency tracking
     import time
     request_start_time = time.time()
@@ -766,7 +769,7 @@ async def chat_stream(request: Request):
             llm_start_time = time.time()
             
             # Stream from Ollama using modularized llm module (async)
-            async for chunk in stream_chat_async(final_prompt, model=OLLAMA_MODEL, include_thinking=include_thinking):
+            async for chunk in stream_chat_async(final_prompt, model=model, include_thinking=include_thinking):
                 if 'error' in chunk:
                     yield f"data: {json.dumps({'type': 'error', 'error': chunk['error']})}\n\n"
                     return
