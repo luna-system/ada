@@ -4,6 +4,7 @@ from typing import Any
 from mcp.types import Tool, TextContent
 from .ada_client import AdaClient, AdaBrainError, AdaBrainConnectionError
 from .tools.complete_code import complete_code
+from .tools.validate_architecture import validate_architecture
 
 
 # Tool definitions (exposed to MCP clients)
@@ -125,6 +126,39 @@ TOOLS = [
             "required": ["code_before"],
         },
     ),
+    Tool(
+        name="ada_validate_architecture",
+        description=(
+            "Validate code changes against Ada's architecture principles. "
+            "Ada introspects her own codebase using .ai/ documentation. "
+            "Returns fast validation feedback on: conventions, placement, "
+            "documentation requirements, import patterns, and testing needs. "
+            "Target: <50ms validation time."
+        ),
+        inputSchema={
+            "type": "object",
+            "properties": {
+                "file_path": {
+                    "type": "string",
+                    "description": "Path to file being changed (relative to repo root)",
+                },
+                "change_description": {
+                    "type": "string",
+                    "description": "Brief description of what changed",
+                },
+                "changed_code": {
+                    "type": "string",
+                    "description": "Optional: code snippet for detailed analysis",
+                },
+                "check_types": {
+                    "type": "array",
+                    "items": {"type": "string"},
+                    "description": "Optional: specific checks to run (conventions, placement, docs, imports, tests)",
+                },
+            },
+            "required": ["file_path", "change_description"],
+        },
+    ),
 ]
 
 
@@ -225,6 +259,31 @@ async def handle_tool_call(name: str, arguments: dict[str, Any], ada: AdaClient)
                 
         except Exception as e:
             return [TextContent(type="text", text=f"Error generating completion: {e}")]
+
+    elif name == "ada_validate_architecture":
+        file_path = arguments["file_path"]
+        change_description = arguments["change_description"]
+        changed_code = arguments.get("changed_code")
+        check_types = arguments.get("check_types")
+
+        try:
+            result = await validate_architecture(
+                file_path=file_path,
+                change_description=change_description,
+                changed_code=changed_code,
+                check_types=check_types,
+            )
+            
+            if result.success:
+                # Include timing in response
+                time_ms = result.metadata.get("time_ms", "?")
+                response = result.content + f"\n\n⚡ Validation time: {time_ms}ms"
+                return [TextContent(type="text", text=response)]
+            else:
+                return [TextContent(type="text", text=f"Validation error: {result.error}")]
+                
+        except Exception as e:
+            return [TextContent(type="text", text=f"Error during validation: {e}")]
 
     else:
         return [TextContent(type="text", text=f"Unknown tool: {name}")]
