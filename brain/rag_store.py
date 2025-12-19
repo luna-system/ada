@@ -439,6 +439,30 @@ class RagStore:
         except Exception:
             pass
 
+    def get_memory_by_id(self, mem_id: str) -> Optional[Tuple[str, dict]]:
+        """Retrieve a specific memory by its ID.
+        
+        Used by GraphRAG to fetch expanded memories by ID after
+        spreading activation discovers related memory IDs.
+        
+        Args:
+            mem_id: The memory document ID
+            
+        Returns:
+            (text, metadata) tuple or None if not found
+        """
+        try:
+            result = self.col.get(ids=[mem_id], include=["documents", "metadatas"])
+            if result and result.get("documents") and result["documents"][0]:
+                doc = result["documents"][0]
+                meta = result.get("metadatas", [{}])[0] or {}
+                meta["id"] = mem_id
+                return (doc, meta)
+            return None
+        except Exception as e:
+            logger.debug(f"Could not fetch memory {mem_id}: {e}")
+            return None
+
     def retrieve_turns(
         self,
         query: str,

@@ -37,14 +37,17 @@ class TestContextRetriever:
         """Mock config for testing."""
         config = Mock()
         config.PERSONA_PATH = "/tmp/persona.md"
+        config.MEMORY_DECAY_ENABLED = False
+        config.GRAPHRAG_ENABLED = False
         return config
 
     @pytest.fixture
     def retriever(self, mock_rag_store, mock_config):
-        """Create ContextRetriever with mocks."""
-        with patch('brain.prompt_builder.context_retriever.rag_store', mock_rag_store):
-            with patch('brain.prompt_builder.context_retriever.config', mock_config):
-                return ContextRetriever()
+        """Create ContextRetriever with mocks passed via constructor."""
+        return ContextRetriever(
+            rag_store_instance=mock_rag_store,
+            config_instance=mock_config
+        )
 
     def test_initialization(self, retriever):
         """Test that ContextRetriever initializes correctly."""
