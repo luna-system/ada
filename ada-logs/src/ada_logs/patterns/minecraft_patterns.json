@@ -1,0 +1,154 @@
+{
+  "patterns": [
+    {
+      "id": "optifine_sodium_conflict",
+      "regex": "(?s)(?=.*[Oo]pti[Ff]ine)(?=.*[Ss]odium)",
+      "error_type": "mod_conflict",
+      "kid_explanation": "OptiFine and Sodium are fighting! 🥊 They both try to make Minecraft run faster and look prettier, but they do it in different ways that don't work together. You can only use one at a time!",
+      "fix": "Remove OptiFine OR remove Sodium (not both!). Sodium is usually faster, so keep Sodium and remove OptiFine. Just delete the OptiFine .jar file from your mods folder.",
+      "difficulty": "easy",
+      "common_causes": ["incompatible_optimization_mods"],
+      "confidence_boost": 0.9
+    },
+    {
+      "id": "out_of_memory",
+      "regex": "OutOfMemoryError|Java heap space",
+      "error_type": "out_of_memory",
+      "kid_explanation": "Minecraft ran out of memory! 🎮 It's like trying to fit too many toys in a small box - there just isn't enough space. This usually happens when you have lots of mods loaded or your render distance is really high.",
+      "fix": "Give Minecraft more RAM in your launcher settings. Try 4-6 GB if you have mods. Also try lowering your render distance to 12 or less.",
+      "difficulty": "easy",
+      "common_causes": ["too_many_mods", "large_render_distance", "too_many_entities", "memory_leak"],
+      "confidence_boost": 0.95
+    },
+    {
+      "id": "mixin_transformation_error",
+      "regex": "MixinTransformerError|Mixin transformation.*failed",
+      "error_type": "mod_conflict",
+      "kid_explanation": "A mod tried to change Minecraft's code, but something went wrong! 🔧 This usually means two mods are trying to change the same thing in different ways.",
+      "fix": "Try updating your mods to the latest versions. If that doesn't work, try removing mods one at a time to find which ones don't work together.",
+      "difficulty": "medium",
+      "common_causes": ["conflicting_mods", "outdated_mods", "incompatible_mod_versions"],
+      "confidence_boost": 0.75
+    },
+    {
+      "id": "null_pointer_exception",
+      "regex": "NullPointerException",
+      "error_type": "null_pointer",
+      "kid_explanation": "Something in Minecraft tried to use something that doesn't exist! 🤔 It's like reaching for a toy that isn't there. This is usually a bug in a mod.",
+      "fix": "Try updating your mods to the latest versions. If the crash keeps happening, report it to the mod author on CurseForge or GitHub with your crash log.",
+      "difficulty": "medium",
+      "common_causes": ["mod_bug", "corrupted_world", "missing_resource"],
+      "confidence_boost": 0.70
+    },
+    {
+      "id": "class_not_found",
+      "regex": "ClassNotFoundException|NoClassDefFoundError",
+      "error_type": "missing_dependency",
+      "kid_explanation": "A mod is looking for another mod (or library) that you don't have installed! 📦 It's like trying to play a game without all the pieces.",
+      "fix": "Check which mods are required by reading the mod description on CurseForge. Install any required mods or libraries (like Fabric API, Cloth Config, or Architectury).",
+      "difficulty": "easy",
+      "common_causes": ["missing_dependency", "missing_api_mod", "wrong_mod_loader"],
+      "confidence_boost": 0.85
+    },
+    {
+      "id": "incompatible_mod_loader",
+      "regex": "(?=.*Forge)(?=.*Fabric)|(?=.*Fabric)(?=.*Forge)",
+      "error_type": "wrong_mod_loader",
+      "kid_explanation": "You're trying to use a Fabric mod with Forge (or vice versa)! ⚠️ Fabric and Forge are two different ways to load mods - they don't mix!",
+      "fix": "Make sure all your mods are for the same mod loader (all Fabric OR all Forge). Check the mod page to see which loader it needs.",
+      "difficulty": "easy",
+      "common_causes": ["mixed_mod_loaders"],
+      "confidence_boost": 0.90
+    },
+    {
+      "id": "ticking_entity",
+      "regex": "Exception ticking entity|Entity being ticked",
+      "error_type": "ticking_entity",
+      "kid_explanation": "Something went wrong with a creature or item in your world! 🐑 Usually this is caused by a corrupted entity (like a mob or dropped item).",
+      "fix": "Try using a tool like MCEdit to remove the broken entity. The crash log should show coordinates - go there and look for weird mobs or items.",
+      "difficulty": "hard",
+      "common_causes": ["corrupted_entity", "mod_bug", "incompatible_mods"],
+      "confidence_boost": 0.75
+    },
+    {
+      "id": "ticking_block_entity",
+      "regex": "Exception ticking block entity|Block entity being ticked",
+      "error_type": "ticking_block_entity",
+      "kid_explanation": "A block in your world is causing problems! 🧱 This could be a machine from a mod, a chest, or any special block.",
+      "fix": "The crash log shows coordinates of the broken block. Go there and break/remove the block causing issues. If you can't get in-game, use MCEdit to remove it.",
+      "difficulty": "medium",
+      "common_causes": ["corrupted_block_entity", "mod_bug", "invalid_data"],
+      "confidence_boost": 0.80
+    },
+    {
+      "id": "concurrent_modification",
+      "regex": "ConcurrentModificationException",
+      "error_type": "concurrent_modification",
+      "kid_explanation": "Two parts of Minecraft tried to change the same thing at the exact same time! ⚡ It's like two people trying to write on the same paper at once.",
+      "fix": "This is usually a mod bug. Try updating your mods. If it keeps happening, report it to the mod author with your crash log.",
+      "difficulty": "hard",
+      "common_causes": ["mod_bug", "threading_issue"],
+      "confidence_boost": 0.65
+    },
+    {
+      "id": "io_exception",
+      "regex": "IOException|Failed to (read|write|load|save)",
+      "error_type": "io_error",
+      "kid_explanation": "Minecraft couldn't read or write a file! 💾 Maybe your disk is full, a file is corrupted, or you don't have permission to access it.",
+      "fix": "Check if your disk is full. Make sure Minecraft has permission to read/write files. Try running Minecraft as administrator (Windows) or check file permissions (Mac/Linux).",
+      "difficulty": "medium",
+      "common_causes": ["disk_full", "permission_denied", "corrupted_file"],
+      "confidence_boost": 0.70
+    },
+    {
+      "id": "opengl_error",
+      "regex": "OpenGL|GL ERROR|Shader compilation failed",
+      "error_type": "graphics_error",
+      "kid_explanation": "Your graphics card is having trouble! 🎨 This could be outdated drivers, incompatible shaders, or graphics settings that are too high.",
+      "fix": "Update your graphics drivers. If using shaders, try disabling them or using simpler shader packs. Lower your graphics settings (especially particles and render distance).",
+      "difficulty": "medium",
+      "common_causes": ["outdated_drivers", "incompatible_shaders", "graphics_too_high"],
+      "confidence_boost": 0.75
+    },
+    {
+      "id": "json_parse_error",
+      "regex": "JsonSyntaxException|JsonParseException|Expected.*but was",
+      "error_type": "json_error",
+      "kid_explanation": "Minecraft tried to read a configuration file, but it's formatted wrong! 📝 Someone (or a mod) made a typo in a .json file.",
+      "fix": "Check the crash log for which file is broken. Use a JSON validator online to fix the syntax. If it's from a mod, try reinstalling that mod or resetting its config.",
+      "difficulty": "medium",
+      "common_causes": ["invalid_json", "corrupted_config", "manual_edit_error"],
+      "confidence_boost": 0.80
+    },
+    {
+      "id": "recipe_conflict",
+      "regex": "Recipe.*conflict|Duplicate recipe",
+      "error_type": "recipe_conflict",
+      "kid_explanation": "Two mods are trying to use the same crafting recipe! 🔨 Minecraft doesn't know which one to use.",
+      "fix": "Usually this doesn't crash the game, just a warning. If it does crash, try removing one of the conflicting mods or use a mod like KubeJS to fix the recipe conflict.",
+      "difficulty": "medium",
+      "common_causes": ["duplicate_recipes", "mod_conflict"],
+      "confidence_boost": 0.60
+    },
+    {
+      "id": "registry_error",
+      "regex": "Missing registry entry|Registry.*not found",
+      "error_type": "missing_registry",
+      "kid_explanation": "Minecraft is looking for something that used to be there but is gone now! 🔍 This happens when you remove a mod from a world that was using it.",
+      "fix": "If you removed a mod, you might need to add it back temporarily. Or use a tool to clean missing registry entries from your world save.",
+      "difficulty": "hard",
+      "common_causes": ["removed_mod", "missing_content", "corrupted_save"],
+      "confidence_boost": 0.75
+    },
+    {
+      "id": "version_mismatch",
+      "regex": "version mismatch|incompatible version|requires.*but found",
+      "error_type": "version_mismatch",
+      "kid_explanation": "A mod is the wrong version! 🔢 Maybe it's for Minecraft 1.19 but you're running 1.20, or it needs a newer version of another mod.",
+      "fix": "Check that all your mods match your Minecraft version. Update or downgrade mods as needed. Make sure dependencies (like Fabric API) are the right version too.",
+      "difficulty": "easy",
+      "common_causes": ["wrong_minecraft_version", "outdated_dependency", "mismatched_versions"],
+      "confidence_boost": 0.85
+    }
+  ]
+}
