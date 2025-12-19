@@ -218,6 +218,13 @@ SEMANTIC_CHUNKING_THRESHOLD = float(os.getenv("SEMANTIC_CHUNKING_THRESHOLD", "0.
 SEMANTIC_CHUNKING_MIN_SIZE = int(os.getenv("SEMANTIC_CHUNKING_MIN_SIZE", "2"))  # Min memories to form chunk
 SEMANTIC_CHUNKING_MAX_SIZE = int(os.getenv("SEMANTIC_CHUNKING_MAX_SIZE", "10"))  # Max memories per chunk
 
+# === Biomimetic Context Management (Phase 3) ===
+# GraphRAG - Graph-based memory with spreading activation
+GRAPHRAG_ENABLED = os.getenv("GRAPHRAG_ENABLED", "false").lower() == "true"  # Off by default until tested
+GRAPHRAG_DEPTH = int(os.getenv("GRAPHRAG_DEPTH", "2"))  # Hops to spread activation
+GRAPHRAG_DECAY_FACTOR = float(os.getenv("GRAPHRAG_DECAY_FACTOR", "0.7"))  # Activation decay per hop
+GRAPHRAG_THRESHOLD = float(os.getenv("GRAPHRAG_THRESHOLD", "0.2"))  # Min activation to include
+
 # === Importance Signal Weights (Phase 4 Optimization) ===
 # Multi-signal importance scoring weights (MUST sum to 1.0)
 #

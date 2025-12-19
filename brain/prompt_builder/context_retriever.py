@@ -2,12 +2,13 @@
 
 @ai-indexable: core-refactor
 @ai-purpose: Retrieves context data from various sources (RAG, filesystem, config)
-@ai-dependencies: brain.rag_store, brain.config, brain.memory_decay
+@ai-dependencies: brain.rag_store, brain.config, brain.memory_decay, brain.memory_graph
 @ai-enhanced: v2.1 - Memory decay weighting applied to memories
 @ai-enhanced: v2.2 - Neuromorphic importance scoring and gradient detail levels
+@ai-enhanced: v3.0 - GraphRAG hybrid retrieval with spreading activation
 """
 from pathlib import Path
-from typing import List, Optional, Tuple, Dict, Any
+from typing import List, Optional, Tuple, Dict, Any, Set
 import logging
 from datetime import datetime, timezone
 from dateutil import parser
@@ -18,26 +19,46 @@ from brain.memory_decay import MemoryDecayWeighter
 
 logger = logging.getLogger(__name__)
 
+# Optional: GraphRAG integration
+try:
+    from brain.memory_graph import MemoryGraph, get_memory_graph
+    HAS_MEMORY_GRAPH = True
+except ImportError:
+    HAS_MEMORY_GRAPH = False
+    logger.info("memory_graph not available, using vector-only retrieval")
+
 
 class ContextRetriever:
     """Retrieves context from RAG store and configuration files.
     
     This class handles all data retrieval operations needed for prompt building,
     separating retrieval logic from formatting and assembly.
+    
+    v3.0: Now supports hybrid vector+graph retrieval via spreading activation.
     """
 
-    def __init__(self, rag_store_instance=None, config_instance=None, cache=None):
+    def __init__(self, rag_store_instance=None, config_instance=None, cache=None, memory_graph=None):
         """Initialize the context retriever.
         
         Args:
             rag_store_instance: Optional RAG store instance (for testing)
             config_instance: Optional config (for testing)
             cache: Optional MultiTimescaleCache instance
+            memory_graph: Optional MemoryGraph instance for GraphRAG
         """
         # Create RagStore instance if not provided
         self.rag_store = rag_store_instance or RagStore(collection_name="conversations")
         self.config = config_instance or config
         self.cache = cache
+        
+        # Initialize memory graph for GraphRAG (optional)
+        self.memory_graph = memory_graph
+        if self.memory_graph is None and HAS_MEMORY_GRAPH:
+            graph_enabled = getattr(self.config, 'GRAPHRAG_ENABLED', False)
+            if graph_enabled:
+                graph_path = Path(getattr(self.config, 'DATA_DIR', './data')) / 'brain' / 'memory_graph.json'
+                self.memory_graph = get_memory_graph(persistence_path=graph_path)
+                logger.info(f"GraphRAG enabled (path={graph_path})")
         
         # Initialize memory decay weighter if enabled
         self.decay_weighter = None
@@ -102,7 +123,8 @@ class ContextRetriever:
         self, 
         query: str, 
         k: int = 5, 
-        entity: Optional[str] = None
+        entity: Optional[str] = None,
+        use_graph: Optional[bool] = None
     ) -> List[Tuple[str, Dict[str, Any]]]:
         """Retrieve relevant memories from RAG store with decay weighting.
         
@@ -110,14 +132,22 @@ class ContextRetriever:
             query: Search query for semantic similarity
             k: Maximum number of memories to return
             entity: Optional entity scope filter
+            use_graph: Whether to use GraphRAG expansion (default: auto based on config)
             
         Returns:
             List of (text, metadata) tuples, sorted by decay-adjusted relevance
         """
         try:
-            # Get more results if decay is enabled (will re-sort and trim)
-            fetch_k = k * 2 if self.decay_weighter else k
+            # Determine if we should use graph expansion
+            should_use_graph = use_graph if use_graph is not None else (self.memory_graph is not None)
+            
+            # Get more results if decay/graph is enabled (will re-sort and trim)
+            fetch_k = k * 2 if (self.decay_weighter or should_use_graph) else k
             memories = self.rag_store.retrieve_memories(query=query, k=fetch_k, entity=entity)
+            
+            # Apply GraphRAG expansion if enabled
+            if should_use_graph and self.memory_graph is not None and memories:
+                memories = self._expand_with_graph(memories, k)
             
             # Apply decay weighting if enabled
             if self.decay_weighter and memories:
@@ -146,6 +176,97 @@ class ContextRetriever:
         except Exception as e:
             logger.error(f"Error retrieving memories: {e}")
             return []
+
+    def _expand_with_graph(
+        self, 
+        memories: List[Tuple[str, Dict[str, Any]]], 
+        k: int
+    ) -> List[Tuple[str, Dict[str, Any]]]:
+        """Expand memory results using graph spreading activation.
+        
+        This is the core biomimetic enhancement: starting from vector-similar
+        memories, we spread activation through the memory graph to find
+        conceptually connected memories that pure similarity might miss.
+        
+        Like how thinking of "doctor" activates "nurse", "hospital", "medicine".
+        
+        Args:
+            memories: Initial vector-retrieved memories
+            k: Maximum memories to return
+            
+        Returns:
+            Expanded list of memories with graph-activated additions
+        """
+        if not self.memory_graph:
+            return memories
+        
+        try:
+            # Extract memory IDs from initial results
+            seed_ids = []
+            memory_map: Dict[str, Tuple[str, Dict[str, Any]]] = {}
+            
+            for text, metadata in memories:
+                memory_id = metadata.get('id') or metadata.get('memory_id')
+                if memory_id:
+                    seed_ids.append(memory_id)
+                    memory_map[memory_id] = (text, metadata)
+            
+            if not seed_ids:
+                logger.debug("No memory IDs found, skipping graph expansion")
+                return memories
+            
+            # Spread activation from seed memories
+            activations = self.memory_graph.spread_activation(
+                seed_ids=seed_ids,
+                depth=2,  # 2 hops from initial memories
+                decay_factor=0.7,
+                threshold=0.2,
+                max_nodes=k * 2
+            )
+            
+            # Find newly activated memories (not in original results)
+            new_ids = [
+                mid for mid, activation in activations.items()
+                if mid not in memory_map and activation > 0.2
+            ]
+            
+            if new_ids:
+                logger.info(f"GraphRAG expanded {len(seed_ids)} → {len(seed_ids) + len(new_ids)} memories")
+                
+                # Fetch the newly discovered memories from RAG store
+                # (They're in the graph but we need their content)
+                for new_id in new_ids[:k]:  # Limit expansion
+                    try:
+                        expanded = self.rag_store.get_memory_by_id(new_id)
+                        if expanded:
+                            text, metadata = expanded
+                            # Add activation score to metadata
+                            metadata['graph_activation'] = activations[new_id]
+                            metadata['source'] = 'graph_expansion'
+                            memory_map[new_id] = (text, metadata)
+                    except Exception as e:
+                        logger.debug(f"Could not fetch expanded memory {new_id}: {e}")
+            
+            # Sort by combined score: original distance + graph activation
+            def combined_score(item):
+                text, metadata = item
+                # Lower distance is better, higher activation is better
+                distance = metadata.get('distance', 0.5)
+                activation = metadata.get('graph_activation', 0.5)
+                # Combine: invert distance, weight activation
+                return (1 - distance) * 0.6 + activation * 0.4
+            
+            sorted_memories = sorted(
+                memory_map.values(),
+                key=combined_score,
+                reverse=True
+            )
+            
+            return sorted_memories[:k]
+            
+        except Exception as e:
+            logger.error(f"GraphRAG expansion failed: {e}")
+            return memories
 
     def get_faqs(
         self, 

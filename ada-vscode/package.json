@@ -1,0 +1,112 @@
+{
+  "name": "ada-code",
+  "displayName": "Ada - Local AI Code Completion",
+  "description": "GitHub Copilot alternative. 103ms latency. $0/month. 100% private. Powered by local Ollama.",
+  "version": "0.1.0",
+  "publisher": "luna-system",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/luna-system/ada"
+  },
+  "engines": {
+    "vscode": "^1.85.0"
+  },
+  "categories": [
+    "Machine Learning",
+    "Programming Languages",
+    "Other"
+  ],
+  "keywords": [
+    "ai",
+    "code completion",
+    "copilot",
+    "ollama",
+    "local",
+    "privacy"
+  ],
+  "activationEvents": [
+    "onStartupFinished"
+  ],
+  "main": "./out/extension.js",
+  "contributes": {
+    "configuration": {
+      "title": "Ada Code Completion",
+      "properties": {
+        "ada.enabled": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable Ada code completion"
+        },
+        "ada.ollamaUrl": {
+          "type": "string",
+          "default": "http://localhost:11434",
+          "description": "Ollama server URL"
+        },
+        "ada.model": {
+          "type": "string",
+          "default": "qwen2.5-coder:7b",
+          "description": "Model to use for completions"
+        },
+        "ada.maxTokens": {
+          "type": "number",
+          "default": 128,
+          "description": "Maximum tokens to generate"
+        },
+        "ada.debounceMs": {
+          "type": "number",
+          "default": 300,
+          "description": "Debounce delay before triggering completion (ms)"
+        },
+        "ada.temperature": {
+          "type": "number",
+          "default": 0.2,
+          "description": "Temperature for generation (0.0-1.0)"
+        },
+        "ada.showStatusBar": {
+          "type": "boolean",
+          "default": true,
+          "description": "Show Ada status in status bar"
+        }
+      }
+    },
+    "commands": [
+      {
+        "command": "ada.triggerCompletion",
+        "title": "Ada: Trigger Completion"
+      },
+      {
+        "command": "ada.toggleEnabled",
+        "title": "Ada: Toggle Enabled"
+      },
+      {
+        "command": "ada.showStats",
+        "title": "Ada: Show Statistics"
+      }
+    ],
+    "keybindings": [
+      {
+        "command": "ada.triggerCompletion",
+        "key": "ctrl+shift+space",
+        "mac": "cmd+shift+space",
+        "when": "editorTextFocus"
+      }
+    ]
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run compile",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./",
+    "lint": "eslint src --ext ts",
+    "package": "vsce package"
+  },
+  "devDependencies": {
+    "@types/node": "^20.10.0",
+    "@types/vscode": "^1.85.0",
+    "@typescript-eslint/eslint-plugin": "^6.13.0",
+    "@typescript-eslint/parser": "^6.13.0",
+    "eslint": "^8.54.0",
+    "typescript": "^5.3.0",
+    "@vscode/vsce": "^2.22.0"
+  },
+  "license": "CC0-1.0"
+}

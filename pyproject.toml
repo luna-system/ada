@@ -45,6 +45,9 @@ dev = [
     "pytest>=8.0.0",
     "pytest-asyncio>=0.23.0",
 ]
+graph = [
+    "networkx>=3.0",  # Graph algorithms for memory_graph.py (optional, pure Python fallback available)
+]
 
 [project.scripts]
 ada = "ada_main:cli"
