@@ -1,0 +1,79 @@
+{
+  "test": "no_tools_comprehension",
+  "date": "2025-12-19",
+  "hypothesis": "Documentation alone enables comprehension",
+  "total_tests": 5,
+  "overall_score": 0.74,
+  "results": [
+    {
+      "test": "Architecture Understanding",
+      "question": "What is Ada's core architecture? What services exist?",
+      "context_size": 2057,
+      "expected_keywords": [
+        "brain",
+        "FastAPI",
+        "ChromaDB",
+        "Ollama",
+        "specialist",
+        "RAG"
+      ],
+      "found_in_docs": 1.0,
+      "conclusion": "\u2705 DOCS SUFFICIENT"
+    },
+    {
+      "test": "Module Inventory",
+      "question": "How many modules are documented? What are the main clusters?",
+      "context_size": 2064,
+      "expected_keywords": [
+        "modules",
+        "clusters",
+        "dependency",
+        "core_api",
+        "specialists"
+      ],
+      "found_in_docs": 0.4,
+      "conclusion": "\u26a0\ufe0f  INCOMPLETE DOCS"
+    },
+    {
+      "test": "Known Issues",
+      "question": "What are common mistakes or anti-patterns to avoid?",
+      "context_size": 2057,
+      "expected_keywords": [
+        "Docker",
+        "unit tests",
+        "PYTHONPATH",
+        "import"
+      ],
+      "found_in_docs": 0.5,
+      "conclusion": "\u26a0\ufe0f  INCOMPLETE DOCS"
+    },
+    {
+      "test": "Development Workflow",
+      "question": "How should I structure code? Where do things go?",
+      "context_size": 4088,
+      "expected_keywords": [
+        "documentation",
+        "Sphinx",
+        ".ai",
+        "conventions",
+        "testing"
+      ],
+      "found_in_docs": 1.0,
+      "conclusion": "\u2705 DOCS SUFFICIENT"
+    },
+    {
+      "test": "Strategic Planning",
+      "question": "What should we work on next?",
+      "context_size": 4084,
+      "expected_keywords": [
+        "TODO",
+        "streaming",
+        "MCP",
+        "specialist",
+        "test"
+      ],
+      "found_in_docs": 0.8,
+      "conclusion": "\u2705 DOCS SUFFICIENT"
+    }
+  ]
+}
