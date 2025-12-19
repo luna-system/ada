@@ -497,19 +497,19 @@
       {
         "concept_id": 2,
         "accuracy": 0.357,
-        "has_misconception": false,
+        "has_misconception": true,
         "understanding_level": "poor"
       },
       {
         "concept_id": 3,
         "accuracy": 0.406,
-        "has_misconception": false,
+        "has_misconception": true,
         "understanding_level": "poor"
       },
       {
         "concept_id": 4,
         "accuracy": 0.357,
-        "has_misconception": true,
+        "has_misconception": false,
         "understanding_level": "poor"
       },
       {
@@ -527,7 +527,7 @@
       {
         "concept_id": 7,
         "accuracy": 0.308,
-        "has_misconception": true,
+        "has_misconception": false,
         "understanding_level": "poor"
       },
       {
@@ -539,13 +539,13 @@
       {
         "concept_id": 9,
         "accuracy": 0.308,
-        "has_misconception": true,
+        "has_misconception": false,
         "understanding_level": "poor"
       },
       {
         "concept_id": 10,
         "accuracy": 0.357,
-        "has_misconception": true,
+        "has_misconception": false,
         "understanding_level": "poor"
       }
     ],
@@ -567,7 +567,7 @@
       {
         "concept_id": 3,
         "accuracy": 0.7429,
-        "has_misconception": false,
+        "has_misconception": true,
         "scaffolding_boost": 0.15,
         "understanding_level": "moderate"
       },
@@ -581,7 +581,7 @@
       {
         "concept_id": 5,
         "accuracy": 0.7429,
-        "has_misconception": true,
+        "has_misconception": false,
         "scaffolding_boost": 0.15,
         "understanding_level": "moderate"
       },
@@ -595,14 +595,14 @@
       {
         "concept_id": 7,
         "accuracy": 0.7072,
-        "has_misconception": true,
+        "has_misconception": false,
         "scaffolding_boost": 0.15,
         "understanding_level": "moderate"
       },
       {
         "concept_id": 8,
         "accuracy": 0.7429,
-        "has_misconception": true,
+        "has_misconception": false,
         "scaffolding_boost": 0.15,
         "understanding_level": "moderate"
       },
