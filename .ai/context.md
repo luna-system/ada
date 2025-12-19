@@ -3,6 +3,8 @@
 ## Purpose
 Conversational AI system with RAG (Retrieval-Augmented Generation), streaming responses, and extensible specialist plugins for augmented capabilities.
 
+**Latest Architecture Audit:** See `.ai/audits/2025-12-19-post-phase-2.md` (Grade A, no major refactoring needed)
+
 ## Core Architecture
 
 ### Service Topology
