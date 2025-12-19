@@ -39,11 +39,15 @@ This document defines **where** and **how** to document different aspects of the
 - ✅ Annotation schemas (annotation-schema.json)
 - ✅ Quick reference for AI assistants (QUICKSTART.md)
 - ✅ Testing strategies (TESTING.md)
+- ✅ Architecture audits (audits/ subdirectory)
 - ✅ Meta-documentation (this file!)
 
 **Format:** Markdown (.md) or JSON (.json)  
 **Purpose:** Fast parsing, structured queries, semantic search  
 **Style:** Concise, hierarchical, machine-optimized
+
+**Subdirectories:**
+- `.ai/audits/` - Historical architecture audits (YYYY-MM-DD-milestone.md)
 
 ### Source Code Documentation → Comments & Docstrings
 
