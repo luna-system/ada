@@ -137,6 +137,8 @@ from llm import stream_chat_async, complete
 from media import fetch_listenbrainz, format_media_for_prompt
 from brain.prompt_builder import PromptAssembler
 from brain.notices_client import get_active_notices
+from brain.router import ContextualRouter, RequestContext
+from brain.response_cache import ResponseCache, get_response_cache
 
 # Ollama + models
 OLLAMA_API_URL = config.OLLAMA_API_URL
@@ -172,6 +174,12 @@ LISTENBRAINZ_TOKEN = config.LISTENBRAINZ_TOKEN
 
 # Global RAG store instance
 rag_store = None
+
+# Global contextual router instance (Phase 2A)
+contextual_router = ContextualRouter()
+
+# Global response cache instance (Phase 2B)
+response_cache = ResponseCache(max_size=1000)
 
 def _init_rag_store():
     """Initialize RAG store and load seed data."""
@@ -664,13 +672,85 @@ async def chat_stream(request: Request):
     faq_k = int(data.get('faq_k', RAG_FAQ_TOP_K))
     memory_k = int(data.get('memory_k', RAG_MEMORY_TOP_K))
     
-    # Model override support (for specialized tasks like code completion)
-    model = (data.get('model') or '').strip() or OLLAMA_MODEL
-    
     # Start latency tracking
     import time
     request_start_time = time.time()
     python_start_time = request_start_time
+    
+    # PHASE 2A: CONTEXTUAL ROUTING (v2.3.0 research-validated)
+    # Build request context from parsed data
+    code_before = data.get('code_before') or data.get('code_context')  # Backward compat
+    code_after = data.get('code_after')
+    
+    router_context = RequestContext(
+        message=prompt,
+        code_before=code_before,
+        code_after=code_after,
+        language=data.get('language'),  # For code completion
+        has_code_before=bool(code_before),
+        has_code_after=bool(code_after),
+        is_completion=data.get('is_completion', False),
+        metadata={'conversation_id': conversation_id},
+    )
+    
+    # Classify and route request (< 10ms)
+    request_type = contextual_router.classify(router_context)
+    response_path = contextual_router.route(request_type, router_context)
+    
+    # Use routed model (allow explicit override for backward compat)
+    model = (data.get('model') or '').strip() or response_path.model
+    
+    # Configure thinking based on routing decision
+    include_thinking = include_thinking or response_path.enable_thinking
+    
+    # Log routing decision
+    routing_time_ms = response_path.routing_time_ms
+    logger.info(
+        f"Request {req_id}: Routed as {request_type.value} → {model} "
+        f"(routing_time={routing_time_ms:.2f}ms, "
+        f"use_rag={response_path.use_rag}, "
+        f"temperature={response_path.temperature})"
+    )
+    
+    # PHASE 2B: RESPONSE CACHING
+    # Check cache if router says to use it
+    cache_key = None
+    cached_response = None
+    if response_path.use_cache:
+        cache_key = contextual_router.generate_cache_key(request_type, router_context)
+        cached_response = response_cache.get(cache_key)
+        
+        if cached_response:
+            logger.info(f"Request {req_id}: Cache HIT for {cache_key[:16]}...")
+            # Return cached response via SSE
+            async def cached_stream():
+                # Stream cached response token by token for consistency
+                for token in cached_response.split():
+                    yield f"data: {json.dumps({'type': 'token', 'content': token + ' '})}\n\n"
+                
+                # Send done event with cache indicator
+                cache_stats = response_cache.get_stats()
+                metadata = {
+                    'type': 'done',
+                    'conversation_id': conversation_id,
+                    'request_id': req_id,
+                    'cached': True,
+                    'cache_age_seconds': response_cache._cache[cache_key].age_seconds(),
+                    'cache_stats': {
+                        'hit_rate': cache_stats.hit_rate,
+                        'total_entries': cache_stats.total_entries,
+                    },
+                    'routing': {
+                        'request_type': request_type.value,
+                        'model': model,
+                        'routing_time_ms': routing_time_ms,
+                    }
+                }
+                yield f"data: {json.dumps(metadata)}\n\n"
+            
+            return StreamingResponse(cached_stream(), media_type='text/event-stream')
+        else:
+            logger.info(f"Request {req_id}: Cache MISS for {cache_key[:16]}...")
 
     # PHASE 3: PRE-EXECUTION TOOL ACTIVATION (Tier 1 - Anticipatory/Reflex)
     # Pattern matching happens BEFORE LLM execution - model-agnostic!
@@ -680,7 +760,10 @@ async def chat_stream(request: Request):
     logger.info(f"Request {req_id}: Found {len(tool_matches)} tool matches")
     
     # Build prompt using new modular PromptAssembler with caching
-    if RAG_ENABLED and rag_store is not None:
+    # PHASE 2A: Respect routing decision for RAG usage
+    use_rag_for_request = RAG_ENABLED and rag_store is not None and response_path.use_rag
+    
+    if use_rag_for_request:
         # Get active notices
         notices = get_active_notices()
         
@@ -871,6 +954,28 @@ async def chat_stream(request: Request):
                             if RAG_DEBUG:
                                 import traceback
                                 print("[BRAIN][RAG][memory-upsert] failed:\n" + traceback.format_exc())
+                    
+                    # PHASE 2B: Store response in cache if router says to
+                    if response_path.use_cache and cache_key and accumulated_text:
+                        try:
+                            response_cache.set(
+                                cache_key=cache_key,
+                                response_text=accumulated_text,
+                                request_type=request_type.value,
+                                model=model,
+                                ttl_seconds=response_path.cache_ttl,
+                                metadata={
+                                    'conversation_id': conversation_id,
+                                    'request_id': req_id,
+                                    'timestamp': assistant_timestamp,
+                                }
+                            )
+                            logger.info(
+                                f"Request {req_id}: Cached response "
+                                f"(key={cache_key[:16]}..., ttl={response_path.cache_ttl}s)"
+                            )
+                        except Exception as e:
+                            logger.error(f"Request {req_id}: Failed to cache response: {e}")
 
                     # Calculate latency breakdown
                     python_overhead_ms = (python_overhead_end - request_start_time) * 1000
@@ -898,7 +1003,8 @@ async def chat_stream(request: Request):
                         cache_hit_rate=cache_hit_rate,
                     )
 
-                    # Send completion metadata
+                    # Send completion metadata (PHASE 2A: include routing decision, PHASE 2B: include cache stats)
+                    resp_cache_stats = response_cache.get_stats()
                     metadata = {
                         'type': 'done',
                         'conversation_id': conversation_id,
@@ -907,6 +1013,21 @@ async def chat_stream(request: Request):
                         'assistant_timestamp': assistant_timestamp,
                         'request_id': req_id,
                         'latency_breakdown': latency_breakdown.model_dump(),
+                        'routing': {
+                            'request_type': request_type.value,
+                            'model': model,
+                            'format': response_path.format,
+                            'use_rag': response_path.use_rag,
+                            'routing_time_ms': routing_time_ms,
+                            'temperature': response_path.temperature,
+                        },
+                        'response_cache': {
+                            'enabled': response_path.use_cache,
+                            'hit_rate': resp_cache_stats.hit_rate,
+                            'total_entries': resp_cache_stats.total_entries,
+                            'hits': resp_cache_stats.hits,
+                            'misses': resp_cache_stats.misses,
+                        }
                     }
                     yield f"data: {json.dumps(metadata)}\n\n"
                     break
