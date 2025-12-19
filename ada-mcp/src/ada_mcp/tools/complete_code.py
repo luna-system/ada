@@ -60,13 +60,11 @@ async def complete_code(
     try:
         client = get_ada_client()
         
-        # Use brain's chat endpoint with completion-specific settings
+        # Use brain's chat endpoint (simple version without extra params for now)
+        # Note: max_tokens, temperature, etc. will be added to Ada brain API later
         response = await client.chat(
             message=prompt,
-            conversation_id=None,  # Stateless for completion
-            max_tokens=max_tokens,
-            temperature=0.2,  # Lower temp for more deterministic completion
-            stop_sequences=["\n\n", "# End", "```"]  # Stop at logical boundaries
+            conversation_id=f"completion_{language}",  # Light context per language
         )
         
         # Extract just the code from response
