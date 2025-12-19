@@ -127,7 +127,8 @@ async def main():
     )
     
     if test_result.success:
-        print_success(f"Read {test_result.metadata['lines']} lines from test file")
+        line_count = len(test_result.content.splitlines())
+        print_success(f"Read {line_count} lines from test file")
         print(f"\n{Colors.CYAN}Key expectation from tests:{Colors.END}")
         print(test_result.content[:300] + "...")
     
@@ -147,7 +148,8 @@ async def main():
     )
     
     if code_result.success:
-        print_success(f"Read {code_result.metadata['lines']} lines from buggy file")
+        line_count = len(code_result.content.splitlines())
+        print_success(f"Read {line_count} lines from buggy file")
         print(f"\n{Colors.CYAN}The buggy function:{Colors.END}")
         print(code_result.content)
         print(f"\n{Colors.RED}🐛 BUG IDENTIFIED:{Colors.END}")
@@ -184,9 +186,11 @@ async def main():
         )
         
         if write_result.success:
-            print_success(f"Fixed! Wrote {write_result.metadata['bytes_written']} bytes")
+            bytes_written = write_result.metadata.get('bytes_written', 'unknown')
+            print_success(f"Fixed! Wrote {bytes_written} bytes")
             print_success(f"Changed: range(1, n) → range(1, n+1)")
-            print_info(f"Fix applied in {write_result.metadata['latency_ms']}ms")
+            latency = write_result.metadata.get('latency_ms', '?')
+            print_info(f"Fix applied in {latency}ms")
     
     input(f"\n{Colors.YELLOW}Press Enter to validate the fix...{Colors.END}")
     
