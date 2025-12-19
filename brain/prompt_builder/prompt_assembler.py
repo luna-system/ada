@@ -14,9 +14,12 @@ and produces the final prompt string ready for the LLM.
 # @ai-dependencies: context_retriever, section_builder, specialists, context_habituation
 # @ai-related: brain.prompt_builder
 # @ai-enhanced: v2.1 - Habituation support for repeated context
+# @ai-enhanced: v2.9 - Parallel RAG retrieval and specialist execution (Phase 2C)
 
 import logging
+import asyncio
 from typing import Any
+from concurrent.futures import ThreadPoolExecutor
 
 from brain.prompt_builder.context_retriever import ContextRetriever
 from brain.prompt_builder.section_builder import SectionBuilder
@@ -140,17 +143,16 @@ class PromptAssembler:
         request_context = request_context or {}
         pre_executed_results = pre_executed_results or []
         
-        # 1. Retrieve RAG context
-        persona = self.retriever.get_persona()
-        memories = self.retriever.get_memories(query=user_message, k=5)
-        faqs_raw = self.retriever.get_faqs(query=user_message, k=3)
-        turns = self.retriever.get_turns(query=user_message, conversation_id=conversation_id, k=10)
+        # 1. Retrieve RAG context IN PARALLEL (Phase 2C optimization)
+        persona, memories, faqs_raw, turns = self._retrieve_context_parallel(
+            user_message, conversation_id
+        )
         
-        # 2. Get specialist results (use pre-executed if available, otherwise activate)
+        # 2. Get specialist results IN PARALLEL (Phase 2C optimization)
         if pre_executed_results:
             specialist_results = pre_executed_results
         else:
-            specialist_results = self._activate_specialists(
+            specialist_results = self._activate_specialists_parallel(
                 specialists,
                 user_message,
                 request_context
@@ -352,3 +354,136 @@ class PromptAssembler:
                     print(f"Specialist {specialist.capability.name} failed: {e}")
         
         return results
+
+    def _retrieve_context_parallel(
+        self,
+        user_message: str,
+        conversation_id: str
+    ) -> tuple[Any, list, list, list]:
+        """Retrieve RAG context in parallel for faster prompt building.
+        
+        Phase 2C optimization: Fetches persona, memories, FAQs, and turns
+        concurrently using ThreadPoolExecutor to reduce total latency.
+        
+        Args:
+            user_message: User's query for semantic search
+            conversation_id: Conversation ID for turn retrieval
+            
+        Returns:
+            Tuple of (persona, memories, faqs, turns)
+        """
+        with ThreadPoolExecutor(max_workers=4) as executor:
+            # Submit all retrieval tasks concurrently
+            persona_future = executor.submit(self.retriever.get_persona)
+            memories_future = executor.submit(
+                self.retriever.get_memories,
+                query=user_message,
+                k=5
+            )
+            faqs_future = executor.submit(
+                self.retriever.get_faqs,
+                query=user_message,
+                k=3
+            )
+            turns_future = executor.submit(
+                self.retriever.get_turns,
+                query=user_message,
+                conversation_id=conversation_id,
+                k=10
+            )
+            
+            # Wait for all to complete and collect results
+            persona = persona_future.result()
+            memories = memories_future.result()
+            faqs = faqs_future.result()
+            turns = turns_future.result()
+            
+        logger.debug("Parallel context retrieval complete")
+        return persona, memories, faqs, turns
+
+    def _activate_specialists_parallel(
+        self,
+        specialists: list[Any],
+        user_message: str,
+        request_context: dict[str, Any]
+    ) -> list[dict[str, Any]]:
+        """Activate specialists in parallel based on priority.
+        
+        Phase 2C optimization: HIGH and CRITICAL priority specialists
+        execute concurrently, then MEDIUM and LOW execute sequentially.
+        This maintains ordering guarantees while improving performance.
+        
+        Args:
+            specialists: List of specialist instances
+            user_message: User's message
+            request_context: Additional context
+            
+        Returns:
+            List of specialist results ordered by priority
+        """
+        from brain.specialists.protocol import SpecialistPriority
+        
+        # Separate specialists by priority
+        high_priority = []  # CRITICAL (0) and HIGH (10)
+        low_priority = []   # MEDIUM (50) and LOW (100)
+        
+        for specialist in specialists:
+            context = {
+                "user_message": user_message,
+                **request_context
+            }
+            
+            if specialist.should_activate(context):
+                priority_value = specialist.priority.value
+                if priority_value <= SpecialistPriority.HIGH.value:
+                    high_priority.append((specialist, context))
+                else:
+                    low_priority.append((specialist, context))
+        
+        results = []
+        
+        # Execute high-priority specialists in parallel
+        if high_priority:
+            with ThreadPoolExecutor(max_workers=len(high_priority)) as executor:
+                futures = [
+                    executor.submit(self._execute_specialist, specialist, context)
+                    for specialist, context in high_priority
+                ]
+                for future in futures:
+                    result = future.result()
+                    if result:
+                        results.append(result)
+        
+        # Execute low-priority specialists sequentially (maintain order)
+        for specialist, context in low_priority:
+            result = self._execute_specialist(specialist, context)
+            if result:
+                results.append(result)
+        
+        logger.debug(f"Parallel specialist execution complete: {len(results)} results")
+        return results
+
+    def _execute_specialist(
+        self,
+        specialist: Any,
+        context: dict[str, Any]
+    ) -> dict[str, Any] | None:
+        """Execute a single specialist with error handling.
+        
+        Args:
+            specialist: Specialist instance
+            context: Execution context
+            
+        Returns:
+            Result dict or None if failed/empty
+        """
+        try:
+            result = specialist.process(context)
+            if result:
+                return {
+                    "specialist": specialist.capability.name,
+                    "result": result
+                }
+        except Exception as e:
+            logger.error(f"Specialist {specialist.capability.name} failed: {e}")
+        return None
