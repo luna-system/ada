@@ -1,6 +1,6 @@
 {
   "version": "1.0.0",
-  "generated": "2025-12-16",
+  "generated": "2025-12-19",
   "project": "ada-v1",
   "modules": {
     "brain/app.py": {
@@ -238,6 +238,62 @@
       ],
       "notes": "Phase 1 v2.0 feature - provides visibility into token usage patterns before optimization. Uses tiktoken for accurate counting."
     },
+    "brain/contextual_router.py": {
+      "type": "core-service",
+      "purpose": "Intelligent query routing based on 22 patterns across 5 categories (v2.7)",
+      "key_classes": [
+        "QueryCategory",
+        "ContextualRouter"
+      ],
+      "key_functions": [
+        "categorize_query",
+        "get_rag_strategy",
+        "get_specialists_to_activate"
+      ],
+      "pattern_categories": [
+        "TRIVIAL",
+        "FACT_RECALL",
+        "ANALYTICAL",
+        "CREATIVE",
+        "CODE"
+      ],
+      "imports": [
+        "enum",
+        "re",
+        "logging"
+      ],
+      "imported_by": [
+        "brain/prompt_builder/prompt_assembler.py"
+      ],
+      "notes": "Phase 2A optimization - skip unnecessary RAG/specialist overhead based on query type. 22 pattern tests, 100% passing."
+    },
+    "brain/response_cache.py": {
+      "type": "core-service",
+      "purpose": "Response caching layer with LRU eviction and TTL expiration (v2.8)",
+      "key_classes": [
+        "ResponseCache",
+        "CachedResponse",
+        "CacheStats"
+      ],
+      "key_functions": [
+        "get",
+        "set",
+        "has",
+        "normalize_query",
+        "get_stats",
+        "cleanup_expired"
+      ],
+      "imports": [
+        "collections.OrderedDict",
+        "dataclasses",
+        "datetime",
+        "hashlib"
+      ],
+      "imported_by": [
+        "brain/app.py"
+      ],
+      "notes": "Phase 2B optimization - ~40% expected hit rate on repetitive workflows. LRU eviction + TTL-based expiration."
+    },
     "brain/specialists/protocol.py": {
       "type": "interface",
       "purpose": "Base protocol for specialist plugins, MCP-inspired architecture",
@@ -348,6 +404,24 @@
       ],
       "priority": "MEDIUM",
       "notes": "Bidirectional specialist, supports Wikipedia and Object Show fandom wikis with smart search"
+    },
+    "brain/specialists/log_analysis_specialist.py": {
+      "type": "plugin",
+      "purpose": "Biomimetic log analysis for Minecraft crashes and DevOps logs (v2.7)",
+      "key_classes": [
+        "LogAnalysisSpecialist"
+      ],
+      "activation_trigger": "LLM uses <log_analysis> tag or log file uploaded (bidirectional)",
+      "imports": [
+        "brain.specialists.protocol",
+        "ada_logs.parsers.minecraft",
+        "brain.memory_decay"
+      ],
+      "imported_by": [
+        "brain/specialists/__init__.py"
+      ],
+      "priority": "HIGH",
+      "notes": "Kid-friendly Minecraft crash explanations. Foundation for 100:1 log compression using v2.2 importance weights (surprise=0.60). Standalone ada-logs package."
     },
     "brain/specialists/bidirectional.py": {
       "type": "framework",
@@ -623,6 +697,59 @@
       "imports": [],
       "imported_by": [],
       "notes": "EventSource (SSE) client for streaming responses, proxied through nginx to /api/* endpoints"
+    },
+    "ada.nvim/lua/ada/completion.lua": {
+      "type": "adapter",
+      "purpose": "Neovim code completion module with direct Ollama access (v2.6)",
+      "key_functions": [
+        "get_completion",
+        "trigger_completion",
+        "setup"
+      ],
+      "imports": [
+        "vim",
+        "plenary.job"
+      ],
+      "imported_by": [],
+      "notes": "10.6x speedup (27.7s → 2.6s) using qwen2.5-coder:7b with FIM format. Bypasses Ada's RAG for speed. 77% quality score, 100% success rate across 24 scenarios."
+    },
+    "ada-mcp/src/ada_mcp/tools/complete_code.py": {
+      "type": "adapter",
+      "purpose": "MCP tool for code completion via Model Context Protocol (v2.6)",
+      "key_functions": [
+        "complete_code_tool",
+        "build_fim_prompt"
+      ],
+      "imports": [
+        "ada_mcp.tools.common",
+        "httpx"
+      ],
+      "imported_by": [
+        "ada-mcp/src/ada_mcp/server.py"
+      ],
+      "notes": "MCP integration for IDE code completion. Uses same FIM format as Neovim plugin. Enables Copilot-like features in any MCP-compatible editor."
+    },
+    "ada-logs/src/ada_logs/parsers/minecraft.py": {
+      "type": "utility",
+      "purpose": "Minecraft crash log parser with kid-friendly explanations (v2.7)",
+      "key_classes": [
+        "MinecraftParser",
+        "CrashPattern"
+      ],
+      "key_functions": [
+        "parse",
+        "analyze_crash",
+        "explain_for_kids"
+      ],
+      "imports": [
+        "re",
+        "dataclasses"
+      ],
+      "imported_by": [
+        "brain/specialists/log_analysis_specialist.py",
+        "ada-logs/src/ada_logs/cli.py"
+      ],
+      "notes": "Pattern matching for common Minecraft crashes (OptiFine+Sodium conflicts, OutOfMemoryError, mod dependencies). Foundation for 100:1 log compression using v2.2 importance weights. Standalone CC0 library."
     }
   },
   "dependency_clusters": {
@@ -631,12 +758,16 @@
       "adapters/cli/ada_cli/cli.py",
       "frontend/public/app.js",
       "matrix-bridge/bridge.py",
-      "ada-mcp/src/ada_mcp/server.py"
+      "ada-mcp/src/ada_mcp/server.py",
+      "ada.nvim/lua/ada/completion.lua",
+      "ada-mcp/src/ada_mcp/tools/complete_code.py"
     ],
     "core_api": [
       "brain/app.py",
       "brain/schemas.py",
-      "brain/config.py"
+      "brain/config.py",
+      "brain/contextual_router.py",
+      "brain/response_cache.py"
     ],
     "llm_orchestration": [
       "brain/llm.py",
@@ -653,7 +784,8 @@
       "brain/specialists/listenbrainz_specialist.py",
       "brain/specialists/web_search_specialist.py",
       "brain/specialists/wiki_specialist.py",
-      "brain/specialists/docs_specialist.py"
+      "brain/specialists/docs_specialist.py",
+      "brain/specialists/log_analysis_specialist.py"
     ],
     "support_utilities": [
       "brain/ocr.py",

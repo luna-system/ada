@@ -53,6 +53,7 @@ Welcome to Ada! Your personal AI assistant that runs entirely on your hardware.
 
    adapters
    adapter_development
+   code_completion
    neovim_integration
    matrix_integration
    api_usage
@@ -67,6 +68,7 @@ Welcome to Ada! Your personal AI assistant that runs entirely on your hardware.
    bidirectional
    specialist_rag
    web_search
+   ada_logs
 
 .. toctree::
    :maxdepth: 2

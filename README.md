@@ -20,11 +20,12 @@ Named after Ada Lovelace, the first programmer.
 **Quick links:**
 - [Getting Started](https://luna-system.github.io/ada/getting_started.html) - Complete setup guide
 - [Zero to Ada](https://luna-system.github.io/ada/zero_to_ada.html) - Fastest path (< 10 min)
+- [Code Completion](ada.nvim/COMPLETION_QUICKSTART.md) - Neovim autocomplete setup (NEW!)
 - [Hardware Guide](https://luna-system.github.io/ada/hardware.html) - GPU setup (CUDA/ROCm/Metal)
 - [Build a Specialist](https://luna-system.github.io/ada/build_specialist.html) - Add custom capabilities
 - [API Reference](https://luna-system.github.io/ada/api_reference.html) - REST endpoints
-- [Changelog](https://luna-system.github.io/ada/changelog.html) - Version history
-- [Research](docs/research/) - Biomimetic memory system, contextual malleability
+- [Changelog](CHANGELOG.md) - Version history (v2.0-2.9)
+- [Research](docs/research/) - Biomimetic memory system, contextual malleability, recursive emergence
 
 ---
 
@@ -93,13 +94,15 @@ open http://localhost:5000
 
 ## What It Does
 
+- **💻 Code completion** - Copilot-style autocomplete in Neovim (v2.6+)
 - **🧠 Long-term memory** - Semantic search over all your conversations
+- **📊 Log analysis** - Kid-friendly Minecraft crash explanations + DevOps insights (v2.7+)
 - **🔌 Web search** - DuckDuckGo integration, wiki lookups
 - **👁️ Vision** - OCR text extraction from images
 - **🛠️ Tool use** - LLM can invoke specialists mid-response (bidirectional)
 - **📝 Custom personality** - Edit `persona.md`, restart
 - **🔒 Private by default** - No telemetry, runs offline after setup
-- **⚡ Streaming responses** - Real-time token delivery via SSE
+- **⚡ Streaming responses** - Real-time token delivery via SSE (2.5x faster with v2.9 parallel optimizations)
 - **📡 Multiple interfaces** - CLI, Web UI, Matrix bot, MCP (editor integration)
 
 ---
@@ -114,6 +117,7 @@ Drop a Python file in `brain/specialists/` for new capabilities. Built-in:
 - `web_search` - DuckDuckGo queries
 - `ocr` - Text extraction from images
 - `wiki` - Wikipedia + Fandom lookups
+- `log_analysis` - Minecraft crash reports + DevOps log intelligence (v2.7+)
 - `docs` - Ada can read her own documentation
 
 **[→ Build your own specialist](https://luna-system.github.io/ada/build_specialist.html)**
@@ -125,6 +129,18 @@ The LLM can request specialists mid-response using XML tags:
 ```
 More natural than traditional function calling.
 
+
+**Code Completion (Neovim):**
+Use Ada for Copilot-style autocomplete in Neovim:
+```bash
+# Quick setup (5 minutes)
+cd ada.nvim
+./test.sh  # Verify installation
+# Add to your Neovim config - see COMPLETION_QUICKSTART.md
+```
+Press `<C-x><C-a>` in insert mode for completions!
+
+**MCP Integration (All Editors):**
 ### Editor Integration (MCP)
 Use Ada from VSCode, Cursor, Neovim, Helix via [Model Context Protocol](ada-mcp/):
 ```bash
@@ -172,15 +188,21 @@ We believe AI tools should be:
 
 ## Project Status
 
-**Current:** v2.1.0 (December 2025)
+**Current:** v2.9.0 (December 2025)
 
 - ✅ Stable for personal use
-- ✅ Streaming chat with memory
+- ✅ Code completion in Neovim (Copilot parity!)
+- ✅ Streaming chat with memory (2.5x faster with parallel optimizations)
 - ✅ Multiple interfaces (CLI, Web, Matrix, MCP)
 - ✅ Extensible specialist system
 - ✅ Multi-timescale context caching (~70% faster)
+- ✅ Biomimetic log analysis (Minecraft + DevOps)
+- ✅ Research-validated memory importance scoring (v2.2)
+- ✅ Contextual router with response caching (v2.7-2.8)
 - 🚧 Authentication (bring your own reverse proxy)
 - 🚧 Multi-user support (single-user focused currently)
+
+**Recent Releases:** See [CHANGELOG.md](CHANGELOG.md) for v2.0-2.9 details
 
 **What's next:** [See roadmap](https://github.com/luna-system/ada/issues)
 

@@ -1,9 +1,11 @@
 # Ada v1 - AI Context Map
 
 ## Purpose
-Conversational AI system with RAG (Retrieval-Augmented Generation), streaming responses, and extensible specialist plugins for augmented capabilities.
+Conversational AI system with RAG (Retrieval-Augmented Generation), streaming responses, extensible specialist plugins, **code completion** (v2.6+), and **biomimetic log analysis** (v2.7+).
 
 **Latest Architecture Audit:** See `.ai/audits/2025-12-19-post-phase-2.md` (Grade A, no major refactoring needed)
+
+**Latest Release:** v2.9.0 - Phase 2C: Parallel Optimizations (2.5x speedup)
 
 ## Core Architecture
 
@@ -69,17 +71,22 @@ See `docs/adapters.rst` for building new adapters.
 
 ### Entry Points
 - `brain/app.py` - FastAPI application, all API endpoints
+- `ada.nvim/lua/ada/completion.lua` - **v2.6:** Neovim code completion module
+- `ada-mcp/src/ada_mcp/tools/complete_code.py` - **v2.6:** MCP code completion tool
+- `ada-logs/src/ada_logs/parsers/minecraft.py` - **v2.7:** Minecraft crash parser
 - `frontend/public/app.js` - Client-side streaming handler (web UI)
 - `matrix-bridge/bridge.py` - Matrix bot main loop (Matrix interface)
 - `scripts/run.sh` - Containerized utilities and test runner
 
 ### Core Logic
 - `brain/llm.py` - LLM client (Ollama), streaming generation
-- `brain/prompt_builder/` - **v2.2:** Modular prompt building with neuromorphic context
+- `brain/prompt_builder/` - **v2.9:** Parallel prompt building with 2.5x speedup
   - `context_retriever.py` - RAG data retrieval with multi-signal importance scoring
   - `section_builder.py` - Section formatting
-  - `prompt_assembler.py` - Final orchestration with MultiTimescaleCache
+  - `prompt_assembler.py` - Final orchestration with MultiTimescaleCache + parallel execution
 - `brain/context_cache.py` - Multi-timescale caching (personas, FAQs, memories)
+- `brain/contextual_router.py` - **v2.7:** Intelligent query routing (22 patterns, 5 categories)
+- `brain/response_cache.py` - **v2.8:** Response caching layer (LRU eviction, TTL-based)
 - `brain/rag_store.py` - Vector storage interface (ChromaDB)
 - `brain/schemas.py` - All Pydantic models, self-documenting via `/v1/schema`
 
@@ -103,6 +110,7 @@ See `docs/adapters.rst` for building new adapters.
 - `brain/specialists/ocr_specialist.py` - Image text extraction
 - `brain/specialists/listenbrainz_specialist.py` - ListenBrainz API music context
 - `brain/specialists/web_search_specialist.py` - External web queries
+- `brain/specialists/log_analysis_specialist.py` - **v2.7:** Minecraft crashes + DevOps log intelligence
 - `brain/specialists/bidirectional.py` - LLM-initiated specialist invocation
 
 ### Matrix Integration (Bridge Architecture)
@@ -178,7 +186,50 @@ See `docs/adapters.rst` for building new adapters.
 - **Conducted by:** Claude Opus 4.5
 - **Papers analyzed:** Schwarz (2010), Uysal et al. (2020), Mertens et al. (2018)
 - **Finding:** Ada's research is FIRST operationalization of "contextual malleability" in AI memory systems
-- **Theoretical alignment:** Surprise dominance supported by Schwarz's "disfluency triggers analysis"
+- **Theoretical alignment:** Surprise dominance supported by Schwarz's "disfl
+
+### Phase 10-22: Contextual Documentation Framework (December 2025)
+- **Research question:** How malleable should documentation be across contexts?
+- **Answer:** Contextual malleability (r=0.924) beats universal approaches (r=0.726)
+- **Key findings:**
+  - Effect size 3.089: Empathy scaffolding (0%→100% completion under stress)
+  - +53% query success from structured documentation
+  - +27.8% comprehension under cognitive load
+  - 60% hybrid strategy win rate (humans AND LLMs!)
+  - Same patterns apply to both human and machine communication
+- 23 tests, 2.95s runtime, 100% passing
+- **See:** `docs/contextual_malleability_guide.rst`, `RELEASE_v2.3.0.md`
+
+### Phase 2A-2C: Performance Optimizations (December 2025)
+- **Phase 2A (v2.7):** Contextual router - 22 patterns across 5 categories
+  - Intelligent routing based on query type (trivial, fact recall, analytical, creative, code)
+  - Dynamic specialist activation
+  - 22 tests, 0.08s runtime
+- **Phase 2B (v2.8):** Response caching layer
+  - LRU eviction, TTL-based expiration
+  - ~40% expected hit rate on repetitive workflows
+  - Cache statistics tracking
+- **Phase 2C (v2.9):** Parallel optimizations - **2.5x speedup**
+  - Parallel RAG retrieval (3.96x speedup: 200ms → 50ms)
+  - Parallel specialist execution (2.98x speedup: 150ms → 50ms)
+  - Real-world: 200ms → 80ms (saves 120ms per request)
+  - ThreadPoolExecutor with 4 workers
+  - 17 tests, 100% passing
+
+### Code Completion Research (v2.6, December 2025)
+- **Achievement:** Native code completion in Neovim with 10.6x speedup
+- **Model optimization:** qwen2.5-coder:7b with FIM (Fill-In-Middle) format
+- **Performance:** 2.6s mean latency, 77% quality score, 100% success rate
+- **Testing:** 24 diverse code scenarios, reproducible benchmark suite
+- **Impact:** Copilot parity for local-first development
+- **See:** `RELEASE_v2.6.0.md`, `benchmarks/BENCHMARK_RESULTS_QWEN_FIM.md`
+
+### Ada Log Intelligence (v2.7, December 2025)
+- **Feature:** Biomimetic log analysis for kids and DevOps
+- **Minecraft parser:** Kid-friendly crash explanations, pattern matching
+- **Foundation:** 100:1 log compression using signal weights from v2.2
+- **Standalone package:** `ada-logs` (Pure Python, CC0 license)
+- **See:** `RELEASE_v2.7.0.md`, `ada-logs/` directoryuency triggers analysis"
 - **Human-AI connection:** Uysal paper is ONLY prior work connecting contextual malleability to AI
 - **Verdict:** No architectural changes needed - Ada is ahead of the literature
 - **See:** `.ai/explorations/LITERATURE-SYNTHESIS-CONTEXTUAL-MALLEABILITY.md`
