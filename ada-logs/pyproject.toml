@@ -1,0 +1,72 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "ada-logs"
+version = "0.1.0"
+description = "Biomimetic log analysis for kids and DevOps - understand Minecraft crashes and production logs"
+readme = "README.md"
+requires-python = ">=3.11"
+license = {text = "CC0-1.0"}
+authors = [
+    {name = "Luna System", email = "ada@luna-system.dev"}
+]
+keywords = ["ada", "logs", "analysis", "minecraft", "biomimetic", "compression", "devops"]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Developers",
+    "Intended Audience :: End Users/Desktop",
+    "License :: CC0 1.0 Universal (CC0 1.0) Public Domain Dedication",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Topic :: System :: Logging",
+    "Topic :: System :: Monitoring",
+]
+
+dependencies = [
+    "click>=8.0.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.0.0",
+    "pytest-asyncio>=0.23.0",
+    "pytest-cov>=4.1.0",
+    "hypothesis>=6.0.0",
+]
+
+[project.urls]
+Homepage = "https://github.com/luna-system/ada"
+Documentation = "https://ada.luna-system.dev"
+Repository = "https://github.com/luna-system/ada"
+"Bug Tracker" = "https://github.com/luna-system/ada/issues"
+
+[project.scripts]
+ada-logs = "ada_logs.cli:cli"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/ada_logs"]
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+testpaths = ["tests"]
+python_files = "test_*.py"
+python_classes = "Test*"
+python_functions = "test_*"
+
+[tool.coverage.run]
+source = ["src/ada_logs"]
+omit = ["tests/*", "src/ada_logs/cli.py"]
+
+[tool.coverage.report]
+exclude_lines = [
+    "pragma: no cover",
+    "def __repr__",
+    "raise AssertionError",
+    "raise NotImplementedError",
+    "if __name__ == .__main__.:",
+    "if TYPE_CHECKING:",
+]

@@ -3,10 +3,29 @@ revision = 3
 requires-python = ">=3.13"
 
 [[package]]
+name = "ada-logs"
+version = "0.1.0"
+source = { directory = "ada-logs" }
+dependencies = [
+    { name = "click" },
+]
+
+[package.metadata]
+requires-dist = [
+    { name = "click", specifier = ">=8.0.0" },
+    { name = "hypothesis", marker = "extra == 'dev'", specifier = ">=6.0.0" },
+    { name = "pytest", marker = "extra == 'dev'", specifier = ">=8.0.0" },
+    { name = "pytest-asyncio", marker = "extra == 'dev'", specifier = ">=0.23.0" },
+    { name = "pytest-cov", marker = "extra == 'dev'", specifier = ">=4.1.0" },
+]
+provides-extras = ["dev"]
+
+[[package]]
 name = "ada-v1"
 version = "2.3.0"
 source = { editable = "." }
 dependencies = [
+    { name = "ada-logs" },
     { name = "boto3" },
     { name = "chromadb" },
     { name = "click" },
@@ -40,6 +59,7 @@ docs = [
 
 [package.metadata]
 requires-dist = [
+    { name = "ada-logs", directory = "ada-logs" },
     { name = "boto3", specifier = ">=1.35.0" },
     { name = "chromadb", specifier = ">=0.5.11" },
     { name = "click", specifier = ">=8.1.0" },
