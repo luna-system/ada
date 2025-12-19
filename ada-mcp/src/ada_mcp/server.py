@@ -12,7 +12,7 @@ from mcp.types import Resource, TextContent, Tool
 
 from .ada_client import AdaClient
 from .resources import RESOURCES, read_resource
-from .tools import TOOLS, handle_tool_call
+from .tool_definitions import TOOLS, handle_tool_call
 
 # Load environment variables
 load_dotenv()
