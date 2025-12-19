@@ -871,6 +871,37 @@
         "paths": [
           {
             "perspective": "tutorial",
+            "steps": 3
+          }
+        ],
+        "total_steps": 3,
+        "found_answer": true,
+        "perspectives_used": 1
+      },
+      "multi_mode": {
+        "entry_point": "tutorial",
+        "entry_match": true,
+        "paths": [
+          {
+            "perspective": "tutorial",
+            "steps": 3
+          }
+        ],
+        "total_steps": 3,
+        "found_answer": true,
+        "perspectives_used": 1
+      }
+    },
+    {
+      "task_id": 2,
+      "user_type": "beginner",
+      "ideal_entry": "tutorial",
+      "single_mode": {
+        "entry_point": "tutorial",
+        "entry_match": true,
+        "paths": [
+          {
+            "perspective": "tutorial",
             "steps": 4
           }
         ],
@@ -884,45 +915,10 @@
         "paths": [
           {
             "perspective": "tutorial",
-            "steps": 3
-          },
-          {
-            "perspective": "reference",
-            "steps": 1
+            "steps": 2
           }
         ],
-        "total_steps": 4,
-        "found_answer": true,
-        "perspectives_used": 2
-      }
-    },
-    {
-      "task_id": 2,
-      "user_type": "beginner",
-      "ideal_entry": "tutorial",
-      "single_mode": {
-        "entry_point": "tutorial",
-        "entry_match": true,
-        "paths": [
-          {
-            "perspective": "tutorial",
-            "steps": 3
-          }
-        ],
-        "total_steps": 3,
-        "found_answer": true,
-        "perspectives_used": 1
-      },
-      "multi_mode": {
-        "entry_point": "tutorial",
-        "entry_match": true,
-        "paths": [
-          {
-            "perspective": "tutorial",
-            "steps": 3
-          }
-        ],
-        "total_steps": 3,
+        "total_steps": 2,
         "found_answer": true,
         "perspectives_used": 1
       }
@@ -937,10 +933,10 @@
         "paths": [
           {
             "perspective": "tutorial",
-            "steps": 3
+            "steps": 2
           }
         ],
-        "total_steps": 3,
+        "total_steps": 2,
         "found_answer": true,
         "perspectives_used": 1
       },
@@ -950,14 +946,14 @@
         "paths": [
           {
             "perspective": "tutorial",
-            "steps": 3
+            "steps": 2
           },
           {
             "perspective": "reference",
             "steps": 1
           }
         ],
-        "total_steps": 4,
+        "total_steps": 3,
         "found_answer": true,
         "perspectives_used": 2
       }
@@ -972,10 +968,10 @@
         "paths": [
           {
             "perspective": "tutorial",
-            "steps": 10
+            "steps": 11
           }
         ],
-        "total_steps": 10,
+        "total_steps": 11,
         "found_answer": true,
         "perspectives_used": 1
       },
@@ -985,10 +981,10 @@
         "paths": [
           {
             "perspective": "reference",
-            "steps": 1
+            "steps": 2
           }
         ],
-        "total_steps": 1,
+        "total_steps": 2,
         "found_answer": true,
         "perspectives_used": 1
       }
@@ -1003,11 +999,11 @@
         "paths": [
           {
             "perspective": "tutorial",
-            "steps": 11
+            "steps": 9
           }
         ],
-        "total_steps": 11,
-        "found_answer": false,
+        "total_steps": 9,
+        "found_answer": true,
         "perspectives_used": 1
       },
       "multi_mode": {
@@ -1016,10 +1012,10 @@
         "paths": [
           {
             "perspective": "reference",
-            "steps": 2
+            "steps": 1
           }
         ],
-        "total_steps": 2,
+        "total_steps": 1,
         "found_answer": true,
         "perspectives_used": 1
       }
@@ -1078,14 +1074,14 @@
         "paths": [
           {
             "perspective": "troubleshooting",
-            "steps": 3
+            "steps": 4
           },
           {
             "perspective": "tutorial",
             "steps": 2
           }
         ],
-        "total_steps": 5,
+        "total_steps": 6,
         "found_answer": true,
         "perspectives_used": 2
       }
@@ -1104,7 +1100,7 @@
           }
         ],
         "total_steps": 8,
-        "found_answer": true,
+        "found_answer": false,
         "perspectives_used": 1
       },
       "multi_mode": {
@@ -1113,14 +1109,14 @@
         "paths": [
           {
             "perspective": "troubleshooting",
-            "steps": 4
+            "steps": 2
           },
           {
             "perspective": "tutorial",
-            "steps": 2
+            "steps": 1
           }
         ],
-        "total_steps": 6,
+        "total_steps": 3,
         "found_answer": true,
         "perspectives_used": 2
       }
@@ -1135,11 +1131,11 @@
         "paths": [
           {
             "perspective": "tutorial",
-            "steps": 8
+            "steps": 9
           }
         ],
-        "total_steps": 8,
-        "found_answer": true,
+        "total_steps": 9,
+        "found_answer": false,
         "perspectives_used": 1
       },
       "multi_mode": {
@@ -1148,11 +1144,11 @@
         "paths": [
           {
             "perspective": "troubleshooting",
-            "steps": 3
+            "steps": 2
           },
           {
             "perspective": "tutorial",
-            "steps": 1
+            "steps": 2
           }
         ],
         "total_steps": 4,
@@ -1170,10 +1166,10 @@
         "paths": [
           {
             "perspective": "tutorial",
-            "steps": 7
+            "steps": 6
           }
         ],
-        "total_steps": 7,
+        "total_steps": 6,
         "found_answer": true,
         "perspectives_used": 1
       },
@@ -1205,10 +1201,10 @@
         "paths": [
           {
             "perspective": "tutorial",
-            "steps": 7
+            "steps": 6
           }
         ],
-        "total_steps": 7,
+        "total_steps": 6,
         "found_answer": true,
         "perspectives_used": 1
       },
@@ -1218,11 +1214,11 @@
         "paths": [
           {
             "perspective": "reference",
-            "steps": 2
+            "steps": 1
           },
           {
             "perspective": "tutorial",
-            "steps": 1
+            "steps": 2
           }
         ],
         "total_steps": 3,
@@ -1240,10 +1236,10 @@
         "paths": [
           {
             "perspective": "tutorial",
-            "steps": 7
+            "steps": 4
           }
         ],
-        "total_steps": 7,
+        "total_steps": 4,
         "found_answer": true,
         "perspectives_used": 1
       },
@@ -1295,7 +1291,7 @@
       {
         "task_id": 5,
         "user_type": "experienced",
-        "completed": false,
+        "completed": true,
         "entry_match": false
       },
       {
@@ -1313,13 +1309,13 @@
       {
         "task_id": 8,
         "user_type": "stuck",
-        "completed": true,
+        "completed": false,
         "entry_match": false
       },
       {
         "task_id": 9,
         "user_type": "stuck",
-        "completed": true,
+        "completed": false,
         "entry_match": false
       },
       {
@@ -1415,36 +1411,36 @@
         "entry_match": true
       }
     ],
-    "rate_single": 0.9166666666666666,
+    "rate_single": 0.8333333333333334,
     "rate_multi": 1.0,
-    "improvement": 0.08333333333333337
+    "improvement": 0.16666666666666663
   },
   "timing": {
     "single_mode": [
       {
         "task_id": 1,
-        "steps": 4,
+        "steps": 3,
         "completed": true
       },
       {
         "task_id": 2,
-        "steps": 3,
+        "steps": 4,
         "completed": true
       },
       {
         "task_id": 3,
-        "steps": 3,
+        "steps": 2,
         "completed": true
       },
       {
         "task_id": 4,
-        "steps": 10,
+        "steps": 11,
         "completed": true
       },
       {
         "task_id": 5,
-        "steps": null,
-        "completed": false
+        "steps": 9,
+        "completed": true
       },
       {
         "task_id": 6,
@@ -1458,54 +1454,54 @@
       },
       {
         "task_id": 8,
-        "steps": 8,
-        "completed": true
+        "steps": null,
+        "completed": false
       },
       {
         "task_id": 9,
-        "steps": 8,
-        "completed": true
+        "steps": null,
+        "completed": false
       },
       {
         "task_id": 10,
-        "steps": 7,
+        "steps": 6,
         "completed": true
       },
       {
         "task_id": 11,
-        "steps": 7,
+        "steps": 6,
         "completed": true
       },
       {
         "task_id": 12,
-        "steps": 7,
+        "steps": 4,
         "completed": true
       }
     ],
     "multi_mode": [
       {
         "task_id": 1,
-        "steps": 4,
-        "completed": true
-      },
-      {
-        "task_id": 2,
         "steps": 3,
         "completed": true
       },
       {
+        "task_id": 2,
+        "steps": 2,
+        "completed": true
+      },
+      {
         "task_id": 3,
-        "steps": 4,
+        "steps": 3,
         "completed": true
       },
       {
         "task_id": 4,
-        "steps": 1,
+        "steps": 2,
         "completed": true
       },
       {
         "task_id": 5,
-        "steps": 2,
+        "steps": 1,
         "completed": true
       },
       {
@@ -1515,12 +1511,12 @@
       },
       {
         "task_id": 7,
-        "steps": 5,
+        "steps": 6,
         "completed": true
       },
       {
         "task_id": 8,
-        "steps": 6,
+        "steps": 3,
         "completed": true
       },
       {
@@ -1544,28 +1540,37 @@
         "completed": true
       }
     ],
-    "avg_single": 6.636363636363637,
-    "avg_multi": 3.3333333333333335,
-    "reduction": -3.303030303030303
+    "avg_single": 6.1,
+    "avg_multi": 2.9166666666666665,
+    "reduction": -3.183333333333333
   },
   "entry_analysis": {
     "by_user_type": {
-      "stuck": {
-        "n_tasks": 3,
-        "single_success": 1.0,
-        "multi_success": 1.0,
-        "improvement": 0.0,
-        "avg_steps_single": 8.0,
-        "avg_steps_multi": 5.0,
-        "best_mode": "single"
-      },
       "beginner": {
         "n_tasks": 3,
         "single_success": 1.0,
         "multi_success": 1.0,
         "improvement": 0.0,
-        "avg_steps_single": 3.3333333333333335,
-        "avg_steps_multi": 3.6666666666666665,
+        "avg_steps_single": 3.0,
+        "avg_steps_multi": 2.6666666666666665,
+        "best_mode": "single"
+      },
+      "stuck": {
+        "n_tasks": 3,
+        "single_success": 0.3333333333333333,
+        "multi_success": 1.0,
+        "improvement": 0.6666666666666667,
+        "avg_steps_single": 8.0,
+        "avg_steps_multi": 4.333333333333333,
+        "best_mode": "multi"
+      },
+      "experienced": {
+        "n_tasks": 3,
+        "single_success": 1.0,
+        "multi_success": 1.0,
+        "improvement": 0.0,
+        "avg_steps_single": 9.333333333333334,
+        "avg_steps_multi": 1.3333333333333333,
         "best_mode": "single"
       },
       "explorer": {
@@ -1573,18 +1578,9 @@
         "single_success": 1.0,
         "multi_success": 1.0,
         "improvement": 0.0,
-        "avg_steps_single": 7.0,
+        "avg_steps_single": 5.333333333333333,
         "avg_steps_multi": 3.3333333333333335,
         "best_mode": "single"
-      },
-      "experienced": {
-        "n_tasks": 3,
-        "single_success": 0.6666666666666666,
-        "multi_success": 1.0,
-        "improvement": 0.33333333333333337,
-        "avg_steps_single": 9.0,
-        "avg_steps_multi": 1.3333333333333333,
-        "best_mode": "multi"
       }
     },
     "entry_match_importance": {
@@ -1593,23 +1589,23 @@
     }
   },
   "comparison": {
-    "completion_single": 0.9166666666666666,
+    "completion_single": 0.8333333333333334,
     "completion_multi": 1.0,
-    "completion_delta": 0.08333333333333337,
-    "time_single": 6.636363636363637,
-    "time_multi": 3.3333333333333335,
-    "time_delta": -3.303030303030303,
+    "completion_delta": 0.16666666666666663,
+    "time_single": 6.1,
+    "time_multi": 2.9166666666666665,
+    "time_delta": -3.183333333333333,
     "match_rate_single": 0.4166666666666667,
     "match_rate_multi": 1.0,
     "match_rate_delta": 0.5833333333333333,
-    "effect_size": 1.3375420875420876,
+    "effect_size": 1.4564814814814813,
     "multi_mode_helps": true,
     "interpretation": "LARGE positive effect",
     "best_entry_by_type": {
-      "stuck": "troubleshooting",
       "beginner": "tutorial",
-      "explorer": "flexible (multiple)",
-      "experienced": "reference"
+      "stuck": "troubleshooting",
+      "experienced": "reference",
+      "explorer": "flexible (multiple)"
     }
   },
   "interpretation": "LARGE positive effect",

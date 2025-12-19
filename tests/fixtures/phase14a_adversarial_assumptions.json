@@ -331,10 +331,10 @@
         },
         {
           "scenario_id": 3,
-          "effectiveness": 0.85,
+          "effectiveness": 0.95,
           "time_seconds": 10,
-          "feels_patronized": true,
-          "satisfied": false
+          "feels_patronized": false,
+          "satisfied": true
         }
       ]
     },
@@ -452,10 +452,10 @@
   "effectiveness": {
     "expert": {
       "minimal_effectiveness": 0.9499999999999998,
-      "heavy_effectiveness": 0.9166666666666666,
+      "heavy_effectiveness": 0.9499999999999998,
       "minimal_time": 3.0,
       "heavy_time": 10.0,
-      "winner": "minimal",
+      "winner": "tie",
       "empathy_helps": false
     },
     "rushed": {
@@ -482,15 +482,7 @@
     "overhead_acceptable": false
   },
   "negative_effects": {
-    "condescension_cases": [
-      {
-        "scenario_id": 3,
-        "effectiveness": 0.85,
-        "time_seconds": 10,
-        "feels_patronized": true,
-        "satisfied": false
-      }
-    ],
+    "condescension_cases": [],
     "annoyance_cases": [
       {
         "scenario_id": 2,
@@ -544,34 +536,33 @@
         "satisfied": false
       }
     ],
-    "condescension_rate": 0.1,
+    "condescension_rate": 0.0,
     "annoyance_rate": 0.3,
     "frustration_rate": 0.4,
-    "total_negative_rate": 0.8,
+    "total_negative_rate": 0.7,
     "has_negative_effects": true
   },
   "boundaries": {
     "expert_minimal_score": 0.9499999999999998,
-    "expert_heavy_score": 0.9166666666666666,
-    "expert_winner": "minimal",
+    "expert_heavy_score": 0.9499999999999998,
+    "expert_winner": "tie",
     "rushed_minimal_score": 0.85,
     "rushed_heavy_score": 0.9499999999999998,
     "rushed_winner": "empathy_heavy",
     "lookup_minimal_score": 0.9,
     "lookup_heavy_score": 0.8,
     "lookup_winner": "minimal",
-    "condescension_rate": 0.1,
+    "condescension_rate": 0.0,
     "annoyance_rate": 0.3,
-    "overhead_penalty": 2.6,
+    "overhead_penalty": 2.4,
     "failure_modes": [
-      "expert: Minimal empathy wins (effectiveness 0.95 vs 0.92)",
       "lookup: Minimal empathy wins (effectiveness 0.90 vs 0.80)",
       "Annoyance: 30.0% frustrated by overhead",
       "Lookup friction: 40.0% can't find quick answer"
     ],
     "empathy_universally_wins": false,
-    "summary": "Significant boundaries: 4 contexts where empathy fails"
+    "summary": "Significant boundaries: 3 contexts where empathy fails"
   },
-  "conclusion": "Significant boundaries: 4 contexts where empathy fails",
+  "conclusion": "Significant boundaries: 3 contexts where empathy fails",
   "thesis_survives": false
 }
