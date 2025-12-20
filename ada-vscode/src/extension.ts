@@ -12,16 +12,56 @@ import * as vscode from 'vscode';
 import { AdaCompletionProvider } from './completionProvider';
 import { OllamaClient } from './ollamaClient';
 import { StatusBar } from './statusBar';
+import { ChatViewProvider } from './chatViewProvider';
+import { AdaBrainClient } from './adaBrainClient';
+import { ModelWarmer } from './modelWarmer';
 
 let completionProvider: AdaCompletionProvider;
 let ollamaClient: OllamaClient;
 let statusBar: StatusBar;
+let modelWarmer: ModelWarmer | undefined;
 
 export async function activate(context: vscode.ExtensionContext) {
-    console.log('Ada: Activating local AI code completion...');
+    console.log('Ada: Activating...');
 
-    // Initialize Ollama client
     const config = vscode.workspace.getConfiguration('ada');
+
+    // ===========================================
+    // REGISTER CHAT VIEW FIRST (no network calls!)
+    // This ensures the sidebar works even if Ollama is down
+    // ===========================================
+    try {
+        const useBrain = config.get<boolean>('chatUseBrain', true);
+        let chatClient: OllamaClient | AdaBrainClient;
+        
+        if (useBrain) {
+            const brainUrl = config.get<string>('brainUrl', 'http://localhost:8000');
+            chatClient = new AdaBrainClient(brainUrl);
+            console.log('Ada: Chat configured for Brain at', brainUrl);
+        } else {
+            // Create a temporary client for chat (will be updated later)
+            chatClient = new OllamaClient(
+                config.get('ollamaUrl', 'http://localhost:11434'),
+                config.get('model', 'qwen2.5-coder:7b')
+            );
+            console.log('Ada: Chat configured for Ollama');
+        }
+
+        const chatViewProvider = new ChatViewProvider(context.extensionUri, chatClient);
+        context.subscriptions.push(
+            vscode.window.registerWebviewViewProvider(ChatViewProvider.viewType, chatViewProvider)
+        );
+        console.log('Ada: Chat view registered ✓');
+    } catch (error) {
+        console.error('Ada: Failed to register chat view:', error);
+        vscode.window.showErrorMessage(`Ada: Chat panel failed: ${error}`);
+    }
+
+    // ===========================================
+    // NOW do the rest (network calls, etc.)
+    // ===========================================
+    
+    // Initialize Ollama client for completions
     ollamaClient = new OllamaClient(
         config.get('ollamaUrl', 'http://localhost:11434'),
         config.get('model', 'qwen2.5-coder:7b')
@@ -31,28 +71,38 @@ export async function activate(context: vscode.ExtensionContext) {
     statusBar = new StatusBar();
     context.subscriptions.push(statusBar);
 
-    // Check Ollama connection
-    const connected = await ollamaClient.checkConnection();
-    if (connected) {
-        statusBar.setConnected();
-        vscode.window.showInformationMessage('Ada: Connected to Ollama ✓');
-    } else {
+    // Initialize model warmer (biomimetic feature!)
+    const brainUrl = config.get<string>('brainUrl', 'http://localhost:8000');
+    modelWarmer = new ModelWarmer(brainUrl);
+    await modelWarmer.register();  // Register VS Code session, warm qwen2.5-coder:7b
+    context.subscriptions.push(modelWarmer);
+
+    // Check Ollama connection (async, but don't block)
+    ollamaClient.checkConnection().then(connected => {
+        if (connected) {
+            statusBar.setConnected();
+            console.log('Ada: Connected to Ollama ✓');
+        } else {
+            statusBar.setDisconnected();
+            vscode.window.showWarningMessage(
+                'Ada: Cannot connect to Ollama at ' + config.get('ollamaUrl', 'http://localhost:11434')
+            );
+        }
+    }).catch(err => {
+        console.error('Ada: Ollama connection check failed:', err);
         statusBar.setDisconnected();
-        vscode.window.showWarningMessage(
-            'Ada: Cannot connect to Ollama. Make sure Ollama is running at ' + 
-            config.get('ollamaUrl', 'http://localhost:11434')
-        );
-    }
+    });
 
     // Initialize completion provider
     completionProvider = new AdaCompletionProvider(ollamaClient, statusBar);
 
     // Register for all languages
-    const disposable = vscode.languages.registerInlineCompletionItemProvider(
-        { pattern: '**' },  // All files
-        completionProvider
+    context.subscriptions.push(
+        vscode.languages.registerInlineCompletionItemProvider(
+            { pattern: '**' },
+            completionProvider
+        )
     );
-    context.subscriptions.push(disposable);
 
     // Register commands
     context.subscriptions.push(
@@ -101,4 +151,9 @@ export async function activate(context: vscode.ExtensionContext) {
 
 export function deactivate() {
     console.log('Ada: Deactivating...');
+    
+    // Unregister from model warmer
+    if (modelWarmer) {
+        modelWarmer.unregister();
+    }
 }

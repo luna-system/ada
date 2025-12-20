@@ -23,6 +23,7 @@ import datetime
 import json
 import csv
 import logging
+import re
 from pathlib import Path
 from typing import List, Dict, Any, Optional
 import sys
@@ -94,6 +95,70 @@ async def clear_notice(notice_id: str):
     ok = notice_manager.clear_notice(notice_id)
     return {"ok": ok}
 
+# --- Model Warmer API (Biomimetic Feature) ---
+from brain.model_warmer import get_model_warmer
+
+class AdapterRegisterRequest(BaseModel):
+    adapter_type: str  # 'vscode', 'cli', 'web', 'mcp', 'matrix'
+    adapter_id: str
+
+class AdapterHeartbeatRequest(BaseModel):
+    adapter_id: str
+
+class AdapterUnregisterRequest(BaseModel):
+    adapter_id: str
+
+@router.post('/v1/adapters/register', tags=['model-warmer'])
+async def register_adapter(request: AdapterRegisterRequest):
+    """
+    Register an adapter connection and warm its preferred model.
+    
+    Like motor cortex pre-activation, this ensures the model is loaded
+    and ready for fast inference (<200ms TTFT) when the adapter sends requests.
+    
+    Example:
+        POST /v1/adapters/register
+        {"adapter_type": "vscode", "adapter_id": "vscode-session-abc123"}
+        
+        → Model qwen2.5-coder:7b warmed with 4h keep_alive
+    """
+    warmer = get_model_warmer()
+    result = warmer.register_adapter(request.adapter_id, request.adapter_type)
+    return result
+
+@router.post('/v1/adapters/heartbeat', tags=['model-warmer'])
+async def adapter_heartbeat(request: AdapterHeartbeatRequest):
+    """
+    Send heartbeat to keep adapter session alive.
+    
+    Adapters should call this every 60 seconds to prevent session cleanup.
+    """
+    warmer = get_model_warmer()
+    result = warmer.heartbeat(request.adapter_id)
+    return result
+
+@router.post('/v1/adapters/unregister', tags=['model-warmer'])
+async def unregister_adapter(request: AdapterUnregisterRequest):
+    """
+    Unregister an adapter connection.
+    
+    Models may cool down if no other adapters need them.
+    """
+    warmer = get_model_warmer()
+    result = warmer.unregister_adapter(request.adapter_id)
+    return result
+
+@router.get('/v1/models/warm-pool', tags=['model-warmer'])
+async def get_warm_pool():
+    """
+    Get status of currently warm models and active adapters.
+    
+    Shows which models are loaded, why they're needed, and which
+    adapters are currently connected.
+    """
+    warmer = get_model_warmer()
+    return warmer.get_warm_pool_status()
+
 # --- OCR API ---
 from fastapi import UploadFile, File, HTTPException
 from brain.ocr import get_ocr_processor
@@ -133,7 +198,7 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 # Import modular components
 import config
 from rag_store import RagStore
-from llm import stream_chat_async, complete
+from llm import stream_chat_async, complete, warm_model
 from media import fetch_listenbrainz, format_media_for_prompt
 from brain.prompt_builder import PromptAssembler
 from brain.notices_client import get_active_notices
@@ -283,6 +348,14 @@ async def lifespan(app: FastAPI):
     print(banner)
     print("[BRAIN] Server is ready. Spawning workers")
     _init_rag_store()
+    try:
+        warmed = warm_model(model=config.OLLAMA_MODEL)
+        if warmed:
+            print(f"[BRAIN][LLM] Warmed model: {config.OLLAMA_MODEL}")
+        else:
+            print(f"[BRAIN][LLM] Warm model failed (continuing): {config.OLLAMA_MODEL}")
+    except Exception as err:
+        print(f"[BRAIN][LLM] Warm model exception (continuing): {err}")
     yield
     # Shutdown
     print("[BRAIN] Server shutting down")
@@ -482,7 +555,7 @@ async def get_system_info():
               },
               "endpoints": ["/v1/chat", "/v1/schema", ...],
               "models": {
-                "llm": "deepseek-r1",
+                                "llm": "qwen2.5-coder:7b",
                 "embedding": "nomic-embed-text"
               }
             }
@@ -661,6 +734,23 @@ async def chat_stream(request: Request):
     if not prompt:
         return JSONResponse(status_code=400, content={'error': 'prompt or message required'})
 
+    def _extract_last_user_message(text: str) -> str:
+        """Extract the last explicit user message from a composite prompt.
+
+        VS Code clients may send a system prompt + conversation transcript like:
+        "System...\nUser: hi\nAssistant: ...". Tool matching and routing should
+        operate on the *user's message*, not the entire prompt (which may contain
+        tool definitions that accidentally trigger specialists).
+        """
+        matches = list(re.finditer(r"(?:^|\n)User:\s*(.*)$", text, flags=re.MULTILINE))
+        if matches:
+            last = (matches[-1].group(1) or '').strip()
+            if last:
+                return last
+        return text.strip()
+
+    user_message = _extract_last_user_message(prompt)
+
     req_id = str(uuid.uuid4())[:8]
     conversation_id = data.get('conversation_id') or str(uuid.uuid4())
     include_thinking = data.get('include_thinking', False)
@@ -683,7 +773,7 @@ async def chat_stream(request: Request):
     code_after = data.get('code_after')
     
     router_context = RequestContext(
-        message=prompt,
+        message=user_message,
         code_before=code_before,
         code_after=code_after,
         language=data.get('language'),  # For code completion
@@ -754,7 +844,7 @@ async def chat_stream(request: Request):
 
     # PHASE 3: PRE-EXECUTION TOOL ACTIVATION (Tier 1 - Anticipatory/Reflex)
     # Pattern matching happens BEFORE LLM execution - model-agnostic!
-    tool_matches = tool_matcher.match(prompt)
+    tool_matches = tool_matcher.match(user_message)
     pre_executed_specialists = []
     
     logger.info(f"Request {req_id}: Found {len(tool_matches)} tool matches")
@@ -809,7 +899,7 @@ async def chat_stream(request: Request):
         
         # Build prompt with pre-executed specialist results
         final_prompt = assembler.build_prompt(
-            user_message=prompt,
+            user_message=user_message,
             conversation_id=conversation_id,
             pre_executed_results=pre_executed_specialists,  # Pass pre-executed results!
             notices=notices,
