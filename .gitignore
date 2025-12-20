@@ -69,3 +69,7 @@ docs/_build/
 /result
 /result-*
 /.direnv/
+
+# Conversation logs (personal)
+log-*.txt
+*.log

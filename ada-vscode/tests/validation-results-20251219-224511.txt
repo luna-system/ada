@@ -1,0 +1,33 @@
+=== ADA VS CODE QUICK VALIDATION ===
+Date: Fri Dec 19 10:45:11 PM CST 2025
+Brain: http://localhost:8000
+
+TEST 1: Brain Service Health
+[0;32m✓[0m Brain health: Service responding
+
+TEST 2: Context Preload
+[0;32m✓[0m AI docs present: 102 files found
+[0;32m✓[0m Brain API: Responding to requests
+
+TEST 3: Latency Benchmark (5 runs)
+  Run 1: TIMEOUT
+  Run 2: TIMEOUT
+  Run 3: TIMEOUT
+  Run 4: TIMEOUT
+  Run 5: TIMEOUT
+
+[0;31m✗[0m Avg latency: All requests timed out
+
+TEST 4: Resource Usage
+[0;32m✓[0m Brain memory: 1.775GiB / 61.95GiB
+
+TEST 5: Extension Package
+[0;31m✗[0m Extension package: Not built (run npm run package)
+
+======================================
+SUMMARY
+======================================
+Passed: 4
+Failed: 2
+
+[1;33m⚠ MOSTLY READY - Fix 2 issue(s)[0m
