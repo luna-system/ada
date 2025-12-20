@@ -25,7 +25,8 @@
     "privacy"
   ],
   "activationEvents": [
-    "onStartupFinished"
+    "onStartupFinished",
+    "onView:ada.chatView"
   ],
   "main": "./out/extension.js",
   "contributes": {
@@ -66,8 +67,41 @@
           "type": "boolean",
           "default": true,
           "description": "Show Ada status in status bar"
+        },
+        "ada.brainUrl": {
+          "type": "string",
+          "default": "http://localhost:8000",
+          "description": "Ada Brain server URL (for chat)"
+        },
+        "ada.chatUseBrain": {
+          "type": "boolean",
+          "default": true,
+          "description": "Use Ada Brain for chat (recommended)"
+        },
+        "ada.enableTools": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable tool calling in chat"
         }
       }
+    },
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "ada",
+          "title": "Ada",
+          "icon": "resources/ada-icon.svg"
+        }
+      ]
+    },
+    "views": {
+      "ada": [
+        {
+          "id": "ada.chatView",
+          "name": "Chat",
+          "type": "webview"
+        }
+      ]
     },
     "commands": [
       {
