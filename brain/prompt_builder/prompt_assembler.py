@@ -434,7 +434,7 @@ class PromptAssembler:
             }
             
             if specialist.should_activate(context):
-                priority_value = specialist.priority.value
+                priority_value = specialist.capability.context_priority.value
                 if priority_value <= SpecialistPriority.HIGH.value:
                     high_priority.append((specialist, context))
                 else:

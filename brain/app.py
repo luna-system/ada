@@ -870,7 +870,12 @@ async def chat_stream(request: Request):
             'entity': entity,
             'media': data.get('media') if isinstance(data.get('media'), dict) else None,
             'ocr_context': data.get('ocr_context') if isinstance(data.get('ocr_context'), dict) else None,
+            'message': user_message,  # Add message to context for specialist activation checks
         }
+        
+        # Get all available specialists for activation checks
+        from brain.specialists import list_specialists
+        all_specialists = list_specialists()
         
         # Execute high-confidence tool matches BEFORE LLM
         CONFIDENCE_THRESHOLD = 0.5
@@ -902,10 +907,11 @@ async def chat_stream(request: Request):
                 except Exception as e:
                     logger.error(f"Request {req_id}: Failed to execute {match.tool_name}: {e}")
         
-        # Build prompt with pre-executed specialist results
+        # Build prompt with pre-executed specialist results + all specialists for activation
         final_prompt = assembler.build_prompt(
             user_message=user_message,
             conversation_id=conversation_id,
+            specialists=all_specialists,  # Pass all specialists for activation checks
             pre_executed_results=pre_executed_specialists,  # Pass pre-executed results!
             notices=notices,
             request_context=request_context
