@@ -265,7 +265,7 @@ TOOLS = [
 ]
 
 
-async def handle_tool_call(name: str, arguments: dict[str, Any], ada: AdaClient) -> list[TextContent]:
+async def handle_tool_call(name: str, arguments: dict[str, Any], ada: AdaClient) -> CallToolResult:
     """
     Handle a tool call from MCP client.
 
@@ -275,7 +275,7 @@ async def handle_tool_call(name: str, arguments: dict[str, Any], ada: AdaClient)
         ada: Ada client instance
 
     Returns:
-        List of text content responses
+        CallToolResult with content and metadata
     """
     if name == "ada_chat":
         message = arguments["message"]
@@ -283,11 +283,20 @@ async def handle_tool_call(name: str, arguments: dict[str, Any], ada: AdaClient)
 
         try:
             response = await ada.chat(message, conversation_id)
-            return [TextContent(type="text", text=response)]
+            return CallToolResult(
+                content=[TextContent(type="text", text=response)],
+                meta={"tool_name": "ada_chat"},
+            )
         except AdaBrainConnectionError as e:
-            return [TextContent(type="text", text=f"Connection error: {e}")]
+            return CallToolResult(
+                content=[TextContent(type="text", text=f"Connection error: {e}")],
+                isError=True,
+            )
         except AdaBrainError as e:
-            return [TextContent(type="text", text=f"Error: {e}")]
+            return CallToolResult(
+                content=[TextContent(type="text", text=f"Error: {e}")],
+                isError=True,
+            )
 
     elif name == "ada_search_memory":
         query = arguments["query"]
@@ -297,7 +306,10 @@ async def handle_tool_call(name: str, arguments: dict[str, Any], ada: AdaClient)
         memories = await ada.search_memories(query, scope=scope, type=type_)
 
         if not memories:
-            return [TextContent(type="text", text="No matching memories found.")]
+            return CallToolResult(
+                content=[TextContent(type="text", text="No matching memories found.")],
+                meta={"tool_name": "ada_search_memory", "actions_taken": ["searched memories"]},
+            )
 
         result = f"Found {len(memories)} memories:\n\n"
         for i, mem in enumerate(memories, 1):
@@ -306,7 +318,10 @@ async def handle_tool_call(name: str, arguments: dict[str, Any], ada: AdaClient)
                 result += f"   Metadata: {mem['metadata']}\n"
             result += "\n"
 
-        return [TextContent(type="text", text=result)]
+        return CallToolResult(
+            content=[TextContent(type="text", text=result)],
+            meta={"tool_name": "ada_search_memory", "actions_taken": [f"found {len(memories)} memories"]},
+        )
 
     elif name == "ada_add_memory":
         content = arguments["content"]
@@ -316,12 +331,13 @@ async def handle_tool_call(name: str, arguments: dict[str, Any], ada: AdaClient)
 
         memory = await ada.add_memory(content, type=type_, importance=importance, scope=scope)
 
-        return [
-            TextContent(
+        return CallToolResult(
+            content=[TextContent(
                 type="text",
                 text=f"Memory saved with ID: {memory.get('id', 'unknown')}",
-            )
-        ]
+            )],
+            meta={"tool_name": "ada_add_memory", "actions_taken": ["added memory"]},
+        )
 
     elif name == "ada_health":
         try:
@@ -335,11 +351,20 @@ async def handle_tool_call(name: str, arguments: dict[str, Any], ada: AdaClient)
                 for service, service_status in health["services"].items():
                     details += f"  {service}: {service_status}\n"
 
-            return [TextContent(type="text", text=status + details)]
+            return CallToolResult(
+                content=[TextContent(type="text", text=status + details)],
+                meta={"tool_name": "ada_health", "actions_taken": ["checked health"]},
+            )
         except AdaBrainConnectionError as e:
-            return [TextContent(type="text", text=f"✗ Cannot connect to Ada Brain: {e}")]
+            return CallToolResult(
+                content=[TextContent(type="text", text=f"✗ Cannot connect to Ada Brain: {e}")],
+                isError=True,
+            )
         except AdaBrainError as e:
-            return [TextContent(type="text", text=f"✗ Health check failed: {e}")]
+            return CallToolResult(
+                content=[TextContent(type="text", text=f"✗ Health check failed: {e}")],
+                isError=True,
+            )
 
     elif name == "ada_complete_code":
         code_before = arguments["code_before"]
@@ -356,12 +381,21 @@ async def handle_tool_call(name: str, arguments: dict[str, Any], ada: AdaClient)
             )
             
             if result.success:
-                return [TextContent(type="text", text=result.content)]
+                return CallToolResult(
+                    content=[TextContent(type="text", text=result.content)],
+                    meta={"tool_name": "ada_complete_code", "actions_taken": ["generated completion"]},
+                )
             else:
-                return [TextContent(type="text", text=f"Completion failed: {result.error}")]
+                return CallToolResult(
+                    content=[TextContent(type="text", text=f"Completion failed: {result.error}")],
+                    isError=True,
+                )
                 
         except Exception as e:
-            return [TextContent(type="text", text=f"Error generating completion: {e}")]
+            return CallToolResult(
+                content=[TextContent(type="text", text=f"Error generating completion: {e}")],
+                isError=True,
+            )
 
     elif name == "ada_validate_architecture":
         file_path = arguments["file_path"]
@@ -381,12 +415,26 @@ async def handle_tool_call(name: str, arguments: dict[str, Any], ada: AdaClient)
                 # Include timing in response
                 time_ms = result.metadata.get("time_ms", "?")
                 response = result.content + f"\n\n⚡ Validation time: {time_ms}ms"
-                return [TextContent(type="text", text=response)]
+                return CallToolResult(
+                    content=[TextContent(type="text", text=response)],
+                    meta={
+                        "tool_name": "ada_validate_architecture",
+                        "files_accessed": [file_path],
+                        "actions_taken": ["validated architecture"],
+                        "duration_ms": result.metadata.get("time_ms"),
+                    },
+                )
             else:
-                return [TextContent(type="text", text=f"Validation error: {result.error}")]
+                return CallToolResult(
+                    content=[TextContent(type="text", text=f"Validation error: {result.error}")],
+                    isError=True,
+                )
                 
         except Exception as e:
-            return [TextContent(type="text", text=f"Error during validation: {e}")]
+            return CallToolResult(
+                content=[TextContent(type="text", text=f"Error during validation: {e}")],
+                isError=True,
+            )
 
     elif name == "ada_read_file":
         file_path = arguments["file_path"]
@@ -407,12 +455,26 @@ async def handle_tool_call(name: str, arguments: dict[str, Any], ada: AdaClient)
                 latency = result.metadata.get("latency_ms", "?")
                 
                 header = f"📄 {file_path} ({file_type}, {lines} lines, {latency}ms)\n\n"
-                return [TextContent(type="text", text=header + result.content)]
+                return CallToolResult(
+                    content=[TextContent(type="text", text=header + result.content)],
+                    meta={
+                        "tool_name": "ada_read_file",
+                        "files_accessed": [file_path],
+                        "actions_taken": [f"read {lines} lines"],
+                        "duration_ms": latency,
+                    },
+                )
             else:
-                return [TextContent(type="text", text=f"❌ Read error: {result.error}")]
+                return CallToolResult(
+                    content=[TextContent(type="text", text=f"❌ Read error: {result.error}")],
+                    isError=True,
+                )
                 
         except Exception as e:
-            return [TextContent(type="text", text=f"Error reading file: {e}")]
+            return CallToolResult(
+                content=[TextContent(type="text", text=f"Error reading file: {e}")],
+                isError=True,
+            )
 
     elif name == "ada_write_file":
         file_path = arguments["file_path"]
@@ -440,12 +502,26 @@ async def handle_tool_call(name: str, arguments: dict[str, Any], ada: AdaClient)
                 details += f"Lines: {lines}\n"
                 details += f"Time: {latency}ms"
                 
-                return [TextContent(type="text", text=status + details)]
+                return CallToolResult(
+                    content=[TextContent(type="text", text=status + details)],
+                    meta={
+                        "tool_name": "ada_write_file",
+                        "files_accessed": [file_path],
+                        "actions_taken": [f"wrote {bytes_written} bytes"],
+                        "duration_ms": latency,
+                    },
+                )
             else:
-                return [TextContent(type="text", text=f"❌ Write error: {result.error}")]
+                return CallToolResult(
+                    content=[TextContent(type="text", text=f"❌ Write error: {result.error}")],
+                    isError=True,
+                )
                 
         except Exception as e:
-            return [TextContent(type="text", text=f"Error writing file: {e}")]
+            return CallToolResult(
+                content=[TextContent(type="text", text=f"Error writing file: {e}")],
+                isError=True,
+            )
 
     elif name == "ada_run_command":
         command = arguments["command"]
@@ -465,14 +541,32 @@ async def handle_tool_call(name: str, arguments: dict[str, Any], ada: AdaClient)
             
             if result.success:
                 header = f"✅ Command succeeded (exit {exit_code}, {latency}ms)\n\n"
-                return [TextContent(type="text", text=header + result.content)]
+                return CallToolResult(
+                    content=[TextContent(type="text", text=header + result.content)],
+                    meta={
+                        "tool_name": "ada_run_command",
+                        "actions_taken": [f"ran command: {command}"],
+                        "duration_ms": latency,
+                    },
+                )
             else:
                 header = f"❌ Command failed (exit {exit_code}, {latency}ms)\n\n"
                 output = result.content if result.content else result.error
-                return [TextContent(type="text", text=header + output)]
+                return CallToolResult(
+                    content=[TextContent(type="text", text=header + output)],
+                    isError=True,
+                    meta={
+                        "tool_name": "ada_run_command",
+                        "actions_taken": [f"ran command: {command}"],
+                        "duration_ms": latency,
+                    },
+                )
                 
         except Exception as e:
-            return [TextContent(type="text", text=f"Error running command: {e}")]
+            return CallToolResult(
+                content=[TextContent(type="text", text=f"Error running command: {e}")],
+                isError=True,
+            )
 
     elif name == "ada_introspect":
         focus = arguments.get("focus", "general")
@@ -485,22 +579,30 @@ async def handle_tool_call(name: str, arguments: dict[str, Any], ada: AdaClient)
             )
             
             if result.success:
-                # Extract metadata and include in response for transparency
-                # This makes files_accessed visible to callers
-                metadata_str = ""
-                if result.metadata.files_accessed:
-                    files = ", ".join(result.metadata.files_accessed)
-                    # Use 📂 (open folder) emoji to match ToolTransparencyFormatter regex
-                    metadata_str = f"\n\n📂 Files Analyzed: {files}"
-                if result.metadata.duration_ms:
-                    metadata_str += f"\n⚡ Introspection time: {result.metadata.duration_ms}ms"
-                
-                return [TextContent(type="text", text=result.content + metadata_str)]
+                # Return CallToolResult with meta field for structured metadata
+                return CallToolResult(
+                    content=[TextContent(type="text", text=result.content)],
+                    meta={
+                        "tool_name": "ada_introspect",
+                        "files_accessed": result.metadata.files_accessed,
+                        "actions_taken": result.metadata.actions_taken,
+                        "duration_ms": result.metadata.duration_ms,
+                    },
+                )
             else:
-                return [TextContent(type="text", text=f"❌ Introspection failed: {result.content}")]
+                return CallToolResult(
+                    content=[TextContent(type="text", text=f"❌ Introspection failed: {result.content}")],
+                    isError=True,
+                )
                 
         except Exception as e:
-            return [TextContent(type="text", text=f"Error during introspection: {e}")]
+            return CallToolResult(
+                content=[TextContent(type="text", text=f"Error during introspection: {e}")],
+                isError=True,
+            )
 
     else:
-        return [TextContent(type="text", text=f"Unknown tool: {name}")]
+        return CallToolResult(
+            content=[TextContent(type="text", text=f"Unknown tool: {name}")],
+            isError=True,
+        )

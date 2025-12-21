@@ -23,6 +23,20 @@ interface MCPResponse {
     error?: any;
 }
 
+export interface ToolMetadata {
+    tool_name: string;
+    files_accessed: string[];
+    actions_taken: string[];
+    duration_ms?: number;
+}
+
+export interface ToolResult {
+    content: string;
+    metadata: ToolMetadata;
+    success: boolean;
+    error?: string;
+}
+
 export class AdaMCPClient {
     private process: ChildProcess | null = null;
     private requestId = 0;
@@ -202,7 +216,7 @@ export class AdaMCPClient {
         throw new Error(`Unexpected response format from MCP tool. Got: ${JSON.stringify(result)}`);
     }
 
-    async callTool(toolName: string, args: any): Promise<string> {
+    async callTool(toolName: string, args: any): Promise<ToolResult> {
         if (!this.process) {
             await this.connect();
         }
@@ -216,13 +230,42 @@ export class AdaMCPClient {
         // Extract response text from tool result
         console.log(`[ADA MCP] Tool ${toolName} result:`, JSON.stringify(result, null, 2));
         
+        // Parse MCP response structure
+        // MCP returns: { content: [{text: "..."}], metadata: {...} }
+        let content = '';
         if (result.content && Array.isArray(result.content) && result.content.length > 0) {
             if (result.content[0].text) {
-                return result.content[0].text;
+                content = result.content[0].text;
             }
         }
         
-        throw new Error(`Tool ${toolName} returned unexpected format: ${JSON.stringify(result)}`);
+        if (!content) {
+            throw new Error(`Tool ${toolName} returned unexpected format: ${JSON.stringify(result)}`);
+        }
+        
+        // Try to parse metadata from the content if it's structured
+        // The MCP server should embed metadata in the response
+        let metadata: ToolMetadata = {
+            tool_name: toolName,
+            files_accessed: [],
+            actions_taken: [],
+        };
+        
+        // Check if result has metadata at top level (some MCP tools do this)
+        if (result.metadata) {
+            metadata = {
+                tool_name: result.metadata.tool_name || toolName,
+                files_accessed: result.metadata.files_accessed || [],
+                actions_taken: result.metadata.actions_taken || [],
+                duration_ms: result.metadata.duration_ms,
+            };
+        }
+        
+        return {
+            content,
+            metadata,
+            success: true,
+        };
     }
 
     async disconnect(): Promise<void> {

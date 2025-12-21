@@ -1,22 +1,77 @@
 {
-  "name": "@ada-code/ada-chat",
+  "name": "ada-chat",
   "displayName": "Ada Chat",
-  "version": "0.1.0",
-  "description": "Conversational AI chat for VSCode - part of Ada Code",
-  "private": true,
-  "main": "dist/extension.js",
+  "version": "1.0.0",
+  "publisher": "luna-system",
+  "description": "Conversational AI chat with MCP tool integration",
+  "categories": [
+    "Other"
+  ],
+  "keywords": [
+    "ai",
+    "chat",
+    "local",
+    "privacy"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/luna-system/ada"
+  },
+  "license": "CC0-1.0",
+  "engines": {
+    "vscode": "^1.85.0"
+  },
+  "main": "./dist/extension.js",
+  "activationEvents": [],
+  "contributes": {
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "ada-sidebar",
+          "title": "Ada",
+          "icon": "resources/icon.svg"
+        }
+      ]
+    },
+    "views": {
+      "ada-sidebar": [
+        {
+          "type": "webview",
+          "id": "ada.chatView",
+          "name": "Chat"
+        }
+      ]
+    },
+    "commands": [
+      {
+        "command": "ada.openChat",
+        "title": "Ada: Open Chat"
+      }
+    ],
+    "configuration": {
+      "title": "Ada",
+      "properties": {
+        "ada.brainUrl": {
+          "type": "string",
+          "default": "http://localhost:8000",
+          "description": "Ada Brain API URL"
+        }
+      }
+    }
+  },
   "scripts": {
     "build": "tsc",
     "watch": "tsc --watch",
+    "package": "vsce package --no-dependencies",
     "pretest": "npm run build",
     "test": "node --require ts-node/register './src/__tests__/**/*.test.ts'"
   },
   "dependencies": {
-    "@ada-code/shared": "workspace:*",
-    "vscode": "^1.85.0"
+    "@ada-code/shared": "workspace:*"
   },
   "devDependencies": {
-    "typescript": "^5.3.0",
-    "@types/vscode": "^1.85.0"
+    "@types/vscode": "^1.85.0",
+    "@vscode/vsce": "^2.22.0",
+    "typescript": "^5.3.0"
   }
 }

@@ -1,16 +1,8 @@
 // Type definitions shared across packages
-export interface ToolMetadata {
-  files_accessed?: string[];
-  actions_taken?: string[];
-  duration_ms?: number;
-  [key: string]: any;
-}
+export * from './toolTypes';
+export * from './messageTypes';
 
-export interface ToolResult {
-  content: string;
-  metadata?: ToolMetadata;
-  success: boolean;
-}
+import { ToolMetadata } from './toolTypes';
 
 export interface AdaRequest {
   message: string;
@@ -23,5 +15,3 @@ export interface AdaResponse {
   metadata?: ToolMetadata;
   timestamp: number;
 }
-
-export * from './messageTypes';
