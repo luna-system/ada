@@ -33,12 +33,32 @@ class LatencyBenchmarker:
         self.ada_url = ada_url
         self.measurements: List[LatencyMeasurement] = []
     
-    async def warmup(self, num_requests: int = 3):
-        """Warm up the model before benchmarking."""
-        print(f"🔥 Warming up model with {num_requests} requests...")
-        for i in range(num_requests):
-            await self._single_request("Hello", query_type="warmup")
-            print(f"  Warmup {i+1}/{num_requests} complete")
+    async def warmup(self, num_requests: int = 5):
+        """Warm up the model before benchmarking.
+        
+        Uses parallel requests with diverse query types to warm:
+        - Model weights
+        - Context caches
+        - Connection pools
+        - Memory systems
+        """
+        print(f"🔥 Warming up model with {num_requests} parallel requests...")
+        
+        # Diverse warmup queries to activate different code paths
+        warmup_queries = [
+            "Hello Ada!",
+            "What is Python?",
+            "def hello(): pass",
+            "Tell me about yourself",
+            "Explain recursion briefly"
+        ][:num_requests]
+        
+        # Parallel warmup for speed
+        tasks = [self._single_request(q, query_type="warmup") for q in warmup_queries]
+        measurements = await asyncio.gather(*tasks)
+        
+        for i, m in enumerate(measurements):
+            print(f"  Warmup {i+1}/{num_requests}: TTFT={m.ttft:.3f}s, {m.tokens_per_second:.1f} tok/s")
     
     async def _single_request(self, message: str, query_type: str) -> LatencyMeasurement:
         """Make a single request and measure latency."""
@@ -88,7 +108,7 @@ class LatencyBenchmarker:
         self,
         query: str,
         query_type: str,
-        num_samples: int = 10,
+        num_samples: int = 15,
         stabilization_delay: float = 2.0
     ) -> List[LatencyMeasurement]:
         """Benchmark a specific query type with multiple samples.
@@ -217,7 +237,7 @@ async def run_comprehensive_benchmark():
         await benchmarker.benchmark_query_type(
             query=query,
             query_type=query_type,
-            num_samples=10,
+            num_samples=15,  # Increased from 10 for better statistics
             stabilization_delay=2.0  # Wait 2s between query types to reach baseline
         )
     
