@@ -1034,6 +1034,207 @@ User's question: ${originalMessage}`;
     }
   }
 
+  // ============================================
+  // BIDIRECTIONAL TOOL SUPPORT
+  // ============================================
+  // Allows Brain to request tools mid-stream by emitting special syntax
+  // Format: SPECIALIST_REQUEST[tool_name:{"param":"value"}]
+  // Or:     @tool_specialist(param=value)
+  // ============================================
+
+  private static readonly SPECIALIST_REQUEST_PATTERN = /SPECIALIST_REQUEST\[(\w+):(.*?)\]/s;
+  private static readonly SPECIALIST_MENTION_PATTERN = /@(\w+)_specialist\((.*?)\)/s;
+  private static readonly TOOL_REQUEST_PATTERN = /TOOL_REQUEST\[(\w+):(.*?)\]/s;
+
+  /**
+   * Detect if text contains a bidirectional tool request from Brain
+   */
+  detectBidirectionalRequest(text: string): {
+    detected: boolean;
+    tool?: string;
+    params?: Record<string, unknown>;
+    matchStart?: number;
+    matchEnd?: number;
+    fullMatch?: string;
+  } {
+    // Try SPECIALIST_REQUEST syntax (matches Brain's format)
+    let match = MCPToolHandler.SPECIALIST_REQUEST_PATTERN.exec(text);
+    if (match) {
+      const toolName = this._normalizeToolName(match[1]);
+      const params = this._parseJsonParams(match[2]);
+      return {
+        detected: true,
+        tool: toolName,
+        params,
+        matchStart: match.index,
+        matchEnd: match.index + match[0].length,
+        fullMatch: match[0]
+      };
+    }
+
+    // Try TOOL_REQUEST syntax (Ada-specific)
+    match = MCPToolHandler.TOOL_REQUEST_PATTERN.exec(text);
+    if (match) {
+      const toolName = this._normalizeToolName(match[1]);
+      const params = this._parseJsonParams(match[2]);
+      return {
+        detected: true,
+        tool: toolName,
+        params,
+        matchStart: match.index,
+        matchEnd: match.index + match[0].length,
+        fullMatch: match[0]
+      };
+    }
+
+    // Try @specialist mention syntax
+    match = MCPToolHandler.SPECIALIST_MENTION_PATTERN.exec(text);
+    if (match) {
+      const toolName = this._normalizeToolName(match[1]);
+      const params = this._parseSimpleParams(match[2]);
+      return {
+        detected: true,
+        tool: toolName,
+        params,
+        matchStart: match.index,
+        matchEnd: match.index + match[0].length,
+        fullMatch: match[0]
+      };
+    }
+
+    return { detected: false };
+  }
+
+  /**
+   * Normalize tool names from various formats to our internal names
+   */
+  private _normalizeToolName(name: string): string {
+    const normalized = name.toLowerCase().replace(/_specialist$/, '');
+    
+    // Map Brain specialist names to our tool names
+    const mapping: Record<string, string> = {
+      'read_file': 'ada_read_file',
+      'readfile': 'ada_read_file',
+      'file': 'ada_read_file',
+      'search': 'ada_search',
+      'grep': 'ada_search',
+      'find': 'ada_search',
+      'list': 'ada_list_files',
+      'ls': 'ada_list_files',
+      'listfiles': 'ada_list_files',
+      'symbols': 'ada_symbols',
+      'definition': 'ada_symbols',
+      'git': 'ada_git_status',
+      'gitstatus': 'ada_git_status',
+      'memory': 'ada_search_memory',
+      'searchmemory': 'ada_search_memory',
+      'introspect': 'ada_introspect',
+      'todos': 'ada_introspect',
+    };
+
+    return mapping[normalized] || `ada_${normalized}`;
+  }
+
+  /**
+   * Parse JSON parameters from bidirectional request
+   */
+  private _parseJsonParams(paramsStr: string): Record<string, unknown> {
+    const trimmed = paramsStr.trim();
+    if (!trimmed) return {};
+    
+    try {
+      return JSON.parse(trimmed);
+    } catch {
+      // Try to be lenient - maybe it's not valid JSON but has key=value pairs
+      return this._parseSimpleParams(trimmed);
+    }
+  }
+
+  /**
+   * Parse simple key=value parameters
+   */
+  private _parseSimpleParams(paramsStr: string): Record<string, unknown> {
+    const params: Record<string, unknown> = {};
+    if (!paramsStr.trim()) return params;
+
+    // Split on commas, handle key=value or key="value"
+    const pairs = paramsStr.split(',');
+    for (const pair of pairs) {
+      const eqIndex = pair.indexOf('=');
+      if (eqIndex > 0) {
+        const key = pair.slice(0, eqIndex).trim();
+        let value: string | number | boolean = pair.slice(eqIndex + 1).trim();
+        
+        // Strip quotes
+        if ((value.startsWith('"') && value.endsWith('"')) ||
+            (value.startsWith("'") && value.endsWith("'"))) {
+          value = value.slice(1, -1);
+        }
+        
+        // Try to parse as number/boolean
+        if (value === 'true') value = true as any;
+        else if (value === 'false') value = false as any;
+        else if (/^\d+$/.test(value as string)) value = parseInt(value as string, 10);
+        
+        params[key] = value;
+      }
+    }
+    return params;
+  }
+
+  /**
+   * Execute a bidirectional tool request from Brain
+   * Returns result text to inject back into the stream
+   */
+  async executeBidirectionalTool(
+    tool: string,
+    params: Record<string, unknown>
+  ): Promise<{
+    success: boolean;
+    resultText: string;
+    toolResult?: ToolResult;
+  }> {
+    const startTime = Date.now();
+    console.log(`[Ada Chat] Bidirectional tool request: ${tool}`, params);
+
+    try {
+      // Build an intent object for executeTool
+      const intent: QueryIntent = {
+        requiresTool: true,
+        requiresReasoning: false,
+        tool: tool,
+        params: params
+      };
+
+      const result = await this.executeTool(intent);
+      const duration = Date.now() - startTime;
+
+      // Format for injection back into LLM context
+      const resultText = `
+[TOOL_RESULT: ${tool}]
+${result.content}
+[/TOOL_RESULT]
+`;
+
+      console.log(`[Ada Chat] Bidirectional tool completed in ${duration}ms`);
+
+      return {
+        success: true,
+        resultText,
+        toolResult: result
+      };
+
+    } catch (error) {
+      const errorMsg = error instanceof Error ? error.message : 'Unknown error';
+      console.error(`[Ada Chat] Bidirectional tool failed: ${errorMsg}`);
+
+      return {
+        success: false,
+        resultText: `\n[TOOL_ERROR: ${tool} - ${errorMsg}]\n`
+      };
+    }
+  }
+
   async disconnect(): Promise<void> {
     if (this.mcpClient) {
       await this.mcpClient.disconnect();
