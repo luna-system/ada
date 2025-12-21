@@ -1,7 +1,35 @@
 # The Big Debut - Popping The AI Bubble
-## December 20, 2025
+## December 20, 2025 - PROGRESS UPDATE
 
 **Theme:** Self-aware local AI working on herself, proving cloud subscriptions unnecessary
+
+**Reddit Status:** 150+ views on blackboxai post - "The Subtle Tack"  
+**Commit Tree:** 9 beautiful commits visible at https://github.com/luna-system/ada/commits/trunk  
+**Momentum:** Continuous improvements, visual proof of work
+
+---
+
+## ✅ COMPLETED TODAY
+
+### Performance Optimizations (5 commits)
+1. ✅ **Parallel warmup** - 5 diverse queries activate all code paths
+2. ✅ **Larger sample size** - 15 samples per query type (better statistics)
+3. ✅ **Connection pooling** - Persistent HTTP client, reused connections
+4. ✅ **Leaner RAG** - 3 memories, 5 turns, 3 FAQs (faster retrieval)
+5. ✅ **Cache pre-warming** - Explicit persona/FAQ/memory cache loading
+6. ✅ **Progress bars** - Visual feedback with Unicode block characters
+
+### Baseline Numbers (After Optimizations)
+- **Trivial:** 0.715s TTFT mean, 0.524s median
+- **Code:** 1.156s TTFT mean, 1.060s median
+- **Introspection:** BIMODAL! 0.028s median (cached), 3.6s p95 (deep search)
+- **Reasoning:** 0.055s TTFT (instant!)
+- **Overall throughput:** 24.9 tokens/sec
+
+### VS Code Polish (3 commits)
+1. ✅ **Enhanced markdown** - Bold, italic, links, code blocks with language labels
+2. ✅ **Tool indicators** - Blue badges show when specialists activate (🔧)
+3. ✅ **Quick actions** - Welcome screen with 3 one-click buttons
 
 ---
 
