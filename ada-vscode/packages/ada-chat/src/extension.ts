@@ -8,8 +8,101 @@
  */
 
 import * as vscode from 'vscode';
-import { AdaBrainClient } from '@ada-code/shared/clients';
 import { ChatViewProvider } from './chatViewProvider';
+
+/**
+ * Minimal Ada Brain API client for chat streaming
+ */
+interface Message {
+  role: 'user' | 'assistant';
+  content: string;
+}
+
+interface StreamChunk {
+  content: string;
+  done: boolean;
+}
+
+class AdaBrainClient {
+  private baseUrl: string;
+
+  constructor(baseUrl: string) {
+    this.baseUrl = baseUrl;
+  }
+
+  async checkConnection(): Promise<boolean> {
+    try {
+      const response = await fetch(`${this.baseUrl}/v1/healthz`, {
+        method: 'GET'
+      });
+      return response.ok;
+    } catch {
+      return false;
+    }
+  }
+
+  async *chat(messages: Message[], options: Record<string, unknown>): AsyncGenerator<StreamChunk> {
+    try {
+      const response = await fetch(`${this.baseUrl}/v1/chat/stream`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'text/event-stream'
+        },
+        body: JSON.stringify({
+          messages,
+          ...options
+        })
+      });
+
+      if (!response.ok) {
+        throw new Error(`Brain API error: ${response.statusText}`);
+      }
+
+      // Handle Server-Sent Events from brain
+      const reader = response.body?.getReader();
+      if (!reader) {
+        throw new Error('No response body');
+      }
+
+      const decoder = new TextDecoder();
+      let buffer = '';
+
+      try {
+        while (true) {
+          const { done, value } = await reader.read();
+          if (done) break;
+
+          buffer += decoder.decode(value, { stream: true });
+          const lines = buffer.split('\n');
+          buffer = lines.pop() || '';
+
+          for (const line of lines) {
+            if (line.startsWith('data: ')) {
+              try {
+                const json = JSON.parse(line.slice(6));
+                yield {
+                  content: json.content || '',
+                  done: json.done === true
+                };
+              } catch {
+                // Skip invalid JSON lines
+              }
+            }
+          }
+        }
+      } finally {
+        reader.releaseLock();
+      }
+    } catch (error) {
+      console.error('[Ada Brain Client] Error:', error);
+      yield {
+        content: `Error communicating with Ada Brain: ${error instanceof Error ? error.message : 'Unknown error'}`,
+        done: true
+      };
+    }
+  }
+}
 
 export async function activate(context: vscode.ExtensionContext) {
   console.log('[Ada Chat] Activating...');
