@@ -8,6 +8,30 @@
 - See `.ai/TESTING.md` for full TDD guide
 - Example: Phase 1-2 biomimetic features (52 tests, pure TDD)
 
+## ⚡ UV Quick Reference (USE THIS!)
+
+Whenever you need to run Python or install packages in Ada:
+
+```bash
+# Installing dependencies
+uv sync                              # Install from pyproject.toml
+uv pip install -e ./ada-mcp          # Install editable package
+uv pip install package-name          # Add new package
+
+# Running code
+uv run pytest                         # Run tests
+uv run python script.py               # Run Python script
+uv run ada-mcp                        # Run MCP server
+
+# Environment setup
+uv venv                               # Create venv
+source .venv/bin/activate             # Activate it
+```
+
+**Golden Rule:** Prefix Python commands with `uv run`, use `uv pip` instead of `pip`.
+
+---
+
 ## First Time Analyzing This Codebase?
 
 Read these files in order:

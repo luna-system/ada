@@ -245,13 +245,38 @@ RUN cd /app/docs && make html  # ← Happens during image build
 COPY --from=build /app/docs/_build/html /usr/share/nginx/html/docs
 ```
 
+### ❌ DON'T: Use pip when uv is available
+**Why it seems right:** pip is more familiar and standard worldwide  
+**Why it's wrong:** 
+- Ada standardized on UV (see `.ai/UV-STANDARDIZATION.md`)
+- uv is **100x faster** than pip
+- Causes venv/environment inconsistencies
+- Inconsistent with setup.sh and CI/CD
+
+**Pattern to catch yourself:**
+```bash
+# DON'T:
+pip install -e ./ada-mcp
+python -m pytest
+python script.py
+
+# DO:
+uv pip install -e ./ada-mcp
+uv run pytest
+uv run python script.py
+```
+
+**Golden Rule:** When working with Python in Ada, always use `uv` as your prefix/wrapper.
+
+---
+
 ### ❌ DON'T: Install Python packages globally with pip
 **Why it seems right:** Quick package installation  
 **Why it's wrong:** This project uses a virtual environment at `.venv`  
 **What to do instead:**
 ```bash
 source .venv/bin/activate
-pip install package_name
+uv pip install package_name
 ```
 
 ### ❌ DON'T: Edit requirements.txt directly
