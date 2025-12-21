@@ -128,7 +128,8 @@ class WorkspaceIntrospectionSpecialist(BaseSpecialist):
         task_keywords = [
             'find a task', 'work on', 'what should', 'next step',
             'opportunities', 'gaps', 'issues', 'todo', 'pending',
-            'introspect', 'analyze', 'workspace', 'state'
+            'introspect', 'analyze', 'workspace', 'state',
+            'find something', 'something to do', 'what to do', 'recommend'
         ]
         
         return any(keyword in message for keyword in task_keywords)
