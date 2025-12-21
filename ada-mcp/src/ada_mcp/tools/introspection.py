@@ -10,10 +10,11 @@ This is THE singularity - Ada analyzing herself and directing her own growth.
 """
 
 import json
+import time
 from pathlib import Path
 from typing import Any, Dict, List
 
-from ada_mcp.tools.base import ToolResult
+from ada_mcp.tools.envelope import ToolMetadata, ToolResult, ToolAction
 
 
 async def ada_introspect(
@@ -32,8 +33,12 @@ async def ada_introspect(
         workspace_root: Path to Ada's codebase (defaults to current dir)
     
     Returns:
-        ToolResult with analysis and suggestions
+        ToolResult with analysis and suggestions, including metadata about
+        what files were accessed and what analysis was performed.
     """
+    start_time = time.time()
+    metadata = ToolMetadata(tool_name="introspection")
+    
     try:
         if workspace_root:
             root = Path(workspace_root)
@@ -43,10 +48,13 @@ async def ada_introspect(
         ai_dir = root / ".ai"
         
         if not ai_dir.exists():
+            metadata.duration_ms = int((time.time() - start_time) * 1000)
+            metadata.add_action("check_ai_directory")
             return ToolResult(
                 success=False,
                 content="Error: .ai/ directory not found. Cannot introspect without documentation.",
-                metadata={"error": "missing_ai_directory"}
+                metadata=metadata,
+                error="missing_ai_directory"
             )
         
         # Read key documentation files
@@ -62,6 +70,8 @@ async def ada_introspect(
         # 1. Read context.md - understanding of self
         context_file = ai_dir / "context.md"
         if context_file.exists():
+            metadata.add_action(ToolAction.READ_FILE)
+            metadata.add_file("context.md")
             context = context_file.read_text()
             analysis["files_analyzed"].append("context.md")
             analysis["current_state"]["architecture"] = _extract_architecture_info(context)
@@ -69,6 +79,9 @@ async def ada_introspect(
         # 2. Read codebase-map.json - structural understanding
         codebase_map_file = ai_dir / "codebase-map.json"
         if codebase_map_file.exists():
+            metadata.add_action(ToolAction.READ_FILE)
+            metadata.add_action(ToolAction.PARSE_JSON)
+            metadata.add_file("codebase-map.json")
             codebase_map = json.loads(codebase_map_file.read_text())
             analysis["files_analyzed"].append("codebase-map.json")
             analysis["current_state"]["modules"] = len(codebase_map.get("modules", {}))
@@ -77,6 +90,9 @@ async def ada_introspect(
         # 3. Read GOTCHAS.md - known issues
         gotchas_file = ai_dir / "GOTCHAS.md"
         if gotchas_file.exists():
+            metadata.add_action(ToolAction.READ_FILE)
+            metadata.add_action(ToolAction.ANALYZE)
+            metadata.add_file("GOTCHAS.md")
             gotchas = gotchas_file.read_text()
             analysis["files_analyzed"].append("GOTCHAS.md")
             analysis["gaps"].extend(_extract_gotchas(gotchas))
@@ -84,6 +100,9 @@ async def ada_introspect(
         # 4. Check TODO.md if exists
         todo_file = root / "TODO.md"
         if todo_file.exists():
+            metadata.add_action(ToolAction.READ_FILE)
+            metadata.add_action(ToolAction.ANALYZE)
+            metadata.add_file("TODO.md")
             todos = todo_file.read_text()
             analysis["files_analyzed"].append("TODO.md")
             analysis["opportunities"].extend(_extract_todos(todos))
@@ -91,9 +110,12 @@ async def ada_introspect(
         # 5. Read CONVENTIONS.md - understand development patterns
         conventions_file = ai_dir / "CONVENTIONS.md"
         if conventions_file.exists():
+            metadata.add_action(ToolAction.READ_FILE)
+            metadata.add_file("CONVENTIONS.md")
             analysis["files_analyzed"].append("CONVENTIONS.md")
         
         # Generate focus-specific analysis
+        metadata.add_action(ToolAction.ANALYZE)
         if focus == "general":
             analysis["suggestions"] = _generate_general_suggestions(analysis)
         elif focus == "architecture":
@@ -108,21 +130,22 @@ async def ada_introspect(
         # Format output
         output = _format_introspection_output(analysis)
         
+        # Record timing
+        metadata.duration_ms = int((time.time() - start_time) * 1000)
+        
         return ToolResult(
             success=True,
             content=output,
-            metadata={
-                "files_analyzed": len(analysis["files_analyzed"]),
-                "suggestions_count": len(analysis["suggestions"]),
-                "focus": focus
-            }
+            metadata=metadata
         )
         
     except Exception as e:
+        metadata.duration_ms = int((time.time() - start_time) * 1000)
         return ToolResult(
             success=False,
             content=f"Introspection failed: {str(e)}",
-            metadata={"error": str(e)}
+            metadata=metadata,
+            error=str(e)
         )
 
 
