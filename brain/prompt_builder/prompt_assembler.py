@@ -170,7 +170,9 @@ class PromptAssembler:
                     self.token_monitor.track("system_notices", notice_section)
         
         # Persona (who Ada is) - with habituation
-        persona_section = self.builder.format_persona(persona)
+        # persona is a tuple (text, metadata) from get_persona()
+        persona_text = persona[0] if isinstance(persona, tuple) else persona
+        persona_section = self.builder.format_persona(persona_text)
         habituation_weight = 1.0
         
         if self.habituation:
