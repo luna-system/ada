@@ -378,7 +378,7 @@ class PromptAssembler:
             memories_future = executor.submit(
                 self.retriever.get_memories,
                 query=user_message,
-                k=5
+                k=3  # Reduced from 5 - focus on highest-importance memories
             )
             faqs_future = executor.submit(
                 self.retriever.get_faqs,
@@ -389,7 +389,7 @@ class PromptAssembler:
                 self.retriever.get_turns,
                 query=user_message,
                 conversation_id=conversation_id,
-                k=10
+                k=5  # Reduced from 10 - most recent context is most relevant
             )
             
             # Wait for all to complete and collect results
