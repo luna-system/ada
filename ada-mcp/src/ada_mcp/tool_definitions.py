@@ -1,7 +1,7 @@
 """MCP tool definitions for Ada."""
 
 from typing import Any
-from mcp.types import Tool, TextContent
+from mcp.types import Tool, TextContent, CallToolResult
 from .ada_client import AdaClient, AdaBrainError, AdaBrainConnectionError
 from .tools.complete_code import complete_code
 from .tools.validate_architecture import validate_architecture
