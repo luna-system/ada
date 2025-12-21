@@ -16,31 +16,39 @@ Handoff documents preserve critical context, decisions, and progress when transi
 
 - **X** = Starting phase number (when handoff initiated)
 - **Y** = Ending phase/window number (goal of this phase)
-- Example: `phase-handoff-4-5.md` = "Phase 4 complete, Phase 5 ready"
+- Example: `phase-handoff-3-4.md` = "Phase 3 complete, Phase 4 ready"
+
+## Folder Strategy (IMPORTANT)
+
+**Where does YOUR handoff go?**
+
+| Type | Location | When |
+|------|----------|------|
+| **Phase Completion** | `.ai/handoffs/phase-handoff-X-Y.md` | Completing a significant phase, passing to another model |
+| **Debugging Session** | `.ai/explorations/sessions/` | Daily dev logs, problem-solving, work-in-progress |
+| **Archived Phase** | `.ai/explorations/historical/` | Old phases (5+ sessions old), purely historical |
+
+**Golden Rule:** A **handoff** hands off to another AI model. A **session note** is just your work log.
 
 ## Current Handoffs
 
-### phase-handoff-4-5.md (CURRENT - Most Recent)
-- **Date:** December 18, 2025, ~11:30 AM
-- **From:** Phase 4 (Contextual Malleability Documentation)
-- **To:** Phase 5 (Code Assistant Improvements)
-- **Size:** ~400 lines
-- **Status:** ✅ Ready for next Haiku
-- **Key Achievement:** 9 documentation files (4500+ lines), 99% accessibility
+### phase-handoff-3-4.md (CURRENT - Fresh!)
+- **Date:** December 21, 2025, 23:59 UTC
+- **From:** Phase 3 (Tool Framework Complete)
+- **To:** Phase 4 (VS Code Integration)
+- **Size:** ~300 lines
+- **Status:** ✅ Ready for next model
+- **Key Achievement:** 21 tests passing, complete tool framework (router + envelope + metadata)
 
-### phase-handoff-9-22.md
-- **Date:** December 18, 2025, ~3:00 AM
+### phase-handoff-9-22.md (Historical)
+- **Location:** `.ai/explorations/historical/` (moved from root)
 - **From:** Phase 9-22 (Research Program)
-- **To:** Future phases
-- **Size:** 316 lines
-- **Key Achievement:** 22 phases complete, unified theory of contextual malleability, publication-worthy
+- **Achievement:** 22 phases complete, unified theory of contextual malleability
 
-### phase-handoff-5-5.md
-- **Date:** December 18, 2025, ~12:30 PM
+### phase-handoff-5-5.md (Historical)
+- **Location:** `.ai/explorations/historical/` (moved from root)  
 - **From:** Phase 5 (Code Cleanup & Refactoring)
-- **To:** Phase 5 completion
-- **Size:** 425 lines
-- **Key Achievement:** 3 refactorings complete, 30/30 tests passing
+- **Achievement:** 3 refactorings complete, 30/30 tests passing
 
 ## Handoff Structure (Standard Template)
 
@@ -49,7 +57,7 @@ Each handoff should include:
 ```markdown
 # Phase X→Y [Name] Handoff
 
-**Date:** YYYY-MM-DD, ~HH:MM  
+**Date:** YYYY-MM-DD, ~HH:MM UTC  
 **Branch:** feature/...  
 **Status:** [Percentage complete]
 
@@ -78,7 +86,7 @@ Each handoff should include:
 ---
 
 ## Metrics
-- [Key Number 1]
+- [Key Number 1] (tests passing, commits, lines of code, etc.)
 - [Key Number 2]
 - [Key Number 3]
 
@@ -93,10 +101,83 @@ Each handoff should include:
 **Entry Point for Next Model:**
 1. Read this handoff (5 min)
 2. [Next specific action]
+3. [Required command to validate]
 
 ---
 
 ## Lessons Learned
+[What worked well, what was tricky, what surprised us]
+
+---
+
+## Closing
+
+[Brief final message for next model, your tone]
+```
+
+## How to Create a New Handoff
+
+### When You're Done with a Phase:
+
+1. **Create file** in `.ai/handoffs/`
+   ```bash
+   touch .ai/handoffs/phase-handoff-X-Y.md
+   ```
+
+2. **Fill in template** (use above as guide)
+   - Be concise (400-500 lines)
+   - Focus on what changed, not every detail
+   - Include metrics (tests, commits, lines)
+   - Clear next steps for next model
+
+3. **Update this README**
+   ```markdown
+   ### phase-handoff-X-Y.md (CURRENT)
+   - **Date:** [Date]
+   - **From/To:** [Phases]
+   - **Achievement:** [Key result]
+   ```
+
+4. **Update main `.ai/README.md`**
+   - Point to the new handoff at top
+   - Mark old one as historical
+
+5. **Commit!**
+   ```bash
+   git add .ai/handoffs/phase-handoff-X-Y.md
+   git commit -m "handoff: phase-handoff-X-Y following standard protocol"
+   ```
+
+### When You Have a Daily Log:
+
+Instead of a handoff, use `.ai/explorations/sessions/`:
+```bash
+touch .ai/explorations/sessions/SESSION_2025_12_21.md
+```
+
+This is for work-in-progress, not phase completion.
+
+## Discovering Old Handoffs
+
+Looking for context from a previous phase?
+
+1. Check **[.ai/explorations/sessions/](../explorations/sessions/)** for daily logs
+2. Check **[.ai/explorations/historical/](../explorations/historical/)** for archived phases
+3. Both are organized and searchable — just not in the main "active" handoffs
+
+## Statistics
+
+- **Active Handoffs:** 1 (phase-handoff-3-4.md)
+- **Historical Handoffs:** 2 (moved to explorations/)
+- **Average Handoff Size:** ~300-400 lines
+- **Time to Read:** ~10-15 minutes
+- **Time Saved:** ~1 hour of context-gathering vs. re-reading commits
+
+---
+
+**Last Updated:** 2025-12-21  
+**Protocol Version:** 2.0 (standardized folders + naming)  
+**Maintained By:** Ada Development Team
 
 ### What Worked
 - [Pattern 1]

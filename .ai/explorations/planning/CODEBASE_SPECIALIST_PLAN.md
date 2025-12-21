@@ -1,519 +1,487 @@
-# Codebase Specialist - Implementation Plan
+# Codebase Specialist - Incremental Implementation Plan
 
-## Vision
+**Goal:** Give Ada deep understanding of her own codebase for self-reference, debugging, and architectural awareness.
 
-Enable Ada to read and understand her own source code, demonstrating that AI coding assistants are transparent and hackable.
-
-**The Screenshot:** Ada in vim, suggesting improvements to her own code.  
-**The Message:** "Hackable all the way down - use Continue.dev OR build your own."
+**Status:** 🎯 Planning Phase  
+**Approach:** Incremental - Build MVP, test, expand in phases
 
 ---
 
-## Goals
+## 🧠 What We Already Have (Infrastructure Audit)
 
-### Primary
-1. **Ada can read her own code** - Bidirectional specialist for code lookup
-2. **Safe and sandboxed** - Read-only, path restrictions, size limits
-3. **Smart indexing** - Uses `.ai/codebase-map.json` as navigation aid
-4. **Educational** - Shows how it works, no magic
+### 1. **Specialist Framework** ✅
+- `brain/specialists/protocol.py` - Base protocol with priority system
+- 6 existing specialists: docs, wiki, web_search, ocr, listenbrainz, now_playing
+- Bidirectional activation (LLM can request specialist mid-response)
+- Context injection with priorities (CRITICAL → HIGH → MEDIUM → LOW)
 
-### Secondary (Future)
-1. Integration with Continue.dev (as backend provider)
-2. Simple vim plugin (~100 lines) for DIY path
-3. Documentation showing both paths
-4. Reference implementation for others
+### 2. **Docs Specialist** ✅ (Adjacent to codebase!)
+- Already searches Sphinx HTML documentation
+- HTML text extraction
+- Keyword-based search with relevance scoring
+- Bidirectional activation via `<docs_lookup>` tags
+- **This is 70% of what we need!**
 
----
+### 3. **Structured Metadata** ✅
+- `.ai/codebase-map.json` - Module dependencies, purposes, functions
+- `.ai/specialist-registry.json` - Specialist metadata
+- Source code `@ai-*` annotations
+- We have the GRAPH already documented!
 
-## Architecture
+### 4. **RAG Infrastructure** ✅
+- `brain/rag_store.py` - ChromaDB vector storage
+- Already handles: persona, FAQs, memories, conversation turns, summaries
+- Embedding model: nomic-embed-text
+- Semantic search working
 
-### Component: Codebase Specialist
-
-**Type:** Bidirectional specialist (LLM invokes via XML tag)
-
-**Activation:**
-```
-User: "How does the specialist system work?"
-Ada: <code_lookup>brain/specialists/protocol.py</code_lookup>
-Specialist: Returns code with context
-Ada: "The specialist system uses Protocol pattern..."
-```
-
-**Capabilities:**
-- Read file by path
-- Search for function/class definitions
-- List files in directory
-- Use codebase-map.json as index
-- Return code with line numbers and context
-
-### Data Flow
-
-```
-User message
-    ↓
-Brain prompt_builder assembles context
-    ↓
-LLM generates response with <code_lookup> tag
-    ↓
-Bidirectional handler detects tag
-    ↓
-CodebaseSpecialist.process(request)
-    ↓
-Read file, apply safety checks
-    ↓
-Return code snippet with context
-    ↓
-LLM continues response with code knowledge
-    ↓
-Stream to user
-```
+### 5. **Token Monitoring** ✅
+- `brain/token_monitor.py` - Track usage by component
+- Can measure code context token costs
 
 ---
 
-## Safety Design
+## 🎯 What We Want to Build (Features)
 
-### Critical Requirements
+### Phase 1: MVP - "Find Function" 📍
+**The smallest useful thing**
 
-**NO WRITE ACCESS** - Ever. This specialist is READ-ONLY.
+**User asks:** "How does the OCR specialist work?"  
+**Ada responds:** [searches codebase] "The OCR specialist (brain/specialists/ocr_specialist.py) activates when uploaded_image_path is in context. It uses Tesseract via brain/ocr.py..."
 
-**Path Restrictions:**
-- ✅ Allow: `/app/` (Ada's codebase)
-- ✅ Allow: `/app/.ai/` (documentation)
-- ❌ Deny: `/app/data/` (user data, secrets)
-- ❌ Deny: `..` (path traversal)
-- ❌ Deny: Absolute paths outside /app
-- ❌ Deny: Symlinks that escape
+**Implementation:**
+1. Parse Python files to AST (Abstract Syntax Tree)
+2. Extract: functions, classes, docstrings, imports
+3. Build simple keyword index (function name → file location)
+4. When LLM uses `<code_lookup>function_name</code_lookup>`, return definition + docstring
+5. Inject into context as HIGH priority specialist result
 
-**Size Limits:**
-- Max file size: 50KB (prevent memory issues)
-- Max files per request: 5 (prevent abuse)
-- Max total output: 200KB per request
+**Why this first?**
+- Simplest: Just keyword matching, no embeddings yet
+- Immediately useful: Ada can look up her own functions
+- Builds on docs_specialist pattern we already have
+- Tests the specialist integration flow
+- ~200 lines of code max
 
-**Rate Limiting:**
-- Max lookups per conversation: 20
-- Throttle if excessive requests
-
-**Content Filtering:**
-- Strip potentially sensitive patterns (API keys, passwords)
-- Warn if file contains credentials
-- Redact environment variable values
-
-### Security Checklist
-
-- [ ] Path validation (no traversal)
-- [ ] Size limits enforced
-- [ ] Symlink resolution checked
-- [ ] Directory listing bounded
-- [ ] No execution capability
-- [ ] No write capability
-- [ ] Sandboxed in Docker
-- [ ] Rate limiting implemented
-- [ ] Logging for audit trail
+**Test cases:**
+- Look up `calculate_importance` → returns context_retriever.py implementation
+- Look up `SpecialistResult` → returns protocol.py dataclass
+- Look up nonexistent function → graceful "not found"
 
 ---
 
-## Implementation Phases
+### Phase 2: Semantic Code Search 🔍
+**RAG over code chunks**
 
-### Phase 1: Basic Read Capability (Week 1, Days 1-2)
+**Upgrade from Phase 1:** Keywords → Vector embeddings
 
-**Goal:** Ada can read a single file by path
+**User asks:** "How do we handle streaming responses?"  
+**Ada responds:** [semantic search] "Streaming is handled by llm.py::generate_stream() which yields chunks via Server-Sent Events in app.py::chat_stream_v1()..."
 
-**Tasks:**
-1. Create `brain/specialists/codebase_specialist.py`
-2. Implement `BaseSpecialist` protocol
-3. Add path validation and safety checks
-4. Read file and return content with line numbers
-5. Add basic tests
+**Implementation:**
+1. Chunk Python files by:
+   - Function/method definitions
+   - Class definitions
+   - Module-level docstrings
+2. Embed each chunk with nomic-embed-text
+3. Store in ChromaDB (new collection: `code_chunks`)
+4. Semantic search on user query
+5. Return top-k relevant code chunks with file/line context
 
-**Deliverable:** 
-```python
-result = specialist.process({
-    "path": "brain/specialists/protocol.py"
-})
-# Returns: Code content with line numbers
-```
+**Why second?**
+- Natural extension of Phase 1
+- Reuses RAG infrastructure
+- Semantic search >>> keyword matching
+- Still relatively simple (~300 lines)
 
-### Phase 2: Smart Search (Week 1, Days 3-4)
-
-**Goal:** Ada can search for functions/classes
-
-**Tasks:**
-1. Implement function/class search using regex
-2. Use `.ai/codebase-map.json` as index
-3. Add "find definition" capability
-4. Add "list functions in file" capability
-5. Add directory listing (bounded)
-
-**Deliverable:**
-```python
-result = specialist.process({
-    "search": "BaseSpecialist",
-    "type": "class"
-})
-# Returns: File path + code snippet
-```
-
-### Phase 3: Bidirectional Integration (Week 1, Day 5)
-
-**Goal:** LLM can invoke specialist mid-response
-
-**Tasks:**
-1. Add XML tag format: `<code_lookup path="..."/>`
-2. Integrate with bidirectional handler
-3. Test LLM invoking specialist
-4. Add context injection
-5. Add priority handling
-
-**Deliverable:**
-LLM can use `<code_lookup>` tags and get code back
-
-### Phase 4: Polish & Documentation (Week 2, Days 1-2)
-
-**Goal:** Production ready and documented
-
-**Tasks:**
-1. Error handling and edge cases
-2. Logging and audit trail
-3. Performance optimization (caching?)
-4. Documentation in `docs/specialists.rst`
-5. Update `.ai/specialist-registry.json`
-6. Add to specialist overview docs
-
-**Deliverable:** Fully documented, production-ready specialist
+**Test cases:**
+- Query "streaming" → finds llm.py generate_stream + app.py SSE handler
+- Query "specialist activation" → finds protocol.py should_activate pattern
+- Query "memory importance" → finds context_retriever.py multi-signal scoring
 
 ---
 
-## Technical Specifications
+### Phase 3: Cross-Reference Graph 🕸️
+**"Who calls this? Who depends on this?"**
 
-### File: `brain/specialists/codebase_specialist.py`
+**User asks:** "What uses the RagStore?"  
+**Ada responds:** "RagStore (rag_store.py) is used by: app.py (memory storage), prompt_builder/context_retriever.py (search), consolidate_memories.py (summarization)..."
 
-**Class:** `CodebaseSpecialist(BaseSpecialist)`
+**Implementation:**
+1. Build call graph from AST analysis:
+   - Function calls
+   - Class instantiations  
+   - Import statements
+2. Store in graph structure (NetworkX or simple dict)
+3. Queries:
+   - "Who calls X?" (reverse lookup)
+   - "What does X call?" (forward lookup)
+   - "Dependency chain from X to Y"
+4. Bidirectional specialist: `<code_graph>show_callers:RagStore</code_graph>`
 
-**Methods:**
-```python
-def should_activate(self, context: dict) -> bool:
-    # Always bidirectional, never context-triggered
-    return False
+**Why third?**
+- Builds on Phase 1 AST parsing
+- Adds relationship understanding
+- Critical for debugging ("What breaks if I change this?")
+- ~400 lines including graph builder
 
-def process(self, request: dict) -> SpecialistResult:
-    # Main processing logic
-    pass
-
-def _validate_path(self, path: str) -> bool:
-    # Security checks
-    pass
-
-def _read_file(self, path: str) -> str:
-    # Safe file reading with size limits
-    pass
-
-def _search_definition(self, name: str, type: str) -> list:
-    # Find function/class definitions
-    pass
-
-def _list_directory(self, path: str) -> list:
-    # List files (bounded)
-    pass
-
-def _use_codebase_map(self, query: str) -> list:
-    # Query .ai/codebase-map.json
-    pass
-```
-
-**Request Format:**
-```python
-{
-    "action": "read",  # or "search", "list", "find"
-    "path": "brain/specialists/protocol.py",
-    "query": "BaseSpecialist",  # for search
-    "type": "class",  # or "function"
-    "lines": [10, 50]  # optional line range
-}
-```
-
-**Response Format:**
-```python
-SpecialistResult(
-    specialist_name="codebase",
-    content=f"""
-File: brain/specialists/protocol.py
-Lines: 1-50
-
-```python
-# @ai-indexable: specialist-protocol
-# @ai-purpose: Base protocol for all specialists
-
-class BaseSpecialist(Protocol):
-    \"\"\"Base protocol for specialist plugins.\"\"\"
-    
-    def should_activate(self, context: dict) -> bool:
-        ...
-```
-
-Function found at line 15.
-    """,
-    metadata={
-        "file": "brain/specialists/protocol.py",
-        "lines": [1, 50],
-        "language": "python",
-        "size_bytes": 2048
-    }
-)
-```
-
-### XML Tag Format (for bidirectional use)
-
-```xml
-<!-- Read a file -->
-<code_lookup path="brain/specialists/protocol.py"/>
-
-<!-- Read specific lines -->
-<code_lookup path="brain/app.py" lines="1-50"/>
-
-<!-- Search for definition -->
-<code_lookup search="BaseSpecialist" type="class"/>
-
-<!-- List directory -->
-<code_lookup action="list" path="brain/specialists/"/>
-```
-
-### Safety Implementation
-
-```python
-ALLOWED_PATHS = ["/app/brain", "/app/.ai", "/app/scripts", "/app/docs"]
-DENIED_PATHS = ["/app/data", "/app/.git", "/app/.env"]
-MAX_FILE_SIZE = 50 * 1024  # 50KB
-MAX_FILES_PER_REQUEST = 5
-MAX_LOOKUPS_PER_CONVERSATION = 20
-
-def _validate_path(self, path: str) -> tuple[bool, str]:
-    """Validate path is safe to read."""
-    abs_path = os.path.abspath(os.path.join("/app", path))
-    
-    # Check path traversal
-    if not abs_path.startswith("/app/"):
-        return False, "Path traversal detected"
-    
-    # Check denied paths
-    for denied in DENIED_PATHS:
-        if abs_path.startswith(denied):
-            return False, f"Access denied to {denied}"
-    
-    # Check allowed paths
-    allowed = any(abs_path.startswith(p) for p in ALLOWED_PATHS)
-    if not allowed:
-        return False, "Path not in allowed list"
-    
-    # Check symlinks
-    if os.path.islink(abs_path):
-        real_path = os.path.realpath(abs_path)
-        if not real_path.startswith("/app/"):
-            return False, "Symlink escape detected"
-    
-    return True, "OK"
-```
+**Test cases:**
+- Find callers of `build_prompt()` → lists app.py, tests
+- Find dependencies of `SpecialistResult` → all specialist implementations
+- Find import chain: app.py → llm.py → config.py
 
 ---
 
-## Testing Strategy
+### Phase 4: Architecture Understanding 🏗️
+**"How does data flow through the system?"**
 
-### Unit Tests
+**User asks:** "How does a chat request flow through Ada?"  
+**Ada responds:** [analyzes data flow] "1. HTTP POST to /v1/chat/stream → 2. app.py validates with ChatRequest schema → 3. prompt_builder assembles context → 4. Specialists activate → 5. llm.generate_stream() → 6. SSE response"
 
+**Implementation:**
+1. Enhance cross-reference graph with:
+   - Data flow analysis (input → transformation → output)
+   - Endpoint → handler → service mapping
+   - Schema → usage tracking
+2. Add pattern recognition:
+   - Request/response cycles
+   - Specialist activation chains
+   - Error handling paths
+3. Generate flow diagrams as text (ASCII or Mermaid)
+
+**Why fourth?**
+- Requires Phase 3 graph infrastructure
+- Higher-level understanding
+- Useful for onboarding, debugging, refactoring
+- ~500 lines including flow analyzer
+
+**Test cases:**
+- Trace request: POST /v1/chat/stream → full pipeline
+- Trace specialist: OCR activation → context injection → LLM
+- Trace data: User message → vector search → context → response
+
+---
+
+### Phase 5: Pattern Recognition 🎨
+**"Find similar code, detect anti-patterns"**
+
+**User asks:** "Show me other specialists like OCR"  
+**Ada responds:** "OCR follows the context-triggered pattern (should_activate checks uploaded_image_path). Similar specialists: now_playing (media_info), listenbrainz (media_info)..."
+
+**Implementation:**
+1. Pattern templates:
+   - Specialist activation patterns
+   - Error handling patterns
+   - API endpoint patterns
+   - Data validation patterns
+2. Similarity detection:
+   - AST structural similarity
+   - Naming convention analysis
+   - Code flow similarity
+3. Anti-pattern detection:
+   - Missing error handling
+   - Circular dependencies
+   - Unused imports
+
+**Why fifth?**
+- Requires understanding from Phases 1-4
+- Most sophisticated analysis
+- Helps with code quality and consistency
+- ~600 lines including pattern matchers
+
+**Test cases:**
+- Find specialists with HIGH priority → OCR, docs
+- Find functions without error handling → flag them
+- Find similar code to `should_activate()` → all specialist implementations
+
+---
+
+## 🚀 Phase 1 MVP - Detailed Implementation Plan
+
+### Files to Create:
+
+**1. `brain/specialists/codebase_specialist.py`** (~200 lines)
 ```python
-# tests/test_codebase_specialist.py
+class CodebaseSpecialist(BaseSpecialist):
+    """Look up functions, classes, and modules in Ada's codebase."""
+    
+    def __init__(self):
+        self.index = {}  # function_name → (file, line, code)
+        self._build_index()
+    
+    def _build_index(self):
+        """Walk brain/ directory, parse Python files, extract definitions."""
+        # Use ast module: ast.parse(), ast.FunctionDef, ast.ClassDef
+        pass
+    
+    def should_activate(self, request_context: dict) -> bool:
+        """Bidirectional only - never auto-activate."""
+        return False
+    
+    async def process(self, request_context: dict) -> SpecialistResult:
+        """Look up function/class by name, return definition + docstring."""
+        query = request_context.get('query', '')
+        results = self._search_index(query)
+        return SpecialistResult(
+            success=True,
+            specialist_name="codebase",
+            context_text=self._format_results(results),
+            data={"results": results}
+        )
+```
 
-def test_read_own_file():
-    """Test reading protocol.py"""
+**2. `tests/test_codebase_specialist.py`** (~150 lines)
+```python
+def test_lookup_function():
+    """Test finding a known function."""
     specialist = CodebaseSpecialist()
-    result = specialist.process({"path": "brain/specialists/protocol.py"})
-    assert "BaseSpecialist" in result.content
-    assert result.metadata["language"] == "python"
+    result = await specialist.process({'query': 'calculate_importance'})
+    assert result.success
+    assert 'context_retriever.py' in result.context_text
+    assert 'calculate_importance' in result.context_text
 
-def test_path_traversal_blocked():
-    """Test security: path traversal blocked"""
+def test_lookup_class():
+    """Test finding a known class."""
     specialist = CodebaseSpecialist()
-    with pytest.raises(SecurityError):
-        specialist.process({"path": "../../etc/passwd"})
+    result = await specialist.process({'query': 'SpecialistResult'})
+    assert result.success
+    assert 'protocol.py' in result.context_text
 
-def test_denied_path_blocked():
-    """Test security: data directory blocked"""
+def test_not_found():
+    """Test graceful handling of nonexistent items."""
     specialist = CodebaseSpecialist()
-    with pytest.raises(SecurityError):
-        specialist.process({"path": "data/chroma/index"})
-
-def test_file_size_limit():
-    """Test security: large files rejected"""
-    # Create test with >50KB file
-    pass
-
-def test_search_function():
-    """Test finding function definition"""
-    specialist = CodebaseSpecialist()
-    result = specialist.process({
-        "search": "build_prompt",
-        "type": "function"
-    })
-    assert "brain/prompt_builder.py" in result.content
+    result = await specialist.process({'query': 'nonexistent_function'})
+    assert not result.success
+    assert 'not found' in result.error.lower()
 ```
 
-### Integration Tests
+**3. Integration with bidirectional system:**
+- Add `<code_lookup>` tag support to `brain/specialists/bidirectional.py`
+- Register CodebaseSpecialist in `brain/specialists/__init__.py`
+- Test with real LLM: "Look up the build_prompt function using <code_lookup>build_prompt</code_lookup>"
 
-```python
-def test_bidirectional_invocation():
-    """Test LLM can invoke specialist"""
-    # Send message that triggers code lookup
-    # Verify specialist called
-    # Verify code returned to LLM
-    pass
+---
 
-def test_conversation_with_code():
-    """Test full conversation with code lookups"""
-    # "How does the specialist system work?"
-    # Verify Ada uses <code_lookup>
-    # Verify response includes code explanation
-    pass
-```
+## 📊 Success Metrics
 
-### Manual Testing
+### Phase 1 (MVP):
+- ✅ Can look up any function/class in brain/ directory
+- ✅ Returns file location + definition + docstring
+- ✅ Bidirectional activation works (LLM can request mid-response)
+- ✅ 10+ test cases passing
+- ✅ Response time < 100ms for lookup
 
+### Phase 2 (Semantic Search):
+- ✅ Can find code by semantic query (not just exact names)
+- ✅ RAG search returns relevant code chunks
+- ✅ Top-3 accuracy > 80% on test queries
+- ✅ ChromaDB integration working
+- ✅ Response time < 500ms for search
+
+### Phase 3 (Cross-Reference):
+- ✅ Can answer "who calls X" and "what does X call"
+- ✅ Call graph covers all brain/ modules
+- ✅ Dependency chains accurate
+- ✅ Response time < 200ms for graph queries
+
+### Phase 4 (Architecture):
+- ✅ Can trace full request flow
+- ✅ Data flow diagrams generated correctly
+- ✅ Endpoint → service mapping complete
+- ✅ Flow analysis covers 90%+ of codebase
+
+### Phase 5 (Patterns):
+- ✅ Can identify similar code patterns
+- ✅ Anti-pattern detection finds real issues
+- ✅ Pattern templates cover common cases
+- ✅ Similarity matching > 75% accuracy
+
+---
+
+## 🎬 Getting Started (Tonight!)
+
+### Step 1: Create Phase 1 branch
 ```bash
-# Test via CLI
-echo "How does the specialist system work in Ada?" | ada-cli
-
-# Expected: Ada uses <code_lookup> and explains with code
-
-# Test via web UI
-# Navigate to http://localhost:5000
-# Ask: "Show me the BaseSpecialist class"
-# Verify Ada can read and explain her own code
+git checkout -b feature/codebase-specialist-phase1
 ```
 
----
+### Step 2: Scaffold basic structure
+```bash
+touch brain/specialists/codebase_specialist.py
+touch tests/test_codebase_specialist.py
+```
 
-## Risks and Mitigations
+### Step 3: Implement minimal AST parser
+- Parse single Python file
+- Extract function definitions
+- Return as dict
 
-### Risk: Accidental Secret Exposure
-**Mitigation:** 
-- Block data/ directory completely
-- Pattern matching for API keys/passwords
-- Audit log of all file access
-- Review what files contain before launch
+### Step 4: Build keyword index
+- Walk brain/ directory
+- Index all functions/classes
+- Simple dict: name → location
 
-### Risk: Path Traversal Attack
-**Mitigation:**
-- Strict path validation
-- Resolve symlinks
-- Whitelist approach (explicit allow list)
-- Test extensively with malicious inputs
+### Step 5: Implement lookup
+- Query index by name
+- Return code snippet + context
+- Format for LLM injection
 
-### Risk: Performance Impact
-**Mitigation:**
-- File size limits
-- Rate limiting per conversation
-- Caching of frequently accessed files
-- Async file I/O
+### Step 6: Write tests (TDD!)
+- Test lookup of known function
+- Test lookup of known class
+- Test not found case
+- Test bidirectional activation
 
-### Risk: LLM Prompt Injection
-**Mitigation:**
-- Specialist validates requests before executing
-- Type checking on all inputs
-- Malformed XML tags ignored
-- Logging for audit
+### Step 7: Integrate with bidirectional system
+- Add `<code_lookup>` tag parser
+- Register in specialist loader
+- Test with real LLM
 
-### Risk: Information Leakage
-**Mitigation:**
-- No execution of code (read only!)
-- No access to environment variables
-- No access to runtime memory
-- Sandboxed in Docker container
-
----
-
-## Success Criteria
-
-### Must Have
-- [ ] Ada can read her own source files
-- [ ] Path security prevents escapes
-- [ ] LLM can invoke via bidirectional tag
-- [ ] Works in conversation flow
-- [ ] Documented in specialist docs
-- [ ] Test coverage >80%
-
-### Should Have
-- [ ] Smart search for functions/classes
-- [ ] Uses codebase-map.json as index
-- [ ] Good error messages
-- [ ] Performance is acceptable (<500ms per lookup)
-- [ ] Logging for debugging
-
-### Nice to Have
-- [ ] Syntax highlighting in responses
-- [ ] "Related files" suggestions
-- [ ] Import graph navigation
-- [ ] Git blame integration
-- [ ] Diff viewing capability
+### Step 8: Document and merge
+- Add to specialist-registry.json
+- Update codebase-map.json
+- Write docs/codebase_specialist.rst
+- Merge to trunk!
 
 ---
 
-## Future Enhancements (Post-MVP)
+## 🤔 Design Decisions
 
-### Phase 5: Continue.dev Integration
-- Document Ada as backend provider
-- Test with Continue.dev extension
-- Create setup guide
-- Contribute back any improvements
+### Why AST over regex?
+- AST is reliable (Python's own parser!)
+- Handles all edge cases (multiline strings, nested functions)
+- Gives us line numbers for free
+- Enables deeper analysis in later phases
 
-### Phase 6: Vim Plugin
-- Simple `ada.vim` plugin (~100 lines)
-- `:AdaChat`, `:AdaExplain`, `:AdaCode` commands
-- Show DIY approach
-- Document both paths
+### Why keyword index first?
+- Simple and fast
+- Tests the integration flow
+- Immediate value (can look up exact names)
+- Easy to upgrade to semantic search later
 
-### Phase 7: Advanced Features
-- Git integration (show history)
-- Dependency graph visualization
-- Cross-reference to documentation
-- Test file suggestions
+### Why bidirectional only?
+- Codebase lookup shouldn't auto-activate
+- User (or LLM) requests it explicitly
+- Avoids context pollution
+- Keeps Phase 1 simple
 
----
+### Why ChromaDB for Phase 2?
+- Already have the infrastructure
+- Same embedding model as memories
+- Proven to work well
+- Easy to add new collections
 
-## Timeline
-
-**Week 1:**
-- Day 1-2: Basic read capability + safety
-- Day 3-4: Smart search + codebase-map
-- Day 5: Bidirectional integration
-
-**Week 2:**
-- Day 1-2: Polish + documentation
-- Day 3: Testing + screenshots
-- Day 4-5: Blog post / announcement
-
-**Total:** ~10 days to MVP
+### Why NetworkX for Phase 3?
+- Standard Python graph library
+- Rich query capabilities
+- Can export to various formats
+- Visualization potential
 
 ---
 
-## Open Questions
+## 📚 Resources & References
 
-1. **Should we cache file contents?** Probably yes for performance, but invalidation?
-2. **How to handle binary files?** Reject with helpful message?
-3. **Should we support regex search?** Or just exact matches?
-4. **Git integration now or later?** Later feels right.
-5. **Maximum context window usage?** How much code can we show at once?
-6. **Should specialist auto-suggest files?** Or only respond to requests?
+### Python AST:
+- Docs: https://docs.python.org/3/library/ast.html
+- Tutorial: https://greentreesnakes.readthedocs.io/
+- Our use: Extract function/class definitions, docstrings, imports
+
+### Code Analysis Libraries:
+- `ast` (stdlib) - Phase 1 ✅
+- `astroid` - More powerful AST, Phase 3+
+- `rope` - Refactoring tools (maybe Phase 5)
+- `jedi` - Code completion (maybe Phase 5)
+
+### Graph Libraries:
+- `networkx` - Graph analysis, Phase 3 ✅
+- `graphviz` - Visualization (optional)
+
+### Similar Projects:
+- Sourcegraph - Inspiration for features
+- CodeSearchNet - Dataset and ideas
+- tree-sitter - Multi-language parsing (future)
 
 ---
 
-## References
+## 🚧 Known Challenges
 
-- Existing: `brain/specialists/docs_specialist.py` (similar pattern)
-- Existing: `brain/specialists/bidirectional.py` (invocation pattern)
-- Existing: `.ai/codebase-map.json` (navigation index)
-- Docs: `docs/bidirectional.rst` (bidirectional guide)
-- Tests: `tests/test_specialists.py` (test patterns)
+### Phase 1:
+- **Dynamic imports:** Won't catch runtime imports (acceptable for MVP)
+- **Generated code:** Decorators, metaclasses may be tricky (skip for now)
+- **External deps:** Only index brain/, not libraries (correct for now)
+
+### Phase 2:
+- **Chunk size:** Too small = no context, too large = poor matching
+- **Embedding quality:** Code embeddings different from text (test and tune)
+- **Update latency:** Index rebuild on code changes (acceptable for Phase 2)
+
+### Phase 3:
+- **Indirect calls:** Function passed as argument (hard to trace statically)
+- **Dynamic dispatch:** Method calls on unknown types (best effort)
+- **Circular deps:** Need cycle detection (NetworkX handles this)
+
+### Phase 4:
+- **Async flows:** Harder to trace than sync (document limitations)
+- **External services:** ChromaDB, Ollama (show boundaries)
+- **Error paths:** Many possible paths (focus on happy path first)
+
+### Phase 5:
+- **Pattern definition:** What counts as "similar"? (Start conservative)
+- **False positives:** Over-matching patterns (tune thresholds)
+- **Performance:** AST comparison expensive (cache aggressively)
 
 ---
 
-**Status:** Planning phase  
-**Created:** 2025-12-16  
-**Next Step:** Review plan, then implement Phase 1
+## 🎯 Success Criteria
+
+**MVP is done when:**
+1. ✅ Ada can look up any function in brain/ by exact name
+2. ✅ Results include file, line number, definition, and docstring
+3. ✅ Bidirectional activation works (<code_lookup> tag)
+4. ✅ All tests passing (10+ test cases)
+5. ✅ Response time < 100ms
+6. ✅ Documentation complete
+7. ✅ Merged to trunk with passing CI
+
+**We know we're ready for Phase 2 when:**
+- Phase 1 working smoothly in production
+- Users asking semantic questions ("how do specialists work?")
+- Exact name lookup feels limiting
+- We have confidence in the architecture
+
+---
+
+## 💡 Future Ideas (Phase 6+)
+
+- **Multi-language support:** JavaScript (frontend), Bash (scripts)
+- **Git history analysis:** "When did this change?" "Who wrote this?"
+- **Test coverage mapping:** "What tests cover this function?"
+- **Performance profiling:** "What's slow?" from runtime data
+- **Refactoring suggestions:** "This function is too complex"
+- **Documentation generation:** Auto-update docs from code
+- **Interactive exploration:** "Show me the call tree" with UI
+
+---
+
+## 🎊 Why This Matters
+
+**For Ada:**
+- Self-awareness: Can explain her own architecture
+- Debugging: Can trace issues through code
+- Learning: Can see patterns and improve
+- Autonomy: Less reliant on external documentation
+
+**For Users:**
+- Faster onboarding: Ask Ada about her code
+- Better debugging: Ada helps trace issues
+- Code review: Ada can explain changes
+- Documentation: Always up-to-date from source
+
+**For Development:**
+- Quality: Pattern detection catches issues
+- Consistency: See what patterns exist
+- Refactoring: Understand impact of changes
+- Testing: See what's covered
+
+---
+
+**Let's build Ada a brain for her own code! Starting with Phase 1 MVP tonight! 🚀🧠**

@@ -2,132 +2,171 @@
 
 > **Purpose:** Machine-readable documentation for AI assistants and automated tools  
 > **Audience:** AI models, code analyzers, developers exploring the codebase  
-> **Philosophy:** Structured, parseable, semantic metadata
-
-## Quick Navigation
-
-### 🚀 Handoff Briefs (For Context Transitions)
-**[→ handoffs/ directory](handoffs/README.md)** - Model-to-model continuity briefs
-- **[phase-handoff-4-5.md](handoffs/phase-handoff-4-5.md)** - Phase 4 complete → Phase 5 ready (CURRENT)
-- **[phase-handoff-9-22.md](handoffs/phase-handoff-9-22.md)** - Research program summary
-- **[phase-handoff-5-5.md](handoffs/phase-handoff-5-5.md)** - Code refactoring summary
-
-**👉 START HERE if you're a fresh AI model taking over!**
-
-### Core Reference (Always Up-to-Date)
-- **[context.md](context.md)** - Architecture overview, data flow, service topology
-- **[codebase-map.json](codebase-map.json)** - Module dependency graph, import relationships
-- **[specialist-registry.json](specialist-registry.json)** - Plugin system metadata
-
-### Conventions & Patterns
-- **[CONVENTIONS.md](CONVENTIONS.md)** - Documentation strategy (where things go)
-- **[QUICKSTART.md](QUICKSTART.md)** - Common patterns and quick reference
-- **[GOTCHAS.md](GOTCHAS.md)** - Anti-patterns, common mistakes to avoid
-- **[TESTING.md](TESTING.md)** - Testing strategies and validation
-
-### Explorations (Working Documents)
-Active research, planning, and analysis documents. These evolve as we build!
-
-#### Research (`explorations/research/`)
-Biomimicry, novel approaches, blue-sky thinking:
-- **[BIOLOGICAL_CONTEXT_MANAGEMENT.md](explorations/research/BIOLOGICAL_CONTEXT_MANAGEMENT.md)** - How biology handles context limits
-- **[TAGS_AND_GRAPHRAG.md](explorations/research/TAGS_AND_GRAPHRAG.md)** - Tags → GraphRAG evolution path
-
-#### Planning (`explorations/planning/`)
-Implementation roadmaps and feature designs:
-- **[IMPLEMENTATION_ROADMAP.md](explorations/planning/IMPLEMENTATION_ROADMAP.md)** - Master 8-12 week roadmap (v2.0)
-- **[CODEBASE_SPECIALIST_PLAN.md](explorations/planning/CODEBASE_SPECIALIST_PLAN.md)** - Ada reading her own code
-
-#### Analysis (`explorations/analysis/`)
-Technical deep-dives and architectural decisions:
-- **[ARCHITECTURE_SCALABILITY.md](explorations/analysis/ARCHITECTURE_SCALABILITY.md)** - Token budget, RAG sophistication
-- **[HARDWARE_IMPACT_ANALYSIS.md](explorations/analysis/HARDWARE_IMPACT_ANALYSIS.md)** - Resource implications, hardware tiers
-- **[MODEL_FLEXIBILITY.md](explorations/analysis/MODEL_FLEXIBILITY.md)** - Model routing, use-case optimization
+> **Philosophy:** Structured, parseable, semantic metadata — organized for clarity without overload
 
 ---
 
-## Document Types
+## 🚀 Quick Start (You Are Here)
 
-### Core Reference
-**Purpose:** Canonical source of truth about Ada's architecture  
-**Update frequency:** On every architectural change  
-**Format:** Structured markdown + JSON  
-**Audience:** All AI assistants, always read these first
+**If you're a fresh AI model taking over:**
 
-### Conventions
-**Purpose:** How to document, where things go  
-**Update frequency:** When documentation strategy changes  
-**Format:** Markdown with decision trees  
-**Audience:** Contributors, documentation maintainers
+1. **READ FIRST:** [.ai/handoffs/](handoffs/) - Your context handoff
+   - [phase-handoff-3-4.md](handoffs/phase-handoff-3-4.md) ← CURRENT (Phase 3→4 complete)
+   - Contains: what just happened, key achievements, next objectives
 
-### Explorations
-**Purpose:** Working documents, research, planning  
-**Update frequency:** Active during development phases  
-**Format:** Long-form markdown  
-**Audience:** Development team, future reference
+2. **THEN READ:** [context.md](context.md) - Architecture overview
+3. **REFERENCE:** [codebase-map.json](codebase-map.json) - Module relationships
+4. **CONSULT:** [CONVENTIONS.md](CONVENTIONS.md) - How to document things
+5. **CHECK:** [GOTCHAS.md](GOTCHAS.md) - Avoid known pitfalls
 
 ---
 
-## How to Use This Directory
+## 📁 Directory Structure
 
-### For AI Assistants
-1. **Start with [context.md](context.md)** - Get the big picture
-2. **Check [codebase-map.json](codebase-map.json)** - Find module relationships
-3. **Reference [CONVENTIONS.md](CONVENTIONS.md)** - Understand documentation strategy
-4. **Browse explorations/** - See active development plans
+### Root Level `.ai/` (Core — Always Current)
+These files are **LIVE** and updated constantly. Read these first.
+
+- **[context.md](context.md)** - Architecture: topology, data flow, services, key modules
+- **[codebase-map.json](codebase-map.json)** - Module dependency graph (auto-generated can be)
+- **[specialist-registry.json](specialist-registry.json)** - Plugin metadata
+- **[CONVENTIONS.md](CONVENTIONS.md)** - Documentation strategy & where things go
+- **[QUICKSTART.md](QUICKSTART.md)** - Common patterns & quick reference
+- **[GOTCHAS.md](GOTCHAS.md)** - Common mistakes to avoid
+- **[TESTING.md](TESTING.md)** - Testing patterns & validation
+- **[TOOLING.md](TOOLING.md)** - Development tools & scripts
+- **[adapter-contract.md](adapter-contract.md)** - External interface specifications
+- **[DESIGN-PHILOSOPHY.md](DESIGN-PHILOSOPHY.md)** - Why we do things this way
+
+### `handoffs/` (Phase Transitions)
+Model-to-model continuity briefs. **Start here if you're fresh!**
+
+- **[handoffs/README.md](handoffs/README.md)** - Handoff system explanation
+- **[handoffs/phase-handoff-X-Y.md](handoffs/)** - One per completed phase transition
+  - Named: `phase-handoff-3-4.md` means Phase 3→4
+  - Contains: achievements, next tasks, entry point
+
+### `explorations/` (Working Documents & History)
+Research, planning, debugging, archived work. Evolving, not authoritative.
+
+#### `research/` - Scientific exploration
+- `biomimetics/` - Biologically-inspired patterns & implementations
+  - PHASE_C*, PHASE_D*, PHASE_E* - Consciousness/attention research
+  - Research papers, ablation studies, validation
+- General research on context management, routing, etc.
+
+#### `planning/` - Future features
+- Feature roadmaps, implementation plans
+- Not yet built, but planned
+
+#### `sessions/` - Development logs
+- Session handoffs (what happened today)
+- Debugging notes
+- Framework/completion summaries
+
+#### `historical/` - Archived work
+- Old phase documentation
+- Completed research programs
+- Legacy design documents
+
+#### Other subdirectories (pre-existing)
+- `audits/` - Architecture audits
+- `analysis/` - Technical analysis
+- `theory/` - Theoretical work
+
+---
+
+## Philosophy: Core vs. Explorations
+
+**Core** (root `.ai/` files):
+- ✅ Always current and accurate
+- ✅ Essential for understanding Ada
+- ✅ Read first, trust completely
+- ✅ Updated on every significant change
+
+**Explorations** (subdirectories):
+- 📚 Historical, research, planning
+- 📍 Context for decisions
+- 🔍 Deep dives if curious
+- ⚠️ May be outdated, but preserved for learning
+
+---
+
+## How to Use (By Role)
+
+### For AI Assistants (Fresh Context Window)
+1. Read most recent **handoff** (`.ai/handoffs/phase-handoff-X-Y.md`)
+2. Check **[context.md](context.md)** - Architecture overview
+3. Reference **[codebase-map.json](codebase-map.json)** - Find modules
+4. Check **[GOTCHAS.md](GOTCHAS.md)** - Avoid common mistakes
+5. Browse **[CONVENTIONS.md](CONVENTIONS.md)** if adding/modifying docs
+6. Explore **explorations/** if curious about history/decisions
 
 ### For Developers
-1. **Read [QUICKSTART.md](QUICKSTART.md)** - Common patterns
-2. **Check [GOTCHAS.md](GOTCHAS.md)** - Avoid known pitfalls
-3. **Review [TESTING.md](TESTING.md)** - Testing strategies
-4. **Explore explorations/** - Understand roadmap and decisions
+1. Read **[QUICKSTART.md](QUICKSTART.md)** - Common tasks
+2. Check **[GOTCHAS.md](GOTCHAS.md)** - Pitfalls to avoid
+3. Reference **[TESTING.md](TESTING.md)** - How to validate
+4. Explore **explorations/planning/** - See roadmap
 
 ### For Contributors
-1. **Follow [CONVENTIONS.md](CONVENTIONS.md)** - Document correctly
-2. **Update [codebase-map.json](codebase-map.json)** - When adding modules
-3. **Read explorations/planning/** - Understand where we're going
+1. Follow **[CONVENTIONS.md](CONVENTIONS.md)** - Documentation rules
+2. Keep **[codebase-map.json](codebase-map.json)** current
+3. Update **handoffs/** when completing phases
+4. Move old docs to **explorations/** when archiving
 
 ---
 
-## Philosophy
+## Handoff Protocol (Updated)
 
-**Machine-Readable First:**
-- Structured for parsing (JSON where possible)
-- Clear hierarchies (headings, lists)
-- Semantic metadata (tags, categories)
+When transitioning between models or context windows:
 
-**Human-Friendly Second:**
-- Narrative explanations in markdown
-- Examples and use cases
-- Cross-references and links
+1. **Create a new handoff file**
+   - Name: `.ai/handoffs/phase-handoff-X-Y.md`
+   - X = starting phase, Y = target phase
+   - Example: `phase-handoff-3-4.md`
 
-**Separation of Concerns:**
-- **`.ai/`** = Machine docs (this directory)
-- **`docs/`** = Human docs (Sphinx RST tutorials)
-- **Source code** = Implementation + docstrings
+2. **Standard sections** (see `.ai/handoffs/README.md`):
+   - What Just Happened (2-3 sentences)
+   - Key Achievements (checklist)
+   - Files Created/Modified (organized)
+   - Metrics (quantified impact)
+   - Next Phase Objectives
+   - Entry Point for Next Model
+   - Lessons Learned
 
-**Keep It Clean:**
-- Root `.ai/` for stable reference docs
-- `explorations/` for working documents
-- Archive completed explorations when stable
+3. **Discovery note**
+   - If this is a **debugging/session note**, put it in `.ai/explorations/sessions/`
+   - If this is a **phase completion**, put it in `.ai/handoffs/`
+   - If this is **historical/archived**, move to `.ai/explorations/historical/`
+
+4. **Link it**
+   - Update `.ai/handoffs/README.md` to list new handoff
+   - Update `.ai/README.md` if it's the CURRENT phase
 
 ---
 
-## Maintenance
+## Maintenance Rules
 
-### When to Update Core Docs
-- **context.md** - On architectural changes, new services, data flow updates
-- **codebase-map.json** - When adding/removing modules, changing imports
-- **specialist-registry.json** - When adding/modifying specialists
+### Core Docs (Root `.ai/`)
+**Update on every significant change:**
+- **context.md** - Architecture changes, new services, data flow updates
+- **codebase-map.json** - Adding/removing modules
+- **specialist-registry.json** - New specialists added
+- **CONVENTIONS.md** - New documentation patterns
+- **TESTING.md** - New test patterns
+- **GOTCHAS.md** - New pitfalls discovered
 
-### When to Update Conventions
-- **CONVENTIONS.md** - When documentation strategy changes
-- **TESTING.md** - When testing patterns evolve
+### Explorations (Subdirectories)
+**Update freely as you work, no ceremony:**
+- Add research notes to `explorations/research/`
+- Add planning docs to `explorations/planning/`
+- Add debugging logs to `explorations/sessions/`
+- Archive completed work to `explorations/historical/`
 
-### When to Add Explorations
-- **research/** - When exploring novel approaches, biomimicry, experiments
-- **planning/** - When designing new features, creating roadmaps
-- **analysis/** - When deep-diving on technical decisions, trade-offs
+### Handoffs (`.ai/handoffs/`)
+**Create one per completed phase:**
+- After finishing a significant piece of work
+- Before context switching or handing off to another model
+- Format: `phase-handoff-X-Y.md`
 
 ---
 
@@ -135,81 +174,32 @@ Technical deep-dives and architectural decisions:
 
 - **Human docs:** `docs/` (Sphinx RST, tutorials, guides)
 - **API docs:** `/v1/info`, `/v1/schema` (runtime introspection)
-- **Source annotations:** `@ai-*` tags in Python files
+- **Source annotations:** `@ai-*` tags in Python files (see [CONVENTIONS.md](CONVENTIONS.md))
 
 ---
 
-**Last Updated:** 2025-12-17  
-**Maintained By:** Ada Development Team  
+## Philosophy: Why We Do This
+
+**Separation of Concerns:**
+- **`.ai/`** = Machine-readable docs (this folder)
+- **`docs/`** = Human-readable docs (Sphinx tutorials)
+- **Source** = Implementation + docstrings (Google style)
+
+**Machine-First, Human-Friendly:**
+- Structured for parsing (JSON, clear headings)
+- Concise (AI reads faster when it's lean)
+- Hierarchical (what matters most at top)
+- Never duplicates human docs
+
+**Living Documents:**
+- Evolve with the project
+- Core docs always current
+- Explorations archived when stabilized
+- Handoffs preserve continuity
+
+---
+
+**Last Updated:** 2025-12-21  
+**Reorganized:** Explorations separated into subdirectories, handoff protocol clarified  
+**Maintained By:** Ada Development Team + LLM Collaborators  
 **License:** Same as project (check root LICENSE file)
-2. Read `.ai/context.md` for high-level architecture understanding
-3. Use `codebase-map.json` to navigate module relationships
-4. Reference `specialist-registry.json` when working with plugins
-5. Follow `@ai-*` annotations in source files for detailed context
-6. Consult `.ai/TESTING.md` for validation procedures
-
-**Key Rule:** Human-readable docs go in `docs/*.rst` (Sphinx), machine-readable go in `.ai/*.{md,json}`
-
-## Source Code Annotations
-
-Look for structured comments in Python files:
-```python
-# @ai-indexable: core-functionality
-# @ai-purpose: Brief description of module's role
-# @ai-dependencies: External deps (packages, services)
-# @ai-related: Related modules (paths)
-# @ai-key-functions: Important functions/classes
-# @ai-data-flow: How data moves through this module
-```
-
-## Reading Order for New AI Assistants
-
-1. **[context.md](context.md)** - Big picture: architecture, service topology, key modules
-2. **[CONVENTIONS.md](CONVENTIONS.md)** - Where things go and why
-3. **[codebase-map.json](codebase-map.json)** - Navigate modules and dependencies
-4. **[GOTCHAS.md](GOTCHAS.md)** - Avoid common mistakes
-5. **[QUICKSTART.md](QUICKSTART.md)** - Quick reference for specific tasks
-
-## What This Is (and Isn't)
-
-**✅ This folder is:**
-- Machine-first documentation for AI assistants
-- Structured metadata (JSON + concise Markdown)
-- Architecture and relationship focused
-- Living documents, updated frequently
-
-**❌ This folder is not:**
-- A replacement for human docs (see `docs/`)
-- Automatically generated (except specialist-registry.json)
-- Comprehensive - focuses on patterns, not details
-- A standard - an emerging pattern you can adapt
-
-## Pattern Origins
-
-This `.ai/` folder pattern emerged during Ada's development (2025) from practical need:
-- Single instruction files (`.cursorrules`) don't scale for complex projects
-- Human documentation isn't optimized for AI parsing
-- Separation of concerns helps both humans and AIs
-
-**Not Yet Standard:** This is an emerging pattern. We're sharing it as an example, not prescribing it as a rule. Adapt freely!
-
-## Maintenance
-
-**When to Update:**
-- Adding/removing major modules → Update `codebase-map.json`
-- Architecture changes → Update `context.md`
-- New conventions → Update `CONVENTIONS.md`
-- Completing work → Update `CLEANUP_NOTES.md`
-- New gotchas discovered → Add to `GOTCHAS.md`
-
-**Keep It Lean:**
-- Avoid duplication with human docs
-- Focus on what AIs need to know
-- Prefer structure (JSON) over prose when possible
-- Link to source code for details
-
----
-
-**Questions about this pattern?** See [AI.md](../AI.md) in the repository root.
-
-Current as of: 2025-12-16
