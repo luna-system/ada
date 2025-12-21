@@ -485,7 +485,16 @@ async def handle_tool_call(name: str, arguments: dict[str, Any], ada: AdaClient)
             )
             
             if result.success:
-                return [TextContent(type="text", text=result.content)]
+                # Extract metadata and include in response for transparency
+                # This makes files_accessed visible to callers
+                metadata_str = ""
+                if result.metadata.files_accessed:
+                    files = ", ".join(result.metadata.files_accessed)
+                    metadata_str = f"\n\n🔧 Files Analyzed: {files}"
+                if result.metadata.duration_ms:
+                    metadata_str += f"\n⚡ Introspection time: {result.metadata.duration_ms}ms"
+                
+                return [TextContent(type="text", text=result.content + metadata_str)]
             else:
                 return [TextContent(type="text", text=f"❌ Introspection failed: {result.content}")]
                 
