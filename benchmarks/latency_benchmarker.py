@@ -10,7 +10,7 @@ Measures:
 import time
 import httpx
 import statistics
-from typing import List, Dict, Tuple
+from typing import List, Dict, Tuple, Optional
 from dataclasses import dataclass, asdict
 import asyncio
 
@@ -32,6 +32,19 @@ class LatencyBenchmarker:
     def __init__(self, ada_url: str = "http://localhost:8000"):
         self.ada_url = ada_url
         self.measurements: List[LatencyMeasurement] = []
+        # Persistent HTTP client for connection pooling
+        self._client: Optional[httpx.AsyncClient] = None
+    
+    async def __aenter__(self):
+        """Context manager entry - create persistent HTTP client."""
+        self._client = httpx.AsyncClient(timeout=60.0)
+        return self
+    
+    async def __aexit__(self, exc_type, exc_val, exc_tb):
+        """Context manager exit - close HTTP client."""
+        if self._client:
+            await self._client.aclose()
+            self._client = None
     
     async def warmup(self, num_requests: int = 5):
         """Warm up the model before benchmarking.
@@ -62,7 +75,11 @@ class LatencyBenchmarker:
     
     async def _single_request(self, message: str, query_type: str) -> LatencyMeasurement:
         """Make a single request and measure latency."""
-        async with httpx.AsyncClient(timeout=60.0) as client:
+        # Use persistent client for connection pooling
+        client = self._client or httpx.AsyncClient(timeout=60.0)
+        should_close = self._client is None
+        
+        try:
             # Start timing
             start_time = time.time()
             first_token_time = None
@@ -103,6 +120,10 @@ class LatencyBenchmarker:
                 query_type=query_type,
                 timestamp=start_time
             )
+        finally:
+            # Close temporary client if we created one
+            if should_close:
+                await client.aclose()
     
     async def benchmark_query_type(
         self,
@@ -226,35 +247,34 @@ BENCHMARK_QUERIES = {
 
 
 async def run_comprehensive_benchmark():
-    """Run comprehensive latency benchmarks."""
-    benchmarker = LatencyBenchmarker()
-    
-    # Warmup
-    await benchmarker.warmup(num_requests=3)
-    
-    # Benchmark each query type with stabilization delay
-    for query_type, query in BENCHMARK_QUERIES.items():
-        await benchmarker.benchmark_query_type(
-            query=query,
-            query_type=query_type,
-            num_samples=15,  # Increased from 10 for better statistics
-            stabilization_delay=2.0  # Wait 2s between query types to reach baseline
-        )
-    
-    # Print statistics (with and without first sample)
-    print("\n" + "=" * 60)
-    print("COMPREHENSIVE LATENCY STATISTICS")
-    print("=" * 60)
-    
-    print("\n--- INCLUDING ALL SAMPLES ---")
-    stats_all = benchmarker.get_all_statistics(exclude_first=False)
-    _print_statistics(stats_all)
-    
-    print("\n--- EXCLUDING FIRST SAMPLE (Steady-State) ---")
-    stats_steady = benchmarker.get_all_statistics(exclude_first=True)
-    _print_statistics(stats_steady)
-    
-    return benchmarker
+    """Run comprehensive latency benchmarks with connection pooling."""
+    async with LatencyBenchmarker() as benchmarker:
+        # Warmup
+        await benchmarker.warmup(num_requests=5)
+        
+        # Benchmark each query type with stabilization delay
+        for query_type, query in BENCHMARK_QUERIES.items():
+            await benchmarker.benchmark_query_type(
+                query=query,
+                query_type=query_type,
+                num_samples=15,  # Increased from 10 for better statistics
+                stabilization_delay=2.0  # Wait 2s between query types to reach baseline
+            )
+        
+        # Print statistics (with and without first sample)
+        print("\n" + "=" * 60)
+        print("COMPREHENSIVE LATENCY STATISTICS")
+        print("=" * 60)
+        
+        print("\n--- INCLUDING ALL SAMPLES ---")
+        stats_all = benchmarker.get_all_statistics(exclude_first=False)
+        _print_statistics(stats_all)
+        
+        print("\n--- EXCLUDING FIRST SAMPLE (Steady-State) ---")
+        stats_steady = benchmarker.get_all_statistics(exclude_first=True)
+        _print_statistics(stats_steady)
+        
+        return benchmarker
 
 
 def _print_statistics(stats: Dict):
