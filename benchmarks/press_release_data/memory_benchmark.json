@@ -1,0 +1,125 @@
+{
+  "storage": {
+    "total_size_bytes": 10246421093,
+    "total_size_mb": 9771.748631477356,
+    "chroma_size_bytes": 63621284,
+    "chroma_size_mb": 60.67398452758789,
+    "file_count": 17,
+    "collection_stats": {
+      "backups": -1,
+      "40cb2f72-3131-4878-8461-5e396e14cc8a": -1
+    },
+    "timestamp": 1766284405.4764519
+  },
+  "retrieval": {
+    "sample_count": 15,
+    "mean_ms": 0.9481112162272135,
+    "median_ms": 0.5054473876953125,
+    "min_ms": 0.4367828369140625,
+    "max_ms": 4.925727844238281,
+    "stdev_ms": 1.1646832813825547,
+    "p95_ms": 4.925727844238281,
+    "p99_ms": 4.925727844238281
+  },
+  "growth_projections": {
+    "current_mb": 9771.748631477356,
+    "daily_growth_mb": 0.0476837158203125,
+    "30_day_projection_mb": 9773.179142951965,
+    "1_year_projection_mb": 9789.15318775177,
+    "5_year_projection_mb": 9858.771412849426,
+    "messages_per_day_assumption": 100,
+    "bytes_per_message_assumption": 500
+  },
+  "raw_retrievals": [
+    {
+      "query": "recent conversations about code",
+      "retrieval_time_ms": 4.925727844238281,
+      "num_results": 0,
+      "timestamp": 1766284405.4524696
+    },
+    {
+      "query": "recent conversations about code",
+      "retrieval_time_ms": 0.7052421569824219,
+      "num_results": 0,
+      "timestamp": 1766284405.4574134
+    },
+    {
+      "query": "recent conversations about code",
+      "retrieval_time_ms": 0.4799365997314453,
+      "num_results": 0,
+      "timestamp": 1766284405.458129
+    },
+    {
+      "query": "recent conversations about code",
+      "retrieval_time_ms": 0.44798851013183594,
+      "num_results": 0,
+      "timestamp": 1766284405.4586167
+    },
+    {
+      "query": "recent conversations about code",
+      "retrieval_time_ms": 0.4782676696777344,
+      "num_results": 0,
+      "timestamp": 1766284405.459073
+    },
+    {
+      "query": "how do I configure Ada",
+      "retrieval_time_ms": 1.3234615325927734,
+      "num_results": 0,
+      "timestamp": 1766284405.4626896
+    },
+    {
+      "query": "how do I configure Ada",
+      "retrieval_time_ms": 0.5054473876953125,
+      "num_results": 0,
+      "timestamp": 1766284405.464022
+    },
+    {
+      "query": "how do I configure Ada",
+      "retrieval_time_ms": 0.4591941833496094,
+      "num_results": 0,
+      "timestamp": 1766284405.4645376
+    },
+    {
+      "query": "how do I configure Ada",
+      "retrieval_time_ms": 0.5733966827392578,
+      "num_results": 0,
+      "timestamp": 1766284405.4650044
+    },
+    {
+      "query": "how do I configure Ada",
+      "retrieval_time_ms": 0.6525516510009766,
+      "num_results": 0,
+      "timestamp": 1766284405.4655888
+    },
+    {
+      "query": "what is the RAG system",
+      "retrieval_time_ms": 1.7852783203125,
+      "num_results": 0,
+      "timestamp": 1766284405.4702237
+    },
+    {
+      "query": "what is the RAG system",
+      "retrieval_time_ms": 0.5352497100830078,
+      "num_results": 0,
+      "timestamp": 1766284405.4720223
+    },
+    {
+      "query": "what is the RAG system",
+      "retrieval_time_ms": 0.4754066467285156,
+      "num_results": 0,
+      "timestamp": 1766284405.4725664
+    },
+    {
+      "query": "what is the RAG system",
+      "retrieval_time_ms": 0.4367828369140625,
+      "num_results": 0,
+      "timestamp": 1766284405.4730494
+    },
+    {
+      "query": "what is the RAG system",
+      "retrieval_time_ms": 0.43773651123046875,
+      "num_results": 0,
+      "timestamp": 1766284405.4734936
+    }
+  ]
+}
