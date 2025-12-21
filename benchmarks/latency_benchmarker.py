@@ -88,10 +88,24 @@ class LatencyBenchmarker:
         self,
         query: str,
         query_type: str,
-        num_samples: int = 10
+        num_samples: int = 10,
+        stabilization_delay: float = 2.0
     ) -> List[LatencyMeasurement]:
-        """Benchmark a specific query type with multiple samples."""
+        """Benchmark a specific query type with multiple samples.
+        
+        Args:
+            query: Query text to benchmark
+            query_type: Category of query (trivial, code, introspection, etc.)
+            num_samples: Number of samples to collect
+            stabilization_delay: Seconds to wait before starting (avoids cold start artifacts)
+        """
         print(f"\n📊 Benchmarking {query_type} ({num_samples} samples)...")
+        
+        # Stabilization: Let model return to baseline state
+        if stabilization_delay > 0:
+            print(f"  ⏳ Stabilization delay: {stabilization_delay}s...")
+            await asyncio.sleep(stabilization_delay)
+        
         measurements = []
         
         for i in range(num_samples):
@@ -104,13 +118,25 @@ class LatencyBenchmarker:
         
         return measurements
     
-    def get_statistics(self, query_type: str = None) -> Dict:
-        """Calculate statistics for measurements."""
+    def get_statistics(self, query_type: str = None, exclude_first: bool = False) -> Dict:
+        """Calculate statistics for measurements.
+        
+        Args:
+            query_type: Filter by query type (None = all)
+            exclude_first: Exclude first sample per query type (removes warm-up artifacts)
+        """
         # Filter by query type if specified
         measurements = [
             m for m in self.measurements
             if query_type is None or m.query_type == query_type
         ]
+        
+        if not measurements:
+            return {}
+        
+        # Exclude first sample if requested (removes cold start / warm-up artifacts)
+        if exclude_first and query_type:
+            measurements = measurements[1:]
         
         if not measurements:
             return {}
@@ -122,6 +148,7 @@ class LatencyBenchmarker:
         return {
             "query_type": query_type or "all",
             "sample_count": len(measurements),
+            "excluded_first": exclude_first,
             "ttft": {
                 "mean": statistics.mean(ttfts),
                 "median": statistics.median(ttfts),
@@ -146,16 +173,20 @@ class LatencyBenchmarker:
             }
         }
     
-    def get_all_statistics(self) -> Dict[str, Dict]:
-        """Get statistics for all query types."""
+    def get_all_statistics(self, exclude_first: bool = False) -> Dict[str, Dict]:
+        """Get statistics for all query types.
+        
+        Args:
+            exclude_first: Exclude first sample per query type (removes warm-up artifacts)
+        """
         query_types = set(m.query_type for m in self.measurements if m.query_type != "warmup")
         
         results = {
-            "overall": self.get_statistics(),
+            "overall": self.get_statistics(exclude_first=False),  # Overall always includes all
         }
         
         for query_type in query_types:
-            results[query_type] = self.get_statistics(query_type)
+            results[query_type] = self.get_statistics(query_type, exclude_first=exclude_first)
         
         return results
     
@@ -181,35 +212,47 @@ async def run_comprehensive_benchmark():
     # Warmup
     await benchmarker.warmup(num_requests=3)
     
-    # Benchmark each query type
+    # Benchmark each query type with stabilization delay
     for query_type, query in BENCHMARK_QUERIES.items():
         await benchmarker.benchmark_query_type(
             query=query,
             query_type=query_type,
-            num_samples=10
+            num_samples=10,
+            stabilization_delay=2.0  # Wait 2s between query types to reach baseline
         )
     
-    # Print statistics
+    # Print statistics (with and without first sample)
     print("\n" + "=" * 60)
     print("COMPREHENSIVE LATENCY STATISTICS")
     print("=" * 60)
     
-    stats = benchmarker.get_all_statistics()
+    print("\n--- INCLUDING ALL SAMPLES ---")
+    stats_all = benchmarker.get_all_statistics(exclude_first=False)
+    _print_statistics(stats_all)
     
+    print("\n--- EXCLUDING FIRST SAMPLE (Steady-State) ---")
+    stats_steady = benchmarker.get_all_statistics(exclude_first=True)
+    _print_statistics(stats_steady)
+    
+    return benchmarker
+
+
+def _print_statistics(stats: Dict):
+    """Helper to print statistics."""
     for query_type, data in stats.items():
         if not data:
             continue
         
         print(f"\n{query_type.upper()}:")
         print(f"  Samples: {data['sample_count']}")
+        if 'excluded_first' in data:
+            print(f"  Excluded first: {data['excluded_first']}")
         print(f"  TTFT: {data['ttft']['mean']:.3f}s (mean), "
               f"{data['ttft']['median']:.3f}s (median), "
               f"{data['ttft']['p95']:.3f}s (p95)")
         print(f"  Total: {data['total_time']['mean']:.3f}s (mean), "
               f"{data['total_time']['median']:.3f}s (median)")
         print(f"  Throughput: {data['tokens_per_second']['mean']:.1f} tokens/sec (mean)")
-    
-    return benchmarker
 
 
 if __name__ == "__main__":
