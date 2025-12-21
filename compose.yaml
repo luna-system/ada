@@ -167,8 +167,9 @@ services:
     ports:
       - "8000:7000"
     environment:
-      # Core services - explicitly set to Docker bridge IP for Linux compatibility
-      - OLLAMA_BASE_URL=http://172.17.0.1:11434
+      # Core services
+      # Override OLLAMA_BASE_URL in .env for external Ollama or use --profile ollama
+      - OLLAMA_BASE_URL=${OLLAMA_BASE_URL:-http://172.17.0.1:11434}
       - OLLAMA_MODEL
       - OLLAMA_EMBED_MODEL
       - CHROMA_URL

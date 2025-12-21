@@ -474,6 +474,30 @@ Cloud Alternatives
 Troubleshooting
 ===============
 
+SELinux Volume Permissions (Fedora/RHEL)
+----------------------------------------
+
+On systems with SELinux enforcing (Fedora, RHEL, CentOS), you may see permission
+denied errors when containers try to access mounted volumes.
+
+**Symptom:** Containers fail to start or can't write to ``./data/`` directories.
+
+**Solution:** Add ``:z`` suffix to volume mounts in ``compose.yaml``:
+
+.. code-block:: yaml
+
+   volumes:
+     - ./data/chroma:/data:z
+     - ./data/brain:/data:z
+
+The ``:z`` flag tells Docker to relabel the volume content with a shared label
+that all containers can access.
+
+.. warning::
+
+   Only use ``:z`` if you're on SELinux-enabled systems. It's harmless but
+   unnecessary on other systems.
+
 GPU not detected
 ----------------
 
