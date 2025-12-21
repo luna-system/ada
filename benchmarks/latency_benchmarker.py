@@ -51,19 +51,21 @@ class LatencyBenchmarker:
         
         Uses parallel requests with diverse query types to warm:
         - Model weights
-        - Context caches
+        - Context caches (persona, FAQs, memories)
         - Connection pools
         - Memory systems
+        - ChromaDB indexes
         """
         print(f"🔥 Warming up model with {num_requests} parallel requests...")
         
-        # Diverse warmup queries to activate different code paths
+        # Diverse warmup queries to activate ALL code paths
         warmup_queries = [
-            "Hello Ada!",
-            "What is Python?",
-            "def hello(): pass",
-            "Tell me about yourself",
-            "Explain recursion briefly"
+            "Hello Ada!",  # Trivial path, persona loading
+            "What is Python?",  # FAQ path
+            "def hello(): pass",  # Code path
+            "Tell me about yourself",  # Introspection + memory retrieval
+            "Explain recursion briefly",  # Reasoning path
+            "I have a bug in my code",  # Debugging path
         ][:num_requests]
         
         # Parallel warmup for speed
@@ -72,6 +74,18 @@ class LatencyBenchmarker:
         
         for i, m in enumerate(measurements):
             print(f"  Warmup {i+1}/{num_requests}: TTFT={m.ttft:.3f}s, {m.tokens_per_second:.1f} tok/s")
+        
+        # Extra cache warming step - hit memory/FAQ/persona explicitly
+        print("  💾 Warming caches (persona, FAQ, memories)...")
+        cache_warmup_queries = [
+            "Who are you?",  # Forces persona load
+            "How do I use Ada?",  # Forces FAQ load
+            "What did we talk about?",  # Forces memory search
+        ]
+        cache_tasks = [self._single_request(q, query_type="cache_warmup") for q in cache_warmup_queries]
+        await asyncio.gather(*cache_tasks)
+        print("  ✅ Caches warmed and ready")
+
     
     async def _single_request(self, message: str, query_type: str) -> LatencyMeasurement:
         """Make a single request and measure latency."""
