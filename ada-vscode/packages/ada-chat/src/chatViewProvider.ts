@@ -10,7 +10,6 @@
  */
 
 import * as vscode from 'vscode';
-import { AdaBrainClient } from '@ada-code/shared/clients';
 import { MCPToolHandler } from './mcpToolHandler';
 
 export class ChatViewProvider implements vscode.WebviewViewProvider {
@@ -21,7 +20,7 @@ export class ChatViewProvider implements vscode.WebviewViewProvider {
 
   constructor(
     private readonly _extensionUri: vscode.Uri,
-    private readonly _brainClient: AdaBrainClient
+    private readonly _brainClient: any  // AdaBrainClient from extension.ts
   ) {
     this._toolHandler = new MCPToolHandler();
   }
