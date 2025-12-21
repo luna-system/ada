@@ -158,8 +158,18 @@ export class ChatViewProvider implements vscode.WebviewViewProvider {
     let toolCallCount = 0;
     const MAX_TOOL_CALLS = 5; // Safety limit
 
-    // Start initial stream
-    let currentMessages = [{ role: 'user', content: userMessage }];
+    // Inject VS Code tool instructions so Brain knows what tools are available
+    const toolInstructions = this._getToolInstructions();
+    const augmentedMessage = `${toolInstructions}
+
+---
+
+User request: ${userMessage}`;
+    
+    // Start initial stream with tool context
+    let currentMessages = [
+      { role: 'user', content: augmentedMessage }
+    ];
     
     while (this._isGenerating) {
       let foundToolRequest = false;
@@ -297,6 +307,54 @@ Continue your response, incorporating the tool result above.`;
       .replace(/\{\{jsUri\}\}/g, jsUri.toString());
     
     return html;
+  }
+
+  /**
+   * Generate tool instructions for Brain so it knows about VS Code tools
+   */
+  private _getToolInstructions(): string {
+    return `You have access to VS Code tools via the extension. When you need to read files, search code, or analyze the workspace, request tools using this syntax:
+
+TOOL_REQUEST[tool_name:{"param":"value"}]
+
+Available tools:
+
+- ada_introspect: Analyze workspace structure, find TODOs/FIXMEs, understand project
+  When to use: Understanding the codebase, finding tasks, getting project overview
+  Example: TOOL_REQUEST[ada_introspect:{"query":"TODOs in the project"}]
+  Returns: Project structure, package.json info, TODO/FIXME items with file locations
+
+- ada_read_file: Read file contents with optional line range
+  When to use: Reading specific files to understand code, reviewing implementations
+  Example: TOOL_REQUEST[ada_read_file:{"path":"src/index.ts"}]
+  Example: TOOL_REQUEST[ada_read_file:{"path":"src/app.py","startLine":10,"endLine":50}]
+  Returns: File contents (or portion if line range specified)
+
+- ada_search: Search for text patterns in the codebase
+  When to use: Finding where something is defined, used, or referenced
+  Example: TOOL_REQUEST[ada_search:{"query":"handleMessage","includePattern":"**/*.ts"}]
+  Returns: Matching lines with file paths and line numbers
+
+- ada_list_files: List files in a directory with optional glob pattern
+  When to use: Exploring folder structure, finding files of a certain type
+  Example: TOOL_REQUEST[ada_list_files:{"path":"src","pattern":"**/*.ts"}]
+  Returns: List of matching files
+
+- ada_symbols: Find code symbols (functions, classes, etc.)
+  When to use: Finding function definitions, class declarations, navigating code
+  Example: TOOL_REQUEST[ada_symbols:{"query":"ChatViewProvider"}]
+  Returns: Symbol definitions with locations
+
+- ada_git_status: Get current git repository status
+  When to use: Understanding what's changed, what's staged, current branch
+  Example: TOOL_REQUEST[ada_git_status:{}]
+  Returns: Branch, staged changes, unstaged changes, untracked files
+
+Guidelines:
+- Use tools proactively when the user's question would benefit from real file/code data
+- After receiving tool results, incorporate them naturally into your response
+- You can chain multiple tool calls if needed (one at a time)
+- For "find a TODO" or "show me something to work on" questions, use ada_introspect first`;
   }
   
   private _getFallbackHtml(): string {
