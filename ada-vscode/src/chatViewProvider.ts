@@ -522,6 +522,34 @@ export class ChatViewProvider implements vscode.WebviewViewProvider {
             max-width: 250px;
         }
         
+        /* Tool usage indicator */
+        .tool-indicator {
+            font-size: 10px;
+            color: var(--vscode-charts-blue);
+            padding: 4px 8px;
+            background: var(--vscode-badge-background);
+            border-radius: 12px;
+            margin-top: 6px;
+            display: inline-block;
+        }
+        
+        /* Token counter */
+        .message-meta {
+            font-size: 10px;
+            color: var(--vscode-descriptionForeground);
+            margin-top: 6px;
+            opacity: 0.7;
+        }
+        
+        /* Links */
+        a {
+            color: var(--vscode-textLink-foreground);
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+        
         /* Scrollbar */
         ::-webkit-scrollbar { width: 6px; }
         ::-webkit-scrollbar-track { background: transparent; }
@@ -633,10 +661,38 @@ export class ChatViewProvider implements vscode.WebviewViewProvider {
         }
         
         function formatContent(text) {
-            // Simple markdown-ish formatting
-            return text
-                .replace(/\`\`\`(\\w*)\\n([\\s\\S]*?)\`\`\`/g, '<pre><code>$2</code></pre>')
-                .replace(/\`([^\`]+)\`/g, '<code>$1</code>');
+            // Enhanced markdown formatting with tool indicators
+            let formatted = text;
+            
+            // Extract and highlight tool usage
+            const toolPattern = /SPECIALIST_REQUEST\[([^\]]+)\]/g;
+            formatted = formatted.replace(toolPattern, '<span class="tool-indicator">🔧 Using: $1</span>');
+            
+            // Code blocks with language hint
+            formatted = formatted.replace(/```(\w*)\n([\s\S]*?)```/g, (match, lang, code) => {
+                const langLabel = lang ? ` <span style="opacity: 0.6; font-size: 10px;">${lang}</span>` : '';
+                return `<pre>${langLabel}<code>${escapeHtml(code)}</code></pre>`;
+            });
+            
+            // Inline code
+            formatted = formatted.replace(/`([^`]+)`/g, '<code>$1</code>');
+            
+            // Bold
+            formatted = formatted.replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>');
+            
+            // Italic
+            formatted = formatted.replace(/\*([^*]+)\*/g, '<em>$1</em>');
+            
+            // Links
+            formatted = formatted.replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" target="_blank">$1</a>');
+            
+            return formatted;
+        }
+        
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
         }
         
         // Handle messages from extension
