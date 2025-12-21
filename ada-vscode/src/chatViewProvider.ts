@@ -25,6 +25,7 @@ import { OllamaClient, ChatMessage } from './ollamaClient';
 import { AdaBrainClient } from './adaBrainClient';
 import { MessageHandlerRegistry } from './handlers/MessageHandlerRegistry';
 import { ToolTransparencyFormatter } from './formatters/ToolTransparencyFormatter';
+import { extractMetadataFromResponse, stripMetadataMarkersFromResponse, formatMetadataForDisplay } from './formatters/metadataParser';
 import { getChatViewHtml } from './views/chatViewTemplate';
 // Don't import AdaMCPClient here - load it dynamically only when needed
 import { 
@@ -287,15 +288,23 @@ export class ChatViewProvider implements vscode.WebviewViewProvider {
                     workspace_root: workspace
                 });
                 
-                // Extract tool usage from response for transparency
+                // PHASE 2: Extract structured metadata from response
+                const metadata = extractMetadataFromResponse(response, 'introspection');
+                if (metadata) {
+                    console.log('[ADA MCP] Extracted metadata:', metadata);
+                    this._postMessage({ type: 'toolMetadata', metadata });
+                } else {
+                    console.log('[ADA MCP] No metadata found in response');
+                }
+                
+                // Keep backwards compatibility: also extract tool files for badge rendering
                 const toolMarkers = ToolTransparencyFormatter.extractToolMarkers(response);
-                console.log('[ADA MCP] Introspection tool markers found:', toolMarkers.length, toolMarkers);
                 if (toolMarkers.length > 0) {
                     const uniqueFiles = [...new Set(toolMarkers.map(m => m.path))];
-                    console.log('[ADA MCP] Tool transparency: sending files to webview:', uniqueFiles);
                     this._postMessage({ type: 'toolFiles', files: uniqueFiles });
                 }
                 
+                // Send response (metadata markers are still in text, webview can use them or strip them)
                 this._postMessage({ type: 'generationChunk', content: response });
                 this._messages.push({ role: 'assistant', content: response });
                 return;
