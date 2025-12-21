@@ -12,16 +12,41 @@ export class ToolTransparencyFormatter {
     /**
      * Extract tool markers from content
      * Looks for patterns like: [🔧 read_file: path/to/file]
+     * Also detects introspection reports like "📂 Files Analyzed: context.md, codebase-map.json"
      */
     static extractToolMarkers(content: string): ToolMarker[] {
         const markers: ToolMarker[] = [];
-        const toolRegex = /\[🔧 ([^:]+): ([^\]]+)\]/g;
         
+        // Pattern 1: Explicit tool markers [🔧 tool: path]
+        const toolRegex = /\[🔧 ([^:]+): ([^\]]+)\]/g;
         let match;
         while ((match = toolRegex.exec(content)) !== null) {
             markers.push({
                 tool: match[1],
                 path: match[2]
+            });
+        }
+        
+        // Pattern 2: Introspection reports "� Files Analyzed: file1, file2, file3"
+        // Note: 📁 (U+1F4C1) is file folder, 📂 (U+1F4C2) is open file folder - match both!
+        const filesAnalyzedRegex = /[📁📂]\s*Files Analyzed:\s*([^\n]+)/i;
+        const filesMatch = content.match(filesAnalyzedRegex);
+        if (filesMatch) {
+            const files = filesMatch[1].split(',').map(f => f.trim()).filter(f => f);
+            for (const file of files) {
+                markers.push({
+                    tool: 'introspect',
+                    path: file
+                });
+            }
+        }
+        
+        // Pattern 3: Read file markers like "reading file.py..." or "analyzed file.py"
+        const readFileRegex = /(?:reading|analyzed|checked|examined)\s+[`"]?([a-zA-Z0-9_\-./]+\.[a-zA-Z]+)[`"]?/gi;
+        while ((match = readFileRegex.exec(content)) !== null) {
+            markers.push({
+                tool: 'read_file',
+                path: match[1]
             });
         }
         

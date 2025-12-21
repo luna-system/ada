@@ -286,6 +286,16 @@ export class ChatViewProvider implements vscode.WebviewViewProvider {
                     focus: 'general',
                     workspace_root: workspace
                 });
+                
+                // Extract tool usage from response for transparency
+                const toolMarkers = ToolTransparencyFormatter.extractToolMarkers(response);
+                console.log('[ADA MCP] Introspection tool markers found:', toolMarkers.length, toolMarkers);
+                if (toolMarkers.length > 0) {
+                    const uniqueFiles = [...new Set(toolMarkers.map(m => m.path))];
+                    console.log('[ADA MCP] Tool transparency: sending files to webview:', uniqueFiles);
+                    this._postMessage({ type: 'toolFiles', files: uniqueFiles });
+                }
+                
                 this._postMessage({ type: 'generationChunk', content: response });
                 this._messages.push({ role: 'assistant', content: response });
                 return;
@@ -307,6 +317,25 @@ export class ChatViewProvider implements vscode.WebviewViewProvider {
             }
             
             const response = await this._mcpClient.chat({ message: contextualMessage });
+
+            // Extract tool usage from response for transparency
+            console.log('[ADA MCP] Response preview (first 500 chars):', response.substring(0, 500));
+            console.log('[ADA MCP] Checking for Files Analyzed pattern...');
+            
+            // Debug: Check if pattern exists manually
+            const hasFilesAnalyzed = response.includes('Files Analyzed');
+            console.log('[ADA MCP] Contains "Files Analyzed":', hasFilesAnalyzed);
+            
+            const toolMarkers = ToolTransparencyFormatter.extractToolMarkers(response);
+            console.log('[ADA MCP] Tool markers found:', toolMarkers.length, toolMarkers);
+            
+            if (toolMarkers.length > 0) {
+                const uniqueFiles = [...new Set(toolMarkers.map(m => m.path))];
+                console.log('[ADA MCP] Tool transparency: sending files to webview:', uniqueFiles);
+                this._postMessage({ type: 'toolFiles', files: uniqueFiles });
+            } else {
+                console.log('[ADA MCP] No tool markers found, skipping toolFiles message');
+            }
 
             // Post the complete response (MCP doesn't support streaming)
             this._postMessage({ type: 'generationChunk', content: response });
