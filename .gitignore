@@ -79,3 +79,5 @@ log-*.txt
 
 # Private demo files (for local testing only!)
 demo/private/
+
+.ai/personal
