@@ -213,7 +213,7 @@ Performance
 Benchmarks (24 Test Cases)
 ---------------------------
 
-Comparing general model (DeepSeek-R1) to specialized code model (Qwen2.5-Coder):
+Comparing a general-purpose model (example: DeepSeek-R1) to a specialized code model (Qwen2.5-Coder):
 
 .. list-table::
    :header-rows: 1

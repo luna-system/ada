@@ -425,7 +425,7 @@ Model Recommendations for SBCs
 
    ollama pull llama3.2:7b       # Balanced
    ollama pull mistral:7b        # Fast
-   ollama pull deepseek-r1:7b    # Reasoning
+   ollama pull qwen2.5-coder:7b  # Coding
 
 **Use Q4 quantization for speed!**
 
@@ -507,7 +507,7 @@ Real-World Use Cases
 .. code-block:: yaml
 
    Board: Orange Pi 5+ (16GB)  
-   Model: deepseek-r1:7b-q4
+   Model: qwen2.5-coder:7b
    Use: Code completion, debugging
    Power: ~$4/month
 

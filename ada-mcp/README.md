@@ -25,8 +25,20 @@ Think of it as: Ada gives you a personal AI with memory and tools. This MCP serv
 ### Installation
 
 ```bash
+# From Ada repository root
+uv sync
+
+# Or just ada-mcp
 cd ada-mcp
-pip install -e .
+uv pip install -e .
+```
+
+**Run the server:**
+```bash
+cd ada-mcp
+uv run ada-mcp          # Direct
+# or
+./ada-mcp.sh            # Wrapper (recommended)
 ```
 
 ### Configuration

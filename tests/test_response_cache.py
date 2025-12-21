@@ -13,7 +13,7 @@ class TestCachedResponse:
             key="test_key",
             response_text="response",
             request_type="chat",
-            model="deepseek-r1",
+            model="qwen2.5-coder:7b",
             created_at=datetime.now(timezone.utc),
             ttl_seconds=3600,
         )
@@ -25,7 +25,7 @@ class TestCachedResponse:
             key="test_key",
             response_text="response",
             request_type="chat",
-            model="deepseek-r1",
+            model="qwen2.5-coder:7b",
             created_at=datetime.now(timezone.utc) - timedelta(hours=2),
             ttl_seconds=3600,  # 1 hour TTL, but entry is 2 hours old
         )
@@ -38,7 +38,7 @@ class TestCachedResponse:
             key="test_key",
             response_text="response",
             request_type="chat",
-            model="deepseek-r1",
+            model="qwen2.5-coder:7b",
             created_at=created,
             ttl_seconds=3600,
         )
@@ -68,7 +68,7 @@ class TestResponseCache:
             cache_key="test_key",
             response_text="cached response",
             request_type="quick_query",
-            model="deepseek-r1",
+            model="qwen2.5-coder:7b",
             ttl_seconds=3600,
         )
         
@@ -89,7 +89,7 @@ class TestResponseCache:
             key="old_key",
             response_text="old response",
             request_type="quick_query",
-            model="deepseek-r1",
+            model="qwen2.5-coder:7b",
             created_at=datetime.now(timezone.utc) - timedelta(hours=2),
             ttl_seconds=3600,  # 1 hour TTL
         )
@@ -213,7 +213,7 @@ class TestResponseCache:
         
         cache.set("code1", "response1", "code_completion", "qwen", 3600)
         cache.set("code2", "response2", "code_completion", "qwen", 3600)
-        cache.set("query1", "response3", "quick_query", "deepseek", 3600)
+        cache.set("query1", "response3", "quick_query", "qwen", 3600)
         
         code_entries = cache.get_entries_by_type("code_completion")
         assert len(code_entries) == 2
@@ -364,7 +364,7 @@ class TestCacheIntegration:
             cache_key=cache_key,
             response_text="Python is a high-level programming language...",
             request_type="quick_query",
-            model="deepseek-r1:latest",
+            model="qwen2.5-coder:7b",
             ttl_seconds=86400,  # 24 hours
         )
         

@@ -10,7 +10,7 @@ def get_intro_message(config: Config) -> str:
 **What I do:**
 • Respond to @{config.matrix_user_id.split(':')[0]} mentions and direct messages
 • Maintain conversation context within rooms
-• Powered by DeepSeek-R1 (local LLM, no external APIs)
+• Powered by a local Ollama model (no external APIs)
 
 **Privacy:**
 • All conversations stored locally in encrypted vector database

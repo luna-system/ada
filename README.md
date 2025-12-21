@@ -58,8 +58,10 @@ pip install -e .
 
 ```bash
 # Install from ollama.ai
-ollama pull deepseek-r1:14b
+ollama pull qwen2.5-coder:7b
 ```
+
+DeepSeek is optional/value-added (e.g. for a dedicated reasoning profile): `ollama pull deepseek-r1:14b`.
 
 ### 3. Run Ada
 

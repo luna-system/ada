@@ -21,7 +21,7 @@ Architecture
 
 The Matrix bridge is a standalone service that connects Matrix rooms to Ada's existing chat API::
 
-    Matrix Room → matrix-bridge → Ada Brain API → DeepSeek-R1 LLM
+   Matrix Room → matrix-bridge → Ada Brain API → Ollama LLM (configured model)
          ↑              ↓              ↓                ↓
        Users      matrix-nio    /v1/chat/stream      RAG + Specialists
                                 (non-streaming)
@@ -190,7 +190,7 @@ Clear Bot Identification
 
 - **Display name:** "Ada [Bot]" (clear bot indicator)
 - **Introduction message:** Explains what Ada is, how she works, and how to opt out
-- **Profile description:** States "AI assistant powered by DeepSeek-R1"
+- **Profile description:** States "AI assistant powered by a local Ollama model"
 - **Protocol-level flag:** Sets ``bot: true`` if homeserver supports it
 
 Invitation-Only (Opt-In Model)
@@ -226,7 +226,7 @@ When joining a room, Ada introduces herself:
    What I do:
    • Respond to @ada mentions and direct messages
    • Maintain conversation context within rooms
-   • Powered by DeepSeek-R1 (local LLM, no external APIs)
+   • Powered by a local Ollama model (no external APIs)
 
    Privacy:
    • All conversations stored locally in encrypted vector database

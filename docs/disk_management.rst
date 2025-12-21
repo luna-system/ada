@@ -150,7 +150,6 @@ Long-Term (Optimization)
 
 Smaller quantized models save significant space:
 
-- ``deepseek-r1:7b`` (4GB) vs ``deepseek-r1:70b`` (40GB)
 - ``llama3.2:1b`` (1GB) vs ``llama3.2:70b`` (40GB)
 
 Trade-off: Smaller models = less capable, but often sufficient.
@@ -212,7 +211,7 @@ Models disappeared after prune
 
 **Fix:** Re-pull your model::
 
-    docker exec ada-v1-ollama-1 ollama pull deepseek-r1:latest
+    docker exec ada-v1-ollama-1 ollama pull qwen2.5-coder:7b
 
 **Prevention:** Omit ``--volumes`` flag unless you know you want to delete data::
 
@@ -278,8 +277,8 @@ If you're tight on space, consider a smaller quantized model.
 Keep notes on which models you're actively using::
 
     # In your own notes/wiki
-    - deepseek-r1:latest (primary, 15GB) - Use for complex reasoning
-    - llama3.2:3b (backup, 2GB) - Use for simple tasks
+    - qwen2.5-coder:7b (primary) - Good default for code + chat
+    - llama3.2:3b (backup) - Use for simple tasks
 
 Makes cleanup decisions easier.
 

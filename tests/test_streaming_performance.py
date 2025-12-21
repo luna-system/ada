@@ -38,7 +38,7 @@ class TestFirstTokenLatency:
             cache_key="test_key",
             response_text="cached response",
             request_type="quick_query",
-            model="deepseek-r1",
+            model="qwen2.5-coder:7b",
             ttl_seconds=3600,
         )
         

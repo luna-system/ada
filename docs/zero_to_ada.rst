@@ -136,7 +136,7 @@ Step 5: Install Ollama Model
    ollama serve > /dev/null 2>&1 &
    
    # Pull a model (choose one)
-   ollama pull deepseek-r1:14b      # Recommended, needs 12GB VRAM
+   ollama pull qwen2.5-coder:7b     # Recommended default
    ollama pull llama3.1:8b          # Good all-rounder, needs 6GB VRAM
    ollama pull qwen2.5:3b           # Lightweight, needs 3GB VRAM
 
@@ -250,7 +250,7 @@ Step 4: Pull a Model
    ollama serve > /dev/null 2>&1 &
    
    # Pull a model
-   ollama pull deepseek-r1:14b
+   ollama pull qwen2.5-coder:7b
 
 Step 5: Start Ada
 -----------------
@@ -309,7 +309,7 @@ Step 3: Pull a Model
 
 .. code-block:: bash
 
-   docker compose exec ollama ollama pull deepseek-r1:14b
+   docker compose exec ollama ollama pull qwen2.5-coder:7b
 
 Step 4: Test It
 ---------------

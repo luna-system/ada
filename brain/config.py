@@ -14,6 +14,7 @@ OLLAMA_API_URL = os.getenv("OLLAMA_API_URL", "http://localhost:11434/api/generat
 # Default model: qwen2.5-coder:7b - Fast, excellent for code + chat, 5-10x faster than deepseek-r1
 OLLAMA_MODEL = os.getenv("OLLAMA_MODEL", "qwen2.5-coder:7b")
 OLLAMA_BASE_URL = os.getenv("OLLAMA_BASE_URL", "http://localhost:11434")
+OLLAMA_KEEP_ALIVE = os.getenv("OLLAMA_KEEP_ALIVE", "4h")
 
 # Model profiles for different use cases (can be selected per-request)
 MODEL_PROFILES = {
@@ -186,7 +187,7 @@ CACHE_CLEANUP_INTERVAL = int(os.getenv("CACHE_CLEANUP_INTERVAL", "300"))  # 5 mi
 # Context window management (v2.0 Phase 2)
 
 # Maximum context tokens (model-specific)
-LLM_MAX_CONTEXT = int(os.getenv("LLM_MAX_CONTEXT", "128000"))  # deepseek-r1 default
+LLM_MAX_CONTEXT = int(os.getenv("LLM_MAX_CONTEXT", "128000"))  # Tune per selected model
 
 # Warning threshold (0.0-1.0)
 TOKEN_WARNING_THRESHOLD = float(os.getenv("TOKEN_WARNING_THRESHOLD", "0.8"))  # Warn at 80%

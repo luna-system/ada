@@ -91,7 +91,7 @@
 ```bash
 # Install Helm chart
 helm install ada oci://ghcr.io/luna-system/charts/ada \
-  --set ollama.model=deepseek-r1:14b \
+  --set ollama.model=qwen2.5-coder:7b \
   --set ingress.enabled=true \
   --set ingress.hostname=ada.example.com
 ```
@@ -223,7 +223,7 @@ brain:
       cpu: "2"
 
 ollama:
-  model: "deepseek-r1:14b"
+  model: "qwen2.5-coder:7b"
   gpu:
     enabled: true
     type: nvidia
@@ -265,7 +265,7 @@ patchesStrategicMerge:
 configMapGenerator:
   - name: ada-config
     literals:
-      - OLLAMA_MODEL=deepseek-r1:14b
+      - OLLAMA_MODEL=qwen2.5-coder:7b
       - RAG_ENABLED=true
 ```
 
@@ -274,7 +274,7 @@ configMapGenerator:
 ```hcl
 # variables.hcl
 variable "model" {
-  default = "deepseek-r1:14b"
+  default = "qwen2.5-coder:7b"
 }
 
 variable "replicas" {

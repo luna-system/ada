@@ -167,8 +167,8 @@ services:
     ports:
       - "8000:7000"
     environment:
-      # Core services
-      - OLLAMA_BASE_URL
+      # Core services - explicitly set to Docker bridge IP for Linux compatibility
+      - OLLAMA_BASE_URL=http://172.17.0.1:11434
       - OLLAMA_MODEL
       - OLLAMA_EMBED_MODEL
       - CHROMA_URL
@@ -258,6 +258,11 @@ services:
     depends_on:
       - ollama
     restart: "no"
+    env_file:
+      - .env
+    environment:
+      - OLLAMA_MODEL=${OLLAMA_MODEL:-qwen2.5-coder:7b}
+      - OLLAMA_EMBED_MODEL=${OLLAMA_EMBED_MODEL:-nomic-embed-text}
     command:
       - 'sh'
       - '-lc'
@@ -270,23 +275,25 @@ services:
           printf '[ollama-init] %s still waiting…
           ' "$(date -u +%FT%TZ)"
         done
-        printf '[ollama-init] %s API up. Pulling deepseek-r1…
-        ' "$(date -u +%FT%TZ)"
-        curl -sS -X POST -H 'Content-Type: application/json' -d '{"name":"deepseek-r1"}' http://ollama:11434/api/pull &
+        model_name="$${OLLAMA_MODEL}"
+        embed_name="$${OLLAMA_EMBED_MODEL}"
+        printf '[ollama-init] %s API up. Pulling %s…
+        ' "$(date -u +%FT%TZ)" "$${model_name}"
+        curl -sS -X POST -H 'Content-Type: application/json' -d '{"name":"'"$${model_name}"'"}' http://ollama:11434/api/pull &
         pid1=$$!
         while kill -0 $$pid1 2>/dev/null; do
-          printf '[ollama-init] %s pulling deepseek-r1… (still running)
-          ' "$(date -u +%FT%TZ)"
+          printf '[ollama-init] %s pulling %s… (still running)
+          ' "$(date -u +%FT%TZ)" "$${model_name}"
           sleep 30
         done
         wait $$pid1
-        printf '[ollama-init] %s Pulling nomic-embed-text…
-        ' "$(date -u +%FT%TZ)"
-        curl -sS -X POST -H 'Content-Type: application/json' -d '{"name":"nomic-embed-text"}' http://ollama:11434/api/pull &
+        printf '[ollama-init] %s Pulling %s…
+        ' "$(date -u +%FT%TZ)" "$${embed_name}"
+        curl -sS -X POST -H 'Content-Type: application/json' -d '{"name":"'"$${embed_name}"'"}' http://ollama:11434/api/pull &
         pid2=$$!
         while kill -0 $$pid2 2>/dev/null; do
-          printf '[ollama-init] %s pulling nomic-embed-text… (still running)
-          ' "$(date -u +%FT%TZ)"
+          printf '[ollama-init] %s pulling %s… (still running)
+          ' "$(date -u +%FT%TZ)" "$${embed_name}"
           sleep 30
         done
         wait $$pid2

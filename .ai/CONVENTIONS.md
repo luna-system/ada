@@ -39,6 +39,7 @@ This document defines **where** and **how** to document different aspects of the
 - ✅ Annotation schemas (annotation-schema.json)
 - ✅ Quick reference for AI assistants (QUICKSTART.md)
 - ✅ Testing strategies (TESTING.md)
+- ✅ Provenance protocol (PROVENANCE.md) - Attribution transparency for AI-assisted development
 - ✅ Architecture audits (audits/ subdirectory)
 - ✅ Meta-documentation (this file!)
 

@@ -57,7 +57,7 @@ ollama:
     tag: "latest"
     pullPolicy: IfNotPresent
   
-  model: "deepseek-r1:14b"
+  model: "qwen2.5-coder:7b"
   
   # GPU support
   gpu:

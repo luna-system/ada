@@ -214,7 +214,7 @@ Our extraction: `return a + b` (clean!)
                │ HTTP to Ollama
                ▼
 ┌─────────────────────────────────────────┐
-│      Ollama (DeepSeek-R1)               │
+│      Ollama (configured model)          │
 │  - Run locally on your GPU              │
 │  - 7B or 14B model                      │
 │  - <500ms after warmup                  │

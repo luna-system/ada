@@ -54,7 +54,7 @@ TEST_MODELS = [
     ModelConfig("llama3.2:1b", "1b"),
     ModelConfig("qwen2.5:3b", "3b"),
     ModelConfig("qwen2.5:7b", "7b"),
-    ModelConfig("deepseek-r1:latest", "14b"),  # Currently deployed
+    ModelConfig("deepseek-r1:latest", "14b"),  # Optional/value-added reasoning model
 ]
 
 

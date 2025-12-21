@@ -266,7 +266,7 @@ Enable agentic workflows:
 Phase 4: Function Calling API
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-If DeepSeek gains native tool calling:
+If the selected LLM gains native tool calling:
 
 .. code-block:: python
 
@@ -274,7 +274,7 @@ If DeepSeek gains native tool calling:
    tools = [specialist.capability.to_openai_tool() for s in specialists]
 
    response = ollama.chat(
-       model="deepseek-r1",
+       model="qwen2.5-coder:7b",
        messages=messages,
        tools=tools
    )

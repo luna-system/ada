@@ -246,7 +246,7 @@ def discover_specialists():
 ```python
 # brain/config/llm.py
 class LLMConfig(BaseSettings):
-    model: str = "deepseek-r1:latest"
+    model: str = "qwen2.5-coder:7b"
     temperature: float = 0.7
     # ...
 

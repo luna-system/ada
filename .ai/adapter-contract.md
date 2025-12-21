@@ -568,7 +568,7 @@ Response:
 {
   "version": "1.2.0",
   "brain_capabilities": [...],
-  "llm_model": "deepseek-r1:latest"
+    "llm_model": "qwen2.5-coder:7b"
 }
 ```
 

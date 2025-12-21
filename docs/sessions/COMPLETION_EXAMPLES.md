@@ -306,7 +306,7 @@ Works but less tested:
 - ⚠️ Java
 - ⚠️ Ruby
 
-The LLM (DeepSeek-R1) knows many languages, so it should work reasonably well for most!
+The LLM (configured Ollama model) knows many languages, so it should work reasonably well for most!
 
 ---
 

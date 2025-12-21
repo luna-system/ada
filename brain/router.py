@@ -21,6 +21,8 @@ from dataclasses import dataclass, field
 from enum import Enum
 from typing import Optional, Dict, Any
 
+import brain.config as config
+
 
 class RequestType(Enum):
     """Types of requests the router can classify."""
@@ -195,9 +197,9 @@ class ContextualRouter:
         )
 
     def _route_chat(self, context: RequestContext) -> ResponsePath:
-        """Route chat to deepseek-r1 with full RAG."""
+        """Route chat using the configured default model."""
         return ResponsePath(
-            model="deepseek-r1:latest",
+            model=config.OLLAMA_MODEL,
             format="chat",
             use_rag=True,
             use_specialists=True,
@@ -210,9 +212,13 @@ class ContextualRouter:
         )
 
     def _route_reasoning(self, context: RequestContext) -> ResponsePath:
-        """Route reasoning to deepseek-r1 with thinking enabled."""
+        """Route reasoning using the configured default model.
+
+        Note: reasoning can be slower depending on model; we keep thinking enabled
+        but do not hardcode a separate "reasoning" model.
+        """
         return ResponsePath(
-            model="deepseek-r1:latest",
+            model=config.OLLAMA_MODEL,
             format="chat",
             use_rag=True,
             use_specialists=True,
@@ -228,7 +234,7 @@ class ContextualRouter:
     def _route_quick_query(self, context: RequestContext) -> ResponsePath:
         """Route simple queries with caching."""
         return ResponsePath(
-            model="deepseek-r1:latest",
+            model=config.OLLAMA_MODEL,
             format="chat",
             use_rag=False,  # Don't need full context for simple queries
             use_specialists=False,

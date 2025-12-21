@@ -81,7 +81,7 @@ Same pattern as Matrix integration, just different protocol.
 ## Chat Interaction Examples
 
 **Viewer:** "What model is Ada using?"  
-**Ada (in chat):** "I'm currently running DeepSeek-R1:14B locally. Luna can switch models depending on the task. Right now we're using R1 for deep reasoning about the caching implementation."
+**Ada (in chat):** "I'm running a local Ollama model (configured by Luna). Luna can switch models depending on the task — right now we're using the configured default (often qwen2.5-coder:7b) for development work."
 
 **Viewer:** "!help"  
 **Ada (in chat):** "Available commands: !model, !specs, !github, !docs, !privacy | I'm Ada, a privacy-first AI assistant. Everything runs locally on Luna's machine. Ask me about the code we're writing!"

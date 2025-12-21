@@ -64,7 +64,7 @@ Quick Setup
 
    .. code-block:: bash
 
-      ollama pull deepseek-r1:14b
+      ollama pull qwen2.5-coder:7b
 
 4. **Start Ada:**
 
@@ -141,7 +141,7 @@ Copy `.env.example` to `.env` and configure:
 Key variables:
 
 - ``OLLAMA_BASE_URL`` - LLM backend URL (default: http://localhost:11434)
-- ``OLLAMA_MODEL`` - Model name (default: deepseek-r1)
+- ``OLLAMA_MODEL`` - Model name (default: qwen2.5-coder:7b)
 - ``CHROMA_URL`` - Vector DB URL (default: http://localhost:8000)
 - ``RAG_ENABLED`` - Enable RAG features (default: true)
 - ``RAG_ENABLE_PERSONA`` - Load persona/style guidelines (default: true)
@@ -231,7 +231,7 @@ Response:
      "python": "3.13.0",
      "config": {
        "OLLAMA_BASE_URL": "http://localhost:11434",
-       "OLLAMA_MODEL": "deepseek-r1",
+          "OLLAMA_MODEL": "qwen2.5-coder:7b",
        ...
      },
      "persona": {"loaded": true},

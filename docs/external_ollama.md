@@ -46,7 +46,7 @@ docker compose up
 ollama list
 
 # Pull required models if needed
-ollama pull deepseek-r1:14b
+ollama pull qwen2.5-coder:7b
 ollama pull nomic-embed-text
 ```
 
@@ -139,7 +139,7 @@ Should return JSON with your models.
 | Environment Variable | Default | Purpose |
 |---------------------|---------|---------|
 | `OLLAMA_BASE_URL` | `http://ollama:11434` | Ollama API endpoint |
-| `OLLAMA_MODEL` | `deepseek-r1:14b` | Main LLM model |
+| `OLLAMA_MODEL` | `qwen2.5-coder:7b` | Main LLM model |
 | `OLLAMA_EMBED_MODEL` | `nomic-embed-text` | Embedding model for RAG |
 | `COMPOSE_PROFILES` | (unset) | Set to `""` to disable ollama service |
 
@@ -173,8 +173,8 @@ COMPOSE_PROFILES=""
 
 ### From Dockerized to External
 
-1. Note your current model in `.env` (e.g., `deepseek-r1:14b`)
-2. Pull that model in your external Ollama: `ollama pull deepseek-r1:14b`
+1. Note your current model in `.env` (e.g., `qwen2.5-coder:7b`)
+2. Pull that model in your external Ollama: `ollama pull qwen2.5-coder:7b`
 3. Update `OLLAMA_BASE_URL` in `.env`
 4. Set `COMPOSE_PROFILES=""` in `.env`
 5. Restart: `docker compose down && docker compose up`
