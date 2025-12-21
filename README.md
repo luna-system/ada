@@ -92,6 +92,19 @@ open http://localhost:5000
 # See ada-mcp/ for Model Context Protocol integration
 ```
 
+### 5. Testing (Development)
+
+```bash
+# Run tests - the ada CLI manages environment setup
+python ada_main.py test                    # Run full test suite
+python ada_main.py test tests/test_*.py    # Run specific tests
+python ada_main.py test ada-mcp/tests/     # Test MCP subsystem
+```
+
+The `ada` CLI wrapper ensures proper environment setup (Python path, uv dependencies, etc.). **Always use `python ada_main.py test` instead of `pytest` directly** — it handles configuration automatically.
+
+For more testing patterns, see [`.ai/TESTING.md`](.ai/TESTING.md)
+
 ---
 
 ## What It Does
