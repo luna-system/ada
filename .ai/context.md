@@ -303,7 +303,7 @@ See `docs/adapters.rst` for building new adapters.
 
 ### Environment Variables (see brain/config.py)
 - `LLM_BASE_URL` - Ollama endpoint
-- `LLM_MODEL` - Model name (default: deepseek-r1:latest)
+- `LLM_MODEL` - Model name (default: qwen2.5-coder:7b)
 - `CHROMA_HOST` / `CHROMA_PORT` - Vector DB connection
 - `DATA_DIR` - Persistent storage path
 

@@ -127,7 +127,7 @@ brain:
       cpu: "2"
 
 ollama:
-  model: "deepseek-r1:14b"
+  model: "qwen2.5-coder:7b"
   gpu:
     enabled: true
     type: "nvidia"  # or "amd"
@@ -152,7 +152,7 @@ Configure via ConfigMap or Helm values:
 
 ```yaml
 env:
-  OLLAMA_MODEL: "deepseek-r1:14b"
+  OLLAMA_MODEL: "qwen2.5-coder:7b"
   RAG_ENABLED: "true"
   AI_NAME: "Ada"
   LOG_LEVEL: "info"

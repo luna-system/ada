@@ -1,0 +1,245 @@
+"""Latency benchmarking utilities for Ada.
+
+Measures:
+- Time To First Token (TTFT)
+- Tokens per second
+- Total response time
+- Breakdown by query type
+"""
+
+import time
+import httpx
+import statistics
+from typing import List, Dict, Tuple
+from dataclasses import dataclass, asdict
+import asyncio
+
+
+@dataclass
+class LatencyMeasurement:
+    """Single latency measurement."""
+    ttft: float  # Time to first token (seconds)
+    total_time: float  # Total response time (seconds)
+    token_count: int  # Number of tokens generated
+    tokens_per_second: float  # Throughput
+    query_type: str  # Type of query (trivial, code, introspection, etc.)
+    timestamp: float  # When measurement was taken
+
+
+class LatencyBenchmarker:
+    """Benchmark Ada's latency across different query types."""
+    
+    def __init__(self, ada_url: str = "http://localhost:8000"):
+        self.ada_url = ada_url
+        self.measurements: List[LatencyMeasurement] = []
+    
+    async def warmup(self, num_requests: int = 3):
+        """Warm up the model before benchmarking."""
+        print(f"🔥 Warming up model with {num_requests} requests...")
+        for i in range(num_requests):
+            await self._single_request("Hello", query_type="warmup")
+            print(f"  Warmup {i+1}/{num_requests} complete")
+    
+    async def _single_request(self, message: str, query_type: str) -> LatencyMeasurement:
+        """Make a single request and measure latency."""
+        async with httpx.AsyncClient(timeout=60.0) as client:
+            # Start timing
+            start_time = time.time()
+            first_token_time = None
+            tokens = []
+            
+            # Stream the response
+            async with client.stream(
+                "POST",
+                f"{self.ada_url}/v1/chat/stream",
+                json={"message": message, "conversation_id": "benchmark"}
+            ) as response:
+                async for line in response.aiter_lines():
+                    if line.startswith("data: "):
+                        data = line[6:]  # Strip "data: " prefix
+                        if data == "[DONE]":
+                            break
+                        
+                        # First token timing
+                        if first_token_time is None:
+                            first_token_time = time.time()
+                        
+                        tokens.append(data)
+            
+            # End timing
+            end_time = time.time()
+            
+            # Calculate metrics
+            ttft = (first_token_time - start_time) if first_token_time else 0
+            total_time = end_time - start_time
+            token_count = len(tokens)
+            tokens_per_second = token_count / total_time if total_time > 0 else 0
+            
+            return LatencyMeasurement(
+                ttft=ttft,
+                total_time=total_time,
+                token_count=token_count,
+                tokens_per_second=tokens_per_second,
+                query_type=query_type,
+                timestamp=start_time
+            )
+    
+    async def benchmark_query_type(
+        self,
+        query: str,
+        query_type: str,
+        num_samples: int = 10
+    ) -> List[LatencyMeasurement]:
+        """Benchmark a specific query type with multiple samples."""
+        print(f"\n📊 Benchmarking {query_type} ({num_samples} samples)...")
+        measurements = []
+        
+        for i in range(num_samples):
+            measurement = await self._single_request(query, query_type)
+            measurements.append(measurement)
+            self.measurements.append(measurement)
+            print(f"  Sample {i+1}/{num_samples}: TTFT={measurement.ttft:.3f}s, "
+                  f"Total={measurement.total_time:.3f}s, "
+                  f"Tokens/s={measurement.tokens_per_second:.1f}")
+        
+        return measurements
+    
+    def get_statistics(self, query_type: str = None) -> Dict:
+        """Calculate statistics for measurements."""
+        # Filter by query type if specified
+        measurements = [
+            m for m in self.measurements
+            if query_type is None or m.query_type == query_type
+        ]
+        
+        if not measurements:
+            return {}
+        
+        ttfts = [m.ttft for m in measurements]
+        total_times = [m.total_time for m in measurements]
+        tokens_per_sec = [m.tokens_per_second for m in measurements]
+        
+        return {
+            "query_type": query_type or "all",
+            "sample_count": len(measurements),
+            "ttft": {
+                "mean": statistics.mean(ttfts),
+                "median": statistics.median(ttfts),
+                "stdev": statistics.stdev(ttfts) if len(ttfts) > 1 else 0,
+                "min": min(ttfts),
+                "max": max(ttfts),
+                "p95": sorted(ttfts)[int(len(ttfts) * 0.95)] if len(ttfts) > 1 else ttfts[0],
+                "p99": sorted(ttfts)[int(len(ttfts) * 0.99)] if len(ttfts) > 1 else ttfts[0],
+            },
+            "total_time": {
+                "mean": statistics.mean(total_times),
+                "median": statistics.median(total_times),
+                "stdev": statistics.stdev(total_times) if len(total_times) > 1 else 0,
+                "min": min(total_times),
+                "max": max(total_times),
+            },
+            "tokens_per_second": {
+                "mean": statistics.mean(tokens_per_sec),
+                "median": statistics.median(tokens_per_sec),
+                "min": min(tokens_per_sec),
+                "max": max(tokens_per_sec),
+            }
+        }
+    
+    def get_all_statistics(self) -> Dict[str, Dict]:
+        """Get statistics for all query types."""
+        query_types = set(m.query_type for m in self.measurements if m.query_type != "warmup")
+        
+        results = {
+            "overall": self.get_statistics(),
+        }
+        
+        for query_type in query_types:
+            results[query_type] = self.get_statistics(query_type)
+        
+        return results
+    
+    def export_measurements(self) -> List[Dict]:
+        """Export all measurements as dict list."""
+        return [asdict(m) for m in self.measurements]
+
+
+# Standard benchmark queries
+BENCHMARK_QUERIES = {
+    "trivial": "Hello! How are you?",
+    "code_completion": "Write a Python function that calculates the fibonacci sequence recursively.",
+    "introspection": "Introspect your own architecture and tell me about your memory system.",
+    "reasoning": "Explain the trade-offs between local AI and cloud AI services, considering cost, privacy, and quality.",
+    "debugging": "I'm getting a TypeError: 'NoneType' object is not subscriptable. How do I debug this?",
+}
+
+
+async def run_comprehensive_benchmark():
+    """Run comprehensive latency benchmarks."""
+    benchmarker = LatencyBenchmarker()
+    
+    # Warmup
+    await benchmarker.warmup(num_requests=3)
+    
+    # Benchmark each query type
+    for query_type, query in BENCHMARK_QUERIES.items():
+        await benchmarker.benchmark_query_type(
+            query=query,
+            query_type=query_type,
+            num_samples=10
+        )
+    
+    # Print statistics
+    print("\n" + "=" * 60)
+    print("COMPREHENSIVE LATENCY STATISTICS")
+    print("=" * 60)
+    
+    stats = benchmarker.get_all_statistics()
+    
+    for query_type, data in stats.items():
+        if not data:
+            continue
+        
+        print(f"\n{query_type.upper()}:")
+        print(f"  Samples: {data['sample_count']}")
+        print(f"  TTFT: {data['ttft']['mean']:.3f}s (mean), "
+              f"{data['ttft']['median']:.3f}s (median), "
+              f"{data['ttft']['p95']:.3f}s (p95)")
+        print(f"  Total: {data['total_time']['mean']:.3f}s (mean), "
+              f"{data['total_time']['median']:.3f}s (median)")
+        print(f"  Throughput: {data['tokens_per_second']['mean']:.1f} tokens/sec (mean)")
+    
+    return benchmarker
+
+
+if __name__ == "__main__":
+    print("Ada Latency Benchmarker")
+    print("=" * 60)
+    print()
+    print("This benchmarks Ada's latency across:")
+    print("✓ Trivial queries (greetings)")
+    print("✓ Code completion")
+    print("✓ Introspection")
+    print("✓ Complex reasoning")
+    print("✓ Debugging help")
+    print()
+    print("Starting benchmark...")
+    print()
+    
+    benchmarker = asyncio.run(run_comprehensive_benchmark())
+    
+    # Export results
+    import json
+    from pathlib import Path
+    
+    output_dir = Path(__file__).parent / "press_release_data"
+    output_dir.mkdir(exist_ok=True)
+    
+    output_file = output_dir / "latency_benchmark.json"
+    with open(output_file, 'w') as f:
+        json.dump({
+            "statistics": benchmarker.get_all_statistics(),
+            "raw_measurements": benchmarker.export_measurements(),
+        }, f, indent=2)
+    
+    print(f"\n✅ Results saved to {output_file}")

@@ -45,7 +45,7 @@ The router analyzes incoming requests and intelligently routes them to optimal p
 
 ### CHAT
 - **Trigger:** Default for conversational messages
-- **Routes to:** deepseek-r1:latest
+- **Routes to:** Configured `OLLAMA_MODEL` (default: qwen2.5-coder:7b)
 - **Format:** Chat
 - **RAG:** Enabled (full context retrieval)
 - **Specialists:** Enabled (OCR, ListenBrainz, etc.)
@@ -54,7 +54,7 @@ The router analyzes incoming requests and intelligently routes them to optimal p
 
 ### REASONING
 - **Trigger:** Keywords like "analyze", "compare", "evaluate", "trade-offs"
-- **Routes to:** deepseek-r1:latest
+- **Routes to:** Configured `OLLAMA_MODEL` (default: qwen2.5-coder:7b)
 - **Format:** Chat with thinking enabled
 - **RAG:** Enabled
 - **Thinking:** Enabled (shows reasoning process)
@@ -63,7 +63,7 @@ The router analyzes incoming requests and intelligently routes them to optimal p
 
 ### QUICK_QUERY
 - **Trigger:** Simple patterns like "What is X?", "Who is Y?", "When did Z?"
-- **Routes to:** deepseek-r1:latest
+- **Routes to:** Configured `OLLAMA_MODEL` (default: qwen2.5-coder:7b)
 - **Format:** Chat
 - **RAG:** Disabled (prefer cache)
 - **Cache:** Enabled (24 hour TTL)
@@ -274,7 +274,7 @@ This implementation directly applies v2.3.0 research findings:
 
 **Applied Here:**
 - Code completion uses qwen2.5-coder (specialized)
-- Chat uses deepseek-r1 (reasoning)
+- Chat uses configured OLLAMA_MODEL (default qwen2.5-coder:7b)
 - Quick queries use cache (optimization)
 - **Result: Context-aware routing beats one-model-fits-all**
 

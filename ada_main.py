@@ -559,9 +559,76 @@ def setup():
     click.echo("\nNext steps:")
     click.echo("  1. Edit .env if needed")
     click.echo("  2. Install Ollama: https://ollama.ai")
-    click.echo("  3. Pull a model: ollama pull deepseek-r1:14b")
+    click.echo("  3. Pull a model: ollama pull qwen2.5-coder:7b")
     click.echo("  4. Start Ada: ada run")
     click.echo()
+
+
+@cli.command()
+@click.argument("args", nargs=-1)
+def test(args):
+    """Run test suite (wraps: uv run pytest)"""
+    cmd = ["uv", "run", "pytest"]
+    if args:
+        cmd.extend(args)
+    else:
+        cmd.append("tests/")
+    
+    click.echo(f"{BLUE}→{RESET} {' '.join(cmd)}\n")
+    result = subprocess.run(cmd)
+    sys.exit(result.returncode)
+
+
+@cli.command()
+@click.option("--stop", is_flag=True, help="Stop the MCP server")
+def mcp(stop):
+    """Manage Ada MCP server"""
+    if stop:
+        click.echo(f"{YELLOW}Stopping MCP server...{RESET}")
+        subprocess.run(["pkill", "-f", "ada-mcp"])
+        success("MCP server stopped")
+    else:
+        click.echo(f"\n{BOLD}Starting Ada MCP Server{RESET}\n")
+        mcp_script = Path("ada-mcp/ada-mcp.sh")
+        
+        if not mcp_script.exists():
+            error("Cannot find ada-mcp/ada-mcp.sh")
+            info("Run from repository root")
+            sys.exit(1)
+        
+        info(f"Spawning: {mcp_script}")
+        subprocess.run([str(mcp_script)])
+
+
+@cli.command()
+@click.option("--profile", default="dev", help="Docker Compose profile")
+def dev(profile):
+    """Start Ada in development mode (auto-reload)"""
+    click.echo(f"\n{BOLD}Ada Development Mode{RESET}\n")
+    
+    has_docker, has_ollama, _ = detect_environment()
+    
+    if has_ollama and not has_docker:
+        # Local development mode
+        success("Using local Ollama")
+        info("Starting brain with auto-reload...")
+        cmd = ["uvicorn", "brain.app:app", "--host", "0.0.0.0", "--port", "8000", "--reload"]
+        subprocess.run(cmd)
+    else:
+        # Docker development mode
+        success("Using Docker")
+        info(f"Starting with profile: {profile}")
+        cmd = ["docker", "compose", "--profile", profile, "up"]
+        subprocess.run(cmd)
+
+
+@cli.command()
+@click.argument("filepath", type=click.Path(exists=True))
+def analyze(filepath):
+    """🔍 Analyze Python code for issues (ZERO external context!)"""
+    script = Path(__file__).parent / "scripts" / "analyze_code.py"
+    result = subprocess.run(["python", str(script), filepath])
+    sys.exit(result.returncode)
 
 
 if __name__ == "__main__":

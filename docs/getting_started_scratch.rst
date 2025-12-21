@@ -40,7 +40,7 @@ If you haven't already:
    python3 ada_main.py setup
 
    # Pull a model and start
-   ollama pull deepseek-r1:14b
+   ollama pull qwen2.5-coder:7b
    ada run
 
 **Checkpoint:** Visit http://localhost:7000/v1/healthz - you should see status "ok".
@@ -62,7 +62,8 @@ Visit https://ollama.com/library for the full list.
 - ``llama3.1`` - Meta's open model, good balance of speed/quality
 - ``mistral`` - Fast and capable, great for coding
 - ``qwen2.5`` - Excellent multilingual support
-- ``deepseek-r1`` - Default, shows reasoning process
+- ``qwen2.5-coder`` - Great coding-focused model
+- ``deepseek-r1`` - Optional, shows reasoning process (can be slower)
 - ``gemma2`` - Google's open model, efficient
 
 Change the Model

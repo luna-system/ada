@@ -34,7 +34,7 @@ Ada loads configuration from ``.env`` in the project root. The file uses standar
 
    # Core Services
    OLLAMA_BASE_URL=http://ollama:11434
-   OLLAMA_MODEL=deepseek-r1:14b
+   OLLAMA_MODEL=qwen2.5-coder:7b
 
 .. note::
    Docker Compose warnings about ``$ts``, ``$pid1``, ``$pid2`` are harmless - these are shell variables used in command blocks, not environment variables.
@@ -56,7 +56,7 @@ Base URL for the Ollama API server. In Docker Compose, use the service name (``o
 OLLAMA_MODEL
 ^^^^^^^^^^^^
 
-:Default: ``deepseek-r1``
+:Default: ``qwen2.5-coder:7b``
 :Required: No
 :Examples: ``deepseek-r1``, ``deepseek-r1:14b``, ``llama3.2:3b``, ``qwen2.5:7b``
 
@@ -64,7 +64,7 @@ The Ollama model to use for chat completions. Must be pulled before use:
 
 .. code-block:: bash
 
-   docker compose exec ollama ollama pull deepseek-r1:14b
+   docker compose exec ollama ollama pull qwen2.5-coder:7b
 
 OLLAMA_EMBED_MODEL
 ^^^^^^^^^^^^^^^^^^
@@ -483,11 +483,11 @@ Services can't connect
 Models not found
 ^^^^^^^^^^^^^^^^
 
-**Symptom**: ``model 'deepseek-r1' not found``
+**Symptom**: ``model 'qwen2.5-coder:7b' not found``
 
 **Solutions**:
 
-1. Pull the model: ``docker compose exec ollama ollama pull deepseek-r1``
+1. Pull the model: ``docker compose exec ollama ollama pull qwen2.5-coder:7b``
 2. List available models: ``docker compose exec ollama ollama list``
 3. Update ``OLLAMA_MODEL`` to match an installed model
 

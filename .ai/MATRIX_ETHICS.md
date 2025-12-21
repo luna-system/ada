@@ -51,7 +51,7 @@ When Ada joins a room (after invitation), she must introduce herself:
 What I do:
 • Respond to @ada mentions and direct messages
 • Maintain conversation context within rooms
-• Powered by DeepSeek-R1 (local LLM, no external APIs)
+• Powered by a local Ollama model (no external APIs)
 
 Privacy:
 • All conversations stored locally in encrypted vector database

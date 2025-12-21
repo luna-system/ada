@@ -70,7 +70,7 @@ Run Ada in development mode:
    # Inside nix develop shell
    ada setup
    ollama serve &
-   ollama pull deepseek-r1:latest
+   ollama pull qwen2.5-coder:7b
    ada run
 
 Build Ada Package

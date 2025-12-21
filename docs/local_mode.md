@@ -20,7 +20,7 @@ Ada now supports running entirely locally without Docker! This is the **recommen
    ollama serve
    
    # Pull a model
-   ollama pull deepseek-r1:14b
+   ollama pull qwen2.5-coder:7b
    ```
 
 ### Installation
@@ -116,7 +116,7 @@ Terminal               Local Ollama (port 11434)
 ```bash
 # Minimal local configuration
 OLLAMA_BASE_URL=http://localhost:11434
-OLLAMA_MODEL=deepseek-r1:14b
+OLLAMA_MODEL=qwen2.5-coder:7b
 CHROMA_MODE=embedded
 DATA_DIR=./data
 ```
@@ -242,7 +242,7 @@ ollama serve
 
 # Check if model is available
 ollama list
-ollama pull deepseek-r1:14b  # If model missing
+ollama pull qwen2.5-coder:7b  # If model missing
 ```
 
 ### "ModuleNotFoundError: No module named 'brain'"
@@ -315,7 +315,7 @@ ada run --local
 ```bash
 # Use smaller model for faster responses
 ada run --local
-# Edit .env: OLLAMA_MODEL=deepseek-r1:7b
+# Edit .env: OLLAMA_MODEL=qwen2.5-coder:3b
 
 # Reduce context window
 RAG_TURN_TOP_K=2
@@ -327,8 +327,8 @@ RAG_MEMORY_TOP_K=1
 If you don't have a GPU, use optimized models:
 
 ```bash
-ollama pull deepseek-r1:7b-q4_0  # Quantized for CPU
-OLLAMA_MODEL=deepseek-r1:7b-q4_0 ada run --local
+ollama pull qwen2.5-coder:3b
+OLLAMA_MODEL=qwen2.5-coder:3b ada run --local
 ```
 
 ### GPU Acceleration

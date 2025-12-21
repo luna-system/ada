@@ -10,6 +10,7 @@ Pure FastAPI backend service that handles:
 The frontend (Nginx) proxies /api/* requests to /v1/* endpoints here.
 External tools can also hit the API directly at http://brain:7000/v1/*
 """
+# October 2024 - luna-system
 # @ai-indexable: entrypoint
 # @ai-purpose: FastAPI REST API for LLM orchestration, chat streaming, and memory management
 # @ai-dependencies: fastapi, uvicorn, brain.llm, brain.prompt_builder, brain.rag_store, brain.schemas
@@ -762,6 +763,10 @@ async def chat_stream(request: Request):
     faq_k = int(data.get('faq_k', RAG_FAQ_TOP_K))
     memory_k = int(data.get('memory_k', RAG_MEMORY_TOP_K))
     
+    # Detect client type (VS Code extension needs clean responses without tool XML)
+    client_type = request.headers.get('X-Client-Type', 'web')
+    logger.info(f"Request {req_id}: Client type: {client_type}")
+    
     # Start latency tracking
     import time
     request_start_time = time.time()
@@ -972,7 +977,22 @@ async def chat_stream(request: Request):
                         # Clear buffer after processing request
                         text_buffer = ""
                     
-                    yield f"data: {json.dumps({'type': 'token', 'content': token})}\n\n"
+                    # For VS Code clients, filter out SPECIALIST_REQUEST XML to keep UI clean
+                    if client_type == 'vscode':
+                        # Only filter out tokens that are PART of the XML tags themselves
+                        # Check if this specific token contains specialist syntax
+                        is_xml_token = (
+                            'SPECIALIST_REQUEST' in token or
+                            '<web_search>' in token or '</web_search>' in token or
+                            '<docs_lookup>' in token or '</docs_lookup>' in token or
+                            '<log_analysis>' in token or '</log_analysis>' in token or
+                            token in ['[', ']']  # Bracket tokens around XML
+                        )
+                        if not is_xml_token:
+                            yield f"data: {json.dumps({'type': 'token', 'content': token})}\n\n"
+                    else:
+                        # Web and other clients see everything (transparent)
+                        yield f"data: {json.dumps({'type': 'token', 'content': token})}\n\n"
                 
                 # Send thinking tokens if enabled
                 if 'thinking' in chunk:

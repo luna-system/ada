@@ -112,6 +112,122 @@ python3 -m pytest tests/test_memory_decay.py tests/test_context_habituation.py -
 
 ---
 
+## 🚫 Docker Networking & Caching
+
+### ❌ DON'T: Assume host.docker.internal works everywhere
+**Why it seems right:** Standard Docker Desktop convention for accessing host from containers  
+**Why it's wrong:** 
+- Only works on Docker Desktop (macOS, Windows)
+- Does NOT work on Linux Docker Engine (most common in production)
+- Silently fails with "Connection refused" instead of clear error
+
+**What to do instead:**
+```bash
+# Check your environment first:
+uname -a  # If Linux → host.docker.internal won't work
+
+# Linux solutions:
+# 1. Use Docker bridge gateway IP (best for development):
+OLLAMA_BASE_URL=http://172.17.0.1:11434
+
+# 2. Use host's actual IP (better for multi-host):
+ip -4 addr show | grep inet  # Find your IP
+OLLAMA_BASE_URL=http://10.0.0.235:11434
+
+# 3. Make service listen on all interfaces:
+# Instead of 127.0.0.1:11434 → 0.0.0.0:11434
+# Example for Ollama:
+sudo systemctl edit ollama
+# Add: Environment="OLLAMA_HOST=0.0.0.0:11434"
+```
+
+**Pattern recognition:**
+- Service returning "Connection refused" from Docker?
+- Check with: `ss -tlnp | grep <port>`
+- If you see `127.0.0.1:<port>` → Only localhost, not reachable from Docker
+- If you see `0.0.0.0:<port>` or `*:<port>` → Reachable from Docker bridge
+
+**Real example from Ada development (Dec 20, 2025):**
+```bash
+# Before fix:
+ss -tlnp | grep 11434
+# LISTEN 0  4096  127.0.0.1:11434  0.0.0.0:*  ← Docker can't reach this
+
+# After fix (added Environment="OLLAMA_HOST=0.0.0.0:11434"):
+ss -tlnp | grep 11434
+# LISTEN 0  4096  *:11434  *:*  ← Docker CAN reach this ✓
+```
+
+### ❌ DON'T: Trust `docker compose up -d` to pick up environment changes
+**Why it seems right:** Standard way to apply config changes  
+**Why it's wrong:** 
+- Docker Compose aggressively caches container state
+- Environment variables may persist from previous runs
+- Buildx cache adds another layer of caching for images
+
+**What to do instead:**
+```bash
+# ✓ For environment variable changes (no image rebuild):
+docker compose rm -sf <service>  # Force remove
+docker compose up -d <service>   # Recreate clean
+
+# OR use --force-recreate:
+docker compose up -d --force-recreate <service>
+
+# ✓ For image changes (Dockerfile edits):
+docker compose build --no-cache <service>  # Bypass buildx cache
+docker compose up -d <service>
+
+# ✓ Nuclear option (when nothing else works):
+docker compose down -v  # Remove volumes too
+docker compose build --no-cache
+docker compose up -d
+```
+
+**Debugging cache issues:**
+```bash
+# Verify environment is what you expect:
+docker compose exec <service> printenv | grep <VAR>
+
+# Check if container was recreated:
+docker compose ps  # Look at "Created" timestamp
+
+# Force complete cleanup:
+docker compose down -v --remove-orphans
+docker system prune -a  # Warning: removes ALL unused images
+```
+
+**Pattern recognition for cache issues:**
+1. Changed `.env` or `compose.yaml` environment section
+2. Restarted service with `docker compose up -d`
+3. Service still shows old values in logs/environment
+4. **Solution:** Force remove and recreate, don't just restart
+
+**Why this happens:**
+- Docker Compose design: Preserve state by default (performance)
+- Buildx caching: Layer-based caching for faster builds
+- Trade-off: Speed vs freshness
+
+**Convention for bypassing caching:**
+```bash
+# Development iteration (fast):
+docker compose up -d  # Use cache
+
+# Environment variable changes:
+docker compose up -d --force-recreate <service>
+
+# Code/Dockerfile changes:
+docker compose build --no-cache <service>
+docker compose up -d
+
+# "Nothing makes sense anymore":
+docker compose down -v
+docker compose build --no-cache
+docker compose up -d
+```
+
+---
+
 ## 🚫 Build & Development
 
 ### ❌ DON'T: Run `cd docs && make html` manually

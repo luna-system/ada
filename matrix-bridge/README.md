@@ -126,7 +126,7 @@ See `config.py` for all available options. Key settings:
 ## Architecture
 
 ```
-Matrix Room → matrix-bridge → Ada Brain API → DeepSeek-R1 LLM
+Matrix Room → matrix-bridge → Ada Brain API → Ollama LLM (configured model)
      ↑              ↓              ↓                ↓
    Users      matrix-nio    /v1/chat/stream      RAG + Specialists
 ```

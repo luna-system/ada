@@ -14,7 +14,7 @@
 - ⚠️ **3-10s:** Noticeable (mind starts to wander)
 - ❌ **>10s:** Frustrating (task switching kicks in, you check your phone)
 
-**Current Ada with DeepSeek-R1:14B:**
+**Example (optional DeepSeek-R1:14B):**
 - Simple query: ~2-5s ✅
 - With specialists: ~5-10s ⚠️
 - Complex reasoning: ~10-20s ❌
@@ -74,7 +74,7 @@ Different tasks need different capabilities:
 - Complex problem solving
 
 **Optimal model:**
-- DeepSeek-R1:14B ✅ (current)
+- DeepSeek-R1:14B (optional)
 - Qwen QwQ-32B (if you have RAM)
 - Claude/GPT via API (if acceptable)
 
@@ -121,7 +121,7 @@ Different tasks need different capabilities:
 - Quality > speed
 - Can use bigger/better models
 
-## Current Architecture: Hardcoded Model
+## Historical Anti-Pattern: Hardcoded Model
 
 **brain/llm.py:**
 ```python
@@ -130,7 +130,7 @@ def generate_stream(prompt: str) -> Iterator[str]:
     response = httpx.post(
         f"{OLLAMA_BASE_URL}/api/generate",
         json={
-            "model": "deepseek-r1:latest",  # ← HARDCODED!
+            "model": "qwen2.5-coder:7b",  # ← HARDCODED (anti-pattern)
             "prompt": prompt,
             "stream": True
         }
@@ -228,7 +228,7 @@ class ModelRouter:
     
     def get_default_model(self) -> str:
         """Default model for general use."""
-        return "deepseek-r1:14b"  # Current default
+        return "qwen2.5-coder:7b"  # Example default
     
     def _speed_score(self, model: str) -> int:
         """Lower = faster."""
@@ -361,8 +361,8 @@ class Config(BaseSettings):
     # Model selection
     MODEL_CHAT: str = "llama3.2:3b"
     MODEL_CODE: str = "qwen2.5-coder:7b"
-    MODEL_REASONING: str = "deepseek-r1:14b"
-    MODEL_GENERAL: str = "deepseek-r1:14b"
+    MODEL_REASONING: str = "qwen2.5-coder:7b"
+    MODEL_GENERAL: str = "qwen2.5-coder:7b"
     MODEL_CONSOLIDATION: str = "mixtral:8x7b"
     
     # Use case detection
@@ -375,9 +375,9 @@ class Config(BaseSettings):
 
 **User can override:**
 ```bash
-# Use R1 for everything (current behavior)
-export MODEL_CHAT="deepseek-r1:14b"
-export MODEL_CODE="deepseek-r1:14b"
+# Use one model for everything
+export MODEL_CHAT="qwen2.5-coder:7b"
+export MODEL_CODE="qwen2.5-coder:7b"
 
 # Or optimize for speed
 export MODEL_CHAT="llama3.2:3b"

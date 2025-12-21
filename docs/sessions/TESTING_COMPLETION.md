@@ -87,7 +87,7 @@ Should complete with: `Path` or `Path, PurePath`
 
 ### "Completion failed" or empty responses
 - Check Ollama has model: `docker compose exec ollama ollama list`
-- Check model in config: Should be `deepseek-r1:latest` or similar
+- Check model in config: Should match `OLLAMA_MODEL` (default: `qwen2.5-coder:7b`)
 - Try manual chat: `curl -X POST http://localhost:8000/v1/chat/stream -d '{"message": "test"}'`
 
 ### Slow completions (>2s)

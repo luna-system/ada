@@ -48,6 +48,9 @@ build/
 
 # Runtime data (databases, caches, backups)
 data/ollama
+
+# Personal reflections (untracked)
+.ai/personal/
 data/chroma/*.sqlite3
 data/chroma/*/
 data/chroma/backups/*
@@ -73,3 +76,6 @@ docs/_build/
 # Conversation logs (personal)
 log-*.txt
 *.log
+
+# Private demo files (for local testing only!)
+demo/private/

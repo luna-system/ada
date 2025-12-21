@@ -47,7 +47,7 @@ class Config(BaseSettings):
     )
     profile_bio: str = Field(
         default=(
-            "AI assistant powered by DeepSeek-R1. "
+            "AI assistant powered by a local Ollama model. "
             "Self-hosted and privacy-focused. "
             "Learn more: https://github.com/luna-system/ada"
         ),

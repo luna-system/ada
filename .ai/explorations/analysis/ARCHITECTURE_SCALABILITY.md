@@ -2,7 +2,7 @@
 
 > **Context:** Written during feature/codebase-specialist planning (Dec 2025)  
 > **Problem:** Dynamic prompts approaching context window limits  
-> **Model:** DeepSeek-R1:14B (~16K token context window)
+> **Model:** Configured Ollama model (example: qwen2.5-coder:7b)
 
 ## The Challenge
 

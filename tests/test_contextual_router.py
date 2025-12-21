@@ -5,6 +5,7 @@ Context-matching beats universal approaches (r=0.924 vs r=0.726).
 """
 
 import pytest
+import brain.config as config
 from brain.router import (
     ContextualRouter,
     RequestType,
@@ -98,7 +99,7 @@ class TestRouting:
         assert path.stream is True
 
     def test_route_chat(self, router):
-        """Chat should route to deepseek-r1 with full RAG."""
+        """Chat should route to configured model with full RAG."""
         context = RequestContext(
             message="Tell me about your memory system",
             is_completion=False,
@@ -106,14 +107,14 @@ class TestRouting:
         
         path = router.route(RequestType.CHAT, context)
         
-        assert path.model == "deepseek-r1:latest"
+        assert path.model == config.OLLAMA_MODEL
         assert path.format == "chat"
         assert path.use_rag is True
         assert path.use_specialists is True
         assert path.stream is True
 
     def test_route_reasoning(self, router):
-        """Reasoning should route to deepseek-r1 with thinking tags."""
+        """Reasoning should route to configured model with thinking tags."""
         context = RequestContext(
             message="Analyze the complexity",
             requires_reasoning=True,
@@ -121,7 +122,7 @@ class TestRouting:
         
         path = router.route(RequestType.REASONING, context)
         
-        assert path.model == "deepseek-r1:latest"
+        assert path.model == config.OLLAMA_MODEL
         assert path.format == "chat"
         assert path.enable_thinking is True
         assert path.timeout > 30  # Longer timeout for reasoning

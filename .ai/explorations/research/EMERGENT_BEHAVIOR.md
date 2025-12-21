@@ -145,9 +145,9 @@ Store successful emergent reasoning patterns:
 
 ### Model Configuration
 
-Current LLM settings in `brain/config.py`:
+Example LLM settings in `brain/config.py`:
 ```python
-LLM_MODEL = "deepseek-r1:latest"
+OLLAMA_MODEL = "qwen2.5-coder:7b"
 LLM_TEMPERATURE = 0.7  # Balance creativity with accuracy
 ```
 

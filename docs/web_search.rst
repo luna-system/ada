@@ -153,7 +153,7 @@ Testing
 Manual Test via Bidirectional Handler
 --------------------------------------
 
-The web search specialist will be invoked when DeepSeek-R1 emits the request syntax during generation.
+The web search specialist will be invoked when the LLM emits the request syntax during generation.
 
 Direct API Test (Future)
 -------------------------
