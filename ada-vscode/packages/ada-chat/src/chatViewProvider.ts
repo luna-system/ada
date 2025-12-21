@@ -5,11 +5,14 @@
  * - Uses MCPToolHandler for intent classification
  * - Two-phase pattern: tool execution → brain reasoning
  * - Tool transparency via structured metadata
+ * - Webview loaded from separate HTML/CSS/JS files for easy iteration
  * 
  * December 2025 - luna+ada
  */
 
 import * as vscode from 'vscode';
+import * as fs from 'fs';
+import * as path from 'path';
 import { MCPToolHandler } from './mcpToolHandler';
 
 export class ChatViewProvider implements vscode.WebviewViewProvider {
@@ -17,12 +20,14 @@ export class ChatViewProvider implements vscode.WebviewViewProvider {
   private _view?: vscode.WebviewView;
   private _toolHandler: MCPToolHandler;
   private _isGenerating = false;
+  private _extensionPath: string;
 
   constructor(
     private readonly _extensionUri: vscode.Uri,
     private readonly _brainClient: any  // AdaBrainClient from extension.ts
   ) {
     this._toolHandler = new MCPToolHandler();
+    this._extensionPath = _extensionUri.fsPath;
   }
 
   public resolveWebviewView(
@@ -51,6 +56,7 @@ export class ChatViewProvider implements vscode.WebviewViewProvider {
     this._postMessage({
       type: 'connectionStatus',
       connected,
+      name: 'Ada Brain',  // TODO: Make configurable for Ollama direct
     });
   }
 
@@ -75,7 +81,6 @@ export class ChatViewProvider implements vscode.WebviewViewProvider {
 
     this._postMessage({ type: 'userMessage', content: userMessage });
     this._isGenerating = true;
-    this._postMessage({ type: 'generationStart' });
 
     try {
       // Classify intent - does this need MCP tools?
@@ -87,7 +92,7 @@ export class ChatViewProvider implements vscode.WebviewViewProvider {
         // Execute tool
         const toolResult = await this._toolHandler.executeTool(intent);
         
-        // ALWAYS show tool transparency (metadata card)
+        // ALWAYS show tool transparency (metadata card) FIRST
         this._postMessage({
           type: 'toolTransparency',
           tool: intent.tool || 'unknown',
@@ -102,6 +107,9 @@ export class ChatViewProvider implements vscode.WebviewViewProvider {
             intent.tool || 'unknown'
           );
           
+          // NOW start generation (after tool card)
+          this._postMessage({ type: 'generationStart' });
+          
           // Stream brain's analysis
           for await (const chunk of this._brainClient.chat([
             { role: 'user', content: augmentedPrompt }
@@ -115,6 +123,7 @@ export class ChatViewProvider implements vscode.WebviewViewProvider {
           }
         } else {
           // Simple tool output - show directly with formatting
+          this._postMessage({ type: 'generationStart' });
           this._postMessage({
             type: 'generationChunk',
             content: toolResult.content,
@@ -123,6 +132,7 @@ export class ChatViewProvider implements vscode.WebviewViewProvider {
         }
       } else {
         // Regular chat - no tools
+        this._postMessage({ type: 'generationStart' });
         for await (const chunk of this._brainClient.chat([
           { role: 'user', content: userMessage }
         ], {})) {
@@ -147,194 +157,70 @@ export class ChatViewProvider implements vscode.WebviewViewProvider {
   }
 
   private _getHtmlForWebview(webview: vscode.Webview) {
-    // Minimal working HTML for now - will enhance later
-    return `
-      <!DOCTYPE html>
-      <html>
-        <head>
-          <meta charset="UTF-8">
-          <meta name="viewport" content="width=device-width, initial-scale=1.0">
-          <title>Ada Chat</title>
-          <style>
-            body {
-              font-family: var(--vscode-font-family);
-              padding: 10px;
-              color: var(--vscode-foreground);
-              background-color: var(--vscode-editor-background);
-            }
-            #chat-container {
-              display: flex;
-              flex-direction: column;
-              height: 100vh;
-            }
-            #messages {
-              flex: 1;
-              overflow-y: auto;
-              margin-bottom: 10px;
-            }
-            .message {
-              margin-bottom: 10px;
-              padding: 8px;
-              border-radius: 4px;
-            }
-            .user-message {
-              background-color: var(--vscode-input-background);
-            }
-            .assistant-message {
-              background-color: var(--vscode-editor-background);
-            }
-            .tool-files {
-              background-color: var(--vscode-badge-background);
-              color: var(--vscode-badge-foreground);
-              padding: 4px 8px;
-              border-radius: 3px;
-              font-size: 11px;
-              margin-bottom: 8px;
-              display: inline-block;
-            }
-            #input-container {
-              display: flex;
-              gap: 5px;
-            }
-            #message-input {
-              flex: 1;
-              padding: 8px;
-              background-color: var(--vscode-input-background);
-              color: var(--vscode-input-foreground);
-              border: 1px solid var(--vscode-input-border);
-              border-radius: 3px;
-            }
-            button {
-              padding: 8px 16px;
-              background-color: var(--vscode-button-background);
-              color: var(--vscode-button-foreground);
-              border: none;
-              border-radius: 3px;
-              cursor: pointer;
-            }
-            button:hover {
-              background-color: var(--vscode-button-hoverBackground);
-            }
-            .tool-card {
-              border-left: 3px solid #0ea5e9;
-              background-color: rgba(14, 165, 233, 0.05);
-              padding: 8px 12px;
-              margin-bottom: 8px;
-              border-radius: 3px;
-              font-size: 12px;
-            }
-            .tool-card strong {
-              color: #0ea5e9;
-              font-weight: 600;
-            }
-            .tool-card small {
-              color: var(--vscode-descriptionForeground);
-              display: block;
-              margin-top: 4px;
-            }
-          </style>
-        </head>
-        <body>
-          <div id="chat-container">
-            <div id="messages"></div>
-            <div id="input-container">
-              <input type="text" id="message-input" placeholder="Ask Ada..." />
-              <button id="send-button">Send</button>
-            </div>
-          </div>
-          <script>
-            const vscode = acquireVsCodeApi();
-            const messagesDiv = document.getElementById('messages');
-            const inputField = document.getElementById('message-input');
-            const sendButton = document.getElementById('send-button');
-            
-            let currentAssistantMessage = null;
-            
-            function addMessage(content, isUser) {
-              const div = document.createElement('div');
-              div.className = 'message ' + (isUser ? 'user-message' : 'assistant-message');
-              div.textContent = content;
-              messagesDiv.appendChild(div);
-              messagesDiv.scrollTop = messagesDiv.scrollHeight;
-              return div;
-            }
-            
-            function sendMessage() {
-              const message = inputField.value.trim();
-              if (message) {
-                vscode.postMessage({ type: 'sendMessage', content: message });
-                inputField.value = '';
-              }
-            }
-            
-            inputField.addEventListener('keypress', (e) => {
-              if (e.key === 'Enter') sendMessage();
-            });
-            
-            sendButton.addEventListener('click', sendMessage);
-            
-            window.addEventListener('message', (event) => {
-              const message = event.data;
-              
-              switch (message.type) {
-                case 'userMessage':
-                  addMessage(message.content, true);
-                  break;
-                  
-                case 'toolTransparency': {
-                  // Show tool metadata card
-                  const toolCard = document.createElement('div');
-                  toolCard.className = 'message tool-card';
-                  
-                  const toolName = message.tool.replace('ada_', '').toUpperCase();
-                  const meta = message.metadata || {};
-                  const durationMs = meta.duration_ms || '?';
-                  const filesAccessed = (meta.files_accessed || []).length;
-                  
-                  let html = '<strong>[TOOL] ' + toolName + '</strong>';
-                  html += '<small>Duration: ' + durationMs.toFixed(0) + 'ms - Files: ' + filesAccessed;
-                  if (meta.actions_taken) {
-                    html += ' - ' + meta.actions_taken;
-                  }
-                  html += '</small>';
-                  
-                  toolCard.innerHTML = html;
-                  messagesDiv.appendChild(toolCard);
-                  messagesDiv.scrollTop = messagesDiv.scrollHeight;
-                  break;
-                }
-                  
-                case 'toolFiles':
-                  const badge = document.createElement('div');
-                  badge.className = 'tool-files';
-                  badge.textContent = '🔧 Files: ' + message.files.join(', ');
-                  messagesDiv.appendChild(badge);
-                  break;
-                  
-                case 'generationStart':
-                  currentAssistantMessage = addMessage('', false);
-                  break;
-                  
-                case 'generationChunk':
-                  if (currentAssistantMessage) {
-                    currentAssistantMessage.textContent += message.content;
-                    messagesDiv.scrollTop = messagesDiv.scrollHeight;
-                  }
-                  break;
-                  
-                case 'generationEnd':
-                  currentAssistantMessage = null;
-                  break;
-                  
-                case 'error':
-                  addMessage('Error: ' + message.message, false);
-                  break;
-              }
-            });
-          </script>
-        </body>
-      </html>
-    `;
+    // Generate nonce for CSP
+    const nonce = this._getNonce();
+    
+    // Get URIs for webview resources
+    const webviewPath = path.join(this._extensionPath, 'resources', 'webview');
+    
+    console.log('[Ada Chat] Extension path:', this._extensionPath);
+    console.log('[Ada Chat] Webview path:', webviewPath);
+    
+    // Check if files exist
+    const htmlPath = path.join(webviewPath, 'chat.html');
+    const cssPath = path.join(webviewPath, 'chat.css');
+    const jsPath = path.join(webviewPath, 'chat.js');
+    
+    console.log('[Ada Chat] HTML exists:', fs.existsSync(htmlPath));
+    console.log('[Ada Chat] CSS exists:', fs.existsSync(cssPath));
+    console.log('[Ada Chat] JS exists:', fs.existsSync(jsPath));
+    
+    if (!fs.existsSync(htmlPath)) {
+      // Fallback: return inline HTML if files not found
+      console.error('[Ada Chat] Webview files not found at:', webviewPath);
+      return this._getFallbackHtml();
+    }
+    
+    const cssUri = webview.asWebviewUri(
+      vscode.Uri.file(cssPath)
+    );
+    const jsUri = webview.asWebviewUri(
+      vscode.Uri.file(jsPath)
+    );
+    
+    // Load HTML template
+    let html = fs.readFileSync(htmlPath, 'utf8');
+    
+    // Replace template variables
+    html = html
+      .replace(/\{\{cspSource\}\}/g, webview.cspSource)
+      .replace(/\{\{nonce\}\}/g, nonce)
+      .replace(/\{\{cssUri\}\}/g, cssUri.toString())
+      .replace(/\{\{jsUri\}\}/g, jsUri.toString());
+    
+    return html;
+  }
+  
+  private _getFallbackHtml(): string {
+    return `<!DOCTYPE html>
+<html><head><meta charset="UTF-8"><title>Ada Chat</title>
+<style>body{font-family:system-ui;padding:20px;color:#ccc;background:#1e1e1e;}
+.error{color:#f44;}</style></head>
+<body>
+<h3>⚠️ Ada Chat - File Loading Error</h3>
+<p class="error">Could not load webview files from resources/webview/</p>
+<p>Extension path: ${this._extensionPath}</p>
+<p>Please check that chat.html, chat.css, and chat.js exist.</p>
+</body></html>`;
+  }
+
+  private _getNonce(): string {
+    let text = '';
+    const possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    for (let i = 0; i < 32; i++) {
+      text += possible.charAt(Math.floor(Math.random() * possible.length));
+    }
+    return text;
   }
 
   private _postMessage(message: any) {

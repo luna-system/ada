@@ -1,82 +1,111 @@
-# Ada - Local AI Code Completion
+# Ada VS Code Extensions
 
-**GitHub Copilot alternative. 103ms latency. $0/month. 100% private.**
+**Your own AI assistant. Local. Private. Fast.**
 
-Ada brings AI code completion to VS Code without cloud dependencies, subscriptions, or sending your code anywhere.
+Ada brings AI capabilities to VS Code without cloud dependencies, subscriptions, or sending your code anywhere.
 
-## Features
+## Extensions
 
-- 🚀 **103ms Time to First Token** - As fast as cloud providers
-- 💰 **$0/month** - No subscription required
-- 🔒 **100% Private** - Your code never leaves your machine
-- 🌐 **Works Offline** - No internet required
-- ⚡ **Ghost Text** - Inline suggestions just like Copilot
+### Ada Chat (`ada-chat`)
+Conversational AI in VS Code sidebar with **tool transparency**.
 
-## Requirements
+- 💬 Chat with Ada about your code
+- 🔧 See exactly what tools Ada uses (files read, TODOs found)
+- 🧠 Real-time workspace introspection
+- 🌐 Connects to Ada Brain for RAG-powered responses
 
-1. **Ollama** installed and running
+### Ada Complete (`ada-complete`)
+Inline code completions with ghost text.
+
+- ⚡ **103ms** time to first token
+- 👻 Ghost text suggestions as you type
+- 🔒 100% local - your code never leaves your machine
+
+## Quick Start
+
+### Requirements
+
+1. **Ada Brain** running (for chat):
    ```bash
-   # Install Ollama (https://ollama.ai)
-   curl -fsSL https://ollama.ai/install.sh | sh
-   
-   # Pull the model
-   ollama pull qwen2.5-coder:7b
-   
-   # Start Ollama (usually automatic)
-   ollama serve
+   cd ada-v1
+   docker compose up brain
    ```
 
-2. **A GPU** (recommended) - Works on CPU but slower
+2. **Ollama** running (for completions):
+   ```bash
+   ollama serve
+   ollama pull qwen2.5-coder:7b
+   ```
 
-## Installation
+### Install Extensions
 
-### From VSIX (Current)
-1. Download `ada-code-0.1.0.vsix` from releases
-2. In VS Code: Extensions → ... → Install from VSIX
+```bash
+# Build and install Ada Chat
+cd ada-vscode/packages/ada-chat
+pnpm build
+npx @vscode/vsce package --no-dependencies
+# Install the .vsix in VS Code
 
-### From Marketplace (Coming Soon)
-Search "Ada Code" in VS Code Extensions
-
-## Usage
-
-Just start typing! Ada will suggest completions as ghost text.
-
-- **Tab** - Accept suggestion
-- **Escape** - Dismiss suggestion  
-- **Ctrl+Shift+Space** - Manually trigger completion
+# Build and install Ada Complete
+cd ada-vscode/packages/ada-completions
+pnpm build
+npx @vscode/vsce package --no-dependencies
+# Install the .vsix in VS Code
+```
 
 ## Configuration
 
+### Ada Chat
 | Setting | Default | Description |
 |---------|---------|-------------|
-| `ada.enabled` | `true` | Enable/disable completions |
+| `ada.brainUrl` | `http://localhost:8000` | Ada Brain server URL |
+| `ada.enableTools` | `true` | Enable tool transparency |
+
+### Ada Complete
+| Setting | Default | Description |
+|---------|---------|-------------|
 | `ada.ollamaUrl` | `http://localhost:11434` | Ollama server URL |
 | `ada.model` | `qwen2.5-coder:7b` | Model to use |
 | `ada.maxTokens` | `128` | Max tokens to generate |
 | `ada.temperature` | `0.2` | Generation temperature |
-| `ada.debounceMs` | `300` | Debounce delay (ms) |
 
-## Why Ada?
+## Architecture
 
-We proved that local AI code completion can match or beat cloud providers:
+```
+VS Code
+├── Ada Chat     → Ada Brain (RAG, memory, specialists)
+└── Ada Complete → Ollama (direct, fast completions)
+```
 
-| Provider | TTFT | Cost | Privacy |
-|----------|------|------|---------|
-| **Ada** | **103ms** | **$0/mo** | **✅ 100%** |
-| Copilot | ~150-300ms | $19/mo | ❌ |
-| Cursor | ~100-200ms | $20/mo | ❌ |
-| Cody | ~200ms | $9-19/mo | ❌ |
+Both extensions share common utilities via the internal `shared` package.
 
-The cloud tax isn't for compute—it's for convenience and marketing.
+## Development
 
-## Research
+```bash
+cd ada-vscode
 
-This extension is part of the Ada project, which discovered:
+# Install dependencies
+pnpm install
 
-- **Singularity #8**: Canonical vocabulary markers reduce hallucinations by 40%
-- **Singularity #9**: Local inference matches cloud latency
+# Build all packages
+pnpm build
 
-See [the research](https://github.com/luna-system/ada/blob/trunk/.ai/explorations/research/EXTERNAL-CODEBASE-VALIDATION-2025-12-19.md).
+# Build and watch specific package
+cd packages/ada-chat
+pnpm watch
+```
+
+## Part of the Ada Project
+
+Ada is a local-first AI assistant with:
+- **ada-brain**: FastAPI backend with RAG and memory
+- **ada-cli**: Terminal interface  
+- **ada-chat**: VS Code chat (this extension)
+- **ada-complete**: VS Code completions (this extension)
+- **ada-nvim**: Neovim plugin
+- **ada-mcp**: Model Context Protocol server
+
+See the [main Ada repository](https://github.com/luna-system/ada) for more.
 
 ## License
 

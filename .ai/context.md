@@ -1,29 +1,47 @@
-# Ada v1 - AI Context Map
+# Ada - AI Context Map
 
 ## Purpose
 Conversational AI system with RAG (Retrieval-Augmented Generation), streaming responses, extensible specialist plugins, **code completion** (v2.6+), and **biomimetic log analysis** (v2.7+).
 
 **Latest Architecture Audit:** See `.ai/audits/2025-12-19-post-phase-2.md` (Grade A, no major refactoring needed)
 
-**Latest Release:** v2.9.0 - Phase 2C: Parallel Optimizations (2.5x speedup)
+**Latest Release:** v2.10.0 - Ada Chat v1.1 with Tool Transparency
+
+## Official Package Names
+```
+Ada (the system)
+├── ada-brain      - FastAPI backend (RAG, specialists, LLM orchestration)
+├── ada-cli        - Terminal interface (REPL + one-shot)
+├── ada-chat       - VS Code conversational panel with tool transparency
+├── ada-complete   - VS Code inline completions (ghost text)
+├── ada-nvim       - Neovim plugin (completions)
+├── ada-mcp        - Model Context Protocol server
+├── ada-client     - Shared Python client library
+└── ada-logs       - Log analysis library (standalone, CC0)
+```
 
 ## Core Architecture
 
 ### Service Topology
 ```
-CLI (terminal)            ┐
-Web UI (nginx:5000)       ├→ brain (fastapi:8000) ⇄ chroma (vector db:8000)
-Matrix bridge (matrix-nio)│                       ⇄ ollama (LLM:11434)
-MCP server (stdio)        ┘
+Ada CLI (terminal)        ┐
+Ada Chat (VS Code)        │
+Ada Complete (VS Code)    ├→ Ada Brain (fastapi:8000) ⇄ chroma (vector db:8000)
+Ada Nvim (Neovim)         │                           ⇄ ollama (LLM:11434)  
+Matrix bridge (matrix-nio)│
+Ada MCP (stdio)           ┘
 ```
 
-**Adapter Pattern:** All interfaces are equal peers that communicate with brain's REST API
+**Adapter Pattern:** All interfaces are equal peers that communicate with Ada Brain's REST API
 
 **Interfaces (Adapters):**
-- **CLI**: Terminal REPL and one-shot queries (`ada-cli`)
+- **Ada CLI**: Terminal REPL and one-shot queries
+- **Ada Chat**: VS Code conversational panel with tool transparency
+- **Ada Complete**: VS Code inline completions (direct to Ollama for speed)
+- **Ada Nvim**: Neovim completions
 - **Web UI**: Browser-based chat at `http://localhost:5000` (optional, `--profile web`)
 - **Matrix**: Bot in Matrix rooms (optional, `--profile matrix`)
-- **MCP**: IDE integration via Model Context Protocol (separate process)
+- **Ada MCP**: IDE integration via Model Context Protocol
 - **API**: Direct REST API access at `http://localhost:8000` (always available)
 
 ### Data Flow

@@ -1,0 +1,442 @@
+/**
+ * Ada Chat Webview Styles - Polished Edition
+ * 
+ * Edit this file directly - changes reflect on extension reload
+ * Uses VS Code CSS variables for native theming
+ */
+
+/* Use Unicode symbols that render everywhere (codicons need font loading) */
+:root {
+  --icon-expand: "›";
+  --icon-tools: "⚙";
+  --icon-file: "◦";
+  --icon-clock: "○";
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  /* Font stack with unicode/emoji support */
+  font-family: var(--vscode-font-family), "Segoe UI Emoji", "Noto Color Emoji", "Apple Color Emoji", sans-serif;
+  font-size: var(--vscode-font-size);
+  color: var(--vscode-foreground);
+  background: var(--vscode-sideBar-background);
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+/* ============================================
+   HEADER - Connection status & actions
+   ============================================ */
+.header {
+  padding: 10px 12px;
+  border-bottom: 1px solid var(--vscode-panel-border);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.header-title {
+  font-size: 13px;
+  font-weight: 600;
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.status-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--vscode-errorForeground);
+  flex-shrink: 0;
+}
+
+.status-dot.connected {
+  background: var(--vscode-testing-iconPassed);
+}
+
+.status-text {
+  font-size: 11px;
+  color: var(--vscode-descriptionForeground);
+  font-weight: 400;
+}
+
+.header-actions {
+  display: flex;
+  gap: 4px;
+}
+
+.icon-button {
+  background: transparent;
+  border: none;
+  color: var(--vscode-foreground);
+  padding: 4px 6px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+  opacity: 0.7;
+}
+
+.icon-button:hover {
+  background: var(--vscode-toolbar-hoverBackground);
+  opacity: 1;
+}
+
+/* ============================================
+   MESSAGES - Chat bubbles
+   ============================================ */
+#messages {
+  flex: 1;
+  overflow-y: auto;
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.message {
+  padding: 10px 14px;
+  border-radius: 12px;
+  max-width: 90%;
+  line-height: 1.5;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  animation: fadeIn 0.2s ease-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(4px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.message.user-message {
+  background: var(--vscode-button-background);
+  color: var(--vscode-button-foreground);
+  align-self: flex-end;
+  border-bottom-right-radius: 4px;
+}
+
+.message.assistant-message {
+  background: var(--vscode-input-background);
+  border: 1px solid var(--vscode-input-border);
+  align-self: flex-start;
+  border-bottom-left-radius: 4px;
+}
+
+.message.error-message {
+  background: var(--vscode-inputValidation-errorBackground);
+  border: 1px solid var(--vscode-inputValidation-errorBorder);
+  color: var(--vscode-errorForeground);
+  align-self: flex-start;
+}
+
+/* Code in messages */
+.message pre {
+  background: var(--vscode-textCodeBlock-background);
+  padding: 10px 12px;
+  border-radius: 6px;
+  overflow-x: auto;
+  margin: 8px 0;
+  font-family: var(--vscode-editor-font-family);
+  font-size: 12px;
+}
+
+.message code {
+  font-family: var(--vscode-editor-font-family);
+  background: var(--vscode-textCodeBlock-background);
+  padding: 2px 5px;
+  border-radius: 3px;
+  font-size: 0.9em;
+}
+
+/* Markdown elements in messages */
+.message h1, .message h2, .message h3 {
+  margin: 12px 0 8px 0;
+  font-weight: 600;
+}
+
+.message h1 { font-size: 1.3em; }
+.message h2 { font-size: 1.15em; color: var(--ada-accent); }
+.message h3 { font-size: 1.05em; }
+
+.message ul, .message ol {
+  margin: 8px 0;
+  padding-left: 20px;
+}
+
+.message li {
+  margin: 4px 0;
+}
+
+.message strong {
+  font-weight: 600;
+  color: var(--vscode-foreground);
+}
+
+.message em {
+  font-style: italic;
+}
+
+.message a {
+  color: var(--ada-accent);
+  text-decoration: none;
+}
+
+.message a:hover {
+  text-decoration: underline;
+}
+
+.message blockquote {
+  border-left: 3px solid var(--ada-accent);
+  margin: 8px 0;
+  padding-left: 12px;
+  color: var(--vscode-descriptionForeground);
+}
+
+/* ============================================
+   TOOL TRANSPARENCY CARD - Collapsible
+   ============================================ */
+.tool-card {
+  background: var(--vscode-editor-background);
+  border: 1px solid var(--vscode-panel-border);
+  border-left: 3px solid var(--vscode-textLink-foreground);
+  border-radius: 6px;
+  font-size: 12px;
+  align-self: flex-start;
+  max-width: 95%;
+  animation: fadeIn 0.2s ease-out;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.tool-card:hover {
+  background: var(--vscode-list-hoverBackground);
+}
+
+/* Collapsed: Two-line layout */
+.tool-summary {
+  padding: 8px 12px;
+}
+
+.tool-header {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.tool-expand {
+  font-size: 12px;
+  color: var(--vscode-foreground);
+  transition: transform 0.15s ease;
+  opacity: 0.7;
+}
+
+.tool-card.expanded .tool-expand {
+  transform: rotate(90deg);
+}
+
+.tool-icon {
+  font-size: 13px;
+  opacity: 0.8;
+}
+
+.tool-name {
+  color: var(--vscode-textLink-foreground);
+  font-weight: 600;
+  font-size: 11px;
+  letter-spacing: 0.3px;
+  text-transform: uppercase;
+}
+
+.tool-meta {
+  color: var(--vscode-descriptionForeground);
+  font-size: 11px;
+  margin-top: 4px;
+  padding-left: 20px;
+}
+
+/* Expanded: Full details */
+.tool-details {
+  display: none;
+  padding: 10px 12px;
+  border-top: 1px solid var(--vscode-panel-border);
+  background: var(--vscode-input-background);
+}
+
+.tool-card.expanded .tool-details {
+  display: block;
+}
+
+.tool-files {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.file-badge {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 8px;
+  background: var(--vscode-editor-background);
+  border: 1px solid var(--vscode-panel-border);
+  border-radius: 4px;
+  font-size: 11px;
+  font-family: var(--vscode-editor-font-family);
+  color: var(--vscode-foreground);
+}
+
+.file-badge .file-icon {
+  color: var(--vscode-textLink-foreground);
+}
+
+/* ============================================
+   TYPING INDICATOR
+   ============================================ */
+.typing-indicator {
+  display: flex;
+  gap: 5px;
+  padding: 12px 14px;
+  background: var(--vscode-input-background);
+  border: 1px solid var(--vscode-input-border);
+  border-radius: 12px;
+  border-bottom-left-radius: 4px;
+  align-self: flex-start;
+  animation: fadeIn 0.2s ease-out;
+}
+
+.typing-indicator span {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  background: var(--ada-accent);
+  border-radius: 50%;
+  animation: bounce 1.4s infinite ease-in-out both;
+}
+
+.typing-indicator span:nth-child(1) { animation-delay: -0.32s; }
+.typing-indicator span:nth-child(2) { animation-delay: -0.16s; }
+.typing-indicator span:nth-child(3) { animation-delay: 0s; }
+
+@keyframes bounce {
+  0%, 80%, 100% { transform: scale(0.6); opacity: 0.4; }
+  40% { transform: scale(1); opacity: 1; }
+}
+
+/* ============================================
+   INPUT AREA
+   ============================================ */
+#input-container {
+  padding: 12px;
+  border-top: 1px solid var(--vscode-panel-border);
+  display: flex;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.input-wrapper {
+  flex: 1;
+  display: flex;
+  background: var(--vscode-input-background);
+  border: 1px solid var(--vscode-input-border);
+  border-radius: 8px;
+  overflow: hidden;
+  transition: border-color 0.15s;
+}
+
+.input-wrapper:focus-within {
+  border-color: var(--vscode-focusBorder);
+}
+
+#message-input {
+  flex: 1;
+  background: transparent;
+  border: none;
+  color: var(--vscode-input-foreground);
+  font-family: var(--vscode-font-family);
+  font-size: var(--vscode-font-size);
+  padding: 10px 14px;
+  outline: none;
+  min-height: 40px;
+}
+
+#message-input::placeholder {
+  color: var(--vscode-input-placeholderForeground);
+}
+
+#send-button {
+  background: var(--vscode-button-background);
+  color: var(--vscode-button-foreground);
+  border: none;
+  border-radius: 6px;
+  padding: 10px 18px;
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 500;
+  transition: background-color 0.15s, opacity 0.15s;
+}
+
+#send-button:hover {
+  background: var(--vscode-button-hoverBackground);
+}
+
+#send-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* ============================================
+   WELCOME STATE
+   ============================================ */
+.welcome {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 24px;
+  gap: 12px;
+}
+
+.welcome-icon {
+  font-size: 48px;
+  margin-bottom: 8px;
+}
+
+.welcome h2 {
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.welcome p {
+  font-size: 12px;
+  color: var(--vscode-descriptionForeground);
+  max-width: 280px;
+  line-height: 1.5;
+}
+
+/* ============================================
+   SCROLLBAR
+   ============================================ */
+#messages::-webkit-scrollbar {
+  width: 6px;
+}
+
+#messages::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+#messages::-webkit-scrollbar-thumb {
+  background: var(--vscode-scrollbarSlider-background);
+  border-radius: 3px;
+}
+
+#messages::-webkit-scrollbar-thumb:hover {
+  background: var(--vscode-scrollbarSlider-hoverBackground);
+}

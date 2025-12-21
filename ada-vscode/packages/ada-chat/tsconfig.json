@@ -5,8 +5,8 @@
     "rootDir": "src",
     "baseUrl": ".",
     "paths": {
-      "@ada-code/shared": ["../shared/dist/index.d.ts"],
-      "@ada-code/shared/*": ["../shared/dist/*"]
+      "shared": ["../shared/dist/index.d.ts"],
+      "shared/*": ["../shared/dist/*"]
     }
   },
   "include": ["src"],

@@ -1,6 +1,14 @@
-# Ada Code Monorepo
+# Ada VS Code Extensions
 
-This is a pnpm workspace monorepo for Ada VSCode extensions. It's structured to allow independent development, testing, and publishing of separate extensions while sharing common code.
+This is a pnpm workspace monorepo for Ada VS Code extensions. It's structured to allow independent development, testing, and publishing of separate extensions while sharing common code.
+
+## Package Names
+
+| Package | Purpose | Published As |
+|---------|---------|--------------|
+| `ada-chat` | Conversational chat panel | VS Code Extension |
+| `ada-complete` | Inline code completions | VS Code Extension |
+| `shared` | Internal utilities | Not published |
 
 ## Architecture
 
@@ -29,31 +37,26 @@ ada-vscode/                          # Monorepo root
 │   │   ├── src/
 │   │   │   ├── extension.ts         # Main entry point
 │   │   │   ├── chatViewProvider.ts  # Webview provider
-│   │   │   ├── handlers/
-│   │   │   ├── views/
+│   │   │   ├── mcpToolHandler.ts    # Tool execution
 │   │   │   └── __tests__/
+│   │   ├── resources/webview/       # Webview HTML/CSS/JS
 │   │   ├── package.json
-│   │   ├── tsconfig.json
-│   │   └── media/                   # Webview HTML/CSS/JS (to be created)
+│   │   └── tsconfig.json
 │   │
-│   └── ada-completions/             # ⚡ Code completion extension
+│   └── ada-completions/             # ⚡ ada-complete extension
 │       ├── src/
 │       │   ├── extension.ts         # Main entry point
 │       │   ├── completionProvider.ts
-│       │   ├── modelWarmer.ts       # Warm model on startup
-│       │   ├── formatters/
-│       │   ├── tools/
-│       │   └── __tests__/
+│       │   └── modelWarmer.ts       # Warm model on startup
 │       ├── package.json
-│       ├── tsconfig.json
-│       └── media/                   # Ghost text assets (to be created)
+│       └── tsconfig.json
 │
 └── [docs, tests, CI/CD config files remain at root]
 ```
 
 ## Packages
 
-### `@ada-code/shared`
+### `shared`
 Shared utilities, clients, and type definitions used by both extensions.
 
 **Exports:**
@@ -61,28 +64,27 @@ Shared utilities, clients, and type definitions used by both extensions.
 - `types/` - TypeScript interfaces and message types
 - `utils/` - Helper functions (metadata parsing, formatting)
 
-**Used by:** Both `ada-chat` and `ada-completions`
+**Used by:** Both `ada-chat` and `ada-complete`
 
-### `@ada-code/ada-chat`
-Conversational AI chat for VSCode sidebar.
+### `ada-chat`
+Conversational AI chat for VS Code sidebar.
 
 **Features:**
 - Chat webview in activity bar
 - Streams responses from Ada Brain API
 - Tool transparency (shows files accessed, execution time)
-- Metadata rendering (📂 Files, ⚡ Time)
+- Intent classification → tool execution → brain reasoning
 
 **Configuration:**
-- `ada.brainUrl` - Ada Brain server URL
-- `ada.chatUseBrain` - Use Brain for chat
+- `ada.brainUrl` - Ada Brain server URL (default: localhost:8000)
 - `ada.enableTools` - Enable tool calling
 
-### `@ada-code/ada-completions`
+### `ada-complete`
 Inline code completion and ghost text suggestions.
 
 **Features:**
 - Inline completion items
-- Ghost text (ghostText feature in VSCode)
+- Ghost text (ghostText feature in VS Code)
 - Model warming on startup
 - qwen2.5-coder:7b with FIM format
 
@@ -159,10 +161,10 @@ npm exec vsce package
 npm exec vsce publish
 ```
 
-### Publishing ada-completions independently
+### Publishing ada-complete independently
 
 ```bash
-cd packages/ada-completions
+cd packages/ada-completions  # folder name (keeping it stable)
 
 # Update version
 npm version minor
@@ -175,29 +177,6 @@ npm exec vsce package
 npm exec vsce publish
 ```
 
-### Future: Separate Repositories
-
-This structure supports eventually splitting into separate repos:
-
-```
-# Option 1: Git Submodules (not recommended)
-# Clunky, poor CI/CD integration
-
-# Option 2: pnpm workspaces + independent CI/CD (recommended)
-# Each package has its own:
-# - GitHub Actions workflows
-# - NPM publishing
-# - Separate marketplace listings
-# - Independent version management
-```
-
-When ready to split:
-1. Create `github.com/luna-system/ada-chat` repo
-2. Move `packages/ada-chat/` to new repo root
-3. Create separate GitHub Actions for publishing
-4. Keep `@ada-code/shared` as npm registry dependency
-5. Update publishing workflows to use `@ada-code/shared@latest`
-
 ## Architecture Benefits
 
 ✅ **Separate Concerns** - Chat and completions developed independently  
@@ -205,34 +184,25 @@ When ready to split:
 ✅ **Independent Testing** - Each extension has own test suite  
 ✅ **Independent Publishing** - Publish updates without touching other extensions  
 ✅ **Future Splitting** - Can move to separate repos without rearchitecting  
-✅ **Team Scalability** - Different teams can own different extensions  
 
 ## Configuration
 
 Configuration is handled at root package.json level for the monorepo. Settings are contributed by individual packages:
 
-- **ada-chat:** `ada.brainUrl`, `ada.chatUseBrain`, `ada.enableTools`
-- **ada-completions:** `ada.ollamaUrl`, `ada.model`, `ada.maxTokens`, `ada.temperature`
-
-Individual extensions will need to contribute their own configurations when split.
+- **ada-chat:** `ada.brainUrl`, `ada.enableTools`
+- **ada-complete:** `ada.ollamaUrl`, `ada.model`, `ada.maxTokens`, `ada.temperature`
 
 ## Current Status
 
-**Phase: Reorganization (Pre-Phase 4)**
+**Phase: v1.1 Tool Transparency**
 
 - ✅ Monorepo structure created
-- ✅ `@ada-code/shared` package scaffolded
-- ✅ `@ada-code/ada-chat` package scaffolded
-- ✅ `@ada-code/ada-completions` package scaffolded
-- 🔄 TODO: Move actual code from root `src/` to packages
-- 🔄 TODO: Update imports to use `@ada-code/shared`
-- 🔄 TODO: Wire up extension entry points
-- 🔄 TODO: Merge with root extension.ts configuration
-
-**Phase 4 Priority:** After code migration, integrate TwoPhaseRouter into chatViewProvider.ts
+- ✅ `shared` package with clients/types
+- ✅ `ada-chat` v1.1 with tool transparency
+- ✅ `ada-complete` inline completions
+- 🔄 TODO: More tools (file read, search)
 
 ## See Also
 
 - [../DEVELOPMENT.md](../DEVELOPMENT.md) - Extension development guide
 - [../APPROACH.md](../APPROACH.md) - Design philosophy
-- Phase handoff: `.ai/handoffs/phase-handoff-3-4.md`

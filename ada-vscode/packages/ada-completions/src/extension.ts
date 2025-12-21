@@ -8,7 +8,7 @@
  */
 
 import * as vscode from 'vscode';
-import { OllamaClient } from '@ada-code/shared/clients';
+import { OllamaClient } from 'shared/clients';
 
 export async function activate(context: vscode.ExtensionContext) {
   console.log('Ada Completions extension activating...');

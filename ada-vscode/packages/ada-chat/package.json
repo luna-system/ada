@@ -1,17 +1,20 @@
 {
   "name": "ada-chat",
   "displayName": "Ada Chat",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "publisher": "luna-system",
-  "description": "Conversational AI chat with MCP tool integration",
+  "description": "Local AI chat assistant with tool transparency - your code stays on your machine",
   "categories": [
-    "Other"
+    "Machine Learning",
+    "Chat"
   ],
   "keywords": [
     "ai",
-    "chat",
+    "assistant",
     "local",
-    "privacy"
+    "privacy",
+    "chat",
+    "tools"
   ],
   "repository": {
     "type": "git",
@@ -67,7 +70,7 @@
     "test": "node --require ts-node/register './src/__tests__/**/*.test.ts'"
   },
   "dependencies": {
-    "@ada-code/shared": "workspace:*"
+    "shared": "workspace:*"
   },
   "devDependencies": {
     "@types/vscode": "^1.85.0",

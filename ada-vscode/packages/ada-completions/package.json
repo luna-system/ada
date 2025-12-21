@@ -1,8 +1,8 @@
 {
-  "name": "@ada-code/ada-completions",
-  "displayName": "Ada Completions",
+  "name": "ada-complete",
+  "displayName": "Ada Complete",
   "version": "1.0.0",
-  "description": "Code completion and ghost text for VSCode - part of Ada Code",
+  "description": "Local AI code completions - ghost text powered by your own LLM",
   "private": true,
   "main": "dist/extension.js",
   "scripts": {
@@ -12,8 +12,7 @@
     "test": "node --require ts-node/register './src/__tests__/**/*.test.ts'"
   },
   "dependencies": {
-    "@ada-code/shared": "workspace:*",
-    "vscode": "^1.85.0"
+    "shared": "workspace:*"
   },
   "devDependencies": {
     "typescript": "^5.3.0",

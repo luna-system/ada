@@ -10,7 +10,7 @@
  */
 
 import * as vscode from 'vscode';
-import { OllamaClient } from '@ada-code/shared/clients';
+import { OllamaClient } from 'shared/clients';
 
 export class CompletionProvider implements vscode.InlineCompletionItemProvider {
   constructor(private readonly _ollamaClient: OllamaClient) {}
