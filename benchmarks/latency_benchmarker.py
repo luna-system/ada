@@ -167,7 +167,14 @@ class LatencyBenchmarker:
             measurement = await self._single_request(query, query_type)
             measurements.append(measurement)
             self.measurements.append(measurement)
-            print(f"  Sample {i+1}/{num_samples}: TTFT={measurement.ttft:.3f}s, "
+            
+            # Pretty progress bar
+            progress = (i + 1) / num_samples
+            bar_length = 20
+            filled = int(bar_length * progress)
+            bar = "█" * filled + "░" * (bar_length - filled)
+            
+            print(f"  [{bar}] {i+1}/{num_samples}: TTFT={measurement.ttft:.3f}s, "
                   f"Total={measurement.total_time:.3f}s, "
                   f"Tokens/s={measurement.tokens_per_second:.1f}")
         
