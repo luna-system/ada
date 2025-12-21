@@ -435,6 +435,9 @@ export function getChatViewHtml(): string {
             return div.innerHTML;
         }
         
+        // Buffer for tool files received before message element exists
+        let pendingToolFiles = [];
+        
         // Handle messages from extension
         window.addEventListener('message', (event) => {
             const msg = event.data;
@@ -455,33 +458,62 @@ export function getChatViewHtml(): string {
                     isGenerating = true;
                     sendBtn.disabled = true;
                     sendBtn.textContent = '⏹';
+                    pendingToolFiles = []; // Clear pending on new generation
                     addTypingIndicator();
                     break;
                     
+                case 'generationChunk':
                 case 'assistantChunk':
                     removeTypingIndicator();
                     if (!currentAssistantEl) {
                         currentAssistantEl = addMessage('', 'assistant');
                         currentAssistantEl.dataset.rawContent = '';
+                        
+                        // Apply any pending tool files
+                        if (pendingToolFiles.length > 0) {
+                            const toolSection = 
+                                '<div class="tool-results">' +
+                                '<details>' +
+                                '<summary>🔧 Files Analyzed (' + pendingToolFiles.length + ')</summary>' +
+                                '<div class="tool-file-list">' +
+                                pendingToolFiles.map(f => '<span class="tool-file-badge">' + f + '</span>').join(' ') +
+                                '</div>' +
+                                '</details>' +
+                                '</div>';
+                            currentAssistantEl.innerHTML = toolSection;
+                            pendingToolFiles = [];
+                        }
                     }
                     currentAssistantEl.dataset.rawContent += msg.content;
-                    currentAssistantEl.innerHTML = formatContent(currentAssistantEl.dataset.rawContent);
+                    // Preserve tool section if it exists
+                    const existingToolSection = currentAssistantEl.querySelector('.tool-results');
+                    const toolHtml = existingToolSection ? existingToolSection.outerHTML : '';
+                    currentAssistantEl.innerHTML = toolHtml + formatContent(currentAssistantEl.dataset.rawContent);
                     scrollToBottom();
                     break;
                     
                 case 'toolFiles':
                     // Tool transparency - show which files Ada read
-                    if (currentAssistantEl && msg.files.length > 0) {
-                        const toolSection = 
-                            '<div class="tool-results">' +
-                            '<details>' +
-                            '<summary>🔧 Tools Used (' + msg.files.length + ' files)</summary>' +
-                            '<div class="tool-file-list">' +
-                            msg.files.map(f => '<span class="tool-file-badge">' + f + '</span>').join(' ') +
-                            '</div>' +
-                            '</details>' +
-                            '</div>';
-                        currentAssistantEl.innerHTML = toolSection + currentAssistantEl.innerHTML;
+                    if (msg.files.length > 0) {
+                        if (currentAssistantEl) {
+                            // Apply immediately to existing message
+                            const toolSection = 
+                                '<div class="tool-results">' +
+                                '<details>' +
+                                '<summary>🔧 Files Analyzed (' + msg.files.length + ')</summary>' +
+                                '<div class="tool-file-list">' +
+                                msg.files.map(f => '<span class="tool-file-badge">' + f + '</span>').join(' ') +
+                                '</div>' +
+                                '</details>' +
+                                '</div>';
+                            // Only add if not already present
+                            if (!currentAssistantEl.querySelector('.tool-results')) {
+                                currentAssistantEl.innerHTML = toolSection + currentAssistantEl.innerHTML;
+                            }
+                        } else {
+                            // Buffer for when message element is created
+                            pendingToolFiles = msg.files;
+                        }
                     }
                     break;
                     
