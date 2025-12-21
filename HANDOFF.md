@@ -1,41 +1,67 @@
 # Ada Handoff - December 21, 2025
 
 **Branch:** `feature/tool-framework-architecture`  
-**Previous:** Tool transparency working! (committed to trunk)  
-**Next:** Implement unified tool framework
+**Status:** MONOREPO MIGRATION COMPLETE! 🎉 EXTENSION PACKAGED! 📦  
+**Next:** Install extension and TEST with Luna!
 
 ---
 
 ## What Just Happened
 
-**Tool Transparency is LIVE!** 🎉
+**FULL MONOREPO MIGRATION COMPLETE!** Built from scratch!
 
-When you ask "use introspection tools", the VS Code extension now shows:
-- Collapsible "🔧 Files Analyzed (5)" section above Ada's response  
-- Clickable badges for each file: `context.md`, `codebase-map.json`, etc.
-- Users can see exactly what Ada read before answering
-
-**Key commits on trunk:**
+**New structure (LIVE):**
 ```
-2b271a3 feat(vscode): implement tool transparency for introspection
+packages/
+  shared/          ✅ MCPClient, ToolResult types, AdaBrainClient
+  ada-chat/        ✅ Full chatViewProvider with tool routing
+```
+
+**Key features implemented:**
+- ✅ MCPClient returns structured ToolResult with metadata
+- ✅ MCPToolHandler for intent classification  
+- ✅ Two-phase pattern: tool execution → brain reasoning
+- ✅ AdaBrainClient with SSE streaming
+- ✅ Clean chatViewProvider with tool transparency UI
+- ✅ Extension packaged: `ada-chat-0.1.0.vsix`
+
+**Ready to install:**
+```bash
+cd ada-vscode/packages/ada-chat
+code --install-extension ada-chat-0.1.0.vsix --force
 ```
 
 ---
 
-## Architecture Plan: Unified Tool Framework
+## Testing Instructions for Luna
 
-We've designed the next evolution. Here's the concrete plan:
+1. **Install the extension:**
+   ```bash
+   cd ~/Code/ada-v1/ada-vscode/packages/ada-chat
+   code --install-extension ada-chat-0.1.0.vsix --force
+   ```
 
-### The Pattern: Tool Result Envelope
+2. **Start Ada Brain:**
+   ```bash
+   cd ~/Code/ada-v1
+   docker compose up -d brain
+   ```
 
-Every MCP tool returns structured metadata alongside content:
+3. **Open VS Code**
+   - Look for "Ada" icon in activity bar (left sidebar)
+   - Click to open chat panel
+   
+4. **Test queries:**
+   - Simple chat: "hello ada!"
+   - Tool usage: "use introspection to find all TODO comments"  
+   - Compound: "introspect and tell me what's easiest to fix"
 
-```python
-# ada-mcp/src/ada_mcp/types.py (NEW FILE)
-@dataclass
-class ToolResult:
-    content: str
-    metadata: ToolMetadata
+5. **Expected behavior:**
+   - Tool queries show "🔧 Files:" badges above response
+   - Compound queries show tool results THEN brain's analysis
+   - Everything streams smoothly
+
+---
 
 @dataclass  
 class ToolMetadata:
