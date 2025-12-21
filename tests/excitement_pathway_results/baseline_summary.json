@@ -1,0 +1,12 @@
+{
+  "condition": "baseline",
+  "n_trials": 3,
+  "mean_confidence": 0.7333333333333334,
+  "mean_hedging": 1.3333333333333333,
+  "mean_bold_claims": 2.3333333333333335,
+  "std_confidence": 0.23094010767585033,
+  "confidence_95ci": [
+    0.15964630270718105,
+    1.3070203639594857
+  ]
+}

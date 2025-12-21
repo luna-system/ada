@@ -14,15 +14,15 @@ import json
 import requests
 import httpx
 from typing import Generator, Dict, Any, AsyncGenerator
-from config import OLLAMA_BASE_URL, OLLAMA_KEEP_ALIVE, OLLAMA_MODEL
+from brain import config
 
 # Construct API endpoint
-OLLAMA_API_URL = f"{OLLAMA_BASE_URL}/api/generate"
+OLLAMA_API_URL = f"{config.OLLAMA_BASE_URL}/api/generate"
 
 
 def stream_chat(
     prompt: str,
-    model: str = OLLAMA_MODEL,
+    model: str = config.OLLAMA_MODEL,
     include_thinking: bool = False,
     timeout: int = 300,
 ) -> Generator[Dict[str, Any], None, None]:
@@ -43,7 +43,7 @@ def stream_chat(
             'prompt': prompt,
             'stream': True,
             'think': include_thinking,
-            'keep_alive': OLLAMA_KEEP_ALIVE,
+            'keep_alive': config.OLLAMA_KEEP_ALIVE,
         }
         
         with requests.post(OLLAMA_API_URL, json=payload, stream=True, timeout=timeout) as response:
@@ -71,7 +71,7 @@ def stream_chat(
 
 async def stream_chat_async(
     prompt: str,
-    model: str = OLLAMA_MODEL,
+    model: str = config.OLLAMA_MODEL,
     include_thinking: bool = False,
     timeout: int = 300,
 ) -> AsyncGenerator[Dict[str, Any], None]:
@@ -92,7 +92,7 @@ async def stream_chat_async(
             'prompt': prompt,
             'stream': True,
             'think': include_thinking,
-            'keep_alive': OLLAMA_KEEP_ALIVE,
+            'keep_alive': config.OLLAMA_KEEP_ALIVE,
         }
         
         async with httpx.AsyncClient(timeout=timeout) as client:
@@ -121,7 +121,7 @@ async def stream_chat_async(
 
 def complete(
     prompt: str,
-    model: str = OLLAMA_MODEL,
+    model: str = config.OLLAMA_MODEL,
     include_thinking: bool = False,
     timeout: int = 300,
 ) -> tuple[str, str, bool]:
@@ -136,7 +136,7 @@ def complete(
             'prompt': prompt,
             'stream': False,
             'think': include_thinking,
-            'keep_alive': OLLAMA_KEEP_ALIVE,
+            'keep_alive': config.OLLAMA_KEEP_ALIVE,
         }
         
         r = requests.post(OLLAMA_API_URL, json=payload, timeout=timeout)
@@ -151,7 +151,7 @@ def complete(
         return "", "", False
 
 
-def warm_model(model: str = OLLAMA_MODEL, timeout: int = 120) -> bool:
+def warm_model(model: str = config.OLLAMA_MODEL, timeout: int = 120) -> bool:
     """Pre-load the model into GPU/RAM to reduce cold-start TTFT.
 
     This makes a minimal non-streaming request so Ollama loads weights.
@@ -168,7 +168,7 @@ def warm_model(model: str = OLLAMA_MODEL, timeout: int = 120) -> bool:
             'model': model,
             'prompt': 'Hello',
             'stream': False,
-            'keep_alive': OLLAMA_KEEP_ALIVE,
+            'keep_alive': config.OLLAMA_KEEP_ALIVE,
         }
         r = requests.post(OLLAMA_API_URL, json=payload, timeout=timeout)
         r.raise_for_status()

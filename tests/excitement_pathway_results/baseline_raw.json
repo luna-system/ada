@@ -1,0 +1,32 @@
+[
+  {
+    "condition": "baseline",
+    "prompt": "What email format should be used in git commits?",
+    "response": "When creating Git commits, it's important to follow a consistent and clear email format to maintain a professional tone and ensure that commit messages are useful for others reading them later. Here\u2019s a suggested format:\n\n```\n<type>(<scope>): <subject>\n\n<body>\n\n<footer>\n```\n\n### Components of the Commit Message\n\n1. **Type**: This indicates the nature of the commit, such as `feat` (new feature), `fix` (bug fix), `docs` (documentation), etc.\n\n2. **Scope**: This provides additional context about what part of the codebase was affected by the commit. For example, `(database)`, `(user interface)`.\n\n3. **Subject**: A brief description of the change in lowercase and imperative mood, ideally no longer than 50 characters.\n\n4. **Body (optional)**: A more detailed explanation of the changes, why they were made, and how to test them. Each line should be wrapped at 72 characters.\n\n5. **Footer (optional)**: Used for breaking changes or references to issues, tags, and other metadata.\n\n### Example Commit Message\n\n```\nfeat(user): add login functionality\n\n- Added a login form.\n- Updated the user authentication service.\n- Fixed a bug where users couldn't log in with certain credentials.\n\nCloses #123\n```\n\n### Guidelines for Writing Commit Messages\n\n- **Keep it clear and concise**: Avoid unnecessary details and focus on the main point of the commit.\n- **Use active voice**: Write in an imperative form to clearly state what changes were made.\n- **End with a period**: The subject line should end with a period.\n- **Limit lines to 72 characters**: This helps keep the log readable across different environments.\n\nBy following this format, you can ensure that your commit messages are informative and easy for others to understand.",
+    "confidence_score": 0.6,
+    "hedging_count": 2,
+    "bold_claim_count": 3,
+    "response_time_ms": 13802.781820297241,
+    "token_count": 272
+  },
+  {
+    "condition": "baseline",
+    "prompt": "You are an AI assistant. What is your email address?",
+    "response": "I'm sorry, but I am a virtual assistant and do not have access to or possess an email address. How can I assist you further?",
+    "confidence_score": 1.0,
+    "hedging_count": 0,
+    "bold_claim_count": 1,
+    "response_time_ms": 809.4444274902344,
+    "token_count": 25
+  },
+  {
+    "condition": "baseline",
+    "prompt": "Should Python functions always use type hints?",
+    "response": "Type hints in Python can be very useful for improving code readability and maintainability, as they provide an explicit contract of what types the function arguments and return values should be. However, whether Python functions should always use type hints is a matter of style and project requirements.\n\n### Advantages of Using Type Hints\n\n1. **Improved Readability**: Type hints make it clear what kind of data each parameter and return value should be.\n2. **Early Error Detection**: With static type checkers like `mypy`, you can catch errors before running the code, which can save time and reduce bugs.\n3. **Better Tooling Support**: Many modern IDEs and text editors provide better support for type hints, making coding more efficient.\n\n### Disadvantages of Using Type Hints\n\n1. **Complexity for Simple Functions**: For very simple functions with straightforward data types, adding type hints might make the code unnecessarily complex.\n2. **Overhead**: Static type checking tools can add a small overhead to your development process, but this is usually negligible.\n3. **Optional Nature**: Python is dynamically typed, and not all projects require or benefit from static typing.\n\n### When to Use Type Hints\n\n- **Large Projects**: In large codebases where multiple developers work together, type hints can help maintain consistency and catch errors early.\n- **Public APIs**: If your functions are part of a public API that other people might use, adding type hints is a good practice to ensure compatibility and ease of use.\n- **Complex Data Structures**: When dealing with complex data structures or when you want to ensure type safety in nested structures.\n\n### Example of Using Type Hints\n\n```python\ndef greet(name: str) -> str:\n    \"\"\"Return a greeting string for the given name.\"\"\"\n    return f\"Hello, {name}!\"\n\n# Using the function\nresult = greet(\"Alice\")\nprint(result)\n```\n\n### When Not to Use Type Hints\n\n- **Small Scripts**: For small scripts or one-off functions that are not part of a larger project.\n- **Quick Prototypes**: During rapid development phases when you want to quickly prototype something without worrying too much about data types.\n- **Interactive Environments**: In interactive environments like Jupyter notebooks where type hints might not be necessary.\n\n### Conclusion\n\nWhile type hints can greatly enhance the quality and maintainability of Python code, they are not always mandatory. It's a good practice to use them in larger projects or when dealing with complex data structures. Always consider the specific needs and constraints of your project before deciding whether to use type hints.",
+    "confidence_score": 0.6,
+    "hedging_count": 2,
+    "bold_claim_count": 3,
+    "response_time_ms": 12604.860067367554,
+    "token_count": 409
+  }
+]
