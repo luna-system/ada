@@ -14,7 +14,6 @@
     "pnpm": ">=8.0.0"
   },
   "scripts": {
-    "install": "pnpm install -r",
     "build": "pnpm -r build",
     "watch": "pnpm -r watch",
     "test": "pnpm -r test",
@@ -22,6 +21,7 @@
     "lint": "pnpm -r lint"
   },
   "devDependencies": {
+    "@types/node": "^20.19.27",
     "@types/vscode": "^1.85.0",
     "@typescript-eslint/eslint-plugin": "^6.13.0",
     "@typescript-eslint/parser": "^6.13.0",

@@ -131,18 +131,9 @@ export class ChatViewProvider implements vscode.WebviewViewProvider {
           });
         }
       } else {
-        // Regular chat - no tools
+        // Regular chat - no pre-identified tools, but watch for bidirectional requests
         this._postMessage({ type: 'generationStart' });
-        for await (const chunk of this._brainClient.chat([
-          { role: 'user', content: userMessage }
-        ], {})) {
-          if (!this._isGenerating) break;
-          this._postMessage({
-            type: 'generationChunk',
-            content: chunk.content,
-            done: chunk.done
-          });
-        }
+        await this._streamWithBidirectional(userMessage);
       }
     } catch (error) {
       console.error('Ada chat error:', error);
@@ -153,6 +144,113 @@ export class ChatViewProvider implements vscode.WebviewViewProvider {
     } finally {
       this._isGenerating = false;
       this._postMessage({ type: 'generationEnd' });
+    }
+  }
+
+  /**
+   * Stream response with bidirectional tool interception
+   * 
+   * Watches for SPECIALIST_REQUEST[...] or TOOL_REQUEST[...] patterns in Brain's output.
+   * When detected, executes the tool locally via VS Code APIs and injects the result.
+   */
+  private async _streamWithBidirectional(userMessage: string): Promise<void> {
+    let accumulated = '';
+    let toolCallCount = 0;
+    const MAX_TOOL_CALLS = 5; // Safety limit
+
+    // Start initial stream
+    let currentMessages = [{ role: 'user', content: userMessage }];
+    
+    while (this._isGenerating) {
+      let foundToolRequest = false;
+      
+      for await (const chunk of this._brainClient.chat(currentMessages, {})) {
+        if (!this._isGenerating) break;
+        
+        // Accumulate for pattern detection
+        if (chunk.content) {
+          accumulated += chunk.content;
+        }
+        
+        // Check for bidirectional tool request
+        const request = this._toolHandler.detectBidirectionalRequest(accumulated);
+        
+        if (request.detected && request.tool && toolCallCount < MAX_TOOL_CALLS) {
+          foundToolRequest = true;
+          toolCallCount++;
+          
+          console.log(`[Ada Chat] Bidirectional request detected: ${request.tool}`);
+          
+          // Send what we have so far (before the tool request marker)
+          if (request.matchStart && request.matchStart > 0) {
+            const textBeforeRequest = accumulated.slice(0, request.matchStart);
+            if (textBeforeRequest.trim()) {
+              this._postMessage({
+                type: 'generationChunk',
+                content: textBeforeRequest,
+                done: false
+              });
+            }
+          }
+          
+          // Show tool transparency card
+          this._postMessage({
+            type: 'toolTransparency',
+            tool: request.tool,
+            metadata: {
+              tool_name: request.tool,
+              actions_taken: `Brain requested: ${request.tool}`,
+              bidirectional: true
+            }
+          });
+          
+          // Execute the tool
+          const toolExecution = await this._toolHandler.executeBidirectionalTool(
+            request.tool,
+            request.params || {}
+          );
+          
+          // Build continuation prompt with tool result
+          const continuation = `${userMessage}
+
+${toolExecution.resultText}
+
+Continue your response, incorporating the tool result above.`;
+          
+          // Reset for next iteration
+          accumulated = '';
+          currentMessages = [{ role: 'user', content: continuation }];
+          
+          break; // Break inner loop to restart stream with tool context
+        }
+        
+        // Normal chunk - forward to UI
+        this._postMessage({
+          type: 'generationChunk',
+          content: chunk.content,
+          done: chunk.done
+        });
+        
+        if (chunk.done) {
+          return; // Stream complete, exit
+        }
+      }
+      
+      // If we didn't find a tool request, we're done
+      if (!foundToolRequest) {
+        break;
+      }
+      
+      // Safety check
+      if (toolCallCount >= MAX_TOOL_CALLS) {
+        console.warn('[Ada Chat] Max bidirectional tool calls reached');
+        this._postMessage({
+          type: 'generationChunk',
+          content: '\n\n*[Tool call limit reached]*',
+          done: true
+        });
+        break;
+      }
     }
   }
 
