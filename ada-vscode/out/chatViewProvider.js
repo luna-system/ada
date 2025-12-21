@@ -496,7 +496,51 @@ class ChatViewProvider {
         .welcome p {
             font-size: 12px;
             color: var(--vscode-descriptionForeground);
+            max-width: 300px;
+            line-height: 1.4;
+        }
+        
+        /* Quick actions */
+        .quick-action {
+            background: var(--vscode-button-secondaryBackground);
+            color: var(--vscode-button-secondaryForeground);
+            border: 1px solid var(--vscode-button-border);
+            padding: 8px 12px;
+            font-size: 12px;
+            text-align: left;
+            width: 100%;
             max-width: 250px;
+        }
+        .quick-action:hover {
+            background: var(--vscode-button-secondaryHoverBackground);
+        }
+        
+        /* Tool usage indicator */
+        .tool-indicator {
+            font-size: 10px;
+            color: var(--vscode-charts-blue);
+            padding: 4px 8px;
+            background: var(--vscode-badge-background);
+            border-radius: 12px;
+            margin-top: 6px;
+            display: inline-block;
+        }
+        
+        /* Token counter */
+        .message-meta {
+            font-size: 10px;
+            color: var(--vscode-descriptionForeground);
+            margin-top: 6px;
+            opacity: 0.7;
+        }
+        
+        /* Links */
+        a {
+            color: var(--vscode-textLink-foreground);
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
         }
         
         /* Scrollbar */
@@ -523,7 +567,12 @@ class ChatViewProvider {
         <div class="welcome" id="welcome">
             <div class="welcome-icon">✨</div>
             <h2>Hi! I'm Ada</h2>
-            <p>Your local AI assistant. Ask me anything about your code, and I'll help!</p>
+            <p>Your local AI assistant with memory, context, and self-introspection.</p>
+            <div style="margin-top: 16px; display: flex; flex-direction: column; gap: 8px; width: 100%;">
+                <button class="quick-action" onclick="quickAsk('Explain this code')">📖 Explain code</button>
+                <button class="quick-action" onclick="quickAsk('Find bugs in my code')">🐛 Find bugs</button>
+                <button class="quick-action" onclick="quickAsk('How does your memory system work?')">🧠 Introspect Ada</button>
+            </div>
         </div>
     </div>
     
@@ -580,12 +629,22 @@ class ChatViewProvider {
             inputEl.style.height = 'auto';
         }
         
+        function quickAsk(message) {
+            inputEl.value = message;
+            sendMessage();
+        }
+        
         function addMessage(content, role) {
             if (welcomeEl) welcomeEl.style.display = 'none';
             
             const el = document.createElement('div');
             el.className = 'message ' + role;
-            el.textContent = content;
+            // Apply markdown formatting for assistant messages
+            if (role === 'assistant' && content) {
+                el.innerHTML = formatContent(content);
+            } else {
+                el.textContent = content;
+            }
             messagesEl.appendChild(el);
             scrollToBottom();
             return el;
@@ -610,10 +669,38 @@ class ChatViewProvider {
         }
         
         function formatContent(text) {
-            // Simple markdown-ish formatting
-            return text
-                .replace(/\`\`\`(\\w*)\\n([\\s\\S]*?)\`\`\`/g, '<pre><code>$2</code></pre>')
-                .replace(/\`([^\`]+)\`/g, '<code>$1</code>');
+            // Enhanced markdown formatting with tool indicators
+            let formatted = text;
+            
+            // Extract and highlight tool usage
+            const toolPattern = /SPECIALIST_REQUEST\\[([^\\]]+)\\]/g;
+            formatted = formatted.replace(toolPattern, '<span class="tool-indicator">🔧 Using: $1</span>');
+            
+            // Code blocks with language hint
+            formatted = formatted.replace(/\`\`\`(\\w*)\\n([\\s\\S]*?)\`\`\`/g, (match, lang, code) => {
+                const langLabel = lang ? \` <span style="opacity: 0.6; font-size: 10px;">\${lang}</span>\` : '';
+                return \`<pre>\${langLabel}<code>\${escapeHtml(code)}</code></pre>\`;
+            });
+            
+            // Inline code
+            formatted = formatted.replace(/\`([^\`]+)\`/g, '<code>$1</code>');
+            
+            // Bold
+            formatted = formatted.replace(/\\*\\*([^*]+)\\*\\*/g, '<strong>$1</strong>');
+            
+            // Italic
+            formatted = formatted.replace(/\\*([^*]+)\\*/g, '<em>$1</em>');
+            
+            // Links
+            formatted = formatted.replace(/\\[([^\\]]+)\\]\\(([^)]+)\\)/g, '<a href="$2" target="_blank">$1</a>');
+            
+            return formatted;
+        }
+        
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
         }
         
         // Handle messages from extension
@@ -643,8 +730,12 @@ class ChatViewProvider {
                     removeTypingIndicator();
                     if (!currentAssistantEl) {
                         currentAssistantEl = addMessage('', 'assistant');
+                        currentAssistantEl.dataset.rawContent = '';
                     }
-                    currentAssistantEl.textContent += msg.content;
+                    // Accumulate raw content
+                    currentAssistantEl.dataset.rawContent += msg.content;
+                    // Re-render with markdown formatting
+                    currentAssistantEl.innerHTML = formatContent(currentAssistantEl.dataset.rawContent);
                     scrollToBottom();
                     break;
                     
