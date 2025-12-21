@@ -116,6 +116,21 @@ export class MCPToolHandler {
       };
     }
 
+    // Health check: system status
+    if ((lower.includes('health') && (lower.includes('status') || lower.includes('check'))) ||
+        lower.includes('are you working') ||
+        lower.includes('system status') ||
+        lower === 'health' ||
+        lower === 'ping') {
+      
+      return {
+        requiresTool: true,
+        requiresReasoning: false,
+        tool: 'ada_health',
+        params: {}
+      };
+    }
+
     // Pure chat - no tools needed
     return {
       requiresTool: false,
@@ -152,6 +167,9 @@ export class MCPToolHandler {
       
       case 'ada_complete_code':
         return await this.mcpClient!.callTool('ada_complete_code', intent.params);
+      
+      case 'ada_health':
+        return await this.mcpClient!.callTool('ada_health', {});
       
       default:
         throw new Error(`Unknown tool: ${intent.tool}`);
