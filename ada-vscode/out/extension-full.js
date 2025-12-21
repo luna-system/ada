@@ -50,11 +50,9 @@ const ollamaClient_1 = require("./ollamaClient");
 const statusBar_1 = require("./statusBar");
 const chatViewProvider_1 = require("./chatViewProvider");
 const adaBrainClient_1 = require("./adaBrainClient");
-const modelWarmer_1 = require("./modelWarmer");
 let completionProvider;
 let ollamaClient;
 let statusBar;
-let modelWarmer;
 async function activate(context) {
     console.log('Ada: Activating...');
     const config = vscode.workspace.getConfiguration('ada');
@@ -91,11 +89,6 @@ async function activate(context) {
     // Initialize status bar
     statusBar = new statusBar_1.StatusBar();
     context.subscriptions.push(statusBar);
-    // Initialize model warmer (biomimetic feature!)
-    const brainUrl = config.get('brainUrl', 'http://localhost:8000');
-    modelWarmer = new modelWarmer_1.ModelWarmer(brainUrl);
-    await modelWarmer.register(); // Register VS Code session, warm qwen2.5-coder:7b
-    context.subscriptions.push(modelWarmer);
     // Check Ollama connection (async, but don't block)
     ollamaClient.checkConnection().then(connected => {
         if (connected) {
@@ -143,9 +136,5 @@ async function activate(context) {
 }
 function deactivate() {
     console.log('Ada: Deactivating...');
-    // Unregister from model warmer
-    if (modelWarmer) {
-        modelWarmer.unregister();
-    }
 }
-//# sourceMappingURL=extension.js.map
+//# sourceMappingURL=extension-full.js.map

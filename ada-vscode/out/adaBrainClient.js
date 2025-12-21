@@ -215,6 +215,7 @@ class AdaBrainClient {
                 headers: {
                     'Content-Type': 'application/json',
                     'Accept': 'text/event-stream',
+                    'X-Client-Type': 'vscode',
                 },
             };
             const req = httpModule.request(url, requestOptions, (res) => {
@@ -224,24 +225,27 @@ class AdaBrainClient {
                 }
                 let buffer = '';
                 async function* streamChunks() {
-                    for await (const chunk of res) {
+                    // Process stream with minimal buffering for fast TTFT
+                    res.on('data', (chunk) => {
                         buffer += chunk.toString();
+                    });
+                    // Process buffer as data arrives (not after chunk completes)
+                    const processBuffer = () => {
                         const lines = buffer.split('\n');
-                        buffer = lines.pop() || '';
+                        buffer = lines.pop() || ''; // Keep incomplete line in buffer
+                        const results = [];
                         for (const line of lines) {
                             if (line.startsWith('data: ')) {
                                 const data = line.slice(6);
                                 if (data === '[DONE]') {
-                                    yield { content: '', done: true };
-                                    return;
+                                    results.push({ content: '', done: true });
+                                    return results;
                                 }
                                 try {
                                     const parsed = JSON.parse(data);
-                                    // Brain API returns {"type": "token", "content": "..."}
-                                    // We extract just the content field
                                     const content = parsed.content || '';
                                     if (content) {
-                                        yield { content, done: false };
+                                        results.push({ content, done: false });
                                     }
                                 }
                                 catch (e) {
@@ -249,8 +253,22 @@ class AdaBrainClient {
                                 }
                             }
                         }
+                        return results;
+                    };
+                    // Yield tokens immediately as they arrive
+                    for await (const _chunk of res) {
+                        const tokens = processBuffer();
+                        for (const token of tokens) {
+                            yield token;
+                            if (token.done)
+                                return;
+                        }
                     }
-                    // Final chunk
+                    // Final processing of any remaining buffer
+                    const final = processBuffer();
+                    for (const token of final) {
+                        yield token;
+                    }
                     yield { content: '', done: true };
                 }
                 resolve(streamChunks());
@@ -274,6 +292,7 @@ class AdaBrainClient {
                 method,
                 headers: {
                     'Content-Type': 'application/json',
+                    'X-Client-Type': 'vscode',
                 },
             };
             const req = httpModule.request(url, options, (res) => {

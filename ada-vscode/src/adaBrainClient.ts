@@ -247,6 +247,7 @@ export class AdaBrainClient {
                 headers: {
                     'Content-Type': 'application/json',
                     'Accept': 'text/event-stream',
+                    'X-Client-Type': 'vscode',
                 },
             };
             
@@ -336,6 +337,7 @@ export class AdaBrainClient {
                 method,
                 headers: {
                     'Content-Type': 'application/json',
+                    'X-Client-Type': 'vscode',
                 },
             };
             
