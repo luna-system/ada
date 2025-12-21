@@ -662,7 +662,12 @@ export class ChatViewProvider implements vscode.WebviewViewProvider {
             
             const el = document.createElement('div');
             el.className = 'message ' + role;
-            el.textContent = content;
+            // Apply markdown formatting for assistant messages
+            if (role === 'assistant' && content) {
+                el.innerHTML = formatContent(content);
+            } else {
+                el.textContent = content;
+            }
             messagesEl.appendChild(el);
             scrollToBottom();
             return el;
@@ -748,8 +753,12 @@ export class ChatViewProvider implements vscode.WebviewViewProvider {
                     removeTypingIndicator();
                     if (!currentAssistantEl) {
                         currentAssistantEl = addMessage('', 'assistant');
+                        currentAssistantEl.dataset.rawContent = '';
                     }
-                    currentAssistantEl.textContent += msg.content;
+                    // Accumulate raw content
+                    currentAssistantEl.dataset.rawContent += msg.content;
+                    // Re-render with markdown formatting
+                    currentAssistantEl.innerHTML = formatContent(currentAssistantEl.dataset.rawContent);
                     scrollToBottom();
                     break;
                     
