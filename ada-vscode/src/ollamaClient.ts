@@ -14,9 +14,25 @@ export interface CompletionResult {
     tokensGenerated: number;
 }
 
+export interface ChatMessage {
+    role: 'user' | 'assistant' | 'system';
+    content: string;
+}
+
+export interface ModelInfo {
+    name: string;
+    size: number;
+    modifiedAt: string;
+}
+
+export interface ChatStreamChunk {
+    content: string;
+    done: boolean;
+}
+
 export class OllamaClient {
     private baseUrl: string;
-    private model: string;
+    public model: string;  // Public for chat provider access
 
     constructor(baseUrl: string, model: string) {
         this.baseUrl = baseUrl;
@@ -34,6 +50,69 @@ export class OllamaClient {
             return response !== null;
         } catch {
             return false;
+        }
+    }
+
+    /**
+     * List available models from Ollama
+     */
+    async listModels(): Promise<ModelInfo[]> {
+        try {
+            const response = await this.fetch('/api/tags', 'GET');
+            if (!response || !response.models) {
+                return [];
+            }
+            return response.models.map((m: any) => ({
+                name: m.name,
+                size: m.size || 0,
+                modifiedAt: m.modified_at || '',
+            }));
+        } catch {
+            return [];
+        }
+    }
+
+    /**
+     * Chat with streaming response
+     */
+    async *chat(
+        messages: ChatMessage[],
+        options: {
+            systemPrompt?: string;
+            temperature?: number;
+            maxTokens?: number;
+        } = {}
+    ): AsyncGenerator<ChatStreamChunk, void, unknown> {
+        // Build prompt from messages
+        let prompt = '';
+        if (options.systemPrompt) {
+            prompt += `${options.systemPrompt}\n\n`;
+        }
+        for (const msg of messages) {
+            if (msg.role === 'user') {
+                prompt += `User: ${msg.content}\n`;
+            } else if (msg.role === 'assistant') {
+                prompt += `Assistant: ${msg.content}\n`;
+            }
+        }
+        prompt += 'Assistant: ';
+
+        const body = {
+            model: this.model,
+            prompt: prompt,
+            stream: true,
+            options: {
+                temperature: options.temperature ?? 0.7,
+                num_predict: options.maxTokens ?? 2048,
+            },
+        };
+
+        for await (const chunk of this.fetchStream('/api/generate', body)) {
+            yield {
+                content: chunk.response || '',
+                done: chunk.done || false,
+            };
+            if (chunk.done) break;
         }
     }
 

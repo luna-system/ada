@@ -1,0 +1,28 @@
+# Build output is required
+!out/**
+
+# Resources (icons, etc)
+!resources/**
+
+# Extension metadata/docs to include
+!package.json
+!README.md
+!LICENSE*
+
+# Exclude development sources/tests
+src/**
+tests/**
+node_modules/**
+
+# Exclude packaging artifacts
+*.vsix
+
+# Exclude configs not needed at runtime
+.eslintignore
+.eslintrc.*
+tsconfig.json
+package-lock.json
+
+# Exclude docs/planning files from VSIX
+*.md
+!README.md

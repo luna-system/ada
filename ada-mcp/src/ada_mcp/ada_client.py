@@ -2,7 +2,7 @@
 
 import json
 import logging
-from typing import Any
+from typing import Any, Callable, Awaitable
 
 import httpx
 
@@ -101,6 +101,82 @@ class AdaClient:
                                     response_text += content
                             except json.JSONDecodeError:
                                 response_text += chunk
+            
+            return response_text
+            
+        except httpx.ConnectError as e:
+            raise AdaBrainConnectionError(
+                f"Unable to connect to Ada's brain at {self.base_url}: {e}"
+            ) from e
+        except httpx.HTTPError as e:
+            raise AdaBrainConnectionError(
+                f"HTTP error communicating with Ada's brain: {e}"
+            ) from e
+    
+    async def chat_stream(
+        self,
+        message: str,
+        conversation_id: str | None = None,
+        on_token: Callable[[str], Awaitable[None]] | None = None
+    ) -> str:
+        """Send a chat message to Ada and stream the response.
+        
+        Args:
+            message: User's message
+            conversation_id: Optional conversation ID for context
+            on_token: Optional async callback for each token/chunk
+            
+        Returns:
+            Ada's complete response text
+            
+        Raises:
+            AdaBrainConnectionError: If unable to connect
+            AdaBrainResponseError: If brain returns an error
+        """
+        url = f"{self.base_url}/v1/chat/stream"
+        payload = {
+            "prompt": message,
+            "conversation_id": conversation_id or "default",
+            "stream": True
+        }
+        
+        try:
+            response_text = ""
+            async with self._client.stream(
+                "POST",
+                url,
+                json=payload,
+                headers={"Accept": "text/event-stream"}
+            ) as response:
+                if response.status_code != 200:
+                    error_text = await response.aread()
+                    raise AdaBrainResponseError(
+                        f"Brain returned {response.status_code}: {error_text.decode()}",
+                        status_code=response.status_code
+                    )
+                
+                async for line in response.aiter_lines():
+                    if line.startswith("data: "):
+                        chunk = line[6:]
+                        
+                        if chunk == "[DONE]":
+                            break
+                        
+                        if chunk:
+                            try:
+                                data = json.loads(chunk)
+                                content = data.get("content", "")
+                                
+                                # Filter out thinking tags
+                                if "<think>" not in content and "</think>" not in content:
+                                    response_text += content
+                                    # Call callback if provided
+                                    if on_token:
+                                        await on_token(content)
+                            except json.JSONDecodeError:
+                                response_text += chunk
+                                if on_token:
+                                    await on_token(chunk)
             
             return response_text
             

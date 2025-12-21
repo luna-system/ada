@@ -45,6 +45,7 @@ var __importStar = (this && this.__importStar) || (function () {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.ChatViewProvider = void 0;
 const vscode = __importStar(require("vscode"));
+// Don't import AdaMCPClient here - load it dynamically only when needed
 const tools_1 = require("./tools");
 class ChatViewProvider {
     _extensionUri;
@@ -53,6 +54,7 @@ class ChatViewProvider {
     _view;
     _messages = [];
     _isGenerating = false;
+    _mcpClient; // Lazy-loaded
     constructor(_extensionUri, _client) {
         this._extensionUri = _extensionUri;
         this._client = _client;
@@ -102,6 +104,13 @@ class ChatViewProvider {
         this._postMessage({ type: 'generationStart' });
         try {
             const config = vscode.workspace.getConfiguration('ada');
+            const chatMode = config.get('chatMode', 'brain');
+            // Route to appropriate backend
+            if (chatMode === 'mcp') {
+                await this._handleMCPChat(message);
+                return;
+            }
+            // Fallback to original logic (ollama or brain)
             const useTools = config.get('enableTools', true);
             const editor = vscode.window.activeTextEditor;
             let systemPrompt = `You are Ada, a helpful AI coding assistant. You run locally and respect user privacy. Be concise but helpful.`;
@@ -195,6 +204,72 @@ class ChatViewProvider {
             this._postMessage({
                 type: 'error',
                 message: `Error: ${error instanceof Error ? error.message : 'Unknown error'}`
+            });
+        }
+        finally {
+            this._isGenerating = false;
+            this._postMessage({ type: 'generationEnd' });
+        }
+    }
+    async _handleMCPChat(message) {
+        try {
+            // Lazy-load MCP client only when needed
+            if (!this._mcpClient) {
+                console.log('[ADA MCP] Loading MCP client module...');
+                const { AdaMCPClient } = await import('./mcpClient.js');
+                this._mcpClient = new AdaMCPClient();
+                console.log('[ADA MCP] Connecting...');
+                await this._mcpClient.connect();
+            }
+            // Detect if user is requesting a specific tool
+            const lowerMessage = message.toLowerCase();
+            // Pytest/testing request - add smart defaults
+            if ((lowerMessage.includes('pytest') || lowerMessage.includes('run test') || lowerMessage.includes('run the test')) &&
+                !lowerMessage.includes('directory') && !lowerMessage.includes('folder')) {
+                console.log('[ADA MCP] Detected pytest request, adding workspace context');
+                const workspace = vscode.workspace.workspaceFolders?.[0]?.uri.fsPath;
+                const enhancedMessage = `${message}\n\n[Context: Workspace root is ${workspace}. If no specific test path is mentioned, default to running 'pytest tests/' from the workspace root.]`;
+                const response = await this._mcpClient.chat({ message: enhancedMessage });
+                this._postMessage({ type: 'generationChunk', content: response });
+                this._messages.push({ role: 'assistant', content: response });
+                return;
+            }
+            // Introspection request
+            if (lowerMessage.includes('introspect') ||
+                (lowerMessage.includes('analyze') && lowerMessage.includes('your') &&
+                    (lowerMessage.includes('architecture') || lowerMessage.includes('yourself')))) {
+                console.log('[ADA MCP] Detected introspection request, calling tool directly');
+                const workspace = vscode.workspace.workspaceFolders?.[0]?.uri.fsPath;
+                const response = await this._mcpClient.callTool('ada_introspect', {
+                    focus: 'general',
+                    workspace_root: workspace
+                });
+                this._postMessage({ type: 'generationChunk', content: response });
+                this._messages.push({ role: 'assistant', content: response });
+                return;
+            }
+            // Default: regular chat
+            // Add workspace context to help Ada understand "this project"
+            const workspace = vscode.workspace.workspaceFolders?.[0];
+            let contextualMessage = message;
+            if (workspace && !message.toLowerCase().includes('workspace') && !message.toLowerCase().includes('directory')) {
+                const workspaceName = workspace.name;
+                const workspacePath = workspace.uri.fsPath;
+                // Add context for first-person references to project
+                if (message.toLowerCase().match(/\b(this project|these modules|this codebase|here)\b/)) {
+                    contextualMessage = `[Context: User is in workspace "${workspaceName}" at ${workspacePath}]\n\n${message}`;
+                }
+            }
+            const response = await this._mcpClient.chat({ message: contextualMessage });
+            // Post the complete response (MCP doesn't support streaming)
+            this._postMessage({ type: 'generationChunk', content: response });
+            this._messages.push({ role: 'assistant', content: response });
+        }
+        catch (error) {
+            console.error('MCP chat error:', error);
+            this._postMessage({
+                type: 'error',
+                message: `MCP Error: ${error instanceof Error ? error.message : 'Unknown error'}`
             });
         }
         finally {

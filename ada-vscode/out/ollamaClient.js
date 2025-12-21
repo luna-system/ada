@@ -44,7 +44,7 @@ const https = __importStar(require("https"));
 const http = __importStar(require("http"));
 class OllamaClient {
     baseUrl;
-    model;
+    model; // Public for chat provider access
     constructor(baseUrl, model) {
         this.baseUrl = baseUrl;
         this.model = model;
@@ -60,6 +60,61 @@ class OllamaClient {
         }
         catch {
             return false;
+        }
+    }
+    /**
+     * List available models from Ollama
+     */
+    async listModels() {
+        try {
+            const response = await this.fetch('/api/tags', 'GET');
+            if (!response || !response.models) {
+                return [];
+            }
+            return response.models.map((m) => ({
+                name: m.name,
+                size: m.size || 0,
+                modifiedAt: m.modified_at || '',
+            }));
+        }
+        catch {
+            return [];
+        }
+    }
+    /**
+     * Chat with streaming response
+     */
+    async *chat(messages, options = {}) {
+        // Build prompt from messages
+        let prompt = '';
+        if (options.systemPrompt) {
+            prompt += `${options.systemPrompt}\n\n`;
+        }
+        for (const msg of messages) {
+            if (msg.role === 'user') {
+                prompt += `User: ${msg.content}\n`;
+            }
+            else if (msg.role === 'assistant') {
+                prompt += `Assistant: ${msg.content}\n`;
+            }
+        }
+        prompt += 'Assistant: ';
+        const body = {
+            model: this.model,
+            prompt: prompt,
+            stream: true,
+            options: {
+                temperature: options.temperature ?? 0.7,
+                num_predict: options.maxTokens ?? 2048,
+            },
+        };
+        for await (const chunk of this.fetchStream('/api/generate', body)) {
+            yield {
+                content: chunk.response || '',
+                done: chunk.done || false,
+            };
+            if (chunk.done)
+                break;
         }
     }
     /**
