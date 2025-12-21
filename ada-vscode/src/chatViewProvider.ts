@@ -549,6 +549,49 @@ export class ChatViewProvider implements vscode.WebviewViewProvider {
             display: inline-block;
         }
         
+        /* Tool results collapsible */
+        .tool-results {
+            margin-top: 8px;
+            padding: 8px;
+            background: var(--vscode-textCodeBlock-background);
+            border-left: 3px solid var(--vscode-charts-blue);
+            border-radius: 4px;
+            font-size: 11px;
+            opacity: 0.8;
+        }
+        .tool-results-header {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            cursor: pointer;
+            user-select: none;
+            font-weight: 600;
+            margin-bottom: 6px;
+        }
+        .tool-results-header:hover {
+            opacity: 1;
+        }
+        .tool-results-content {
+            font-family: var(--vscode-editor-font-family);
+            white-space: pre-wrap;
+            overflow-x: auto;
+            max-height: 200px;
+            overflow-y: auto;
+            display: none;
+        }
+        .tool-results-content.expanded {
+            display: block;
+        }
+        .tool-file-badge {
+            display: inline-block;
+            padding: 2px 6px;
+            background: var(--vscode-charts-green);
+            color: var(--vscode-editor-background);
+            border-radius: 3px;
+            font-size: 10px;
+            margin: 2px;
+        }
+        
         /* Token counter */
         .message-meta {
             font-size: 10px;
@@ -692,17 +735,31 @@ export class ChatViewProvider implements vscode.WebviewViewProvider {
         }
         
         function formatContent(text) {
-            // Enhanced markdown formatting with tool indicators
+            // Enhanced markdown formatting with tool indicators and results
             let formatted = text;
+            let toolsUsed = [];
             
-            // Extract and highlight tool usage
-            const toolPattern = /SPECIALIST_REQUEST\\[([^\\]]+)\\]/g;
-            formatted = formatted.replace(toolPattern, '<span class="tool-indicator">🔧 Using: $1</span>');
+            // Extract tool usage (e.g., "🔧 Reading context.md...")
+            const toolPattern = /🔧\s*(.+?)(?:\n|$)/g;
+            let match;
+            while ((match = toolPattern.exec(text)) !== null) {
+                toolsUsed.push(match[1]);
+            }
+            
+            // Extract SPECIALIST_REQUEST tags
+            const specialistPattern = /SPECIALIST_REQUEST\[([^\]]+)\]/g;
+            while ((match = specialistPattern.exec(text)) !== null) {
+                toolsUsed.push('Specialist: ' + match[1]);
+            }
+            
+            // Remove tool indicators from main content
+            formatted = formatted.replace(/🔧\s*(.+?)(?:\n|$)/g, '');
+            formatted = formatted.replace(/SPECIALIST_REQUEST\[([^\]]+)\]/g, '');
             
             // Code blocks with language hint
-            formatted = formatted.replace(/\`\`\`(\\w*)\\n([\\s\\S]*?)\`\`\`/g, (match, lang, code) => {
-                const langLabel = lang ? \` <span style="opacity: 0.6; font-size: 10px;">\${lang}</span>\` : '';
-                return \`<pre>\${langLabel}<code>\${escapeHtml(code)}</code></pre>\`;
+            formatted = formatted.replace(/\`\`\`(\w*)\n([\s\S]*?)\`\`\`/g, (match, lang, code) => {
+                const langLabel = lang ? ' <span style="opacity: 0.6; font-size: 10px;">' + lang + '</span>' : '';
+                return '<pre>' + langLabel + '<code>' + escapeHtml(code) + '</code></pre>';
             });
             
             // Inline code
@@ -715,7 +772,31 @@ export class ChatViewProvider implements vscode.WebviewViewProvider {
             formatted = formatted.replace(/\\*([^*]+)\\*/g, '<em>$1</em>');
             
             // Links
-            formatted = formatted.replace(/\\[([^\\]]+)\\]\\(([^)]+)\\)/g, '<a href="$2" target="_blank">$1</a>');
+            formatted = formatted.replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" target="_blank">$1</a>');
+            
+            // Add tool results section if tools were used
+            if (toolsUsed.length > 0) {
+                const toolItems = toolsUsed.map(tool => {
+                    // Parse tool usage (e.g., "Reading context.md" -> extract file)
+                    const fileMatch = tool.match(/Reading\s+([^\s]+)/);
+                    if (fileMatch) {
+                        return '<span class="tool-file-badge">📄 ' + fileMatch[1] + '</span>';
+                    }
+                    return '<span class="tool-file-badge">' + tool + '</span>';
+                }).join(' ');
+                
+                const toolSection = '<div class="tool-results">' +
+                    '<div class="tool-results-header" onclick="this.nextElementSibling.classList.toggle(\'expanded\')">' +
+                    '<span>🔧 Tools Used (' + toolsUsed.length + ')</span>' +
+                    '<span style="font-size: 9px; opacity: 0.6;">▼ Click to expand</span>' +
+                    '</div>' +
+                    '<div class="tool-results-content">' +
+                    toolItems +
+                    '</div>' +
+                    '</div>';
+                
+                formatted = toolSection + formatted;
+            }
             
             return formatted;
         }
