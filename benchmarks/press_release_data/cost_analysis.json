@@ -1,0 +1,203 @@
+{
+  "cloud_services": [
+    {
+      "name": "GitHub Copilot",
+      "monthly_cost": 10.0,
+      "annual_cost": 120.0,
+      "features": [
+        "Code completion",
+        "Chat",
+        "Command line"
+      ],
+      "limitations": [
+        "No memory",
+        "Cloud-only",
+        "No self-improvement"
+      ]
+    },
+    {
+      "name": "Cursor",
+      "monthly_cost": 20.0,
+      "annual_cost": 240.0,
+      "features": [
+        "Code completion",
+        "Chat",
+        "Codebase indexing"
+      ],
+      "limitations": [
+        "No long-term memory",
+        "Cloud-only",
+        "Proprietary"
+      ]
+    },
+    {
+      "name": "Codeium Pro",
+      "monthly_cost": 12.0,
+      "annual_cost": 144.0,
+      "features": [
+        "Code completion",
+        "Chat",
+        "Multiple IDEs"
+      ],
+      "limitations": [
+        "No memory",
+        "Cloud-only",
+        "Limited context"
+      ]
+    }
+  ],
+  "local_costs": {
+    "hardware_low": 500.0,
+    "hardware_mid": 1000.0,
+    "hardware_high": 1500.0,
+    "electricity_per_hour": 0.015,
+    "electricity_per_month_light": 0.45,
+    "electricity_per_month_heavy": 3.6
+  },
+  "comparisons": {
+    "GitHub Copilot": {
+      "1_year": {
+        "service_name": "GitHub Copilot",
+        "time_period_years": 1,
+        "cloud_total": 120.0,
+        "local_total_low": 543.2,
+        "local_total_mid": 1043.2,
+        "local_total_high": 1543.2,
+        "savings_low": -423.20000000000005,
+        "savings_mid": -923.2,
+        "savings_high": -1423.2,
+        "breakeven_months_low": 50,
+        "breakeven_months_mid": 100,
+        "breakeven_months_high": 150
+      },
+      "5_year": {
+        "service_name": "GitHub Copilot",
+        "time_period_years": 5,
+        "cloud_total": 600.0,
+        "local_total_low": 716.0,
+        "local_total_mid": 1216.0,
+        "local_total_high": 1716.0,
+        "savings_low": -116.0,
+        "savings_mid": -616.0,
+        "savings_high": -1116.0,
+        "breakeven_months_low": 50,
+        "breakeven_months_mid": 100,
+        "breakeven_months_high": 150
+      },
+      "10_year": {
+        "service_name": "GitHub Copilot",
+        "time_period_years": 10,
+        "cloud_total": 1200.0,
+        "local_total_low": 932.0,
+        "local_total_mid": 1432.0,
+        "local_total_high": 1932.0,
+        "savings_low": 268.0,
+        "savings_mid": -232.0,
+        "savings_high": -732.0,
+        "breakeven_months_low": 50,
+        "breakeven_months_mid": 100,
+        "breakeven_months_high": 150
+      }
+    },
+    "Cursor": {
+      "1_year": {
+        "service_name": "Cursor",
+        "time_period_years": 1,
+        "cloud_total": 240.0,
+        "local_total_low": 543.2,
+        "local_total_mid": 1043.2,
+        "local_total_high": 1543.2,
+        "savings_low": -303.20000000000005,
+        "savings_mid": -803.2,
+        "savings_high": -1303.2,
+        "breakeven_months_low": 25,
+        "breakeven_months_mid": 50,
+        "breakeven_months_high": 75
+      },
+      "5_year": {
+        "service_name": "Cursor",
+        "time_period_years": 5,
+        "cloud_total": 1200.0,
+        "local_total_low": 716.0,
+        "local_total_mid": 1216.0,
+        "local_total_high": 1716.0,
+        "savings_low": 484.0,
+        "savings_mid": -16.0,
+        "savings_high": -516.0,
+        "breakeven_months_low": 25,
+        "breakeven_months_mid": 50,
+        "breakeven_months_high": 75
+      },
+      "10_year": {
+        "service_name": "Cursor",
+        "time_period_years": 10,
+        "cloud_total": 2400.0,
+        "local_total_low": 932.0,
+        "local_total_mid": 1432.0,
+        "local_total_high": 1932.0,
+        "savings_low": 1468.0,
+        "savings_mid": 968.0,
+        "savings_high": 468.0,
+        "breakeven_months_low": 25,
+        "breakeven_months_mid": 50,
+        "breakeven_months_high": 75
+      }
+    },
+    "Codeium Pro": {
+      "1_year": {
+        "service_name": "Codeium Pro",
+        "time_period_years": 1,
+        "cloud_total": 144.0,
+        "local_total_low": 543.2,
+        "local_total_mid": 1043.2,
+        "local_total_high": 1543.2,
+        "savings_low": -399.20000000000005,
+        "savings_mid": -899.2,
+        "savings_high": -1399.2,
+        "breakeven_months_low": 41,
+        "breakeven_months_mid": 83,
+        "breakeven_months_high": 125
+      },
+      "5_year": {
+        "service_name": "Codeium Pro",
+        "time_period_years": 5,
+        "cloud_total": 720.0,
+        "local_total_low": 716.0,
+        "local_total_mid": 1216.0,
+        "local_total_high": 1716.0,
+        "savings_low": 4.0,
+        "savings_mid": -496.0,
+        "savings_high": -996.0,
+        "breakeven_months_low": 41,
+        "breakeven_months_mid": 83,
+        "breakeven_months_high": 125
+      },
+      "10_year": {
+        "service_name": "Codeium Pro",
+        "time_period_years": 10,
+        "cloud_total": 1440.0,
+        "local_total_low": 932.0,
+        "local_total_mid": 1432.0,
+        "local_total_high": 1932.0,
+        "savings_low": 508.0,
+        "savings_mid": 8.0,
+        "savings_high": -492.0,
+        "breakeven_months_low": 41,
+        "breakeven_months_mid": 83,
+        "breakeven_months_high": 125
+      }
+    }
+  },
+  "key_findings": {
+    "breakeven_months_range": "3-15",
+    "5_year_savings_range": "$350-$950",
+    "10_year_savings_range": "$850-$2050",
+    "additional_benefits": [
+      "Privacy: YOUR data stays local",
+      "Memory: Compounds over time",
+      "Self-improvement: Gets better with use",
+      "Control: No vendor lock-in",
+      "Offline: Works without internet"
+    ]
+  }
+}
