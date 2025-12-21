@@ -1,0 +1,22 @@
+{
+  "name": "@ada-code/ada-chat",
+  "displayName": "Ada Chat",
+  "version": "0.1.0",
+  "description": "Conversational AI chat for VSCode - part of Ada Code",
+  "private": true,
+  "main": "dist/extension.js",
+  "scripts": {
+    "build": "tsc",
+    "watch": "tsc --watch",
+    "pretest": "npm run build",
+    "test": "node --require ts-node/register './src/__tests__/**/*.test.ts'"
+  },
+  "dependencies": {
+    "@ada-code/shared": "workspace:*",
+    "vscode": "^1.85.0"
+  },
+  "devDependencies": {
+    "typescript": "^5.3.0",
+    "@types/vscode": "^1.85.0"
+  }
+}
