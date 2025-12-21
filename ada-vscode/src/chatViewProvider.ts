@@ -519,7 +519,23 @@ export class ChatViewProvider implements vscode.WebviewViewProvider {
         .welcome p {
             font-size: 12px;
             color: var(--vscode-descriptionForeground);
+            max-width: 300px;
+            line-height: 1.4;
+        }
+        
+        /* Quick actions */
+        .quick-action {
+            background: var(--vscode-button-secondaryBackground);
+            color: var(--vscode-button-secondaryForeground);
+            border: 1px solid var(--vscode-button-border);
+            padding: 8px 12px;
+            font-size: 12px;
+            text-align: left;
+            width: 100%;
             max-width: 250px;
+        }
+        .quick-action:hover {
+            background: var(--vscode-button-secondaryHoverBackground);
         }
         
         /* Tool usage indicator */
@@ -574,7 +590,12 @@ export class ChatViewProvider implements vscode.WebviewViewProvider {
         <div class="welcome" id="welcome">
             <div class="welcome-icon">✨</div>
             <h2>Hi! I'm Ada</h2>
-            <p>Your local AI assistant. Ask me anything about your code, and I'll help!</p>
+            <p>Your local AI assistant with memory, context, and self-introspection.</p>
+            <div style="margin-top: 16px; display: flex; flex-direction: column; gap: 8px; width: 100%;">
+                <button class="quick-action" onclick="quickAsk('Explain this code')">📖 Explain code</button>
+                <button class="quick-action" onclick="quickAsk('Find bugs in my code')">🐛 Find bugs</button>
+                <button class="quick-action" onclick="quickAsk('How does your memory system work?')">🧠 Introspect Ada</button>
+            </div>
         </div>
     </div>
     
@@ -629,6 +650,11 @@ export class ChatViewProvider implements vscode.WebviewViewProvider {
             vscode.postMessage({ type: 'sendMessage', message });
             inputEl.value = '';
             inputEl.style.height = 'auto';
+        }
+        
+        function quickAsk(message) {
+            inputEl.value = message;
+            sendMessage();
         }
         
         function addMessage(content, role) {
