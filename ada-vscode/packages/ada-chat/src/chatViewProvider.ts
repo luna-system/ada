@@ -100,7 +100,8 @@ export class ChatViewProvider implements vscode.WebviewViewProvider {
           // Two-phase: inject tool results into brain for reasoning
           const augmentedPrompt = this._toolHandler.buildAugmentedPrompt(
             userMessage,
-            toolResult
+            toolResult,
+            intent.tool || 'unknown'
           );
           
           // Stream brain's analysis
