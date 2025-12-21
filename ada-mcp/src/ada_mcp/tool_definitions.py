@@ -490,7 +490,8 @@ async def handle_tool_call(name: str, arguments: dict[str, Any], ada: AdaClient)
                 metadata_str = ""
                 if result.metadata.files_accessed:
                     files = ", ".join(result.metadata.files_accessed)
-                    metadata_str = f"\n\n🔧 Files Analyzed: {files}"
+                    # Use 📂 (open folder) emoji to match ToolTransparencyFormatter regex
+                    metadata_str = f"\n\n📂 Files Analyzed: {files}"
                 if result.metadata.duration_ms:
                     metadata_str += f"\n⚡ Introspection time: {result.metadata.duration_ms}ms"
                 
