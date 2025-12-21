@@ -88,13 +88,12 @@ export class ChatViewProvider implements vscode.WebviewViewProvider {
         // Execute tool
         const toolResult = await this._toolHandler.executeTool(intent);
         
-        // Show tool transparency
-        if (toolResult.metadata.files_accessed.length > 0) {
-          this._postMessage({
-            type: 'toolFiles',
-            files: toolResult.metadata.files_accessed
-          });
-        }
+        // ALWAYS show tool transparency (metadata card)
+        this._postMessage({
+          type: 'toolTransparency',
+          tool: intent.tool || 'unknown',
+          metadata: toolResult.metadata
+        });
         
         if (intent.requiresReasoning) {
           // Two-phase: inject tool results into brain for reasoning
@@ -116,7 +115,7 @@ export class ChatViewProvider implements vscode.WebviewViewProvider {
             });
           }
         } else {
-          // Simple tool output - no reasoning needed
+          // Simple tool output - show directly with formatting
           this._postMessage({
             type: 'generationChunk',
             content: toolResult.content,
@@ -217,6 +216,23 @@ export class ChatViewProvider implements vscode.WebviewViewProvider {
             button:hover {
               background-color: var(--vscode-button-hoverBackground);
             }
+            .tool-card {
+              border-left: 3px solid #0ea5e9;
+              background-color: rgba(14, 165, 233, 0.05);
+              padding: 8px 12px;
+              margin-bottom: 8px;
+              border-radius: 3px;
+              font-size: 12px;
+            }
+            .tool-card strong {
+              color: #0ea5e9;
+              font-weight: 600;
+            }
+            .tool-card small {
+              color: var(--vscode-descriptionForeground);
+              display: block;
+              margin-top: 4px;
+            }
           </style>
         </head>
         <body>
@@ -265,6 +281,29 @@ export class ChatViewProvider implements vscode.WebviewViewProvider {
                 case 'userMessage':
                   addMessage(message.content, true);
                   break;
+                  
+                case 'toolTransparency': {
+                  // Show tool metadata card
+                  const toolCard = document.createElement('div');
+                  toolCard.className = 'message tool-card';
+                  
+                  const toolName = message.tool.replace('ada_', '').toUpperCase();
+                  const meta = message.metadata || {};
+                  const durationMs = meta.duration_ms || '?';
+                  const filesAccessed = (meta.files_accessed || []).length;
+                  
+                  let html = '<strong>[TOOL] ' + toolName + '</strong>';
+                  html += '<small>Duration: ' + durationMs.toFixed(0) + 'ms - Files: ' + filesAccessed;
+                  if (meta.actions_taken) {
+                    html += ' - ' + meta.actions_taken;
+                  }
+                  html += '</small>';
+                  
+                  toolCard.innerHTML = html;
+                  messagesDiv.appendChild(toolCard);
+                  messagesDiv.scrollTop = messagesDiv.scrollHeight;
+                  break;
+                }
                   
                 case 'toolFiles':
                   const badge = document.createElement('div');
