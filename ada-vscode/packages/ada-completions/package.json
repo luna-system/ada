@@ -1,7 +1,7 @@
 {
   "name": "@ada-code/ada-completions",
   "displayName": "Ada Completions",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "description": "Code completion and ghost text for VSCode - part of Ada Code",
   "private": true,
   "main": "dist/extension.js",

@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128">
+  <!-- Ada icon: interconnected organic network (human + 4 agents) -->
+  <defs>
+    <linearGradient id="adaGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#8b5cf6;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#ec4899;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  
+  <!-- Central node (human/you) -->
+  <circle cx="64" cy="64" r="16" fill="url(#adaGradient)" opacity="0.95"/>
+  
+  <!-- Four connected agents forming organic network -->
+  <!-- Upper left agent -->
+  <circle cx="28" cy="28" r="10" fill="url(#adaGradient)" opacity="0.85"/>
+  <path d="M 28 28 Q 46 46 64 64" stroke="url(#adaGradient)" stroke-width="3" fill="none" opacity="0.7"/>
+  
+  <!-- Upper right agent -->
+  <circle cx="100" cy="28" r="10" fill="url(#adaGradient)" opacity="0.85"/>
+  <path d="M 100 28 Q 82 46 64 64" stroke="url(#adaGradient)" stroke-width="3" fill="none" opacity="0.7"/>
+  
+  <!-- Lower left agent -->
+  <circle cx="28" cy="100" r="10" fill="url(#adaGradient)" opacity="0.85"/>
+  <path d="M 28 100 Q 46 82 64 64" stroke="url(#adaGradient)" stroke-width="3" fill="none" opacity="0.7"/>
+  
+  <!-- Lower right agent -->
+  <circle cx="100" cy="100" r="10" fill="url(#adaGradient)" opacity="0.85"/>
+  <path d="M 100 100 Q 82 82 64 64" stroke="url(#adaGradient)" stroke-width="3" fill="none" opacity="0.7"/>
+  
+  <!-- Connecting agents to each other (the network effect) -->
+  <path d="M 28 28 Q 64 28 100 28" stroke="url(#adaGradient)" stroke-width="2" fill="none" opacity="0.5"/>
+  <path d="M 100 28 Q 100 64 100 100" stroke="url(#adaGradient)" stroke-width="2" fill="none" opacity="0.5"/>
+  <path d="M 100 100 Q 64 100 28 100" stroke="url(#adaGradient)" stroke-width="2" fill="none" opacity="0.5"/>
+  <path d="M 28 100 Q 28 64 28 28" stroke="url(#adaGradient)" stroke-width="2" fill="none" opacity="0.5"/>
+  
+  <!-- Subtle inner glow around center -->
+  <circle cx="64" cy="64" r="24" fill="url(#adaGradient)" opacity="0.15"/>
+</svg>

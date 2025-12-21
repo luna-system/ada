@@ -27,7 +27,9 @@ import { MessageHandlerRegistry } from './handlers/MessageHandlerRegistry';
 import { ToolTransparencyFormatter } from './formatters/ToolTransparencyFormatter';
 import { extractMetadataFromResponse, stripMetadataMarkersFromResponse, formatMetadataForDisplay } from './formatters/metadataParser';
 import { getChatViewHtml } from './views/chatViewTemplate';
-// Don't import AdaMCPClient here - load it dynamically only when needed
+// Don't import AdaMCPClient statically - load it dynamically only when needed
+// But DO import the types for type checking
+import type { ToolResult, ToolMetadata } from './mcpClient';
 import { 
     TOOL_DEFINITIONS, 
     parseToolCalls, 
@@ -277,37 +279,67 @@ export class ChatViewProvider implements vscode.WebviewViewProvider {
                 return;
             }
             
-            // Introspection request
+            // Introspection request - handle compound queries!
             if (lowerMessage.includes('introspect') || 
                 (lowerMessage.includes('analyze') && lowerMessage.includes('your') && 
                  (lowerMessage.includes('architecture') || lowerMessage.includes('yourself')))) {
-                console.log('[ADA MCP] Detected introspection request, calling tool directly');
+                console.log('[ADA MCP] Detected introspection request');
                 const workspace = vscode.workspace.workspaceFolders?.[0]?.uri.fsPath;
-                const response = await this._mcpClient.callTool('ada_introspect', {
+                
+                // Call MCP tool - now returns structured ToolResult!
+                const toolResult = await this._mcpClient.callTool('ada_introspect', {
                     focus: 'general',
                     workspace_root: workspace
                 });
                 
-                // PHASE 2: Extract structured metadata from response
-                const metadata = extractMetadataFromResponse(response, 'introspection');
-                if (metadata) {
-                    console.log('[ADA MCP] Extracted metadata:', metadata);
-                    this._postMessage({ type: 'toolMetadata', metadata });
+                console.log('[ADA MCP] Got structured tool result with', toolResult.metadata.files_accessed.length, 'files');
+                
+                // Show tool transparency from metadata
+                if (toolResult.metadata.files_accessed.length > 0) {
+                    this._postMessage({ 
+                        type: 'toolFiles', 
+                        files: toolResult.metadata.files_accessed 
+                    });
+                }
+                
+                // Check if this is a compound query (introspect AND reason about it)
+                const needsReasoning = lowerMessage.includes('suggest') || 
+                                      lowerMessage.includes('recommend') ||
+                                      lowerMessage.includes('should') ||
+                                      lowerMessage.includes('todo') ||
+                                      lowerMessage.includes('next') ||
+                                      lowerMessage.includes('easy');
+                
+                if (needsReasoning) {
+                    // Phase 2: Inject tool results into brain context for reasoning
+                    console.log('[ADA MCP] Compound query detected - routing to brain for analysis');
+                    
+                    const augmentedMessage = `Based on this introspection of Ada's codebase:\n\n${toolResult.content}\n\n---\n\nUser's question: ${message}`;
+                    
+                    // Add augmented context to conversation
+                    this._messages.push({ role: 'user', content: augmentedMessage });
+                    
+                    // Stream brain's reasoning
+                    this._postMessage({ type: 'generationStart' });
+                    for await (const chunk of this._client.chat(this._messages, {
+                        temperature: 0.7,
+                        maxTokens: 2048,
+                    })) {
+                        if (!this._isGenerating) break;
+                        this._postMessage({ 
+                            type: 'generationChunk', 
+                            content: chunk.content,
+                            done: chunk.done
+                        });
+                    }
+                    
+                    return;
                 } else {
-                    console.log('[ADA MCP] No metadata found in response');
+                    // Simple introspection - just show the results
+                    this._postMessage({ type: 'generationChunk', content: toolResult.content });
+                    this._messages.push({ role: 'assistant', content: toolResult.content });
+                    return;
                 }
-                
-                // Keep backwards compatibility: also extract tool files for badge rendering
-                const toolMarkers = ToolTransparencyFormatter.extractToolMarkers(response);
-                if (toolMarkers.length > 0) {
-                    const uniqueFiles = [...new Set(toolMarkers.map(m => m.path))];
-                    this._postMessage({ type: 'toolFiles', files: uniqueFiles });
-                }
-                
-                // Send response (metadata markers are still in text, webview can use them or strip them)
-                this._postMessage({ type: 'generationChunk', content: response });
-                this._messages.push({ role: 'assistant', content: response });
-                return;
             }
 
             // Default: regular chat
