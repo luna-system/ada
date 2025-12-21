@@ -248,6 +248,46 @@ export function getChatViewHtml(): string {
             background: var(--vscode-charts-green);
             color: var(--vscode-editor-background);
             border-radius: 3px;
+        }
+        
+        /* PHASE 2: Structured metadata display */
+        .tool-metadata {
+            margin-top: 8px;
+            padding: 8px;
+            background: var(--vscode-textCodeBlock-background);
+            border-left: 3px solid var(--vscode-charts-purple);
+            border-radius: 4px;
+            font-size: 11px;
+        }
+        .tool-metadata-details {
+            cursor: pointer;
+        }
+        .tool-metadata-details > summary {
+            font-weight: 600;
+            color: var(--vscode-charts-purple);
+            user-select: none;
+            padding: 2px 0;
+        }
+        .tool-metadata-body {
+            margin-top: 8px;
+            padding: 4px 0;
+        }
+        .metadata-section {
+            margin: 4px 0;
+            padding: 4px 0;
+            border-bottom: 1px solid var(--vscode-editor-lineHighlightBorder);
+        }
+        .metadata-section:last-child {
+            border-bottom: none;
+        }
+        .metadata-section code {
+            display: inline-block;
+            padding: 1px 4px;
+            background: var(--vscode-editor-background);
+            border-radius: 2px;
+            font-size: 10px;
+            margin: 1px 2px 1px 0;
+        }
             font-size: 10px;
             font-family: var(--vscode-editor-font-family);
         }
@@ -513,6 +553,40 @@ export function getChatViewHtml(): string {
                         } else {
                             // Buffer for when message element is created
                             pendingToolFiles = msg.files;
+                        }
+                    }
+                    break;
+                    
+                case 'toolMetadata':
+                    // PHASE 2: Structured metadata from envelope pattern
+                    if (currentAssistantEl && msg.metadata) {
+                        const metadata = msg.metadata;
+                        console.log('[WEBVIEW] Rendering metadata:', metadata);
+                        
+                        // Build metadata display
+                        const metadataHtml = 
+                            '<div class="tool-metadata">' +
+                            '<details open class="tool-metadata-details">' +
+                            '<summary>🔧 Tool Execution (' + metadata.toolName + ')</summary>' +
+                            '<div class="tool-metadata-body">' +
+                            (metadata.filesAccessed && metadata.filesAccessed.length > 0 ? 
+                                '<div class="metadata-section"><strong>📁 Files Accessed:</strong><br/>' +
+                                metadata.filesAccessed.map(f => '<code>' + f + '</code>').join(', ') +
+                                '</div>' : '') +
+                            (metadata.actionsTaken && metadata.actionsTaken.length > 0 ?
+                                '<div class="metadata-section"><strong>⚙️  Actions:</strong><br/>' +
+                                metadata.actionsTaken.join(', ') +
+                                '</div>' : '') +
+                            (metadata.durationMs !== undefined ?
+                                '<div class="metadata-section"><strong>⚡ Duration:</strong> ' +
+                                metadata.durationMs + 'ms</div>' : '') +
+                            '</div>' +
+                            '</details>' +
+                            '</div>';
+                        
+                        // Insert before content if not already present
+                        if (!currentAssistantEl.querySelector('.tool-metadata')) {
+                            currentAssistantEl.innerHTML = metadataHtml + currentAssistantEl.innerHTML;
                         }
                     }
                     break;
