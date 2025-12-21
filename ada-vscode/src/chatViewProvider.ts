@@ -51,6 +51,10 @@ export class ChatViewProvider implements vscode.WebviewViewProvider {
         // Handle messages from the webview
         webviewView.webview.onDidReceiveMessage(async (data) => {
             switch (data.type) {
+                case 'ready':
+                    // Webview is ready - send connection status
+                    this._checkConnection();
+                    break;
                 case 'sendMessage':
                     await this._handleUserMessage(data.message);
                     break;
@@ -63,9 +67,6 @@ export class ChatViewProvider implements vscode.WebviewViewProvider {
                     break;
             }
         });
-
-        // Send initial connection status
-        this._checkConnection();
     }
 
     private async _checkConnection() {
@@ -890,6 +891,9 @@ export class ChatViewProvider implements vscode.WebviewViewProvider {
                     break;
             }
         });
+        
+        // Notify extension that webview is ready
+        vscode.postMessage({ type: 'ready' });
         
         // Focus input on load
         inputEl.focus();
