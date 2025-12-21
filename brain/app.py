@@ -708,8 +708,11 @@ async def chat_stream(request: Request):
 
     - **Method:** POST
     - **Path:** /v1/chat/stream
-    - **Request JSON:** prompt (required), conversation_id, include_thinking, entity,
-      save_memory, memory_text, turns_k, faq_k, memory_k
+    - **Request JSON (flexible input - use ANY of these):**
+      - ``prompt``: Simple string prompt
+      - ``message``: Alias for prompt  
+      - ``messages``: OpenAI-style array [{role: 'user', content: '...'}]
+      - Plus: conversation_id, include_thinking, entity, save_memory, memory_text, turns_k, faq_k, memory_k
     - **Content-Type:** text/event-stream
 
     Events (newline-delimited, prefixed with ``data: ``):
@@ -730,10 +733,21 @@ async def chat_stream(request: Request):
     except Exception:
         return JSONResponse(status_code=400, content={'error': 'invalid json'})
     
-    # Accept both 'prompt' and 'message' for ergonomics
+    # UNIVERSAL INPUT FORMAT: Accept prompt, message, OR OpenAI-style messages array
+    # This eliminates "wrong format" bugs across all adapters (CLI, VS Code, MCP, etc.)
     prompt = (data.get('prompt') or data.get('message') or '').strip()
+    
+    # If no direct prompt, check for OpenAI-style messages array
+    if not prompt and 'messages' in data:
+        messages = data.get('messages', [])
+        if isinstance(messages, list):
+            # Extract the last user message from the conversation
+            user_messages = [m for m in messages if isinstance(m, dict) and m.get('role') == 'user']
+            if user_messages:
+                prompt = (user_messages[-1].get('content') or '').strip()
+    
     if not prompt:
-        return JSONResponse(status_code=400, content={'error': 'prompt or message required'})
+        return JSONResponse(status_code=400, content={'error': 'prompt, message, or messages array required'})
 
     def _extract_last_user_message(text: str) -> str:
         """Extract the last explicit user message from a composite prompt.

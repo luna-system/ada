@@ -43,6 +43,7 @@ class AdaBrainClient {
 
   async *chat(messages: Message[], options: Record<string, unknown>): AsyncGenerator<StreamChunk> {
     try {
+      // Brain now accepts OpenAI-style messages array natively!
       const response = await fetch(`${this.baseUrl}/v1/chat/stream`, {
         method: 'POST',
         headers: {
@@ -81,10 +82,19 @@ class AdaBrainClient {
             if (line.startsWith('data: ')) {
               try {
                 const json = JSON.parse(line.slice(6));
-                yield {
-                  content: json.content || '',
-                  done: json.done === true
-                };
+                // Brain sends: {type: 'token', content: '...'} or {type: 'done', ...}
+                if (json.type === 'token') {
+                  yield {
+                    content: json.content || '',
+                    done: false
+                  };
+                } else if (json.type === 'done') {
+                  yield {
+                    content: '',
+                    done: true
+                  };
+                }
+                // Ignore 'thinking' and 'specialist_result' for now
               } catch {
                 // Skip invalid JSON lines
               }

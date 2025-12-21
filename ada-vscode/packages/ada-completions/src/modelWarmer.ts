@@ -8,7 +8,7 @@
  * To be moved from: ../../src/modelWarmer.ts
  */
 
-import { OllamaClient } from '@ada-code/shared/clients';
+import { OllamaClient } from 'shared/clients';
 
 export class ModelWarmer {
   constructor(private readonly _ollamaClient: OllamaClient) {}

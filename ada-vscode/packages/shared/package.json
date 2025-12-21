@@ -1,7 +1,7 @@
 {
-  "name": "@ada-code/shared",
+  "name": "shared",
   "version": "1.0.0",
-  "description": "Shared utilities, clients, and types for Ada VSCode extensions",
+  "description": "Shared utilities, clients, and types for Ada VS Code extensions",
   "private": true,
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
