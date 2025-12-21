@@ -5,7 +5,9 @@ Conversational AI system with RAG (Retrieval-Augmented Generation), streaming re
 
 **Latest Architecture Audit:** See `.ai/audits/2025-12-19-post-phase-2.md` (Grade A, no major refactoring needed)
 
-**Latest Release:** v2.10.0 - Ada Chat v1.1 with Tool Transparency
+**Latest Release:** v3.0.0 - Ada the Pair Programmer
+
+**Ada Chat Architecture:** See `.ai/ADA-CHAT-ARCHITECTURE.md` for VS Code tool system design
 
 ## Official Package Names
 ```
