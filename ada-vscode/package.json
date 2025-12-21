@@ -1,171 +1,36 @@
 {
-  "name": "ada-code",
-  "displayName": "Ada - Local AI Code Completion",
-  "description": "GitHub Copilot alternative. 103ms latency. $0/month. 100% private. Powered by local Ollama.",
+  "name": "ada-code-monorepo",
+  "displayName": "Ada Code Monorepo",
+  "description": "VSCode extension monorepo for Ada Code - chat and completions split into separate packages",
   "version": "0.1.0",
-  "publisher": "luna-system",
+  "private": true,
+  "packageManager": "pnpm@8.0.0",
   "repository": {
     "type": "git",
     "url": "https://github.com/luna-system/ada"
   },
   "engines": {
-    "vscode": "^1.85.0"
-  },
-  "categories": [
-    "Machine Learning",
-    "Programming Languages",
-    "Other"
-  ],
-  "keywords": [
-    "ai",
-    "code completion",
-    "copilot",
-    "ollama",
-    "local",
-    "privacy"
-  ],
-  "activationEvents": [
-    "onStartupFinished",
-    "onView:ada.chatView"
-  ],
-  "main": "./out/extension.js",
-  "contributes": {
-    "configuration": {
-      "title": "Ada Code Completion",
-      "properties": {
-        "ada.enabled": {
-          "type": "boolean",
-          "default": true,
-          "description": "Enable Ada code completion"
-        },
-        "ada.ollamaUrl": {
-          "type": "string",
-          "default": "http://localhost:11434",
-          "description": "Ollama server URL"
-        },
-        "ada.model": {
-          "type": "string",
-          "default": "qwen2.5-coder:7b",
-          "description": "Model to use for completions"
-        },
-        "ada.maxTokens": {
-          "type": "number",
-          "default": 128,
-          "description": "Maximum tokens to generate"
-        },
-        "ada.debounceMs": {
-          "type": "number",
-          "default": 300,
-          "description": "Debounce delay before triggering completion (ms)"
-        },
-        "ada.temperature": {
-          "type": "number",
-          "default": 0.2,
-          "description": "Temperature for generation (0.0-1.0)"
-        },
-        "ada.showStatusBar": {
-          "type": "boolean",
-          "default": true,
-          "description": "Show Ada status in status bar"
-        },
-        "ada.brainUrl": {
-          "type": "string",
-          "default": "http://localhost:8000",
-          "description": "Ada Brain server URL (for chat)"
-        },
-        "ada.chatUseBrain": {
-          "type": "boolean",
-          "default": true,
-          "description": "Use Ada Brain for chat (recommended)"
-        },
-        "ada.enableTools": {
-          "type": "boolean",
-          "default": true,
-          "description": "Enable tool calling in chat"
-        },
-        "ada.chatMode": {
-          "type": "string",
-          "default": "brain",
-          "enum": ["ollama", "mcp", "brain"],
-          "enumDescriptions": [
-            "Direct Ollama (fast, simple, no memory)",
-            "Ada MCP (tools + memory via MCP protocol)",
-            "Full Brain (all features, REST API)"
-          ],
-          "description": "Chat backend mode"
-        },
-        "ada.mcpServerPath": {
-          "type": "string",
-          "default": "ada-mcp/ada-mcp.sh",
-          "description": "Path to ada-mcp server executable (uses uv for venv auto-detection)"
-        }
-      }
-    },
-    "viewsContainers": {
-      "activitybar": [
-        {
-          "id": "ada",
-          "title": "Ada",
-          "icon": "resources/ada-icon.svg"
-        }
-      ]
-    },
-    "views": {
-      "ada": [
-        {
-          "id": "ada.chatView",
-          "name": "Chat",
-          "type": "webview"
-        }
-      ]
-    },
-    "commands": [
-      {
-        "command": "ada.triggerCompletion",
-        "title": "Ada: Trigger Completion"
-      },
-      {
-        "command": "ada.toggleEnabled",
-        "title": "Ada: Toggle Enabled"
-      },
-      {
-        "command": "ada.showStats",
-        "title": "Ada: Show Statistics"
-      }
-    ],
-    "keybindings": [
-      {
-        "command": "ada.triggerCompletion",
-        "key": "ctrl+shift+space",
-        "mac": "cmd+shift+space",
-        "when": "editorTextFocus"
-      }
-    ]
+    "node": ">=18.0.0",
+    "pnpm": ">=8.0.0"
   },
   "scripts": {
-    "vscode:prepublish": "npm run compile",
-    "compile": "tsc -p ./",
-    "watch": "tsc -watch -p ./",
-    "lint": "eslint src --ext ts",
-    "test": "jest",
-    "test:watch": "jest --watch",
-    "test:coverage": "jest --coverage",
-    "package": "vsce package"
+    "install": "pnpm install -r",
+    "build": "pnpm -r build",
+    "watch": "pnpm -r watch",
+    "test": "pnpm -r test",
+    "test:watch": "pnpm -r test:watch",
+    "lint": "pnpm -r lint"
   },
   "devDependencies": {
-    "@types/jest": "^29.5.12",
-    "@types/node": "^20.10.0",
     "@types/vscode": "^1.85.0",
     "@typescript-eslint/eslint-plugin": "^6.13.0",
     "@typescript-eslint/parser": "^6.13.0",
     "@vscode/vsce": "^2.22.0",
     "eslint": "^8.54.0",
-    "jest": "^29.7.0",
-    "ts-jest": "^29.1.2",
     "typescript": "^5.3.0"
   },
   "license": "CC0-1.0",
-  "dependencies": {
-    "@modelcontextprotocol/sdk": "^1.25.1"
-  }
+  "workspaces": [
+    "packages/*"
+  ]
 }
