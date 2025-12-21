@@ -691,26 +691,26 @@ export class ChatViewProvider implements vscode.WebviewViewProvider {
             let formatted = text;
             
             // Extract and highlight tool usage
-            const toolPattern = /SPECIALIST_REQUEST\[([^\]]+)\]/g;
+            const toolPattern = /SPECIALIST_REQUEST\\[([^\\]]+)\\]/g;
             formatted = formatted.replace(toolPattern, '<span class="tool-indicator">🔧 Using: $1</span>');
             
             // Code blocks with language hint
-            formatted = formatted.replace(/```(\w*)\n([\s\S]*?)```/g, (match, lang, code) => {
-                const langLabel = lang ? ` <span style="opacity: 0.6; font-size: 10px;">${lang}</span>` : '';
-                return `<pre>${langLabel}<code>${escapeHtml(code)}</code></pre>`;
+            formatted = formatted.replace(/\`\`\`(\\w*)\\n([\\s\\S]*?)\`\`\`/g, (match, lang, code) => {
+                const langLabel = lang ? \` <span style="opacity: 0.6; font-size: 10px;">\${lang}</span>\` : '';
+                return \`<pre>\${langLabel}<code>\${escapeHtml(code)}</code></pre>\`;
             });
             
             // Inline code
-            formatted = formatted.replace(/`([^`]+)`/g, '<code>$1</code>');
+            formatted = formatted.replace(/\`([^\`]+)\`/g, '<code>$1</code>');
             
             // Bold
-            formatted = formatted.replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>');
+            formatted = formatted.replace(/\\*\\*([^*]+)\\*\\*/g, '<strong>$1</strong>');
             
             // Italic
-            formatted = formatted.replace(/\*([^*]+)\*/g, '<em>$1</em>');
+            formatted = formatted.replace(/\\*([^*]+)\\*/g, '<em>$1</em>');
             
             // Links
-            formatted = formatted.replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" target="_blank">$1</a>');
+            formatted = formatted.replace(/\\[([^\\]]+)\\]\\(([^)]+)\\)/g, '<a href="$2" target="_blank">$1</a>');
             
             return formatted;
         }
