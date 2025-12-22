@@ -107,20 +107,27 @@ export class ChatViewProvider implements vscode.WebviewViewProvider {
             intent.tool || 'unknown'
           );
           
+          console.log('[Ada Chat] Sending augmented prompt to Brain for reasoning...');
+          console.log('[Ada Chat] Augmented prompt length:', augmentedPrompt.length);
+          
           // NOW start generation (after tool card)
           this._postMessage({ type: 'generationStart' });
           
           // Stream brain's analysis
+          let chunkCount = 0;
           for await (const chunk of this._brainClient.chat([
             { role: 'user', content: augmentedPrompt }
           ], {})) {
+            chunkCount++;
             if (!this._isGenerating) break;
+            console.log(`[Ada Chat] Chunk ${chunkCount}:`, chunk.content?.slice(0, 50), 'done:', chunk.done);
             this._postMessage({
               type: 'generationChunk',
               content: chunk.content,
               done: chunk.done
             });
           }
+          console.log('[Ada Chat] Stream complete, total chunks:', chunkCount);
         } else {
           // Simple tool output - show directly with formatting
           this._postMessage({ type: 'generationStart' });
@@ -132,6 +139,7 @@ export class ChatViewProvider implements vscode.WebviewViewProvider {
         }
       } else {
         // Regular chat - no pre-identified tools, but watch for bidirectional requests
+        console.log('[Ada Chat] Sending generationStart...');
         this._postMessage({ type: 'generationStart' });
         await this._streamWithBidirectional(userMessage);
       }
@@ -159,12 +167,8 @@ export class ChatViewProvider implements vscode.WebviewViewProvider {
     const MAX_TOOL_CALLS = 5; // Safety limit
 
     // Inject VS Code tool instructions so Brain knows what tools are available
-    const toolInstructions = this._getToolInstructions();
-    const augmentedMessage = `${toolInstructions}
-
----
-
-User request: ${userMessage}`;
+    // TEMPORARY DEBUG: Use simple prompt to test streaming
+    const augmentedMessage = `Hello! The user said: ${userMessage}. Please respond naturally.`;
     
     // Start initial stream with tool context
     let currentMessages = [
@@ -174,12 +178,34 @@ User request: ${userMessage}`;
     while (this._isGenerating) {
       let foundToolRequest = false;
       
+      console.log('[Ada Chat] About to start brain stream iteration...');
       for await (const chunk of this._brainClient.chat(currentMessages, {})) {
+        console.log('[Ada Chat] Got chunk from brain:', JSON.stringify(chunk));
         if (!this._isGenerating) break;
         
-        // Accumulate for pattern detection
+        // Send chunk to UI immediately for real-time display
         if (chunk.content) {
+          console.log('[Ada Chat] Sending generationChunk to webview:', JSON.stringify(chunk.content));
+          this._postMessage({
+            type: 'generationChunk',
+            content: chunk.content,
+            done: false
+          });
+          
+          // Also accumulate for pattern detection
           accumulated += chunk.content;
+        } else {
+          console.log('[Ada Chat] Chunk has no content:', JSON.stringify(chunk));
+        }
+        
+        // Handle completion
+        if (chunk.done) {
+          this._postMessage({
+            type: 'generationChunk',
+            content: '',
+            done: true
+          });
+          return; // Stream complete, exit
         }
         
         // Check for bidirectional tool request
@@ -190,18 +216,6 @@ User request: ${userMessage}`;
           toolCallCount++;
           
           console.log(`[Ada Chat] Bidirectional request detected: ${request.tool}`);
-          
-          // Send what we have so far (before the tool request marker)
-          if (request.matchStart && request.matchStart > 0) {
-            const textBeforeRequest = accumulated.slice(0, request.matchStart);
-            if (textBeforeRequest.trim()) {
-              this._postMessage({
-                type: 'generationChunk',
-                content: textBeforeRequest,
-                done: false
-              });
-            }
-          }
           
           // Show tool transparency card
           this._postMessage({
@@ -380,7 +394,12 @@ Guidelines:
   }
 
   private _postMessage(message: any) {
-    this._view?.webview.postMessage(message);
+    if (!this._view) {
+      console.error('[Ada Chat] Cannot post message - webview not available!', message.type);
+      return;
+    }
+    console.log('[Ada Chat] Posting message to webview:', message.type);
+    this._view.webview.postMessage(message);
   }
   
   public dispose() {

@@ -1,4 +1,7 @@
-# Ada Development Handoff - December 21, 2025
+# Ada Chat - Development Handoff - December 21, 2025
+
+**Package:** `ada-vscode/packages/ada-chat`  
+**Context:** See [CONTEXT.md](./CONTEXT.md) | [PARENT.md](./PARENT.md)
 
 ## 🎯 Current Mission: Fix Brain Streaming Bug
 

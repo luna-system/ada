@@ -1,0 +1,253 @@
+/**
+ * Ada Chat Extension - Entry Point
+ * 
+ * Provides conversational AI chat with MCP tool integration
+ * Part of the unified Ada Code monorepo
+ * 
+ * December 2025 - luna+ada
+ */
+
+import * as vscode from 'vscode';
+import * as http from 'http';
+import { ChatViewProvider } from './chatViewProvider';
+
+/**
+ * Minimal Ada Brain API client for chat streaming
+ */
+interface Message {
+  role: 'user' | 'assistant';
+  content: string;
+}
+
+interface StreamChunk {
+  content: string;
+  done: boolean;
+}
+
+class AdaBrainClient {
+  private baseUrl: string;
+
+  constructor(baseUrl: string) {
+    this.baseUrl = baseUrl;
+  }
+
+  async checkConnection(): Promise<boolean> {
+    try {
+      const response = await fetch(`${this.baseUrl}/v1/healthz`, {
+        method: 'GET'
+      });
+      return response.ok;
+    } catch {
+      return false;
+    }
+  }
+
+  async *chat(messages: Message[], options: Record<string, unknown>): AsyncGenerator<StreamChunk> {
+    console.log('[Ada Brain Client] ===== CHAT METHOD STARTED =====');
+    console.log('[Ada Brain Client] Base URL:', this.baseUrl);
+    console.log('[Ada Brain Client] fetch available?', typeof fetch);
+    
+    // First, yield a test message to prove the generator works
+    yield {
+      content: '[DEBUG] Chat method called, about to test fetch...',
+      done: false
+    };
+
+    yield {
+      content: '[DEBUG] About to enter try block...',
+      done: false
+    };
+
+    try {
+      console.log('[Ada Brain Client] Sending chat request to:', `${this.baseUrl}/v1/chat/stream`);
+      console.log('[Ada Brain Client] Messages:', JSON.stringify(messages).slice(0, 200));
+      
+      yield {
+        content: '[DEBUG] Inside try block, about to fetch...',
+        done: false
+      };
+      
+      // Test if fetch is even working
+      console.log('[Ada Brain Client] About to call fetch...');
+      
+      const requestData = JSON.stringify({
+        messages,
+        ...options
+      });
+
+      console.log('[Ada Brain Client] Starting fetch for EventSource...');
+      
+      // Add a timeout wrapper around fetch
+      const fetchPromise = fetch(`${this.baseUrl}/v1/chat/stream`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'text/event-stream'
+        },
+        body: requestData
+      });
+
+      const timeoutPromise = new Promise((_, reject) => 
+        setTimeout(() => reject(new Error('Fetch timeout after 5s')), 5000)
+      );
+
+      yield {
+        content: '[DEBUG] Fetch started, waiting for response...',
+        done: false
+      };
+
+      const response = await Promise.race([fetchPromise, timeoutPromise]);
+
+      console.log('[Ada Brain Client] Fetch completed!');
+      yield {
+        content: '[DEBUG] Fetch successful! Processing response...',
+        done: false
+      };
+      console.log('[Ada Brain Client] Response status:', response.status, response.statusText);
+
+      if (!response.ok) {
+        throw new Error(`Brain API error: ${response.statusText}`);
+      }
+
+      if (!response.body) {
+        throw new Error('No response body');
+      }
+
+      console.log('[Ada Brain Client] Setting up EventSource-style streaming...');
+      
+      yield {
+        content: '[DEBUG] Got response body, setting up reader...',
+        done: false
+      };
+
+      // Convert the ReadableStream to async iteration - this is the key!
+      const reader = response.body.getReader();
+      const decoder = new TextDecoder();
+      let buffer = '';
+      let yieldCount = 0;
+
+      yield {
+        content: '[DEBUG] Reader created, starting stream loop...',
+        done: false
+      };
+
+      try {
+        while (true) {
+          yield {
+            content: `[DEBUG] About to read chunk ${yieldCount + 1}...`,
+            done: false
+          };
+          
+          const { done, value } = await reader.read();
+          
+          yield {
+            content: `[DEBUG] Read result: done=${done}, value=${value ? value.length + ' bytes' : 'null'}`,
+            done: false
+          };
+          
+          if (done) {
+            console.log('[Ada Brain Client] Stream done, total yields:', yieldCount);
+            break;
+          }
+
+          // Process the chunk exactly like EventSource would
+          buffer += decoder.decode(value, { stream: true });
+          const lines = buffer.split('\n');
+          buffer = lines.pop() || '';
+
+          for (const line of lines) {
+            console.log('[Ada Brain Client] Processing SSE line:', line.slice(0, 100));
+            
+            if (line.startsWith('data: ')) {
+              try {
+                const jsonStr = line.slice(6);
+                
+                // Handle SSE [DONE] marker
+                if (jsonStr.trim() === '[DONE]') {
+                  console.log('[Ada Brain Client] Received [DONE] marker');
+                  return;
+                }
+
+                const json = JSON.parse(jsonStr);
+                console.log('[Ada Brain Client] Parsed SSE JSON:', json);
+                
+                // Brain sends: {type: 'token', content: '...'} or {type: 'done', ...}
+                if (json.type === 'token') {
+                  yieldCount++;
+                  console.log('[Ada Brain Client] Yielding token:', json.content?.slice(0, 20));
+                  yield {
+                    content: json.content || '',
+                    done: false
+                  };
+                } else if (json.type === 'done') {
+                  console.log('[Ada Brain Client] Received done signal');
+                  yield {
+                    content: '',
+                    done: true
+                  };
+                  return;
+                }
+                // Ignore 'thinking' and 'specialist_result' for now
+              } catch (parseError) {
+                console.error('[Ada Brain Client] JSON parse error:', parseError, 'line:', line);
+              }
+            } else if (line.startsWith('event: ')) {
+              console.log('[Ada Brain Client] SSE event type:', line);
+            } else if (line.trim() === '') {
+              console.log('[Ada Brain Client] SSE message boundary');
+            }
+          }
+        }
+      } finally {
+        reader.releaseLock();
+      }
+
+    } catch (error) {
+      console.error('[Ada Brain Client] ===== ERROR OCCURRED =====');
+      console.error('[Ada Brain Client] Error:', error);
+      console.error('[Ada Brain Client] Error stack:', error instanceof Error ? error.stack : 'No stack');
+      yield {
+        content: `Error communicating with Ada Brain: ${error instanceof Error ? error.message : 'Unknown error'}`,
+        done: true
+      };
+    }
+    
+    console.log('[Ada Brain Client] ===== CHAT METHOD ENDING =====');
+  }
+}
+
+export async function activate(context: vscode.ExtensionContext) {
+  console.log('[Ada Chat] Activating...');
+
+  // Initialize Ada Brain client
+  const config = vscode.workspace.getConfiguration('ada');
+  const brainUrl = config.get<string>('brainUrl', 'http://localhost:8000');
+  const brainClient = new AdaBrainClient(brainUrl);
+
+  // Register chat view provider
+  const chatProvider = new ChatViewProvider(
+    context.extensionUri,
+    brainClient
+  );
+
+  context.subscriptions.push(
+    vscode.window.registerWebviewViewProvider(
+      ChatViewProvider.viewType,
+      chatProvider
+    )
+  );
+
+  // Register commands
+  context.subscriptions.push(
+    vscode.commands.registerCommand('ada.openChat', () => {
+      vscode.commands.executeCommand('ada.chatView.focus');
+    })
+  );
+
+  console.log('[Ada Chat] Activated successfully!');
+}
+
+export function deactivate() {
+  console.log('[Ada Chat] Deactivating...');
+}
+

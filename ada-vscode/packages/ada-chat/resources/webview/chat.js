@@ -256,6 +256,7 @@
         break;
         
       case 'generationStart':
+        console.log('[Webview] Received generationStart');
         removeTypingIndicator();
         setGenerating(true);
         currentAssistantText = '';
@@ -266,6 +267,7 @@
         break;
         
       case 'generationChunk':
+        console.log('[Webview] Received generationChunk:', message.content, 'currentAssistantMessage exists:', !!currentAssistantMessage);
         if (currentAssistantMessage) {
           currentAssistantText += message.content;
           // Show raw text while streaming (faster)

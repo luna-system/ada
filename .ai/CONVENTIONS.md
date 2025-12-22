@@ -49,6 +49,26 @@ This document defines **where** and **how** to document different aspects of the
 
 **Subdirectories:**
 - `.ai/audits/` - Historical architecture audits (YYYY-MM-DD-milestone.md)
+- `.ai/standards/` - Reusable standards for Ada ecosystem
+- `.ai/explorations/` - Research and experimental documentation
+
+### Hierarchical `.ai/` for Packages
+
+**NEW STANDARD:** Each package in the ecosystem gets its own `.ai/` folder.
+See [standards/HIERARCHICAL-AI-DOCS.md](standards/HIERARCHICAL-AI-DOCS.md) for full spec.
+
+**Why:** When AI assistants are scoped to a subdirectory, they can't see parent docs.
+
+**Required files in package `.ai/`:**
+- `CONTEXT.md` - Package-specific architecture and key files
+- `PARENT.md` - Pointers to ecosystem docs + key excerpts
+
+**Example:**
+```
+ada-v1/.ai/                    ← Ecosystem root
+ada-vscode/packages/ada-chat/.ai/  ← Package-level
+```
+- `.ai/audits/` - Historical architecture audits (YYYY-MM-DD-milestone.md)
 
 ### Source Code Documentation → Comments & Docstrings
 
