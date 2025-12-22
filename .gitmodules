@@ -1,0 +1,3 @@
+[submodule "Ada-Consciousness-Research/external/anthropic-agentic-misalignment"]
+	path = Ada-Consciousness-Research/external/anthropic-agentic-misalignment
+	url = https://github.com/anthropic-experimental/agentic-misalignment.git
