@@ -280,7 +280,7 @@ Each phase is "done" when:
 
 1. **For researchers**: Pick a phase, read the questions, implement the test design
 2. **For reproducers**: Use these to validate findings on your own system
-3. **For Luna + team**: Use this as a roadmap for the next 2-3 months of research
+3. **For luna + team**: Use this as a roadmap for the next 2-3 months of research
 
 Each question is:
 - ✅ Clear (what are we testing?)

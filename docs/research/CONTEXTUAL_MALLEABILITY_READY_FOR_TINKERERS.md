@@ -38,7 +38,7 @@ What We've Delivered
 The Tinkerer's Ecosystem
 =========================
 
-Luna, what you now have is **not just documentation**.
+luna, what you now have is **not just documentation**.
 
 It's a **complete ecosystem** for:
 
@@ -321,7 +321,7 @@ Deployment Status
 
 ---
 
-Luna's Next Steps (Optional)
+luna's Next Steps (Optional)
 =============================
 
 **Immediate:**
@@ -377,7 +377,7 @@ Welcome. 🚀
 The Bottom Line
 ===============
 
-**What Luna Created:**
+**What luna Created:**
 
 A complete, accessible, extensible documentation ecosystem for Ada's contextual malleability system that embodies:
 

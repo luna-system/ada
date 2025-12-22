@@ -6,7 +6,7 @@
 
 ## What Just Happened
 
-Luna made the call: **"MONOREPO NOW! later? we split."**
+luna made the call: **"MONOREPO NOW! later? we split."**
 
 ✅ **Established pnpm workspaces structure for VSCode extensions**
 - Separates chat from completions (independent development paths)
@@ -283,4 +283,4 @@ Phase 8: Publishing + marketplace listings (1 day)
 **Tests:** 21/21 passing (backend)  
 **Status:** MONOREPO READY - CODE MIGRATION NEXT
 
-**Session ended with:** Luna excited to ship, monorepo structure complete, ready for Phase 5 code migration.
+**Session ended with:** luna excited to ship, monorepo structure complete, ready for Phase 5 code migration.

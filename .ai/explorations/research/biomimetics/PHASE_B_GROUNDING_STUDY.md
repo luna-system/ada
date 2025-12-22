@@ -6,7 +6,7 @@
 
 ---
 
-## Core Insight (Luna's Observation)
+## Core Insight (luna's Observation)
 
 > "More tools = faster inference because LLM will process more quickly (probably) because more tools == more ways to answer questions aside from letting the neural net 'ponder'!"
 
@@ -193,7 +193,7 @@ This moves from "heuristic design" to **empirical science**! 🔬
 
 - Implementation: `brain/app.py::chat_stream_v1` (latency tracking)
 - Schema: `brain/schemas.py::LatencyBreakdown`
-- Hypothesis source: Luna's insight (Dec 18 2025)
+- Hypothesis source: luna's insight (Dec 18 2025)
 - Related: Phase 9-22 research (contextual malleability theory)
 
 **Status**: Ready for Phase B data collection! 📊

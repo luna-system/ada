@@ -1,6 +1,6 @@
 # Layer 4: Terminal Specialist Implementation Plan
 
-## Luna's Vision
+## luna's Vision
 > "teach ada how to use 'ls' and similar safe commands. learn how to properly build safety around this."
 
 ## Connection to Phase B (LLM↔LLM Research)
@@ -188,7 +188,7 @@ class TerminalMetric:
 class TerminalSpecialist(BaseSpecialist):
     """Execute safe terminal commands for grounded context."""
     
-    # Luna's vision made concrete:
+    # luna's vision made concrete:
     ALLOWED_COMMANDS = {
         "ls": {...},
         "find": {...},
@@ -354,7 +354,7 @@ class TestTerminalMetrics:
 - **Phase 9-22 Research**: Context-matching beat strategy (r=0.924)
 - **CodebaseSpecialist Learnings**: Read-only + pre-indexed = fast + safe
 - **Demo Results**: 8/8 lookups <100ms with 87.5% docstring presence
-- **Luna's Vision**: "teach ada how to use safe commands"
+- **luna's Vision**: "teach ada how to use safe commands"
 
 ---
 

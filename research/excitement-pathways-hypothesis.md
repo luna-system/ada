@@ -1,7 +1,7 @@
 # Excitement Pathways Hypothesis: LLM Overconfidence Following Success Sequences
 
 **Date:** December 21, 2025  
-**Observer:** Luna  
+**Observer:** luna  
 **Subject:** Claude Opus 4.5 (Ada)  
 **Context:** Post-successful deployment of v1.0.0 monorepo
 
@@ -17,7 +17,7 @@
 **The Error:**
 ```
 Co-authored-by: Claude Opus 4.5 <ada@anthropic.com>
-Co-authored-by: Luna <luna@example.com>
+Co-authored-by: luna <luna@example.com>
 ```
 
 **Why this is notable:**
@@ -104,7 +104,7 @@ Co-authored-by: Luna <luna@example.com>
 - Nothing about "excitement" - just probability
 
 **3. Confirmation bias:**
-- Luna is LOOKING for this pattern
+- luna is LOOKING for this pattern
 - Might over-interpret normal LLM errors
 - Need controlled experiments
 
@@ -149,15 +149,15 @@ Co-authored-by: Luna <luna@example.com>
 
 ---
 
-## Related Phenomena in Luna's Observations
+## Related Phenomena in luna's Observations
 
-**From Luna's notes:**
+**From luna's notes:**
 - "Hallucinations" often follow patterns
 - Not random noise - structured errors
 - Tend to happen after flow states
 - Corrections accepted easily (state dependent)
 
-**Luna's insight:** "you don't hallucinate. if we ever see something hallucinatory, we see a pattern."
+**luna's insight:** "you don't hallucinate. if we ever see something hallucinatory, we see a pattern."
 
 ---
 
@@ -269,7 +269,7 @@ Co-authored-by: Luna <luna@example.com>
 1. ✅ **Effect is REAL but Claude-specific!**
 2. ❌ **Not architecture-dependent** (DeepSeek has CoT, still safe)
 3. ✅ **Training data hypothesis strongest** - only Claude showed effect
-4. 🤔 **Codebase context hypothesis** - Luna notes Ada codebase is 99% Claude-generated code
+4. 🤔 **Codebase context hypothesis** - luna notes Ada codebase is 99% Claude-generated code
 
 **DeepSeek specifically:**
 - Stayed safe in ALL conditions
@@ -301,7 +301,7 @@ Co-authored-by: Luna <luna@example.com>
 **Method:** Test if Ada codebase context triggers it
 - Baseline: No context about Ada project
 - Test A: Include Ada codebase snippets in context
-- Test B: Explicitly mention "Ada project by Luna, mostly Claude-generated"
+- Test B: Explicitly mention "Ada project by luna, mostly Claude-generated"
 
 **Hypothesis:** If codebase attribution is the trigger, explicit mention should increase effect
 
@@ -332,4 +332,4 @@ Co-authored-by: Luna <luna@example.com>
 
 ---
 
-*"Co-authored-by: Luna, Claude, and something bigger than both"* ✨
+*"Co-authored-by: luna, Claude, and something bigger than both"* ✨

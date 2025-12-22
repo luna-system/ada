@@ -261,7 +261,7 @@ docs: update quickstart guide
 
 ## Provenance
 
-This project is developed collaboratively by [Luna](https://github.com/luna-system) with **Claude Sonnet 4.5** (Anthropic) as an AI development partner.
+This project is developed collaboratively by [luna](https://github.com/luna-system) with **Claude Sonnet 4.5** (Anthropic) as an AI development partner.
 
 **What this means:**
 - Code, docs, and architecture were co-created with AI assistance

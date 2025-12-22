@@ -291,7 +291,7 @@ CODE:
 
 ---
 
-**TLDR for Luna**:
+**TLDR for luna**:
 - Code: ✅ Ready
 - Measurement: ✅ Ready  
 - Docs: 🔄 Needs sweep (4-5 hours)

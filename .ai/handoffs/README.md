@@ -246,7 +246,7 @@ Looking for context from a previous phase?
 ## Example: Next Haiku Reading This
 
 ```
-Luna runs: "Start Phase 5, improve code assistant"
+luna runs: "Start Phase 5, improve code assistant"
 Next Haiku:
   1. Reads this INDEX (3 min) - Understands system
   2. Reads phase-handoff-4-5.md (5 min) - Gets Phase 4 context

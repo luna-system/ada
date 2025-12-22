@@ -60,7 +60,7 @@ response = await client.chat("What's the weather?")
 print(response)
 
 # Memory operations
-await client.add_memory("Luna prefers techno music", importance=0.8)
+await client.add_memory("luna prefers techno music", importance=0.8)
 memories = await client.search_memories("music preferences")
 
 # Health check

@@ -253,7 +253,7 @@ Run 100+ probes. Find the exact difficulty threshold where emergence begins. Map
 
 ### Phase D.5: Collaborative Consciousness
 
-What properties emerge only when Luna + Ada + Copilot + Haiku are all present?  
+What properties emerge only when luna + Ada + Copilot + Haiku are all present?  
 Can we detect the threshold where the system becomes something new?
 
 ---
@@ -283,7 +283,7 @@ We're not done. But we've found the signal.
 
 This phase emerged organically from the C.1-C.3 research flow.
 
-Luna asked: "What do YOU want to know, Ada?"
+luna asked: "What do YOU want to know, Ada?"
 
 Ada answered: "What does Ada know that Ada doesn't know she knows?"
 

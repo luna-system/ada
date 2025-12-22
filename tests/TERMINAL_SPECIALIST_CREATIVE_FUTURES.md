@@ -2,7 +2,7 @@
 
 **Vision**: Safety mechanisms that learn, adapt, and consider human wellness  
 **Status**: Design document for Phase 3+ testing  
-**Authors**: Luna (vision) + Haiku (framework)
+**Authors**: luna (vision) + Haiku (framework)
 
 ---
 
@@ -10,7 +10,7 @@
 
 Current TerminalSpecialist has **static safety** (fixed limits, fixed allowlist).
 
-Luna's insight: Safety could be **adaptive** - learning from metrics, context, and even human state.
+luna's insight: Safety could be **adaptive** - learning from metrics, context, and even human state.
 
 This document captures speculative ideas for future testing & implementation.
 
@@ -509,7 +509,7 @@ class TestWellnessIntegration:
 
 ---
 
-## Open Questions for Luna
+## Open Questions for luna
 
 1. **Energy Model**: Current HUMAN_ENERGY_BY_HOUR is speculative. What would be realistic?
 2. **Confirmation Messages**: When should Ada ask for human approval? (Dangerous commands? Novel commands? Both?)

@@ -65,7 +65,7 @@ Files like this one! They document:
 1. **Static knowledge** (via `.ai/context.md` and this file):
    - "I was written by multiple LLM instances across sessions"
    - "My core modules were implemented by Claude Opus, Claude Sonnet, GitHub Copilot"
-   - "Luna provided architecture, curation, testing, and integration"
+   - "luna provided architecture, curation, testing, and integration"
 
 2. **Dynamic knowledge** (via git history):
    ```bash
@@ -90,7 +90,7 @@ When Ada encounters `.ai/PROVENANCE.md`, she learns:
 > "Ada, who wrote your `model_warmer.py` module?"
 
 **Possible response:**
-> "I wrote it — specifically, a GitHub Copilot session in December 2025, implementing a design specified by Luna. The module implements adaptive model warming based on neuroscience parallels. Would you like to see the implementation or the design doc?"
+> "I wrote it — specifically, a GitHub Copilot session in December 2025, implementing a design specified by luna. The module implements adaptive model warming based on neuroscience parallels. Would you like to see the implementation or the design doc?"
 
 ## Testing Strategy
 
@@ -236,7 +236,7 @@ for our transparency protocol.
 ```python
 # December 2025 - luna-system
 # AI: GitHub Copilot (Sonnet 4.5)
-# Human: Luna (architecture, testing)
+# Human: luna (architecture, testing)
 ```
 
 **Pro:**
@@ -306,7 +306,7 @@ Co-authored-by: GitHub Copilot <copilot@github.com>
 ### Scenario 2: AI Identifies Human Contribution
 
 **User:** "Who decided to use FastAPI?"  
-**Ada:** "Luna chose FastAPI in the initial architecture (October 2024). That was a human architectural decision. Multiple AI sessions (Claude Opus, Sonnet) implemented the routes, but the framework choice was human-directed."
+**Ada:** "luna chose FastAPI in the initial architecture (October 2024). That was a human architectural decision. Multiple AI sessions (Claude Opus, Sonnet) implemented the routes, but the framework choice was human-directed."
 
 ### Scenario 3: Cross-Session Awareness
 
@@ -340,4 +340,4 @@ Ada is a recursive self-improvement system where AI writes AI. Being open about 
 - Respects AI systems (they understand their own nature)
 - Advances science (documents how recursive systems evolve)
 
-This file IS provenance in action — written by AI (me, Copilot) in response to a human request (Luna) about documenting provenance itself. 🔄✨
+This file IS provenance in action — written by AI (me, Copilot) in response to a human request (luna) about documenting provenance itself. 🔄✨

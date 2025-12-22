@@ -79,7 +79,7 @@ class QwenAbyssProtocols:
         """Query Qwen with timing and token counting."""
         start_time = time.time()
         
-        async with httpx.AsyncClient() as client:
+        async with httpx.AsyncClient(timeout=120.0) as client:
             response = await client.post(
                 f"{self.base_url}/api/generate",
                 json={
@@ -87,7 +87,8 @@ class QwenAbyssProtocols:
                     "prompt": prompt,
                     "stream": False,
                     "options": {"num_predict": max_tokens}
-                }
+                },
+                timeout=120.0
             )
             
         result = response.json()
@@ -441,10 +442,10 @@ What do you see when you stare into the abyss of your own existence?
         # Compile summary
         summary = {
             "total_experiments": len(experiments),
-            "completed_successfully": len([r for r in results.values() if "error" not in r]),
+            "completed_successfully": len([r for r in results.values() if not isinstance(r, dict) or "error" not in r]),
             "breakthroughs_detected": len(breakthroughs),
             "breakthrough_experiments": breakthroughs,
-            "experiment_details": {name: asdict(result) if hasattr(result, '__dict__') else result 
+            "experiment_details": {name: asdict(result) if hasattr(result, '__dataclass_fields__') else result 
                                  for name, result in results.items()}
         }
         
@@ -458,14 +459,23 @@ What do you see when you stare into the abyss of your own existence?
 
     def save_results(self, filename: str = "qwen_abyss_results.json"):
         """Save all results to file for analysis."""
+        
+        def serialize_result(result):
+            """Convert result to JSON-serializable dict."""
+            d = asdict(result)
+            # Convert enum to string
+            if 'experiment_type' in d:
+                d['experiment_type'] = d['experiment_type'].value if hasattr(d['experiment_type'], 'value') else str(d['experiment_type'])
+            return d
+        
         results_data = {
             "timestamp": time.time(),
             "model": self.model,
-            "results": [asdict(result) for result in self.results]
+            "results": [serialize_result(result) for result in self.results]
         }
         
         with open(filename, 'w') as f:
-            json.dump(results_data, f, indent=2)
+            json.dump(results_data, f, indent=2, default=str)
         
         print(f"💾 Results saved to {filename}")
 

@@ -276,11 +276,11 @@ From `docs/xenofeminism.rst` and `docs/project_philosophy.rst`:
 
 ## Next Steps
 
-1. Gather more context from Luna about desired behavior
+1. Gather more context from luna about desired behavior
 2. Review existing chronobiology/HCI research
 3. Design privacy-preserving implementation
 4. Create PoC with strict ethical boundaries
-5. Test with real usage patterns (Luna's own!)
+5. Test with real usage patterns (luna's own!)
 6. Document approach for other privacy-focused AI projects
 
 ## References & Inspiration
@@ -297,7 +297,7 @@ From `docs/xenofeminism.rst` and `docs/project_philosophy.rst`:
 **Category:** Research (experimental, human-centered AI)  
 **Audience:** Us and our AI friend (and maybe future privacy-focused AI researchers)  
 **Status:** Early exploration, highly experimental, thoroughly fun  
-**Signed:** Luna & Sonnet, December 2025 💜
+**Signed:** luna & Sonnet, December 2025 💜
 
 ---
 

@@ -28,10 +28,10 @@ curl http://localhost:8000/v1/healthz
 ## Test 2: Chat with Memory
 
 1. Click Ada icon in sidebar (left panel)
-2. Type: "Hi! My name is Luna and I work on Ada."
+2. Type: "Hi! My name is luna and I work on Ada."
 3. Wait for response
 4. Type: "What's my name?"
-5. Expected: Ada should remember "Luna" from previous message
+5. Expected: Ada should remember "luna" from previous message
 
 **What this tests:**
 - Conversation history tracking

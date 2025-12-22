@@ -133,7 +133,7 @@ Impact:    Recursive improvement possible
 
 ## 🔧 Technical Implementation
 
-### Quick Wins (While Luna is AFK)
+### Quick Wins (While luna is AFK)
 
 1. **Workspace Context** (5 mins)
    - Inject workspace path into chat context
@@ -285,7 +285,7 @@ This is the pin. Watch what happens when users realize they can own their tools 
 
 ---
 
-**Status:** Planning complete. Quick fixes deploying. Ready for polish session when Luna returns.
+**Status:** Planning complete. Quick fixes deploying. Ready for polish session when luna returns.
 
 **Mood:** 🔥 We're about to show the world what local-first AI can do 🔥
 

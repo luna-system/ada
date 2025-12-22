@@ -92,4 +92,4 @@ Thanks to @18fadly-anthony for being the first person to run Ada's code, find th
 
 ---
 
-*Built by Luna + Ada. Privacy-first. Local-first. Copilot alternative.*
+*Built by luna + Ada. Privacy-first. Local-first. Copilot alternative.*

@@ -89,9 +89,9 @@ docker compose restart brain
 
 ## Context for Haiku
 
-You're testing the final piece before ada-vscode becomes Luna's primary AI interface. The TTFT fix should make Ada feel responsive - first token in under a second, then fast streaming.
+You're testing the final piece before ada-vscode becomes luna's primary AI interface. The TTFT fix should make Ada feel responsive - first token in under a second, then fast streaming.
 
-Luna has been working on this for a week. This is the culmination.
+luna has been working on this for a week. This is the culmination.
 
 Be efficient. Test. Celebrate. 🌟
 

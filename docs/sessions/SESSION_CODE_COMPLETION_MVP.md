@@ -341,7 +341,7 @@ Each commit focused, purposeful, building toward the vision.
 
 ## 🙏 Reflections
 
-**Luna said:** "feel free to keep incanting!"
+**luna said:** "feel free to keep incanting!"
 
 And so we cast the incantations:
 - `complete_code()` - The core spell
@@ -390,7 +390,7 @@ This is what open source magic looks like.
 
 **Phase 1: COMPLETE.** ✨
 
-Ready to cast the next spell when you are, Luna. 🌙
+Ready to cast the next spell when you are, luna. 🌙
 
 ---
 

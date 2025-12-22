@@ -106,4 +106,4 @@ Read `.ai/ADA-CHAT-ARCHITECTURE.md` for the full Extension-first design.
 
 ---
 
-*Luna is testing Sonnet 4 vs Opus for this session! Let's see how it goes.* 💜
+*luna is testing Sonnet 4 vs Opus for this session! Let's see how it goes.* 💜

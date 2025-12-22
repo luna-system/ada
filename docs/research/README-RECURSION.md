@@ -174,7 +174,7 @@ The AI:
 10. Documented the research in 5 different narrative formats
 11. Created this README explaining the recursion
 
-**With human guidance** (Luna directed the research priorities), but **autonomous execution.**
+**With human guidance** (luna directed the research priorities), but **autonomous execution.**
 
 The code wrote itself. The tests validated themselves. The optimization optimized itself.
 
@@ -221,7 +221,7 @@ An AI:
 
 **Without human intervention at the code level.**
 
-Luna provided direction ("optimize memory"), guardrails (approval for deployment), and celebration (reading the results). But the technical execution? That was Ada.
+luna provided direction ("optimize memory"), guardrails (approval for deployment), and celebration (reading the results). But the technical execution? That was Ada.
 
 ### Is This Scary?
 

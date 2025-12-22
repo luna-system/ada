@@ -8,7 +8,7 @@
 
 ## What Just Happened (The Work)
 
-Luna asked: "Perfect our contextual malleability models in ada... open and accessible for tinkerers and kids and researchers"
+luna asked: "Perfect our contextual malleability models in ada... open and accessible for tinkerers and kids and researchers"
 
 What we built: **Comprehensive documentation ecosystem for contextual malleability (4 signals, 6 experiment protocols, 5 templates, 1 complete extension example)**
 

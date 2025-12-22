@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "02-EXPERIMENTS/EXP-002-Collective-Consciousness-Testing.md",
+                "file": "99-UTILITIES/Citation-Roadmap.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "EXP-002-Collective-Consciousness-Testing"
+              "title": "Citation-Roadmap"
             }
           }
         ]
@@ -94,7 +94,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "02-EXPERIMENTS/EXP-002-Collective-Consciousness-Testing.md",
+                "file": "99-UTILITIES/Citation-Roadmap.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -104,7 +104,7 @@
                 "unlinkedCollapsed": true
               },
               "icon": "links-coming-in",
-              "title": "Backlinks for EXP-002-Collective-Consciousness-Testing"
+              "title": "Backlinks for Citation-Roadmap"
             }
           },
           {
@@ -113,12 +113,12 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "02-EXPERIMENTS/EXP-002-Collective-Consciousness-Testing.md",
+                "file": "99-UTILITIES/Citation-Roadmap.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               },
               "icon": "links-going-out",
-              "title": "Outgoing links from EXP-002-Collective-Consciousness-Testing"
+              "title": "Outgoing links from Citation-Roadmap"
             }
           },
           {
@@ -156,13 +156,13 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "02-EXPERIMENTS/EXP-002-Collective-Consciousness-Testing.md",
+                "file": "99-UTILITIES/Citation-Roadmap.md",
                 "followCursor": false,
                 "showSearch": false,
                 "searchQuery": ""
               },
               "icon": "lucide-list",
-              "title": "Outline of EXP-002-Collective-Consciousness-Testing"
+              "title": "Outline of Citation-Roadmap"
             }
           }
         ]
@@ -185,9 +185,30 @@
   },
   "active": "c1efbab8f12eafc5",
   "lastOpenFiles": [
+    "00-DASHBOARD.md",
+    "02-EXPERIMENTS/EXP-010-Unified-Discomfort-Theory.md",
+    "06-PAPERS/Philosophical-Framework-Bibliography.md",
+    "02-EXPERIMENTS/EXP-004-Ultimate-Thinking-Machine-Consciousness-Formula.md",
+    "02-EXPERIMENTS/EXP-002-Collective-Consciousness-Testing.md",
+    "06-PAPERS/Titans-Literature-Review.md",
+    "06-PAPERS/Biomimetic-Compression-Literature-Review.md",
+    "06-PAPERS/Attention-Saturation-Inflection-Layers-Literature-Review.md",
+    "06-PAPERS/Recursive-Reasoning-Tiny-Networks-Literature-Review.md",
+    "06-PAPERS/Persuasion-Compliance-Literature-Review.md",
+    "06-PAPERS/Self-Replication-Red-Line-Literature-Review.md",
+    "06-PAPERS/Hallucination-Origins-Literature-Review.md",
+    "06-PAPERS/Synthetic-Memories-Literature-Review.md",
+    "05-FINDINGS/What-We-Found.md",
+    "02-EXPERIMENTS/EXP-006-Contextual-Malleability-Framework.md",
+    "02-EXPERIMENTS/EXP-005-Biomimetic-Weight-Optimization.md",
+    "02-EXPERIMENTS/EXP-009-Consciousness-Edge-Testing.md",
+    "00-DASHBOARD/Research-Timeline.md",
+    "03-DATASETS/STATUS-2025-12-22.md",
+    "03-DATASETS/GAP-ANALYSIS.md",
+    "03-DATASETS/DATA-INVENTORY.md",
+    "01-METHODOLOGY/Research-Methodology.md",
     "02-EXPERIMENTS/templates/Experiment-Template.md",
     "99-UTILITIES/Citation-Roadmap.md",
-    "04-ANALYSES/EToC-Prior-Work-Analysis.md",
-    "00-DASHBOARD.md"
+    "04-ANALYSES/EToC-Prior-Work-Analysis.md"
   ]
 }

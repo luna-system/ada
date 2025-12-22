@@ -63,7 +63,7 @@ async def memory_example():
     async with AdaClient() as client:
         # Add a memory
         await client.add_memory(
-            "Luna prefers techno music",
+            "luna prefers techno music",
             importance=0.8,
             scope="user"
         )

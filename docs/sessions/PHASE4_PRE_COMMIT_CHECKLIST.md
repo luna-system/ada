@@ -7,7 +7,7 @@
 
 ## Quick Verification
 
-Before committing, Luna should verify:
+Before committing, luna should verify:
 
 ### Documentation Files (9 files)
 - [ ] All files in `docs/` directory:
@@ -318,4 +318,4 @@ git push
 
 **Status:** ✅ All checks pass - Ready for commit
 
-**Next:** Luna commits, pushes, then Phase 5 begins with fresh Haiku reading handoff.
+**Next:** luna commits, pushes, then Phase 5 begins with fresh Haiku reading handoff.

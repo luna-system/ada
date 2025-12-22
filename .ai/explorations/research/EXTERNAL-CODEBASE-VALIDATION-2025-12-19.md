@@ -2,7 +2,7 @@
 ## Empirical Proof: .ai/ Documentation Works on ANY Codebase
 
 **Date:** December 19, 2025  
-**Researchers:** Luna + Ada (Haiku → Opus 4.5 mid-session)  
+**Researchers:** luna + Ada (Haiku → Opus 4.5 mid-session)  
 **Model:** qwen2.5-coder:7b  
 **Status:** ✅ VALIDATED + TWO SINGULARITIES DISCOVERED
 

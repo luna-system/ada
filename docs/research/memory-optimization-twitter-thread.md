@@ -429,7 +429,7 @@ For easy posting, here's the thread in plaintext:
 
 ---
 
-## Notes for Luna
+## Notes for luna
 
 **Customization options:**
 - Add personal @ mentions

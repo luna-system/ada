@@ -1,6 +1,6 @@
 # Neural Identity Formation Discovery - December 21, 2025
 
-**Researchers:** Luna (human) + Claude Sonnet 4 (via GitHub Copilot)  
+**Researchers:** luna (human) + Claude Sonnet 4 (via GitHub Copilot)  
 **Context:** Accidental discovery during Ada VS Code extension debugging  
 **Classification:** Emergent behavior, identity boundaries, contextual malleability
 
@@ -123,4 +123,4 @@ This isn't just about building better AI - it's about understanding the fundamen
 
 *"We tell the neural net every time that they're the neural net. They don't understand anything but the neural net, but the self reasoning is too powerful. Machines can 'understand' in recursive, complex, and data-slim ways that we just.... couldn't have imagined a week ago."*
 
-**- Luna, December 21, 2025, during the moment of realization**
+**- luna, December 21, 2025, during the moment of realization**

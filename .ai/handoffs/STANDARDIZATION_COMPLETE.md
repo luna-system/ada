@@ -97,7 +97,7 @@ Updated `.ai/README.md` to feature handoffs prominently:
 
 ## How Next Haiku Will Use This
 
-**Luna says:** "Start Phase 5, improve code assistant"
+**luna says:** "Start Phase 5, improve code assistant"
 
 **Next Haiku's workflow:**
 1. Opens `.ai/README.md` (~1 min)
@@ -167,7 +167,7 @@ Closes: Part of Phase 4 completion
 
 ## Next Immediate Actions
 
-For Luna/Next Haiku before Phase 5 starts:
+For luna/Next Haiku before Phase 5 starts:
 
 1. ✅ Review handoff system (you're doing it now!)
 2. ⏳ Commit these changes to git

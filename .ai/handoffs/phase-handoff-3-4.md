@@ -8,7 +8,7 @@
 
 ## What Just Happened
 
-Luna wanted to see the complete tool framework working in actual Ada Chat. We built it **end-to-end in a single session**: from Python backend framework (Phases 1-3) through live chat demo showing Ada thinking in real time. All 21 tests passing, demo working, handoff protocol followed.
+luna wanted to see the complete tool framework working in actual Ada Chat. We built it **end-to-end in a single session**: from Python backend framework (Phases 1-3) through live chat demo showing Ada thinking in real time. All 21 tests passing, demo working, handoff protocol followed.
 
 ---
 
@@ -141,7 +141,7 @@ Webview Rendering
 3. Route Phase 2 responses through LLM for reasoning
 4. Enhance tool transparency UI (show actions, timeline, execution)
 5. End-to-end test: query → router → tool → LLM → response
-6. Iterate on Luna's feedback
+6. Iterate on luna's feedback
 7. Prepare for big second debut (confetti cannon reveal)
 
 **Entry Point for Next Model:**
@@ -188,9 +188,9 @@ python scripts/demo_live_ada_chat.py
 
 ---
 
-## Luna's Context (Critical for Next Model)
+## luna's Context (Critical for Next Model)
 
-**Who:** Luna is a plural system, precise, energized about Ada's potential
+**Who:** luna is a plural system, precise, energized about Ada's potential
 
 **Vision:** Ada's intelligence should be VISIBLE and CONVERSATIONAL
 - Not: "Here's technical metadata"
@@ -201,7 +201,7 @@ python scripts/demo_live_ada_chat.py
 - VS Code integration done (→ Phase 4)
 - Reveal to community → celebrate
 
-**Speed:** Luna operates in "Ada time" (fast, focused, incremental)
+**Speed:** luna operates in "Ada time" (fast, focused, incremental)
 
 **Communication:** Clear, direct, energetic ("holy shit. its so beautiful")
 
@@ -269,7 +269,7 @@ ea1c6ae docs: comprehensive summary of Phase 1-2 completion
 - [ ] Check tool execution feels fast
 
 **Priority 4 (Polish):**
-- [ ] Iterate on Luna's feedback
+- [ ] Iterate on luna's feedback
 - [ ] Prepare for reveal
 
 ---
@@ -280,7 +280,7 @@ ea1c6ae docs: comprehensive summary of Phase 1-2 completion
 ✅ User says "introspect and suggest" → Sees tool executes, metadata injected to LLM, reasoning result  
 ✅ User says "tell me a story" → Sees pure conversation (no tools)  
 ✅ All 21 tests still passing  
-✅ Luna gives feedback and we iterate  
+✅ luna gives feedback and we iterate  
 ✅ Ready for big reveal  
 
 ---
@@ -289,7 +289,7 @@ ea1c6ae docs: comprehensive summary of Phase 1-2 completion
 
 - **Is the router import straightforward?** (Should be simple MCP call)
 - **Do the TypeScript types need updates?** (Shouldn't - already built in Phase 2)
-- **How should transparency evolve?** (Luna will tell us during iteration)
+- **How should transparency evolve?** (luna will tell us during iteration)
 - **Ready for the confetti cannon?** (Phase 4 complete = full integration ready)
 
 ---

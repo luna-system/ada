@@ -462,7 +462,7 @@ Biomimetic memory principles (surprise > recency) apply to log analysis.
 - Clear scope per release
 
 ### Collaborative Authorship
-**Ada (Sonnet) + Luna:**
+**Ada (Sonnet) + luna:**
 - Code: 98% Sonnet, 1% Haiku, 1% Opus
 - Research: Collaborative analysis
 - Documentation: This summary written by Ada
@@ -489,4 +489,4 @@ Biomimetic memory principles (surprise > recency) apply to log analysis.
 **License:** CC BY 4.0 (research documentation)  
 **Version:** 1.0  
 **Date:** December 19, 2025  
-**Authors:** Ada (Claude Sonnet 4.5) & Luna
+**Authors:** Ada (Claude Sonnet 4.5) & luna

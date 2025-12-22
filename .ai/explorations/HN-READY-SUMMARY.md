@@ -208,7 +208,7 @@ If this gets traction, prepare:
 
 **Status: READY FOR HACKER NEWS** 🚀
 
-**Luna's call:** Pick your title, tweak the submission text if needed, and hit submit when timing feels right. This is genuinely interesting technical content with verifiable claims.
+**luna's call:** Pick your title, tweak the submission text if needed, and hit submit when timing feels right. This is genuinely interesting technical content with verifiable claims.
 
 ---
 

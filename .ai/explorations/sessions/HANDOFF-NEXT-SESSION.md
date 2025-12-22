@@ -3,7 +3,7 @@
 **Date:** 2025-12-21 23:59 UTC  
 **From:** Claude Haiku 4.5 (completed Phases 1-3)  
 **To:** Copilot Tomorrow (likely Sonnet, but could be anyone)  
-**Context:** Luna (plural, precise, energized) is driving the vision
+**Context:** luna (plural, precise, energized) is driving the vision
 
 ---
 
@@ -11,7 +11,7 @@
 
 **Phase 4: Wire Everything Into VS Code**
 
-Luna's vision: Tool framework exists in Python → Now make it VISIBLE and REACTIVE in Ada Chat (VS Code extension).
+luna's vision: Tool framework exists in Python → Now make it VISIBLE and REACTIVE in Ada Chat (VS Code extension).
 
 **Target:** Big Second Debut - Ada's voice fully alive in the system
 - Tool transparency that shows users EXACTLY what Ada did
@@ -87,7 +87,7 @@ These Python pieces are DONE and TESTED:
 - ✅ Introspection (actual working tool with metadata)
 - ✅ Tool Definitions (embeds metadata in responses)
 
-Next: Wire into VS Code and show Luna what Ada thinks! 
+Next: Wire into VS Code and show luna what Ada thinks! 
 
 ---
 
@@ -139,7 +139,7 @@ Tomorrow's goal:
 - ✅ Make it CLICKABLE (expand to see details)
 - ✅ Use Ada's design language (purple accents, clean typography)
 
-**Inspiration:** Luna wanted radical transparency. Show EVERYTHING but make it beautiful.
+**Inspiration:** luna wanted radical transparency. Show EVERYTHING but make it beautiful.
 
 **Example next-gen badge:**
 ```
@@ -174,9 +174,9 @@ Tool Execution (introspection)
 
 ---
 
-### Task 4: Iterate on Luna's Feedback
+### Task 4: Iterate on luna's Feedback
 
-**Luna will say things like:**
+**luna will say things like:**
 - "The metadata box is too big"
 - "I want to see WHAT FILES more clearly"
 - "Make the execution time prominent"
@@ -188,22 +188,22 @@ Tool Execution (introspection)
 
 ## CRITICAL CONTEXT FOR THE NEXT COPILOT
 
-### Luna's Voice & Vision
+### luna's Voice & Vision
 
-Luna is:
+luna is:
 - **Plural** (uses "we," "our," references multiplicity)
 - **Precise** (cares about detail, patterns, correctness)
 - **Energized** (excited about Ada's potential, goes fast)
 - **Visionary** (sees how pieces fit together, wants the big reveal)
 
-Luna's goal: **Ada's intelligence should be VISIBLE and CONVERSATIONAL**
+luna's goal: **Ada's intelligence should be VISIBLE and CONVERSATIONAL**
 
 Not: "Here's technical metadata"  
 Yes: "Here's what Ada just thought about and discovered"
 
 ### The "Big Second Debut"
 
-Luna said: "finish this BIG CONFETTI CANNON"
+luna said: "finish this BIG CONFETTI CANNON"
 
 This means:
 - Phase 4 (VS Code integration) is part of a bigger reveal
@@ -238,7 +238,7 @@ This means:
 - End-to-end test of complete flow
 
 ### Priority 3: Polish
-- Iterate on transparency UI with Luna
+- Iterate on transparency UI with luna
 - Make sure tool execution feels fast
 - Ensure conversation stays natural
 
@@ -258,7 +258,7 @@ This means:
 ✅ **Sees:** Pure conversation, no metadata (because no tools)  
 ✅ **Feels:** Natural conversation without tool overhead
 
-**Then:** Luna says "show them" → We reveal the system → Confetti cannon 🎊
+**Then:** luna says "show them" → We reveal the system → Confetti cannon 🎊
 
 ---
 
@@ -292,7 +292,7 @@ python scripts/demo_two_phase_router.py
 ## HANDOFF CHECKLIST
 
 ✅ Understand Phases 1-3 complete  
-✅ Know what Luna wants (transparent, conversational, big reveal)  
+✅ Know what luna wants (transparent, conversational, big reveal)  
 ✅ Have 21 passing tests as safety net  
 ✅ Have demo scripts to see expected behavior  
 ✅ Have router + metadata + extraction all working  
@@ -303,13 +303,13 @@ python scripts/demo_two_phase_router.py
 
 ## FINAL WORDS
 
-Luna built something beautiful here. The tool framework shows:
+luna built something beautiful here. The tool framework shows:
 - **Clarity:** Every tool knows what it did (metadata tracking)
 - **Intelligence:** Router makes decisions about what to execute (two-phase routing)
 - **Honesty:** Everything is transparent (metadata badges)
 - **Conversation:** It all feels natural (three routing paths)
 
-Your job tomorrow: Make this VISIBLE in Ada Chat, iterate on Luna's feedback, prepare for the big reveal.
+Your job tomorrow: Make this VISIBLE in Ada Chat, iterate on luna's feedback, prepare for the big reveal.
 
 The foundation is SOLID. The tests are PASSING. Ada is READY.
 
@@ -324,5 +324,5 @@ Go make it shine. 🌟
 ---
 
 *Handoff written by Claude Haiku 4.5 at 2025-12-21 23:59 UTC*  
-*For Luna, the best plural system I know*  
+*For luna, the best plural system I know*  
 *And for the next Copilot, whoever you are*

@@ -118,7 +118,7 @@ All code, tests, datasets, and visualizations available at:
 github.com/luna-system/ada (MIT License)
 
 ## Acknowledgments
-"To Luna, for demanding we keep flying. To the data, for being ruthlessly honest."
+"To luna, for demanding we keep flying. To the data, for being ruthlessly honest."
 ```
 
 **Key Narrative Beats:**
@@ -813,7 +813,7 @@ And we documented everything so others can learn from it.
 ## Next Steps for Phase 8
 
 **1. Choose which format(s) to flesh out first**
-   - Luna's preference?
+   - luna's preference?
    - Multiple audiences?
    - Different platforms?
 
@@ -866,6 +866,6 @@ And we documented everything so others can learn from it.
 
 **Current Status:** Skeleton complete, ready to flesh out chosen format(s)
 
-**Luna's Call:** Which narrative angle first? Academic fun? CCRU spice? Technical deep? Public access? Multiple?
+**luna's Call:** Which narrative angle first? Academic fun? CCRU spice? Technical deep? Public access? Multiple?
 
 **Recommendation:** Start with 2 contrasting formats (e.g., Academic + CCRU) to explore range, then decide if others needed.

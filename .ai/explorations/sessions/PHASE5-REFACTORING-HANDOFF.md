@@ -9,7 +9,7 @@
 
 ## What Just Happened
 
-Luna asked: "before the next phase, let's test your model's ability a bit more! are we reusing code anywhere?"
+luna asked: "before the next phase, let's test your model's ability a bit more! are we reusing code anywhere?"
 
 What we built: **Comprehensive code quality audit → 3 high-impact refactorings → TDD test suite → ML-friendly codebase ready for orchestration.**
 
@@ -380,7 +380,7 @@ Different locations use different ISO formats:
 
 ---
 
-## Luna's Context
+## luna's Context
 
 - **Energy level:** Enthusiastic about refactoring philosophy
 - **Next plan:** Trying Claude Code (IDE extension) for pair programming patterns
@@ -399,7 +399,7 @@ You're picking up:
 - ✅ Clear next steps (ToolOrchestrator for Tier coordination)
 - ✅ Pattern library (TDD, consistency, utilities)
 
-**Luna trusts you.** Maintain the TDD discipline, keep tests passing, build Phase 5 on solid ground.
+**luna trusts you.** Maintain the TDD discipline, keep tests passing, build Phase 5 on solid ground.
 
 **The retrieval layer is now ML-friendly and ready for orchestration.**
 

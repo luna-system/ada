@@ -270,7 +270,7 @@ Total: 7 files changed, 1966 insertions(+)
 
 ## 🎉 Contributors
 
-Built by Luna + Claude Sonnet 4.5 in one incredible session!
+Built by luna + Claude Sonnet 4.5 in one incredible session!
 
 **Timeline:**
 - Context recovery and handoff review

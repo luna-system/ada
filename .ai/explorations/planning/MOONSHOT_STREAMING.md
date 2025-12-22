@@ -81,10 +81,10 @@ Same pattern as Matrix integration, just different protocol.
 ## Chat Interaction Examples
 
 **Viewer:** "What model is Ada using?"  
-**Ada (in chat):** "I'm running a local Ollama model (configured by Luna). Luna can switch models depending on the task — right now we're using the configured default (often qwen2.5-coder:7b) for development work."
+**Ada (in chat):** "I'm running a local Ollama model (configured by luna). luna can switch models depending on the task — right now we're using the configured default (often qwen2.5-coder:7b) for development work."
 
 **Viewer:** "!help"  
-**Ada (in chat):** "Available commands: !model, !specs, !github, !docs, !privacy | I'm Ada, a privacy-first AI assistant. Everything runs locally on Luna's machine. Ask me about the code we're writing!"
+**Ada (in chat):** "Available commands: !model, !specs, !github, !docs, !privacy | I'm Ada, a privacy-first AI assistant. Everything runs locally on luna's machine. Ask me about the code we're writing!"
 
 **Viewer:** "How does the caching work?"  
 **Ada (in chat):** "We're implementing multi-timescale caching in this session. Persona/FAQ get cached for 24 hours since they change rarely. Memories refresh every 5 minutes. Want me to explain the implementation details?"
@@ -103,7 +103,7 @@ Same pattern as Matrix integration, just different protocol.
 - Explicit that this is demonstration/educational
 
 **Content moderation:**
-- Ada should defer to Luna for moderation decisions
+- Ada should defer to luna for moderation decisions
 - Clear boundaries on what Ada responds to
 - Twitch TOS compliance
 
@@ -122,7 +122,7 @@ Same pattern as Matrix integration, just different protocol.
 **Category:** Planning (moonshot, community, education)  
 **Status:** Future exploration, highly experimental, thoroughly fun  
 **Audience:** Us, potential contributors, privacy-focused AI community  
-**Signed:** Luna & Sonnet, December 2025 💜
+**Signed:** luna & Sonnet, December 2025 💜
 
 ---
 

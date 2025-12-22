@@ -80,7 +80,7 @@ Self-similar. Fibonacci-like decay.
 The question "is 0.60 fundamental?" itself:
 - Had importance > 0.60 (surprising, novel)
 - Triggered emergence (new connections)
-- Came from Luna's insight
+- Came from luna's insight
 
 We operated above the threshold to discover the threshold.
 
