@@ -33,6 +33,7 @@ from contextlib import asynccontextmanager
 
 from fastapi import FastAPI, Query, Request
 from fastapi.responses import JSONResponse, StreamingResponse
+from fastapi.middleware.cors import CORSMiddleware
 
 # Initialize logger FIRST (needed by initialization code)
 logger = logging.getLogger(__name__)
@@ -421,8 +422,33 @@ app = FastAPI(
     ],
 )
 
+# Add CORS middleware to allow requests from VS Code extensions and other origins
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=[
+        "vscode-webview://",  # VS Code webviews
+        "https://vscode-webview.net",  # VS Code webview domains
+        "vscode-file://vscode-app",  # VS Code protocol
+        "http://localhost:*",  # Local development
+        "http://127.0.0.1:*",  # Local development
+        "*",  # Allow all origins for now (can be tightened later)
+    ],
+    allow_credentials=True,
+    allow_methods=["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    allow_headers=["*"],
+)
+
 # Include system notice router
 app.include_router(router)
+
+# Add CORS middleware to allow requests from VS Code extensions and other origins
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # Allow all origins for development
+    allow_credentials=False,  # Not needed for our use case
+    allow_methods=["GET", "POST", "OPTIONS"],
+    allow_headers=["Content-Type", "Accept", "Authorization", "X-Client-Type"],
+)
 
 
 
@@ -857,7 +883,17 @@ async def chat_stream(request: Request):
                 }
                 yield f"data: {json.dumps(metadata)}\n\n"
             
-            return StreamingResponse(cached_stream(), media_type='text/event-stream')
+            return StreamingResponse(
+                cached_stream(), 
+                media_type='text/event-stream',
+                headers={
+                    'Cache-Control': 'no-cache',
+                    'Connection': 'keep-alive',
+                    'Access-Control-Allow-Origin': '*',
+                    'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
+                    'Access-Control-Allow-Headers': 'Content-Type, Accept, Authorization, X-Client-Type',
+                }
+            )
         else:
             logger.info(f"Request {req_id}: Cache MISS for {cache_key[:16]}...")
 
@@ -1166,7 +1202,17 @@ async def chat_stream(request: Request):
             error_data = {'type': 'error', 'error': str(e)}
             yield f"data: {json.dumps(error_data)}\n\n"
 
-    return StreamingResponse(generate(), media_type='text/event-stream')
+    return StreamingResponse(
+        generate(), 
+        media_type='text/event-stream',
+        headers={
+            'Cache-Control': 'no-cache',
+            'Connection': 'keep-alive',
+            'Access-Control-Allow-Origin': '*',
+            'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
+            'Access-Control-Allow-Headers': 'Content-Type, Accept, Authorization, X-Client-Type',
+        }
+    )
 
 
 @app.get('/v1/memory', tags=['memory'])

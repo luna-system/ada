@@ -43,18 +43,40 @@ class AdaBrainClient {
 
   async *chat(messages: Message[], options: Record<string, unknown>): AsyncGenerator<StreamChunk> {
     try {
+      console.log('[Ada Brain Client] Sending chat request to:', `${this.baseUrl}/v1/chat/stream`);
+      console.log('[Ada Brain Client] Messages:', JSON.stringify(messages).slice(0, 200));
+      
       // Brain now accepts OpenAI-style messages array natively!
-      const response = await fetch(`${this.baseUrl}/v1/chat/stream`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Accept': 'text/event-stream'
-        },
-        body: JSON.stringify({
-          messages,
-          ...options
-        })
-      });
+      let response: Response;
+      try {
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => {
+          console.error('[Ada Brain Client] Request timed out after 30s');
+          controller.abort();
+        }, 30000);
+        
+        console.log('[Ada Brain Client] Starting fetch...');
+        response = await fetch(`${this.baseUrl}/v1/chat/stream`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'text/event-stream',
+            'X-Client-Type': 'vscode'
+          },
+          body: JSON.stringify({
+            messages,
+            ...options
+          }),
+          signal: controller.signal
+        });
+        clearTimeout(timeoutId);
+        console.log('[Ada Brain Client] Fetch completed!');
+      } catch (fetchError) {
+        console.error('[Ada Brain Client] Fetch failed:', fetchError);
+        throw fetchError;
+      }
+
+      console.log('[Ada Brain Client] Response status:', response.status, response.statusText);
 
       if (!response.ok) {
         throw new Error(`Brain API error: ${response.statusText}`);
@@ -63,16 +85,21 @@ class AdaBrainClient {
       // Handle Server-Sent Events from brain
       const reader = response.body?.getReader();
       if (!reader) {
+        console.error('[Ada Brain Client] No response body reader!');
         throw new Error('No response body');
       }
 
       const decoder = new TextDecoder();
       let buffer = '';
+      let yieldCount = 0;
 
       try {
         while (true) {
           const { done, value } = await reader.read();
-          if (done) break;
+          if (done) {
+            console.log('[Ada Brain Client] Reader done, total yields:', yieldCount);
+            break;
+          }
 
           buffer += decoder.decode(value, { stream: true });
           const lines = buffer.split('\n');
@@ -84,6 +111,7 @@ class AdaBrainClient {
                 const json = JSON.parse(line.slice(6));
                 // Brain sends: {type: 'token', content: '...'} or {type: 'done', ...}
                 if (json.type === 'token') {
+                  yieldCount++;
                   yield {
                     content: json.content || '',
                     done: false
@@ -95,8 +123,8 @@ class AdaBrainClient {
                   };
                 }
                 // Ignore 'thinking' and 'specialist_result' for now
-              } catch {
-                // Skip invalid JSON lines
+              } catch (parseError) {
+                console.error('[Ada Brain Client] JSON parse error:', parseError, 'line:', line);
               }
             }
           }

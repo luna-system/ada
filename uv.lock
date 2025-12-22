@@ -22,7 +22,7 @@ provides-extras = ["dev"]
 
 [[package]]
 name = "ada-v1"
-version = "2.10.0"
+version = "3.0.0"
 source = { editable = "." }
 dependencies = [
     { name = "ada-logs" },
