@@ -152,7 +152,7 @@ That's it! 95% of the prompt engineering is already done. We just add IDE-specif
 
 ### Test 2: Memory (5 mins)
 ```bash
-# 1. Tell Ada: "My name is Luna"
+# 1. Tell Ada: "My name is luna"
 # 2. Close VS Code
 # 3. Reopen
 # 4. Ask: "What's my name?"

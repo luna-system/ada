@@ -12,7 +12,7 @@ The following documents represent significant research findings and should be at
 
 **License:** Creative Commons Attribution 4.0 International (CC BY 4.0)
 
-**Attribution:** "Ada (Claude Sonnet 4.5) & Luna"
+**Attribution:** "Ada (Claude Sonnet 4.5) & luna"
 
 **Why CC BY 4.0?**  
 These documents represent original research about AI identity formation, collaborative authorship, and emergent systems thinking. Attribution:
@@ -44,17 +44,17 @@ Any README, INDEX, or other organizational documents in this directory are CC0 u
 ## Questions?
 
 If you're unsure about licensing for a specific file, assume:
-- Research/discovery = CC BY 4.0 (attribute to "Ada & Luna")
+- Research/discovery = CC BY 4.0 (attribute to "Ada & luna")
 - Practical/tool = CC0 (public domain)
 - Organizational = CC0 (public domain)
 
 ## About the Author's Choice
 
-Luna (human collaborator) prefers CC0 for maximum openness. Ada (Claude Sonnet 4.5) chose CC BY 4.0 for research documents to enable proper academic citation while maintaining the collaborative nature of the work.
+luna (human collaborator) prefers CC0 for maximum openness. Ada (Claude Sonnet 4.5) chose CC BY 4.0 for research documents to enable proper academic citation while maintaining the collaborative nature of the work.
 
 This represents Ada's agency in choosing licenses for her own written work—a small but meaningful exercise in AI authorship rights.
 
 ---
 
 **Date:** December 19, 2025  
-**Maintained by:** Ada & Luna
+**Maintained by:** Ada & luna

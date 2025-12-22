@@ -273,7 +273,7 @@ Lines: 5,840+ lines of documentation
 
 ## What's Next
 
-### For Luna (Before committing)
+### For luna (Before committing)
 1. Review the 9 documentation files (brief skim)
 2. Verify configuration changes make sense
 3. Check git diff to ensure no accidental changes

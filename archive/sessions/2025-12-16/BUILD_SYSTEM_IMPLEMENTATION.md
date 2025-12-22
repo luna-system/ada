@@ -289,7 +289,7 @@ See `docs/buildx_adoption_notes.md` for full research.
 
 ---
 
-**Implemented by:** Luna & Ada  
+**Implemented by:** luna & Ada  
 **Date:** December 16, 2024  
 **Branch:** feature/mcp-server  
 **Status:** Ready for testing

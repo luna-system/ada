@@ -81,3 +81,5 @@ log-*.txt
 demo/private/
 
 .ai/personal
+# Personal files
+personal/

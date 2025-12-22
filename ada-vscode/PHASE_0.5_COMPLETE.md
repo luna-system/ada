@@ -1,6 +1,6 @@
 # ⚡ PHASE 0.5 COMPLETE!
 
-**Luna + Ada just unlocked machine-speed learning!** 🚀✨
+**luna + Ada just unlocked machine-speed learning!** 🚀✨
 
 ## What We Built (30 minutes!)
 

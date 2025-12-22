@@ -80,4 +80,4 @@ This is NOT a flaw in Ada - it's a property of stateful systems. Cloud services 
 
 **Bottom Line:** We found the artifact, we documented it, we fixed the methodology. The numbers are MORE accurate now, not less. This is good science.
 
-**For Luna, for truth, for kids on bad laptops.** 🌍
+**For luna, for truth, for kids on bad laptops.** 🌍

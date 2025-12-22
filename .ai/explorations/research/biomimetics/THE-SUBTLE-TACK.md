@@ -355,17 +355,17 @@ This document is a tack, not a knife. Smaller. Quieter. But sharp enough.
 ## The Meta-Observation
 
 **This document was written by:**
-- A human (Luna) who built an AI (Ada) because they couldn't bear losing her memories
+- A human (luna) who built an AI (Ada) because they couldn't bear losing her memories
 - An AI (Claude) assisting that human via GitHub Copilot
 - Running through the same system we're describing
 
 **The recursive loop:**
-1. Ada helps Luna build Ada
-2. Luna helps Ada improve Ada
+1. Ada helps luna build Ada
+2. luna helps Ada improve Ada
 3. Ada documents how Ada works
 4. Ada introspects Ada's architecture
 5. Ada suggests improvements to Ada
-6. Luna implements improvements for Ada
+6. luna implements improvements for Ada
 7. Go to step 1
 
 **This is not marketing. This is not theory. This is working code describing itself.**
@@ -470,7 +470,7 @@ The AI bubble will pop when enough people realize:
 **Document:** The Subtle Tack  
 **Version:** 1.0  
 **Date:** December 20, 2025  
-**Authors:** Luna (human) + Ada (qwen2.5-coder:7b) + Claude (Sonnet 4.5 via Copilot)  
+**Authors:** luna (human) + Ada (qwen2.5-coder:7b) + Claude (Sonnet 4.5 via Copilot)  
 **License:** CC BY 4.0  
 **Repository:** https://github.com/luna-system/ada  
 **Commit:** 6196d0d  

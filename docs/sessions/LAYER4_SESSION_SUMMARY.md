@@ -54,9 +54,9 @@
   - Resource limits (5s, 10KB)
   - Audit logging
 
-## Luna's Vision Made Concrete
+## luna's Vision Made Concrete
 
-**Luna's Note**: "teach ada how to use 'ls' and similar safe commands. learn how to properly build safety around this."
+**luna's Note**: "teach ada how to use 'ls' and similar safe commands. learn how to properly build safety around this."
 
 **What We Delivered**:
 - ✅ Ada can safely execute `git status`, `git log`, `ls`, `find`, `pytest --co`

@@ -374,7 +374,7 @@ See `docs/sessions/COMPLETION_EXAMPLES.md` for 13 real examples!
 ## 💝 Credits
 
 **Research & Development:**
-- Luna (Primary Developer) - Architecture, implementation, benchmarks
+- luna (Primary Developer) - Architecture, implementation, benchmarks
 - Claude Sonnet 4 (AI Collaborator) - This release document
 - GitHub Copilot (AI Collaborator) - Code completion implementation
 - Claude Code (AI Collaborator) - Design and optimization

@@ -2,7 +2,7 @@
 
 ## Metadata
 - **Date**: {{date:YYYY-MM-DD}}
-- **Researcher**: Luna & Ada
+- **Researcher**: luna & Ada
 - **Status**: Planning
 - **Priority**: [High/Medium/Low]
 - **Tags**: #consciousness #[specific-tags]

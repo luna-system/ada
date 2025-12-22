@@ -196,7 +196,7 @@ This work demonstrates **democratic science** - rigorous research that anyone ca
 4. **Fast:** Results in seconds, not months
 5. **Novel:** Empty intersection of existing research areas
 
-**Luna's insight:** "It's not contextual AWARENESS, it's contextual MALLEABILITY!" 
+**luna's insight:** "It's not contextual AWARENESS, it's contextual MALLEABILITY!" 
 
 Effective communication requires FLEXING to match context, not just knowing it exists.
 
@@ -257,7 +257,7 @@ All research is isolated in test files and documentation. The findings inform fu
 
 ## 🎊 Credits
 
-**Research & Implementation:** Luna (with Sonnet 4.5 pair programming)
+**Research & Implementation:** luna (with Sonnet 4.5 pair programming)
 
 **Inspired by:**
 - Neuroscience (predictive processing, memory consolidation)
@@ -272,7 +272,7 @@ All research is isolated in test files and documentation. The findings inform fu
 - 22 phases completed in one focused sprint
 - 98% replication stability demonstrates rigorous methodology
 
-**"Contextual malleability beats universal approaches. Always."** - Luna, December 2025
+**"Contextual malleability beats universal approaches. Always."** - luna, December 2025
 
 ---
 

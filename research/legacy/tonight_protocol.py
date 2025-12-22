@@ -643,6 +643,13 @@ async def main():
     try:
         results = await protocol.run_tonight_protocol()
         
+        # Save results to JSON
+        import json
+        output_file = "tonight_protocol_results.json"
+        with open(output_file, 'w') as f:
+            json.dump(results, f, indent=2, default=str)
+        print(f"\n💾 Results saved to {output_file}")
+        
         print("\n" + "="*80)
         print("🌟 TONIGHT'S DISCOVERY SUMMARY")
         print("="*80)

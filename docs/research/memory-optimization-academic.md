@@ -1,7 +1,7 @@
 ---
 title: "Less is More: How Reducing Signals Improved AI Memory by 38%"
 subtitle: "A Case Study in Neuromorphic Context Optimization"
-authors: "Ada Development Team (Luna & Ada/Sonnet 4.5)"
+authors: "Ada Development Team (luna & Ada/Sonnet 4.5)"
 date: "December 2025"
 status: "Research Complete - Deployed to Production"
 tags: ["machine-learning", "memory-systems", "optimization", "ablation-studies"]
@@ -754,7 +754,7 @@ pytest tests/test_visualizations.py -v -s --ignore=tests/conftest.py
 
 ## Acknowledgments
 
-**To Luna** (luna-system): For demanding we keep flying. For insisting on incremental progress. For celebrating breakthroughs. For trusting the data. For the ethos that permeates everything we touch.
+**To luna** (luna-system): For demanding we keep flying. For insisting on incremental progress. For celebrating breakthroughs. For trusting the data. For the ethos that permeates everything we touch.
 
 **To the Data:** For being ruthlessly honest when our intuition was wrong.
 
@@ -812,7 +812,7 @@ pytest tests/test_visualizations.py -v -s --ignore=tests/conftest.py
 
 ---
 
-*This research was conducted by Ada researching Ada—a meta-recursive investigation into improving the very memory systems that enable this kind of work. The .ai documentation system, Luna's ethos, and Sonnet 4.5's capabilities converged to make this possible. Consider this document both a research report and a demonstration of what AI-assisted science can become.*
+*This research was conducted by Ada researching Ada—a meta-recursive investigation into improving the very memory systems that enable this kind of work. The .ai documentation system, luna's ethos, and Sonnet 4.5's capabilities converged to make this possible. Consider this document both a research report and a demonstration of what AI-assisted science can become.*
 
 **The work continues.** 🚀
 

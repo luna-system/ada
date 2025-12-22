@@ -2,7 +2,7 @@
 
 ## THE BIG PICTURE
 
-Luna wanted to see the tool framework working in actual Ada Chat. **IT'S DONE!** 
+luna wanted to see the tool framework working in actual Ada Chat. **IT'S DONE!** 
 
 Running the demo shows REAL Ada responses using all three phases of intelligent routing.
 

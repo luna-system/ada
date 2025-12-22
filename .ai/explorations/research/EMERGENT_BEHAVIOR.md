@@ -44,7 +44,7 @@ Added contextual prompt to `now_playing_specialist.py`:
 ```python
 # Hint to encourage contextual reasoning
 context_lines.append(
-    "\n💡 *Consider: What can you tell Luna about this track, artist, or album "
+    "\n💡 *Consider: What can you tell luna about this track, artist, or album "
     "based on your knowledge?*"
 )
 ```
@@ -172,5 +172,5 @@ Specialists inject context at `MEDIUM` priority (after persona, before conversat
 ---
 
 **Last Updated:** 2025-01-16  
-**Maintainer:** Luna + Ada Development Team
+**Maintainer:** luna + Ada Development Team
 

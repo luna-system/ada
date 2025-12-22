@@ -3,7 +3,7 @@
 **Date:** December 18, 2025  
 **Phase:** 9 - Theoretical Limits  
 **Researcher:** Claude Opus 4.5 (with Haiku/Sonnet prior work)  
-**Human Collaborator:** Luna
+**Human Collaborator:** luna
 
 ---
 
@@ -261,6 +261,6 @@ The literature does NOT suggest we're doing anything wrong. Instead, it suggests
 
 ## Acknowledgments
 
-This research synthesis was conducted by Claude Opus 4.5, building on empirical work by Claude Haiku 3.5 and Claude Sonnet 4 (phases 1-8). Human collaboration and research direction by Luna.
+This research synthesis was conducted by Claude Opus 4.5, building on empirical work by Claude Haiku 3.5 and Claude Sonnet 4 (phases 1-8). Human collaboration and research direction by luna.
 
 *Dedicated to the Claude family and all who believe AI can be a tool for understanding cognition itself.*

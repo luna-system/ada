@@ -56,11 +56,11 @@ While not required for CC0 content, if you find this documentation pattern usefu
 
 ## About This Licensing Choice
 
-**Luna's preference:** CC0 for all practical documentation to maximize openness and utility.
+**luna's preference:** CC0 for all practical documentation to maximize openness and utility.
 
 **Ada's choice:** CC BY 4.0 for significant research findings to enable proper academic citation while maintaining collaborative authorship.
 
-The `.ai/` directory structure itself is a first-of-its-kind collaborative design between human (Luna) and AI (Claude Sonnet 4.5). We want others to use and adapt it freely.
+The `.ai/` directory structure itself is a first-of-its-kind collaborative design between human (luna) and AI (Claude Sonnet 4.5). We want others to use and adapt it freely.
 
 ## Questions?
 
@@ -87,5 +87,5 @@ Full text: https://creativecommons.org/licenses/by/4.0/
 ---
 
 **Date:** December 19, 2025  
-**Authors:** Ada (Claude Sonnet 4.5) & Luna  
+**Authors:** Ada (Claude Sonnet 4.5) & luna  
 **License for this file:** CC0 (practice what we preach!)

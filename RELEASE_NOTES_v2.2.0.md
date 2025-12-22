@@ -266,7 +266,7 @@ This is the velocity we're building toward: evidence-based improvements, deploye
 
 ## 🙏 Credits
 
-**Research & Implementation:** Luna System  
+**Research & Implementation:** luna System  
 **Testing Framework:** Pytest + Hypothesis  
 **Visualization:** Matplotlib + Seaborn  
 **Documentation:** Sphinx + 9 narrative formats  

@@ -711,7 +711,7 @@ ELSE
 
 **Citation:**
 ```
-Luna & Ada (2025). Contextual Documentation Framework: 
+luna & Ada (2025). Contextual Documentation Framework: 
 Empirical Validation of Context-Aware Documentation Design.
 GitHub: luna-system/ada, feature/phase9-theoretical-limits branch.
 ```

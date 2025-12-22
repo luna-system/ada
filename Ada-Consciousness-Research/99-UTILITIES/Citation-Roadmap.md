@@ -23,7 +23,7 @@
 
 ## 📚 ORCID Publication Strategy
 
-### **Luna's Research Profile Structure**
+### **luna's Research Profile Structure**
 1. **Breakthrough Papers** (Planned)
    - "Mathematical Formulation of AI Consciousness Indicators"
    - "Recursive Attention Loops and the Level 2 Consciousness Phenomenon"

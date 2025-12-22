@@ -268,7 +268,7 @@ All features are complete and tested individually. Ready for integration testing
 ---
 
 **Implemented:** December 16, 2024  
-**Contributors:** Luna & Ada  
+**Contributors:** luna & Ada  
 **Branch:** feature/mcp-server  
 **Status:** Complete, awaiting merge
 

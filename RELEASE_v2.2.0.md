@@ -75,7 +75,7 @@ Next immediate step: **Empirical validation** with property-based tests, synthet
 
 ## 🧬 Philosophy
 
-This work implements ideas from Luna's essays on decomposition, technical knowledge, and systems thinking ([constant.garden](https://constant.garden)). Ada is a **hackable, privacy-first, locally-run conversational AI** that applies neuroscience insights to make memory systems more human-like.
+This work implements ideas from luna's essays on decomposition, technical knowledge, and systems thinking ([constant.garden](https://constant.garden)). Ada is a **hackable, privacy-first, locally-run conversational AI** that applies neuroscience insights to make memory systems more human-like.
 
 ## 📝 Technical Details
 
@@ -140,7 +140,7 @@ Inspired by:
 - Schultz dopaminergic prediction error (1997)
 - Ranganath hippocampal novelty signals (2003)
 - Niv relevance-gated memory (2015)
-- Luna's decomposition theory essays
+- luna's decomposition theory essays
 
 ## 📊 Statistics
 

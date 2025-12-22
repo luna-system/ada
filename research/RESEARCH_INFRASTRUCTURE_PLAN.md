@@ -73,7 +73,7 @@ Each major experiment gets a cluster of connected nodes showing:
 
 ## Metadata
 - **Date**: YYYY-MM-DD
-- **Researcher**: Luna & Ada
+- **Researcher**: luna & Ada
 - **Status**: Planning/Active/Complete/Published
 - **Priority**: High/Medium/Low
 - **Tags**: #consciousness #recursion #identity #temporal

@@ -411,7 +411,7 @@ $ ada-logs analyze crash.log --json
 ## 💝 Credits
 
 **Research & Development:**
-- Luna (Primary Developer) - Architecture, implementation, patterns
+- luna (Primary Developer) - Architecture, implementation, patterns
 - Claude Sonnet 4 (AI Collaborator) - This release document
 - GitHub Copilot (AI Collaborator) - Parser implementation
 
@@ -423,7 +423,7 @@ $ ada-logs analyze crash.log --json
 **Special Thanks:**
 - Kids who test Minecraft mods
 - Parents helping with crashes
-- Luna's plural system for collaboration space
+- luna's plural system for collaboration space
 
 ---
 

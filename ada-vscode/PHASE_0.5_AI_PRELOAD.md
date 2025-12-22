@@ -2,7 +2,7 @@
 
 ## The Insight
 
-**Luna's Discovery:** Instead of waiting for Ada to learn the codebase organically, **preload `.ai/` on startup!**
+**luna's Discovery:** Instead of waiting for Ada to learn the codebase organically, **preload `.ai/` on startup!**
 
 This is EXACTLY what `.ai/` was designed for - machine-readable context that AI systems can consume instantly.
 

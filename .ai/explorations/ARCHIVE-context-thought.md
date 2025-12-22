@@ -3,5 +3,5 @@ so the one big thing that happens in copilot that we want to try to smooth out i
 let's see what we come up with when it's time to dig into this thought later!
 
 - Regards,
--   Luna "luna" Luna, the IIIrd
+-   luna "luna" luna, the IIIrd
 -   

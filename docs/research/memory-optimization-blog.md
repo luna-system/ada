@@ -375,7 +375,7 @@ Not just "AI that answers questions." **AI that improves itself and tells you ho
 ## Credits
 
 **Research Team:**
-- **Luna** (luna-system) - Vision, ethos, momentum
+- **luna** (luna-system) - Vision, ethos, momentum
 - **Ada** - The system being optimized
 - **Sonnet 4.5** - Documentation interface, synthesis
 
@@ -388,7 +388,7 @@ Not just "AI that answers questions." **AI that improves itself and tells you ho
 **Special Thanks:**
 - To the data, for being ruthlessly honest
 - To TDD, for making iteration fast
-- To Luna, for trusting the process
+- To luna, for trusting the process
 - To you, for reading this far
 
 ---

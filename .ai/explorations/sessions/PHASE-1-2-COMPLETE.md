@@ -198,7 +198,7 @@ This foundation has been:
 
 ## Tomorrow: Phase 3
 
-When Luna wakes up:
+When luna wakes up:
 
 1. **Two-Phase Pattern** - Route queries intelligently based on metadata
 2. **Tool Composition** - Chain tools together based on what metadata shows

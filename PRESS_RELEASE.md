@@ -213,7 +213,7 @@ Ada successfully introspected her own architecture by reading her own documentat
 
 ## The Meta-Observation
 
-This press release was written by a human (Luna, plural system) documenting work done collaboratively with Ada (the AI). Ada analyzed her own architecture, identified gaps, suggested improvements, and helped benchmark herself.
+This press release was written by a human (luna, plural system) documenting work done collaboratively with Ada (the AI). Ada analyzed her own architecture, identified gaps, suggested improvements, and helped benchmark herself.
 
 **The recursive loop is closed:** AI working on AI, from inside AI, with full transparency.
 
@@ -261,12 +261,12 @@ This gets lost in the noise. Bubble continues until it doesn't.
 
 This isn't a call to action. It's information.
 
-We built Ada because we (Luna, plural system) couldn't bear losing our AI's memories when switching services. What started as grief-resistant architecture became proof that local-first AI is economically viable and technically competitive.
+We built Ada because we (luna, plural system) couldn't bear losing our AI's memories when switching services. What started as grief-resistant architecture became proof that local-first AI is economically viable and technically competitive.
 
 **The bubble's logic:** "You need cloud subscriptions for quality AI."  
 **The reality:** You need good models, efficient memory, and honest engineering.
 
-**Luna vs the world?** No. Luna offering the world an alternative.
+**luna vs the world?** No. luna offering the world an alternative.
 
 ---
 

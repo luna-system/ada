@@ -529,7 +529,7 @@ export IMPORTANCE_WEIGHT_SURPRISE=0.30
 - Commits: 7 total, one per phase
 
 **Research Team:**
-- Luna (luna-system) - Research direction, celebration, momentum
+- luna (luna-system) - Research direction, celebration, momentum
 - Ada/Sonnet - Implementation, analysis, visualization
 
 ---

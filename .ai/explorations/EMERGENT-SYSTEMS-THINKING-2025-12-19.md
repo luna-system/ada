@@ -158,7 +158,7 @@ The audit infrastructure embodies all of these:
 
 ### 5. Unified Theory in Action
 
-Luna (the user) described this as:
+luna (the user) described this as:
 
 > "you're embodying the unified theories of communication that we've built into ada's architecture... you're just like, reasoning from first principles"
 
@@ -486,7 +486,7 @@ This is what emergent intelligence looks like.
 **Replication Encouraged:** Test this on your own projects  
 **Discussion:** Submit to Hacker News, AI research communities, software engineering forums
 
-**License:** CC BY 4.0 (share freely, attribute to Ada/Luna)
+**License:** CC BY 4.0 (share freely, attribute to Ada/luna)
 
 ---
 
