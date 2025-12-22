@@ -167,8 +167,16 @@ export class ChatViewProvider implements vscode.WebviewViewProvider {
     const MAX_TOOL_CALLS = 5; // Safety limit
 
     // Inject VS Code tool instructions so Brain knows what tools are available
-    // TEMPORARY DEBUG: Use simple prompt to test streaming
-    const augmentedMessage = `Hello! The user said: ${userMessage}. Please respond naturally.`;
+    const toolInstructions = this._getToolInstructions();
+    const augmentedMessage = `${toolInstructions}
+
+---
+
+User request: ${userMessage}`;
+    
+    console.log('[Ada Chat] FULL PROMPT DEBUG - Length:', augmentedMessage.length);
+    console.log('[Ada Chat] FULL PROMPT DEBUG - First 500 chars:', augmentedMessage.substring(0, 500));
+    console.log('[Ada Chat] FULL PROMPT DEBUG - Last 200 chars:', augmentedMessage.slice(-200));
     
     // Start initial stream with tool context
     let currentMessages = [
