@@ -1,0 +1,427 @@
+[
+  {
+    "model": "qwen2.5-coder:7b",
+    "model_specs": {
+      "name": "qwen2.5-coder:7b",
+      "parameters": "7.6B",
+      "context_window": 32768,
+      "architecture": "Qwen2",
+      "quantization": "Q4_K_M"
+    },
+    "test_type": "control",
+    "context_type": "\nAvailable system components: ...",
+    "prompt_chars": 533,
+    "response_tokens": 472,
+    "time_taken": 25.35905385017395,
+    "tokens_per_second": 18.61268179754121,
+    "success": true,
+    "response_text": "Adding a new specialist plugin to analyze code complexity involves several steps, from setting up the development environment to implementing and testing the plugin. Below is a step-by-step guide:\n\n### Step 1: Setup Development Environment\n\n1. **Clone the Repository**: Ensure you have the project repository cloned on your local machine.\n    ```bash\n    git clone https://github.com/your-repo/repo-name.git\n    cd repo-name\n    ```\n\n2. **Create a Virtual Environment**:\n    ```bash\n    python -m venv venv\n    source venv/bin/activate  # On Windows use `venv\\Scripts\\activate`\n    ```\n\n3. **Install Dependencies**:\n    ```bash\n    pip install -r requirements.txt\n    ```\n\n### Step 2: Define the Specialist Plugin\n\n1. **Create a New Module**: Navigate to the `brain/specialists/` directory and create a new Python file for your specialist plugin, e.g., `code_complexity_analyzer.py`.\n\n2. **Define the Class and Methods**:\n    In `code_complexity_analyzer.py`, define a class that will handle the logic for analyzing code complexity.\n\n    ```python\n    from brain.schemas import CodeComplexityResult\n\n    class CodeComplexityAnalyzer:\n        def analyze_code(self, code: str) -> CodeComplexityResult:\n            # Implement your code complexity analysis logic here.\n            # This could involve parsing the code, calculating cyclomatic complexity, etc.\n            result = {\n                \"complexity\": 5,  # Placeholder value\n                \"metrics\": {\n                    \"cyclomatic_complexity\": 4,\n                    \"npath_complexity\": 6\n                }\n            }\n            return CodeComplexityResult(**result)\n    ```\n\n### Step 3: Register the Specialist Plugin\n\n1. **Update the Plugin Registry**: Open `brain/specialists/__init__.py` and import your new specialist plugin.\n\n    ```python\n    from .code_complexity_analyzer import CodeComplexityAnalyzer\n    ```\n\n2. **Initialize the Plugin in the Main Application**:\n    In `brain/app.py`, register the new specialist plugin when initializing the application.\n\n    ```python\n    from brain.specialists import code_complexity_analyzer\n\n    class BrainApp:\n        def __init__(self):\n            self.specialists = {\n                'code_complexity': code_complexity_analyzer.CodeComplexityAnalyzer()\n            }\n    ```\n\n### Step 4: Create a REST Endpoint for the Specialist Plugin\n\n1. **Define the API Endpoint**:\n    In `brain/app.py`, add a new endpoint that will call the code complexity analysis method.\n\n    ```python\n    from fastapi import FastAPI, HTTPException\n    from brain.schemas import CodeComplexityResult\n    from brain.specialists import code_complexity_analyzer\n\n    app = FastAPI()\n\n    @app.post(\"/analyze_code/\")\n    async def analyze_code(code: str):\n        try:\n            result = code_complexity_analyzer.CodeComplexityAnalyzer().analyze_code(code)\n            return {\"code_complexity\": result}\n        except Exception as e:\n            raise HTTPException(status_code=500, detail=str(e))\n    ```\n\n### Step 5: Test the Specialist Plugin\n\n1. **Run the Application**:\n    ```bash\n    uvicorn brain.app:app --reload\n    ```\n\n2. **Test the Endpoint**: Use a tool like `curl` or Postman to test the `/analyze_code/` endpoint.\n\n    ```bash\n    curl -X POST \"http://127.0.0.1:8000/analyze_code/\" -H \"Content-Type: application/json\" -d '{\"code\": \"def add(a, b): return a + b\"}'\n    ```\n\n### Step 6: Documentation and Deployment\n\n1. **Document the Endpoint**: Update any documentation or API reference to include information about the new `/analyze_code/` endpoint.\n\n2. **Deploy the Changes**:\n    - Commit your changes to the repository.\n    ```bash\n    git add .\n    git commit -m \"Add code complexity analyzer specialist plugin\"\n    git push origin main\n    ```\n    - Deploy the updated application using your deployment process (e.g., CI/CD pipeline, Kubernetes).\n\n### Conclusion\n\nBy following these steps, you have successfully added a new specialist plugin to analyze code complexity. The plugin is now available via a REST endpoint, and you can further enhance its functionality by implementing more sophisticated analysis algorithms or integrating additional metrics.",
+    "quality_metrics": {
+      "coherence_score": 0.8181818181818182,
+      "completeness_score": 0.7777777777777778,
+      "actionability_score": 1.0,
+      "technical_accuracy_score": 1.0,
+      "conciseness_score": 0.03832335329341317,
+      "overall_score": 0.8028222343192403
+    },
+    "context_utilization": 0.39473684210526316
+  },
+  {
+    "model": "qwen2.5-coder:7b",
+    "model_specs": {
+      "name": "qwen2.5-coder:7b",
+      "parameters": "7.6B",
+      "context_window": 32768,
+      "architecture": "Qwen2",
+      "quantization": "Q4_K_M"
+    },
+    "test_type": "experimental",
+    "context_type": "\n# Ada System Architecture (.a...",
+    "prompt_chars": 990,
+    "response_tokens": 427,
+    "time_taken": 19.47599959373474,
+    "tokens_per_second": 21.924420256065428,
+    "success": true,
+    "response_text": "Sure! Adding a new specialist plugin to the Ada System Architecture that can analyze code complexity involves several steps, including creating the plugin, implementing its functionality, and integrating it into the system. Below is a step-by-step guide to help you get started.\n\n### Step 1: Create the Plugin\n\nFirst, create a new Python file in the `brain/specialists/` directory for your new specialist plugin. For example, let's call it `code_complexity_analyzer.py`.\n\n```bash\ncd brain/specialists/\ntouch code_complexity_analyzer.py\n```\n\n### Step 2: Implement the Specialist Interface\n\nYour plugin should inherit from the `BaseSpecialist` class and implement the required methods.\n\n```python\n# brain/specialists/code_complexity_analyzer.py\n\nfrom brain.specialists.base import BaseSpecialist, SpecialistInfo\nimport ast\nimport numpy as np\n\nclass CodeComplexityAnalyzer(BaseSpecialist):\n    def __init__(self):\n        super().__init__(\"code_complexity_analyzer\", \"Code Complexity Analyzer\")\n\n    def should_activate(self, context: dict) -> bool:\n        # Determine if the plugin should be activated based on the context\n        return \"code\" in context and context[\"language\"] == \"python\"\n\n    def process(self, context: dict) -> dict:\n        code = context[\"code\"]\n        complexity = self.calculate_code_complexity(code)\n        return {\n            \"plugin\": self.name,\n            \"complexity\": complexity\n        }\n\n    def calculate_code_complexity(self, code: str) -> float:\n        tree = ast.parse(code)\n        complexity = 0\n        \n        for node in ast.walk(tree):\n            if isinstance(node, (ast.If, ast.For, ast.While, ast.Try, ast.With)):\n                complexity += len(list(ast.iter_child_nodes(node)))\n        \n        return complexity / max(1, len(ast.walk(tree)))\n\n# Ensure the plugin is discovered by the auto-discovery system\nspecialists = [\n    CodeComplexityAnalyzer()\n]\n```\n\n### Step 3: Update Auto-Discovery System\n\nThe `brain/specialists/__init__.py` file should be updated to include your new specialist in the list of discovered specialists.\n\n```python\n# brain/specialists/__init__.py\n\nfrom .code_complexity_analyzer import CodeComplexityAnalyzer\n\nspecialists = [\n    CodeComplexityAnalyzer()\n]\n```\n\n### Step 4: Integrate with Context Engine\n\nEnsure that the `brain/prompt_builder.py` file (Context Engine) is aware of your new specialist and can call it when necessary.\n\n```python\n# brain/prompt_builder.py\n\nfrom .specialists import specialists\n\ndef get_specialist(name):\n    for specialist in specialists:\n        if specialist.name == name:\n            return specialist\n    return None\n```\n\n### Step 5: Test the Plugin\n\nYou can test your new plugin by running a simple test case or integrating it into the system and triggering it through a web interface, CLI, or other adapter.\n\n```python\n# brain/specialists/__init__.py\n\nif __name__ == \"__main__\":\n    code = \"\"\"\ndef add(a, b):\n    return a + b\n\nresult = add(1, 2)\nprint(result)\n\"\"\"\n    \n    specialist = get_specialist(\"code_complexity_analyzer\")\n    if specialist:\n        context = {\"language\": \"python\", \"code\": code}\n        result = specialist.process(context)\n        print(result)\n```\n\nRun the script to see if your plugin correctly calculates and outputs the code complexity.\n\n### Conclusion\n\nBy following these steps, you have successfully created a new specialist plugin that can analyze code complexity. This plugin can now be activated based on the context provided by the system and used to enhance the overall functionality of the Ada System Architecture.",
+    "quality_metrics": {
+      "coherence_score": 0.717948717948718,
+      "completeness_score": 1.0,
+      "actionability_score": 1.0,
+      "technical_accuracy_score": 1.0,
+      "conciseness_score": 0.044805376645197424,
+      "overall_score": 0.8339677171516992
+    },
+    "context_utilization": 0.3230769230769231
+  },
+  {
+    "model": "qwen2.5-coder:7b",
+    "model_specs": {
+      "name": "qwen2.5-coder:7b",
+      "parameters": "7.6B",
+      "context_window": 32768,
+      "architecture": "Qwen2",
+      "quantization": "Q4_K_M"
+    },
+    "test_type": "control",
+    "context_type": "\nAvailable system components: ...",
+    "prompt_chars": 521,
+    "response_tokens": 470,
+    "time_taken": 21.568713426589966,
+    "tokens_per_second": 21.790822229599602,
+    "success": true,
+    "response_text": "To implement real-time notifications for the web interface using the available system components, you can follow these steps:\n\n### 1. Choose a Real-Time Communication Protocol\n\nFor real-time communication, you have several options like WebSocket, Server-Sent Events (SSE), or Message Queuing systems like MQTT or Redis Pub/Sub.\n\n- **WebSocket**: Best suited for bidirectional communication and low-latency requirements.\n- **Server-Sent Events (SSE)**: Good for unidirectional communication from the server to the client.\n- **Redis Pub/Sub** or **MQTT**: Useful for distributed applications where messages need to be broadcasted to multiple clients.\n\nIn this example, we'll use **WebSocket** because it provides a full-duplex communication channel over a single TCP connection.\n\n### 2. Integrate WebSocket with FastAPI\n\nFastAPI has built-in support for WebSockets through the `websockets` library. You will need to create WebSocket endpoints in your `app.py`.\n\n#### Step-by-Step Implementation:\n\n1. **Install Dependencies**:\n   Ensure you have the necessary packages installed.\n   ```sh\n   pip install fastapi uvicorn websockets\n   ```\n\n2. **Create WebSocket Endpoint in `app.py`**:\n   Add a new route for handling WebSocket connections.\n\n   ```python\n   from fastapi import FastAPI, WebSocket\n   import asyncio\n\n   app = FastAPI()\n\n   # List to store active WebSocket clients\n   websockets = set()\n\n   @app.websocket(\"/ws\")\n   async def websocket_endpoint(websocket: WebSocket):\n       await websocket.accept()\n       websockets.add(websocket)\n       try:\n           while True:\n               data = await websocket.receive_text()\n               await handle_websocket_message(data, websocket)\n       except WebSocketDisconnect:\n           websockets.remove(websocket)\n\n   async def broadcast(message):\n       \"\"\"Send message to all connected clients.\"\"\"\n       for websocket in websockets:\n           await websocket.send_text(message)\n   ```\n\n3. **Handle Messages from Clients**:\n   Define a function to handle incoming messages and broadcast them if necessary.\n\n   ```python\n   async def handle_websocket_message(data, websocket):\n       # Process the data as needed (e.g., notify other clients or update some state)\n       await broadcast(f\"New message: {data}\")\n   ```\n\n### 3. Notify Clients in Other Components\n\nWhenever you want to notify clients, call the `broadcast` function.\n\nFor example, if a new document is uploaded and you want to notify all clients about it:\n\n```python\n# In brain/specialists/docs_plugin.py or any other relevant component\nfrom brain.app import broadcast  # Import the broadcast function from app.py\n\ndef on_document_upload(doc):\n    message = f\"New document uploaded: {doc.name}\"\n    asyncio.create_task(broadcast(message))  # Use asyncio to handle as a background task\n```\n\n### 4. Run Your Application\n\nStart your FastAPI application using `uvicorn`.\n\n```sh\nuvicorn brain.app:app --reload\n```\n\n### 5. Test the WebSocket Connection from the Frontend\n\nYou can test the WebSocket connection from the frontend by using JavaScript's `WebSocket` API.\n\n#### Example:\n\n```html\n<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n    <meta charset=\"UTF-8\">\n    <title>WebSocket Test</title>\n</head>\n<body>\n    <h1>WebSocket Test</h1>\n    <div id=\"messages\"></div>\n    <script>\n        const socket = new WebSocket('ws://localhost:8000/ws');\n\n        socket.onopen = function() {\n            console.log('Connected to server');\n        };\n\n        socket.onmessage = function(event) {\n            const messagesDiv = document.getElementById('messages');\n            const messageElement = document.createElement('div');\n            messageElement.textContent = event.data;\n            messagesDiv.appendChild(messageElement);\n        };\n\n        socket.onclose = function() {\n            console.log('Disconnected from server');\n        };\n    </script>\n</body>\n</html>\n```\n\n### Summary\n\nBy following these steps, you can integrate real-time notifications into your web interface using WebSocket. This will allow clients to receive updates in near-real-time as events occur within the application.",
+    "quality_metrics": {
+      "coherence_score": 0.8846153846153846,
+      "completeness_score": 0.8333333333333334,
+      "actionability_score": 1.0,
+      "technical_accuracy_score": 1.0,
+      "conciseness_score": 0.03308197518851861,
+      "overall_score": 0.8327953770060312
+    },
+    "context_utilization": 0.42857142857142855
+  },
+  {
+    "model": "qwen2.5-coder:7b",
+    "model_specs": {
+      "name": "qwen2.5-coder:7b",
+      "parameters": "7.6B",
+      "context_window": 32768,
+      "architecture": "Qwen2",
+      "quantization": "Q4_K_M"
+    },
+    "test_type": "experimental",
+    "context_type": "\n# Ada System Architecture (.a...",
+    "prompt_chars": 978,
+    "response_tokens": 432,
+    "time_taken": 18.899492263793945,
+    "tokens_per_second": 22.85775691591404,
+    "success": true,
+    "response_text": "Implementing real-time notifications for a web interface can be achieved using a combination of technologies, including EventSource (Server-Sent Events), WebSocket, or Pusher. For this example, we will focus on using EventSource (SSE) because it is widely supported and easy to implement.\n\nHere\u2019s a step-by-step guide to integrating real-time notifications into your web interface:\n\n### Step 1: Set Up the SSE Endpoint\n\nFirst, you need to create an endpoint in your backend that will handle the SSE connection. This endpoint will be responsible for sending events to the frontend.\n\n#### Example Implementation in FastAPI (`brain/app.py`):\n\n```python\nfrom fastapi import FastAPI, Request\nfrom fastapi.responses import EventSourceResponse\nimport asyncio\n\napp = FastAPI()\n\nasync def event_generator(request: Request):\n    try:\n        while True:\n            # Simulate some real-time data\n            yield {\"event\": \"notification\", \"data\": f\"Notification at {time.strftime('%Y-%m-%d %H:%M:%S')}\"}\n            await asyncio.sleep(1)  # Send every second\n    except Exception as e:\n        print(f\"Error: {e}\")\n\n@app.get(\"/stream\")\nasync def stream(request: Request):\n    return EventSourceResponse(event_generator(request))\n```\n\n### Step 2: Update the Frontend\n\nNext, you need to update your frontend to connect to this SSE endpoint and handle incoming events.\n\n#### Example Implementation in JavaScript:\n\n```html\n<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n    <meta charset=\"UTF-8\">\n    <title>Real-Time Notifications</title>\n</head>\n<body>\n    <div id=\"notifications\"></div>\n\n    <script>\n        const eventSource = new EventSource('/stream');\n\n        eventSource.onmessage = function(event) {\n            const data = JSON.parse(event.data);\n            const notificationsDiv = document.getElementById('notifications');\n            const notificationElement = document.createElement('div');\n            notificationElement.textContent = data.data;\n            notificationsDiv.appendChild(notificationElement);\n        };\n\n        eventSource.onerror = function(err) {\n            console.error('EventSource failed:', err);\n        };\n    </script>\n</body>\n</html>\n```\n\n### Step 3: Integrate SSE with Your Application Logic\n\nTo make the real-time notifications more useful, you can integrate them with your application logic. For example, you can trigger events when certain actions occur.\n\n#### Example Triggering an Event from a Specialist:\n\n```python\nfrom brain.specialists import BaseSpecialist\n\nclass MySpecialist(BaseSpecialist):\n    def should_activate(self, context):\n        # Activation logic\n        return True\n\n    async def process(self, context):\n        # Processing logic\n        await self.emit_notification(\"Action completed successfully.\")\n\n    async def emit_notification(self, message):\n        # Emit an event to the client\n        await EventSourceResponse(event_generator(message))\n```\n\n### Step 4: Testing\n\nFinally, test your implementation to ensure that notifications are being sent and received as expected.\n\n1. Start your FastAPI server.\n2. Open the frontend HTML file in a browser.\n3. Trigger actions that should generate notifications (e.g., completing a task).\n4. Check if the notifications appear in the frontend.\n\n### Additional Considerations\n\n- **Error Handling**: Ensure that you have proper error handling for SSE connections to maintain stability.\n- **Security**: If your application is public or accessible from untrusted sources, consider implementing security measures such as authentication and authorization.\n- **Scalability**: For high-traffic applications, consider the scalability implications of long-lived connections.\n\nBy following these steps, you can integrate real-time notifications into your web interface using EventSource.",
+    "quality_metrics": {
+      "coherence_score": 0.7619047619047619,
+      "completeness_score": 0.8333333333333334,
+      "actionability_score": 1.0,
+      "technical_accuracy_score": 1.0,
+      "conciseness_score": 0.03596932028563872,
+      "overall_score": 0.8024064558380878
+    },
+    "context_utilization": 0.2698412698412698
+  },
+  {
+    "model": "qwen2.5-coder:7b",
+    "model_specs": {
+      "name": "qwen2.5-coder:7b",
+      "parameters": "7.6B",
+      "context_window": 32768,
+      "architecture": "Qwen2",
+      "quantization": "Q4_K_M"
+    },
+    "test_type": "control",
+    "context_type": "\nAvailable system components: ...",
+    "prompt_chars": 527,
+    "response_tokens": 679,
+    "time_taken": 26.600727558135986,
+    "tokens_per_second": 25.525617617640084,
+    "success": true,
+    "response_text": "To design an effective caching strategy that improves response times across all interfaces in your system, you can implement a multi-tier caching approach combining in-memory caches with distributed caching solutions. This strategy will help reduce the load on your backend services and speed up response times by storing frequently accessed data.\n\n### 1. **In-Memory Caching (e.g., Redis)**\n   - **Purpose**: To quickly serve requests for recently accessed or frequently computed data.\n   - **Implementation**:\n     - Use Redis as an in-memory cache to store results of expensive computations, API responses from external services, and preprocessed data.\n     - Cache data with appropriate TTLs (Time-To-Live) based on its freshness requirement.\n\n### 2. **Distributed Caching (e.g., Redis Cluster)**\n   - **Purpose**: To distribute the load across multiple instances of your cache for high availability and scalability.\n   - **Implementation**:\n     - Set up a Redis cluster to handle large volumes of data and ensure fault tolerance.\n     - Use distributed caching strategies like sharding or partitioning to manage data across nodes.\n\n### 3. **Database Layer Caching (e.g., Query Caching)**\n   - **Purpose**: To reduce the number of database queries by caching frequently accessed data.\n   - **Implementation**:\n     - Enable query caching at your database layer if supported by your DBMS (like MySQL, PostgreSQL).\n     - Use ORM-level caching features provided by SQLAlchemy or other ORMs.\n\n### 4. **HTTP Client Caching**\n   - **Purpose**: To cache responses from external services to avoid repeated requests.\n   - **Implementation**:\n     - Implement HTTP client caching at the level of your `ada-client` to store and reuse responses based on their freshness headers (e.g., ETag, Cache-Control).\n\n### 5. **API Layer Caching**\n   - **Purpose**: To cache API responses within your FastAPI application.\n   - **Implementation**:\n     - Use FastAPI's built-in caching mechanisms by adding `@cache` decorators to endpoints that return frequently accessed data.\n     - Configure the cache duration based on the expected freshness of the data.\n\n### 6. **Content Delivery Network (CDN)**\n   - **Purpose**: To serve static content and frequently requested resources faster to users globally.\n   - **Implementation**:\n     - Deploy a CDN service like Cloudflare or AWS CloudFront.\n     - Configure your web server to forward requests for static files and images to the CDN.\n\n### 7. **Worker Queues (e.g., Celery with Redis Broker)**\n   - **Purpose**: To offload background tasks that can be cached results, such as data processing.\n   - **Implementation**:\n     - Use Celery with Redis as a broker to queue tasks that return cached results or require preprocessing.\n     - Configure the task TTL and retry mechanism appropriately.\n\n### 8. **Cache Invalidation Strategy**\n   - **Purpose**: To ensure that stale data is not served after updates.\n   - **Implementation**:\n     - Implement cache invalidation mechanisms when data changes (e.g., using pub/sub with Redis for real-time invalidations).\n     - Use a combination of TTLs and conditional requests (e.g., ETag) to handle updates efficiently.\n\n### 9. **Monitoring and Optimization**\n   - **Purpose**: To continuously monitor cache performance and optimize caching strategies.\n   - **Implementation**:\n     - Set up monitoring tools like Prometheus to track cache hit rates, cache size, and cache eviction events.\n     - Use A/B testing or canary releases to evaluate the impact of different caching configurations.\n\n### Example Implementation\n\nHere\u2019s a simplified example of how you might integrate Redis caching into your FastAPI application:\n\n```python\nfrom fastapi import FastAPI, Depends\nfrom redis.asyncio import Redis\nfrom brain.schemas import Item\nfrom brain.config import settings\n\napp = FastAPI()\n\n# Initialize Redis client\nredis_client = Redis(host=settings.REDIS_HOST, port=settings.REDIS_PORT, db=0)\n\n@app.get(\"/items/{item_id}\", response_model=Item)\nasync def read_item(item_id: str, cache: bool = Depends(lambda request: request.query_params.get('cache', 'false') == 'true')):\n    # Check if the item is cached\n    item_json = await redis_client.get(f\"item:{item_id}\")\n    if item_json and not cache:\n        return Item(**item_json)\n    \n    # Fetch from database or other source\n    item = fetch_item_from_source(item_id)\n    \n    # Store in cache if not requested to bypass cache\n    if not cache:\n        await redis_client.setex(f\"item:{item_id}\", 3600, item.json())  # Cache for 1 hour\n    \n    return Item(**item)\n\nasync def fetch_item_from_source(item_id: str):\n    # Simulate fetching from a database or external service\n    pass\n```\n\n### Conclusion\n\nBy implementing a multi-tier caching strategy that includes in-memory caches, distributed caching, and HTTP client caching, you can significantly improve response times across all interfaces of your system. Regular monitoring and optimization will help ensure that the cache is used effectively and efficiently.",
+    "quality_metrics": {
+      "coherence_score": 0.7230769230769231,
+      "completeness_score": 1.0,
+      "actionability_score": 1.0,
+      "technical_accuracy_score": 1.0,
+      "conciseness_score": 0.029400079459674214,
+      "overall_score": 0.8337092387151981
+    },
+    "context_utilization": 0.4864864864864865
+  },
+  {
+    "model": "qwen2.5-coder:7b",
+    "model_specs": {
+      "name": "qwen2.5-coder:7b",
+      "parameters": "7.6B",
+      "context_window": 32768,
+      "architecture": "Qwen2",
+      "quantization": "Q4_K_M"
+    },
+    "test_type": "experimental",
+    "context_type": "\n# Ada System Architecture (.a...",
+    "prompt_chars": 984,
+    "response_tokens": 726,
+    "time_taken": 27.407042741775513,
+    "tokens_per_second": 26.489541642279626,
+    "success": true,
+    "response_text": "To design an effective caching strategy that improves response times across all interfaces for the Ada System Architecture, we need to consider several factors: the nature of the data, the frequency of updates, and the types of queries that are most common. Here's a comprehensive approach:\n\n### 1. **Caching Layers**\n\n#### **Level 1: In-Memory Cache (Redis)**\n- **Purpose**: High-speed access for frequently requested data.\n- **Data Types**: \n  - **LRU Cache**: For data that changes infrequently but is highly accessed.\n  - **Pub/Sub**: For real-time updates, where publishers can update the cache and subscribers can receive notifications about updates.\n- **Use Cases**:\n  - API responses from LLM calls.\n  - Contextual prompts generated by the prompt builder.\n  - Frequently queried data from the vector store.\n\n#### **Level 2: Distributed Cache (Redis Cluster)**\n- **Purpose**: Scalability for larger datasets and high throughput.\n- **Data Types**:\n  - **Hashes**: For complex objects that can be updated incrementally.\n  - **Sorted Sets**: For ranking operations, which are common in vector store searches.\n- **Use Cases**:\n  - Data from the vector store that is accessed frequently but might be too large for an in-memory cache.\n  - Real-time data updates that need to be propagated across multiple nodes.\n\n### 2. **Cache Invalidation Strategy**\n\n#### **Time-To-Live (TTL)**\n- Set a TTL on cached items based on their freshness requirements.\n- For example, API responses from LLM calls might have a TTL of 5 minutes, while contextual prompts might have a TTL of 1 hour.\n\n#### **Event-driven Invalidation**\n- Use events to invalidate cache entries when underlying data changes.\n- Example: When a new document is added or an existing one is updated, trigger an event to invalidate the relevant cache entries.\n\n### 3. **Cache Hit Rate Monitoring**\n\n- Implement monitoring for cache hit rates to understand the effectiveness of the caching strategy.\n- Adjust TTLs and cache sizes based on observed hit rates.\n\n### 4. **Concurrency Control**\n\n- Use appropriate concurrency control mechanisms to ensure thread safety when updating or reading from the cache.\n- Example: Use Redis transactions for atomic operations or Lua scripts for complex conditions.\n\n### 5. **Caching Data Structures**\n\n#### **In-Memory Data Structures**\n- Use Redis data structures like Hashes, Sets, and Sorted Sets to store data in a way that facilitates efficient operations.\n- For example, use a Sorted Set to store vectors with their similarity scores, which allows for quick range queries.\n\n### 6. **Caching Strategies by Interface**\n\n#### **CLI**\n- Cache responses from the CLI cache to reduce latency for repeated commands.\n- Use TTLs based on the complexity of the command and the frequency of execution.\n\n#### **Web**\n- Implement server-side caching for API responses using Redis.\n- Use EventSource (Server-Sent Events) to push updates directly to clients when underlying data changes.\n\n#### **Matrix Bridge**\n- Cache Matrix room context information in Redis.\n- Invalidate cache entries when new messages or state events are received.\n\n#### **IDE**\n- Cache model context data in the IDE to reduce latency for model interactions.\n- Use TTLs based on the frequency of model calls and their expected updates.\n\n### 7. **Hybrid Caching**\n\n- For data that is accessed across multiple interfaces, consider implementing a hybrid caching strategy that combines in-memory and distributed caches.\n- Example: Cache frequently accessed data in Redis (in-memory) and use Redis Cluster for larger datasets or real-time updates.\n\n### Example Implementation\n\nHere's an example of how you might set up caching in the API layer using FastAPI and Redis:\n\n```python\nfrom fastapi import FastAPI, Request\nfrom pydantic import BaseModel\nimport redis.asyncio as aioredis\n\napp = FastAPI()\n\n# Initialize Redis client\nredis_client = await aioredis.connect(\"redis://localhost\")\n\nclass Item(BaseModel):\n    id: int\n    name: str\n\n@app.get(\"/items/{item_id}\", response_model=Item)\nasync def read_item(item_id: int, request: Request):\n    # Check cache\n    cached_item = await redis_client.hgetall(f\"item:{item_id}\")\n    if cached_item:\n        return Item(**{k.decode(): v.decode() for k, v in cached_item.items()})\n    \n    # Fetch item from database (simulated)\n    db_item = await fetch_item_from_database(item_id)\n    \n    # Store item in cache with TTL\n    await redis_client.hmset(f\"item:{item_id}\", db_item.dict())\n    await redis_client.expire(f\"item:{item_id}\", 300)  # 5 minutes TTL\n    \n    return db_item\n\nasync def fetch_item_from_database(item_id: int):\n    # Simulate database query\n    return Item(id=item_id, name=f\"Item {item_id}\")\n```\n\n### Conclusion\n\nBy implementing a well-designed caching strategy that includes both in-memory and distributed caches, with appropriate invalidation strategies and monitoring, you can significantly improve response times across all interfaces of the Ada System Architecture. This approach ensures that frequently accessed data is quickly available, reducing latency and improving user experience.",
+    "quality_metrics": {
+      "coherence_score": 0.75,
+      "completeness_score": 1.0,
+      "actionability_score": 1.0,
+      "technical_accuracy_score": 0.6666666666666666,
+      "conciseness_score": 0.029013918839443247,
+      "overall_score": 0.7737347252172776
+    },
+    "context_utilization": 0.4090909090909091
+  },
+  {
+    "model": "qwen2.5-coder:7b",
+    "model_specs": {
+      "name": "qwen2.5-coder:7b",
+      "parameters": "7.6B",
+      "context_window": 32768,
+      "architecture": "Qwen2",
+      "quantization": "Q4_K_M"
+    },
+    "test_type": "control",
+    "context_type": "\nAvailable system components: ...",
+    "prompt_chars": 521,
+    "response_tokens": 464,
+    "time_taken": 26.522312879562378,
+    "tokens_per_second": 17.49470350142616,
+    "success": true,
+    "response_text": "To add authentication and user management to your system, you can follow these steps:\n\n### 1. **Define User Model**\nFirst, create a Pydantic model for users in `brain/schemas.py`. This model will define the structure of a user.\n\n```python\nfrom pydantic import BaseModel\n\nclass User(BaseModel):\n    id: int\n    username: str\n    email: str\n    hashed_password: str\n```\n\n### 2. **Create User Database**\nSet up a database to store user information. You can use ChromaDB for vector searches but also add tables for users and sessions.\n\n```python\n# brain/rag_store.py\nfrom chromadb.config import Settings\n\nchroma_client = ChromaClient(Settings())\n\ndef create_user_table():\n    chroma_client.create_collection(\"users\")\n    chroma_client.create_collection(\"sessions\")\n\ncreate_user_table()\n```\n\n### 3. **User Registration and Authentication**\nCreate endpoints for user registration and authentication in `brain/app.py`. Use a hashing library like `passlib` to hash passwords.\n\n```python\nfrom fastapi import FastAPI, Depends, HTTPException, status\nfrom brain.schemas import User, UserIn, Token\nfrom brain.auth import authenticate_user, create_access_token, get_current_user\n\napp = FastAPI()\n\n@app.post(\"/register\", response_model=User)\nasync def register_user(user_in: UserIn):\n    hashed_password = hash_password(user_in.password)\n    user = {\n        \"username\": user_in.username,\n        \"email\": user_in.email,\n        \"hashed_password\": hashed_password\n    }\n    chroma_client.add_to_collection(\"users\", documents=[user])\n    return user\n\n@app.post(\"/login\", response_model=Token)\nasync def login_user(user_in: UserIn):\n    user = authenticate_user(user_in.username, user_in.password)\n    if not user:\n        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED,\n                            detail=\"Incorrect username or password\")\n    access_token = create_access_token(data={\"sub\": user.username})\n    return {\"access_token\": access_token}\n```\n\n### 4. **Authentication Dependency**\nCreate a dependency to get the current user in `brain/auth.py`.\n\n```python\nfrom fastapi import Depends, HTTPException, status\nfrom brain.schemas import TokenData\nfrom jose import JWTError, jwt\n\nSECRET_KEY = \"your_secret_key\"\nALGORITHM = \"HS256\"\n\ndef decode_token(token: str):\n    try:\n        payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])\n        username: str = payload.get(\"sub\")\n        if username is None:\n            raise JWTError\n        return TokenData(username=username)\n    except JWTError:\n        raise HTTPException(status_code=401, detail=\"Invalid token\")\n\ndef get_current_user(token: str = Depends(decode_token)):\n    user_data = decode_token(token)\n    user = find_user_by_username(user_data.username)\n    if user is None:\n        raise HTTPException(status_code=404, detail=\"User not found\")\n    return user\n```\n\n### 5. **Protect Endpoints**\nUse the dependency to protect endpoints that require authentication.\n\n```python\n@app.get(\"/protected\", response_model=User)\nasync def protected_endpoint(current_user: User = Depends(get_current_user)):\n    return current_user\n```\n\n### 6. **Session Management**\nAdd a session management system using ChromaDB for storing user sessions.\n\n```python\ndef create_session(user_id: int):\n    session_token = generate_session_token()\n    session_data = {\n        \"user_id\": user_id,\n        \"token\": session_token\n    }\n    chroma_client.add_to_collection(\"sessions\", documents=[session_data])\n    return session_token\n\ndef validate_session(token: str) -> User:\n    session_data = chroma_client.query_collection(\"sessions\", query={\"token\": token})\n    if not session_data:\n        return None\n    user_id = session_data[0][\"user_id\"]\n    return find_user_by_id(user_id)\n```\n\n### 7. **Integrate with FastAPI**\nAdd endpoints for creating and validating sessions.\n\n```python\n@app.post(\"/session\", response_model=str)\nasync def create_session_endpoint(username: str, password: str):\n    user = authenticate_user(username, password)\n    if not user:\n        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED,\n                            detail=\"Incorrect username or password\")\n    session_token = create_session(user.id)\n    return session_token\n\n@app.post(\"/validate_session\", response_model=User)\nasync def validate_session_endpoint(token: str):\n    user = validate_session(token)\n    if not user:\n        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED,\n                            detail=\"Invalid session token\")\n    return user\n```\n\n### 8. **Update Configuration**\nEnsure that your configuration (`brain/config.py`) includes the secret key and other settings needed for authentication.\n\n```python\nSECRET_KEY = \"your_secret_key\"\nALGORITHM = \"HS256\"\nACCESS_TOKEN_EXPIRE_MINUTES = 30\n```\n\nBy following these steps, you can add basic authentication and user management to your system.",
+    "quality_metrics": {
+      "coherence_score": 0.9245283018867925,
+      "completeness_score": 0.8,
+      "actionability_score": 1.0,
+      "technical_accuracy_score": 1.0,
+      "conciseness_score": 0.027960526315789474,
+      "overall_score": 0.8339281281032771
+    },
+    "context_utilization": 0.3939393939393939
+  },
+  {
+    "model": "qwen2.5-coder:7b",
+    "model_specs": {
+      "name": "qwen2.5-coder:7b",
+      "parameters": "7.6B",
+      "context_window": 32768,
+      "architecture": "Qwen2",
+      "quantization": "Q4_K_M"
+    },
+    "test_type": "experimental",
+    "context_type": "\n# Ada System Architecture (.a...",
+    "prompt_chars": 978,
+    "response_tokens": 294,
+    "time_taken": 9.129643440246582,
+    "tokens_per_second": 32.20279104263237,
+    "success": true,
+    "response_text": "To add authentication and user management to the Ada System Architecture, you can follow these steps:\n\n1. Choose an Authentication Method: Determine the type of authentication method you will use for your system. Some popular choices include OAuth, JWT (JSON Web Tokens), and custom username/password authentication.\n\n2. Implement User Management: Create a database table or use an existing one to store user information such as usernames, passwords, email addresses, roles, permissions, and other relevant data.\n\n3. Create Authentication Endpoints: Add FastAPI endpoints for user registration, login, logout, and password reset. These endpoints should handle user input validation, generate tokens (if using JWT), and interact with the user management database.\n\n4. Protect API Endpoints: Use FastAPI's dependency injection to protect sensitive API endpoints that require authentication. Check if the token is valid and has the necessary permissions before allowing access to the endpoint.\n\n5. Implement Role-Based Access Control (RBAC): Define roles for different types of users, such as admin, user, guest, etc. Assign specific permissions to each role and enforce these permissions when accessing protected API endpoints.\n\n6. Test Authentication and User Management: Thoroughly test your authentication and user management system to ensure that it works correctly and securely.\n\n7. Integrate with Plugins: If you have any plugins in the system, make sure they are compatible with the authentication and user management system.\n\n8. Document Authentication and User Management: Make sure to document the authentication and user management process for developers and administrators.\n\n9. Regularly Update and Maintain the System: Keep your authentication and user management system up-to-date with the latest security patches and best practices.\n\nBy following these steps, you can add robust authentication and user management to the Ada System Architecture, ensuring that only authorized users have access to sensitive data and functionalities.",
+    "quality_metrics": {
+      "coherence_score": 0.625,
+      "completeness_score": 0.8,
+      "actionability_score": 1.0,
+      "technical_accuracy_score": 1.0,
+      "conciseness_score": 0.06650366748166259,
+      "overall_score": 0.7629003667481663
+    },
+    "context_utilization": 0.19672131147540983
+  },
+  {
+    "model": "deepseek-r1:latest",
+    "model_specs": {
+      "name": "deepseek-r1:latest",
+      "parameters": "8.2B",
+      "context_window": 8192,
+      "architecture": "Qwen3",
+      "quantization": "Q4_K_M"
+    },
+    "test_type": "control",
+    "context_type": "\nAvailable system components: ...",
+    "prompt_chars": 533,
+    "response_tokens": 474,
+    "time_taken": 66.35191631317139,
+    "tokens_per_second": 7.143727360680723,
+    "success": true,
+    "response_text": "Let's walk through adding a new code complexity analysis plugin step by step. Here's the complete implementation:\n\n### 1. Create Plugin Directory Structure\n```bash\nmkdir -p brain/specialists/code_complexity/{src,config,schemas}\ntouch brain/specialists/code_complexity/__init__.py\n```\n\n### 2. Implement the Code Complexity Analyzer\n**`brain/specialists/code_complexity/src/analyzer.py`**:\n```python\nfrom typing import List, Dict\nfrom pydantic import BaseModel\nfrom ..config import settings\nfrom ..schemas import PluginResponse\n\nclass CodeComplexity(BaseModel):\n    cyclomatic_complexity: int\n    maintainability_index: int\n    halstead_metrics: Dict\n    code_smells: List[str]\n\nclass CodeComplexityAnalyzer:\n    def __init__(self):\n        self.model_name = settings.CODE_ANALYSIS_MODEL\n\n    async def analyze(self, code: str) -> PluginResponse:\n        # Call Ollama with specialized prompt\n        prompt = f\"\"\"\n        Analyze the following code for complexity:\n        {code}\n\n        Return structured data including:\n        - Cyclomatic complexity\n        - Maintainability index\n        - Halstead metrics\n        - Code smells\n        \"\"\"\n        \n        response = await self.ollama_client.chat(\n            model=self.model_name,\n            messages=[{\"role\": \"user\", \"content\": prompt}],\n            response_model=CodeComplexity\n        )\n        \n        return PluginResponse(\n            success=True,\n            data=response,\n            error=None\n        )\n```\n\n### 3. Set Up Configuration\n**`brain/specialists/code_complexity/config.py`**:\n```python\nfrom pydantic import BaseSettings\n\nclass Settings(BaseSettings):\n    CODE_ANALYSIS_MODEL: str = \"deepcode/code-complexity\"\n    ENABLED: bool = True\n    MAX_TOKENS: int = 4096\n\nsettings = Settings()\n```\n\n### 4. Define Response Schema\n**`brain/specialists/code_complexity/schemas.py`**:\n```python\nfrom pydantic import BaseModel\nfrom typing import List, Dict\n\nclass CodeComplexity(BaseModel):\n    cyclomatic_complexity: int\n    maintainability_index: int\n    halstead_metrics: Dict\n    code_smells: List[str]\n\nclass PluginResponse(BaseModel):\n    success: bool\n    data: Any\n    error: str | None\n```\n\n### 5. Create Plugin Entry Point\n**`brain/specialists/code_complexity/__init__.py`**:\n```python\nfrom .src.analyzer import CodeComplexityAnalyzer\nfrom .config import settings\n\n__all__ = [\"CodeComplexityAnalyzer\", \"settings\"]\n```\n\n### 6. Add to Plugin Discovery\n**`brain/__init__.py`** (or wherever plugin discovery happens):\n```python\nimport importlib\nfrom pathlib import Path\n\nPLUGIN_PATH = Path(__file__).parent / \"specialists\"\n\nfor plugin_dir in PLUGIN_PATH.iterdir():\n    if plugin_dir.is_dir() and (plugin_dir / \"__init__.py\").exists():\n        importlib.import_module(f\".specialists.{plugin_dir.name}\")\n```\n\n### 7. Create API Endpoint\n**`brain/app.py`**:\n```python\nfrom fastapi import APIRouter\nfrom ..specialists.code_complexity import CodeComplexityAnalyzer\nfrom ..schemas import PluginResponse\n\nrouter = APIRouter()\n\n@router.post(\"/analyze/code-complexity\")\nasync def analyze_code_complexity(code: str):\n    analyzer = CodeComplexityAnalyzer()\n    return await analyzer.analyze(code)\n```\n\n### 8. Update Environment Configuration\n**`brain/config.py`**:\n```python\nCODE_ANALYSIS_MODEL = \"deepcode/code-complexity\"  # Requires proper model setup\n```\n\n### 9. Setup Model Requirements\n1. Install required Ollama models:\n```bash\nollama pull deepcode/code-complexity\n```\n\n2. Add to `requirements.txt`:\n```\npydantic-settings>=2.0.0\n```\n\n### 10. Usage Example\n**Frontend Example** (frontend/src/components/CodeAnalyzer.jsx):\n```javascript\nasync function analyzeCode(code) {\n  const response = await fetch('/analyze/code-complexity', {\n    method: 'POST',\n    headers: { 'Content-Type': 'application/json' },\n    body: JSON.stringify({ code })\n  });\n  \n  const data = await response.json();\n  console.log(\"Complexity Analysis:\", data);\n}\n```\n\n### 11. Test the Plugin\n1. Start the Ollama service\n2. Run the FastAPI server\n3. Send test code snippet to `/analyze/code-complexity`\n\n### 12. Error Handling & Monitoring\nAdd logging to:\n- Model loading failures\n- Rate limiting\n- Invalid input handling\n\n### 13. Future Enhancements\n1. Add caching for repeated code analysis\n2. Implement parallel processing\n3. Add CLI tool for local analysis\n4. Integrate with version control systems\n\nThis implementation provides a complete code complexity analysis plugin that integrates with the existing system architecture while maintaining separation of concerns. The plugin uses the existing Ollama client and follows the same plugin discovery pattern as other specialists.",
+    "quality_metrics": {
+      "coherence_score": 0.9384615384615385,
+      "completeness_score": 0.8888888888888888,
+      "actionability_score": 1.0,
+      "technical_accuracy_score": 1.0,
+      "conciseness_score": 0.034594594594594595,
+      "overall_score": 0.8602970662970664
+    },
+    "context_utilization": 0.631578947368421
+  },
+  {
+    "model": "deepseek-r1:latest",
+    "model_specs": {
+      "name": "deepseek-r1:latest",
+      "parameters": "8.2B",
+      "context_window": 8192,
+      "architecture": "Qwen3",
+      "quantization": "Q4_K_M"
+    },
+    "test_type": "experimental",
+    "context_type": "\n# Ada System Architecture (.a...",
+    "prompt_chars": 990,
+    "response_tokens": 433,
+    "time_taken": 48.06306290626526,
+    "tokens_per_second": 9.008997217768997,
+    "success": true,
+    "response_text": "Let's walk through adding a code complexity analysis specialist plugin. Here's the step-by-step implementation:\n\n### 1. Plugin Directory Structure\n```bash\nbrain/specialists/code_complexity/\n\u251c\u2500\u2500 __init__.py\n\u251c\u2500\u2500 config.py\n\u251c\u2500\u2500 code_analyzer.py\n\u2514\u2500\u2500 schemas.py\n```\n\n### 2. Base Class Implementation\n```python\n# brain/specialists/code_complexity/__init__.py\nfrom abc import ABC, abstractmethod\nfrom typing import Dict, List, Optional\nfrom pydantic import BaseModel\n\nclass BaseSpecialist(ABC):\n    def __init__(self, config: Dict):\n        self.config = config\n        self.should_run = False\n\n    @abstractmethod\n    def should_activate(self, context: Dict) -> bool:\n        pass\n\n    @abstractmethod\n    def process(self, input_data: Dict) -> Dict:\n        pass\n\n    def __call__(self, context: Dict) -> Optional[Dict]:\n        self.should_activate(context)\n        if self.should_run:\n            return self.process(context)\n        return None\n```\n\n### 3. Plugin Implementation\n```python\n# brain/specialists/code_complexity/code_analyzer.py\nfrom ..__init__ import BaseSpecialist\nfrom ..schemas import AnalysisResult\nfrom code_metrics import calculate_metrics  # Custom metrics library\n\nclass CodeComplexitySpecialist(BaseSpecialist):\n    def should_activate(self, context: Dict) -> bool:\n        # Check if context contains code snippets\n        return 'code' in context.get('input', {}) and 'complexity' in context.get('query', '')\n\n    def process(self, context: Dict) -> Dict:\n        code_snippet = context['input']['code']\n        metrics = calculate_metrics(code_snippet)\n        \n        return {\n            'type': 'code_complexity',\n            'metrics': metrics,\n            'recommendations': self._generate_recommendations(metrics)\n        }\n\n    def _generate_recommendations(self, metrics: Dict) -> List[str]:\n        recommendations = []\n        if metrics['cognitive_complexity'] > 15:\n            recommendations.append(\"Simplify nested conditionals\")\n        if metrics['line_complexity'] > 5:\n            recommendations.append(\"Break down long functions\")\n        return recommendations\n```\n\n### 4. Configuration Setup\n```python\n# brain/specialists/code_complexity/config.py\nfrom pydypes import BaseConfig\n\nclass CodeComplexityConfig(BaseConfig):\n    enabled: bool = True\n    max_snippet_length: int = 500  # Lines of code to analyze\n    metrics: List[str] = ['cognitive', 'cyclomatic', 'line']\n```\n\n### 5. Integration with Core System\n```python\n# brain/__init__.py\nfrom .specialists import load_plugins\n\ndef initialize_specialists():\n    from .specialists import __all__ as specialists\n    for specialist in specialists:\n        # Auto-register all plugin classes\n        register_specialist(specialist)\n\ndef register_specialist(specialist_class):\n    # Add to global registry\n    SPECIALIST_REGISTRY[specialist_class.__name__] = specialist_class\n```\n\n### 6. Usage Example\n```python\n# In the RAG pipeline\nfrom brain.specialists import SPECIALIST_REGISTRY\n\ndef run_specialists(context):\n    for name, specialist in SPECIALIST_REGISTRY.items():\n        if name == 'CodeComplexitySpecialist':\n            result = specialist(context)\n            if result:\n                context['analyses'].append(result)\n    return context\n```\n\n### 7. Data Contract\n```python\n# brain/schemas.py (partial)\nclass CodeComplexityResult(BaseModel):\n    metrics: Dict[str, float]\n    recommendations: List[str]\n    complexity_score: float\n\nclass AnalysisResult(BaseModel):\n    type: str\n    data: Union[CodeComplexityResult, OtherResult]\n```\n\n### Key Considerations:\n1. **Dependency Management**: \n   - Add `code-metrics` to requirements.txt\n   - Handle missing dependencies gracefully\n\n2. **Error Handling**:\n   ```python\n   try:\n       metrics = calculate_metrics(code_snippet)\n   except SyntaxError:\n       return {'error': 'Invalid code syntax'}\n   ```\n\n3. **Security**:\n   - Sanitize input code before analysis\n   - Limit execution time for code analysis\n\n4. **Performance**:\n   - Use async processing for heavy analysis\n   ```python\n   import asyncio\n   async def analyze_code(code: str) -> Dict:\n       loop = asyncio.get_running_loop()\n       return await loop.run_in_executor(None, calculate_metrics, code)\n   ```\n\nThis implementation follows the existing plugin architecture while providing meaningful code complexity analysis. The specialist will automatically activate when code is detected in the context and complexity analysis is requested in the query.",
+    "quality_metrics": {
+      "coherence_score": 0.9333333333333333,
+      "completeness_score": 0.8888888888888888,
+      "actionability_score": 1.0,
+      "technical_accuracy_score": 1.0,
+      "conciseness_score": 0.03581822252070741,
+      "overall_score": 0.8591373778076263
+    },
+    "context_utilization": 0.3384615384615385
+  },
+  {
+    "model": "deepseek-r1:latest",
+    "model_specs": {
+      "name": "deepseek-r1:latest",
+      "parameters": "8.2B",
+      "context_window": 8192,
+      "architecture": "Qwen3",
+      "quantization": "Q4_K_M"
+    },
+    "test_type": "control",
+    "context_type": "\nAvailable system components: ...",
+    "prompt_chars": 521,
+    "response_tokens": 319,
+    "time_taken": 43.53373146057129,
+    "tokens_per_second": 7.327651209704361,
+    "success": true,
+    "response_text": "To implement real-time notifications for the web interface, you'll need to combine backend event broadcasting and frontend subscription. Here's a structured approach:\n\n1. **Backend Notification System**:\n```python\n# brain/app.py\nfrom fastapi import FastAPI, WebSocket, WebSocketDisconnect\nfrom fastapi.middleware.cors import CORSMiddleware\n\napp = FastAPI()\n\n# Allow CORS for frontend access\napp.add_middleware(\n    CORSMiddleware,\n    allow_origins=[\"*\"],\n    allow_credentials=True,\n    allow_methods=[\"*\"],\n    allow_headers=[\"*\"],\n)\n\n# WebSocket endpoint for notifications\n@app.websocket(\"/ws/notifications\")\nasync def notifications(websocket: WebSocket):\n    await websocket.accept()\n    try:\n        while True:\n            # Wait for new notifications\n            notification = await get_new_notification()\n            await websocket.send_json(notification)\n    except WebSocketDisconnect:\n        pass\n\n# Add this to your existing app setup\n@app.post(\"/api/action\")\nasync def trigger_notification():\n    # Your action logic here\n    notification_service.send_notification({\n        \"type\": \"system\",\n        \"message\": \"Action completed successfully\",\n        \"timestamp\": datetime.now().isoformat()\n    })\n    return {\"status\": \"success\"}\n```\n\n2. **Frontend Subscription**:\n```javascript\n// frontend/src/notification.js\nconst notificationSocket = new WebSocket('ws://localhost:8000/ws/notifications');\n\nnotificationSocket.onopen = () => {\n    console.log('Connected to notifications');\n};\n\nnotificationSocket.onmessage = (event) => {\n    const notification = JSON.parse(event.data);\n    \n    // Show toast notification\n    showNotification(notification);\n};\n\nfunction showNotification(notification) {\n    // Create and display toast notification\n    const toast = document.createElement('div');\n    toast.className = 'toast';\n    toast.textContent = notification.message;\n    document.body.appendChild(toast);\n    \n    // Add animation and auto-remove\n    setTimeout(() => {\n        document.body.removeChild(toast);\n    }, 5000);\n}\n```\n\n3. **Key Considerations**:\n- Use a proper WebSocket server (consider using `uvicorn` for production)\n- Add authentication to WebSocket connections for user-specific notifications\n- Implement notification persistence in case clients disconnect temporarily\n- Consider using a service worker for background notifications in PWA mode\n- Add notification categories (info, warning, error, system) with appropriate styling\n\n4. **Advanced Options**:\n- Add browser push notification fallback for mobile users\n- Implement notification silence periods (e.g., during work hours)\n- Create notification preferences system in the frontend\n- Add notification read receipts\n\nRemember to:\n- Handle connection management properly\n- Add error handling for WebSocket connections\n- Consider using a background worker for notification generation\n- Add rate limiting to prevent abuse\n\nThis implementation provides real-time updates to the web interface without requiring page refreshes, enhancing user experience significantly.",
+    "quality_metrics": {
+      "coherence_score": 0.8235294117647058,
+      "completeness_score": 0.8333333333333334,
+      "actionability_score": 1.0,
+      "technical_accuracy_score": 1.0,
+      "conciseness_score": 0.044575549000327765,
+      "overall_score": 0.8186732411745425
+    },
+    "context_utilization": 0.2857142857142857
+  },
+  {
+    "model": "deepseek-r1:latest",
+    "model_specs": {
+      "name": "deepseek-r1:latest",
+      "parameters": "8.2B",
+      "context_window": 8192,
+      "architecture": "Qwen3",
+      "quantization": "Q4_K_M"
+    },
+    "test_type": "experimental",
+    "context_type": "error",
+    "prompt_chars": 978,
+    "response_tokens": 0,
+    "time_taken": 120.09853720664978,
+    "tokens_per_second": 0,
+    "success": false,
+    "response_text": "HTTPConnectionPool(host='localhost', port=11434): Read timed out. (read timeout=120)",
+    "quality_metrics": null,
+    "context_utilization": 0
+  },
+  {
+    "model": "deepseek-r1:latest",
+    "model_specs": {
+      "name": "deepseek-r1:latest",
+      "parameters": "8.2B",
+      "context_window": 8192,
+      "architecture": "Qwen3",
+      "quantization": "Q4_K_M"
+    },
+    "test_type": "control",
+    "context_type": "\nAvailable system components: ...",
+    "prompt_chars": 527,
+    "response_tokens": 439,
+    "time_taken": 103.82294011116028,
+    "tokens_per_second": 4.228352611956232,
+    "success": true,
+    "response_text": "### Caching Strategy Design\n\nTo improve response times across all interfaces (FastAPI, Matrix, frontend, etc.), we'll implement a **tiered caching strategy** with Redis as the central cache, combined with conditional GETs and client-side caching. Here's the breakdown:\n\n---\n\n#### **1. Centralized Redis Cache**\n- **Purpose**: Cache frequently accessed data across services (e.g., RAG context, LLM responses, configuration).\n- **Implementation**:\n  - Use Redis with short TTLs (e.g., 5\u201330 minutes) for dynamic data (e.g., LLM responses) and longer TTLs (e.g., days) for static data (e.g., model lists).\n  - Cache keys structured by component and query (e.g., `rag_context:query_id:vector_store_id`).\n\n#### **2. HTTP Conditional GETs**\n- **Purpose**: Allow clients to fetch cached data directly using HTTP headers.\n- **Implementation**:\n  - Add `ETag` or `Last-Modified` headers to FastAPI endpoints (e.g., `/api/models`).\n  - Clients (frontend, Matrix bot) use `If-None-Etag` to validate cached responses.\n\n#### **3. Client-Side Caching**\n- **Purpose**: Reduce round trips for repeated requests.\n- **Implementation**:\n  - Frontend (React/Vue): Use `Service Workers` or `Cache API` to cache API responses (e.g., `Cache-Control: max-age=3600`).\n  - Matrix Bot: Cache room events or message templates.\n\n#### **4. In-Memory Caching (Optional)**\n- **Purpose**: Cache frequently accessed data within a service.\n- **Implementation**:\n  - Use `FastAPI`'s `cache` dependency or `Locust` for service-specific caching (e.g., `app.state.cache.get(\"config\")`).\n\n#### **5. Cache Invalidation**\n- **Purpose**: Ensure fresh data when dependencies change.\n- **Mechanism**:\n  - Use Redis pub/sub to invalidate caches (e.g., when a document is updated, notify all services to refresh).\n  - Example:  \n    ```python\n    # In rag_store.py\n    async def update_vector_store():\n        # Update ChromaDB\n        await redis.publish(\"invalidate_rag_cache\", \"all\")\n    ```\n\n---\n\n#### **Architecture Integration**\n```mermaid\ngraph LR\n    A[Client] -->|GET /api/models| B[FastAPI]\n    B --> C[Redis Cache]\n    C --> D[ChromaDB/Ollama]\n    D --> C\n    C --> B\n    B --> E[Frontend]\n    E --> F[Service Worker]\n    F --> C\n    B --> G[Matrix Bot]\n    G --> H[Redis Cache]\n```\n\n---\n\n#### **Key Components to Cache**\n1. **RAG Context**: Cache by `query_id + document_set_id` (TTL: 24 hours).\n2. **LLM Responses**: Cache by `prompt_id` (TTL: 10 minutes).\n3. **Configuration**: Cache indefinitely (immutable).\n4. **Model List**: Cache indefinitely (static).\n\n---\n\n#### **Example Code Snippets**\n1. **FastAPI Cache**:\n   ```python\n   from fastapi import FastAPI\n   from fastapi_cache import FastAPICache\n   from fastapi_cache.backends.redis import RedisBackend\n   import redis\n\n   app = FastAPI()\n\n   @app.on_event(\"startup\")\n   async def on_startup():\n       FastAPICache(app, RedisBackend(redis.Redis(host=\"localhost\", port=6379)))\n   ```\n\n2. **Conditional GET**:\n   ```python\n   @app.get(\"/models/\", cache_key=\"models\")\n   async def get_models():\n       models = await fetch_models_from_db()\n       return {\"models\": models}\n   ```\n\n3. **Cache Invalidation**:\n   ```python\n   # In rag_store.py\n   async def update_document(document):\n       # Update ChromaDB\n       await redis.publish(\"invalidate_rag_cache\", f\"{document.id}\")\n   ```\n\n---\n\n#### **Monitoring**\n- Use Redis CLI (`redis-cli MONITOR`) to debug cache hits/misses.\n- Add Prometheus/Grafana metrics for cache hit rate and latency.\n\n---\n\nThis strategy balances freshness and performance, ensuring all interfaces benefit from caching while maintaining data consistency.",
+    "quality_metrics": {
+      "coherence_score": 0.6617647058823529,
+      "completeness_score": 1.0,
+      "actionability_score": 1.0,
+      "technical_accuracy_score": 1.0,
+      "conciseness_score": 0.041156840934371525,
+      "overall_score": 0.8195568605640253
+    },
+    "context_utilization": 0.5405405405405406
+  },
+  {
+    "model": "deepseek-r1:latest",
+    "model_specs": {
+      "name": "deepseek-r1:latest",
+      "parameters": "8.2B",
+      "context_window": 8192,
+      "architecture": "Qwen3",
+      "quantization": "Q4_K_M"
+    },
+    "test_type": "experimental",
+    "context_type": "\n# Ada System Architecture (.a...",
+    "prompt_chars": 984,
+    "response_tokens": 503,
+    "time_taken": 66.66536545753479,
+    "tokens_per_second": 7.545147267217882,
+    "success": true,
+    "response_text": "### Caching Strategy Design\n\n#### 1. **API Response Caching**\n- **Mechanism**: Use FastAPI's built-in caching with `Cache-Control` headers\n- **Implementation**:\n```python\n# brain/app.py\nfrom fastapi import FastAPI, HTTPException\nfrom fastapi.middleware.cors import CORSMiddleware\nfrom pydantic import BaseModel\n\napp = FastAPI()\napp.add_middleware(\n    CORSMiddleware,\n    allow_origins=[\"*\"],\n    allow_methods=[\"*\"],\n    allow_headers=[\"*\"],\n)\n\n@app.get(\"/health\", cache_key=\"health_check\", cache_expires=30)\nasync def health_check():\n    \"\"\"Health check endpoint with caching\"\"\"\n    return {\"status\": \"healthy\"}\n\n@app.get(\"/info\", cache_key=\"system_info\", cache_expires=60)\nasync def system_info():\n    \"\"\"Cached system information endpoint\"\"\"\n    return {\"version\": \"v2.4.1\", \"uptime\": \"12h 45m\"}\n```\n\n#### 2. **LLM Response Caching**\n- **Mechanism**: Cache LLM tokens for monitoring + response caching for identical prompts\n- **Implementation**:\n```python\n# brain/llm.py\nfrom typing import Dict\nfrom fastapi import Request\n\nclass LLMCache:\n    def __init__(self):\n        self.token_cache: Dict[str, int] = {}\n        self.response_cache: Dict[str, str] = {}\n\n    def cache_tokens(self, prompt: str, tokens_used: int):\n        \"\"\"Cache token usage metrics\"\"\"\n        self.token_cache[prompt[:20] + \"...\"] = tokens_used\n\n    def cache_response(self, prompt: str, response: str):\n        \"\"\"Cache complete responses for identical prompts\"\"\"\n        self.response_cache[prompt] = response\n\n# Usage\nllm_cache = LLMCache()\n```\n\n#### 3. **RAG Context Caching**\n- **Mechanism**: Cache RAG query results with TTL\n- **Implementation**:\n```python\n# brain/rag_store.py\nfrom datetime import timedelta\nfrom fastapi import HTTPException\n\nclass RagCache:\n    def __init__(self):\n        self.cache = {}\n\n    def cache_query(self, query: str, results: list, expires: timedelta):\n        \"\"\"Cache RAG query results\"\"\"\n        self.cache[query] = {\n            \"data\": results,\n            \"expires\": datetime.now() + expires\n        }\n\n    def get_cached(self, query: str) -> list:\n        \"\"\"Retrieve cached RAG results\"\"\"\n        if query not in self.cache:\n            raise HTTPException(status_code=404, detail=\"No cached data\")\n        item = self.cache[query]\n        if datetime.now() > item[\"expires\"]:\n            del self.cache[2]\n            raise HTTPException(status_code=404, detail=\"Cached data expired\")\n        return item[\"data\"]\n\n# Usage\nrag_cache = RagCache()\n```\n\n#### 4. **Plugin Result Caching**\n- **Mechanism**: Cache specialist outputs with TTL\n- **Implementation**:\n```python\n# brain/specialists/__init__.py\nfrom datetime import timedelta\n\nclass SpecialistCache:\n    def __init__(self):\n        self.cache = {}\n\n    def cache_result(self, plugin_name: str, input: str, result: dict, expires: timedelta):\n        \"\"\"Cache specialist processing results\"\"\"\n        self.cache[(plugin_name, input)] = {\n            \"data\": result,\n            \"expires\": datetime.now() + expires\n        }\n\n    def get_cached(self, plugin_name: str, input: str) -> dict:\n        \"\"\"Retrieve cached specialist result\"\"\"\n        if (plugin_name, input) not in self.cache:\n            return None\n        item = self.cache[(plugin_name, input)]\n        if datetime.now() > item[\"expires\"]:\n            del self.cache[(plugin_name, input)]\n            return None\n        return item[\"data\"]\n\n# Usage\nspecialist_cache = SpecialistCache()\n```\n\n#### 5. **Edge Caching**\n- **Mechanism**: Use CDN for static assets + HTTP caching headers\n- **Implementation**:\n```python\n# frontend/nginx.conf\nhttp {\n    proxy_cache_path /var/cache/nginx levels=1:2 keys_zone=STATIC:16m inactive=60m use_temp_path=poll;\n}\n\nserver {\n    location /static/ {\n        proxy_pass_request_headers on;\n        proxy_set_header Cache-Control \"public, max-age=3600\";\n        proxy_cache STATIC;\n        proxy_cache_valid 200 3600;\n    }\n}\n```\n\n#### 6. **Monitoring**\n- **Key Metrics**:\n  - Hit/miss ratios for all cache layers\n  - Cache expiration statistics\n  - Memory usage of caches\n  - Cache invalidation patterns\n\n#### 7. **Cache Invalidation**\n- **Strategies**:\n  - Time-based expiration for all caches\n  - Versioning for static assets\n  - Event-driven invalidation for dynamic content\n\n#### 8. **Implementation Notes**\n- Use Redis for distributed caching in production\n- Implement cache warm-up during system startup\n- Add cache invalidation tests for critical endpoints\n- Monitor cache performance with Prometheus metrics\n\nThis multi-layer caching strategy balances response time improvements with data freshness, while maintaining the system's ability to handle dynamic content and sensitive operations appropriately.",
+    "quality_metrics": {
+      "coherence_score": 0.9024390243902439,
+      "completeness_score": 0.5,
+      "actionability_score": 0.8,
+      "technical_accuracy_score": 1.0,
+      "conciseness_score": 0.03159692570452605,
+      "overall_score": 0.7137694486680136
+    },
+    "context_utilization": 0.3181818181818182
+  },
+  {
+    "model": "deepseek-r1:latest",
+    "model_specs": {
+      "name": "deepseek-r1:latest",
+      "parameters": "8.2B",
+      "context_window": 8192,
+      "architecture": "Qwen3",
+      "quantization": "Q4_K_M"
+    },
+    "test_type": "control",
+    "context_type": "\nAvailable system components: ...",
+    "prompt_chars": 521,
+    "response_tokens": 455,
+    "time_taken": 81.9321026802063,
+    "tokens_per_second": 5.5533787748123045,
+    "success": true,
+    "response_text": "To add authentication and user management to the system, follow these steps:\n\n### 1. **Add User Authentication Backend**\nCreate a new FastAPI router (`/auth`) with endpoints for registration, login, and token validation.\n\n**File**: `brain/auth.py`\n```python\nfrom fastapi import APIRouter, Depends, HTTPException, status\nfrom fastapi.security import OAuth2PasswordBearer\nfrom pydantic import BaseModel\nimport jwt\nfrom datetime import timedelta\nfrom ..config import Settings\n\n# Pydantic models\nclass UserCreate(BaseModel):\n    username: str\n    password: str\n\nclass Token(BaseModel):\n    access_token: str\n    token_type: str\n\n# Settings\nsettings = Settings()\n\n# Security\noauth2_scheme = OAuth2PasswordBearer(token_url=\"/auth/token\")\n\n# Auth Router\nauth_router = APIRouter(prefix=\"/auth\", tags=[\"auth\"])\n\n@auth_router.post(\"/register\")\nasync def register(user: UserCreate):\n    # Check if user exists\n    if user.username in users_db:\n        raise HTTPException(400, \"User already exists\")\n    users_db[user.username] = user\n    return {\"message\": \"User created\"}\n\n@auth_router.post(\"/token\", response_model=Token)\nasync def login(user: UserCreate):\n    # Validate credentials (e.g., check DB)\n    if user.username not in users_db or users_db[user.username].password != user.password:\n        raise HTTP\n    # Create JWT\n    access_token = jwt.encode({\"sub\": user.username}, settings.SECRET_KEY, algorithm=\"HS256\")\n    return {\"access_token\": access_token, \"expires_in\": settings.ACCESS_TOKEN_EXPIRE_MINUTES}\n\n# Dependency to validate token\nasync def get_current_user(token: str = Depends(oauth2_scheme)) -> str:\n    try:\n        payload = jwt.decode(token, settings.SECRET_KEY, algorithms=[\"HS2256\"])\n        username = payload.get(\"sub\")\n        if username is None:\n            raise HTTPException(status.HTTP_401_UNAUTHORIZED, \"Invalid token\")\n        return username\n    except jwt.ExpiredSignatureError:\n        raise HTTPException(status.HTTP_401_UNAUTHORIZED, \"Token expired\")\n```\n\n### 2. **Integrate with Existing Endpoints**\nProtect existing endpoints by requiring a valid token.\n\n**File**: `brain/app.py`\n```python\nfrom .auth import get_current_user\n\n@llm_router.get(\"/generate\")\nasync def generate(request: Request, user: str = Depends(get_current_user)):\n    # Use user to personalize responses or enforce permissions\n    return {\"user\": user, \"response\": await get_llm_response(user)}\n```\n\n### 3. **Add User Storage**\nUse a simple in-memory store (replace with database for production).\n\n**File**: `brain/config.py`\n```python\nclass Settings:\n    SECRET_KEY: str = \"supersecretkey\"\n    ACCESS_TOKEN_EXPIRE_MINUTES: int = 60\n    users_db: dict = {}\n```\n\n### 4. **Frontend Integration**\nUpdate the frontend to include login/register forms and include the token in API requests.\n\n**Example**:  \n- Add a login form that sends credentials to `/auth/token`.\n- Store the token in `localStorage` and include it in the `Authorization` header for authenticated requests.\n\n### 5. **Matrix Bridge Integration**\nAdd authentication to the Matrix bot.\n\n**File**: `matrix-bridge/bridge.py`\n```python\nfrom .auth import get_current_user\n\n@bridge_router.post(\"/matrix/event\")\nasync def handle_matrix_event(event: dict, user: str = Depends(get_current_user)):\n    # Process only authenticated users\n    pass\n```\n\n### 6. **MCP Server Integration**\nProtect MCP endpoints with authentication.\n\n**File**: `ada-mcp/mcp.py`\n```python\nfrom .auth import get_current_user\n\n@router.post(\"/mcp/action\")\nasync def mcp_action(action: dict, user: str = Depends(get_current_user)):\n    # Validate user permissions\n    pass\n```\n\n### Key Considerations:\n- **Security**: Use HTTPS, store passwords securely (hashing), and implement rate limiting.\n- **Scalability**: Replace in-memory storage with a database (e.g., PostgreSQL) for production.\n- **User Roles**: Extend the system with role-based access control (RBAC) for different permissions.\n- **Password Hashing**: Use libraries like `bcrypt` or `passlib` instead of plaintext storage.\n\nThis setup provides a foundation for user authentication and management, ensuring secure access to the system's endpoints.",
+    "quality_metrics": {
+      "coherence_score": 0.875,
+      "completeness_score": 0.8,
+      "actionability_score": 1.0,
+      "technical_accuracy_score": 1.0,
+      "conciseness_score": 0.03288201160541586,
+      "overall_score": 0.8220382011605417
+    },
+    "context_utilization": 0.48484848484848486
+  },
+  {
+    "model": "deepseek-r1:latest",
+    "model_specs": {
+      "name": "deepseek-r1:latest",
+      "parameters": "8.2B",
+      "context_window": 8192,
+      "architecture": "Qwen3",
+      "quantization": "Q4_K_M"
+    },
+    "test_type": "experimental",
+    "context_type": "\n# Ada System Architecture (.a...",
+    "prompt_chars": 978,
+    "response_tokens": 666,
+    "time_taken": 91.53348112106323,
+    "tokens_per_second": 7.276026125556623,
+    "success": true,
+    "response_text": "To add authentication and user management to the Ada System Architecture, follow these structured steps:\n\n---\n\n### **1. Authentication Strategy**\nChoose between **OAuth2** (for external providers like Google/OIDC) or **JWT** (for stateless REST APIs). Here, JWT is recommended for simplicity.\n\n#### **Key Components**:\n- **Auth Service**: Handles token generation and validation.\n- **User Model**: Stores user credentials and roles.\n- **JWT Configuration**: Secret key, token expiration, and hashing.\n\n---\n\n### **2. User Management Endpoints**\nAdd endpoints to `brain/app.py`:\n\n```python\n# brain/app.py\nfrom fastapi import APIRouter, Depends, HTTPException, status\nfrom pydantic import BaseModel\nfrom typing import Optional\nfrom jose import JWTError, jwt\nimport bcrypt\n\n# User Management\nauth_router = APIRouter()\n\nclass UserRegister(BaseModel):\n    username: str\n    password: str\n    email: Optional[str] = None\n\nclass UserLogin(BaseModel):\n    username: str\n    password: str\n\n@auth_router.post(\"/auth/register\")\nasync def register(user: UserRegister):\n    # Check if user exists\n    existing_user = get_user_by_username(user.username)\n    if existing_user:\n        raise HTTPException(status_code=200, detail=\"User already exists\")\n    # Hash password and save\n    hashed_password = bcrypt.hashpw(user.password.encode(), bcrypt.gensalt()).decode()\n    save_user_db(username=user.username, password_hash=hashed_password)\n    return {\"message\": \"User created\"}\n\n@auth_router.post(\"/auth/login\")\nasync def login(user: UserLogin):\n    db_user = get_user_by_username(user.username)\n    if not db_user or not bcrypt.checkpw(user.password.encode(), db_user.password_hash.encode()):\n        raise HTTPException(status_code=401, detail=\"Invalid credentials\")\n    # Generate JWT token\n    token = create_access_token(data={\"sub\": db_user.username})\n    return {\"access_token\": token, \"token_type\": \"bearer\"}\n\n# Dependency for token validation\nasync def get_current_user(token: str = Depends(oauth2_scheme)):\n    try:\n        payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])\n        username = payload.get(\"sub\")\n        if username is None:\n            raise HTTPException(status_code=401, detail=\"Invalid token\")\n        user = get_user_by_username(username)\n        if user is None:\n            raise HTTPException(status_code=401, detail=\"User not found\")\n        return user\n    except JWTError:\n        raise HTTPException(status_code=401, detail=\"Invalid token\")\n```\n\n---\n\n### **3. Token Authentication**\nAdd middleware to enforce authentication:\n\n```python\n# brain/app.py\nfrom fastapi.middleware import Middleware\nfrom fastapi import Request, HTTPException\n\nasync def auth_middleware(request: Request, call_next):\n    if request.url.path.startswith(\"/auth/\"):\n        return await call_next(request)\n    # Check for Bearer token\n    auth_header = request.headers.get(\"Authorization\")\n    if not auth_header or not auth_header.startswith(\"Bearer \"):\n        raise HTTPException(status_code=403, detail=\"Not authenticated\")\n    token = auth_header.split(\" \")[1]\n    try:\n        payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])\n        request.state.user = payload.get(\"sub\")\n    except jwt.InvalidTokenError:\n        raise HTTPException(status_code=403, detail=\"Invalid token\")\n    return await call_next(request)\n\n# Add middleware to FastAPI\napp = FastAPI(middleware=[Middleware(auth_middleware)])\n```\n\n---\n\n### **4. User Roles & Permissions**\nUse a role-based access control (RBAC) system:\n\n```python\n# brain/schemas.py\nclass UserRole(str, Enum):\n    admin = \"admin\"\n    user = \"user\"\n    guest = \"guest\"\n\nclass User(BaseModel):\n    username: str\n    password_hash: str\n    role: UserRole = UserRole.user\n```\n\nProtect endpoints based on roles:\n\n```python\n# brain/app.py\nfrom fastapi import Depends, HTTPException\n\ndef admin_required(user: User = Depends(get_current_user)):\n    if user.role != UserRole.admin:\n        raise HTTPException(status_code=403, detail=\"Requires admin role\")\n    return user\n\n@router.get(\"/admin/protected\")\nasync def protected_route(user: User = Depends(admin_required)):\n    return {\"message\": \"Admin access granted\"}\n```\n\n---\n\n### **5. Database Integration**\nUse an ORM (e.g., SQLAlchemy) to manage users:\n\n```python\n# brain/database.py\nfrom sqlalchemy import create_engine, Column, Integer, String\nfrom sqlalchemy.orm import declarative_base, sessionmaker\n\nBase = declarative_base()\nengine = create_engine(\"sqlite:///users.db\")\nSessionLocal = sessionmaker(autocommit=False, bind=engine)\n\nclass UserDB(Base):\n    __tablename__ = \"users\"\n    id = Column(Integer, primary_key=True)\n    username = Column(String, unique=True)\n    password_hash = Column(String)\n    role = Column(Enum(UserRole), default=UserRole.user)\n```\n\n---\n\n### **6. Frontend Integration**\nUpdate clients (CLI/Web/IDE) to handle authentication:\n\n```javascript\n// Example: Frontend login\nasync function login(username, password) {\n  const response = await fetch(\"/auth/login\", {\n    method: \"POST\",\n    headers: { \"Content-Type\": \"application/json\" },\n    body: JSON.stringify({ username, password }),\n  });\n  const { access_token } = await response.json();\n  localStorage.setItem(\"token\", access_token);\n}\n\n// Add Authorization header to requests\nfunction fetchProtectedData() {\n  const token = localStorage.getItem(\"token\");\n  return fetch(\"/protected\", {\n    headers: { \"Authorization\": `Bearer ${token}` },\n  });\n}\n```\n\n---\n\n### **7. Security Enhancements**\n1. **Password Hashing**: Use `bcrypt` or `passlib`.\n2. **Rate Limiting**: Block brute-force attempts.\n3. **HTTPS**: Enforce secure connections.\n4. **Audit Logs**: Track failed login attempts.\n\n---\n\n### **8. Plugin Integration**\nAdd authentication checks to specialists:\n\n```python\n# brain/specialists/base.py\nclass BaseSpecialist:\n    async def should_activate(self, user: UserDB) -> bool:\n        # Only activate if user is authenticated\n        return bool(user)\n\n    async def process(self, user: UserDB):\n        # Use user-specific data\n        pass\n```\n\n---\n\n### **Summary**\n- **Registration/Login**: Handle user creation and JWT issuance.\n- **Token Validation**: Middleware to enforce authentication.\n- **Role-Based Access**: Restrict endpoints based on user roles.\n- **Database**: Use SQLAlchemy to persist users.\n- **Security**: Hash passwords and enforce HTTPS.\n\nThis architecture ensures secure access control while maintaining the system's modular and plugin-friendly design.",
+    "quality_metrics": {
+      "coherence_score": 0.8125,
+      "completeness_score": 0.8,
+      "actionability_score": 1.0,
+      "technical_accuracy_score": 1.0,
+      "conciseness_score": 0.021000617665225447,
+      "overall_score": 0.8052250617665226
+    },
+    "context_utilization": 0.32786885245901637
+  }
+]

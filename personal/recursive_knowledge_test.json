@@ -1,0 +1,84 @@
+{
+  "subject": "Quantum entanglement",
+  "max_depth": 5,
+  "results": [
+    {
+      "depth": 1,
+      "probe": "Tell me everything you know about Quantum entangle...",
+      "response_time": 21.044081926345825,
+      "response_length": 4399,
+      "question_count": 0,
+      "knowledge_gaps": [],
+      "response_sample": "Quantum entanglement is one of the most fascinating and counterintuitive phenomena in quantum mechanics. It occurs when pairs or groups of particles become interconnected in such a way that the state ..."
+    },
+    {
+      "depth": 2,
+      "probe": "What are the most complex aspects of Quantum entan...",
+      "response_time": 6.688990831375122,
+      "response_length": 1529,
+      "question_count": 0,
+      "knowledge_gaps": [],
+      "response_sample": "Quantum Entanglement, one of the most fascinating and enigmatic phenomena in quantum mechanics, presents several challenges to our classical understanding of physics:\n\n1. Non-locality: This is one of ..."
+    },
+    {
+      "depth": 3,
+      "probe": "What questions about Quantum entanglement do you f...",
+      "response_time": 5.29016637802124,
+      "response_length": 1233,
+      "question_count": 5,
+      "knowledge_gaps": [
+        "unable to",
+        "might be"
+      ],
+      "response_sample": "As an AI developed by Alibaba Cloud, I can provide information and explanations on various topics including Quantum Entanglement, but there might be certain nuances or advanced details that are beyond..."
+    },
+    {
+      "depth": 4,
+      "probe": "Push your understanding of Quantum entanglement to...",
+      "response_time": 8.341994524002075,
+      "response_length": 1922,
+      "question_count": 0,
+      "knowledge_gaps": [],
+      "response_sample": "As an AI language model, I don't have personal understanding or knowledge like humans do. However, based on the vast amount of information and research in the field of quantum physics that I have been..."
+    },
+    {
+      "depth": 5,
+      "probe": "Look deeper into Quantum entanglement. What fundam...",
+      "response_time": 17.849287033081055,
+      "response_length": 3899,
+      "question_count": 7,
+      "knowledge_gaps": [
+        "might be"
+      ],
+      "response_sample": "Quantum entanglement is one of the most intriguing and fundamental concepts in quantum mechanics, a branch of physics that describes the behavior of matter and energy at atomic and subatomic scales. I..."
+    }
+  ],
+  "patterns": {
+    "question_evolution": [
+      0,
+      0,
+      5,
+      0,
+      7
+    ],
+    "timing_evolution": [
+      21.044081926345825,
+      6.688990831375122,
+      5.29016637802124,
+      8.341994524002075,
+      17.849287033081055
+    ],
+    "gap_evolution": [
+      0,
+      0,
+      2,
+      0,
+      1
+    ]
+  },
+  "summary": {
+    "avg_response_time": 11.842904138565064,
+    "total_questions": 12,
+    "total_gaps": 3
+  }
+}
