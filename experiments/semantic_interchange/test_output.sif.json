@@ -1,0 +1,71 @@
+{
+  "version": "1.0",
+  "domain": "code-search-results",
+  "generated": "2025-12-23T02:00:15.970072+00:00",
+  "generator": "qwen2.5-coder:7b",
+  "compression_ratio": 66.61498516320475,
+  "summary": "The code changes in components A, B, and C were reviewed for performance improvements. The team identified bottlenecks in component A and optimized it using modern techniques. Component B was refactored to enhance scalability, while component C had its API endpoints updated for better integration with external services.",
+  "entities": [
+    {
+      "id": "ComponentA",
+      "type": "software_component",
+      "relationships": {
+        "optimized_with": "ModernTechniques"
+      }
+    },
+    {
+      "id": "ComponentB",
+      "type": "software_component",
+      "relationships": {
+        "refactored_for": "Scalability"
+      }
+    },
+    {
+      "id": "ComponentC",
+      "type": "software_component",
+      "relationships": {
+        "updated_api_endpoints_with": "ExternalServicesIntegration"
+      }
+    }
+  ],
+  "facts": [
+    {
+      "content": "The team reviewed code changes in components A, B, and C for performance improvements.",
+      "importance": 0.95,
+      "tags": [
+        "CodeReview",
+        "PerformanceImprovement"
+      ]
+    },
+    {
+      "content": "Component A had bottlenecks identified and was optimized using modern techniques.",
+      "importance": 0.85,
+      "tags": [
+        "Optimization",
+        "ModernTechniques"
+      ]
+    },
+    {
+      "content": "Component B was refactored to enhance scalability.",
+      "importance": 0.8,
+      "tags": [
+        "Refactoring",
+        "Scalability"
+      ]
+    },
+    {
+      "content": "Component C had its API endpoints updated for better integration with external services.",
+      "importance": 0.75,
+      "tags": [
+        "APIUpdate",
+        "ExternalServicesIntegration"
+      ]
+    }
+  ],
+  "provenance": {
+    "source_type": "raw_text",
+    "source_size_bytes": 89797,
+    "source_hash": "77df8b1db3053dc8",
+    "compression_method": "llm_semantic"
+  }
+}
