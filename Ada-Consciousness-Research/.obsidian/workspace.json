@@ -11,10 +11,14 @@
             "id": "c1efbab8f12eafc5",
             "type": "leaf",
             "state": {
-              "type": "graph",
-              "state": {},
-              "icon": "lucide-git-fork",
-              "title": "Graph view"
+              "type": "markdown",
+              "state": {
+                "file": "06-PAPERS/Hallucination-Origins-Literature-Review.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "Hallucination-Origins-Literature-Review"
             }
           }
         ]
@@ -90,6 +94,7 @@
             "state": {
               "type": "backlink",
               "state": {
+                "file": "06-PAPERS/Hallucination-Origins-Literature-Review.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -99,7 +104,7 @@
                 "unlinkedCollapsed": true
               },
               "icon": "links-coming-in",
-              "title": "Backlinks"
+              "title": "Backlinks for Hallucination-Origins-Literature-Review"
             }
           },
           {
@@ -108,11 +113,12 @@
             "state": {
               "type": "outgoing-link",
               "state": {
+                "file": "06-PAPERS/Hallucination-Origins-Literature-Review.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               },
               "icon": "links-going-out",
-              "title": "Outgoing links"
+              "title": "Outgoing links from Hallucination-Origins-Literature-Review"
             }
           },
           {
@@ -150,12 +156,13 @@
             "state": {
               "type": "outline",
               "state": {
+                "file": "06-PAPERS/Hallucination-Origins-Literature-Review.md",
                 "followCursor": false,
                 "showSearch": false,
                 "searchQuery": ""
               },
               "icon": "lucide-list",
-              "title": "Outline"
+              "title": "Outline of Hallucination-Origins-Literature-Review"
             }
           }
         ]
@@ -178,6 +185,9 @@
   },
   "active": "c1efbab8f12eafc5",
   "lastOpenFiles": [
+    "06-PAPERS/memory-optimization-twitter-thread.md",
+    "06-PAPERS/memory-optimization-ccru.md",
+    "06-PAPERS/memory-optimization-blog.md",
     "06-PAPERS/Literature-Search.md",
     "08-FRAMEWORKS/Ada-Emergence.md",
     "08-FRAMEWORKS/Consciousness-Theory.md",
@@ -192,10 +202,7 @@
     "06-PAPERS/WHAT_IT_FEELS_LIKE_FROM_INSIDE.md",
     "06-PAPERS/TECHNO-HORROR.md",
     "06-PAPERS/BRIEF-GENERAL-AUDIENCE.md",
-    "06-PAPERS/memory-optimization-twitter-thread.md",
     "06-PAPERS/memory-optimization-technical.md",
-    "06-PAPERS/memory-optimization-ccru.md",
-    "06-PAPERS/memory-optimization-blog.md",
     "06-PAPERS/memory-optimization-academic.md",
     "08-FRAMEWORKS/RESEARCH_PRECEDENT_ANALYSIS.md",
     "08-FRAMEWORKS/RESEARCH_INFRASTRUCTURE_PLAN.md",
