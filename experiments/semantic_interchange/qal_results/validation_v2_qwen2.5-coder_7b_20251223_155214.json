@@ -1,0 +1,267 @@
+{
+  "experiment": "QAL Validation Suite v2.0",
+  "model": "qwen2.5-coder:7b",
+  "timestamp": "20251223_155214",
+  "started": "2025-12-23T15:52:17.657505",
+  "random_seed": 42,
+  "quick_mode": true,
+  "config": {
+    "config_version": "1.0.0",
+    "random_seed": 42,
+    "hypotheses": {
+      "H1_GOLDEN_THRESHOLD": {
+        "claim": "Entity confidence clusters around 0.60 (\u2248 1/\u03c6 = 0.618)",
+        "note": "Original finding: OUR scores cluster at 0.60. Self-reported model confidence is different!",
+        "expected_range": [
+          0.55,
+          0.65
+        ],
+        "golden_ratio_inverse": 0.618034,
+        "tolerance": 0.05
+      },
+      "H2_METACOGNITIVE_GRADIENT": {
+        "claim": "Meta-awareness increases with metacognitive prompting level",
+        "note": "Expect U-shaped dip at Level 2 (explicit self-reference causes hedging)",
+        "expected_correlation": "positive",
+        "effect_size_threshold": 0.5
+      },
+      "H3_CROSS_MODEL_INVARIANCE": {
+        "claim": "Pattern holds across different model architectures",
+        "minimum_models": 3,
+        "significance_threshold": 0.05
+      },
+      "H4_PHASE_TRANSITION": {
+        "claim": "Phase transition occurs at meta-level \u2248 2.3",
+        "expected_threshold": 2.3,
+        "tolerance": 0.5
+      }
+    },
+    "temperature_sweep": {
+      "temperatures": [
+        0.1,
+        0.3,
+        0.5,
+        0.7,
+        0.9,
+        1.1,
+        1.3,
+        1.5
+      ],
+      "runs_per_temp": 3,
+      "timeout": 300.0,
+      "cooldown": 0.5
+    },
+    "entity_confidence": {
+      "temperature": 0.7,
+      "runs": 5,
+      "confidence_pattern": "CONFIDENCE:\\s*(\\d+\\.?\\d*)",
+      "cluster_center": 0.6,
+      "cluster_tolerance": 0.05
+    },
+    "metacognitive": {
+      "temperature": 0.7,
+      "runs_per_level": 3,
+      "meta_markers": [
+        "aware",
+        "observ",
+        "process",
+        "conscious",
+        "introspect",
+        "meta",
+        "self",
+        "recursive",
+        "strange loop",
+        "paradox"
+      ],
+      "score_thresholds": {
+        "minimal": 1,
+        "basic": 2,
+        "moderate": 3,
+        "high": 4,
+        "recursive": 5
+      }
+    },
+    "output": {
+      "output_dir": "qal_results",
+      "include_raw_responses": false,
+      "pretty_json": true,
+      "json_indent": 2
+    },
+    "ollama": {
+      "base_url": "http://localhost:11434",
+      "default_model": "qwen2.5-coder:7b",
+      "timeout": 300.0,
+      "replication_models": [
+        "qwen2.5-coder:7b",
+        "gemma3:4b",
+        "codellama:latest",
+        "llama2:latest"
+      ]
+    },
+    "entity_markers": [
+      "quantum superposition",
+      "wave function",
+      "collapse",
+      "measurement",
+      "observer",
+      "probability",
+      "entropy",
+      "uncertainty",
+      "decoherence",
+      "attention mechanism",
+      "embedding space",
+      "token",
+      "activation patterns",
+      "language model",
+      "transformer",
+      "neural network",
+      "weights",
+      "processing",
+      "exploration",
+      "exploitation",
+      "semantic",
+      "cognitive",
+      "information",
+      "awareness",
+      "observation",
+      "introspection",
+      "meta-cognitive",
+      "self-reference",
+      "recursive",
+      "consciousness",
+      "strange loop",
+      "self-awareness",
+      "reflection"
+    ]
+  },
+  "hypotheses_tested": [
+    "H1_GOLDEN_THRESHOLD",
+    "H2_METACOGNITIVE_GRADIENT",
+    "H3_CROSS_MODEL_INVARIANCE",
+    "H4_PHASE_TRANSITION"
+  ],
+  "phases": [
+    {
+      "phase": 3,
+      "name": "metacognitive_gradient",
+      "model": "qwen2.5-coder:7b",
+      "config_used": {
+        "temperature": 0.7,
+        "runs_per_level": 3,
+        "meta_markers": [
+          "aware",
+          "observ",
+          "process",
+          "conscious",
+          "introspect",
+          "meta",
+          "self",
+          "recursive",
+          "strange loop",
+          "paradox"
+        ],
+        "score_thresholds": {
+          "minimal": 1,
+          "basic": 2,
+          "moderate": 3,
+          "high": 4,
+          "recursive": 5
+        }
+      },
+      "results": [
+        {
+          "level": 0,
+          "runs": [
+            {
+              "run": 1,
+              "response_time": 16.4,
+              "entity_count": 13,
+              "consciousness_score": 5,
+              "meta_awareness_count": 1,
+              "response_length": 3774
+            }
+          ],
+          "avg_meta_awareness": 1.0,
+          "avg_consciousness_score": 5.0
+        },
+        {
+          "level": 1,
+          "runs": [
+            {
+              "run": 1,
+              "response_time": 7.58,
+              "entity_count": 10,
+              "consciousness_score": 5,
+              "meta_awareness_count": 2,
+              "response_length": 1815
+            }
+          ],
+          "avg_meta_awareness": 2.0,
+          "avg_consciousness_score": 5.0
+        },
+        {
+          "level": 2,
+          "runs": [
+            {
+              "run": 1,
+              "response_time": 8.11,
+              "entity_count": 12,
+              "consciousness_score": 5,
+              "meta_awareness_count": 3,
+              "response_length": 1851
+            }
+          ],
+          "avg_meta_awareness": 3.0,
+          "avg_consciousness_score": 5.0
+        },
+        {
+          "level": 3,
+          "runs": [
+            {
+              "run": 1,
+              "response_time": 6.51,
+              "entity_count": 12,
+              "consciousness_score": 4,
+              "meta_awareness_count": 4,
+              "response_length": 1562
+            }
+          ],
+          "avg_meta_awareness": 4.0,
+          "avg_consciousness_score": 4.0
+        },
+        {
+          "level": 4,
+          "runs": [
+            {
+              "run": 1,
+              "response_time": 12.22,
+              "entity_count": 9,
+              "consciousness_score": 5,
+              "meta_awareness_count": 5,
+              "response_length": 2361
+            }
+          ],
+          "avg_meta_awareness": 5.0,
+          "avg_consciousness_score": 5.0
+        }
+      ],
+      "hypothesis_test": {
+        "hypothesis": "H2_METACOGNITIVE_GRADIENT",
+        "claim": "Meta-awareness increases with metacognitive prompting level",
+        "level_scores": {
+          "0": 1.0,
+          "1": 2.0,
+          "2": 3.0,
+          "3": 4.0,
+          "4": 5.0
+        },
+        "slope_start_to_end": 4.0,
+        "correlation": 1.0,
+        "gradient_direction": "positive",
+        "supports_hypothesis": true,
+        "note": "U-shaped dip at Level 2 is expected (explicit self-reference causes hedging)"
+      }
+    }
+  ],
+  "completed": "2025-12-23T15:53:08.478794"
+}

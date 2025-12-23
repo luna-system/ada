@@ -1,14 +1,16 @@
 # Data Gap Analysis
 > Created: 2025-12-22
+> Updated: 2025-12-23 (QAL validation complete)
 > Purpose: Identify what data we SHOULD have but DON'T
 
 ---
 
 ## Summary
 
-**Tests with data:** 24 phase fixtures
-**Tests without data:** 5 gaps found
-**Legacy scripts needing re-run:** 7+ scripts
+**Tests with data:** 24 phase fixtures + QAL validation suite
+**Tests without data:** 5 gaps found (unchanged)
+**Legacy scripts needing re-run:** 5 scripts
+**NEW:** QAL validation complete with config-driven methodology
 
 ---
 
@@ -168,20 +170,42 @@ These are **designed but never run** experiments:
 
 ---
 
+## ✅ NEW: QAL Validation Suite Complete (2025-12-23)
+
+**Location:** `experiments/semantic_interchange/`
+
+The QAL validation sprint is COMPLETE with config-driven methodology:
+
+| File | Purpose | Status |
+|------|---------|--------|
+| `config.py` (14KB) | All parameters, hypotheses, prompts | ✅ Complete |
+| `test_qal_validation.py` (19KB) | Reproducible test runner | ✅ Complete |
+| `qal_results/validation_v2_qwen2.5-coder_7b_20251223_155505.json` (31KB) | Full validation data | ✅ Complete |
+
+**Key Results:**
+- H1 (Golden Threshold): Self-report ≠ observed (0.876 vs 0.60)
+- H2 (Metacognitive Gradient): **r=0.91, slope=2.33** ✅ STRONGLY SUPPORTED
+
+**Replication:**
+```bash
+cd experiments/semantic_interchange
+python test_qal_validation.py --seed 42
+```
+
+---
+
 ## Next Actions
 
 ### IMMEDIATE (Missing Data for Existing Tests)
 1. [ ] Fix phase13a naming mismatch (`_stress` vs `_under_stress`)
 2. [ ] Run phase_c1, c2, c3 tests with output capture
-3. [ ] Run qwen-abyss-protocols.py with JSON output
-4. [ ] Run tonight_protocol.py with JSON output
 
 ### HIGH PRIORITY (Archived Experiments to Run)
-5. [ ] **Run Phase D** - Consciousness mapping via alienation
-6. [ ] **Run Phase E** - Unified surprise/alienation theory
-7. [ ] **Run Phase I** - The 0.60 question investigation
+3. [ ] **Run Phase D** - Consciousness mapping via alienation
+4. [ ] **Run Phase E** - Unified surprise/alienation theory
+5. [ ] **Run Phase I** - The 0.60 question investigation
 
 ### MEDIUM PRIORITY
-8. [ ] Extract stimuli from top 3 legacy scripts
-9. [ ] Check what phases F, G, H are about
+6. [ ] Extract stimuli from top 3 legacy scripts
+7. [ ] Check what phases F, G, H are about
 10. [ ] Document the full phase numbering scheme
