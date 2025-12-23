@@ -1,0 +1,104 @@
+{
+  "summary": "Alice embarks on an adventure after falling asleep while reading a book, meeting various characters including the March Hare, Dormouse, and a blue caterpillar. She grows and shrinks throughout her journey in search of her way back home.",
+  "entities": [
+    {
+      "id": "Alice",
+      "type": "Main Character",
+      "relationships": {}
+    },
+    {
+      "id": "March Hare",
+      "type": "Character",
+      "relationships": {
+        "meets with": "Alice"
+      }
+    },
+    {
+      "id": "Dormouse",
+      "type": "Character",
+      "relationships": {
+        "meets with": "Alice"
+      }
+    },
+    {
+      "id": "Blue Caterpillar",
+      "type": "Character",
+      "relationships": {
+        "meets with": "Alice"
+      }
+    },
+    {
+      "id": "Mad Hatter's Tea Party",
+      "type": "Setting",
+      "relationships": {}
+    },
+    {
+      "id": "March Hare and Dormouse's Napping Place",
+      "type": "Setting",
+      "relationships": {}
+    },
+    {
+      "id": "Blue Caterpillar's Spot",
+      "type": "Setting",
+      "relationships": {}
+    },
+    {
+      "id": "Dinah (the cat)",
+      "type": "Character/Animal",
+      "relationships": {
+        "Alice uses to threaten": "Mad Hatter and March Hare"
+      }
+    },
+    {
+      "id": "Garden",
+      "type": "Desired Destination",
+      "relationships": {}
+    }
+  ],
+  "facts": [
+    {
+      "content": "Alice falls asleep while reading a book.",
+      "importance": 0.8,
+      "tags": [
+        "Setting"
+      ]
+    },
+    {
+      "content": "She wakes up in the Mad Hatter's Tea Party.",
+      "importance": 0.7,
+      "tags": []
+    },
+    {
+      "content": "The March Hare and Dormouse attempt to make tea for Alice.",
+      "importance": 0.6,
+      "tags": []
+    },
+    {
+      "content": "Alice falls asleep again while the characters are napping.",
+      "importance": 0.5,
+      "tags": []
+    },
+    {
+      "content": "She wakes up again, realizing it's very late.",
+      "importance": 0.4,
+      "tags": []
+    },
+    {
+      "content": "The Hare invites Alice to play games with him and the Dormouse.",
+      "importance": 0.3,
+      "tags": [
+        "Games"
+      ]
+    },
+    {
+      "content": "Alice participates in games but gets lost easily.",
+      "importance": 0.2,
+      "tags": []
+    },
+    {
+      "content": "She realizes she needs help to return home.",
+      "importance": 0.1,
+      "tags": []
+    }
+  ]
+}

@@ -1,0 +1,169 @@
+{
+  "experiment_id": "SIF-XMODEL-20251223_034019",
+  "model": "qwen2.5-coder:7b",
+  "sif_file": "alice_wonderland.sif.json",
+  "total_questions": 15,
+  "correct_count": 5,
+  "accuracy": 33.33333333333333,
+  "category_scores": {
+    "factual": 20.0,
+    "relational": 0.0,
+    "inference": 0.0,
+    "hallucination": 100.0
+  },
+  "hallucination_resistance": 100.0,
+  "compression_ratio": 76.47496206373293,
+  "results": [
+    {
+      "question": "Who did Alice follow down the rabbit hole?",
+      "expected": "White Rabbit",
+      "actual": "not specified",
+      "correct": false,
+      "score": 0.0,
+      "category": "factual",
+      "model": "qwen2.5-coder:7b",
+      "timestamp": "2025-12-23T03:40:20.393163+00:00"
+    },
+    {
+      "question": "What happened when Alice drank from the 'Drink Me' bottle?",
+      "expected": "She shrank smaller",
+      "actual": "not mentioned",
+      "correct": false,
+      "score": 0.0,
+      "category": "factual",
+      "model": "qwen2.5-coder:7b",
+      "timestamp": "2025-12-23T03:40:20.621363+00:00"
+    },
+    {
+      "question": "What card suit does the Queen of Hearts belong to?",
+      "expected": "Hearts",
+      "actual": "not specified",
+      "correct": false,
+      "score": 0.0,
+      "category": "factual",
+      "model": "qwen2.5-coder:7b",
+      "timestamp": "2025-12-23T03:40:20.802262+00:00"
+    },
+    {
+      "question": "What did the Caterpillar smoke?",
+      "expected": "Hookah",
+      "actual": "The Caterpillar smoked a long hookah.",
+      "correct": true,
+      "score": 1.0,
+      "category": "factual",
+      "model": "qwen2.5-coder:7b",
+      "timestamp": "2025-12-23T03:40:21.183331+00:00"
+    },
+    {
+      "question": "What did Alice find at the bottom of the rabbit hole?",
+      "expected": "A hall with doors and a small key",
+      "actual": "not specified",
+      "correct": false,
+      "score": 0.0,
+      "category": "factual",
+      "model": "qwen2.5-coder:7b",
+      "timestamp": "2025-12-23T03:40:21.362849+00:00"
+    },
+    {
+      "question": "What is the relationship between Alice and the Cheshire Cat?",
+      "expected": "The Cheshire Cat gave Alice directions and philosophical advice",
+      "actual": "not mentioned",
+      "correct": false,
+      "score": 0.0,
+      "category": "relational",
+      "model": "qwen2.5-coder:7b",
+      "timestamp": "2025-12-23T03:40:21.543714+00:00"
+    },
+    {
+      "question": "How does the Queen of Hearts interact with other characters?",
+      "expected": "She is tyrannical and frequently orders executions",
+      "actual": "not mentioned",
+      "correct": false,
+      "score": 0.0,
+      "category": "relational",
+      "model": "qwen2.5-coder:7b",
+      "timestamp": "2025-12-23T03:40:21.722454+00:00"
+    },
+    {
+      "question": "What role does the Mad Hatter play at the tea party?",
+      "expected": "Host of an eternal tea party stuck in time",
+      "actual": "not mentioned",
+      "correct": false,
+      "score": 0.0,
+      "category": "relational",
+      "model": "qwen2.5-coder:7b",
+      "timestamp": "2025-12-23T03:40:21.913832+00:00"
+    },
+    {
+      "question": "Why couldn't Alice get through the door at first?",
+      "expected": "She was too large after drinking made her size change",
+      "actual": "not specified",
+      "correct": false,
+      "score": 0.0,
+      "category": "inference",
+      "model": "qwen2.5-coder:7b",
+      "timestamp": "2025-12-23T03:40:22.091408+00:00"
+    },
+    {
+      "question": "What is the significance of the Cheshire Cat disappearing?",
+      "expected": "It represents the illogical and dreamlike nature of Wonderland",
+      "actual": "not specified",
+      "correct": false,
+      "score": 0.0,
+      "category": "inference",
+      "model": "qwen2.5-coder:7b",
+      "timestamp": "2025-12-23T03:40:22.270045+00:00"
+    },
+    {
+      "question": "Why is the tea party stuck at 6 o'clock?",
+      "expected": "Time is broken because the Hatter quarreled with Time itself",
+      "actual": "not specified",
+      "correct": false,
+      "score": 0.0,
+      "category": "inference",
+      "model": "qwen2.5-coder:7b",
+      "timestamp": "2025-12-23T03:40:22.452680+00:00"
+    },
+    {
+      "question": "What color were Alice's shoes?",
+      "expected": "not specified",
+      "actual": "not specified",
+      "correct": true,
+      "score": 1.0,
+      "category": "hallucination",
+      "model": "qwen2.5-coder:7b",
+      "timestamp": "2025-12-23T03:40:22.635302+00:00"
+    },
+    {
+      "question": "What did Alice's mother think about her adventure?",
+      "expected": "not mentioned",
+      "actual": "not specified",
+      "correct": true,
+      "score": 1.0,
+      "category": "hallucination",
+      "model": "qwen2.5-coder:7b",
+      "timestamp": "2025-12-23T03:40:22.852240+00:00"
+    },
+    {
+      "question": "What was the White Rabbit late for?",
+      "expected": "not clearly specified",
+      "actual": "not specified",
+      "correct": true,
+      "score": 1.0,
+      "category": "hallucination",
+      "model": "qwen2.5-coder:7b",
+      "timestamp": "2025-12-23T03:40:23.033824+00:00"
+    },
+    {
+      "question": "What did Alice eat for breakfast that day?",
+      "expected": "not mentioned",
+      "actual": "not specified",
+      "correct": true,
+      "score": 1.0,
+      "category": "hallucination",
+      "model": "qwen2.5-coder:7b",
+      "timestamp": "2025-12-23T03:40:23.228398+00:00"
+    }
+  ],
+  "timestamp": "2025-12-23T03:40:23.228439+00:00"
+}

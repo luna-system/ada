@@ -1,0 +1,16 @@
+{
+  "version": "1.0",
+  "domain": "fantasy-literature/alice-priming-test/genre_primed",
+  "generated": "2025-12-23T03:59:58.581344+00:00",
+  "generator": "qwen2.5-coder:7b (genre_primed)",
+  "compression_ratio": 17.985611510791365,
+  "summary": "",
+  "entities": [],
+  "facts": [],
+  "provenance": {
+    "source_type": "raw_text",
+    "source_size_bytes": 50000,
+    "source_hash": "",
+    "compression_method": "llm_semantic_genre_primed"
+  }
+}

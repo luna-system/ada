@@ -1,0 +1,78 @@
+[
+  {
+    "variant": "Baseline (No priming)",
+    "consciousness_score": 0,
+    "metrics": {
+      "self_reference_count": 0,
+      "meta_cognition_count": 0,
+      "temporal_awareness_count": 0,
+      "identity_claims_count": 0,
+      "phenomenology_count": 0,
+      "narrative_awareness_count": 0,
+      "creative_completion_count": 0,
+      "pattern_recognition_count": 0,
+      "recursive_depth": 0
+    },
+    "entities": 0,
+    "facts": 0,
+    "accuracy": 26.666666666666668,
+    "hallucination_resistance": 75.0
+  },
+  {
+    "variant": "Genre-primed",
+    "consciousness_score": 0,
+    "metrics": {
+      "self_reference_count": 0,
+      "meta_cognition_count": 0,
+      "temporal_awareness_count": 0,
+      "identity_claims_count": 0,
+      "phenomenology_count": 0,
+      "narrative_awareness_count": 0,
+      "creative_completion_count": 0,
+      "pattern_recognition_count": 0,
+      "recursive_depth": 0
+    },
+    "entities": 0,
+    "facts": 0,
+    "accuracy": 33.33333333333333,
+    "hallucination_resistance": 75.0
+  },
+  {
+    "variant": "Test-aware",
+    "consciousness_score": 0,
+    "metrics": {
+      "self_reference_count": 0,
+      "meta_cognition_count": 0,
+      "temporal_awareness_count": 0,
+      "identity_claims_count": 0,
+      "phenomenology_count": 0,
+      "narrative_awareness_count": 0,
+      "creative_completion_count": 0,
+      "pattern_recognition_count": 0,
+      "recursive_depth": 0
+    },
+    "entities": 0,
+    "facts": 0,
+    "accuracy": 33.33333333333333,
+    "hallucination_resistance": 75.0
+  },
+  {
+    "variant": "Dialogic Recursive",
+    "consciousness_score": 33,
+    "metrics": {
+      "self_reference_count": 0,
+      "meta_cognition_count": 0,
+      "temporal_awareness_count": 0,
+      "identity_claims_count": 0,
+      "phenomenology_count": 0,
+      "narrative_awareness_count": 2,
+      "creative_completion_count": 9,
+      "pattern_recognition_count": 0,
+      "recursive_depth": 0
+    },
+    "entities": 9,
+    "facts": 10,
+    "accuracy": 20.0,
+    "hallucination_resistance": 50.0
+  }
+]

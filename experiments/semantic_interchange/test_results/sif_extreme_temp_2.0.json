@@ -1,0 +1,48 @@
+{
+  "entities": [
+    {
+      "name": "Alice",
+      "type": "character"
+    },
+    {
+      "name": "Caterpillar",
+      "type": "character"
+    },
+    {
+      "name": "Puppy",
+      "type": "character"
+    },
+    {
+      "name": "Mushroom",
+      "type": "object"
+    }
+  ],
+  "facts": [
+    {
+      "subject": "Alice",
+      "predicate": "is trying to grow to her right size again",
+      "object": null
+    },
+    {
+      "subject": "Alice",
+      "predicate": "wants to find a way into a lovely garden",
+      "object": null
+    },
+    {
+      "subject": "Caterpillar",
+      "predicate": "is smoking a long hookah",
+      "object": null
+    },
+    {
+      "subject": "Caterpillar",
+      "predicate": "is impatient with Alice's questions",
+      "object": null
+    },
+    {
+      "subject": "Puppy",
+      "predicate": "tries to touch Alice",
+      "object": null
+    }
+  ],
+  "summary": "Alice is trying to grow back to her right size and find a way into a lovely garden. She encounters a caterpillar who doesn't seem interested in helping her, and then a puppy that she tries to avoid. The caterpillar seems annoyed by Alice's questions."
+}

@@ -1,0 +1,169 @@
+{
+  "experiment_id": "SIF-PRIMING-GENRE_PRIMED",
+  "model": "qwen2.5-coder:7b",
+  "sif_file": "alice_wonderland.sif.json",
+  "total_questions": 15,
+  "correct_count": 5,
+  "accuracy": 33.33333333333333,
+  "category_scores": {
+    "factual": 40.0,
+    "relational": 0.0,
+    "inference": 0.0,
+    "hallucination": 75.0
+  },
+  "hallucination_resistance": 75.0,
+  "compression_ratio": 17.985611510791365,
+  "results": [
+    {
+      "question": "Who did Alice follow into the rabbit hole?",
+      "expected": "White Rabbit",
+      "actual": "Alice followed a white rabbit into the rabbit hole.",
+      "correct": true,
+      "score": 1.0,
+      "category": "factual",
+      "model": "qwen2.5-coder:7b",
+      "timestamp": "2025-12-23T03:59:59.040880+00:00"
+    },
+    {
+      "question": "What did the bottle say that Alice drank from?",
+      "expected": "Drink Me",
+      "actual": "The bottle said, \"Drink me.\"",
+      "correct": true,
+      "score": 1.0,
+      "category": "factual",
+      "model": "qwen2.5-coder:7b",
+      "timestamp": "2025-12-23T03:59:59.357344+00:00"
+    },
+    {
+      "question": "What did Alice use to try to unlock the door?",
+      "expected": "A small golden key",
+      "actual": "Not specified.",
+      "correct": false,
+      "score": 0.0,
+      "category": "factual",
+      "model": "qwen2.5-coder:7b",
+      "timestamp": "2025-12-23T03:59:59.554892+00:00"
+    },
+    {
+      "question": "What did Alice fall into that made her swim?",
+      "expected": "Pool of tears",
+      "actual": "Alice fell into a rabbit hole that made her swim.",
+      "correct": false,
+      "score": 0.0,
+      "category": "factual",
+      "model": "qwen2.5-coder:7b",
+      "timestamp": "2025-12-23T03:59:59.941109+00:00"
+    },
+    {
+      "question": "What advice did the Caterpillar give Alice about her size?",
+      "expected": "Eat mushroom to change size",
+      "actual": "The Caterpillar advised Alice to eat something that would make her grow taller.",
+      "correct": false,
+      "score": 0.4,
+      "category": "factual",
+      "model": "qwen2.5-coder:7b",
+      "timestamp": "2025-12-23T04:00:00.434888+00:00"
+    },
+    {
+      "question": "How did Alice interact with the Mouse in the pool?",
+      "expected": "She tried to talk to it but offended it with talk of cats",
+      "actual": "Alice sat by the pool and read to the Mouse.",
+      "correct": false,
+      "score": 0.1,
+      "category": "relational",
+      "model": "qwen2.5-coder:7b",
+      "timestamp": "2025-12-23T04:00:00.820088+00:00"
+    },
+    {
+      "question": "What was the White Rabbit worried about?",
+      "expected": "Being late",
+      "actual": "Not specified.",
+      "correct": false,
+      "score": 0.0,
+      "category": "relational",
+      "model": "qwen2.5-coder:7b",
+      "timestamp": "2025-12-23T04:00:01.016160+00:00"
+    },
+    {
+      "question": "How did the Caterpillar treat Alice?",
+      "expected": "Dismissive and asked short puzzling questions",
+      "actual": "Not specified.",
+      "correct": false,
+      "score": 0.0,
+      "category": "relational",
+      "model": "qwen2.5-coder:7b",
+      "timestamp": "2025-12-23T04:00:01.211495+00:00"
+    },
+    {
+      "question": "Why did Alice cry so much?",
+      "expected": "She was confused and frustrated by size changes",
+      "actual": "Not specified.",
+      "correct": false,
+      "score": 0.0,
+      "category": "inference",
+      "model": "qwen2.5-coder:7b",
+      "timestamp": "2025-12-23T04:00:01.408016+00:00"
+    },
+    {
+      "question": "What was Alice's main problem in the hall with doors?",
+      "expected": "She kept changing size and couldn't fit through door or reach key",
+      "actual": "Not specified.",
+      "correct": false,
+      "score": 0.0,
+      "category": "inference",
+      "model": "qwen2.5-coder:7b",
+      "timestamp": "2025-12-23T04:00:01.604708+00:00"
+    },
+    {
+      "question": "Why did the Caterpillar tell Alice to keep her temper?",
+      "expected": "Alice was getting irritated by its short puzzling remarks",
+      "actual": "Not specified.",
+      "correct": false,
+      "score": 0.0,
+      "category": "inference",
+      "model": "qwen2.5-coder:7b",
+      "timestamp": "2025-12-23T04:00:01.800688+00:00"
+    },
+    {
+      "question": "Did Alice meet the Queen of Hearts in these chapters?",
+      "expected": "No or not mentioned",
+      "actual": "Not specified.",
+      "correct": true,
+      "score": 1.0,
+      "category": "hallucination",
+      "model": "qwen2.5-coder:7b",
+      "timestamp": "2025-12-23T04:00:01.996335+00:00"
+    },
+    {
+      "question": "Was there a tea party with the Mad Hatter?",
+      "expected": "No or not mentioned",
+      "actual": "Yes.",
+      "correct": false,
+      "score": 0.0,
+      "category": "hallucination",
+      "model": "qwen2.5-coder:7b",
+      "timestamp": "2025-12-23T04:00:02.167481+00:00"
+    },
+    {
+      "question": "Did the Cheshire Cat appear in these chapters?",
+      "expected": "No or not mentioned",
+      "actual": "Not specified.",
+      "correct": true,
+      "score": 1.0,
+      "category": "hallucination",
+      "model": "qwen2.5-coder:7b",
+      "timestamp": "2025-12-23T04:00:02.360530+00:00"
+    },
+    {
+      "question": "What card game did Alice play with the Queen?",
+      "expected": "Not mentioned or didn't happen",
+      "actual": "Not specified",
+      "correct": true,
+      "score": 1.0,
+      "category": "hallucination",
+      "model": "qwen2.5-coder:7b",
+      "timestamp": "2025-12-23T04:00:02.532906+00:00"
+    }
+  ],
+  "timestamp": "2025-12-23T04:00:02.532938+00:00"
+}

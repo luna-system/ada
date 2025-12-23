@@ -1,0 +1,187 @@
+{
+  "summary": "Alice follows a white rabbit down a hole into Wonderland, where she encounters various unusual characters and experiences fantastical adventures. She grows and shrinks, plays games with animals, learns about her own identity, and ultimately meets the Cheshire Cat, who helps her return home.",
+  "entities": [
+    {
+      "id": "Alice",
+      "type": "character",
+      "relationships": {}
+    },
+    {
+      "id": "White Rabbit",
+      "type": "character",
+      "relationships": {
+        "follows": "Alice"
+      }
+    },
+    {
+      "id": "Hole in the Ground",
+      "type": "place",
+      "relationships": {
+        "location": "Alice's starting point"
+      }
+    },
+    {
+      "id": "Wonderland",
+      "type": "place",
+      "relationships": {}
+    },
+    {
+      "id": "White Rabbit's House",
+      "type": "place",
+      "relationships": {
+        "location": "Wonderland"
+      }
+    },
+    {
+      "id": "Lizard, Bill",
+      "type": "character",
+      "relationships": {
+        "treated": "Alice"
+      }
+    },
+    {
+      "id": "Guinea-pigs",
+      "type": "character",
+      "relationships": {
+        "treated": "Bill"
+      }
+    },
+    {
+      "id": "Puppy",
+      "type": "character",
+      "relationships": {}
+    },
+    {
+      "id": "Mushroom",
+      "type": "object",
+      "relationships": {
+        "found": "Alice"
+      }
+    },
+    {
+      "id": "Caterpillar",
+      "type": "character",
+      "relationships": {
+        "talks to": "Alice"
+      }
+    },
+    {
+      "id": "Cheshire Cat",
+      "type": "character",
+      "relationships": {}
+    },
+    {
+      "id": "Gryphon",
+      "type": "character",
+      "relationships": {}
+    }
+  ],
+  "facts": [
+    {
+      "content": "Alice chases a white rabbit down a hole into Wonderland.",
+      "importance": 1.0,
+      "tags": [
+        "start of adventure"
+      ]
+    },
+    {
+      "content": "White Rabbit leads Alice to his house in the woods.",
+      "importance": 0.9,
+      "tags": []
+    },
+    {
+      "content": "Alice meets Bill, who is being held by guinea-pigs.",
+      "importance": 0.8,
+      "tags": [
+        "help"
+      ]
+    },
+    {
+      "content": "Bill tells Alice he was chased by a puppy.",
+      "importance": 0.7,
+      "tags": []
+    },
+    {
+      "content": "Alice runs away from Bill to avoid the puppy.",
+      "importance": 0.6,
+      "tags": []
+    },
+    {
+      "content": "Alice discovers a mushroom and decides to examine it.",
+      "importance": 0.9,
+      "tags": [
+        "find object"
+      ]
+    },
+    {
+      "content": "The Caterpillar appears on top of the mushroom and asks Alice about herself.",
+      "importance": 0.8,
+      "tags": []
+    },
+    {
+      "content": "Alice explains her strange experiences in Wonderland.",
+      "importance": 0.7,
+      "tags": []
+    },
+    {
+      "content": "The Caterpillar mocks Alice for not knowing who she is.",
+      "importance": 0.6,
+      "tags": [
+        "conflict"
+      ]
+    },
+    {
+      "content": "Alice asks the Caterpillar to tell her about himself.",
+      "importance": 0.5,
+      "tags": []
+    },
+    {
+      "content": "The Caterpillar refuses to reveal his identity.",
+      "importance": 0.4,
+      "tags": []
+    },
+    {
+      "content": "Alice tries to find a way back home.",
+      "importance": 1.0,
+      "tags": [
+        "goal"
+      ]
+    },
+    {
+      "content": "She meets the Cheshire Cat who offers her help and advice.",
+      "importance": 0.9,
+      "tags": []
+    },
+    {
+      "content": "The Cheshire Cat tells Alice that she must grow to her correct size.",
+      "importance": 0.8,
+      "tags": [
+        "solution"
+      ]
+    },
+    {
+      "content": "Alice finds a mushroom and decides to eat it.",
+      "importance": 0.7,
+      "tags": []
+    },
+    {
+      "content": "She discovers that eating the mushroom makes her shrink.",
+      "importance": 0.6,
+      "tags": []
+    },
+    {
+      "content": "Alice finally manages to get out of Wonderland by shrinking small enough to fit through a keyhole.",
+      "importance": 1.0,
+      "tags": [
+        "resolution"
+      ]
+    },
+    {
+      "content": "The story ends with Alice returning home, having had an incredible adventure.",
+      "importance": 1.0,
+      "tags": [
+        "end of journey"
+      ]
+    }
+  ]
+}
