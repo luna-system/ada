@@ -1,0 +1,137 @@
+{
+  "version": "1.0",
+  "domain": "fantasy-literature/alice-in-wonderland",
+  "generated": "2025-12-23T03:40:19.861256+00:00",
+  "generator": "qwen2.5-coder:7b",
+  "compression_ratio": 76.47496206373293,
+  "summary": "Alice finds herself in a strange world where her size keeps changing. She meets a Caterpillar who gives her advice and helps her understand that change is a natural part of life.",
+  "entities": [
+    {
+      "id": "Alice",
+      "type": "character",
+      "relationships": {
+        "meets": [
+          "Caterpillar"
+        ]
+      }
+    },
+    {
+      "id": "Caterpillar",
+      "type": "character",
+      "relationships": {
+        "gives_advice_to": [
+          "Alice"
+        ]
+      }
+    },
+    {
+      "id": "Mushroom",
+      "type": "object",
+      "relationships": {
+        "contains": [
+          "Caterpillar"
+        ]
+      }
+    },
+    {
+      "id": "Puppy",
+      "type": "character",
+      "relationships": {
+        "chases": [
+          "Alice"
+        ]
+      }
+    },
+    {
+      "id": "Buttercup",
+      "type": "plant",
+      "relationships": {
+        "used_by": [
+          "Alice"
+        ]
+      }
+    }
+  ],
+  "facts": [
+    {
+      "content": "Alice finds herself in a strange world where her size keeps changing.",
+      "importance": 0.95,
+      "tags": [
+        "world",
+        "size_change"
+      ]
+    },
+    {
+      "content": "She meets a Caterpillar who gives her advice and helps her understand that change is a natural part of life.",
+      "importance": 0.85,
+      "tags": [
+        "meeting",
+        "advice",
+        "change"
+      ]
+    },
+    {
+      "content": "Alice tries to say 'How doth the little busy bee' but it all comes different!",
+      "importance": 0.75,
+      "tags": [
+        "memory_loss",
+        "language"
+      ]
+    },
+    {
+      "content": "The Caterpillar asks Alice to repeat 'You are old, Father William'.",
+      "importance": 0.65,
+      "tags": [
+        "challenge",
+        "recitation"
+      ]
+    },
+    {
+      "content": "Alice is confused and doesn't remember things as she used to.",
+      "importance": 0.7,
+      "tags": [
+        "memory_loss",
+        "confusion"
+      ]
+    },
+    {
+      "content": "The Caterpillar tells Alice that change is a natural part of life.",
+      "importance": 0.8,
+      "tags": [
+        "advice",
+        "change"
+      ]
+    },
+    {
+      "content": "Alice runs away from the puppy to avoid being chased.",
+      "importance": 0.6,
+      "tags": [
+        "escape",
+        "puppy"
+      ]
+    },
+    {
+      "content": "Alice finds a mushroom and looks over its edge, meeting a large blue caterpillar.",
+      "importance": 0.75,
+      "tags": [
+        "meeting",
+        "caterpillar",
+        "mushroom"
+      ]
+    },
+    {
+      "content": "The Caterpillar is smoking a long hookah and taking not the smallest notice of Alice or anything else.",
+      "importance": 0.65,
+      "tags": [
+        "hookah",
+        "attitude"
+      ]
+    }
+  ],
+  "provenance": {
+    "source_type": "raw_text",
+    "source_size_bytes": 151191,
+    "source_hash": "a3a27f8edbf7fcd9",
+    "compression_method": "llm_semantic"
+  }
+}

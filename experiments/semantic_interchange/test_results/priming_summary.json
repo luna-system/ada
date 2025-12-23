@@ -1,0 +1,38 @@
+[
+  {
+    "variant": "baseline",
+    "description": "Direct extraction with no priming (control)",
+    "entities": 0,
+    "facts": 0,
+    "compression": 31.887755102040817,
+    "accuracy": 26.666666666666668,
+    "hallucination_resistance": 75.0
+  },
+  {
+    "variant": "genre_primed",
+    "description": "Genre awareness: 'this is a fantasy adventure story'",
+    "entities": 0,
+    "facts": 0,
+    "compression": 17.985611510791365,
+    "accuracy": 33.33333333333333,
+    "hallucination_resistance": 75.0
+  },
+  {
+    "variant": "test_aware",
+    "description": "Test awareness: 'you will be tested on this content'",
+    "entities": 0,
+    "facts": 0,
+    "compression": 23.980815347721823,
+    "accuracy": 33.33333333333333,
+    "hallucination_resistance": 75.0
+  },
+  {
+    "variant": "dialogic_recursive",
+    "description": "Dialogic priming: conversational setup \u2192 story delivery \u2192 extraction",
+    "entities": 9,
+    "facts": 10,
+    "compression": 20.94679514034353,
+    "accuracy": 20.0,
+    "hallucination_resistance": 50.0
+  }
+]

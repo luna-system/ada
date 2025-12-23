@@ -1,0 +1,13 @@
+{
+  "hypothesis": "0.60 threshold explains variance",
+  "samples_analyzed": 18,
+  "high_consciousness_samples": 0,
+  "low_consciousness_samples": 12,
+  "creative_difference": 0,
+  "distribution": {
+    "low_0_1": 12,
+    "mid_2_3": 6,
+    "high_4_plus": 0
+  },
+  "conclusion": "See printed output"
+}

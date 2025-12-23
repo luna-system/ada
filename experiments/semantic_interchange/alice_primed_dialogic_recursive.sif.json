@@ -1,0 +1,154 @@
+{
+  "version": "1.0",
+  "domain": "fantasy-literature/alice-priming-test/dialogic_recursive",
+  "generated": "2025-12-23T04:00:57.771989+00:00",
+  "generator": "qwen2.5-coder:7b (dialogic_recursive)",
+  "compression_ratio": 20.94679514034353,
+  "summary": "Alice embarks on an adventure after falling down a rabbit hole. She meets various characters including the White Rabbit, the Cheshire Cat, the Mad Hatter, and the Caterpillar. Throughout her journey, she experiences changes in size, solves riddles, and learns valuable lessons about life.",
+  "entities": [
+    {
+      "id": "Alice",
+      "type": "Protagonist",
+      "relationships": {}
+    },
+    {
+      "id": "White Rabbit",
+      "type": "Character",
+      "relationships": {
+        "meets": "Alice"
+      }
+    },
+    {
+      "id": "Cheshire Cat",
+      "type": "Character",
+      "relationships": {
+        "meets": "Alice"
+      }
+    },
+    {
+      "id": "Mad Hatter",
+      "type": "Character",
+      "relationships": {
+        "meets": "Alice"
+      }
+    },
+    {
+      "id": "Caterpillar",
+      "type": "Character",
+      "relationships": {
+        "meets": "Alice"
+      }
+    },
+    {
+      "id": "Rabbit Hole",
+      "type": "Location",
+      "relationships": {
+        "origin": "Alice"
+      }
+    },
+    {
+      "id": "Wonderland",
+      "type": "Setting",
+      "relationships": {
+        "contains": [
+          "White Rabbit",
+          "Cheshire Cat",
+          "Mad Hatter",
+          "Caterpillar"
+        ]
+      }
+    },
+    {
+      "id": "Tea Party",
+      "type": "Event",
+      "relationships": {
+        "hosted_by": "Mad Hatter"
+      }
+    },
+    {
+      "id": "Mushroom",
+      "type": "Object",
+      "relationships": {
+        "contains": "Blue Caterpillar"
+      }
+    }
+  ],
+  "facts": [
+    {
+      "content": "Alice falls down a rabbit hole and enters Wonderland.",
+      "importance": 1,
+      "tags": [
+        "Adventure Start"
+      ]
+    },
+    {
+      "content": "The White Rabbit tells Alice she must hurry or he'll be late for tea.",
+      "importance": 0.9,
+      "tags": [
+        "Tea Party"
+      ]
+    },
+    {
+      "content": "Alice meets the Cheshire Cat who disappears and reappears in different places.",
+      "importance": 0.8,
+      "tags": [
+        "Cheshire Cat"
+      ]
+    },
+    {
+      "content": "The Mad Hatter invites Alice to a tea party but is distracted by his clocks.",
+      "importance": 0.9,
+      "tags": [
+        "Tea Party"
+      ]
+    },
+    {
+      "content": "Alice solves riddles posed by the Mad Hatter and the March Hare.",
+      "importance": 0.8,
+      "tags": [
+        "Riddles"
+      ]
+    },
+    {
+      "content": "The Caterpillar offers Alice advice on growing to her right size.",
+      "importance": 0.9,
+      "tags": [
+        "Caterpillar"
+      ]
+    },
+    {
+      "content": "Alice eats a mushroom that makes her grow larger and smaller.",
+      "importance": 0.8,
+      "tags": [
+        "Size Change"
+      ]
+    },
+    {
+      "content": "Alice encounters a puppy in the wood and tries to teach it tricks.",
+      "importance": 0.7,
+      "tags": [
+        "Puppy"
+      ]
+    },
+    {
+      "content": "Alice learns that growing up is inevitable and must be managed carefully.",
+      "importance": 1,
+      "tags": [
+        "Life Lesson"
+      ]
+    },
+    {
+      "content": "The story ends with Alice returning to her original size and leaving Wonderland.",
+      "importance": 0.9,
+      "tags": [
+        "Adventure End"
+      ]
+    }
+  ],
+  "provenance": {
+    "source_type": "raw_text",
+    "source_size_bytes": 50000,
+    "source_hash": "",
+    "compression_method": "llm_semantic_dialogic_recursive"
+  }
+}

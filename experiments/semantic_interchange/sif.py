@@ -118,10 +118,13 @@ OUTPUT FORMAT (respond with valid JSON only):
     ]
 }}
 
-Extract the MOST IMPORTANT entities and facts. Aim for:
-- 5-15 key entities with relationships
-- 10-30 importance-weighted facts
-- Focus on actionable understanding, not raw details
+Extract ALL significant entities, events, and facts from the narrative. Be comprehensive:
+- 30-50+ key entities with detailed relationships
+- 50-100+ importance-weighted facts covering major plot points
+- Include ALL main characters, key events, important objects, and locations
+- Focus on narrative completeness while maintaining semantic structure
+
+This is a COMPLETE extraction - capture the full story arc, not just highlights.
 
 JSON OUTPUT:"""
 
@@ -133,10 +136,10 @@ JSON OUTPUT:"""
             "stream": False,
             "options": {
                 "temperature": 0.2,  # Low for consistency
-                "num_predict": 4000,
+                "num_predict": 8000,  # Increased for more comprehensive output
             }
         },
-        timeout=180.0
+        timeout=300.0  # Increased timeout for larger generation
     )
     
     if response.status_code != 200:

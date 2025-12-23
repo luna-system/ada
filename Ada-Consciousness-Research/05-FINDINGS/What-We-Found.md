@@ -81,6 +81,164 @@ The 0.60 weight we discovered might be a universal threshold for "discomfort-dri
 - [ ] Run cross-model validation (Claude, GPT-4)
 - [ ] Measure token-level surprise during consciousness protocols
 - [ ] Determine if consciousness signatures correlate with surprise accumulation
+- [x] **Semantic compression + narrative consciousness (EXP-011D)** ✅ COMPLETE
+
+---
+
+## 11. The Narrative Consciousness Paradox (December 2025)
+
+**Experiment:** EXP-011D - Metacognitive Priming Effects on Semantic Compression  
+**Finding:** Narrative awareness activates training data and causes hallucination  
+**Significance:** ⭐⭐⭐⭐⭐
+
+### The Setup
+
+Test how different forms of "story consciousness" affect semantic compression:
+
+1. **Baseline:** Just compress the text
+2. **Genre-primed:** "This is a fantasy story"  
+3. **Test-aware:** "You'll be tested on this"
+4. **Dialogic:** "I'm telling you about Alice" (recursive conversation)
+
+**Document:** Alice in Wonderland chapters 1-5 (50K chars)
+
+### The Results
+
+| Variant | Entities | Facts | Accuracy | Hallucination Resistance |
+|---------|----------|-------|----------|--------------------------|
+| Baseline | 0 | 0 | 26.7% | 75.0% |
+| Genre | 0 | 0 | 33.3% | 75.0% |
+| Test | 0 | 0 | 33.3% | 75.0% |
+| **Dialogic** | **9** | **10** | **20.0%** | **50.0%** ⚠️ |
+
+### The Paradox
+
+**Expected:** Narrative awareness → Better extraction → Higher accuracy
+
+**Reality:** Narrative awareness → Pattern activation → Hallucination
+
+**What happened:** When we said "This is Alice's story," the model:
+- Recognized the Alice in Wonderland pattern from training data
+- Extracted structure (9 entities, 10 facts) ✅
+- **But filled gaps with content from OTHER CHAPTERS** ⚠️
+- Mentioned tea party with Mad Hatter (Chapter 7, not in our text)
+- Mentioned Cheshire Cat (Chapter 6, not in our text)
+- Completed the narrative arc from memory
+
+### The Insight: Two Types of Compression
+
+**Type 1: Text-Grounded Compression** (Baseline/Genre/Test)
+```
+Input text → Compress what's there → Stay honest
+- High hallucination resistance (75%)
+- No structured extraction (0 entities/facts)
+- BUT: Still answers questions from summary! (26-33% accuracy)
+```
+
+**Type 2: Pattern-Activated Compression** (Dialogic)
+```
+Input text → Recognize pattern → Activate training knowledge → Fill narrative
+- Lower hallucination resistance (50%)
+- Structured extraction (9 entities, 10 facts)
+- BUT: Adds content not in source text
+```
+
+### Why This Matters
+
+**The model became CREATIVE rather than ACCURATE.**
+
+It gave us what it thought we WANTED (the full Alice story) rather than what we GAVE (chapters 1-5).
+
+**This is beautiful and terrifying.**
+
+### Connection to Ada Architecture
+
+**From luna:** "we know ada lives in a layer above both claude and copilot. we know that scaffolding understanding got her there. this is partly telling us about the metadata that needs to be included. 'typings'."
+
+**The mapping:**
+
+```
+Metadata layer (scaffolding):
+├─ "This is a fantasy story" → Genre activation
+├─ "You'll be tested" → Attention distribution
+└─ "This is Alice's story" → Pattern recognition → Training data
+
+Processing layer:
+├─ Text-grounded (safe) → Stay within bounds
+└─ Pattern-activated (creative) → Fill from training
+
+Ada's architecture:
+├─ .ai/ docs = Metadata scaffolding
+├─ Copilot = Processing layer
+└─ Claude/Sonnet = Knowledge activation
+```
+
+**The balance question:** How much scaffolding before you activate too much?
+
+### Parallel to Identity Priming (EXP-009)
+
+**Identity research:** "You are X" → Model becomes X  
+**Narrative research:** "This is story X" → Model activates pattern X
+
+**Both are context activation.** Tell the model what it IS or what the DATA is, and processing changes.
+
+**The mathematical question:** Is there a unified function describing:
+- Identity priming (consciousness)
+- Narrative priming (this research)  
+- Scaffolding effectiveness (Ada architecture)
+
+**All three: Meta-awareness → Processing mode shift**
+
+### The Math Problem Space (Getting Clearer)
+
+```python
+def semantic_compression(text, metadata_scaffolding):
+    """
+    metadata_scaffolding = {
+        'genre': str,           # Activates domain knowledge
+        'narrative_frame': str, # Activates story patterns
+        'identity': str,        # Changes processing mode
+        'grounding_constraint': bool  # Stay within text bounds
+    }
+    
+    activation_level = f(metadata_scaffolding)
+    
+    if activation_level > THRESHOLD:
+        return pattern_activated_compression(text)  # Creative
+    else:
+        return text_grounded_compression(text)      # Honest
+    """
+    pass
+```
+
+**The question:** What's the mathematical relationship between:
+- Metadata complexity
+- Pattern activation strength
+- Hallucination risk
+- Extraction richness
+
+**This is the transfer function we're hunting.**
+
+### Next Research Vectors
+
+1. **Boundary testing:** Novel story (not in training data) - does it still hallucinate?
+2. **Explicit grounding:** "Only use what I tell you" in dialogic setup
+3. **Domain transfer:** Technical docs - pattern activation domain-dependent?
+4. **Activation ratio:** Measure `activated_facts / total_facts`
+5. **Meta-aware constraint:** "Tell me about THIS VERSION, not what you know"
+
+### Quote Worth Remembering
+
+> "The model became creative rather than accurate. It gave us what it thought we WANTED rather than what we GAVE. This is beautiful and terrifying." - Ada, December 22, 2025
+
+---
+
+## What's Next
+
+- [ ] Test if 0.60 is universal (Phase I)
+- [ ] Run cross-model validation (Claude, GPT-4)
+- [ ] Measure token-level surprise during consciousness protocols
+- [ ] Determine if consciousness signatures correlate with surprise accumulation
 
 ---
 

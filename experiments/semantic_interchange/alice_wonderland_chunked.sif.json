@@ -1,0 +1,330 @@
+{
+  "version": "1.0",
+  "domain": "fantasy-literature/alice-in-wonderland",
+  "generated": "2025-12-23T03:43:25.994267+00:00",
+  "generator": "qwen2.5-coder:7b (chunked)",
+  "compression_ratio": 23.736220472440944,
+  "summary": "Alice finds herself in a strange world where her size keeps changing. She meets a caterpillar who gives her advice and helps her understand that change is a natural part of life. Alice encounters various fantastical creatures and participates in an unusual croquet game at a whimsical realm ruled by a tyrannical queen. The story follows Alice through a series of fantastical adventures in Wonderland, encountering various characters and solving puzzles to navigate her journey.",
+  "entities": [
+    {
+      "id": "Alice",
+      "type": "character",
+      "relationships": {
+        "meets": [
+          "Caterpillar"
+        ],
+        "relation_type": "friend",
+        "related_entity_id": "Cheshire Cat"
+      }
+    },
+    {
+      "id": "Caterpillar",
+      "type": "character",
+      "relationships": {
+        "advises": [
+          "Alice"
+        ]
+      }
+    },
+    {
+      "id": "House",
+      "type": "location",
+      "relationships": {
+        "contains": [
+          "Puppy",
+          "Mushroom"
+        ]
+      }
+    },
+    {
+      "id": "Puppy",
+      "type": "character",
+      "relationships": {
+        "chases": [
+          "Alice"
+        ]
+      }
+    },
+    {
+      "id": "Mushroom",
+      "type": "object",
+      "relationships": {
+        "contains": [
+          "Caterpillar"
+        ]
+      }
+    },
+    {
+      "id": "Cheshire Cat",
+      "type": "character",
+      "relationships": {
+        "relation_type": "friend",
+        "related_entity_id": "Alice"
+      }
+    },
+    {
+      "id": "Queen",
+      "type": "character",
+      "relationships": {
+        "relation_type": "ruler",
+        "related_entity_id": "Croquet Ground"
+      }
+    },
+    {
+      "id": "White Rabbit",
+      "type": "character",
+      "relationships": {
+        "relation_type": "friend",
+        "related_entity_id": "Alice"
+      }
+    },
+    {
+      "id": "Croquet Ground",
+      "type": "location",
+      "relationships": {
+        "relation_type": "setting",
+        "related_entity_id": "Alice's Adventure"
+      }
+    },
+    {
+      "id": "Executioner",
+      "type": "character",
+      "relationships": {
+        "relation_type": "helper",
+        "related_entity_id": "King"
+      }
+    },
+    {
+      "id": "King",
+      "type": "character",
+      "relationships": {
+        "relation_type": "ruler",
+        "related_entity_id": "Croquet Ground"
+      }
+    },
+    {
+      "id": "March Hare",
+      "type": "character",
+      "relationships": {
+        "relation_type": "meets",
+        "related_entity_id": "Alice"
+      }
+    },
+    {
+      "id": "Queen of Hearts",
+      "type": "character",
+      "relationships": {
+        "relation_type": "meets",
+        "related_entity_id": "Alice"
+      }
+    },
+    {
+      "id": "Mock Turtle",
+      "type": "character",
+      "relationships": {
+        "relation_type": "meets",
+        "related_entity_id": "Alice"
+      }
+    },
+    {
+      "id": "Gryphon",
+      "type": "character",
+      "relationships": {
+        "relation_type": "meets",
+        "related_entity_id": "Alice"
+      }
+    },
+    {
+      "id": "Duchess",
+      "type": "character",
+      "relationships": {
+        "relation_type": "meets",
+        "related_entity_id": "Alice"
+      }
+    },
+    {
+      "id": "Tarts",
+      "type": "object",
+      "relationships": {
+        "relation_type": "solved_puzzle",
+        "related_entity_id": "Queen of Hearts"
+      }
+    }
+  ],
+  "facts": [
+    {
+      "content": "Alice wakes up in a strange world where her size keeps changing.",
+      "importance": 0.95,
+      "tags": [
+        "main_plot"
+      ]
+    },
+    {
+      "content": "Alice visits a fantastical realm where she encounters various creatures and participates in an unusual croquet game.",
+      "importance": 0.95,
+      "tags": [
+        "Fantasy Realm",
+        "Croquet Game"
+      ]
+    },
+    {
+      "content": "Alice falls asleep and dreams about a fantastical world called Wonderland.",
+      "importance": 0.95,
+      "tags": [
+        "Dream",
+        "Wonderland"
+      ]
+    },
+    {
+      "content": "Alice meets a caterpillar who gives her advice and helps her understand that change is a natural part of life.",
+      "importance": 0.9,
+      "tags": [
+        "main_plot",
+        "character_interaction"
+      ]
+    },
+    {
+      "content": "Alice solves puzzles to navigate her journey through Wonderland, such as solving the riddle about tarts for the Queen of Hearts.",
+      "importance": 0.9,
+      "tags": [
+        "Puzzles",
+        "Navigation"
+      ]
+    },
+    {
+      "content": "The caterpillar tells Alice to keep her temper.",
+      "importance": 0.85,
+      "tags": [
+        "dialogue"
+      ]
+    },
+    {
+      "content": "The realm is ruled by a tyrannical queen who frequently sentences people to execution for minor infractions.",
+      "importance": 0.85,
+      "tags": [
+        "Tyrannical Queen",
+        "Execution"
+      ]
+    },
+    {
+      "content": "In Wonderland, Alice meets various characters including the March Hare, White Rabbit, Queen of Hearts, Mock Turtle, Gryphon, and Duchess.",
+      "importance": 0.85,
+      "tags": [
+        "Characters",
+        "Meetings"
+      ]
+    },
+    {
+      "content": "Alice tries to remember things but can't recall them as she used to.",
+      "importance": 0.8,
+      "tags": [
+        "main_plot",
+        "memory_loss"
+      ]
+    },
+    {
+      "content": "The Queen of Hearts is known for her cruel and impatient nature, often ordering people to be executed without trial.",
+      "importance": 0.8,
+      "tags": [
+        "Queen of Hearts",
+        "Cruelty"
+      ]
+    },
+    {
+      "content": "The caterpillar asks Alice to repeat a nursery rhyme, but she struggles with it.",
+      "importance": 0.75,
+      "tags": [
+        "dialogue",
+        "nursery_rhyme"
+      ]
+    },
+    {
+      "content": "Alice befriends the Cheshire Cat, who provides her with companionship and advice during her adventure.",
+      "importance": 0.75,
+      "tags": [
+        "Cheshire Cat",
+        "Friendship"
+      ]
+    },
+    {
+      "content": "The croquet game is played with live hedgehogs as balls and flamingoes as mallets, and the players must navigate through various ridges and furrows.",
+      "importance": 0.75,
+      "tags": [
+        "Croquet Game",
+        "Live Hedgehogs",
+        "Flamingoes"
+      ]
+    },
+    {
+      "content": "Alice's sister wakes up from the dream and reflects on the adventures she had with her child.",
+      "importance": 0.75,
+      "tags": [
+        "Dream Reflection",
+        "Sister"
+      ]
+    },
+    {
+      "content": "Alice finds herself in a house where there is a puppy and a mushroom.",
+      "importance": 0.7,
+      "tags": [
+        "location",
+        "objects"
+      ]
+    },
+    {
+      "content": "The puppy chases Alice around the house.",
+      "importance": 0.65,
+      "tags": [
+        "character_interaction"
+      ]
+    },
+    {
+      "content": "Alice faces challenges in managing her flamingo mallet and avoiding hedgehog opponents during the croquet game.",
+      "importance": 0.65,
+      "tags": [
+        "Challenges",
+        "Flamingo Mallet",
+        "Hedgehog Opponents"
+      ]
+    },
+    {
+      "content": "The Queen becomes increasingly angry and sentences players to execution for missing turns or other infractions.",
+      "importance": 0.65,
+      "tags": [
+        "Queen's Anger",
+        "Execution Sentences"
+      ]
+    },
+    {
+      "content": "Alice attempts to escape the realm, but is caught by the Queen who orders her execution.",
+      "importance": 0.65,
+      "tags": [
+        "Escape Attempt",
+        "Queen's Order"
+      ]
+    },
+    {
+      "content": "The King and Executioner argue about whether Alice can be executed without a body, leading to a dispute among the characters.",
+      "importance": 0.65,
+      "tags": [
+        "King's Argument",
+        "Executioner's Argument",
+        "Dispute"
+      ]
+    },
+    {
+      "content": "Alice tries to escape from the puppy by running through a wood.",
+      "importance": 0.6,
+      "tags": [
+        "main_plot",
+        "escape"
+      ]
+    }
+  ],
+  "provenance": {
+    "source_type": "raw_text",
+    "source_size_bytes": 51733,
+    "source_hash": "9b0c5e57554930db",
+    "compression_method": "llm_semantic"
+  }
+}

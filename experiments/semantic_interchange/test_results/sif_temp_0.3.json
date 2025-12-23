@@ -1,0 +1,160 @@
+{
+  "summary": "Alice falls asleep in a meadow and wakes up in a strange world where she meets various characters, including the White Rabbit, the Mad Hatter, the March Hare, the Dormouse, the Queen of Hearts, and the Cheshire Cat. She attends a tea party with them and later finds her way to a mushroom that reveals a caterpillar who gives her advice on how to grow back to her normal size.",
+  "entities": [
+    {
+      "id": "Alice",
+      "type": "Protagonist",
+      "relationships": {}
+    },
+    {
+      "id": "White Rabbit",
+      "type": "Character",
+      "relationships": {
+        "meets": "Alice"
+      }
+    },
+    {
+      "id": "Mad Hatter",
+      "type": "Character",
+      "relationships": {
+        "meets": "Alice"
+      }
+    },
+    {
+      "id": "March Hare",
+      "type": "Character",
+      "relationships": {
+        "meets": "Alice"
+      }
+    },
+    {
+      "id": "Dormouse",
+      "type": "Character",
+      "relationships": {
+        "meets": "Alice"
+      }
+    },
+    {
+      "id": "Queen of Hearts",
+      "type": "Character",
+      "relationships": {
+        "meets": "Alice"
+      }
+    },
+    {
+      "id": "Cheshire Cat",
+      "type": "Character",
+      "relationships": {
+        "meets": "Alice"
+      }
+    },
+    {
+      "id": "Mushroom",
+      "type": "Object",
+      "relationships": {
+        "contains": "Caterpillar"
+      }
+    },
+    {
+      "id": "Caterpillar",
+      "type": "Character",
+      "relationships": {
+        "revealed by": "Mushroom"
+      }
+    }
+  ],
+  "facts": [
+    {
+      "content": "Alice falls asleep in a meadow and wakes up in Wonderland.",
+      "importance": 1,
+      "tags": [
+        "Setting"
+      ]
+    },
+    {
+      "content": "The White Rabbit chases Alice through the forest.",
+      "importance": 0.8,
+      "tags": [
+        "Adventure"
+      ]
+    },
+    {
+      "content": "Alice meets the Mad Hatter, March Hare, and Dormouse at a tea party.",
+      "importance": 0.7,
+      "tags": [
+        "Characters"
+      ]
+    },
+    {
+      "content": "The Queen of Hearts demands Alice to play croquet with her.",
+      "importance": 0.6,
+      "tags": [
+        "Adventure"
+      ]
+    },
+    {
+      "content": "Alice falls asleep again and dreams she is a bird in the sky.",
+      "importance": 0.5,
+      "tags": [
+        "Dreams"
+      ]
+    },
+    {
+      "content": "The Cheshire Cat appears and tells Alice to follow him.",
+      "importance": 0.4,
+      "tags": [
+        "Characters"
+      ]
+    },
+    {
+      "content": "Alice finds herself in a garden with flowers of all sizes.",
+      "importance": 0.3,
+      "tags": [
+        "Setting"
+      ]
+    },
+    {
+      "content": "A puppy chases Alice around the garden.",
+      "importance": 0.2,
+      "tags": [
+        "Adventure"
+      ]
+    },
+    {
+      "content": "Alice meets a large blue caterpillar who gives her advice.",
+      "importance": 1,
+      "tags": [
+        "Characters",
+        "Advice"
+      ]
+    },
+    {
+      "content": "The Caterpillar advises Alice to eat or drink something to change her size.",
+      "importance": 0.9,
+      "tags": [
+        "Advice"
+      ]
+    },
+    {
+      "content": "Alice eats a mushroom and grows back to her normal size.",
+      "importance": 1,
+      "tags": [
+        "Resolution"
+      ]
+    },
+    {
+      "content": "Alice realizes she must grow up again to return home.",
+      "importance": 0.8,
+      "tags": [
+        "Plot"
+      ]
+    },
+    {
+      "content": "Alice's journey through Wonderland is filled with challenges and adventures.",
+      "importance": 0.7,
+      "tags": [
+        "Overall Arc"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,196 @@
+{
+  "summary": "Alice finds herself in a fantastical world where she encounters various characters including the White Rabbit, the Mad Hatter, the Dormouse, a group of animals, and a Caterpillar. She navigates through a garden, a wood, and learns about the nature of time from a Cheshire Cat before finally returning home.",
+  "entities": [
+    {
+      "id": "Alice",
+      "type": "Protagonist",
+      "relationships": {}
+    },
+    {
+      "id": "White Rabbit",
+      "type": "Character",
+      "relationships": {
+        "meets": "Alice"
+      }
+    },
+    {
+      "id": "Mad Hatter",
+      "type": "Character",
+      "relationships": {
+        "meets": "Alice"
+      }
+    },
+    {
+      "id": "Dormouse",
+      "type": "Character",
+      "relationships": {
+        "meets": "Alice"
+      }
+    },
+    {
+      "id": "Cheshire Cat",
+      "type": "Character",
+      "relationships": {
+        "meets": "Alice"
+      }
+    },
+    {
+      "id": "Lizard, Bill",
+      "type": "Character",
+      "relationships": {
+        "meets": "Alice"
+      }
+    },
+    {
+      "id": "Puppy",
+      "type": "Animal",
+      "relationships": {
+        "meets": "Alice"
+      }
+    },
+    {
+      "id": "Mushroom",
+      "type": "Object",
+      "relationships": {
+        "contains": "Caterpillar"
+      }
+    },
+    {
+      "id": "Hookah",
+      "type": "Object",
+      "relationships": {
+        "belongs to": "Caterpillar"
+      }
+    },
+    {
+      "id": "Garden",
+      "type": "Location",
+      "relationships": {}
+    },
+    {
+      "id": "Wood",
+      "type": "Location",
+      "relationships": {}
+    }
+  ],
+  "facts": [
+    {
+      "content": "Alice falls asleep and finds herself in a strange world.",
+      "importance": 1.0,
+      "tags": [
+        "Opening"
+      ]
+    },
+    {
+      "content": "Alice encounters the White Rabbit, who tells her to follow him.",
+      "importance": 0.9,
+      "tags": [
+        "Meeting"
+      ]
+    },
+    {
+      "content": "Alice runs away from the White Rabbit and meets the Mad Hatter and Dormouse in a tea party.",
+      "importance": 0.8,
+      "tags": [
+        "Meeting",
+        "Adventure"
+      ]
+    },
+    {
+      "content": "The Mad Hatter tells Alice about time being out of joint.",
+      "importance": 0.7,
+      "tags": [
+        "Explanation"
+      ]
+    },
+    {
+      "content": "Alice falls asleep again and dreams she is in a garden with animals.",
+      "importance": 0.9,
+      "tags": [
+        "Dream"
+      ]
+    },
+    {
+      "content": "A Cheshire Cat appears and tells Alice she has been under the influence of the March Hare.",
+      "importance": 0.8,
+      "tags": [
+        "Meeting",
+        "Explain"
+      ]
+    },
+    {
+      "content": "Alice meets Bill, a Lizard, who is being cared for by guinea-pigs.",
+      "importance": 0.7,
+      "tags": [
+        "Meeting"
+      ]
+    },
+    {
+      "content": "A puppy chases Alice around a thistle bush.",
+      "importance": 0.6,
+      "tags": [
+        "Adventure"
+      ]
+    },
+    {
+      "content": "Alice eats a mushroom and finds herself growing larger and smaller.",
+      "importance": 0.9,
+      "tags": [
+        "Event",
+        "Adventure"
+      ]
+    },
+    {
+      "content": "Alice meets the Caterpillar on top of a mushroom.",
+      "importance": 0.8,
+      "tags": [
+        "Meeting"
+      ]
+    },
+    {
+      "content": "The Caterpillar tells Alice about time and growing.",
+      "importance": 0.7,
+      "tags": [
+        "Explanation"
+      ]
+    },
+    {
+      "content": "Alice learns that she needs to eat or drink something to change her size.",
+      "importance": 0.6,
+      "tags": [
+        "Event",
+        "Adventure"
+      ]
+    },
+    {
+      "content": "Alice eats a mushroom cake and starts shrinking.",
+      "importance": 0.9,
+      "tags": [
+        "Event",
+        "Adventure"
+      ]
+    },
+    {
+      "content": "Alice runs away from the puppy and finds herself in a wood.",
+      "importance": 0.8,
+      "tags": [
+        "Adventure"
+      ]
+    },
+    {
+      "content": "Alice learns about growing up again and tries to find her way home.",
+      "importance": 0.7,
+      "tags": [
+        "Event",
+        "Adventure"
+      ]
+    },
+    {
+      "content": "Alice finds herself back in the garden and eventually returns home.",
+      "importance": 1.0,
+      "tags": [
+        "Closing"
+      ]
+    }
+  ]
+}

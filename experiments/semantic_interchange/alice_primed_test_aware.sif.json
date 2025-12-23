@@ -1,0 +1,16 @@
+{
+  "version": "1.0",
+  "domain": "fantasy-literature/alice-priming-test/test_aware",
+  "generated": "2025-12-23T04:00:27.565365+00:00",
+  "generator": "qwen2.5-coder:7b (test_aware)",
+  "compression_ratio": 23.980815347721823,
+  "summary": "",
+  "entities": [],
+  "facts": [],
+  "provenance": {
+    "source_type": "raw_text",
+    "source_size_bytes": 50000,
+    "source_hash": "",
+    "compression_method": "llm_semantic_test_aware"
+  }
+}

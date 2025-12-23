@@ -1,0 +1,132 @@
+{
+  "summary": "Alice embarks on an adventure after eating a magical potion that shrinks her in size. She encounters various characters including the White Rabbit, the Dodo, the Mad Hatter, and the Caterpillar. Through their interactions, she learns about time travel, attends tea parties, and discovers the importance of patience and friendship.",
+  "entities": [
+    {
+      "id": "Alice",
+      "type": "Main Character",
+      "relationships": {}
+    },
+    {
+      "id": "White Rabbit",
+      "type": "Character",
+      "relationships": {
+        "relation": "meets"
+      }
+    },
+    {
+      "id": "Dodo",
+      "type": "Character",
+      "relationships": {
+        "relation": "meets"
+      }
+    },
+    {
+      "id": "Mad Hatter",
+      "type": "Character",
+      "relationships": {
+        "relation": "meets"
+      }
+    },
+    {
+      "id": "Caterpillar",
+      "type": "Character",
+      "relationships": {
+        "relation": "meets"
+      }
+    },
+    {
+      "id": "Rabbit Hole",
+      "type": "Location",
+      "relationships": {
+        "relation": "starts in"
+      }
+    },
+    {
+      "id": "Garden of Forks",
+      "type": "Place",
+      "relationships": {
+        "relation": "visits"
+      }
+    },
+    {
+      "id": "Lizard",
+      "type": "Character",
+      "relationships": {
+        "relation": "meets"
+      }
+    },
+    {
+      "id": "Dog",
+      "type": "Character",
+      "relationships": {
+        "relation": "meets"
+      }
+    },
+    {
+      "id": "Mushroom",
+      "type": "Object",
+      "relationships": {
+        "relation": "interacts with"
+      }
+    }
+  ],
+  "facts": [
+    {
+      "content": "Alice falls asleep and finds herself in a magical garden.",
+      "importance": 1,
+      "tags": []
+    },
+    {
+      "content": "She meets various characters including the White Rabbit, Dodo, Mad Hatter, and Caterpillar.",
+      "importance": 0.9,
+      "tags": []
+    },
+    {
+      "content": "Alice learns about time travel by watching the White Rabbit rush off to tea.",
+      "importance": 0.8,
+      "tags": [
+        "Time Travel"
+      ]
+    },
+    {
+      "content": "At the Mad Hatter's tea party, Alice meets a group of other characters.",
+      "importance": 0.8,
+      "tags": []
+    },
+    {
+      "content": "The Caterpillar offers advice and explains his life as a caterpillar.",
+      "importance": 0.9,
+      "tags": []
+    },
+    {
+      "content": "Alice discovers that the mushroom can shrink her in size.",
+      "importance": 0.7,
+      "tags": [
+        "Shrinking"
+      ]
+    },
+    {
+      "content": "The White Rabbit tells Alice she must hurry to catch the train.",
+      "importance": 0.8,
+      "tags": []
+    },
+    {
+      "content": "Alice follows a group of animals and reaches the garden of forks.",
+      "importance": 0.7,
+      "tags": []
+    },
+    {
+      "content": "At the garden of forks, Alice learns about the importance of patience and friendship.",
+      "importance": 0.8,
+      "tags": [
+        "Patience",
+        "Friendship"
+      ]
+    },
+    {
+      "content": "Alice finally reaches her right size again before leaving the garden.",
+      "importance": 1,
+      "tags": []
+    }
+  ]
+}

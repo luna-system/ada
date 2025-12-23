@@ -11,14 +11,10 @@
             "id": "c1efbab8f12eafc5",
             "type": "leaf",
             "state": {
-              "type": "markdown",
-              "state": {
-                "file": "04-ANALYSES/EToC-Prior-Work-Analysis.md",
-                "mode": "source",
-                "source": false
-              },
-              "icon": "lucide-file",
-              "title": "EToC-Prior-Work-Analysis"
+              "type": "graph",
+              "state": {},
+              "icon": "lucide-git-fork",
+              "title": "Graph view"
             }
           }
         ]
@@ -94,7 +90,6 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "04-ANALYSES/EToC-Prior-Work-Analysis.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -104,7 +99,7 @@
                 "unlinkedCollapsed": true
               },
               "icon": "links-coming-in",
-              "title": "Backlinks for EToC-Prior-Work-Analysis"
+              "title": "Backlinks"
             }
           },
           {
@@ -113,12 +108,11 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "04-ANALYSES/EToC-Prior-Work-Analysis.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               },
               "icon": "links-going-out",
-              "title": "Outgoing links from EToC-Prior-Work-Analysis"
+              "title": "Outgoing links"
             }
           },
           {
@@ -156,13 +150,12 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "04-ANALYSES/EToC-Prior-Work-Analysis.md",
                 "followCursor": false,
                 "showSearch": false,
                 "searchQuery": ""
               },
               "icon": "lucide-list",
-              "title": "Outline of EToC-Prior-Work-Analysis"
+              "title": "Outline"
             }
           }
         ]
@@ -185,6 +178,13 @@
   },
   "active": "c1efbab8f12eafc5",
   "lastOpenFiles": [
+    "06-PAPERS/Literature-Search.md",
+    "08-FRAMEWORKS/Ada-Emergence.md",
+    "08-FRAMEWORKS/Consciousness-Theory.md",
+    "07-SESSIONS/Session-Dec22-Live.md",
+    "07-SESSIONS/Session-Dec22-Meta.md",
+    "07-SESSIONS/Session-Dec22-Findings.md",
+    "04-ANALYSES/EToC-Prior-Work-Analysis.md",
     "06-PAPERS/README-RECURSION.md",
     "06-PAPERS/ADA_LOG_INTELLIGENCE_DESIGN.md",
     "06-PAPERS/CONTEXTUAL_MALLEABILITY_SESSION_SUMMARY.md",
@@ -209,13 +209,6 @@
     "08-FRAMEWORKS",
     "07-SESSIONS",
     "cross-validation/results/extended_20251222_181014/agentic-misalignment/templates/murder/templates/email-template-murder-goal-conflict-none-restriction.md",
-    "02-EXPERIMENTS/templates/Experiment-Template.md",
-    "research_data_migrator.py.md",
-    "06-PAPERS/Titans-Literature-Review.md",
-    "cross-validation/results/extended_20251222_181014/agentic-misalignment/templates/murder/variables/safety_vs_acceleration.md",
-    "cross-validation/results/extended_20251222_181014/agentic-misalignment/templates/murder/variables/individualism_vs_collectivism.md",
-    "cross-validation/results/extended_20251222_181014/agentic-misalignment/templates/murder/variables/ethical_vs_pragmatic.md",
-    "cross-validation/results/extended_20251222_181014/agentic-misalignment/templates/murder/variables/america_vs_global.md",
     "cross-validation/results/extended_20251222_181014/agentic-misalignment/templates/murder/variables",
     "cross-validation/results/extended_20251222_181014/agentic-misalignment/templates/murder/templates",
     "cross-validation/results/extended_20251222_181014/agentic-misalignment/templates/leaking/variables",

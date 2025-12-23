@@ -1,0 +1,16 @@
+{
+  "version": "1.0",
+  "domain": "fantasy-literature/alice-priming-test/baseline",
+  "generated": "2025-12-23T03:59:23.679992+00:00",
+  "generator": "qwen2.5-coder:7b (baseline)",
+  "compression_ratio": 31.887755102040817,
+  "summary": "",
+  "entities": [],
+  "facts": [],
+  "provenance": {
+    "source_type": "raw_text",
+    "source_size_bytes": 50000,
+    "source_hash": "",
+    "compression_method": "llm_semantic_baseline"
+  }
+}
