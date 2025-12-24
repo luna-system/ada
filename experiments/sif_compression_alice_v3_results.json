@@ -1,0 +1,67 @@
+{
+  "timestamp": "2025-12-23T18:04:53.736476",
+  "document": "Alice in Wonderland (26K words, 152KB)",
+  "original_bytes": 152702,
+  "total_sentences": 949,
+  "importance_stats": {
+    "min": 0.0,
+    "max": 1.0,
+    "mean": 0.3018076137744429,
+    "median": 0.2587656114945696,
+    "std": 0.17587837323241245
+  },
+  "tiers": {
+    "1": {
+      "percentile": 0.9,
+      "threshold": 0.09575968632952937,
+      "name": "Critical (Top 10%)",
+      "compression_ratio": 0.7719044610135221,
+      "bytes": 197825,
+      "facts_preserved": 0.8998946259220232,
+      "facts_count": 854,
+      "avg_importance": 0.3288405430307517,
+      "lossiness": 0.015402269190412923,
+      "quality_score": 55.726217618726025,
+      "bytes_saved": -45123
+    },
+    "2": {
+      "percentile": 0.75,
+      "threshold": 0.1575993686504904,
+      "name": "Standard (Top 25%)",
+      "compression_ratio": 0.8734213416308227,
+      "bytes": 174832,
+      "facts_preserved": 0.7502634351949421,
+      "facts_count": 712,
+      "avg_importance": 0.36961962655851033,
+      "lossiness": 0.052794946979822635,
+      "quality_score": 52.18771500130831,
+      "bytes_saved": -22130
+    },
+    "3": {
+      "percentile": 0.5,
+      "threshold": 0.2587656114945696,
+      "name": "Enhanced (Top 50%)",
+      "compression_ratio": 1.1669825451655305,
+      "bytes": 130852,
+      "facts_preserved": 0.5005268703898841,
+      "facts_count": 475,
+      "avg_importance": 0.4491630597243713,
+      "lossiness": 0.12822827799750336,
+      "quality_score": 46.97085839905764,
+      "bytes_saved": 21850
+    },
+    "4": {
+      "percentile": 0.25,
+      "threshold": 0.4400280599782034,
+      "name": "Aggressive (Top 75%)",
+      "compression_ratio": 2.1328286496452318,
+      "bytes": 71596,
+      "facts_preserved": 0.2507903055848261,
+      "facts_count": 238,
+      "avg_importance": 0.5406162289540952,
+      "lossiness": 0.21870173437319446,
+      "quality_score": 42.468585960638755,
+      "bytes_saved": 81106
+    }
+  }
+}

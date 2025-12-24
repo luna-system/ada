@@ -1,0 +1,95 @@
+{
+  "timestamp": "2025-12-23T18:05:31.318373",
+  "document": "Alice in Wonderland (26K words, 152KB)",
+  "original_bytes": 152702,
+  "total_sentences": 949,
+  "importance_stats": {
+    "min": 5.268703898840885e-05,
+    "max": 0.40757614531587133,
+    "mean": 0.11035763348648284,
+    "median": 0.10292515041299842,
+    "std": 0.06303379662689705,
+    "q1": 0.06322444678609063,
+    "q3": 0.1461854583772392
+  },
+  "thresholds": {
+    "0.80": {
+      "threshold": 0.8,
+      "label": "CRITICAL (Top unique 5%)",
+      "pct_above": 0.0,
+      "facts_kept": 0,
+      "compression_ratio": 5873.153846153846,
+      "sif_bytes": 26,
+      "bytes_saved": 152676,
+      "avg_importance": 0,
+      "lossiness": 1.0,
+      "quality_score": 0
+    },
+    "0.70": {
+      "threshold": 0.7,
+      "label": "ESSENTIAL (Top unique 12%)",
+      "pct_above": 0.0,
+      "facts_kept": 0,
+      "compression_ratio": 5873.153846153846,
+      "sif_bytes": 26,
+      "bytes_saved": 152676,
+      "avg_importance": 0,
+      "lossiness": 1.0,
+      "quality_score": 0
+    },
+    "0.60": {
+      "threshold": 0.6,
+      "label": "STANDARD (Top unique 25%)",
+      "pct_above": 0.0,
+      "facts_kept": 0,
+      "compression_ratio": 5873.153846153846,
+      "sif_bytes": 26,
+      "bytes_saved": 152676,
+      "avg_importance": 0,
+      "lossiness": 1.0,
+      "quality_score": 0
+    },
+    "0.50": {
+      "threshold": 0.5,
+      "label": "BALANCED (Top unique 37%)",
+      "pct_above": 0.0,
+      "facts_kept": 0,
+      "compression_ratio": 5873.153846153846,
+      "sif_bytes": 26,
+      "bytes_saved": 152676,
+      "avg_importance": 0,
+      "lossiness": 1.0,
+      "quality_score": 0
+    },
+    "0.40": {
+      "threshold": 0.4,
+      "label": "ENHANCED (Top unique 50%)",
+      "pct_above": 0.10537407797681769,
+      "facts_kept": 1,
+      "compression_ratio": 1090.7285714285715,
+      "sif_bytes": 140,
+      "bytes_saved": 152562,
+      "avg_importance": 0.40757614531587133,
+      "lossiness": 0.2138888687973965,
+      "quality_score": 24.496718350143006
+    },
+    "0.30": {
+      "threshold": 0.3,
+      "label": "AGGRESSIVE (Top unique 65%)",
+      "pct_above": 0.5268703898840885,
+      "facts_kept": 5,
+      "compression_ratio": 239.3448275862069,
+      "sif_bytes": 638,
+      "bytes_saved": 152064,
+      "avg_importance": 0.3667637613528024,
+      "lossiness": 0.22950590466141446,
+      "quality_score": 22.21657383712178
+    }
+  },
+  "sweet_spot": {
+    "threshold": 0.6,
+    "compression_ratio": 5873.153846153846,
+    "quality_score": 0,
+    "information_loss": 1.0
+  }
+}

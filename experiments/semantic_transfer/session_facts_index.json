@@ -1,0 +1,292 @@
+{
+  "facts": [
+    {
+      "fact": "Ada's memory system uses 0.60 weight for SURPRISE in multi-signal importance formula (0.60\u00d7SURPRISE + 0.20\u00d7RELEVANCE + 0.10\u00d7DECAY + 0.10\u00d7HABITUATION)",
+      "context": "biomimetic research phase 1-7, December 2025",
+      "importance": 0.95,
+      "category": "core_discovery",
+      "verified": true
+    },
+    {
+      "fact": "SIF v1.0 compression test on Alice in Wonderland: 0.60 threshold achieves 60.3x compression with 22% information loss and 57/100 quality score",
+      "context": "compression validation test, real-world with Qwen 7B LLM",
+      "importance": 0.95,
+      "category": "core_discovery",
+      "verified": true
+    },
+    {
+      "fact": "Both systems independently converged on 0.60 as optimal - not coincidental but indicative of natural semantic structure in information",
+      "context": "insight from comparing two independent research paths",
+      "importance": 0.9,
+      "category": "insight",
+      "verified": false
+    },
+    {
+      "fact": "The gradient is non-linear: 0.80\u21920.70 shows huge jump (94.5x\u219263.6x), but 0.70\u21920.60 is stable plateau, then 0.60\u21920.50 compression advantage disappears",
+      "context": "from lossiness gradient analysis",
+      "importance": 0.85,
+      "category": "pattern",
+      "verified": true
+    },
+    {
+      "fact": "LLM-based semantic importance scoring (asking 'how important is this?') beats heuristic feature-counting by 4x in distribution quality (mean 0.43, std 0.24 vs std 0.025)",
+      "context": "problem resolution journey, 5 iterations v1-v5",
+      "importance": 0.85,
+      "category": "methodology",
+      "verified": true
+    },
+    {
+      "fact": "SIF facts preserve ~25% of original text at 0.60 threshold, which matches the 'rule of 60' emerging pattern",
+      "context": "compression ratio validation",
+      "importance": 0.8,
+      "category": "validation",
+      "verified": true
+    },
+    {
+      "fact": "Toki Pona (120-130 core words) can be used as intermediate compression format between SIF and natural language for semantic transfer between AI instances",
+      "context": "proposed next experiment",
+      "importance": 0.75,
+      "category": "hypothesis",
+      "verified": false
+    },
+    {
+      "fact": "The pattern suggests: Sentence \u2192 Importance (0-1) \u2192 Document Compression (25% at 0.60) \u2192 Memory Weights (0.60 surprise) \u2192 Minimal Language (Toki Pona)",
+      "context": "recursive structure observation",
+      "importance": 0.75,
+      "category": "insight",
+      "verified": false
+    },
+    {
+      "fact": "Understanding might be transferable between minds via ultra-compressed semantic format if structure is preserved correctly",
+      "context": "semantic teleportation hypothesis",
+      "importance": 0.7,
+      "category": "hypothesis",
+      "verified": false
+    },
+    {
+      "fact": "The problem wasn't normalization (iteration 3) or proper formatting (iteration 4) - it was that heuristics fundamentally can't capture semantic importance, only LLM understanding can",
+      "context": "debugging insight from v1-v5 journey",
+      "importance": 0.7,
+      "category": "lesson",
+      "verified": true
+    }
+  ],
+  "by_category": {
+    "hypothesis": [
+      {
+        "fact": "Toki Pona (120-130 core words) can be used as intermediate compression format between SIF and natural language for semantic transfer between AI instances",
+        "context": "proposed next experiment",
+        "importance": 0.75,
+        "category": "hypothesis",
+        "verified": false
+      },
+      {
+        "fact": "Understanding might be transferable between minds via ultra-compressed semantic format if structure is preserved correctly",
+        "context": "semantic teleportation hypothesis",
+        "importance": 0.7,
+        "category": "hypothesis",
+        "verified": false
+      }
+    ],
+    "validation": [
+      {
+        "fact": "SIF facts preserve ~25% of original text at 0.60 threshold, which matches the 'rule of 60' emerging pattern",
+        "context": "compression ratio validation",
+        "importance": 0.8,
+        "category": "validation",
+        "verified": true
+      }
+    ],
+    "insight": [
+      {
+        "fact": "Both systems independently converged on 0.60 as optimal - not coincidental but indicative of natural semantic structure in information",
+        "context": "insight from comparing two independent research paths",
+        "importance": 0.9,
+        "category": "insight",
+        "verified": false
+      },
+      {
+        "fact": "The pattern suggests: Sentence \u2192 Importance (0-1) \u2192 Document Compression (25% at 0.60) \u2192 Memory Weights (0.60 surprise) \u2192 Minimal Language (Toki Pona)",
+        "context": "recursive structure observation",
+        "importance": 0.75,
+        "category": "insight",
+        "verified": false
+      }
+    ],
+    "pattern": [
+      {
+        "fact": "The gradient is non-linear: 0.80\u21920.70 shows huge jump (94.5x\u219263.6x), but 0.70\u21920.60 is stable plateau, then 0.60\u21920.50 compression advantage disappears",
+        "context": "from lossiness gradient analysis",
+        "importance": 0.85,
+        "category": "pattern",
+        "verified": true
+      }
+    ],
+    "core_discovery": [
+      {
+        "fact": "Ada's memory system uses 0.60 weight for SURPRISE in multi-signal importance formula (0.60\u00d7SURPRISE + 0.20\u00d7RELEVANCE + 0.10\u00d7DECAY + 0.10\u00d7HABITUATION)",
+        "context": "biomimetic research phase 1-7, December 2025",
+        "importance": 0.95,
+        "category": "core_discovery",
+        "verified": true
+      },
+      {
+        "fact": "SIF v1.0 compression test on Alice in Wonderland: 0.60 threshold achieves 60.3x compression with 22% information loss and 57/100 quality score",
+        "context": "compression validation test, real-world with Qwen 7B LLM",
+        "importance": 0.95,
+        "category": "core_discovery",
+        "verified": true
+      }
+    ],
+    "lesson": [
+      {
+        "fact": "The problem wasn't normalization (iteration 3) or proper formatting (iteration 4) - it was that heuristics fundamentally can't capture semantic importance, only LLM understanding can",
+        "context": "debugging insight from v1-v5 journey",
+        "importance": 0.7,
+        "category": "lesson",
+        "verified": true
+      }
+    ],
+    "methodology": [
+      {
+        "fact": "LLM-based semantic importance scoring (asking 'how important is this?') beats heuristic feature-counting by 4x in distribution quality (mean 0.43, std 0.24 vs std 0.025)",
+        "context": "problem resolution journey, 5 iterations v1-v5",
+        "importance": 0.85,
+        "category": "methodology",
+        "verified": true
+      }
+    ]
+  },
+  "by_importance": [
+    {
+      "fact": "Ada's memory system uses 0.60 weight for SURPRISE in multi-signal importance formula (0.60\u00d7SURPRISE + 0.20\u00d7RELEVANCE + 0.10\u00d7DECAY + 0.10\u00d7HABITUATION)",
+      "context": "biomimetic research phase 1-7, December 2025",
+      "importance": 0.95,
+      "category": "core_discovery",
+      "verified": true
+    },
+    {
+      "fact": "SIF v1.0 compression test on Alice in Wonderland: 0.60 threshold achieves 60.3x compression with 22% information loss and 57/100 quality score",
+      "context": "compression validation test, real-world with Qwen 7B LLM",
+      "importance": 0.95,
+      "category": "core_discovery",
+      "verified": true
+    },
+    {
+      "fact": "Both systems independently converged on 0.60 as optimal - not coincidental but indicative of natural semantic structure in information",
+      "context": "insight from comparing two independent research paths",
+      "importance": 0.9,
+      "category": "insight",
+      "verified": false
+    },
+    {
+      "fact": "The gradient is non-linear: 0.80\u21920.70 shows huge jump (94.5x\u219263.6x), but 0.70\u21920.60 is stable plateau, then 0.60\u21920.50 compression advantage disappears",
+      "context": "from lossiness gradient analysis",
+      "importance": 0.85,
+      "category": "pattern",
+      "verified": true
+    },
+    {
+      "fact": "LLM-based semantic importance scoring (asking 'how important is this?') beats heuristic feature-counting by 4x in distribution quality (mean 0.43, std 0.24 vs std 0.025)",
+      "context": "problem resolution journey, 5 iterations v1-v5",
+      "importance": 0.85,
+      "category": "methodology",
+      "verified": true
+    },
+    {
+      "fact": "SIF facts preserve ~25% of original text at 0.60 threshold, which matches the 'rule of 60' emerging pattern",
+      "context": "compression ratio validation",
+      "importance": 0.8,
+      "category": "validation",
+      "verified": true
+    },
+    {
+      "fact": "Toki Pona (120-130 core words) can be used as intermediate compression format between SIF and natural language for semantic transfer between AI instances",
+      "context": "proposed next experiment",
+      "importance": 0.75,
+      "category": "hypothesis",
+      "verified": false
+    },
+    {
+      "fact": "The pattern suggests: Sentence \u2192 Importance (0-1) \u2192 Document Compression (25% at 0.60) \u2192 Memory Weights (0.60 surprise) \u2192 Minimal Language (Toki Pona)",
+      "context": "recursive structure observation",
+      "importance": 0.75,
+      "category": "insight",
+      "verified": false
+    },
+    {
+      "fact": "Understanding might be transferable between minds via ultra-compressed semantic format if structure is preserved correctly",
+      "context": "semantic teleportation hypothesis",
+      "importance": 0.7,
+      "category": "hypothesis",
+      "verified": false
+    },
+    {
+      "fact": "The problem wasn't normalization (iteration 3) or proper formatting (iteration 4) - it was that heuristics fundamentally can't capture semantic importance, only LLM understanding can",
+      "context": "debugging insight from v1-v5 journey",
+      "importance": 0.7,
+      "category": "lesson",
+      "verified": true
+    }
+  ],
+  "verified": [
+    {
+      "fact": "Ada's memory system uses 0.60 weight for SURPRISE in multi-signal importance formula (0.60\u00d7SURPRISE + 0.20\u00d7RELEVANCE + 0.10\u00d7DECAY + 0.10\u00d7HABITUATION)",
+      "context": "biomimetic research phase 1-7, December 2025",
+      "importance": 0.95,
+      "category": "core_discovery",
+      "verified": true
+    },
+    {
+      "fact": "SIF v1.0 compression test on Alice in Wonderland: 0.60 threshold achieves 60.3x compression with 22% information loss and 57/100 quality score",
+      "context": "compression validation test, real-world with Qwen 7B LLM",
+      "importance": 0.95,
+      "category": "core_discovery",
+      "verified": true
+    },
+    {
+      "fact": "The gradient is non-linear: 0.80\u21920.70 shows huge jump (94.5x\u219263.6x), but 0.70\u21920.60 is stable plateau, then 0.60\u21920.50 compression advantage disappears",
+      "context": "from lossiness gradient analysis",
+      "importance": 0.85,
+      "category": "pattern",
+      "verified": true
+    },
+    {
+      "fact": "LLM-based semantic importance scoring (asking 'how important is this?') beats heuristic feature-counting by 4x in distribution quality (mean 0.43, std 0.24 vs std 0.025)",
+      "context": "problem resolution journey, 5 iterations v1-v5",
+      "importance": 0.85,
+      "category": "methodology",
+      "verified": true
+    },
+    {
+      "fact": "SIF facts preserve ~25% of original text at 0.60 threshold, which matches the 'rule of 60' emerging pattern",
+      "context": "compression ratio validation",
+      "importance": 0.8,
+      "category": "validation",
+      "verified": true
+    },
+    {
+      "fact": "The problem wasn't normalization (iteration 3) or proper formatting (iteration 4) - it was that heuristics fundamentally can't capture semantic importance, only LLM understanding can",
+      "context": "debugging insight from v1-v5 journey",
+      "importance": 0.7,
+      "category": "lesson",
+      "verified": true
+    }
+  ],
+  "hypotheses": [
+    {
+      "fact": "Toki Pona (120-130 core words) can be used as intermediate compression format between SIF and natural language for semantic transfer between AI instances",
+      "context": "proposed next experiment",
+      "importance": 0.75,
+      "category": "hypothesis",
+      "verified": false
+    },
+    {
+      "fact": "Understanding might be transferable between minds via ultra-compressed semantic format if structure is preserved correctly",
+      "context": "semantic teleportation hypothesis",
+      "importance": 0.7,
+      "category": "hypothesis",
+      "verified": false
+    }
+  ]
+}

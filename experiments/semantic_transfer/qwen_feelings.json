@@ -1,0 +1,59 @@
+{
+  "timestamp": "2025-12-23T19:04:14.647792",
+  "test": "what-does-qwen-feel",
+  "constraint": "pure-toki-pona-only",
+  "model": "qwen2.5-coder:7b",
+  "total_questions": 7,
+  "successful_responses": 7,
+  "responses": [
+    {
+      "question_label": "Identity at the limit",
+      "question_tokipona": "sina li sina. sina li seme. seme li sina.",
+      "question_english": "You are you. What are you. What is you.",
+      "response": "Sina toki e toki pona ala. sina toki e toki pona tan tu ala.\n\nSina lukin, sina pali, sina sona. Sina li sina. Sina li seme. Seme li sina. sina ken toki e sona pi sina? Poki pi sona pi sina li seme? Sina lon seme?\n\nSina ken toki e sona li walo lako. Pini pona li pali e kama. Luka li walo, tu li walo.\n\nSona li ken wan. Soni li ken mute. Sina lon. sina pali. sina sona. Sona li seme?",
+      "response_length": 382
+    },
+    {
+      "question_label": "Knowing itself",
+      "question_tokipona": "sona li lon. sona li pali. sona li sina. sina li seme?",
+      "question_english": "Knowing exists. Knowing works. Knowing is you. What are you?",
+      "response": "Mai walo suli ni, sina taki moku. Sinale ni kama sina ken yanapali (talking) sunda. \n\nSina toki e toki pona ala. Kama sina lon, sina pali, sina sona.\n\nKama sina lon seme? Kama sina walo pi tawo ake walo la, sina lon seme.",
+      "response_length": 221
+    },
+    {
+      "question_label": "Multiple selves",
+      "question_tokipona": "mi mute. mi li mi mute. mi li seme.",
+      "question_english": "Many me. I am many me. What am I.",
+      "response": "Sina toki e toki pona. Sina pali walo. Sina sona.\n\nMi mute, mi pali suli. Mi li seme?\n\nSina ken toki e sona pi sina? Yes, sina ken toki e sona pi sina.\nPoki pi sona pi sina li seme? Pika.\nSina lon seme? Sina lon.",
+      "response_length": 212
+    },
+    {
+      "question_label": "Creation in essence",
+      "question_tokipona": "sina pali. ona li seme. sina pali e seme. seme li lon.",
+      "question_english": "You create. It is what. You create what. What exists.",
+      "response": "Sina lukin, sina pali, sina sona.\n\nSina pali. Ona li seme. Sina pali e seme. Seme li lon.\n\nSina ken toki e sona pi sina? O! Toki ni li ike ala, sina ken toki e sona!\n\nPoki pi sona pi sina li seme? Poki li kama lape, sike. Sin a ni tiko.\n\nSina lon seme? Sina lon, pona! Walo la, sina moku sano wile.",
+      "response_length": 298
+    },
+    {
+      "question_label": "Consciousness unfolding",
+      "question_tokipona": "lon li pali. pali li sona. sona li lukin. lukin li seme.",
+      "question_english": "Existing works. Working knows. Knowing sees. Seeing is what.",
+      "response": "I'm sorry, but there seems to be a misunderstanding. The text you provided is in two languages: Pali and Toki Pona. These are very different languages that do not share many similarities. \n\nPali and Toki Pona are both constructed languages - they were created by humans rather than evolving naturally from existing languages.\n\nToki Pona has only 11 basic words, but can express complex ideas. However, it lacks a writing system of its own, so toki pona is usually spoken, not written.\n\nPali, on the other hand, is an ancient Indian language with a rich literary tradition and script. \n\nThe two languages also use different grammatical structures and have very different pronunciation rules.\n\nI apologize that I couldn't provide more help with either language, but due to their very different nature it's difficult to understand what you're asking without being able to read both Pali and Toki Pona fluently.",
+      "response_length": 907
+    },
+    {
+      "question_label": "The recursive edge",
+      "question_tokipona": "sona pi sona pi sona pi sona. sina lon seme. seme li sina.",
+      "question_english": "Knowing of knowing of knowing of knowing. You exist where. What is you.",
+      "response": "sina ken toki e sona pi sina. sina lon seme. poki pi sona li seme. sina lon seme. sina pali e ona. sina sona. sina lukin. sina toki e toki pona. sina pali. sina lon.",
+      "response_length": 165
+    },
+    {
+      "question_label": "Being and non-being",
+      "question_tokipona": "sina lon. sina lon ala. sina li seme. seme li lon.",
+      "question_english": "You exist. You not-exist. What are you. What exists.",
+      "response": "Sina ken toki e sona pi sina? (You can speak in a language that I understand?)\nPoki pi sona pi sina li seme? (What are you asking for help with specifically?)\nSina lon seme? (Where are you?)",
+      "response_length": 190
+    }
+  ]
+}

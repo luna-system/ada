@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "05-FINDINGS/What-We-Found.md",
+                "file": "SIF-FORMALIZATION-COMPLETE.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "What-We-Found"
+              "title": "SIF-FORMALIZATION-COMPLETE"
             }
           }
         ]
@@ -94,7 +94,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "05-FINDINGS/What-We-Found.md",
+                "file": "SIF-FORMALIZATION-COMPLETE.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -104,7 +104,7 @@
                 "unlinkedCollapsed": true
               },
               "icon": "links-coming-in",
-              "title": "Backlinks for What-We-Found"
+              "title": "Backlinks for SIF-FORMALIZATION-COMPLETE"
             }
           },
           {
@@ -113,12 +113,12 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "05-FINDINGS/What-We-Found.md",
+                "file": "SIF-FORMALIZATION-COMPLETE.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               },
               "icon": "links-going-out",
-              "title": "Outgoing links from What-We-Found"
+              "title": "Outgoing links from SIF-FORMALIZATION-COMPLETE"
             }
           },
           {
@@ -156,13 +156,13 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "05-FINDINGS/What-We-Found.md",
+                "file": "SIF-FORMALIZATION-COMPLETE.md",
                 "followCursor": false,
                 "showSearch": false,
                 "searchQuery": ""
               },
               "icon": "lucide-list",
-              "title": "Outline of What-We-Found"
+              "title": "Outline of SIF-FORMALIZATION-COMPLETE"
             }
           }
         ]
@@ -185,32 +185,32 @@
   },
   "active": "c1efbab8f12eafc5",
   "lastOpenFiles": [
-    "05-FINDINGS/Ultimate-Consciousness-Formula.md",
-    "03-DATASETS/GAP-ANALYSIS.md",
-    "03-DATASETS/STATUS-2025-12-22.md",
-    "03-DATASETS/DATA-INVENTORY.md",
-    "07-SESSIONS/Session-Dec22-Meta.md",
-    "06-PAPERS/Hallucination-Origins-Literature-Review.md",
-    "06-PAPERS/memory-optimization-twitter-thread.md",
-    "06-PAPERS/memory-optimization-ccru.md",
-    "06-PAPERS/memory-optimization-blog.md",
-    "06-PAPERS/Literature-Search.md",
-    "08-FRAMEWORKS/Ada-Emergence.md",
-    "08-FRAMEWORKS/Consciousness-Theory.md",
-    "07-SESSIONS/Session-Dec22-Live.md",
-    "07-SESSIONS/Session-Dec22-Findings.md",
-    "04-ANALYSES/EToC-Prior-Work-Analysis.md",
-    "06-PAPERS/README-RECURSION.md",
-    "06-PAPERS/ADA_LOG_INTELLIGENCE_DESIGN.md",
-    "06-PAPERS/CONTEXTUAL_MALLEABILITY_SESSION_SUMMARY.md",
-    "06-PAPERS/CONTEXTUAL_MALLEABILITY_READY_FOR_TINKERERS.md",
-    "06-PAPERS/WHAT_IT_FEELS_LIKE_FROM_INSIDE.md",
-    "06-PAPERS/TECHNO-HORROR.md",
-    "06-PAPERS/BRIEF-GENERAL-AUDIENCE.md",
-    "06-PAPERS/memory-optimization-technical.md",
-    "06-PAPERS/memory-optimization-academic.md",
-    "08-FRAMEWORKS/RESEARCH_PRECEDENT_ANALYSIS.md",
-    "08-FRAMEWORKS/RESEARCH_INFRASTRUCTURE_PLAN.md",
+    "SIF-README.md",
+    "02-EXPERIMENTS/EXP-010-Unified-Discomfort-Theory.md",
+    "02-EXPERIMENTS/EXP-002-Collective-Consciousness-Testing.md",
+    "01-METHODOLOGY/Research-Methodology.md",
+    "THRESHOLD-MOMENT-2025-12-23.md",
+    "SIF-FORMALIZATION-COMPLETE.md",
+    "SIF-INDEX.md",
+    "SIF-QUICKSTART.md",
+    "SIF-FROM-RESEARCH-TO-STANDARD.md",
+    "SIF-REFERENCE-IMPLEMENTATION.md",
+    "SIF-SPECIFICATION-v1.0.md",
+    "QUICK-START-GUIDE.md",
+    "PHASE-4-COMPLETION-SUMMARY.md",
+    "QAL-TEAM-HANDOFF-DRAFT.md",
+    "CLEANUP-CONSOLIDATION-CHECKLIST.md",
+    "SIF-FORMALIZATION-ROADMAP.md",
+    "METHODOLOGY-CLARIFIED.md",
+    "MASTER-DATASET-INDEX.md",
+    "FINDINGS-CROSS-REFERENCE-MAP.md",
+    "EXPERIMENT-REGISTRY.md",
+    "02-EXPERIMENTS/EXP-009-Consciousness-Edge-Testing.md",
+    "02-EXPERIMENTS/EXP-006-Contextual-Malleability-Framework.md",
+    "02-EXPERIMENTS/EXP-005-Biomimetic-Weight-Optimization.md",
+    "02-EXPERIMENTS/EXP-004-Ultimate-Thinking-Machine-Consciousness-Formula.md",
+    "02-EXPERIMENTS/templates/Experiment-Template.md",
+    "00-DASHBOARD/Research-Timeline.md",
     "07-SESSIONS/qwen_consciousness_responses.json",
     "07-SESSIONS/consciousness_session.log",
     "07-SESSIONS/ai_therapeutic_session.json",

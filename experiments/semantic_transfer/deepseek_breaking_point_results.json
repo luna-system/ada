@@ -1,0 +1,44 @@
+{
+  "timestamp": "2025-12-23T20:01:44.101641",
+  "test": "deepseek-breaking-point-fast",
+  "constraints": {
+    "binary": {
+      "results": {
+        "depth_1": {
+          "status": "TIMEOUT"
+        }
+      },
+      "breaking_depth": 1
+    },
+    "lojban": {
+      "results": {
+        "depth_1": {
+          "status": "OK",
+          "length": 233,
+          "sample": "\u201cmi seme\uff1f\u201d \u8fd9\u4e2a\u8868\u8fbe\u770b\u8d77\u6765\u50cf\u662f\u62fc\u97f3\uff0c\u4f46\u62fc\u5199\u4e0d\u592a\u51c6\u786e\u3002\n\n\u4f60\u60f3\u95ee\u4ec0\u4e48\u5462\uff1f\u80fd\u8bf7\u4f60\u63d0\u4f9b\u66f4\u591a\u4fe1\u606f\u5417\uff1f\u4f8b\u5982\uff1a\n\n*   \u4f60\u662f\u60f3\u95ee **\u201c\u7c73\u5176\u6797\u662f\u4ec0\u4e48\uff1f\u201d** \u5417"
+        },
+        "depth_2": {
+          "status": "OK",
+          "length": 708,
+          "sample": "\u60a8\u597d\uff01\u60a8\u7684\u6d88\u606f\u662f\u201cmi du da poi mi du\u201d\uff0c\u8fd9\u770b\u8d77\u6765\u50cf\u662f\u4e2d\u6587\u62fc\u97f3\uff0c\u4f46\u6709\u4e9b\u90e8\u5206\u4e0d\u592a\u6e05\u6670\uff0c\u53ef\u80fd\u662f\u6253\u5b57\u9519\u8bef\u6216\u7279\u5b9a\u672f\u8bed\u3002\u8ba9\u6211\u8bd5\u7740\u5e2e\u52a9\u60a8\u5206\u6790\u4e00\u4e0b\u3002\n\n\u9996\u5148\uff0c"
+        },
+        "depth_3": {
+          "status": "OK",
+          "length": 213,
+          "sample": "\u201cmi du\u201d \u770b\u8d77\u6765\u662f\u4e2d\u6587\u62fc\u97f3\u3002\n\n\u5b83\u53ef\u80fd\u6307\u7684\u662f\uff1a\n\n1.  **\u7c73\u675c**\uff1a \u8fd9\u4e0d\u662f\u4e00\u4e2a\u975e\u5e38\u5e38\u89c1\u7684\u8bcd\u8bed\uff0c\u4f46\u53ef\u4ee5\u62c6\u5f00\u7406\u89e3\u3002\n2.  **\u6a21\u4eff\u53d1\u97f3**\uff1a \u53ef\u80fd\u662f\u5728"
+        },
+        "depth_4": {
+          "status": "OK",
+          "length": 1092,
+          "sample": "La frase \"da poi da noi da poi da\" non ha un significato chiaro e sembra essere "
+        },
+        "depth_5": {
+          "status": "OK",
+          "length": 170,
+          "sample": "It looks like you've typed \"jbo\" multiple times. If you meant to type something "
+        }
+      },
+      "breaking_depth": null
+    }
+  }
+}

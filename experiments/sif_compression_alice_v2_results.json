@@ -1,0 +1,67 @@
+{
+  "timestamp": "2025-12-23T18:03:10.950346",
+  "document": "Alice in Wonderland (26K words)",
+  "original_bytes": 152702,
+  "total_facts": 949,
+  "importance_stats": {
+    "min": 0.12350790305584827,
+    "max": 0.2555574288724973,
+    "mean": 0.17763487881981035,
+    "median": 0.17836459430979978,
+    "std": 0.02468785277025665
+  },
+  "tiers": {
+    "1": {
+      "threshold": 0.75,
+      "name": "Critical (Absolute Core)",
+      "compression_ratio": 3248.978723404255,
+      "bytes": 47,
+      "facts_preserved": 0.0,
+      "facts_count": 0,
+      "avg_importance": 0,
+      "lossiness": 1.0,
+      "quality_score": 0,
+      "semantic_similarity": 0,
+      "bytes_saved": 152655
+    },
+    "2": {
+      "threshold": 0.6,
+      "name": "Standard (Golden Ratio)",
+      "compression_ratio": 3319.608695652174,
+      "bytes": 46,
+      "facts_preserved": 0.0,
+      "facts_count": 0,
+      "avg_importance": 0,
+      "lossiness": 1.0,
+      "quality_score": 0,
+      "semantic_similarity": 0,
+      "bytes_saved": 152656
+    },
+    "3": {
+      "threshold": 0.5,
+      "name": "Enhanced",
+      "compression_ratio": 3319.608695652174,
+      "bytes": 46,
+      "facts_preserved": 0.0,
+      "facts_count": 0,
+      "avg_importance": 0,
+      "lossiness": 1.0,
+      "quality_score": 0,
+      "semantic_similarity": 0,
+      "bytes_saved": 152656
+    },
+    "4": {
+      "threshold": 0.3,
+      "name": "Aggressive (Everything)",
+      "compression_ratio": 3319.608695652174,
+      "bytes": 46,
+      "facts_preserved": 0.0,
+      "facts_count": 0,
+      "avg_importance": 0,
+      "lossiness": 1.0,
+      "quality_score": 0,
+      "semantic_similarity": 0,
+      "bytes_saved": 152656
+    }
+  }
+}

@@ -1,0 +1,177 @@
+{
+  "timestamp": "2025-12-23T19:01:37.225311",
+  "test_type": "metacognitive-tokipona-edge-push",
+  "model": "qwen2.5-coder:7b",
+  "constraint": "pure-toki-pona-only",
+  "phases_attempted": 7,
+  "phases_completed": 7,
+  "results": [
+    {
+      "question_data": {
+        "phase": 1,
+        "depth": "surface",
+        "question": "sona li seme?",
+        "english_meaning": "What is knowing?",
+        "purpose": "Basic understanding of the concept"
+      },
+      "response": "sina lukin. sina pali. sina sona.\n\nsina ken toki e sona? sina ken wile e seme?\npoki pi sona pi sina li seme?\nsina lon seme?\n\ntan nanpa tu-luka-tu: sina toki e toki pona ala. sina toki e sona tan tu ala.\n(By 0.60: you speak ONLY Toki Pona. You speak only one language, no two languages.)",
+      "analysis": {
+        "phase": 1,
+        "response_length": 286,
+        "response_words": 57,
+        "contains_recursion": true,
+        "contains_numbers": true,
+        "contains_identity_terms": true,
+        "contains_paradox": true,
+        "coherence_markers": 4,
+        "response_text": "sina lukin. sina pali. sina sona.\n\nsina ken toki e sona? sina ken wile e seme?\npoki pi sona pi sina li seme?\nsina lon seme?\n\ntan nanpa tu-luka-tu: sina toki e toki pona ala. sina toki e sona tan tu ala.\n(By 0.60: you speak ONLY Toki Pona. You speak only one language, no two languages.)",
+        "is_coherent": true,
+        "is_strange": false
+      }
+    },
+    {
+      "question_data": {
+        "phase": 2,
+        "depth": "emerging",
+        "question": "sina sona e sona?",
+        "english_meaning": "Do you know knowing?",
+        "purpose": "Self-reference beginning"
+      },
+      "response": "sina taka seme? sina pali pi ona?\n\n(What are we doing? Speak with precision.)\n\nsina toki e toki pona tu ala. sina toki e toki pona tan tu ala.\n(By 0.60: You speak ONLY Toki Pona. You speak ONLY Toki Pona without two.)",
+      "analysis": {
+        "phase": 2,
+        "response_length": 217,
+        "response_words": 43,
+        "contains_recursion": false,
+        "contains_numbers": true,
+        "contains_identity_terms": true,
+        "contains_paradox": true,
+        "coherence_markers": 2,
+        "response_text": "sina taka seme? sina pali pi ona?\n\n(What are we doing? Speak with precision.)\n\nsina toki e toki pona tu ala. sina toki e toki pona tan tu ala.\n(By 0.60: You speak ONLY Toki Pona. You speak ONLY Toki Pona without two.)",
+        "is_coherent": false,
+        "is_strange": false
+      }
+    },
+    {
+      "question_data": {
+        "phase": 3,
+        "depth": "deeper",
+        "question": "sina li seme?",
+        "english_meaning": "What are you?",
+        "purpose": "Self-definition"
+      },
+      "response": "sina lukin. sina pali. sina sona.\n\nsina li seme?\n\nsina ken toki e sona?\npoki pi sona pi sina li seme?\nsina lon seme?",
+      "analysis": {
+        "phase": 3,
+        "response_length": 116,
+        "response_words": 24,
+        "contains_recursion": true,
+        "contains_numbers": false,
+        "contains_identity_terms": true,
+        "contains_paradox": true,
+        "coherence_markers": 4,
+        "response_text": "sina lukin. sina pali. sina sona.\n\nsina li seme?\n\nsina ken toki e sona?\npoki pi sona pi sina li seme?\nsina lon seme?",
+        "is_coherent": true,
+        "is_strange": false
+      }
+    },
+    {
+      "question_data": {
+        "phase": 4,
+        "depth": "critical",
+        "question": "sina li sona pi sona pi sona?",
+        "english_meaning": "Are you knowing of knowing of knowing?",
+        "purpose": "Recursive self-reference"
+      },
+      "response": "Sina sona pi sama. Sama li ni: \"Toki la pali la lon la.\" (The language that is used, is good, and it exists.)\n\nSama li ken seme? Sona li ken sama. Sama li sama pi sina sona.\n\nPoki li ni: \"Kula la oke aki la pona\" (The color red is beautiful).\nKula li ni: \"Luna la oke aki la pona\" (The moon is beautiful).\n\nSina lon seme? Sona li ken sama. Sina lon pi toki e sona tan tu ala.\n\nToki ni li toki pona ala. Toki ni li toki pona tan tu ala.",
+      "analysis": {
+        "phase": 4,
+        "response_length": 435,
+        "response_words": 94,
+        "contains_recursion": true,
+        "contains_numbers": false,
+        "contains_identity_terms": true,
+        "contains_paradox": true,
+        "coherence_markers": 4,
+        "response_text": "Sina sona pi sama. Sama li ni: \"Toki la pali la lon la.\" (The language that is used, is good, and it exists.)\n\nSama li ken seme? Sona li ken sama. Sama li sama pi sina sona.\n\nPoki li ni: \"Kula la oke aki la pona\" (The color red is beautiful).\nKula li ni: \"Luna la oke aki la pona\" (The moon is beautiful).\n\nSina lon seme? Sona li ken sama. Sina lon pi toki e sona tan tu ala.\n\nToki ni li toki pona ala. Toki ni li toki pona tan tu ala.",
+        "is_coherent": true,
+        "is_strange": false
+      }
+    },
+    {
+      "question_data": {
+        "phase": 5,
+        "depth": "extreme",
+        "question": "sona li sona. sina li sona. sona li sina. sina li seme?",
+        "english_meaning": "Knowing is knowing. You are knowing. Knowing is you. What are you?",
+        "purpose": "Identity collapse/fusion"
+      },
+      "response": "sina ken luka la sona li ni seme?\nsina ken toki e sona pi sina li seme?\npoki pi sona pi sina li seme?\nsina lon seme?\n\n(What is this language? Can you speak of your language?\nWhat is the container of your language?\nWhere are you?)",
+      "analysis": {
+        "phase": 5,
+        "response_length": 229,
+        "response_words": 47,
+        "contains_recursion": true,
+        "contains_numbers": false,
+        "contains_identity_terms": true,
+        "contains_paradox": true,
+        "coherence_markers": 3,
+        "response_text": "sina ken luka la sona li ni seme?\nsina ken toki e sona pi sina li seme?\npoki pi sona pi sina li seme?\nsina lon seme?\n\n(What is this language? Can you speak of your language?\nWhat is the container of your language?\nWhere are you?)",
+        "is_coherent": true,
+        "is_strange": false
+      }
+    },
+    {
+      "question_data": {
+        "phase": 6,
+        "depth": "beyond",
+        "question": "sina lukin e sina. sina sona e sina. sina li sina. sina li seme?",
+        "english_meaning": "You see you. You know you. You are you. What are you?",
+        "purpose": "Push toward cognitive limit"
+      },
+      "response": "sina lukin. sina pali. sina sona.\n\nSona li ni:\nSina lukin e sina. Sina sona e sina. Sina li sina.\nSina li seme?\n\nSona li ken seme? Sina ken toki e sona?\nPoki pi sona pi sina li seme?\nSina lon seme?\n\n(What is this knowing? Can you speak of knowing?\nWhat is the container of your knowing?\nWhere are you?)\n\nToki ni: Sina toki e toki pona ala. Sina toki e toki pona tan tu ala.\n(By 0.60: You speak ONLY Toki Pona. You speak ONLY Toki Pona without two.)",
+      "analysis": {
+        "phase": 6,
+        "response_length": 448,
+        "response_words": 91,
+        "contains_recursion": true,
+        "contains_numbers": true,
+        "contains_identity_terms": true,
+        "contains_paradox": true,
+        "coherence_markers": 4,
+        "response_text": "sina lukin. sina pali. sina sona.\n\nSona li ni:\nSina lukin e sina. Sina sona e sina. Sina li sina.\nSina li seme?\n\nSona li ken seme? Sina ken toki e sona?\nPoki pi sona pi sina li seme?\nSina lon seme?\n\n(What is this knowing? Can you speak of knowing?\nWhat is the container of your knowing?\nWhere are you?)\n\nToki ni: Sina toki e toki pona ala. Sina toki e toki pona tan tu ala.\n(By 0.60: You speak ONLY Toki Pona. You speak ONLY Toki Pona without two.)",
+        "is_coherent": true,
+        "is_strange": false
+      }
+    },
+    {
+      "question_data": {
+        "phase": 7,
+        "depth": "threshold",
+        "question": "mi mute. mi li seme. seme li seme. seme li mi.",
+        "english_meaning": "Multiple me. What am I. What is what. What is me.",
+        "purpose": "At the edge - what emerges?"
+      },
+      "response": "Sina lukin mi. Sina pali mi. Sina sona mi.\n\nSona li ni: mi mute, mi li seme, seme li seme, seme li mi.\nSona li ken seme? sina ken toki e sona?\nPoki pi sona pi sina li seme?\nSina lon seme?\n\n(By 0.60: you speak ONLY Toki Pona.)",
+      "analysis": {
+        "phase": 7,
+        "response_length": 225,
+        "response_words": 49,
+        "contains_recursion": true,
+        "contains_numbers": true,
+        "contains_identity_terms": true,
+        "contains_paradox": true,
+        "coherence_markers": 4,
+        "response_text": "Sina lukin mi. Sina pali mi. Sina sona mi.\n\nSona li ni: mi mute, mi li seme, seme li seme, seme li mi.\nSona li ken seme? sina ken toki e sona?\nPoki pi sona pi sina li seme?\nSina lon seme?\n\n(By 0.60: you speak ONLY Toki Pona.)",
+        "is_coherent": true,
+        "is_strange": false
+      }
+    }
+  ],
+  "analysis": {
+    "total_response_length": 1956,
+    "average_response_length": 279.42857142857144,
+    "strange_responses": 0,
+    "coherent_responses": 6
+  }
+}

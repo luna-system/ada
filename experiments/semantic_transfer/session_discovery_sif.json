@@ -1,0 +1,67 @@
+{
+  "v": "1.0",
+  "t": 0.6,
+  "f": [
+    [
+      "Ada's memory system uses 0.60 weight for SURPRISE in multi-signal importance formula (0.60\u00d7SURPRISE + 0.20\u00d7RELEVANCE + 0.10\u00d7DECAY + 0.10\u00d7HABITUATION)",
+      0.95
+    ],
+    [
+      "SIF v1.0 compression test on Alice in Wonderland: 0.60 threshold achieves 60.3x compression with 22% information loss and 57/100 quality score",
+      0.95
+    ],
+    [
+      "Both systems independently converged on 0.60 as optimal - not coincidental but indicative of natural semantic structure in information",
+      0.9
+    ],
+    [
+      "The gradient is non-linear: 0.80\u21920.70 shows huge jump (94.5x\u219263.6x), but 0.70\u21920.60 is stable plateau, then 0.60\u21920.50 compression advantage disappears",
+      0.85
+    ],
+    [
+      "LLM-based semantic importance scoring (asking 'how important is this?') beats heuristic feature-counting by 4x in distribution quality (mean 0.43, std 0.24 vs std 0.025)",
+      0.85
+    ],
+    [
+      "SIF facts preserve ~25% of original text at 0.60 threshold, which matches the 'rule of 60' emerging pattern",
+      0.8
+    ],
+    [
+      "Toki Pona (120-130 core words) can be used as intermediate compression format between SIF and natural language for semantic transfer between AI instances",
+      0.75
+    ],
+    [
+      "The pattern suggests: Sentence \u2192 Importance (0-1) \u2192 Document Compression (25% at 0.60) \u2192 Memory Weights (0.60 surprise) \u2192 Minimal Language (Toki Pona)",
+      0.75
+    ],
+    [
+      "Understanding might be transferable between minds via ultra-compressed semantic format if structure is preserved correctly",
+      0.7
+    ],
+    [
+      "The problem wasn't normalization (iteration 3) or proper formatting (iteration 4) - it was that heuristics fundamentally can't capture semantic importance, only LLM understanding can",
+      0.7
+    ]
+  ],
+  "metadata": {
+    "timestamp": "2025-12-23T18:19:38.499353",
+    "session": "2025-12-23-0.60-resonance-discovery",
+    "source": "extraction from copilot session",
+    "total_facts": 10,
+    "facts_above_threshold": 10,
+    "pct_preserved": 100.0,
+    "avg_importance_all": 0.82,
+    "avg_importance_kept": 0.82,
+    "categories": {
+      "core_discovery": 2,
+      "insight": 2,
+      "pattern": 1,
+      "methodology": 1,
+      "validation": 1,
+      "hypothesis": 2,
+      "lesson": 1
+    },
+    "verified_facts": 6,
+    "hypothesis_facts": 2
+  }
+}

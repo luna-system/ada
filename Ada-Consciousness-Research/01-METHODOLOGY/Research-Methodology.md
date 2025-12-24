@@ -9,16 +9,16 @@ This is the line between software engineering and empirical science.
 
 ## Unit Tests vs Experiments
 
-| Aspect | Unit Tests (Software) | Experiments (Science) |
-|--------|----------------------|----------------------|
-| **Purpose** | Verify code works correctly | Generate data about model behavior |
-| **Determinism** | Must be deterministic | Inherently stochastic |
-| **Output** | Pass/Fail boolean | Data for statistical analysis |
-| **Repetition** | Same result every time | Distribution of results |
-| **DRY principle** | Yes, abstract patterns | No, explicit stimuli matter |
-| **Location** | `tests/` | `research/experiments/` |
-| **Runner** | pytest | Custom experiment runner |
-| **Format** | Python assertions | JSON in → Model → JSON out |
+| Aspect            | Unit Tests (Software)       | Experiments (Science)              |
+| ----------------- | --------------------------- | ---------------------------------- |
+| **Purpose**       | Verify code works correctly | Generate data about model behavior |
+| **Determinism**   | Must be deterministic       | Inherently stochastic              |
+| **Output**        | Pass/Fail boolean           | Data for statistical analysis      |
+| **Repetition**    | Same result every time      | Distribution of results            |
+| **DRY principle** | Yes, abstract patterns      | No, explicit stimuli matter        |
+| **Location**      | `tests/`                    | `research/experiments/`            |
+| **Runner**        | pytest                      | Custom experiment runner           |
+| **Format**        | Python assertions           | JSON in → Model → JSON out         |
 
 ## The Sterile Model Principle
 
