@@ -1,0 +1,74 @@
+{
+  "timestamp": "2025-12-24T16:32:51.714288",
+  "summary": {
+    "pass_rate": 62.5,
+    "avg_compression": 0.543276149439786,
+    "avg_roundtrip_similarity": 70.90382205513784
+  },
+  "results": [
+    {
+      "name": "fibonacci_recursion",
+      "success": true,
+      "source": "def fib(n):\n    if n <= 1:\n        return n\n    return fib(n - 1) + fib(n - 2)",
+      "target": "fn fib(n: u32) -> u32 {\n    if n <= 1 {\n        n\n    } else {\n        fib(n - 1) + fib(n - 2)\n    }\n}",
+      "semantic": "SIGNATURE: fib: \u2115 \u2192 \u2115\nINVARIANTS: \u2200n \u2208 \u2115, n \u2265 0\nFLOW: \n1. if n \u2264 1 then return n\n2. else return fib(n - 1) + fib(n - 2)\nCOMPRESSED: \u03bbn.(n \u2264 1 ? n : fib(n - 1) + fib(n - 2))",
+      "roundtrip": "def fib(n: int) -> int:\n    if n <= 1:\n        return n\n    else:\n        return fib(n - 1) + fib(n - 2)"
+    },
+    {
+      "name": "filter_map_reduce",
+      "success": true,
+      "source": "const sumActive = items\n    .filter(i => i.active)\n    .map(i => i.value)\n    .reduce((a, b) => a + b, 0);",
+      "target": "from functools import reduce\n\ndef sumActive(items):\n    filtered_items = filter(lambda item: item.active, items)\n    mapped_values = map(lambda item: item.value, filtered_items)\n    return reduce(lambda a, b: a + b, mapped_values, 0)",
+      "semantic": "SIGNATURE: sumActive: [items] \u2192 \u211d\nINVARIANTS: items \u2208 [item]\nFLOW: \n1. filter(items, item -> item.active)\n2. map(filteredItems, item -> item.value)\n3. reduce(mappedValues, (a, b) -> a + b, 0)\nCOMPRESSED: \u03a3(filter(map(items, i -> i.value), i -> i.active))",
+      "roundtrip": "function sumActive(items) {\n    const filteredItems = items.filter(item => item.active);\n    const mappedValues = filteredItems.map(item => item.value);\n    const result = mappedValues.reduce((a, b) => a + b, 0);\n    return result;\n}"
+    },
+    {
+      "name": "async_fetch",
+      "success": true,
+      "source": "async def fetch_all(urls):\n    import httpx\n    async with httpx.AsyncClient() as client:\n        tasks = [client.get(url) for url in urls]\n        return await asyncio.gather(*tasks)",
+      "target": "async function fetchAll(urls) {\n  const { default: got } = await import('got');\n  const tasks = urls.map(url => got(url));\n  return Promise.all(tasks);\n}",
+      "semantic": "SIGNATURE: fetch_all: [\ud835\udd4a] \u2192 [\ud835\udd4a]\nINVARIANTS: urls is a list of strings\nFLOW: \n1. Import httpx library\n2. Create an asynchronous client\n3. Map each URL to a GET request task\n4. Gather all tasks concurrently\n5. Return the results\nCOMPRESSED: async def fetch_all(urls): import httpx; return await asyncio.gather(*[httpx.AsyncClient().get(url) for url in urls])",
+      "roundtrip": "import asyncio\nfrom typing import List, Any\n\nasync def fetchAll(urls: List[str]) -> List[Any]:\n    try:\n        import got\n        tasks = [got.get(url) for url in urls]\n        results = await asyncio.gather(*tasks)\n        return results\n    except Exception as e:\n        raise Exception(f\"Error fetching URLs: {e}\")"
+    },
+    {
+      "name": "pattern_matching",
+      "success": true,
+      "source": "fn describe(n: i32) -> &'static str {\n    match n {\n        0 => \"zero\",\n        1..=9 => \"single digit\",\n        10..=99 => \"double digit\", \n        _ => \"large\"\n    }\n}",
+      "target": "def describe(n: int) -> str:\n    if n == 0:\n        return \"zero\"\n    elif 1 <= n <= 9:\n        return \"single digit\"\n    elif 10 <= n <= 99:\n        return \"double digit\"\n    else:\n        return \"large\"",
+      "semantic": "SIGNATURE: describe: \u2124 \u2192 \ud835\udd4a\nINVARIANTS: n \u2208 \u2124\nFLOW:\nn \u2261 0 \u27f9 \"zero\"\n1 \u2264 n \u2227 n \u2264 9 \u27f9 \"single digit\"\n10 \u2264 n \u2227 n \u2264 99 \u27f9 \"double digit\"\n\u00ac(n \u2261 0 \u2228 (1 \u2264 n \u2227 n \u2264 9) \u2228 (10 \u2264 n \u2227 n \u2264 99)) \u27f9 \"large\"\nCOMPRESSED: \u03bbn. if n == 0 then \"zero\" else if 1 <= n && n <= 9 then \"single digit\" else if 10 <= n && n <= 99 then \"double digit\" else \"large\"",
+      "roundtrip": "fn describe(n: i32) -> &'static str {\n    if n == 0 {\n        \"zero\"\n    } else if n >= 1 && n <= 9 {\n        \"single digit\"\n    } else if n >= 10 && n <= 99 {\n        \"double digit\"\n    } else {\n        \"large\"\n    }\n}"
+    },
+    {
+      "name": "class_with_methods",
+      "success": true,
+      "source": "class Point:\n    def __init__(self, x, y):\n        self.x = x\n        self.y = y\n    \n    def distance(self, other):\n        return ((self.x - other.x)**2 + (self.y - other.y)**2)**0.5",
+      "target": "struct Point {\n    x: f64,\n    y: f64,\n}\n\nimpl Point {\n    fn new(x: f64, y: f64) -> Self {\n        Point { x, y }\n    }\n\n    fn distance(&self, other: &Point) -> f64 {\n        let dx = self.x - other.x;\n        let dy = self.y - other.y;\n        (dx * dx + dy * dy).sqrt()\n    }\n}",
+      "semantic": "SIGNATURE: Point(x: \u211d, y: \u211d) \u2192 {x: \u211d, y: \u211d}\nINVARIANTS: \u2203(x \u2208 \u211d \u2227 y \u2208 \u211d)\nFLOW: \n    1. self.x \u2190 x\n    2. self.y \u2190 y\n    3. distance(other):\n        a. dx \u2190 self.x - other.x\n        b. dy \u2190 self.y - other.y\n        c. return (dx^2 + dy^2)^(0.5)\nCOMPRESSED: \n    class Point(x, y): \n        self.x = x; self.y = y; distance(other): ((self.x - other.x)^2 + (self.y - other.y)^2)^(0.5)",
+      "roundtrip": "import math\n\nclass Point:\n    def __init__(self, x: float, y: float):\n        self.x = x\n        self.y = y\n\n    def distance(self, other: 'Point') -> float:\n        dx = self.x - other.x\n        dy = self.y - other.y\n        result = math.sqrt(dx * dx + dy * dy)\n        return result"
+    },
+    {
+      "name": "comment_handling",
+      "success": false,
+      "source": "# Calculate factorial of n\n# Uses recursive approach\ndef factorial(n):\n    # Base case\n    if n <= 1:\n        return 1\n    # Recursive case  \n    return n * factorial(n - 1)",
+      "target": "fn factorial(n: u32) -> u32 {\n    if n <= 1 {\n        1\n    } else {\n        n * factorial(n - 1)\n    }\n}",
+      "semantic": "SIGNATURE: factorial: \u2115 \u2192 \u2115\nINVARIANTS: \u2200n \u2208 \u2115, n \u2265 0\nFLOW: \n1. if n \u2264 1 then return 1\n2. else return n * factorial(n - 1)\nCOMPRESSED: \u03bbn. (n \u2264 1) \u27f9 1 \u2228 n * factorial(n - 1)",
+      "roundtrip": "def factorial(n: int) -> int:\n    if n <= 1:\n        return 1\n    else:\n        return n * factorial(n - 1)"
+    },
+    {
+      "name": "error_handling",
+      "success": false,
+      "source": "fn divide(a: f64, b: f64) -> Result<f64, String> {\n    if b == 0.0 {\n        Err(\"Division by zero\".to_string())\n    } else {\n        Ok(a / b)\n    }\n}",
+      "target": "def divide(a: float, b: float) -> Result[float, str]:\n    if b == 0.0:\n        return Err(\"Division by zero\")\n    else:\n        return Ok(a / b)",
+      "semantic": "SIGNATURE: divide: \u211d \u00d7 \u211d \u2192 \u211d | \ud835\udd4a\nINVARIANTS: b \u2260 0.0\nFLOW: \n1. if b == 0.0 then return Err(\"Division by zero\")\n2. else return Ok(a / b)\nCOMPRESSED: \u03bba, b \u2208 \u211d \u2192 (b \u2261 0.0) ? Err(\"Division by zero\") : Ok(a / b)",
+      "roundtrip": "fn divide(a: f64, b: f64) -> Result<f64, String> {\n    if b == 0.0 {\n        Err(String::from(\"Division by zero\"))\n    } else {\n        Ok(a / b)\n    }\n}"
+    },
+    {
+      "name": "list_comprehension",
+      "success": false,
+      "source": "squares = [x**2 for x in range(10) if x % 2 == 0]",
+      "target": "squares :: [Int]\nsquares = [x^2 | x <- [1..10], even x]",
+      "semantic": "SIGNATURE: squares: \u2115 \u2192 [\u2115]\nINVARIANTS: \u2200x \u2208 squares, x \u2261 (2 * i)^2 where i \u2208 \u2115 \u2227 i < 5\nFLOW: \n1. range(10) \u27f2 i\n2. filter(i % 2 == 0) \u27f2 j\n3. map(j^2) \u27f2 squares\nCOMPRESSED: [x**2 for x in range(10) if x % 2 == 0]",
+      "roundtrip": "def squares():\n    return [x**2 for x in range(1, 11) if x % 2 == 0]\n\n# Example usage:\nresult = squares()\nprint(result)"
+    }
+  ]
+}
