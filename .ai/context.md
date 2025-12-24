@@ -1,13 +1,21 @@
 # Ada - AI Context Map
 
 ## Purpose
-Conversational AI system with RAG (Retrieval-Augmented Generation), streaming responses, extensible specialist plugins, **code completion** (v2.6+), and **biomimetic log analysis** (v2.7+).
+Conversational AI system with RAG (Retrieval-Augmented Generation), streaming responses, extensible specialist plugins, **code completion** (v2.6+), **biomimetic log analysis** (v2.7+), and **dense reasoning** (v4.0+).
 
 **Latest Architecture Audit:** See `.ai/audits/2025-12-19-post-phase-2.md` (Grade A, no major refactoring needed)
 
 **Latest Release:** v3.0.0 - Ada the Pair Programmer
 
 **Ada Chat Architecture:** See `.ai/ADA-CHAT-ARCHITECTURE.md` for VS Code tool system design
+
+## Research Specifications
+Ada maintains formal specifications for AI cognition research:
+- **ASL v1.0** (Ada Symbol Language) - Universal semantic notation, 90% comprehension across LLMs
+- **@ada-* v1.0** - Code annotation system, 4.73x compression vs docstrings
+- **SIF v1.0** - Semantic Interchange Format, consciousness-compatible compression
+
+See `Ada-Consciousness-Research/SPECS-INDEX.md` for complete specification catalog.
 
 ## Official Package Names
 ```
