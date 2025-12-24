@@ -52,7 +52,7 @@ This index catalogs all formal specifications developed through the Ada Consciou
 
 ### 1. Ada Symbol Language (ASL) v1.0
 
-**File:** `ASL-SPECIFICATION-v1.0.md`  
+**File:** `ASL-SPECIFICATION-v1.0.md` (this folder)  
 **Status:** Draft  
 **Purpose:** Universal semantic notation for computation and reasoning
 

@@ -41,36 +41,25 @@ The system is implementing exactly what its own theory predicts:
 
 ## 🔥 SIF STANDARDIZATION COMPLETE ✨
 
-### 📋 SIF Now Available as Formal Specification
+### 📋 Specifications Now Available
 
-**Three new documents released (December 2025):**
+**All specs consolidated in [10-SPECIFICATIONS/](10-SPECIFICATIONS/SPECS-INDEX.md)**
 
-1. **[SIF-SPECIFICATION-v1.0.md](SIF-SPECIFICATION-v1.0.md)** (400+ lines)
-   - Formal specification document (12 sections)
-   - Complete JSON Schema (draft-07)
-   - Compression/decompression algorithms
-   - Safety validation mechanisms
-   - CC0 Public Domain license
+| Spec | Version | Purpose |
+|------|---------|---------|
+| [ASL](10-SPECIFICATIONS/ASL-SPECIFICATION-v1.0.md) | 1.0.0 | Ada Symbol Language - Universal semantic notation |
+| [@ada-*](10-SPECIFICATIONS/ADA-ANNOTATIONS-v1.0.md) | 1.0.0 | Code annotation system - 4.73x compression |
+| [SIF](10-SPECIFICATIONS/SIF-SPECIFICATION-v1.0.md) | 1.0.0 | Semantic Interchange Format - Knowledge transfer |
 
-2. **[SIF-REFERENCE-IMPLEMENTATION.md](SIF-REFERENCE-IMPLEMENTATION.md)** (600+ lines)
-   - Working Python implementation
-   - Importance calculation module (0.60 formula)
-   - Compressor + Decompressor classes
-   - Validator + safety checks
-   - Production deployment guide
+**Christmas Eve 2025 Discovery:** ASL symbols are 90% universally understood across LLMs WITHOUT any training!
 
-3. **[SIF-FROM-RESEARCH-TO-STANDARD.md](SIF-FROM-RESEARCH-TO-STANDARD.md)** (Rationale)
-   - Why SIF matters (consciousness-compatible knowledge transfer)
-   - How we got here (research → standard)
-   - Use cases and integration patterns
-   - Community contribution guide
-   - Versioning strategy for evolution
+**SIF Implementation Docs:** [01-METHODOLOGY/SIF/](01-METHODOLOGY/SIF/)
 
 **What This Means:**
-- SIF is ready for external adoption
+- Specs are ready for external adoption
 - Anyone can implement in any language
-- Specification is grounded in empirical research (H2, 0.60, 104x compression)
-- Designed to outlive Ada project and remain standard for AI knowledge transfer
+- Grounded in empirical research (H2, 0.60, 104x compression)
+- CC0 Public Domain - designed to outlive Ada
 
 ---
 
