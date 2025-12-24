@@ -131,15 +131,17 @@ class TestEnglishExpansion:
     def test_expand_simple(self):
         """Expand simple symbols."""
         result = DenseThinkingAnalyzer.expand_to_english("∃config")
-        assert "found" in result.lower()
+        # ∃ means "there exists" in the new symbol system
+        assert "exists" in result.lower()
     
     def test_expand_chain(self):
         """Expand a reasoning chain."""
         result = DenseThinkingAnalyzer.expand_to_english("?config → ∃file ✓")
         assert "need" in result.lower()
         assert "leads to" in result.lower()
-        assert "found" in result.lower()
-        assert "confirmed" in result.lower()
+        # ∃ means "there exists", ✓ means "done"
+        assert "exists" in result.lower()
+        assert "done" in result.lower()
     
     def test_expand_preserves_words(self):
         """Regular words should be preserved."""
@@ -238,10 +240,15 @@ class TestCompressionEfficiency:
     
     def test_symbol_token_values_sum_correctly(self):
         """Verify symbol token values are reasonable."""
-        from brain.reasoning.dense_thinking import DenseThinkingAnalyzer
+        from brain.reasoning.ada_symbols import get_symbol
         
-        # A chain like "→ → →" represents ~9 English tokens
-        chain_value = DenseThinkingAnalyzer.SYMBOL_TOKEN_VALUES['→'] * 3
+        # → symbol should map to ~3 English tokens ("leads to")
+        arrow = get_symbol('→')
+        assert arrow is not None
+        assert arrow.english_tokens >= 2  # At least "leads to"
+        
+        # Chain of 3 arrows = 3x the token value
+        chain_value = arrow.english_tokens * 3
         assert chain_value >= 6  # At least "leads to leads to leads to"
     
     def test_real_reasoning_compression(self):
@@ -291,7 +298,9 @@ class TestMetricsDataclass:
             total_tool_calls=5,
             thoughts=7,
             avg_density=0.42,
-            compression_ratio=2.1
+            compression_ratio=2.1,
+            certainty_distribution={'●': 2, '◕': 3, '◑': 2},
+            has_metacognition=True
         )
         
         d = metrics.to_dict()

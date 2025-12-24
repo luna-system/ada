@@ -1,7 +1,8 @@
 """Parse tool requests from LLM output.
 
-LLMs can request tools mid-generation using the pattern:
-    TOOL_REQUEST[tool_name:{"param": "value"}]
+LLMs can request tools mid-generation using either pattern:
+    TOOL_REQUEST[tool_name:{"param": "value"}]    (standard)
+    ⚡tool_name:{"param": "value"}                  (dense notation)
 
 This module parses these requests and validates them against
 available tools.
@@ -20,8 +21,11 @@ logger = logging.getLogger(__name__)
 class ToolRequest:
     """A parsed tool request from LLM output.
     
-    Example LLM output:
+    Example LLM output (standard):
         "I need to search the codebase. TOOL_REQUEST[ada_search:{"query":"authentication"}]"
+    
+    Example LLM output (dense notation):
+        "?auth → ⚡brain_search:{\"query\":\"authentication\"}"
     
     Parsed result:
         ToolRequest(
@@ -36,7 +40,11 @@ class ToolRequest:
 
 
 class ToolRequestParser:
-    """Parse TOOL_REQUEST[...] patterns from LLM output.
+    """Parse tool requests from LLM output.
+    
+    Supports TWO formats:
+    1. Standard: TOOL_REQUEST[tool_name:{"param":"value"}]
+    2. Dense:    ⚡tool_name:{"param":"value"}
     
     Supports:
     - Single tool requests
@@ -45,15 +53,22 @@ class ToolRequestParser:
     - Validation against available tools
     
     Example:
-        parser = ToolRequestParser(available_tools=["ada_search", "ada_read_file"])
+        parser = ToolRequestParser(available_tools=["brain_search", "brain_read_file"])
         
-        llm_output = "I need to search. TOOL_REQUEST[ada_search:{\"query\":\"auth\"}]"
+        # Standard format
+        llm_output = "I need to search. TOOL_REQUEST[brain_search:{\"query\":\"auth\"}]"
         requests = parser.parse(llm_output)
-        # [ToolRequest(tool_name="ada_search", params={"query": "auth"})]
+        
+        # Dense format (same result!)
+        llm_output = "?auth → ⚡brain_search:{\"query\":\"auth\"}"
+        requests = parser.parse(llm_output)
     """
     
-    # Pattern: TOOL_REQUEST[tool_name:{"param":"value"}]
-    PATTERN = r'TOOL_REQUEST\[([a-z_]+):(.*?)\]'
+    # Pattern 1: TOOL_REQUEST[tool_name:{"param":"value"}]
+    STANDARD_PATTERN = r'TOOL_REQUEST\[([a-z_]+):(.*?)\]'
+    
+    # Pattern 2: ⚡tool_name:{"param":"value"} (dense notation)
+    DENSE_PATTERN = r'⚡([a-z_]+):\{([^}]+)\}'
     
     def __init__(self, available_tools: Optional[List[str]] = None):
         """Initialize parser.
@@ -66,16 +81,18 @@ class ToolRequestParser:
     def parse(self, text: str) -> List[ToolRequest]:
         """Parse all tool requests from text.
         
+        Supports both standard TOOL_REQUEST[...] and dense ⚡tool:... formats.
+        
         Args:
-            text: LLM output that may contain TOOL_REQUEST[...] patterns
+            text: LLM output that may contain tool request patterns
             
         Returns:
             List of parsed tool requests (may be empty)
         """
         requests = []
         
-        # Find all matches
-        matches = re.finditer(self.PATTERN, text, re.DOTALL)
+        # Find standard format matches
+        matches = re.finditer(self.STANDARD_PATTERN, text, re.DOTALL)
         
         for match in matches:
             tool_name = match.group(1)

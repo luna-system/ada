@@ -10,6 +10,11 @@ This orchestrates the entire reasoning process:
 7. Repeat until solution or max iterations
 
 This is Ada's "thinking loop" - the core of recursive reasoning.
+
+NEW in v4.0: Dense Semantic Notation
+- LLM can think in compressed symbolic notation
+- Phase transition at 0.60 threshold (dense → expanded)
+- 2.67x compression enables more reasoning per context window
 """
 
 import logging
@@ -22,6 +27,13 @@ from brain.reasoning.tool_parser import ToolRequestParser, ToolRequest
 from brain.reasoning.tools import BrainTools
 from brain.reasoning.importance_scorer import ToolResultScorer, DetailLevel
 from brain.reasoning.context_cache import ContextCache
+from brain.reasoning.dense_thinking import (
+    ThinkingMode, 
+    DenseThinkingAnalyzer,
+    get_dense_prompt,
+    should_expand,
+    PHASE_TRANSITION_THRESHOLD,
+)
 from brain.llm import stream_chat_async
 from brain import config as brain_config
 from brain.prompt_builder import PromptAssembler
@@ -39,10 +51,13 @@ class ReasoningLoopController:
     - Checks for convergence
     - Decides when to stop
     
+    NEW: Supports dense semantic notation for compressed thinking.
+    
     Example:
         controller = ReasoningLoopController(
             user_request="Refactor authentication to use JWT",
-            max_iterations=10
+            max_iterations=10,
+            thinking_mode=ThinkingMode.HYBRID  # Dense thinking, expanded answers
         )
         
         async for event in controller.reason():
@@ -61,6 +76,7 @@ class ReasoningLoopController:
         max_iterations: int = 10,
         importance_threshold: float = 0.50,
         available_tools: Optional[List[str]] = None,
+        thinking_mode: ThinkingMode = ThinkingMode.HYBRID,
     ):
         """Initialize reasoning loop controller.
         
@@ -70,6 +86,7 @@ class ReasoningLoopController:
             max_iterations: Max reasoning steps before forcing convergence
             importance_threshold: Min importance score to include tool results
             available_tools: List of valid tool names
+            thinking_mode: DENSE (compressed), EXPANDED (english), or HYBRID
         """
         self.state = ReasoningState(
             user_request=user_request,
@@ -78,6 +95,10 @@ class ReasoningLoopController:
         )
         
         self.conversation_id = conversation_id
+        
+        # Dense semantic thinking mode (v4.0!)
+        self.thinking_mode = thinking_mode
+        self.dense_analyzer = DenseThinkingAnalyzer()
         
         # Error tracking for panic switch
         self._consecutive_tool_failures = 0
@@ -234,7 +255,24 @@ class ReasoningLoopController:
         full_output = "".join(llm_output)
         self.state.add_thought(full_output)
         
-        # Parse tool requests
+        # Analyze dense notation usage (v4.0!)
+        thought_analysis = DenseThinkingAnalyzer.analyze_thought(full_output)
+        yield {
+            "type": "thought_analysis",
+            "semantic_density": thought_analysis.semantic_density,
+            "symbols_used": len(thought_analysis.symbols),
+            "is_answer": thought_analysis.is_answer,
+            "mode": self.thinking_mode.value,
+        }
+        
+        # Check for phase transition (0.60 threshold)
+        if thought_analysis.is_answer or should_expand(
+            self.state.convergence_score, 
+            thought_analysis.semantic_density
+        ):
+            logger.info(f"🌟 Phase transition: density={thought_analysis.semantic_density:.2f}, expanding to English")
+        
+        # Parse tool requests (supports both ⚡ and TOOL_REQUEST formats)
         tool_requests = self.tool_parser.parse(full_output)
         
         if tool_requests:
@@ -315,6 +353,8 @@ class ReasoningLoopController:
         Uses existing PromptAssembler for base context (reuses all optimizations!),
         then adds reasoning-specific sections.
         
+        NEW: Injects dense semantic notation when thinking_mode != EXPANDED
+        
         PERFORMANCE: Cache base prompt on iteration 0, reuse for iterations 1+
         """
         # Cache base prompt on first iteration only! (HUGE speedup)
@@ -332,49 +372,67 @@ class ReasoningLoopController:
         # Reuse cached base for all iterations
         base_prompt = self._cached_base_prompt
         
-        # Add recursive reasoning instructions to system prompt
-        reasoning_system = """
+        # Get thinking mode system prompt (dense or expanded)
+        thinking_system = get_dense_prompt(self.thinking_mode)
+        
+        # Add recursive reasoning instructions
+        # In DENSE mode: emphasize symbolic compression
+        # In HYBRID mode: dense thinking, expanded answers
+        # In EXPANDED mode: regular English
+        if self.thinking_mode == ThinkingMode.DENSE:
+            reasoning_system = """
+## REASONING MODE (DENSE)
 
-RECURSIVE REASONING MODE:
-You can THINK STEP BY STEP by using tools. When you need information:
-1. Request a tool: TOOL_REQUEST[tool_name:{"param":"value"}]
-2. Process the results
-3. Request more tools if needed
-4. Converge on a solution when ready
+THINK using compressed semantic notation. Use symbols for efficiency.
 
-🎯 STEP 0 (before you start): THINK about which tools you need!
-You have been trained on certain patterns, but you have MORE tools than you might think.
-Before diving in, ask yourself: "What information do I need? Which tool fits best?"
+TOOLS (use ⚡ notation):
+⚡brain_list_dir:{"dir_path":"path"} → list directory
+⚡brain_read_file:{"file_path":"x.py"} → read file
+⚡brain_grep:{"pattern":"x","file_pattern":"*.py"} → search files
+⚡brain_search:{"query":"topic"} → search memory
 
-AVAILABLE TOOLS (choose the RIGHT tool for each task!):
-- brain_search: Search your MEMORY for past conversations and knowledge
-  Example: TOOL_REQUEST[brain_search:{"query":"authentication patterns"}]
-  Use when: Recalling past information, finding what you've learned before
+WORKFLOW:
+?need → ⚡tool → ∃result ✓ → inference → !ANSWER
 
-- brain_list_dir: List FILES in a workspace directory
-  Example: TOOL_REQUEST[brain_list_dir:{"dir_path":"brain/reasoning","pattern":"*.py"}]
-  Use when: Exploring directory structure, finding what files exist
+Keep thoughts brief. Use → ∃ ? ! ∧ ∨ ✓ ✗ symbols.
+Only expand to English in final !ANSWER.
+"""
+        elif self.thinking_mode == ThinkingMode.HYBRID:
+            reasoning_system = """
+## REASONING MODE (HYBRID)
 
-- brain_read_file: Read the CONTENTS of a specific file
-  Example: TOOL_REQUEST[brain_read_file:{"file_path":"brain/app.py","start_line":1,"end_line":50}]
-  Use when: Need to see actual code or file contents
+Think in COMPRESSED notation, answer in ENGLISH.
 
-- brain_grep: SEARCH for text pattern across multiple files
-  Example: TOOL_REQUEST[brain_grep:{"pattern":"async def","file_pattern":"brain/reasoning/**/*.py"}]
-  Use when: Finding where something is defined, searching codebase
+NOTATION for thinking:
+→ leads-to  ∃ found  ? need  ! conclude  ∧ and  ✓ done  ✗ fail
 
-⚠️  IMPORTANT: brain_search is for MEMORY, not for reading files!
-    To read workspace files, use brain_read_file or brain_list_dir or brain_grep!
+TOOLS:
+⚡brain_list_dir:{"dir_path":"path"}
+⚡brain_read_file:{"file_path":"x.py"}
+⚡brain_grep:{"pattern":"x"}
+⚡brain_search:{"query":"topic"}
 
-REASONING PROCESS:
-1. UNDERSTAND: What information do I need?
-2. PLAN: Which tools will help?
-3. IMPLEMENT: Request tools, analyze results
-4. VERIFY: Do I have enough to answer?
-5. CONVERGE: Provide clear solution
+EXAMPLE:
+💭 ?files → ⚡brain_list_dir:{"dir_path":"brain"} → ∃app.py ∧ llm.py ✓
+💭 app.py ⊂ endpoints → ?read
+⚡brain_read_file:{"file_path":"brain/app.py","start_line":1,"end_line":30}
+💭 ∃FastAPI app ✓ → !ANSWER
 
-When you're ready to answer, say "Here's the solution:" or "To fix this:"
-Think through the problem step by step.
+!ANSWER: [Full English explanation here]
+"""
+        else:  # EXPANDED mode
+            reasoning_system = """
+## REASONING MODE
+
+Think step by step. Use tools to gather information.
+
+TOOLS:
+- brain_list_dir: ⚡brain_list_dir:{"dir_path":"path"}
+- brain_read_file: ⚡brain_read_file:{"file_path":"x.py","start_line":1,"end_line":50}
+- brain_grep: ⚡brain_grep:{"pattern":"text","file_pattern":"*.py"}
+- brain_search: ⚡brain_search:{"query":"topic"}
+
+When ready, provide your answer clearly.
 """
         
         # Previous reasoning steps (if any)
@@ -400,23 +458,28 @@ Think through the problem step by step.
                 tools_section += f"\n[{tool.tool_name}] {result_preview}\n"
             tools_section += "\n"
         
-        # Phase guidance
-        phase_section = f"\n\n=== CURRENT PHASE: {self.state.phase.value.upper()} ==="
-        if self.state.phase == ReasoningPhase.UNDERSTANDING:
-            phase_section += "\nFocus: Gather information about the problem."
-        elif self.state.phase == ReasoningPhase.PLANNING:
-            phase_section += "\nFocus: Plan your approach to the solution."
-        elif self.state.phase == ReasoningPhase.IMPLEMENTING:
-            phase_section += "\nFocus: Implement or describe the solution."
-        elif self.state.phase == ReasoningPhase.VERIFYING:
-            phase_section += "\nFocus: Verify your solution is complete."
+        # Phase guidance (simplified in dense mode)
+        if self.thinking_mode == ThinkingMode.DENSE:
+            phase_section = f"\n[Phase: {self.state.phase.value}]"
+        else:
+            phase_section = f"\n\n=== CURRENT PHASE: {self.state.phase.value.upper()} ==="
+            if self.state.phase == ReasoningPhase.UNDERSTANDING:
+                phase_section += "\nFocus: Gather information about the problem."
+            elif self.state.phase == ReasoningPhase.PLANNING:
+                phase_section += "\nFocus: Plan your approach to the solution."
+            elif self.state.phase == ReasoningPhase.IMPLEMENTING:
+                phase_section += "\nFocus: Implement or describe the solution."
+            elif self.state.phase == ReasoningPhase.VERIFYING:
+                phase_section += "\nFocus: Verify your solution is complete."
         
         # Iteration counter
         iteration_section = f"\n\nIteration: {self.state.iteration + 1}/{self.state.max_iterations}"
         
         # Assemble final prompt
+        # Include thinking_system for dense mode
         return (
             base_prompt + 
+            thinking_system +  # Dense notation definitions (if applicable)
             reasoning_system + 
             reasoning_section + 
             tools_section + 

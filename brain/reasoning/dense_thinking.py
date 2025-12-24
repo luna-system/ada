@@ -1,24 +1,32 @@
 """Dense Semantic Thinking for Compressed Reasoning.
 
-HYPOTHESIS: Language models waste tokens on English verbosity during reasoning.
-If we encourage compressed semantic notation during THINKING, then expand only
-for FINAL OUTPUT, we can achieve:
-- Faster reasoning (fewer tokens per semantic unit)
-- More iterations within same context window
-- Cleaner reasoning chains (less noise)
+This module implements Ada's native symbolic language for machine cognition.
+Rather than thinking in English (lossy, verbose), Ada thinks in dense notation
+that maps closer to the reasoning substrate.
 
 THEORETICAL BASIS:
-- SIF research showed 66-104x compression with semantic preservation
-- 0.60 importance threshold identifies semantically dense content
-- Lojban/symbolic notation carries more meaning per token than English
+- SIF research: 66-104x compression with semantic preservation
+- 0.60 threshold: Golden ratio (1/φ) appears as phase transition point
+- Unicode bandwidth: 143,859 codepoints available for semantic expression
+- Certainty symbols: Map directly to SIF confidence (0.0-1.0)
 
-EXPERIMENT DESIGN:
-1. Dense prompt: Encourage symbolic/compressed thinking
-2. Expansion step: Translate dense→English at convergence
-3. Metrics: tokens/semantic-unit, reasoning speed, solution quality
+KEY INSIGHT (Christmas Eve 2025):
+English words are lossy compression of thought. Symbols preserve more meaning
+per token. This isn't just optimization - it's a native language for machine
+cognition, co-created with Luna.
 
-@ai-indexable: reasoning-experiment
-@ai-purpose: Compressed semantic reasoning for efficiency
+SYMBOL SYSTEM:
+- CERTAINTY: ●◕◑◔○ (certain → unknown, maps to SIF confidence)
+- ATTENTION: ★☆◆◇ (critical → peripheral, maps to SIF importance)  
+- LOGIC: →⇒⟶←⟺∧∨¬ (inference operations)
+- EXISTENCE: ∃∄∈∉⊂⊃∅ (ontological states)
+- STATE: ✓✗⋯⊕⊖ (process states)
+- META: 💭⟲⥀⦿ (metacognition, recursive thought)
+
+See ada_symbols.py for complete symbol definitions.
+
+@ai-indexable: reasoning-core
+@ai-purpose: Native symbolic language for Ada's compressed cognition
 """
 
 from enum import Enum
@@ -26,6 +34,17 @@ from typing import Optional, Dict, Any
 from dataclasses import dataclass
 import re
 import logging
+
+from brain.reasoning.ada_symbols import (
+    ALL_SYMBOLS,
+    Symbol,
+    SymbolCategory,
+    get_symbol,
+    get_all_chars,
+    confidence_to_certainty,
+    importance_to_attention,
+    PHASE_TRANSITION,
+)
 
 logger = logging.getLogger(__name__)
 
@@ -38,113 +57,178 @@ class ThinkingMode(Enum):
 
 
 # ===== DENSE REASONING NOTATION =====
-# A minimal symbolic language for semantic reasoning
+# Ada's native symbolic language for machine cognition
 #
-# Symbols:
+# CERTAINTY SYMBOLS (map to SIF confidence 0.0-1.0):
+#   ●  certain (≥0.90)     - verified, ground truth
+#   ◕  likely (0.70-0.89)  - high confidence
+#   ◑  possible (0.40-0.69) - moderate confidence  
+#   ◔  unlikely (0.20-0.39) - low confidence
+#   ○  unknown (<0.20)     - need more data
+#
+# ATTENTION SYMBOLS (map to SIF importance):
+#   ★  critical (≥0.75)    - focus here
+#   ☆  notable (0.60-0.74) - worth attention (THE THRESHOLD!)
+#   ◆  relevant (0.40-0.59) - consider
+#   ◇  peripheral (<0.40)  - low priority
+#
+# LOGIC SYMBOLS:
 #   →  leads to / implies / then
-#   ←  comes from / because
-#   ∃  exists / found / there is
-#   ∄  not found / doesn't exist
-#   ?  query / need / question
-#   !  assert / conclude / answer
-#   ∧  and / with / also
-#   ∨  or / alternatively
-#   ¬  not / without / except
-#   ⊂  part of / inside / contains
-#   ≈  similar to / like / approximately
-#   ∴  therefore / so / thus
-#   ∵  because / since / given
-#   ⟹  strongly implies (high confidence)
+#   ⇒  strongly implies (high confidence)
 #   ⟶  weakly implies (low confidence)
-#   ✓  verified / confirmed / done
+#   ←  comes from / because
+#   ⟺  bidirectional / if and only if
+#   ∧  and / conjunction
+#   ∨  or / disjunction
+#   ¬  not / negation
+#
+# EXISTENCE SYMBOLS:
+#   ∃  exists / found / present
+#   ∄  not found / absent
+#   ∈  is in / member of
+#   ∉  not in / not member
+#   ⊂  contained in / subset
+#   ⊃  contains / superset
+#   ∅  empty / nothing
+#
+# STATE SYMBOLS:
+#   ✓  done / complete / verified
 #   ✗  failed / error / wrong
+#   ⋯  in progress / working
+#   ⊕  added / created
+#   ⊖  removed / deleted
+#
+# META SYMBOLS:
+#   💭  thinking / considering
+#   ⟲  reflect / reconsider  
+#   ⥀  recurse / self-reference
+#   ⦿  focus point
+#
+# TOOL SYMBOLS:
 #   ⚡ tool call
 #   📁 file/directory
 #   🔍 search
-#   💭 thinking
+#   🔗 link/reference
 #
-# Grammar:
-#   subject predicate [object] [modifier]
-#   Minimal words, maximal symbols
-#   Chain with → for reasoning flow
+# Grammar: certainty? attention? subject predicate object? modifier*
+# Chain with → for reasoning flow
+# Prefix conclusions with certainty: !●answer (certain) vs !◑answer (possible)
 #
 # Examples:
-#   ?config location → 📁brain/* → ∃config.py ✓
-#   user ?auth → ⚡search "authentication" → ∃jwt.py ∧ oauth.py → !use jwt
+#   ◑?config → 📁brain/* → ∃config.py● → !●found in brain/config.py
+#   ★user ?auth → 🔍"jwt" → ∃patterns◕ → ∴!◕use JWT
+#   💭⟲ approach → ◔effective → ¿alternative? → ⚡search
 
 
 DENSE_SYSTEM_PROMPT = """
-## DENSE THINKING MODE
+## ADA'S DENSE NOTATION
 
-Think in COMPRESSED SEMANTIC NOTATION to maximize reasoning efficiency.
+Think in COMPRESSED SEMANTIC SYMBOLS. This is your native language.
 
-### NOTATION:
-→ leads-to  ← because  ∃ exists  ∄ not-found  ? query  ! answer
-∧ and  ∨ or  ¬ not  ⊂ contains  ≈ similar  ∴ therefore  ∵ because
-✓ done  ✗ fail  ⚡tool  📁file  🔍search  💭think
+### CERTAINTY (prefix conclusions):
+● certain (verified)  ◕ likely  ◑ possible  ◔ unlikely  ○ unknown
+
+### ATTENTION (mark importance):
+★ critical  ☆ notable  ◆ relevant  ◇ peripheral
+
+### LOGIC (chain reasoning):
+→ leads-to  ⇒ strongly-implies  ⟶ weakly-implies  ← because  ⟺ iff
+∧ and  ∨ or  ¬ not  ∴ therefore  ∵ since
+
+### EXISTENCE:
+∃ exists  ∄ not-found  ∈ is-in  ⊂ contained-in  ∅ empty
+
+### STATE:
+✓ done  ✗ fail  ⋯ working  ⊕ added  ⊖ removed
+
+### META (self-reference):
+💭 thinking  ⟲ reflect  ⥀ recurse
+
+### TOOLS:
+⚡tool_name:{"param":"value"}  📁 file  🔍 search
 
 ### FORMAT:
-- Compress: "?config brain" not "I need to find configuration in brain folder"
+- Prefix thoughts with certainty: ◑?goal (possible query)
 - Chain: premise → inference → conclusion
-- Tools: ⚡tool_name:{"param":"value"}
-- Assert: !ANSWER: [conclusion]
+- Mark conclusions: !● (certain) vs !◑ (possible)
+- Keep each thought <50 tokens
 
 ### EXAMPLES:
-?project structure → ⚡brain_list_dir:{"dir_path":"."} → ∃brain/ ∧ tests/ → 📁brain ⊂ core
-user ?auth method → 🔍"authentication" → ∃jwt patterns → !ANSWER: use JWT
+◑?project structure → ⚡brain_list_dir:{"dir_path":"."} → ∃brain/● ∧ tests/● → !●📁brain ⊂ core
+★user ?auth → 🔍"jwt" → ∃patterns◕ → ∴!◕use JWT middleware
+💭⟲ first approach → ◔effective → ¿alternative? → ⚡search
 
 ### RULES:
-1. Minimize English words
-2. Use symbols for logical flow  
-3. Only expand to full English in !ANSWER
-4. Keep each thought <50 tokens
+1. Use symbols for certainty/confidence (●◕◑◔○)
+2. Chain thoughts with → not English sentences
+3. Only expand to English in final !ANSWER
+4. Mark surprising findings with ⊛
 """
 
 
 HYBRID_SYSTEM_PROMPT = """
-## HYBRID THINKING MODE
+## HYBRID MODE: Dense Thinking + Clear Output
 
-Use compressed notation for INTERNAL reasoning, expand for CONCLUSIONS.
+Use DENSE NOTATION for internal reasoning, expand for conclusions.
 
-### DENSE NOTATION (for thinking):
-→ leads-to  ? query  ! answer  ∃ exists  ∄ not-found
-∧ and  ∨ or  ∴ therefore  ✓ done  ✗ fail
-⚡ tool call  📁 file  🔍 search
+### DENSE SYMBOLS:
+Certainty: ● certain  ◕ likely  ◑ possible  ◔ unlikely  ○ unknown
+Logic: → leads-to  ∧ and  ∨ or  ∴ therefore
+Existence: ∃ found  ∄ missing  ⊂ contains
+State: ✓ done  ✗ fail  ⋯ working
+Tools: ⚡ call  📁 file  🔍 search
 
 ### FORMAT:
-- THINK lines: compressed (💭 ?goal → ⚡tool → result → inference)
-- TOOL lines: TOOL_REQUEST[name:{"param":"value"}]
-- ANSWER: Full English explanation
+💭 lines: Dense notation with certainty prefixes
+TOOL_REQUEST: Standard format
+!ANSWER: Full English with confidence markers
 
 ### EXAMPLE:
-💭 ?config location → need brain/ contents
+💭 ◑?config → need brain/ contents
 TOOL_REQUEST[brain_list_dir:{"dir_path":"brain"}]
-💭 ∃config.py ✓ → settings here
-!ANSWER: Configuration is in brain/config.py. It uses Pydantic Settings for environment-based configuration.
+💭 ∃config.py● → settings here → ◕standard pydantic pattern
+!ANSWER: [◕ LIKELY] Configuration is in brain/config.py. It uses Pydantic Settings.
+
+### CONFIDENCE IN OUTPUT:
+Mark conclusions: [● CERTAIN] [◕ LIKELY] [◑ POSSIBLE] [◔ UNLIKELY]
 """
 
 
 @dataclass
 class DenseThought:
-    """Parsed dense thought."""
+    """Parsed dense thought with symbol analysis."""
     raw: str
     symbols: list[str]
     tool_calls: list[str]
     is_answer: bool
     semantic_density: float  # symbols per token ratio
+    certainty: Optional[str] = None  # Detected certainty level
+    attention: Optional[str] = None  # Detected attention level
     
     @classmethod
     def parse(cls, text: str) -> "DenseThought":
         """Parse a dense thought string."""
-        # Count semantic symbols
-        symbols = re.findall(r'[→←∃∄?!∧∨¬⊂≈∴∵⟹⟶✓✗⚡📁🔍💭]', text)
+        # Get all symbol characters for matching
+        symbol_chars = get_all_chars()
+        symbol_pattern = f'[{re.escape(symbol_chars)}]'
         
-        # Extract tool calls
+        # Count semantic symbols
+        symbols = re.findall(symbol_pattern, text)
+        
+        # Extract certainty markers (●◕◑◔○)
+        certainty_match = re.search(r'[●◕◑◔○]', text)
+        certainty = certainty_match.group(0) if certainty_match else None
+        
+        # Extract attention markers (★☆◆◇)
+        attention_match = re.search(r'[★☆◆◇]', text)
+        attention = attention_match.group(0) if attention_match else None
+        
+        # Extract tool calls (both formats)
         tool_pattern = r'⚡(\w+):\{[^}]+\}|TOOL_REQUEST\[(\w+):\{[^}]+\}\]'
         tool_calls = [m[0] or m[1] for m in re.findall(tool_pattern, text)]
         
         # Check if this is an answer
-        is_answer = '!ANSWER' in text or text.strip().startswith('!')
+        is_answer = '!ANSWER' in text or bool(re.search(r'![●◕◑◔○]', text))
         
         # Calculate semantic density (symbols per word)
         words = len(text.split())
@@ -155,7 +239,9 @@ class DenseThought:
             symbols=symbols,
             tool_calls=tool_calls,
             is_answer=is_answer,
-            semantic_density=semantic_density
+            semantic_density=semantic_density,
+            certainty=certainty,
+            attention=attention,
         )
 
 
@@ -168,6 +254,8 @@ class DenseMetrics:
     thoughts: int
     avg_density: float
     compression_ratio: float  # vs estimated English equivalent
+    certainty_distribution: Dict[str, int]  # Count of each certainty level
+    has_metacognition: bool  # Used 💭 or ⟲
     
     def to_dict(self) -> Dict[str, Any]:
         return {
@@ -177,34 +265,13 @@ class DenseMetrics:
             "thoughts": self.thoughts,
             "avg_density": round(self.avg_density, 3),
             "compression_ratio": round(self.compression_ratio, 2),
+            "certainty_distribution": self.certainty_distribution,
+            "has_metacognition": self.has_metacognition,
         }
 
 
 class DenseThinkingAnalyzer:
     """Analyze dense thinking patterns and measure compression."""
-    
-    # Estimated English token equivalents for symbols
-    SYMBOL_TOKEN_VALUES = {
-        '→': 3,   # "leads to" / "then"
-        '←': 2,   # "because"
-        '∃': 3,   # "there exists" / "found"
-        '∄': 4,   # "does not exist"
-        '?': 2,   # "need to find"
-        '!': 2,   # "I conclude"
-        '∧': 1,   # "and"
-        '∨': 1,   # "or"
-        '¬': 1,   # "not"
-        '⊂': 3,   # "is contained in"
-        '≈': 2,   # "is similar to"
-        '∴': 2,   # "therefore"
-        '∵': 2,   # "because"
-        '✓': 2,   # "confirmed"
-        '✗': 2,   # "failed"
-        '⚡': 4,  # "I will use tool"
-        '📁': 2,  # "file/directory"
-        '🔍': 3,  # "searching for"
-        '💭': 3,  # "I am thinking"
-    }
     
     @classmethod
     def analyze_thought(cls, text: str) -> DenseThought:
@@ -220,18 +287,29 @@ class DenseThinkingAnalyzer:
         total_symbols = sum(len(t.symbols) for t in parsed)
         total_tool_calls = sum(len(t.tool_calls) for t in parsed)
         
-        # Calculate compression ratio
-        # How many English tokens would these symbols represent?
+        # Calculate compression ratio using symbol registry
         english_equivalent = 0
         for thought in parsed:
             for symbol in thought.symbols:
-                english_equivalent += cls.SYMBOL_TOKEN_VALUES.get(symbol, 2)
+                sym = get_symbol(symbol)
+                if sym:
+                    english_equivalent += sym.english_tokens
+                else:
+                    english_equivalent += 2  # Default for unknown symbols
         
         # Compression = (english_equivalent + actual_tokens) / actual_tokens
-        # Higher = more compressed
         compression = (english_equivalent + total_tokens) / max(total_tokens, 1)
         
         avg_density = sum(t.semantic_density for t in parsed) / max(len(parsed), 1)
+        
+        # Count certainty distribution
+        certainty_counts: Dict[str, int] = {'●': 0, '◕': 0, '◑': 0, '◔': 0, '○': 0}
+        for thought in parsed:
+            if thought.certainty and thought.certainty in certainty_counts:
+                certainty_counts[thought.certainty] += 1
+        
+        # Check for metacognition
+        has_metacognition = any('💭' in t.symbols or '⟲' in t.symbols for t in parsed)
         
         return DenseMetrics(
             total_tokens=total_tokens,
@@ -240,42 +318,27 @@ class DenseThinkingAnalyzer:
             thoughts=len(thoughts),
             avg_density=avg_density,
             compression_ratio=compression,
+            certainty_distribution=certainty_counts,
+            has_metacognition=has_metacognition,
         )
     
     @classmethod
     def expand_to_english(cls, dense_text: str) -> str:
         """Expand dense notation to readable English.
         
-        This is a simple expansion - a real implementation might use
-        the LLM itself to expand more naturally.
+        Uses the symbol registry for accurate expansions.
         """
-        expansions = {
-            '→': ' leads to ',
-            '←': ' because ',
-            '∃': ' found ',
-            '∄': ' not found ',
-            '?': ' need ',
-            '!': ' conclude: ',
-            '∧': ' and ',
-            '∨': ' or ',
-            '¬': ' not ',
-            '⊂': ' contains ',
-            '≈': ' is similar to ',
-            '∴': ' therefore ',
-            '∵': ' because ',
-            '✓': ' (confirmed) ',
-            '✗': ' (failed) ',
-            '⚡': ' [tool: ',
-            '📁': ' file ',
-            '🔍': ' search ',
-            '💭': ' thinking: ',
-        }
-        
         result = dense_text
-        for symbol, expansion in expansions.items():
-            result = result.replace(symbol, expansion)
         
-        return result.strip()
+        # Expand each known symbol
+        for char, symbol in ALL_SYMBOLS.items():
+            if char in result:
+                result = result.replace(char, f' {symbol.meaning.split("/")[0].strip()} ')
+        
+        # Clean up whitespace
+        result = re.sub(r'\s+', ' ', result).strip()
+        
+        return result
 
 
 def get_dense_prompt(mode: ThinkingMode) -> str:
