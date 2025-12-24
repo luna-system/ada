@@ -116,6 +116,9 @@ class ReasoningLoopController:
                 async for event in self._reasoning_step():
                     yield event
                 
+                # Increment iteration counter after step completes
+                self.state.iteration += 1
+                
                 # Check convergence
                 if self.state.has_solution:
                     yield {
@@ -199,7 +202,7 @@ class ReasoningLoopController:
         self.state.add_thought(full_output)
         
         # Parse tool requests
-        tool_requests = self.tool_parser.parse_all(full_output)
+        tool_requests = self.tool_parser.parse(full_output)
         
         if tool_requests:
             # Execute tools (parallel if multiple requests!)
@@ -254,16 +257,23 @@ class ReasoningLoopController:
         
         Uses existing PromptAssembler for base context (reuses all optimizations!),
         then adds reasoning-specific sections.
-        """
-        # Get optimized base context (parallel RAG retrieval!)
-        # Only include specialists on first iteration to avoid redundancy
-        include_specialists = (self.state.iteration == 0)
         
-        base_prompt = self.prompt_assembler.build_prompt(
-            user_message=self.state.user_request,
-            conversation_id=self.conversation_id,
-            include_specialists=include_specialists,
-        )
+        PERFORMANCE: Cache base prompt on iteration 0, reuse for iterations 1+
+        """
+        # Cache base prompt on first iteration only! (HUGE speedup)
+        if not hasattr(self, '_cached_base_prompt'):
+            # First iteration: Full RAG retrieval with parallel optimizations
+            self._cached_base_prompt = self.prompt_assembler.build_prompt(
+                user_message=self.state.user_request,
+                conversation_id=self.conversation_id,
+                specialists=[],  # No specialists for reasoning (simplify)
+                notices=[],
+                request_context={},
+            )
+            logger.info(f"Cached base prompt ({len(self._cached_base_prompt)} chars)")
+        
+        # Reuse cached base for all iterations
+        base_prompt = self._cached_base_prompt
         
         # Add recursive reasoning instructions to system prompt
         reasoning_system = """
@@ -435,10 +445,11 @@ Think through the problem step by step.
         if not memories:
             return "[No relevant memories found]"
         
-        # Format results
+        # Format results - memories are (text, metadata) tuples
         result = f"Found {len(memories)} relevant memories:\n\n"
-        for i, mem in enumerate(memories, 1):
-            result += f"{i}. {mem['content'][:200]}...\n"
+        for i, (text, metadata) in enumerate(memories, 1):
+            preview = text[:200] + "..." if len(text) > 200 else text
+            result += f"{i}. {preview}\n"
         
         return result
     
