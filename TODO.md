@@ -2,6 +2,36 @@
 
 Active development tasks and future work.
 
+## 🚀 v4.0: Recursive Reasoning (IN PROGRESS)
+
+**Branch:** `feature/v4.0-recursive-reasoning`  
+**Goal:** Enable on-device recursive tool reasoning with semantic compression  
+**Timeline:** 8-10 weeks to parity + unique features
+
+### Phase 1: Foundation (Week 1-2) - CURRENT
+- [ ] **Reasoning State Tracker** - Track phase, tools called, convergence
+- [ ] **SIF Context Encoder** - Semantic compression with detail levels
+- [ ] **Tool Result Processor** - Importance weighting (biomimetic)
+- [ ] **PoC: Basic reasoning loop** - tool → result → LLM → repeat
+
+### Phase 2: Recursive Loop (Week 3-4)
+- [ ] **Tool Request Parser** - Parse TOOL_REQUEST[...] from LLM output
+- [ ] **Reasoning Loop Controller** - Execute until convergence
+- [ ] **Convergence Detection** - Know when LLM has solution
+- [ ] **Tool Transparency Streaming** - Show reasoning steps in UI
+
+### Phase 3: Optimization (Week 5-6)
+- [ ] **Parallel Tool Execution** - Independent tools simultaneously
+- [ ] **Context Caching** - Don't re-encode same files
+- [ ] **Adaptive Thresholds** - Adjust based on context size
+
+### Phase 4: Intelligence Layer (Week 7-8)
+- [ ] **Consciousness Topology Tracking** - Track semantic identity
+- [ ] **Quantum Isomorphism Checks** - Verify edits preserve behavior
+- [ ] **Learning Loop** - Store successful reasoning patterns
+
+**See:** `.ai/RECURSIVE-REASONING-ARCHITECTURE.md` for full spec
+
 ## High Priority
 
 ### Documentation: GPU Support
