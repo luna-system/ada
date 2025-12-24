@@ -6,11 +6,19 @@
     messages,
     thinking,
     conversationId,
+    reasoningMode,
+    currentReasoning,
     ensureConversationId,
     setConversationId,
+    setReasoningMode,
     setThinking,
     pushMessage,
     updateMessage,
+    setCurrentReasoning,
+    addReasoningStep,
+    addReasoningTool,
+    addReasoningWarning,
+    resetReasoning,
     type Message,
     type Role
   } from '../stores/chat';
@@ -23,6 +31,7 @@
   import PromptPanel from './PromptPanel.svelte';
   import NoticesPanel from './NoticesPanel.svelte';
   import { streamChat, type StreamMessage } from '../services/chat';
+  import { streamReasoning, type ReasoningStreamMessage } from '../services/reasoning';
   import { panelOpen as panelOpenStore, menuOpen as menuOpenStore } from '../stores/ui';
   import { extractTextFromImage, type OCRResult } from '../services/ocr';
 
@@ -34,6 +43,7 @@
   let shareListenBrainz = false;
   let showAddMemory = false;
   let showComposerControls = true;
+  let isReasoningMode = false;
   let listenBrainzPreview: any = null;
   let listenBrainzLoading = false;
   let entity = '';
@@ -81,6 +91,12 @@
     const currentId = ensureConversationId(uuid);
     const storedEntity = localStorage.getItem('entity') || '';
     entity = storedEntity;
+    
+    // Initialize reasoning mode from store
+    reasoningMode.subscribe(value => {
+      isReasoningMode = value;
+    });
+    
     refreshHealth();
     updateClientLibStatus();
     refreshMemList();
@@ -268,6 +284,129 @@
   }
 
   async function streamReply(userText: string) {
+    if (isReasoningMode) {
+      await streamReasoningReply(userText);
+    } else {
+      await streamRegularReply(userText);
+    }
+  }
+
+  async function streamReasoningReply(userText: string) {
+    setThinking(true);
+    resetReasoning();
+    
+    let answerId = uuid();
+    let assistantText = '';
+    
+    pushMessage({ id: answerId, role: 'assistant', text: '', reasoning: {
+      steps: [],
+      tools: [],
+      warnings: [],
+      isComplete: false
+    }});
+
+    setCurrentReasoning({
+      active: true,
+      messageId: answerId,
+      steps: [],
+      tools: [],
+      warnings: []
+    });
+
+    const convId = ensureConversationId(uuid);
+    let activeConversationId = convId;
+
+    try {
+      await streamReasoning({
+        message: userText,
+        conversationId: activeConversationId,
+        maxIterations: 10,
+        entity: entity || undefined,
+        onReasoningStart: (metadata) => {
+          console.log('🧠 Reasoning started:', metadata);
+        },
+        onReasoningStep: (content, phase, step) => {
+          addReasoningStep(phase || 'thinking', content, step || 0);
+          updateMessage(answerId, { 
+            text: assistantText,
+            reasoning: {
+              steps: $currentReasoning.steps,
+              tools: $currentReasoning.tools,
+              warnings: $currentReasoning.warnings,
+              isComplete: false
+            }
+          });
+        },
+        onThoughtChunk: (content) => {
+          // For now, append thought chunks to reasoning steps
+          // This could be displayed differently in the UI
+        },
+        onToolRequest: (toolName, args) => {
+          addReasoningTool(toolName, args);
+          updateMessage(answerId, { 
+            text: assistantText,
+            reasoning: {
+              steps: $currentReasoning.steps,
+              tools: $currentReasoning.tools,
+              warnings: $currentReasoning.warnings,
+              isComplete: false
+            }
+          });
+        },
+        onToolResult: (toolName, result) => {
+          addReasoningTool(toolName, undefined, result);
+          updateMessage(answerId, { 
+            text: assistantText,
+            reasoning: {
+              steps: $currentReasoning.steps,
+              tools: $currentReasoning.tools,
+              warnings: $currentReasoning.warnings,
+              isComplete: false
+            }
+          });
+        },
+        onWarning: (message) => {
+          addReasoningWarning(message || 'Unknown warning');
+          updateMessage(answerId, { 
+            text: assistantText,
+            reasoning: {
+              steps: $currentReasoning.steps,
+              tools: $currentReasoning.tools,
+              warnings: $currentReasoning.warnings,
+              isComplete: false
+            }
+          });
+        },
+        onReasoningComplete: (summary, newConvId) => {
+          assistantText = summary || 'Reasoning completed.';
+          setThinking(false);
+          setCurrentReasoning({ active: false });
+          
+          updateMessage(answerId, { 
+            text: assistantText,
+            reasoning: {
+              steps: $currentReasoning.steps,
+              tools: $currentReasoning.tools,
+              warnings: $currentReasoning.warnings,
+              isComplete: true
+            }
+          });
+
+          if (newConvId && newConvId !== activeConversationId) {
+            activeConversationId = newConvId;
+            setConversationId(activeConversationId);
+          }
+        }
+      });
+    } catch (e: any) {
+      updateMessage(answerId, { text: `Reasoning Error: ${e.message || e}` });
+      setCurrentReasoning({ active: false });
+    } finally {
+      setThinking(false);
+    }
+  }
+
+  async function streamRegularReply(userText: string) {
     setThinking(true);
     let answerId = uuid();
     let assistantText = '';
@@ -524,6 +663,52 @@
               <div class="think-content">{@html renderMarkdown(m.thinking || '', true)}</div>
             </details>
           {/if}
+          
+          {#if m.reasoning}
+            <details class="bubble reasoning" open>
+              <summary>🔍 Reasoning Process {#if m.reasoning.isComplete}✅{:else}⏳{/if}</summary>
+              <div class="reasoning-content">
+                {#if m.reasoning.steps.length > 0}
+                  <div class="reasoning-steps">
+                    <h4>🧠 Reasoning Steps</h4>
+                    {#each m.reasoning.steps as step}
+                      <div class="reasoning-step">
+                        <strong>Step {step.step}: {step.phase}</strong>
+                        <div>{step.content}</div>
+                      </div>
+                    {/each}
+                  </div>
+                {/if}
+                
+                {#if m.reasoning.tools.length > 0}
+                  <div class="reasoning-tools">
+                    <h4>🛠️ Tools Used</h4>
+                    {#each m.reasoning.tools as tool}
+                      <div class="reasoning-tool">
+                        <strong>🔧 {tool.name}</strong>
+                        {#if tool.args}
+                          <div class="tool-args">Args: <code>{JSON.stringify(tool.args)}</code></div>
+                        {/if}
+                        {#if tool.result}
+                          <div class="tool-result">Result: <pre>{JSON.stringify(tool.result, null, 2)}</pre></div>
+                        {/if}
+                      </div>
+                    {/each}
+                  </div>
+                {/if}
+                
+                {#if m.reasoning.warnings.length > 0}
+                  <div class="reasoning-warnings">
+                    <h4>⚠️ Warnings</h4>
+                    {#each m.reasoning.warnings as warning}
+                      <div class="reasoning-warning">{warning}</div>
+                    {/each}
+                  </div>
+                {/if}
+              </div>
+            </details>
+          {/if}
+          
           <div class={`bubble ${m.role === 'assistant' ? 'answer' : ''}`}>{@html renderMarkdown(m.text || '', true)}</div>
           {#if m.role === 'assistant'}
             <button class="ghost save-mem" type="button" on:click={() => openSaveToMemory(m.text)}>Save to memory</button>
@@ -584,6 +769,13 @@
           <span class="emoji">🏷️</span>
           <span class="switch">
             <input type="checkbox" bind:checked={showEntityInput} />
+            <span class="knob"></span>
+          </span>
+        </label>
+        <label class="toggle-control" title="Enable reasoning mode (step-by-step thinking with tools)">
+          <span class="emoji">🔍</span>
+          <span class="switch">
+            <input type="checkbox" bind:checked={isReasoningMode} on:change={() => setReasoningMode(isReasoningMode)} />
             <span class="knob"></span>
           </span>
         </label>
