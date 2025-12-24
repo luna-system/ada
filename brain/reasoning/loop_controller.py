@@ -19,6 +19,9 @@ from concurrent.futures import ThreadPoolExecutor, as_completed
 
 from brain.reasoning.state_tracker import ReasoningState, ReasoningPhase, ToolCall
 from brain.reasoning.tool_parser import ToolRequestParser, ToolRequest
+from brain.reasoning.tools import BrainTools
+from brain.reasoning.importance_scorer import ToolResultScorer, DetailLevel
+from brain.reasoning.context_cache import ContextCache
 from brain.llm import stream_chat_async
 from brain import config as brain_config
 from brain.prompt_builder import PromptAssembler
@@ -75,17 +78,38 @@ class ReasoningLoopController:
         )
         
         self.conversation_id = conversation_id
-        self.tool_parser = ToolRequestParser(available_tools=available_tools)
+        
+        # Error tracking for panic switch
+        self._consecutive_tool_failures = 0
+        self._max_consecutive_failures = 3  # Bail after 3 failures
+        
+        # Brain-side tools (Phase 2!)
+        self.brain_tools = BrainTools()
+        
+        # Available tools - set BEFORE creating parser!
+        self.available_tools = available_tools or [
+            "brain_search",       # Search RAG memories
+            "brain_read_file",    # Read from workspace
+            "brain_list_dir",     # List directory contents
+            "brain_grep",         # Search in files
+        ]
+        
+        # Initialize parser with our tool list
+        self.tool_parser = ToolRequestParser(available_tools=self.available_tools)
         
         # Reuse existing optimized prompt assembler!
         self.prompt_assembler = PromptAssembler()
         
-        # For PoC, brain-side tools (server-side execution)
-        self.available_tools = available_tools or [
-            "brain_search",       # Search RAG memories
-            "brain_read_file",    # Read from workspace (future)
-            "brain_list_symbols", # Parse code structure (future)
-        ]
+        # Initialize importance scorer with user query
+        self.importance_scorer = ToolResultScorer(query=user_request)
+        
+        # Initialize context cache for high-importance results
+        # Cache results with importance ≥ 0.75 for 5 minutes
+        self.context_cache = ContextCache(
+            max_size=100,
+            ttl_seconds=300.0,  # 5 minutes
+            min_importance=0.75  # Only cache high-importance results
+        )
     
     async def reason(self) -> AsyncIterator[Dict[str, Any]]:
         """Main reasoning loop - yields events as reasoning progresses.
@@ -118,6 +142,15 @@ class ReasoningLoopController:
                 
                 # Increment iteration counter after step completes
                 self.state.iteration += 1
+                
+                # Check panic switch (error bailout)
+                if self.state.error_bailout:
+                    yield {
+                        "type": "error_bailout",
+                        "reason": self.state.error_bailout_reason,
+                        "iteration": self.state.iteration,
+                    }
+                    break
                 
                 # Check convergence
                 if self.state.has_solution:
@@ -217,6 +250,18 @@ class ReasoningLoopController:
                 
                 tool_result = await self._execute_tool(request)
                 
+                # Yield tool transparency event FIRST (before result)
+                yield {
+                    "type": "tool_transparency",
+                    "tool": request.tool_name,
+                    "importance": tool_result.importance,
+                    "detail_level": getattr(tool_result, 'detail_level', 'unknown'),
+                    "signals": getattr(tool_result, 'signals', {}),
+                    "cache_hit": getattr(tool_result, 'cache_hit', False),
+                    "execution_time_ms": tool_result.execution_time_ms,
+                }
+                
+                # Then yield actual result
                 yield {
                     "type": "tool_result",
                     "tool": request.tool_name,
@@ -237,8 +282,20 @@ class ReasoningLoopController:
                 # Execute all tools in parallel
                 tool_results = await self._execute_tools_parallel(tool_requests)
                 
-                # Yield results and add to state
+                # Yield transparency events + results
                 for result in tool_results:
+                    # Transparency event first
+                    yield {
+                        "type": "tool_transparency",
+                        "tool": result.tool_name,
+                        "importance": result.importance,
+                        "detail_level": getattr(result, 'detail_level', 'unknown'),
+                        "signals": getattr(result, 'signals', {}),
+                        "cache_hit": getattr(result, 'cache_hit', False),
+                        "execution_time_ms": result.execution_time_ms,
+                    }
+                    
+                    # Then result
                     yield {
                         "type": "tool_result",
                         "tool": result.tool_name,
@@ -285,9 +342,29 @@ You can THINK STEP BY STEP by using tools. When you need information:
 3. Request more tools if needed
 4. Converge on a solution when ready
 
-AVAILABLE TOOLS:
-- brain_search: Search your memory for relevant information
+🎯 STEP 0 (before you start): THINK about which tools you need!
+You have been trained on certain patterns, but you have MORE tools than you might think.
+Before diving in, ask yourself: "What information do I need? Which tool fits best?"
+
+AVAILABLE TOOLS (choose the RIGHT tool for each task!):
+- brain_search: Search your MEMORY for past conversations and knowledge
   Example: TOOL_REQUEST[brain_search:{"query":"authentication patterns"}]
+  Use when: Recalling past information, finding what you've learned before
+
+- brain_list_dir: List FILES in a workspace directory
+  Example: TOOL_REQUEST[brain_list_dir:{"dir_path":"brain/reasoning","pattern":"*.py"}]
+  Use when: Exploring directory structure, finding what files exist
+
+- brain_read_file: Read the CONTENTS of a specific file
+  Example: TOOL_REQUEST[brain_read_file:{"file_path":"brain/app.py","start_line":1,"end_line":50}]
+  Use when: Need to see actual code or file contents
+
+- brain_grep: SEARCH for text pattern across multiple files
+  Example: TOOL_REQUEST[brain_grep:{"pattern":"async def","file_pattern":"brain/reasoning/**/*.py"}]
+  Use when: Finding where something is defined, searching codebase
+
+⚠️  IMPORTANT: brain_search is for MEMORY, not for reading files!
+    To read workspace files, use brain_read_file or brain_list_dir or brain_grep!
 
 REASONING PROCESS:
 1. UNDERSTAND: What information do I need?
@@ -356,26 +433,102 @@ Think through the problem step by step.
         """
         start = datetime.now()
         
+        logger.info(f"⚙️  Executing tool: {request.tool_name} with params: {request.params}")
+        
+        # Check cache first!
+        if cached_result := self.context_cache.get(request.tool_name, request.params):
+            logger.info(f"✨ Using cached result for {request.tool_name}")
+            # Return cached result (already compressed, already scored)
+            # Note: This is a regular return (no yield), so transparency events
+            # for cache hits need to be yielded by the caller
+            return ToolCall(
+                tool_name=request.tool_name,
+                params=request.params,
+                result=cached_result,
+                importance=0.75,  # Cached results are by definition high importance
+                execution_time_ms=0,  # No execution needed!
+                cache_hit=True,  # Signal cache hit for transparency
+            )
+        
         # Execute based on tool name
         if request.tool_name == "brain_search":
             # Search RAG memories
             result = await self._tool_brain_search(request.params)
+        elif request.tool_name == "brain_list_dir":
+            # List directory contents
+            logger.info(f"📂 brain_list_dir called!")
+            result = self._tool_brain_list_dir(request.params)
+        elif request.tool_name == "brain_read_file":
+            # Read file from workspace
+            result = self._tool_brain_read_file(request.params)
+        elif request.tool_name == "brain_grep":
+            # Search in files
+            result = self._tool_brain_grep(request.params)
         else:
             # Unknown tool (shouldn't happen if parser validates)
+            logger.warning(f"⚠️ Unknown tool requested: {request.tool_name}")
             result = f"[Error] Unknown tool: {request.tool_name}"
         
-        # Calculate importance (simple heuristic for now)
-        # TODO: Real biomimetic importance scoring
-        importance = 0.75 if result else 0.0
+        # Apply biomimetic importance scoring!
+        is_error = result and "[Error]" in result or result.startswith("ERROR:")
+        
+        if is_error:
+            # Error results get zero importance
+            importance = 0.0
+            detail_level = DetailLevel.DROPPED
+            signals = {}
+            compressed_result = result
+        else:
+            # Score and compress using research-validated weights!
+            scored = self.importance_scorer.score_tool_result(
+                content=result,
+                tool_name=request.tool_name,
+                params=request.params,
+                iteration=self.state.iteration  # Fixed attribute name!
+            )
+            
+            importance = scored.importance
+            detail_level = scored.detail_level
+            signals = scored.signals
+            compressed_result = scored.content
+            
+            # Log importance breakdown for transparency
+            logger.info(
+                f"📊 Importance: {importance:.3f} "
+                f"(surprise={signals['surprise']:.2f}, "
+                f"relevance={signals['relevance']:.2f}, "
+                f"detail={detail_level.value})"
+            )
+            
+            # Cache high-importance results for future use
+            self.context_cache.set(
+                tool_name=request.tool_name,
+                params=request.params,
+                content=compressed_result,
+                importance=importance
+            )
+        
+        # Track consecutive failures for panic switch
+        if is_error:
+            self._consecutive_tool_failures += 1
+            if self._consecutive_tool_failures >= self._max_consecutive_failures:
+                self.state.error_bailout = True
+                self.state.error_bailout_reason = f"Too many tool failures ({self._consecutive_tool_failures} consecutive)"
+                logger.warning(f"🚨 PANIC SWITCH ACTIVATED: {self.state.error_bailout_reason}")
+        else:
+            self._consecutive_tool_failures = 0  # Reset on success
         
         execution_time = (datetime.now() - start).total_seconds() * 1000
         
         return ToolCall(
             tool_name=request.tool_name,
             params=request.params,
-            result=result,
+            result=compressed_result,  # Use compressed result!
             importance=importance,
             execution_time_ms=execution_time,
+            cache_hit=False,  # Not a cache hit (cache hits return early)
+            detail_level=detail_level.value if not is_error else "dropped",
+            signals=signals,  # Include raw signals for transparency
         )
     
     async def _execute_tools_parallel(self, requests: List[ToolRequest]) -> List[ToolCall]:
@@ -452,6 +605,33 @@ Think through the problem step by step.
             result += f"{i}. {preview}\n"
         
         return result
+    
+    def _tool_brain_read_file(self, params: Dict[str, Any]) -> str:
+        """Tool: Read file contents from workspace."""
+        # Accept flexible param names
+        file_path = params.get("file_path") or params.get("path") or ""
+        return self.brain_tools.read_file(
+            file_path=file_path,
+            start_line=params.get("start_line"),
+            end_line=params.get("end_line"),
+        )
+    
+    def _tool_brain_list_dir(self, params: Dict[str, Any]) -> str:
+        """Tool: List directory contents."""
+        # Accept flexible param names (dir_path or path)
+        dir_path = params.get("dir_path") or params.get("path") or "."
+        return self.brain_tools.list_directory(
+            dir_path=dir_path,
+            pattern=params.get("pattern", "*"),
+        )
+    
+    def _tool_brain_grep(self, params: Dict[str, Any]) -> str:
+        """Tool: Search for pattern in files."""
+        return self.brain_tools.grep_search(
+            pattern=params.get("pattern", ""),
+            file_pattern=params.get("file_pattern", "**/*.py"),
+            max_results=params.get("max_results", 20),
+        )
     
     def _looks_like_solution(self, text: str) -> bool:
         """Heuristic: Does this text look like a final solution?

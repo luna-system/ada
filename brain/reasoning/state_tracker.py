@@ -37,6 +37,11 @@ class ToolCall:
     timestamp: datetime = field(default_factory=datetime.now)
     execution_time_ms: float = 0.0
     
+    # Tool transparency fields (Phase 3 - Tool Transparency)
+    cache_hit: bool = False
+    detail_level: Optional[str] = None  # "full", "chunks", "summary", "dropped"
+    signals: Optional[Dict[str, float]] = None  # {"surprise": 0.8, "relevance": 0.6, ...}
+    
     def to_dict(self) -> Dict[str, Any]:
         """Convert to JSON-serializable dict."""
         return {
@@ -46,6 +51,10 @@ class ToolCall:
             "importance": self.importance,
             "timestamp": self.timestamp.isoformat(),
             "execution_time_ms": self.execution_time_ms,
+            # Include transparency fields
+            "cache_hit": self.cache_hit,
+            "detail_level": self.detail_level,
+            "signals": self.signals or {},
         }
 
 
@@ -99,6 +108,10 @@ class ReasoningState:
     has_solution: bool = False
     reasoning_history: List[str] = field(default_factory=list)  # LLM thoughts
     
+    # Panic switch - Ada can bail early on critical errors
+    error_bailout: bool = False
+    error_bailout_reason: str = ""
+    
     # Semantic identity (for quantum isomorphism)
     semantic_identity: Dict[str, Any] = field(default_factory=dict)
     
@@ -132,6 +145,10 @@ class ReasoningState:
         
         # Stop if we hit max iterations
         if self.iteration >= self.max_iterations:
+            return False
+        
+        # Stop if panic switch activated (error bailout)
+        if self.error_bailout:
             return False
         
         # Continue otherwise

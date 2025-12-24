@@ -440,3 +440,150 @@ body {
 #messages::-webkit-scrollbar-thumb:hover {
   background: var(--vscode-scrollbarSlider-hoverBackground);
 }
+
+/* ============================================
+   REASONING TOOL TRANSPARENCY CARD
+   Phase 4 - Beautiful biomimetic signal visualization!
+   ============================================ */
+.reasoning-tool-card {
+  background: linear-gradient(135deg, var(--vscode-editor-background) 0%, var(--vscode-input-background) 100%);
+  border: 1px solid var(--vscode-panel-border);
+  border-left: 3px solid var(--ada-accent);
+  border-radius: 8px;
+  font-size: 12px;
+  align-self: flex-start;
+  max-width: 95%;
+  animation: fadeIn 0.3s ease-out;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.reasoning-tool-card:hover {
+  background: var(--vscode-list-hoverBackground);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+/* Cache badge */
+.cache-badge {
+  background: linear-gradient(135deg, #4CAF50 0%, #45a049 100%);
+  color: white;
+  padding: 2px 8px;
+  border-radius: 10px;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.3px;
+  margin-left: 4px;
+  animation: sparkle 2s ease-in-out infinite;
+}
+
+@keyframes sparkle {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.7; }
+}
+
+/* Importance badges */
+.importance-badge {
+  padding: 3px 8px;
+  border-radius: 10px;
+  font-weight: 600;
+  letter-spacing: 0.2px;
+  display: inline-block;
+}
+
+.importance-badge.importance-high {
+  background: linear-gradient(135deg, #4CAF50 0%, #45a049 100%);
+  color: white;
+}
+
+.importance-badge.importance-medium {
+  background: linear-gradient(135deg, #FF9800 0%, #F57C00 100%);
+  color: white;
+}
+
+.importance-badge.importance-low {
+  background: linear-gradient(135deg, #9E9E9E 0%, #757575 100%);
+  color: white;
+}
+
+/* Compression badge */
+.compression-badge {
+  padding: 3px 8px;
+  background: var(--vscode-badge-background);
+  color: var(--vscode-badge-foreground);
+  border-radius: 10px;
+  font-size: 10px;
+  margin-left: 6px;
+}
+
+/* Time badge */
+.time-badge {
+  padding: 3px 8px;
+  background: var(--vscode-editor-background);
+  border: 1px solid var(--vscode-panel-border);
+  border-radius: 10px;
+  font-size: 10px;
+  color: var(--vscode-descriptionForeground);
+  margin-left: 6px;
+}
+
+/* Signal breakdown grid */
+.signals-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 4px;
+}
+
+.signal-row {
+  display: grid;
+  grid-template-columns: 90px 1fr 50px;
+  align-items: center;
+  gap: 10px;
+}
+
+.signal-label {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--vscode-foreground);
+  text-transform: capitalize;
+}
+
+.signal-bar {
+  height: 6px;
+  background: var(--vscode-editor-background);
+  border: 1px solid var(--vscode-panel-border);
+  border-radius: 10px;
+  overflow: hidden;
+  position: relative;
+}
+
+.signal-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--ada-accent) 0%, var(--vscode-textLink-activeForeground) 100%);
+  transition: width 0.3s ease-out;
+  border-radius: 10px;
+}
+
+.signal-value {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--vscode-textLink-foreground);
+  text-align: right;
+  font-family: var(--vscode-editor-font-family);
+}
+
+/* Animate signal fills on expand */
+.reasoning-tool-card:not(.expanded) .signal-fill {
+  width: 0 !important;
+}
+
+.reasoning-tool-card.expanded .signal-fill {
+  animation: fillBar 0.4s ease-out forwards;
+}
+
+@keyframes fillBar {
+  from { width: 0; }
+  to { width: var(--fill-width, 100%); }
+}

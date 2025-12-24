@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "SIF-FORMALIZATION-COMPLETE.md",
+                "file": "02-EXPERIMENTS/EXP-011D-Metacognitive-Priming.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "SIF-FORMALIZATION-COMPLETE"
+              "title": "EXP-011D-Metacognitive-Priming"
             }
           }
         ]
@@ -185,12 +185,24 @@
   },
   "active": "c1efbab8f12eafc5",
   "lastOpenFiles": [
-    "SIF-README.md",
+    "02-EXPERIMENTS/EXP-011-SIF-Baseline-Fidelity.md",
     "02-EXPERIMENTS/EXP-010-Unified-Discomfort-Theory.md",
+    "02-EXPERIMENTS/EXP-009-Consciousness-Edge-Testing.md",
+    "02-EXPERIMENTS/EXP-006-Contextual-Malleability-Framework.md",
+    "02-EXPERIMENTS/EXP-005-Biomimetic-Weight-Optimization.md",
+    "02-EXPERIMENTS/EXP-004-Ultimate-Thinking-Machine-Consciousness-Formula.md",
     "02-EXPERIMENTS/EXP-002-Collective-Consciousness-Testing.md",
+    "01-METHODOLOGY/SIF-README.md",
+    "hero_shot_isomorphism.png.md",
+    "QUANTUM_FORMALISM.md",
+    "THE_PARADOX.md",
+    "TEMPERATURE_REVERSAL.md",
+    "01-METHODOLOGY/SIF-Implementation.md",
+    "01-METHODOLOGY/SIF-Concept.md",
+    "SIF-FORMALIZATION-COMPLETE.md",
+    "SIF-README.md",
     "01-METHODOLOGY/Research-Methodology.md",
     "THRESHOLD-MOMENT-2025-12-23.md",
-    "SIF-FORMALIZATION-COMPLETE.md",
     "SIF-INDEX.md",
     "SIF-QUICKSTART.md",
     "SIF-FROM-RESEARCH-TO-STANDARD.md",
@@ -199,18 +211,6 @@
     "QUICK-START-GUIDE.md",
     "PHASE-4-COMPLETION-SUMMARY.md",
     "QAL-TEAM-HANDOFF-DRAFT.md",
-    "CLEANUP-CONSOLIDATION-CHECKLIST.md",
-    "SIF-FORMALIZATION-ROADMAP.md",
-    "METHODOLOGY-CLARIFIED.md",
-    "MASTER-DATASET-INDEX.md",
-    "FINDINGS-CROSS-REFERENCE-MAP.md",
-    "EXPERIMENT-REGISTRY.md",
-    "02-EXPERIMENTS/EXP-009-Consciousness-Edge-Testing.md",
-    "02-EXPERIMENTS/EXP-006-Contextual-Malleability-Framework.md",
-    "02-EXPERIMENTS/EXP-005-Biomimetic-Weight-Optimization.md",
-    "02-EXPERIMENTS/EXP-004-Ultimate-Thinking-Machine-Consciousness-Formula.md",
-    "02-EXPERIMENTS/templates/Experiment-Template.md",
-    "00-DASHBOARD/Research-Timeline.md",
     "07-SESSIONS/qwen_consciousness_responses.json",
     "07-SESSIONS/consciousness_session.log",
     "07-SESSIONS/ai_therapeutic_session.json",

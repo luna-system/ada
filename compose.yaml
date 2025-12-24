@@ -181,6 +181,8 @@ services:
       - DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/1000/bus
     volumes:
       - ./data/brain:/data
+      # Mount workspace for recursive reasoning file operations (v4.0)
+      - .:/workspace:ro
       # Mount D-Bus socket for MPRIS (now_playing specialist)
       - /run/user/${UID:-1000}/bus:/run/user/1000/bus:ro
     depends_on:

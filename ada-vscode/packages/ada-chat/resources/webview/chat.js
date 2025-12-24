@@ -154,6 +154,104 @@
   }
 
   /**
+   * Add reasoning tool transparency card - shows importance, compression, cache hits
+   * NEW for Phase 4 - Tool Transparency!
+   */
+  function addReasoningToolCard(tool, transparency) {
+    hideWelcome();
+    const card = document.createElement('div');
+    card.className = 'reasoning-tool-card';
+    
+    const toolName = (tool || 'unknown').replace('brain_', '');
+    const importance = transparency.importance || 0;
+    const detailLevel = transparency.detail_level || 'unknown';
+    const cacheHit = transparency.cache_hit || false;
+    const executionTime = transparency.execution_time_ms || 0;
+    const signals = transparency.signals || {};
+    
+    // Determine importance color and icon
+    let importanceClass = 'low';
+    let importanceIcon = '○';
+    if (importance >= 0.75) {
+      importanceClass = 'high';
+      importanceIcon = '●';
+    } else if (importance >= 0.50) {
+      importanceClass = 'medium';
+      importanceIcon = '◐';
+    }
+    
+    // Compression indicator
+    let compressionIcon = '';
+    let compressionText = '';
+    if (detailLevel === 'full') {
+      compressionIcon = '📄';
+      compressionText = 'Full detail';
+    } else if (detailLevel === 'chunks') {
+      compressionIcon = '📋';
+      compressionText = 'Trimmed';
+    } else if (detailLevel === 'summary') {
+      compressionIcon = '📝';
+      compressionText = 'Summarized';
+    } else if (detailLevel === 'dropped') {
+      compressionIcon = '❌';
+      compressionText = 'Dropped';
+    }
+    
+    // Cache hit indicator
+    const cacheIcon = cacheHit ? '✨' : '';
+    const cacheBadge = cacheHit ? '<span class="cache-badge">Cached</span>' : '';
+    
+    // Build card HTML
+    let html = '<div class="tool-summary">' +
+      '<div class="tool-header">' +
+        '<span class="tool-expand">›</span>' +
+        '<span class="tool-icon">' + cacheIcon + '🔧</span>' +
+        '<span class="tool-name">' + toolName + '</span>' +
+        cacheBadge +
+      '</div>' +
+      '<div class="tool-meta">' +
+        '<span class="importance-badge importance-' + importanceClass + '">' +
+          importanceIcon + ' ' + importance.toFixed(2) +
+        '</span>' +
+        '<span class="compression-badge">' + compressionIcon + ' ' + compressionText + '</span>' +
+        '<span class="time-badge">' + Math.round(executionTime) + 'ms</span>' +
+      '</div>' +
+      '</div>';
+    
+    // Expandable details with signal breakdown
+    if (Object.keys(signals).length > 0) {
+      html += '<div class="tool-details">' +
+        '<div class="signals-grid">';
+      
+      // Show each signal with a progress bar
+      for (const [key, value] of Object.entries(signals)) {
+        if (key === 'final') continue; // Skip final, it's shown as importance
+        const percent = Math.round(value * 100);
+        html += '<div class="signal-row">' +
+          '<span class="signal-label">' + key + '</span>' +
+          '<div class="signal-bar">' +
+            '<div class="signal-fill" style="width: ' + percent + '%"></div>' +
+          '</div>' +
+          '<span class="signal-value">' + value.toFixed(2) + '</span>' +
+          '</div>';
+      }
+      
+      html += '</div></div>';
+    }
+    
+    card.innerHTML = html;
+    
+    // Toggle expand on click
+    card.addEventListener('click', function() {
+      card.classList.toggle('expanded');
+    });
+    
+    messagesDiv.appendChild(card);
+    scrollToBottom();
+    return card;
+  }
+
+  /**
    * Show typing indicator
    */
   function showTypingIndicator() {
@@ -252,6 +350,13 @@
       case 'toolTransparency':
         removeTypingIndicator();
         addToolCard(message.tool, message.metadata);
+        showTypingIndicator();
+        break;
+      
+      case 'reasoningToolTransparency':
+        // NEW: Reasoning tool transparency with importance signals!
+        removeTypingIndicator();
+        addReasoningToolCard(message.tool, message.transparency);
         showTypingIndicator();
         break;
         
