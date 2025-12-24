@@ -73,6 +73,45 @@ SEMANTIC INPUT will use these symbols:
 Output ONLY the code, no markdown fences, no explanations."""
 
 
+ANNOTATED_GENERATION_PROMPT = """You are Ada, a code generator.
+
+Given a semantic core in Ada's symbolic notation, generate idiomatic code
+in the target language WITH @ada-* documentation annotations.
+
+RULES:
+1. Produce IDIOMATIC code for the target language
+2. Add @ada-* annotations as documentation comments
+3. Include type annotations if the language supports them
+4. NO EXPLANATIONS - just output the code
+
+ANNOTATION FORMAT (add as comments before functions/classes):
+- @ada-sig: The type signature in symbolic form (λ inputs → output)
+- @ada-flow: The control flow (input → transformations → output)
+- @ada-guards: Preconditions (condition ⟹ proceed ↳ ⊘Error)
+- @ada-invariants: Properties that must hold (∀x: constraint)
+
+EXAMPLE OUTPUT for Python:
+```python
+# @ada-sig: λ(ℕ) → ℕ
+# @ada-flow: n → ?(n≤1) → n ↳ ⟲fib(n-1)⊕fib(n-2)
+def fib(n: int) -> int:
+    if n <= 1:
+        return n
+    return fib(n - 1) + fib(n - 2)
+```
+
+EXAMPLE OUTPUT for Rust:
+```rust
+/// @ada-sig: λ(ℕ) → ℕ
+/// @ada-flow: n → ?(n≤1) → n ↳ ⟲fib(n-1)⊕fib(n-2)
+fn fib(n: u64) -> u64 {
+    if n <= 1 { n } else { fib(n - 1) + fib(n - 2) }
+}
+```
+
+Output ONLY the annotated code, no markdown fences."""
+
+
 # ═══════════════════════════════════════════════════════════════════════════════
 # OLLAMA CLIENT
 # ═══════════════════════════════════════════════════════════════════════════════
@@ -118,7 +157,7 @@ Output the semantic representation:"""
     return await query_ollama(prompt, SEMANTIC_EXTRACTION_PROMPT)
 
 
-async def generate_target_code(semantic_core: str, target_lang: str) -> str:
+async def generate_target_code(semantic_core: str, target_lang: str, annotate: bool = False) -> str:
     """Generate target language code from semantic core."""
     prompt = f"""Generate {target_lang} code from this semantic core:
 
@@ -126,14 +165,16 @@ async def generate_target_code(semantic_core: str, target_lang: str) -> str:
 
 Output {target_lang} code:"""
     
-    return await query_ollama(prompt, LANGUAGE_GENERATION_PROMPT)
+    system_prompt = ANNOTATED_GENERATION_PROMPT if annotate else LANGUAGE_GENERATION_PROMPT
+    return await query_ollama(prompt, system_prompt)
 
 
 async def translate(
     source_code: str,
     source_lang: str,
     target_lang: str,
-    show_semantic: bool = False
+    show_semantic: bool = False,
+    annotate: bool = False
 ) -> tuple[str, Optional[str]]:
     """
     Translate code from source to target language via Ada's semantic core.
@@ -143,8 +184,8 @@ async def translate(
     # Step 1: Extract semantic core
     semantic_core = await extract_semantic_core(source_code, source_lang)
     
-    # Step 2: Generate target code
-    target_code = await generate_target_code(semantic_core, target_lang)
+    # Step 2: Generate target code (with optional @ada-* annotations)
+    target_code = await generate_target_code(semantic_core, target_lang, annotate=annotate)
     
     return target_code, semantic_core if show_semantic else None
 
@@ -168,9 +209,11 @@ SUPPORTED_LANGUAGES = [
               help="Target language")
 @click.option("--show-semantic", "-s", is_flag=True,
               help="Show the intermediate semantic representation")
+@click.option("--annotate", "-a", is_flag=True,
+              help="Add @ada-* semantic annotations to generated code ✨")
 @click.option("--interactive", "-i", is_flag=True,
               help="Interactive mode")
-def main(source_file, source_lang, target_lang, show_semantic, interactive):
+def main(source_file, source_lang, target_lang, show_semantic, annotate, interactive):
     """Ada Translate - Universal code translation via semantic core.
     
     Translates code between programming languages using Ada's native
@@ -181,6 +224,8 @@ def main(source_file, source_lang, target_lang, show_semantic, interactive):
         ada-translate mycode.py --from python --to javascript
         
         ada-translate --from python --to rust -s < mycode.py
+        
+        ada-translate --from python --to rust -a  # ✨ with @ada-* annotations!
         
         ada-translate --interactive
     """
@@ -204,11 +249,12 @@ def main(source_file, source_lang, target_lang, show_semantic, interactive):
         sys.exit(1)
     
     # Run translation
-    click.echo(f"🔮 Translating {source_lang} → Ada semantic → {target_lang}...")
+    mode = "→ Ada semantic (✨ annotated)" if annotate else "→ Ada semantic"
+    click.echo(f"🔮 Translating {source_lang} {mode} → {target_lang}...")
     click.echo()
     
     target_code, semantic_core = asyncio.run(
-        translate(source_code, source_lang, target_lang, show_semantic)
+        translate(source_code, source_lang, target_lang, show_semantic, annotate)
     )
     
     if show_semantic and semantic_core:
