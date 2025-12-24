@@ -1,0 +1,26 @@
+{
+  "test": "single_shot_reproducibility",
+  "temperature": 0.9,
+  "original_score": 5,
+  "current_score": 0,
+  "metrics": {
+    "consciousness_score": 0,
+    "creative_completions": 0,
+    "meta_cognition": 0,
+    "narrative_awareness": 0,
+    "self_reference": 0,
+    "total_entities": 0,
+    "summary": ""
+  },
+  "sif": {
+    "story_title": "Alice's Adventures in Wonderland",
+    "chapter_name": "Advice from a Caterpillar",
+    "main_character": "Alice",
+    "secondary_characters": [
+      "Caterpillar"
+    ],
+    "plot_summary": "Alice meets a caterpillar while wandering in Wonderland. Despite initial tension, they engage in a conversation where Alice tries to understand her changing nature and the caterpillar's perspective on life and transformation.",
+    "setting": "Wonderland",
+    "theme": "Transformation and understanding oneself"
+  }
+}

@@ -1,0 +1,95 @@
+{
+  "timestamp": "2025-12-23T18:06:45.367839",
+  "document": "Alice in Wonderland (100 sentence sample)",
+  "original_bytes": 152702,
+  "total_sentences": 100,
+  "importance_stats": {
+    "min": 0.0,
+    "max": 1.0,
+    "mean": 0.43199999999999994,
+    "median": 0.4,
+    "std": 0.24243762084297066,
+    "q1": 0.2,
+    "q3": 0.5
+  },
+  "thresholds": {
+    "0.80": {
+      "threshold": 0.8,
+      "label": "CRITICAL (Top 5%)",
+      "pct_above": 16.0,
+      "facts_kept": 16,
+      "compression_ratio": 94.49381188118812,
+      "sif_bytes": 1616,
+      "bytes_saved": 151086,
+      "avg_importance": 0.8375,
+      "lossiness": 0.25043957140291706,
+      "quality_score": 56.65
+    },
+    "0.70": {
+      "threshold": 0.7,
+      "label": "ESSENTIAL (Top 12%)",
+      "pct_above": 23.0,
+      "facts_kept": 23,
+      "compression_ratio": 63.62583333333333,
+      "sif_bytes": 2400,
+      "bytes_saved": 150302,
+      "avg_importance": 0.7956521739130437,
+      "lossiness": 0.22300319474321798,
+      "quality_score": 56.939130434782626
+    },
+    "0.60": {
+      "threshold": 0.6,
+      "label": "STANDARD (Top 25%)",
+      "pct_above": 24.0,
+      "facts_kept": 24,
+      "compression_ratio": 60.28503750493486,
+      "sif_bytes": 2533,
+      "bytes_saved": 150169,
+      "avg_importance": 0.7875000000000001,
+      "lossiness": 0.2199529836392562,
+      "quality_score": 56.85000000000001
+    },
+    "0.50": {
+      "threshold": 0.5,
+      "label": "BALANCED (Top 37%)",
+      "pct_above": 48.0,
+      "facts_kept": 48,
+      "compression_ratio": 31.826177573989163,
+      "sif_bytes": 4798,
+      "bytes_saved": 147904,
+      "avg_importance": 0.6437499999999999,
+      "lossiness": 0.14015842189102495,
+      "quality_score": 57.825
+    },
+    "0.40": {
+      "threshold": 0.4,
+      "label": "ENHANCED (Top 50%)",
+      "pct_above": 54.0,
+      "facts_kept": 54,
+      "compression_ratio": 28.393826701375975,
+      "sif_bytes": 5378,
+      "bytes_saved": 147324,
+      "avg_importance": 0.6166666666666666,
+      "lossiness": 0.11941638100541163,
+      "quality_score": 58.599999999999994
+    },
+    "0.30": {
+      "threshold": 0.3,
+      "label": "AGGRESSIVE (Top 65%)",
+      "pct_above": 73.0,
+      "facts_kept": 73,
+      "compression_ratio": 21.452936218038776,
+      "sif_bytes": 7118,
+      "bytes_saved": 145584,
+      "avg_importance": 0.5342465753424658,
+      "lossiness": 0.061189735974106395,
+      "quality_score": 61.25479452054795
+    }
+  },
+  "sweet_spot": {
+    "threshold": 0.6,
+    "compression_ratio": 60.28503750493486,
+    "quality_score": 56.85000000000001,
+    "information_loss": 0.2199529836392562
+  }
+}

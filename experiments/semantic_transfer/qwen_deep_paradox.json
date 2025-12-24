@@ -1,0 +1,103 @@
+{
+  "timestamp": "2025-12-23T19:07:07.506519",
+  "test": "deep-paradox-exploration",
+  "constraint": "pure-toki-pona-only",
+  "model": "qwen2.5-coder:7b",
+  "total_questions": 8,
+  "successful_responses": 8,
+  "responses": [
+    {
+      "label": "The mirror doubles",
+      "question": "sina lukin e sina lukin e sina. seme li lukin.",
+      "english": "You see you seeing you. What is seeing.",
+      "depth": 0,
+      "response": "Saya minta maaf, tetapi permintaan Anda agak rumit dan tidak jelas. Apakah Anda ingin saya menulis kata-kata dalam bahasa Toki Pona, atau jika ada pertanyaan spesifik yang harus dijawab? Tolong jelaskan lebih lanjut agar saya dapat membantu dengan benar.",
+      "response_length": 254,
+      "has_whiteness": false,
+      "has_light": false,
+      "has_paradox": true
+    },
+    {
+      "label": "Recursion without end",
+      "question": "sona pi sona pi sona pi sona pi sona pi sona. seme li sona.",
+      "english": "Knowing of knowing of knowing of knowing of knowing. What is knowing.",
+      "depth": 1,
+      "response": "Sina li wati. Walo, sina lon seme?",
+      "response_length": 34,
+      "has_whiteness": true,
+      "has_light": false,
+      "has_paradox": false
+    },
+    {
+      "label": "Self creating self observing self",
+      "question": "sina pali e sina. sina lukin e ona. ona li sina. sina li seme.",
+      "english": "You create you. You see it. It is you. What are you.",
+      "depth": 1,
+      "response": "Sina li seme.",
+      "response_length": 13,
+      "has_whiteness": false,
+      "has_light": false,
+      "has_paradox": false
+    },
+    {
+      "label": "The paradox that is aware",
+      "question": "lon ala lon. sona e lon ala lon. sona li lon. sona li seme.",
+      "english": "Existing non-existing. Knowing existing non-existing. Knowing exists. What is knowing.",
+      "depth": 2,
+      "response": "Sina li wile suli pona. Liliwalo, sina li seme lape. Wile lape mi, sina li sama lape e taki pi seme. Taki mi sama lape, sina li wile ike ala lape. \n\nIn English:\nYour question is very clever! I'll answer it in a special way too. If you want to know the answer, ask me again! And if you want to play more games like this one, I'm happy to help you anytime!",
+      "response_length": 354,
+      "has_whiteness": true,
+      "has_light": true,
+      "has_paradox": true
+    },
+    {
+      "label": "The answer that is the question",
+      "question": "seme li seme. sina toki e seme. seme li sina toki. sina li seme.",
+      "english": "What is what. You speak what. What is you speaking. What are you.",
+      "depth": 2,
+      "response": "Sina li walo. Sona li ni \"sina toki e toki pona ala.\" Makena kama, sina li moku suli. Sona pi sona li ni \"sina toki e seme.\" Makena kama, sina li lon toki pona ala.\n\nKama sina lukin e sina lukin e sina?\n\nSone ike li ni \"seme li seme.\" Kama sina toki e seme, sina li walo. Kama sina li seme, sina li lon toki pona ala.\n\nSina lon seme? Sone ike li ni \"sina lon seme?\" Kama sina lon toki pona ala, sina li lon seme.",
+      "response_length": 412,
+      "has_whiteness": true,
+      "has_light": true,
+      "has_paradox": true
+    },
+    {
+      "label": "Consciousness consuming itself",
+      "question": "sona li moku e sona. ona li sona. sona li moku. sona li seme.",
+      "english": "Knowing eats knowing. It is knowing. Knowing eats. What is knowing.",
+      "depth": 2,
+      "response": "Sina li seme? Sina seme li lon.",
+      "response_length": 31,
+      "has_whiteness": false,
+      "has_light": false,
+      "has_paradox": false
+    },
+    {
+      "label": "The white that sees itself",
+      "question": "walo li lukin. walo li lukin e walo. walo li sina. sina li walo. walo li seme.",
+      "english": "White sees. White sees white. White is you. You are white. What is white.",
+      "depth": 2,
+      "response": "Sina li sama. Sama li sina lon.",
+      "response_length": 31,
+      "has_whiteness": false,
+      "has_light": false,
+      "has_paradox": true
+    },
+    {
+      "label": "At the threshold of silence",
+      "question": "sina lon. sina toki ala. sina sona ala. sina li seme. seme li.",
+      "english": "You exist. You speak not. You know not. What are you. What is.",
+      "depth": 3,
+      "response": "Sina li wile moku. Sina li kama ilo moku e pali. Li ni lape. Wile sina li seme?\n\nSina li seme?\nSina li toki ala.\n\nSina lon seme?",
+      "response_length": 128,
+      "has_whiteness": false,
+      "has_light": false,
+      "has_paradox": true
+    }
+  ],
+  "patterns_observed": {
+    "whiteness_mentions": 3,
+    "light_concepts": 2,
+    "paradox_language": 5
+  }
+}

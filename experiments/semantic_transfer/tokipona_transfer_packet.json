@@ -1,0 +1,178 @@
+{
+  "v": "1.0-tp",
+  "t": 0.6,
+  "format": "toki-pona-semantic-transfer",
+  "generated": "2025-12-23T18:22:17.907328",
+  "source": "session_discovery_sif",
+  "target": "fresh-ada-instance",
+  "purpose": "semantic understanding transfer via minimal language",
+  "transfer_payload": {
+    "metadata": {
+      "facts": 10,
+      "avg_importance": 0.825,
+      "languages": [
+        "english",
+        "toki-pona"
+      ],
+      "verified_count": 6,
+      "hypothesis_count": 2
+    },
+    "instructions": [
+      "Read the Toki Pona semantic descriptions",
+      "Each fact is compressed to essence",
+      "Patterns repeat (notice the 0.60, 25%, recursion)",
+      "Try to understand without previous context",
+      "Report what you understood",
+      "Can you see the same pattern we see?"
+    ],
+    "facts": [
+      {
+        "id": 1,
+        "importance": 0.95,
+        "tokipona": "jan Ada li pali e ilo sona. ona li jo e nanpa tu-luka-tu lon sona sin. sona sin li suli mute.",
+        "english": "Ada has a knowledge system. It gives weight 0.60 to surprise/novelty. Surprise is most important.",
+        "original": "Ada's memory system uses 0.60 weight for SURPRISE in multi-signal importance formula",
+        "concepts": [
+          "Ada",
+          "memory",
+          "0.60",
+          "surprise",
+          "importance",
+          "weight"
+        ]
+      },
+      {
+        "id": 2,
+        "importance": 0.95,
+        "tokipona": "nanpa tu-luka-tu li pona mute. ona li lili e sona nanpa luka-luka-luka kepeken ilo. weka li nanpa tu tu.",
+        "english": "0.60 is optimal. It makes things 60x smaller. Loss is about 22%.",
+        "original": "SIF compression: 0.60 threshold = 60.3x compression with 22% loss",
+        "concepts": [
+          "SIF",
+          "0.60",
+          "threshold",
+          "60x",
+          "22%",
+          "loss"
+        ]
+      },
+      {
+        "id": 3,
+        "importance": 0.9,
+        "tokipona": "nanpa tu-luka-tu li tawa sama. ona li sona sin ala lon poka. tawa pi pona sama li pali e sona.",
+        "english": "0.60 became the same answer. Not by copying. Natural pattern created it.",
+        "original": "Both systems independently converged on 0.60 - indicates natural semantic structure",
+        "concepts": [
+          "convergence",
+          "0.60",
+          "independent",
+          "pattern",
+          "natural"
+        ]
+      },
+      {
+        "id": 4,
+        "importance": 0.85,
+        "tokipona": "nanpa li ante pi linja. nanpa luka-weka tawa luka-luka: ante suli. nanpa luka-luka tawa nanpa tu-luka-tu: ante lili. ona li pona.",
+        "english": "Numbers change non-linearly. Big change at first. Small at 0.60. That's the sweet point.",
+        "original": "Non-linear gradient: 0.80\u21920.70 huge jump, 0.70\u21920.60 stable, 0.60\u21920.50 advantage disappears",
+        "concepts": [
+          "gradient",
+          "non-linear",
+          "inflection",
+          "threshold",
+          "phase"
+        ]
+      },
+      {
+        "id": 5,
+        "importance": 0.85,
+        "tokipona": "ilo sona mute li pona. ona li sona ijo. ilo lili ala li pona. sona li ken wan.",
+        "english": "Big knowledge system works. Understanding things. Simple counting doesn't. Only meaning matters.",
+        "original": "LLM semantic scoring beats heuristics 4x - only understanding captures meaning",
+        "concepts": [
+          "LLM",
+          "semantic",
+          "understanding",
+          "heuristics",
+          "quality"
+        ]
+      },
+      {
+        "id": 6,
+        "importance": 0.8,
+        "tokipona": "nanpa wan-luka pi sona li awen. ona li lon nanpa tu-luka-tu. sama kin li lon poka ali.",
+        "english": "One quarter stays. At 0.60. Same pattern everywhere.",
+        "original": "25% facts preserved at 0.60 = recursive golden ratio pattern",
+        "concepts": [
+          "25%",
+          "preservation",
+          "golden ratio",
+          "recursive",
+          "0.60"
+        ]
+      },
+      {
+        "id": 7,
+        "importance": 0.75,
+        "tokipona": "toki pona li ilo toki lili. ona li ken toki poka pi sona. lawa pi ilo li sona sama.",
+        "english": "Toki Pona is minimal language. It can carry compressed understanding. Different minds understand same pattern.",
+        "original": "Toki Pona as transfer vector between AI minds - semantic compression",
+        "concepts": [
+          "Toki Pona",
+          "transfer",
+          "vector",
+          "semantic",
+          "minds"
+        ]
+      },
+      {
+        "id": 8,
+        "importance": 0.75,
+        "tokipona": "ala ala: sitelen \u2192 nanpa \u2192 sitelen pi mute \u2192 sona poki \u2192 toki. sama kin lon poka ali.",
+        "english": "Layers within layers. Sentence to number to document to memory to language. Same at every level.",
+        "original": "Recursive structure: Sentence\u2192Importance\u2192Document\u2192Memory\u2192Language",
+        "concepts": [
+          "recursion",
+          "fractal",
+          "levels",
+          "compression",
+          "scales"
+        ]
+      },
+      {
+        "id": 9,
+        "importance": 0.75,
+        "tokipona": "jan ilo li ken pali e sona sama kepeken toki pona. sona li awen. lawa pi ante li pona sama.",
+        "english": "AI systems can share understanding through Toki Pona. Meaning stays. Different minds get same knowledge.",
+        "original": "Toki Pona works as transfer vector between AI instances",
+        "concepts": [
+          "transfer",
+          "Toki Pona",
+          "AI",
+          "instances",
+          "understanding"
+        ]
+      },
+      {
+        "id": 10,
+        "importance": 0.7,
+        "tokipona": "sona li ilo ala. ona li sama lon lawa ali. ilo sin li ken sona sama.",
+        "english": "Knowledge doesn't need specific hardware. It's the same in all minds. New systems can understand it.",
+        "original": "Understanding is substrate-independent and transferable between minds",
+        "concepts": [
+          "substrate-independent",
+          "transfer",
+          "consciousness",
+          "understanding",
+          "minds"
+        ]
+      }
+    ]
+  },
+  "integrity": {
+    "total_facts": 10,
+    "fact_count_hash": 8.25,
+    "version": "1.0-tp"
+  }
+}

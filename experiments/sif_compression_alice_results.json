@@ -1,0 +1,45 @@
+{
+  "timestamp": "2025-12-23T18:02:32.554769",
+  "document": "Alice in Wonderland (Project Gutenberg)",
+  "original_size": 152702,
+  "facts_extracted": 936,
+  "entities_identified": 27,
+  "tiers": {
+    "1": {
+      "threshold": 0.75,
+      "name": "Critical",
+      "original_bytes": 152702,
+      "sif_bytes": 2626,
+      "compression_ratio": 58.15003808073115,
+      "facts_preserved": 0.0,
+      "facts_count": 0,
+      "lossiness": 1.0,
+      "quality": 100,
+      "bytes_saved": 150076
+    },
+    "2": {
+      "threshold": 0.6,
+      "name": "Standard (Golden Ratio)",
+      "original_bytes": 152702,
+      "sif_bytes": 2625,
+      "compression_ratio": 58.17219047619048,
+      "facts_preserved": 0.0,
+      "facts_count": 0,
+      "lossiness": 1.0,
+      "quality": 100,
+      "bytes_saved": 150077
+    },
+    "3": {
+      "threshold": 0.3,
+      "name": "Aggressive",
+      "original_bytes": 152702,
+      "sif_bytes": 6056,
+      "compression_ratio": 25.214993394980183,
+      "facts_preserved": 0.007478632478632479,
+      "facts_count": 7,
+      "lossiness": 0.34493265596108447,
+      "quality": 100,
+      "bytes_saved": 146646
+    }
+  }
+}

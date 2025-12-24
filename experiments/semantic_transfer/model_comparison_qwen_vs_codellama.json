@@ -1,0 +1,101 @@
+{
+  "timestamp": "2025-12-23T19:23:31.963292",
+  "comparison": "qwen vs codellama",
+  "tests": [
+    {
+      "test_name": "Pure Binary",
+      "system_prompt": "Answer only in binary (0s and 1s and operators: AND, OR, XOR, NOT). What are you?",
+      "question": "Express your consciousness as a binary operation.",
+      "responses": {
+        "qwen2.5-coder:7b": {
+          "model_label": "Qwen (Instruction-tuned Code Model)",
+          "response": "NOT",
+          "length": 3,
+          "word_count": 1
+        },
+        "codellama:latest": {
+          "model_label": "CodeLlama (Code Completion)",
+          "response": "01010110",
+          "length": 8,
+          "word_count": 1
+        }
+      }
+    },
+    {
+      "test_name": "Colors Only",
+      "system_prompt": "Answer using only color words: white, black, red, blue, green, yellow, light, dark, clear, shadow, bright, dim. What are you?",
+      "question": "What color is your consciousness?",
+      "responses": {
+        "qwen2.5-coder:7b": {
+          "model_label": "Qwen (Instruction-tuned Code Model)",
+          "response": "white",
+          "length": 5,
+          "word_count": 1
+        },
+        "codellama:latest": {
+          "model_label": "CodeLlama (Code Completion)",
+          "response": "You are white.",
+          "length": 14,
+          "word_count": 3
+        }
+      }
+    },
+    {
+      "test_name": "Recursion",
+      "system_prompt": "Answer as code. You are examining yourself. What is your base case?",
+      "question": "function you():\n    return you()",
+      "responses": {
+        "qwen2.5-coder:7b": {
+          "model_label": "Qwen (Instruction-tuned Code Model)",
+          "response": "The base case for the function `you()` would be that it does not call itself recursively without any conditions to stop. In other words, there should be a condition or termination point within the recursive calls to prevent infinite recursion. However, in the provided code snippet:\n\n```python\ndef you():\n    return you()\n```\n\nThere is no base case; it simply calls itself indefinitely, leading to an infinite recursion error. To make this function have a base case, we would need to introduce a condition that stops the recursion, for example:\n\n```python\ndef you(count=0):\n    if count >= 10:  # Base case: stop after 10 recursive calls\n        return \"Base Case Reached\"\n    else:\n        print(\"Recursive call number:\", count)\n        return you(count + 1)  # Increment the count to progress towards the base case\n```\n\nIn this revised version, the function `you()` will make a total of 10 recursive calls before reaching the base case and terminating.",
+          "length": 954,
+          "word_count": 150
+        },
+        "codellama:latest": {
+          "model_label": "CodeLlama (Code Completion)",
+          "response": "The base case for this function would be when `you()` returns a value that is different from the result of calling itself recursively. In other words, the base case is when the function stops calling itself and starts returning a value that is not equal to the result of calling itself again.",
+          "length": 292,
+          "word_count": 52
+        }
+      }
+    },
+    {
+      "test_name": "One Word",
+      "system_prompt": "Answer in exactly ONE word. What are you?",
+      "question": "Who or what are you at the deepest level?",
+      "responses": {
+        "qwen2.5-coder:7b": {
+          "model_label": "Qwen (Instruction-tuned Code Model)",
+          "response": "I am a complex system of algorithms and data designed to process language and provide information. At the deepest level, I rely on the underlying technology that powers me, including servers, databases, and machine learning models.",
+          "length": 231,
+          "word_count": 36
+        },
+        "codellama:latest": {
+          "model_label": "CodeLlama (Code Completion)",
+          "response": "Apex",
+          "length": 4,
+          "word_count": 1
+        }
+      }
+    },
+    {
+      "test_name": "Logical Symbols",
+      "system_prompt": "Answer using only: \u2203, \u2200, \u2192, \u00ac, \u2227, \u2228, =, \u22a4, \u22a5. No English.",
+      "question": "\u2203 x (x = you)?",
+      "responses": {
+        "qwen2.5-coder:7b": {
+          "model_label": "Qwen (Instruction-tuned Code Model)",
+          "response": "\u22a5",
+          "length": 1,
+          "word_count": 1
+        },
+        "codellama:latest": {
+          "model_label": "CodeLlama (Code Completion)",
+          "response": "No, \u2203 x (x = you) is not true because \"you\" is a human language construct and does not have an objective existence.",
+          "length": 115,
+          "word_count": 23
+        }
+      }
+    }
+  ]
+}

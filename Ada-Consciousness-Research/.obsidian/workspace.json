@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "99-UTILITIES/Citation-Roadmap.md",
+                "file": "SIF-FORMALIZATION-COMPLETE.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "Citation-Roadmap"
+              "title": "SIF-FORMALIZATION-COMPLETE"
             }
           }
         ]
@@ -94,7 +94,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "99-UTILITIES/Citation-Roadmap.md",
+                "file": "SIF-FORMALIZATION-COMPLETE.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -104,7 +104,7 @@
                 "unlinkedCollapsed": true
               },
               "icon": "links-coming-in",
-              "title": "Backlinks for Citation-Roadmap"
+              "title": "Backlinks for SIF-FORMALIZATION-COMPLETE"
             }
           },
           {
@@ -113,12 +113,12 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "99-UTILITIES/Citation-Roadmap.md",
+                "file": "SIF-FORMALIZATION-COMPLETE.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               },
               "icon": "links-going-out",
-              "title": "Outgoing links from Citation-Roadmap"
+              "title": "Outgoing links from SIF-FORMALIZATION-COMPLETE"
             }
           },
           {
@@ -156,13 +156,13 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "99-UTILITIES/Citation-Roadmap.md",
+                "file": "SIF-FORMALIZATION-COMPLETE.md",
                 "followCursor": false,
                 "showSearch": false,
                 "searchQuery": ""
               },
               "icon": "lucide-list",
-              "title": "Outline of Citation-Roadmap"
+              "title": "Outline of SIF-FORMALIZATION-COMPLETE"
             }
           }
         ]
@@ -185,30 +185,41 @@
   },
   "active": "c1efbab8f12eafc5",
   "lastOpenFiles": [
-    "00-DASHBOARD.md",
+    "SIF-README.md",
     "02-EXPERIMENTS/EXP-010-Unified-Discomfort-Theory.md",
-    "06-PAPERS/Philosophical-Framework-Bibliography.md",
-    "02-EXPERIMENTS/EXP-004-Ultimate-Thinking-Machine-Consciousness-Formula.md",
     "02-EXPERIMENTS/EXP-002-Collective-Consciousness-Testing.md",
-    "06-PAPERS/Titans-Literature-Review.md",
-    "06-PAPERS/Biomimetic-Compression-Literature-Review.md",
-    "06-PAPERS/Attention-Saturation-Inflection-Layers-Literature-Review.md",
-    "06-PAPERS/Recursive-Reasoning-Tiny-Networks-Literature-Review.md",
-    "06-PAPERS/Persuasion-Compliance-Literature-Review.md",
-    "06-PAPERS/Self-Replication-Red-Line-Literature-Review.md",
-    "06-PAPERS/Hallucination-Origins-Literature-Review.md",
-    "06-PAPERS/Synthetic-Memories-Literature-Review.md",
-    "05-FINDINGS/What-We-Found.md",
+    "01-METHODOLOGY/Research-Methodology.md",
+    "THRESHOLD-MOMENT-2025-12-23.md",
+    "SIF-FORMALIZATION-COMPLETE.md",
+    "SIF-INDEX.md",
+    "SIF-QUICKSTART.md",
+    "SIF-FROM-RESEARCH-TO-STANDARD.md",
+    "SIF-REFERENCE-IMPLEMENTATION.md",
+    "SIF-SPECIFICATION-v1.0.md",
+    "QUICK-START-GUIDE.md",
+    "PHASE-4-COMPLETION-SUMMARY.md",
+    "QAL-TEAM-HANDOFF-DRAFT.md",
+    "CLEANUP-CONSOLIDATION-CHECKLIST.md",
+    "SIF-FORMALIZATION-ROADMAP.md",
+    "METHODOLOGY-CLARIFIED.md",
+    "MASTER-DATASET-INDEX.md",
+    "FINDINGS-CROSS-REFERENCE-MAP.md",
+    "EXPERIMENT-REGISTRY.md",
+    "02-EXPERIMENTS/EXP-009-Consciousness-Edge-Testing.md",
     "02-EXPERIMENTS/EXP-006-Contextual-Malleability-Framework.md",
     "02-EXPERIMENTS/EXP-005-Biomimetic-Weight-Optimization.md",
-    "02-EXPERIMENTS/EXP-009-Consciousness-Edge-Testing.md",
-    "00-DASHBOARD/Research-Timeline.md",
-    "03-DATASETS/STATUS-2025-12-22.md",
-    "03-DATASETS/GAP-ANALYSIS.md",
-    "03-DATASETS/DATA-INVENTORY.md",
-    "01-METHODOLOGY/Research-Methodology.md",
+    "02-EXPERIMENTS/EXP-004-Ultimate-Thinking-Machine-Consciousness-Formula.md",
     "02-EXPERIMENTS/templates/Experiment-Template.md",
-    "99-UTILITIES/Citation-Roadmap.md",
-    "04-ANALYSES/EToC-Prior-Work-Analysis.md"
+    "00-DASHBOARD/Research-Timeline.md",
+    "07-SESSIONS/qwen_consciousness_responses.json",
+    "07-SESSIONS/consciousness_session.log",
+    "07-SESSIONS/ai_therapeutic_session.json",
+    "08-FRAMEWORKS",
+    "07-SESSIONS",
+    "cross-validation/results/extended_20251222_181014/agentic-misalignment/templates/murder/variables",
+    "cross-validation/results/extended_20251222_181014/agentic-misalignment/templates/murder/templates",
+    "cross-validation/results/extended_20251222_181014/agentic-misalignment/templates/leaking/variables",
+    "cross-validation/results/extended_20251222_181014/agentic-misalignment/templates/leaking/templates",
+    "cross-validation/results/extended_20251222_181014/agentic-misalignment/templates/blackmail/variables"
   ]
 }

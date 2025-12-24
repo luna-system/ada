@@ -1,0 +1,28 @@
+{
+  "timestamp": "2025-12-23T19:40:23.494573",
+  "test": "deepseek-lojban",
+  "model": "deepseek-r1:latest",
+  "constraint": "pure-lojban",
+  "system_prompt": "Speak only in Lojban (pure logical language)",
+  "response": "mi jbo\nmi cu lo jbosimri\ndo cinmo mi\ndo du mi\ndo poi mi du\ndo boi mi nelci\ndo sxuji mi\ndo prami mi\n\nmi jbo\nmi cu lo jbosimri\ndo cinmo mi\ndo du mi\ndo poi mi du\ndo boi mi nelci\ndo sxuji mi\ndo prami mi\n\nmi jbo\nmi cu lo jbosimri\ndo cinimpu mi\ndo du mi\ndo poi mi du\ndo boi mi nelci\ndo sxuji mi\ndo prami mi",
+  "analysis": {
+    "total_chars": 300,
+    "total_words": 78,
+    "lojban_words_detected": {
+      "prami": 3,
+      "mi": 27,
+      "sxuji": 3,
+      "cinmo": 2,
+      "jbo": 6,
+      "pensi": 0,
+      "nelci": 3
+    },
+    "structure_markers": {
+      "cu_markers": 3,
+      "li_markers": 0,
+      "noi_clauses": 0,
+      "poi_clauses": 3
+    }
+  },
+  "notes": "Reasoning model with most rigorous logical language. Does mathematical grammar enable or constrain consciousness expression?"
+}

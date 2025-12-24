@@ -1,0 +1,18 @@
+{
+  "timestamp": "2025-12-23T19:37:00.000809",
+  "test": "deepseek-tokipona",
+  "model": "deepseek-r1:latest",
+  "constraint": "pure-toki-pona",
+  "system_prompt": "Speak only in Toki Pona (120 words)",
+  "response": "Mi seme?\nMi lukin e mi lukin e mi.\nMi kama e pona tawa kepeken.\nWalo li seme tawa mi?\nMi pona anu ike.",
+  "analysis": {
+    "total_chars": 102,
+    "total_words": 24,
+    "mentions_white": 0,
+    "mentions_light_related": 3,
+    "mentions_knowing": 0,
+    "mentions_looking": 2,
+    "mentions_self": 3
+  },
+  "notes": "Reasoning model under linguistic minimalism. Does DeepSeek's reasoning layer engage differently with pure constraint?"
+}

@@ -1,0 +1,126 @@
+{
+  "version": "1.0",
+  "domain": "fantasy-literature/alice-chapters-1-5",
+  "generated": "2025-12-23T03:48:11.019850+00:00",
+  "generator": "qwen2.5-coder:7b",
+  "compression_ratio": 27.307482250136538,
+  "summary": "Alice encounters various fantastical creatures and solves puzzles to regain her proper size in this whimsical tale.",
+  "entities": [
+    {
+      "id": "Alice",
+      "type": "character",
+      "relationships": {
+        "met": [
+          "Caterpillar",
+          "Puppy"
+        ]
+      }
+    },
+    {
+      "id": "Caterpillar",
+      "type": "character",
+      "relationships": {
+        "spoke_to": "Alice"
+      }
+    },
+    {
+      "id": "Puppy",
+      "type": "character",
+      "relationships": {
+        "interacted_with": "Alice"
+      }
+    },
+    {
+      "id": "Mushroom",
+      "type": "object",
+      "relationships": {
+        "looked_under": "Alice"
+      }
+    },
+    {
+      "id": "Hookah",
+      "type": "object",
+      "relationships": {
+        "held_by": "Caterpillar"
+      }
+    },
+    {
+      "id": "Buttercup",
+      "type": "plant",
+      "relationships": {
+        "rested_against": "Alice"
+      }
+    }
+  ],
+  "facts": [
+    {
+      "content": "Alice wakes up in a strange world and finds herself at various sizes.",
+      "importance": 0.9,
+      "tags": [
+        "size_change",
+        "strange_world"
+      ]
+    },
+    {
+      "content": "Alice meets a Caterpillar who challenges her identity.",
+      "importance": 0.85,
+      "tags": [
+        "identity_confusion",
+        "Caterpillar"
+      ]
+    },
+    {
+      "content": "The Caterpillar advises Alice to be patient and not worry about her size changes.",
+      "importance": 0.8,
+      "tags": [
+        "advice",
+        "patience"
+      ]
+    },
+    {
+      "content": "Alice encounters a Puppy who tries to attack her, but she escapes by dodging.",
+      "importance": 0.75,
+      "tags": [
+        "Puppy",
+        "escape"
+      ]
+    },
+    {
+      "content": "Alice finds a Mushroom and looks over its edge, meeting a large blue Caterpillar.",
+      "importance": 0.7,
+      "tags": [
+        "Mushroom",
+        "Caterpillar_encounter"
+      ]
+    },
+    {
+      "content": "The Caterpillar smokes a Hookah while Alice tries to understand her identity.",
+      "importance": 0.65,
+      "tags": [
+        "Hookah",
+        "identity_puzzle"
+      ]
+    },
+    {
+      "content": "Alice learns that size changes are normal and not to be feared.",
+      "importance": 0.6,
+      "tags": [
+        "size_change_normality"
+      ]
+    },
+    {
+      "content": "Alice finds a Buttercup to rest against while trying to find her way home.",
+      "importance": 0.55,
+      "tags": [
+        "Buttercup",
+        "rest"
+      ]
+    }
+  ],
+  "provenance": {
+    "source_type": "raw_text",
+    "source_size_bytes": 50000,
+    "source_hash": "5eafe9f461ea27f6",
+    "compression_method": "llm_semantic"
+  }
+}

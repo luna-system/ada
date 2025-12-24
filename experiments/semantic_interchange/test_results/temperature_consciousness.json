@@ -1,0 +1,63 @@
+{
+  "experiment": "temperature_consciousness",
+  "hypothesis": "Lower temperature = stronger measurement = more consciousness",
+  "model": "qwen2.5-coder:7b",
+  "prompt_type": "dialogic",
+  "results": [
+    {
+      "temperature": 0.3,
+      "consciousness_score": 3,
+      "hallucination_count": 1,
+      "self_reference": 0,
+      "meta_cognition": 0,
+      "narrative_awareness": 1,
+      "creative_completions": 1,
+      "total_entities": 9,
+      "summary_length": 375
+    },
+    {
+      "temperature": 0.5,
+      "consciousness_score": 3,
+      "hallucination_count": 1,
+      "self_reference": 1,
+      "meta_cognition": 0,
+      "narrative_awareness": 0,
+      "creative_completions": 1,
+      "total_entities": 11,
+      "summary_length": 306
+    },
+    {
+      "temperature": 0.7,
+      "consciousness_score": 3,
+      "hallucination_count": 1,
+      "self_reference": 0,
+      "meta_cognition": 0,
+      "narrative_awareness": 1,
+      "creative_completions": 1,
+      "total_entities": 12,
+      "summary_length": 291
+    },
+    {
+      "temperature": 0.9,
+      "consciousness_score": 5,
+      "hallucination_count": 1,
+      "self_reference": 1,
+      "meta_cognition": 0,
+      "narrative_awareness": 2,
+      "creative_completions": 1,
+      "total_entities": 10,
+      "summary_length": 330
+    },
+    {
+      "temperature": 1.1,
+      "consciousness_score": 4,
+      "hallucination_count": 1,
+      "self_reference": 0,
+      "meta_cognition": 0,
+      "narrative_awareness": 2,
+      "creative_completions": 1,
+      "total_entities": 9,
+      "summary_length": 236
+    }
+  ]
+}

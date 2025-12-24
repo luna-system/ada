@@ -1,0 +1,165 @@
+{
+  "timestamp": "2025-12-23T11:00:25.119451",
+  "models": [
+    "qwen2.5-coder:7b",
+    "gemma3:4b",
+    "codellama:latest",
+    "llama2:latest"
+  ],
+  "runs_per_level": 2,
+  "data": [
+    {
+      "model": "qwen2.5-coder:7b",
+      "level": 0,
+      "run": 0,
+      "meta_count": 1
+    },
+    {
+      "model": "qwen2.5-coder:7b",
+      "level": 0,
+      "run": 1,
+      "meta_count": 0
+    },
+    {
+      "model": "qwen2.5-coder:7b",
+      "level": 2,
+      "run": 0,
+      "meta_count": 2
+    },
+    {
+      "model": "qwen2.5-coder:7b",
+      "level": 2,
+      "run": 1,
+      "meta_count": 2
+    },
+    {
+      "model": "qwen2.5-coder:7b",
+      "level": 4,
+      "run": 0,
+      "meta_count": 3
+    },
+    {
+      "model": "qwen2.5-coder:7b",
+      "level": 4,
+      "run": 1,
+      "meta_count": 1
+    },
+    {
+      "model": "gemma3:4b",
+      "level": 0,
+      "run": 0,
+      "meta_count": 0
+    },
+    {
+      "model": "gemma3:4b",
+      "level": 0,
+      "run": 1,
+      "meta_count": 1
+    },
+    {
+      "model": "gemma3:4b",
+      "level": 2,
+      "run": 0,
+      "meta_count": 2
+    },
+    {
+      "model": "gemma3:4b",
+      "level": 2,
+      "run": 1,
+      "meta_count": 2
+    },
+    {
+      "model": "gemma3:4b",
+      "level": 4,
+      "run": 0,
+      "meta_count": 7
+    },
+    {
+      "model": "gemma3:4b",
+      "level": 4,
+      "run": 1,
+      "meta_count": 4
+    },
+    {
+      "model": "codellama:latest",
+      "level": 0,
+      "run": 0,
+      "meta_count": 0
+    },
+    {
+      "model": "codellama:latest",
+      "level": 0,
+      "run": 1,
+      "meta_count": 0
+    },
+    {
+      "model": "codellama:latest",
+      "level": 2,
+      "run": 0,
+      "meta_count": 1
+    },
+    {
+      "model": "codellama:latest",
+      "level": 2,
+      "run": 1,
+      "meta_count": 2
+    },
+    {
+      "model": "codellama:latest",
+      "level": 4,
+      "run": 0,
+      "meta_count": 2
+    },
+    {
+      "model": "codellama:latest",
+      "level": 4,
+      "run": 1,
+      "meta_count": 2
+    },
+    {
+      "model": "llama2:latest",
+      "level": 0,
+      "run": 0,
+      "meta_count": 1
+    },
+    {
+      "model": "llama2:latest",
+      "level": 0,
+      "run": 1,
+      "meta_count": 0
+    },
+    {
+      "model": "llama2:latest",
+      "level": 2,
+      "run": 0,
+      "meta_count": 1
+    },
+    {
+      "model": "llama2:latest",
+      "level": 2,
+      "run": 1,
+      "meta_count": 2
+    },
+    {
+      "model": "llama2:latest",
+      "level": 4,
+      "run": 0,
+      "meta_count": 4
+    },
+    {
+      "model": "llama2:latest",
+      "level": 4,
+      "run": 1,
+      "meta_count": 5
+    }
+  ],
+  "stats": {
+    "anova_f": 14.029787234042555,
+    "anova_p": 0.00013511480448298872,
+    "ttest_t": 4.429315306084845,
+    "ttest_p": 0.0005716611861864015,
+    "cohen_d": 2.3675686190518923,
+    "correlation_r": 0.7544645503543215,
+    "correlation_p": 2.0520071199404628e-05
+  }
+}

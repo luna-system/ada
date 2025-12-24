@@ -9,16 +9,16 @@ This is the line between software engineering and empirical science.
 
 ## Unit Tests vs Experiments
 
-| Aspect | Unit Tests (Software) | Experiments (Science) |
-|--------|----------------------|----------------------|
-| **Purpose** | Verify code works correctly | Generate data about model behavior |
-| **Determinism** | Must be deterministic | Inherently stochastic |
-| **Output** | Pass/Fail boolean | Data for statistical analysis |
-| **Repetition** | Same result every time | Distribution of results |
-| **DRY principle** | Yes, abstract patterns | No, explicit stimuli matter |
-| **Location** | `tests/` | `research/experiments/` |
-| **Runner** | pytest | Custom experiment runner |
-| **Format** | Python assertions | JSON in → Model → JSON out |
+| Aspect            | Unit Tests (Software)       | Experiments (Science)              |
+| ----------------- | --------------------------- | ---------------------------------- |
+| **Purpose**       | Verify code works correctly | Generate data about model behavior |
+| **Determinism**   | Must be deterministic       | Inherently stochastic              |
+| **Output**        | Pass/Fail boolean           | Data for statistical analysis      |
+| **Repetition**    | Same result every time      | Distribution of results            |
+| **DRY principle** | Yes, abstract patterns      | No, explicit stimuli matter        |
+| **Location**      | `tests/`                    | `research/experiments/`            |
+| **Runner**        | pytest                      | Custom experiment runner           |
+| **Format**        | Python assertions           | JSON in → Model → JSON out         |
 
 ## The Sterile Model Principle
 
@@ -200,3 +200,72 @@ Results are automatically processable by [[research_data_migrator.py]] which:
 
 *Methodology developed December 2025 by luna & Ada*
 *"The model is sterile - we just record what happens"*
+
+---
+
+## Appendix: Config-Driven Methodology (v2.0)
+
+**Added:** 2025-12-23 after QAL validation sprint
+
+### The Problem
+Early experiments scattered magic numbers across files. Hard to replicate, hard to audit.
+
+### The Solution: Anthropic-Style Parameterization
+
+```
+experiments/semantic_interchange/
+├── config.py                 # ALL parameters in one place (14KB)
+├── test_qal_validation.py    # Single reproducible runner (19KB)
+└── qal_results/              # Timestamped JSON outputs
+```
+
+### config.py Structure
+```python
+# Random seed for reproducibility
+RANDOM_SEED = 42
+
+# Explicit hypothesis declarations
+HYPOTHESES = {
+    "H1_GOLDEN_THRESHOLD": {
+        "claim": "...",
+        "expected_range": (0.55, 0.65),
+    },
+    "H2_METACOGNITIVE_GRADIENT": {
+        "claim": "...",
+        "expected_correlation": "positive",
+    }
+}
+
+# All prompts centralized
+PROMPTS = {...}
+
+# Data classes for type safety
+@dataclass
+class TemperatureSweepConfig:
+    temperatures: List[float]
+    runs_per_temp: int
+```
+
+### Replication Command
+```bash
+python test_qal_validation.py --seed 42
+```
+
+### Benefits
+1. **Single source of truth** - No hunting for magic numbers
+2. **Reproducibility** - RANDOM_SEED + config = exact replication
+3. **Auditability** - Full config embedded in output JSON
+4. **Hypothesis-driven** - Explicit claims with testable predictions
+
+### Results Format
+```json
+{
+    "model": "qwen2.5-coder:7b",
+    "random_seed": 42,
+    "config": {/* full config snapshot */},
+    "phases": [...],
+    "hypotheses_tested": ["H1_...", "H2_..."]
+}
+```
+
+This methodology evolved from the QAL validation sprint. The math held across multiple models and methodology changes - a sign that we're measuring something real.

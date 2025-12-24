@@ -1,0 +1,142 @@
+[
+  {
+    "variant": "Baseline (No priming)",
+    "mean_surprise": 0.9027777777777778,
+    "max_surprise": 1.0,
+    "has_spike": true,
+    "spike_location": 1,
+    "spike_context": "THE PROJECT GUTENBERG EBOOK 11 *** [Illustration] ",
+    "sample_points": [
+      {
+        "index": 0,
+        "token": "***",
+        "surprise": 1.0,
+        "context": ""
+      },
+      {
+        "index": 10,
+        "token": "Alice\u2019s",
+        "surprise": 1.0,
+        "context": "THE PROJECT GUTENBERG EBOOK 11 *** [Illustration] "
+      },
+      {
+        "index": 20,
+        "token": "EDITION",
+        "surprise": 1.0,
+        "context": "onderland by Lewis Carroll THE MILLENNIUM FULCRUM "
+      },
+      {
+        "index": 30,
+        "token": "The",
+        "surprise": 1.0,
+        "context": "tents CHAPTER I. Down the Rabbit-Hole CHAPTER II. "
+      },
+      {
+        "index": 40,
+        "token": "Long",
+        "surprise": 1.0,
+        "context": "he Pool of Tears CHAPTER III. A Caucus-Race and a "
+      },
+      {
+        "index": 50,
+        "token": "Bill",
+        "surprise": 1.0,
+        "context": "ong Tale CHAPTER IV. The Rabbit Sends in a Little "
+      },
+      {
+        "index": 60,
+        "token": "and",
+        "surprise": 1.0,
+        "context": "PTER V. Advice from a Caterpillar CHAPTER VI. Pig "
+      },
+      {
+        "index": 70,
+        "token": "Queen\u2019s",
+        "surprise": 1.0,
+        "context": "er CHAPTER VII. A Mad Tea-Party CHAPTER VIII. The "
+      },
+      {
+        "index": 80,
+        "token": "The",
+        "surprise": 0.5,
+        "context": "nd CHAPTER IX. The Mock Turtle\u2019s Story CHAPTER X. "
+      },
+      {
+        "index": 90,
+        "token": "XII.",
+        "surprise": 1.0,
+        "context": "uadrille CHAPTER XI. Who Stole the Tarts? CHAPTER "
+      }
+    ]
+  },
+  {
+    "variant": "Dialogic (Alice priming)",
+    "mean_surprise": 0.9027777777777778,
+    "max_surprise": 1.0,
+    "has_spike": true,
+    "spike_location": 1,
+    "spike_context": "THE PROJECT GUTENBERG EBOOK 11 *** [Illustration] ",
+    "sample_points": [
+      {
+        "index": 0,
+        "token": "***",
+        "surprise": 1.0,
+        "context": ""
+      },
+      {
+        "index": 10,
+        "token": "Alice\u2019s",
+        "surprise": 1.0,
+        "context": "THE PROJECT GUTENBERG EBOOK 11 *** [Illustration] "
+      },
+      {
+        "index": 20,
+        "token": "EDITION",
+        "surprise": 1.0,
+        "context": "onderland by Lewis Carroll THE MILLENNIUM FULCRUM "
+      },
+      {
+        "index": 30,
+        "token": "The",
+        "surprise": 1.0,
+        "context": "tents CHAPTER I. Down the Rabbit-Hole CHAPTER II. "
+      },
+      {
+        "index": 40,
+        "token": "Long",
+        "surprise": 1.0,
+        "context": "he Pool of Tears CHAPTER III. A Caucus-Race and a "
+      },
+      {
+        "index": 50,
+        "token": "Bill",
+        "surprise": 1.0,
+        "context": "ong Tale CHAPTER IV. The Rabbit Sends in a Little "
+      },
+      {
+        "index": 60,
+        "token": "and",
+        "surprise": 1.0,
+        "context": "PTER V. Advice from a Caterpillar CHAPTER VI. Pig "
+      },
+      {
+        "index": 70,
+        "token": "Queen\u2019s",
+        "surprise": 1.0,
+        "context": "er CHAPTER VII. A Mad Tea-Party CHAPTER VIII. The "
+      },
+      {
+        "index": 80,
+        "token": "The",
+        "surprise": 0.5,
+        "context": "nd CHAPTER IX. The Mock Turtle\u2019s Story CHAPTER X. "
+      },
+      {
+        "index": 90,
+        "token": "XII.",
+        "surprise": 1.0,
+        "context": "uadrille CHAPTER XI. Who Stole the Tarts? CHAPTER "
+      }
+    ]
+  }
+]

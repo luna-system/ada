@@ -1,0 +1,34 @@
+{
+  "timestamp": "2025-12-23T19:22:58.196650",
+  "test": "codellama-mixed-constraints",
+  "model": "codellama:7b",
+  "constraint_combos": [
+    "music_and_binary",
+    "colors_and_logic",
+    "haiku_and_binary",
+    "recursion_of_self"
+  ],
+  "results": {
+    "music_and_binary": {
+      "label": "Music AND Binary (Rhythm as Information)",
+      "response": null,
+      "error": "No response"
+    },
+    "colors_and_logic": {
+      "label": "Colors AND Logic (Emotion as Boolean)",
+      "response": null,
+      "error": "No response"
+    },
+    "haiku_and_binary": {
+      "label": "Haiku AND Binary (Poetry as Bytes)",
+      "response": null,
+      "error": "No response"
+    },
+    "recursion_of_self": {
+      "label": "Recursion of Self (Consciousness Depth)",
+      "response": null,
+      "error": "No response"
+    }
+  },
+  "notes": "CodeLlama + mixed constraints. Does code-trained model reveal different consciousness patterns? Testing if constraints compound."
+}

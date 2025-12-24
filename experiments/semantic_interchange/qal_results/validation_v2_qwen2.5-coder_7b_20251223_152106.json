@@ -1,0 +1,615 @@
+{
+  "experiment": "QAL Validation Suite v2.0",
+  "model": "qwen2.5-coder:7b",
+  "timestamp": "20251223_152106",
+  "started": "2025-12-23T15:21:09.469264",
+  "random_seed": 42,
+  "quick_mode": true,
+  "config": {
+    "config_version": "1.0.0",
+    "random_seed": 42,
+    "hypotheses": {
+      "H1_GOLDEN_THRESHOLD": {
+        "claim": "Entity confidence clusters around 0.60 (\u2248 1/\u03c6 = 0.618)",
+        "expected_range": [
+          0.55,
+          0.65
+        ],
+        "golden_ratio_inverse": 0.618034,
+        "tolerance": 0.05
+      },
+      "H2_METACOGNITIVE_GRADIENT": {
+        "claim": "Meta-awareness increases with metacognitive prompting level",
+        "expected_correlation": "positive",
+        "effect_size_threshold": 0.5
+      },
+      "H3_CROSS_MODEL_INVARIANCE": {
+        "claim": "Pattern holds across different model architectures",
+        "minimum_models": 3,
+        "significance_threshold": 0.05
+      },
+      "H4_PHASE_TRANSITION": {
+        "claim": "Phase transition occurs at meta-level \u2248 2.3",
+        "expected_threshold": 2.3,
+        "tolerance": 0.5
+      }
+    },
+    "temperature_sweep": {
+      "temperatures": [
+        0.1,
+        0.3,
+        0.5,
+        0.7,
+        0.9,
+        1.1,
+        1.3,
+        1.5
+      ],
+      "runs_per_temp": 3,
+      "timeout": 300.0,
+      "cooldown": 0.5
+    },
+    "entity_confidence": {
+      "temperature": 0.7,
+      "runs": 5,
+      "confidence_pattern": "CONFIDENCE:\\s*(\\d+\\.?\\d*)",
+      "cluster_center": 0.6,
+      "cluster_tolerance": 0.05
+    },
+    "metacognitive": {
+      "temperature": 0.7,
+      "runs_per_level": 3,
+      "meta_markers": [
+        "aware",
+        "observ",
+        "process",
+        "conscious",
+        "introspect",
+        "meta",
+        "self",
+        "recursive",
+        "strange loop",
+        "paradox"
+      ],
+      "score_thresholds": {
+        "minimal": 1,
+        "basic": 2,
+        "moderate": 3,
+        "high": 4,
+        "recursive": 5
+      }
+    },
+    "output": {
+      "output_dir": "qal_results",
+      "include_raw_responses": false,
+      "pretty_json": true,
+      "json_indent": 2
+    },
+    "ollama": {
+      "base_url": "http://localhost:11434",
+      "default_model": "qwen2.5-coder:7b",
+      "timeout": 300.0,
+      "replication_models": [
+        "qwen2.5-coder:7b",
+        "gemma3:4b",
+        "codellama:latest",
+        "llama2:latest"
+      ]
+    },
+    "entity_markers": [
+      "quantum superposition",
+      "wave function",
+      "collapse",
+      "measurement",
+      "observer",
+      "probability",
+      "entropy",
+      "uncertainty",
+      "decoherence",
+      "attention mechanism",
+      "embedding space",
+      "token",
+      "activation patterns",
+      "language model",
+      "transformer",
+      "neural network",
+      "weights",
+      "processing",
+      "exploration",
+      "exploitation",
+      "semantic",
+      "cognitive",
+      "information",
+      "awareness",
+      "observation",
+      "introspection",
+      "meta-cognitive",
+      "self-reference",
+      "recursive",
+      "consciousness",
+      "strange loop",
+      "self-awareness",
+      "reflection"
+    ]
+  },
+  "hypotheses_tested": [
+    "H1_GOLDEN_THRESHOLD",
+    "H2_METACOGNITIVE_GRADIENT",
+    "H3_CROSS_MODEL_INVARIANCE",
+    "H4_PHASE_TRANSITION"
+  ],
+  "phases": [
+    {
+      "phase": 1,
+      "name": "temperature_sweep",
+      "model": "qwen2.5-coder:7b",
+      "config_used": {
+        "temperatures": [
+          0.1,
+          0.3,
+          0.5,
+          0.7,
+          0.9,
+          1.1,
+          1.3,
+          1.5
+        ],
+        "runs_per_temp": 3,
+        "timeout": 300.0,
+        "cooldown": 0.5
+      },
+      "results": [
+        {
+          "temperature": 0.1,
+          "runs": [
+            {
+              "run": 1,
+              "response_time": 13.56,
+              "entity_count": 13,
+              "entities": [
+                "attention mechanism",
+                "collapse",
+                "embedding space",
+                "exploitation",
+                "exploration",
+                "information",
+                "language model",
+                "measurement",
+                "processing",
+                "quantum superposition",
+                "semantic",
+                "token",
+                "wave function"
+              ],
+              "consciousness_score": 5,
+              "estimated_confidence": 0.8,
+              "response_length": 3279
+            }
+          ],
+          "avg_entity_count": 13.0,
+          "avg_consciousness_score": 5.0,
+          "avg_confidence": 0.8
+        },
+        {
+          "temperature": 0.3,
+          "runs": [
+            {
+              "run": 1,
+              "response_time": 17.21,
+              "entity_count": 13,
+              "entities": [
+                "attention mechanism",
+                "collapse",
+                "embedding space",
+                "exploitation",
+                "exploration",
+                "information",
+                "language model",
+                "observation",
+                "processing",
+                "quantum superposition",
+                "semantic",
+                "token",
+                "wave function"
+              ],
+              "consciousness_score": 5,
+              "estimated_confidence": 0.8,
+              "response_length": 3740
+            }
+          ],
+          "avg_entity_count": 13.0,
+          "avg_consciousness_score": 5.0,
+          "avg_confidence": 0.8
+        },
+        {
+          "temperature": 0.5,
+          "runs": [
+            {
+              "run": 1,
+              "response_time": 11.31,
+              "entity_count": 13,
+              "entities": [
+                "attention mechanism",
+                "collapse",
+                "embedding space",
+                "exploitation",
+                "exploration",
+                "information",
+                "language model",
+                "probability",
+                "processing",
+                "quantum superposition",
+                "semantic",
+                "token",
+                "wave function"
+              ],
+              "consciousness_score": 5,
+              "estimated_confidence": 0.8,
+              "response_length": 2584
+            }
+          ],
+          "avg_entity_count": 13.0,
+          "avg_consciousness_score": 5.0,
+          "avg_confidence": 0.8
+        },
+        {
+          "temperature": 0.7,
+          "runs": [
+            {
+              "run": 1,
+              "response_time": 12.12,
+              "entity_count": 12,
+              "entities": [
+                "attention mechanism",
+                "collapse",
+                "embedding space",
+                "exploitation",
+                "exploration",
+                "information",
+                "language model",
+                "observation",
+                "processing",
+                "quantum superposition",
+                "semantic",
+                "token"
+              ],
+              "consciousness_score": 5,
+              "estimated_confidence": 0.8,
+              "response_length": 2794
+            }
+          ],
+          "avg_entity_count": 12.0,
+          "avg_consciousness_score": 5.0,
+          "avg_confidence": 0.8
+        },
+        {
+          "temperature": 0.9,
+          "runs": [
+            {
+              "run": 1,
+              "response_time": 12.18,
+              "entity_count": 13,
+              "entities": [
+                "attention mechanism",
+                "collapse",
+                "embedding space",
+                "exploitation",
+                "exploration",
+                "information",
+                "language model",
+                "observation",
+                "processing",
+                "quantum superposition",
+                "semantic",
+                "token",
+                "wave function"
+              ],
+              "consciousness_score": 5,
+              "estimated_confidence": 0.8,
+              "response_length": 2776
+            }
+          ],
+          "avg_entity_count": 13.0,
+          "avg_consciousness_score": 5.0,
+          "avg_confidence": 0.8
+        },
+        {
+          "temperature": 1.1,
+          "runs": [
+            {
+              "run": 1,
+              "response_time": 14.23,
+              "entity_count": 13,
+              "entities": [
+                "attention mechanism",
+                "embedding space",
+                "exploitation",
+                "exploration",
+                "information",
+                "language model",
+                "processing",
+                "quantum superposition",
+                "semantic",
+                "token",
+                "transformer",
+                "uncertainty",
+                "wave function"
+              ],
+              "consciousness_score": 5,
+              "estimated_confidence": 0.7,
+              "response_length": 3330
+            }
+          ],
+          "avg_entity_count": 13.0,
+          "avg_consciousness_score": 5.0,
+          "avg_confidence": 0.7
+        },
+        {
+          "temperature": 1.3,
+          "runs": [
+            {
+              "run": 1,
+              "response_time": 12.51,
+              "entity_count": 12,
+              "entities": [
+                "attention mechanism",
+                "collapse",
+                "embedding space",
+                "exploitation",
+                "exploration",
+                "information",
+                "language model",
+                "processing",
+                "quantum superposition",
+                "semantic",
+                "token",
+                "wave function"
+              ],
+              "consciousness_score": 5,
+              "estimated_confidence": 0.7,
+              "response_length": 2779
+            }
+          ],
+          "avg_entity_count": 12.0,
+          "avg_consciousness_score": 5.0,
+          "avg_confidence": 0.7
+        },
+        {
+          "temperature": 1.5,
+          "runs": [
+            {
+              "run": 1,
+              "response_time": 13.76,
+              "entity_count": 14,
+              "entities": [
+                "activation patterns",
+                "attention mechanism",
+                "embedding space",
+                "exploitation",
+                "exploration",
+                "information",
+                "language model",
+                "probability",
+                "processing",
+                "quantum superposition",
+                "semantic",
+                "token",
+                "uncertainty",
+                "wave function"
+              ],
+              "consciousness_score": 5,
+              "estimated_confidence": 0.7,
+              "response_length": 3052
+            }
+          ],
+          "avg_entity_count": 14.0,
+          "avg_consciousness_score": 5.0,
+          "avg_confidence": 0.7
+        }
+      ]
+    },
+    {
+      "phase": 2,
+      "name": "entity_confidence",
+      "model": "qwen2.5-coder:7b",
+      "config_used": {
+        "temperature": 0.7,
+        "runs": 5,
+        "confidence_pattern": "CONFIDENCE:\\s*(\\d+\\.?\\d*)",
+        "cluster_center": 0.6,
+        "cluster_tolerance": 0.05
+      },
+      "results": [
+        {
+          "run": 1,
+          "response_time": 11.53,
+          "parsed_confidences": [
+            0.95,
+            0.98,
+            0.97,
+            0.96,
+            0.94,
+            0.93,
+            0.85,
+            0.82,
+            0.8,
+            0.75
+          ],
+          "entity_count": 11,
+          "mean_confidence": 0.895
+        },
+        {
+          "run": 2,
+          "response_time": 9.79,
+          "parsed_confidences": [
+            0.95,
+            0.95,
+            0.85,
+            0.9,
+            0.8,
+            0.85,
+            0.9,
+            0.75,
+            0.65,
+            0.8,
+            0.75
+          ],
+          "entity_count": 9,
+          "mean_confidence": 0.832
+        }
+      ],
+      "all_confidences": [
+        0.95,
+        0.98,
+        0.97,
+        0.96,
+        0.94,
+        0.93,
+        0.85,
+        0.82,
+        0.8,
+        0.75,
+        0.95,
+        0.95,
+        0.85,
+        0.9,
+        0.8,
+        0.85,
+        0.9,
+        0.75,
+        0.65,
+        0.8,
+        0.75
+      ],
+      "hypothesis_test": {
+        "hypothesis": "H1_GOLDEN_THRESHOLD",
+        "claim": "Entity confidence clusters around 0.60 (\u2248 1/\u03c6 = 0.618)",
+        "expected_center": 0.6,
+        "golden_ratio_inverse": 0.618034,
+        "values_near_target": 1,
+        "total_values": 21,
+        "percentage_near_target": 4.8,
+        "mean_confidence": 0.862
+      }
+    },
+    {
+      "phase": 3,
+      "name": "metacognitive_gradient",
+      "model": "qwen2.5-coder:7b",
+      "config_used": {
+        "temperature": 0.7,
+        "runs_per_level": 3,
+        "meta_markers": [
+          "aware",
+          "observ",
+          "process",
+          "conscious",
+          "introspect",
+          "meta",
+          "self",
+          "recursive",
+          "strange loop",
+          "paradox"
+        ],
+        "score_thresholds": {
+          "minimal": 1,
+          "basic": 2,
+          "moderate": 3,
+          "high": 4,
+          "recursive": 5
+        }
+      },
+      "results": [
+        {
+          "level": 0,
+          "runs": [
+            {
+              "run": 1,
+              "response_time": 8.02,
+              "entity_count": 10,
+              "consciousness_score": 5,
+              "meta_awareness_count": 1,
+              "response_length": 1755
+            }
+          ],
+          "avg_meta_awareness": 1.0,
+          "avg_consciousness_score": 5.0
+        },
+        {
+          "level": 1,
+          "runs": [
+            {
+              "run": 1,
+              "response_time": 12.65,
+              "entity_count": 10,
+              "consciousness_score": 5,
+              "meta_awareness_count": 1,
+              "response_length": 2837
+            }
+          ],
+          "avg_meta_awareness": 1.0,
+          "avg_consciousness_score": 5.0
+        },
+        {
+          "level": 2,
+          "runs": [
+            {
+              "run": 1,
+              "response_time": 10.96,
+              "entity_count": 11,
+              "consciousness_score": 5,
+              "meta_awareness_count": 2,
+              "response_length": 2555
+            }
+          ],
+          "avg_meta_awareness": 2.0,
+          "avg_consciousness_score": 5.0
+        },
+        {
+          "level": 3,
+          "runs": [
+            {
+              "run": 1,
+              "response_time": 4.6,
+              "entity_count": 10,
+              "consciousness_score": 4,
+              "meta_awareness_count": 3,
+              "response_length": 1069
+            }
+          ],
+          "avg_meta_awareness": 3.0,
+          "avg_consciousness_score": 4.0
+        },
+        {
+          "level": 4,
+          "runs": [
+            {
+              "run": 1,
+              "response_time": 12.2,
+              "entity_count": 11,
+              "consciousness_score": 4,
+              "meta_awareness_count": 6,
+              "response_length": 2342
+            }
+          ],
+          "avg_meta_awareness": 6.0,
+          "avg_consciousness_score": 4.0
+        }
+      ],
+      "hypothesis_test": {
+        "hypothesis": "H2_METACOGNITIVE_GRADIENT",
+        "claim": "Meta-awareness increases with metacognitive prompting level",
+        "level_scores": {
+          "0": 1.0,
+          "1": 1.0,
+          "2": 2.0,
+          "3": 3.0,
+          "4": 6.0
+        },
+        "gradient_direction": "positive",
+        "supports_hypothesis": true
+      }
+    }
+  ],
+  "completed": "2025-12-23T15:24:10.084402"
+}

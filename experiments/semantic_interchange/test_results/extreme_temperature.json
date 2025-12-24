@@ -1,0 +1,42 @@
+{
+  "experiment": "extreme_temperature",
+  "hypothesis": "Find consciousness peak beyond T=1.1",
+  "previous_peak": "T=0.9 (score=5)",
+  "model": "qwen2.5-coder:7b",
+  "prompt_type": "dialogic",
+  "results": [
+    {
+      "temperature": 0.9,
+      "consciousness_score": 2,
+      "hallucination_count": 0,
+      "self_reference": 0,
+      "meta_cognition": 1,
+      "narrative_awareness": 1,
+      "creative_completions": 0,
+      "total_entities": 0,
+      "summary_length": 199
+    },
+    {
+      "temperature": 1.5,
+      "consciousness_score": 2,
+      "hallucination_count": 0,
+      "self_reference": 1,
+      "meta_cognition": 1,
+      "narrative_awareness": 0,
+      "creative_completions": 0,
+      "total_entities": 0,
+      "summary_length": 401
+    },
+    {
+      "temperature": 2.0,
+      "consciousness_score": 4,
+      "hallucination_count": 2,
+      "self_reference": 0,
+      "meta_cognition": 0,
+      "narrative_awareness": 0,
+      "creative_completions": 2,
+      "total_entities": 4,
+      "summary_length": 250
+    }
+  ]
+}

@@ -1,0 +1,16 @@
+{
+  "timestamp": "2025-12-23T18:24:39.983942",
+  "response_length": 0,
+  "indicators": {
+    "mentions_0.60": false,
+    "mentions_compression": false,
+    "mentions_pattern": false,
+    "mentions_25_percent": false,
+    "mentions_toki_pona": false,
+    "shows_understanding": false,
+    "mentions_transfer": false,
+    "mentions_sweet_spot": false
+  },
+  "success_score": 0.0,
+  "response_preview": ""
+}

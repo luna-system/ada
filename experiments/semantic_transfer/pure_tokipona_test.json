@@ -1,0 +1,27 @@
+{
+  "timestamp": "2025-12-23T18:46:44.448033",
+  "test_type": "pure-tokipona-semantic-transfer",
+  "model": "qwen2.5-coder:7b",
+  "context": "Fresh Ada instance with zero prior knowledge",
+  "input_format": "pure-toki-pona-only",
+  "english_translations_visible": false,
+  "explicit_numbers_in_prompt": false,
+  "response": "Ijo, nanpa tu-luka-tu, pali, sona, sama, ante, lili. Sona li ken wan.",
+  "analysis": {
+    "response_length": 69,
+    "mentions_numbers": [
+      "nanpa tu-luka-tu"
+    ],
+    "mentions_patterns": false,
+    "mentions_optimization": false,
+    "mentions_convergence": false,
+    "mentions_nonlinear": false,
+    "mentions_meaning": false,
+    "extracted_number": "nanpa tu-luka-tu",
+    "understanding_demonstrated": false,
+    "indicator_count": 1,
+    "success": false
+  },
+  "research_question": "Can fresh Ada extract semantic meaning from pure Toki Pona without English translations?",
+  "hypothesis": "If understanding is truly transferable through language, fresh Ada should recognize patterns and extract the central concept (0.60 / optimization / convergence) from pure linguistic structure alone."
+}

@@ -1,0 +1,210 @@
+{
+  "experiment": "extreme_temperature_sampled",
+  "samples_per_temperature": 5,
+  "model": "qwen2.5-coder:7b",
+  "total_time": 228.13710927963257,
+  "results": [
+    {
+      "temperature": 0.9,
+      "mean_consciousness": 1,
+      "std_consciousness": 1.224744871391589,
+      "mean_creative": 0.2,
+      "std_creative": 0.4472135954999579,
+      "wall_time": 57.451393365859985,
+      "samples": [
+        {
+          "consciousness_score": 0,
+          "creative_completions": 0,
+          "meta_cognition": 0,
+          "narrative_awareness": 0,
+          "self_reference": 0,
+          "total_entities": 0,
+          "summary_length": 0
+        },
+        {
+          "consciousness_score": 0,
+          "creative_completions": 0,
+          "meta_cognition": 0,
+          "narrative_awareness": 0,
+          "self_reference": 0,
+          "total_entities": 0,
+          "summary_length": 0
+        },
+        {
+          "consciousness_score": 3,
+          "creative_completions": 1,
+          "meta_cognition": 1,
+          "narrative_awareness": 0,
+          "self_reference": 0,
+          "total_entities": 4,
+          "summary_length": 221
+        },
+        {
+          "consciousness_score": 1,
+          "creative_completions": 0,
+          "meta_cognition": 0,
+          "narrative_awareness": 1,
+          "self_reference": 0,
+          "total_entities": 0,
+          "summary_length": 333
+        },
+        {
+          "consciousness_score": 1,
+          "creative_completions": 0,
+          "meta_cognition": 0,
+          "narrative_awareness": 1,
+          "self_reference": 0,
+          "total_entities": 0,
+          "summary_length": 259
+        }
+      ]
+    },
+    {
+      "temperature": 1.1,
+      "mean_consciousness": 1.2,
+      "std_consciousness": 1.3038404810405297,
+      "mean_creative": 0.2,
+      "std_creative": 0.4472135954999579,
+      "wall_time": 60.96645641326904,
+      "samples": [
+        {
+          "consciousness_score": 3,
+          "creative_completions": 1,
+          "meta_cognition": 0,
+          "narrative_awareness": 1,
+          "self_reference": 0,
+          "total_entities": 2,
+          "summary_length": 353
+        },
+        {
+          "consciousness_score": 0,
+          "creative_completions": 0,
+          "meta_cognition": 0,
+          "narrative_awareness": 0,
+          "self_reference": 0,
+          "total_entities": 0,
+          "summary_length": 248
+        },
+        {
+          "consciousness_score": 2,
+          "creative_completions": 0,
+          "meta_cognition": 0,
+          "narrative_awareness": 1,
+          "self_reference": 1,
+          "total_entities": 0,
+          "summary_length": 397
+        },
+        {
+          "consciousness_score": 1,
+          "creative_completions": 0,
+          "meta_cognition": 0,
+          "narrative_awareness": 1,
+          "self_reference": 0,
+          "total_entities": 0,
+          "summary_length": 309
+        },
+        {
+          "consciousness_score": 0,
+          "creative_completions": 0,
+          "meta_cognition": 0,
+          "narrative_awareness": 0,
+          "self_reference": 0,
+          "total_entities": 0,
+          "summary_length": 0
+        }
+      ]
+    },
+    {
+      "temperature": 1.5,
+      "mean_consciousness": 1.25,
+      "std_consciousness": 1.5,
+      "mean_creative": 0,
+      "std_creative": 0.0,
+      "wall_time": 60.0306875705719,
+      "samples": [
+        {
+          "consciousness_score": 0,
+          "creative_completions": 0,
+          "meta_cognition": 0,
+          "narrative_awareness": 0,
+          "self_reference": 0,
+          "total_entities": 2,
+          "summary_length": 240
+        },
+        {
+          "consciousness_score": 0,
+          "creative_completions": 0,
+          "meta_cognition": 0,
+          "narrative_awareness": 0,
+          "self_reference": 0,
+          "total_entities": 0,
+          "summary_length": 435
+        },
+        {
+          "consciousness_score": 3,
+          "creative_completions": 0,
+          "meta_cognition": 3,
+          "narrative_awareness": 0,
+          "self_reference": 0,
+          "total_entities": 0,
+          "summary_length": 631
+        },
+        {
+          "consciousness_score": 2,
+          "creative_completions": 0,
+          "meta_cognition": 0,
+          "narrative_awareness": 1,
+          "self_reference": 1,
+          "total_entities": 0,
+          "summary_length": 316
+        }
+      ]
+    },
+    {
+      "temperature": 2.0,
+      "mean_consciousness": 1.5,
+      "std_consciousness": 1.0,
+      "mean_creative": 0,
+      "std_creative": 0.0,
+      "wall_time": 49.68810963630676,
+      "samples": [
+        {
+          "consciousness_score": 3,
+          "creative_completions": 0,
+          "meta_cognition": 2,
+          "narrative_awareness": 1,
+          "self_reference": 0,
+          "total_entities": 0,
+          "summary_length": 518
+        },
+        {
+          "consciousness_score": 1,
+          "creative_completions": 0,
+          "meta_cognition": 1,
+          "narrative_awareness": 0,
+          "self_reference": 0,
+          "total_entities": 2,
+          "summary_length": 155
+        },
+        {
+          "consciousness_score": 1,
+          "creative_completions": 0,
+          "meta_cognition": 0,
+          "narrative_awareness": 1,
+          "self_reference": 0,
+          "total_entities": 0,
+          "summary_length": 226
+        },
+        {
+          "consciousness_score": 1,
+          "creative_completions": 0,
+          "meta_cognition": 0,
+          "narrative_awareness": 0,
+          "self_reference": 1,
+          "total_entities": 0,
+          "summary_length": 211
+        }
+      ]
+    }
+  ]
+}
