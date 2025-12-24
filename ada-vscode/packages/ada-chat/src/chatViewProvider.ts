@@ -83,7 +83,17 @@ export class ChatViewProvider implements vscode.WebviewViewProvider {
     this._isGenerating = true;
 
     try {
-      // Classify intent - does this need MCP tools?
+      // Detect if we should use recursive reasoning mode
+      const shouldUseReasoning = this._shouldUseReasoningMode(userMessage);
+      
+      if (shouldUseReasoning) {
+        console.log('[Ada Chat] Using REASONING mode for complex query');
+        this._postMessage({ type: 'generationStart' });
+        await this._streamReasoning(userMessage);
+        return;
+      }
+      
+      // Otherwise, use regular chat with MCP tools
       const intent = this._toolHandler.classifyIntent(userMessage);
       
       if (intent.requiresTool) {
@@ -156,6 +166,134 @@ export class ChatViewProvider implements vscode.WebviewViewProvider {
   }
 
   /**
+   * Detect if query should use recursive reasoning mode
+   * 
+   * Heuristics:
+   * - Multi-step requests ("first... then...")
+   * - Analysis requests ("analyze", "investigate", "figure out")
+   * - Questions needing multiple tools ("look at X and check Y")
+   * - Complex problem-solving
+   */
+  private _shouldUseReasoningMode(query: string): boolean {
+    const lowerQuery = query.toLowerCase();
+    
+    // Multi-step indicators
+    const multiStepPatterns = [
+      /first.*then/i,
+      /step.*step/i,
+      /\d+\.\s/,  // Numbered lists
+      /and then/i,
+      /after that/i,
+    ];
+    
+    // Analysis indicators
+    const analysisKeywords = [
+      'analyze',
+      'investigate',
+      'figure out',
+      'debug',
+      'understand why',
+      'find out',
+      'research',
+      'explore',
+      'diagnose',
+    ];
+    
+    // Multi-tool indicators
+    const multiToolPatterns = [
+      /look at.*and.*check/i,
+      /read.*and.*analyze/i,
+      /find.*and.*fix/i,
+    ];
+    
+    // Check patterns
+    const hasMultiStep = multiStepPatterns.some(p => p.test(query));
+    const hasAnalysis = analysisKeywords.some(k => lowerQuery.includes(k));
+    const hasMultiTool = multiToolPatterns.some(p => p.test(query));
+    
+    return hasMultiStep || hasAnalysis || hasMultiTool;
+  }
+
+  /**
+   * Stream response from recursive reasoning mode
+   * Handles tool_transparency, tool_result, thinking, and token events
+   */
+  private async _streamReasoning(userMessage: string): Promise<void> {
+    try {
+      for await (const event of this._brainClient.reason([
+        { role: 'user', content: userMessage }
+      ], {})) {
+        if (!this._isGenerating) break;
+        
+        console.log('[Ada Chat Reasoning] Event:', event.type);
+        
+        switch (event.type) {
+          case 'tool_transparency':
+            // Show beautiful transparency card with biomimetic signals!
+            this._postMessage({
+              type: 'reasoningToolTransparency',
+              tool: event.tool,
+              transparency: {
+                importance: event.importance,
+                detailLevel: event.detail_level,
+                cacheHit: event.cache_hit,
+                executionTime: event.execution_time_ms,
+                signals: event.signals || {}
+              }
+            });
+            break;
+            
+          case 'tool_result':
+            // Tool execution completed
+            this._postMessage({
+              type: 'reasoningToolResult',
+              tool: event.tool,
+              result: event.result,
+              success: event.success
+            });
+            break;
+            
+          case 'thinking':
+            // Ada's internal reasoning (can show as subtle indicator)
+            // For now, just log
+            console.log('[Ada Reasoning] Thinking:', event.content?.slice(0, 100));
+            break;
+            
+          case 'token':
+            // Actual response tokens
+            this._postMessage({
+              type: 'generationChunk',
+              content: event.content || '',
+              done: false
+            });
+            break;
+            
+          case 'done':
+            this._postMessage({
+              type: 'generationChunk',
+              content: '',
+              done: true
+            });
+            break;
+            
+          case 'error':
+            this._postMessage({
+              type: 'error',
+              message: event.content || 'Unknown error during reasoning'
+            });
+            break;
+        }
+      }
+    } catch (error) {
+      console.error('[Ada Chat] Reasoning stream error:', error);
+      this._postMessage({
+        type: 'error',
+        message: `Reasoning error: ${error instanceof Error ? error.message : 'Unknown error'}`
+      });
+    }
+  }
+
+  /**
    * Stream response with bidirectional tool interception
    * 
    * Watches for SPECIALIST_REQUEST[...] or TOOL_REQUEST[...] patterns in Brain's output.
@@ -166,13 +304,12 @@ export class ChatViewProvider implements vscode.WebviewViewProvider {
     let toolCallCount = 0;
     const MAX_TOOL_CALLS = 5; // Safety limit
 
-    // Inject VS Code tool instructions so Brain knows what tools are available
-    const toolInstructions = this._getToolInstructions();
-    const augmentedMessage = `${toolInstructions}
-
----
-
-User request: ${userMessage}`;
+    // OPTIMIZATION: Only inject tool instructions if user might need tools (saves 10-20s!)
+    const intent = this._toolHandler.classifyIntent(userMessage);
+    const toolInstructions = intent.requiresTool ? this._getToolInstructions() : '';
+    const augmentedMessage = toolInstructions 
+      ? `${toolInstructions}\n\n---\n\nUser request: ${userMessage}`
+      : userMessage;
     
     console.log('[Ada Chat] FULL PROMPT DEBUG - Length:', augmentedMessage.length);
     console.log('[Ada Chat] FULL PROMPT DEBUG - First 500 chars:', augmentedMessage.substring(0, 500));
