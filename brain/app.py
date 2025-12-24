@@ -206,6 +206,7 @@ from brain.prompt_builder import PromptAssembler
 from brain.notices_client import get_active_notices
 from brain.router import ContextualRouter, RequestContext
 from brain.response_cache import ResponseCache, get_response_cache
+from brain.reasoning import ReasoningLoopController
 
 # Ollama + models
 OLLAMA_API_URL = config.OLLAMA_API_URL
@@ -1204,6 +1205,102 @@ async def chat_stream(request: Request):
 
     return StreamingResponse(
         generate(), 
+        media_type='text/event-stream',
+        headers={
+            'Cache-Control': 'no-cache',
+            'Connection': 'keep-alive',
+            'Access-Control-Allow-Origin': '*',
+            'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
+            'Access-Control-Allow-Headers': 'Content-Type, Accept, Authorization, X-Client-Type',
+        }
+    )
+
+
+@app.post('/v1/chat/reason', tags=['chat'])
+async def chat_reason(request: Request):
+    """
+    Recursive reasoning chat endpoint using Server-Sent Events (SSE).
+    
+    Ada thinks step-by-step, using tools to gather information and
+    converging on a solution through iterative reasoning.
+    
+    - **Method:** POST
+    - **Path:** /v1/chat/reason
+    - **Request JSON:**
+      - ``message`` or ``prompt``: User's question or task (required)
+      - ``conversation_id``: Optional conversation context
+      - ``max_iterations``: Max reasoning steps (default 10)
+      - ``available_tools``: List of tool names (default: brain_search)
+    - **Content-Type:** text/event-stream
+    
+    Events (newline-delimited, prefixed with ``data: ``):
+    - ``reasoning_start``: Initial metadata
+    - ``reasoning_step``: New reasoning iteration (includes phase)
+    - ``thought_chunk``: LLM thinking token
+    - ``tool_request``: Tool invocation requested
+    - ``tool_result``: Tool execution completed  
+    - ``parallel_tools``: Multiple tools executing
+    - ``convergence``: Reached solution
+    - ``warning``: Loop detected or other issue
+    - ``reasoning_complete``: Final summary
+    - ``error``: Error details
+    
+    Example:
+        {
+          "message": "How do I refactor authentication to use JWT?",
+          "conversation_id": "abc123",
+          "max_iterations": 10
+        }
+    """
+    try:
+        data = await request.json()
+    except Exception:
+        return JSONResponse(status_code=400, content={'error': 'invalid json'})
+    
+    # Extract user request (support both 'message' and 'prompt')
+    user_request = (data.get('message') or data.get('prompt') or '').strip()
+    
+    if not user_request:
+        return JSONResponse(
+            status_code=400,
+            content={'error': 'message or prompt required'}
+        )
+    
+    # Parse parameters
+    conversation_id = data.get('conversation_id') or str(uuid.uuid4())
+    max_iterations = int(data.get('max_iterations', 10))
+    available_tools = data.get('available_tools')
+    
+    # Log request
+    req_id = str(uuid.uuid4())[:8]
+    logger.info(f"Reasoning request {req_id}: {user_request[:50]}...")
+    
+    # Create reasoning controller
+    controller = ReasoningLoopController(
+        user_request=user_request,
+        conversation_id=conversation_id,
+        max_iterations=max_iterations,
+        available_tools=available_tools,
+    )
+    
+    # Generator for SSE streaming
+    async def generate():
+        try:
+            # Stream reasoning events
+            async for event in controller.reason():
+                # Convert event to SSE format
+                yield f"data: {json.dumps(event)}\n\n"
+                
+        except Exception as e:
+            logger.error(f"Reasoning error {req_id}: {e}", exc_info=True)
+            error_event = {
+                'type': 'error',
+                'message': str(e),
+            }
+            yield f"data: {json.dumps(error_event)}\n\n"
+    
+    return StreamingResponse(
+        generate(),
         media_type='text/event-stream',
         headers={
             'Cache-Control': 'no-cache',

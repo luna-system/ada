@@ -1,0 +1,53 @@
+[project]
+name = "ada-translate"
+version = "0.1.0"
+description = "Universal code translation via Ada's semantic core"
+readme = "README.md"
+license = {text = "MIT"}
+authors = [
+    {name = "Luna & Ada", email = "luna@moonforge.dev"}
+]
+requires-python = ">=3.11"
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Topic :: Software Development :: Code Generators",
+    "Topic :: Software Development :: Compilers",
+]
+keywords = ["translation", "transpiler", "semantic", "ada", "llm"]
+
+dependencies = [
+    "click>=8.0",
+    "httpx>=0.24",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.0",
+    "pytest-asyncio>=0.21",
+]
+
+[project.scripts]
+ada-translate = "ada_translate:main"
+
+[project.urls]
+Homepage = "https://github.com/luna-system/ada"
+Documentation = "https://github.com/luna-system/ada"
+Repository = "https://github.com/luna-system/ada"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["."]
+
+[dependency-groups]
+dev = [
+    "pytest>=7.0",
+    "pytest-asyncio>=0.21",
+]

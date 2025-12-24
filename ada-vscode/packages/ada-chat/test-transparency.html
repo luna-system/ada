@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Tool Transparency Test</title>
+  <link rel="stylesheet" href="resources/webview/chat.css">
+  <style>
+    body {
+      padding: 20px;
+      background: var(--vscode-editor-background, #1e1e1e);
+      color: var(--vscode-foreground, #d4d4d4);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    }
+    
+    :root {
+      --vscode-editor-background: #1e1e1e;
+      --vscode-foreground: #d4d4d4;
+      --vscode-input-background: #2d2d30;
+      --vscode-input-border: #3c3c3c;
+      --vscode-panel-border: #3c3c3c;
+      --vscode-textLink-foreground: #4fc3f7;
+      --vscode-textLink-activeForeground: #29b6f6;
+      --vscode-descriptionForeground: #858585;
+      --vscode-badge-background: #4d4d4d;
+      --vscode-badge-foreground: #ffffff;
+      --vscode-list-hoverBackground: #2a2a2a;
+      --ada-accent: #4fc3f7;
+    }
+    
+    #messages {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      max-width: 800px;
+    }
+    
+    h1 {
+      color: var(--ada-accent);
+      margin-bottom: 20px;
+    }
+  </style>
+</head>
+<body>
+  <h1>✨ Tool Transparency Test ✨</h1>
+  <p>Testing the beautiful biomimetic importance visualization!</p>
+  
+  <div id="messages"></div>
+  
+  <script>
+    // Simulate the transparency cards
+    const messagesDiv = document.getElementById('messages');
+    
+    function addReasoningToolCard(tool, transparency) {
+      const card = document.createElement('div');
+      card.className = 'reasoning-tool-card';
+      
+      const toolName = (tool || 'unknown').replace('brain_', '');
+      const importance = transparency.importance || 0;
+      const detailLevel = transparency.detail_level || 'unknown';
+      const cacheHit = transparency.cache_hit || false;
+      const executionTime = transparency.execution_time_ms || 0;
+      const signals = transparency.signals || {};
+      
+      // Determine importance color and icon
+      let importanceClass = 'low';
+      let importanceIcon = '○';
+      if (importance >= 0.75) {
+        importanceClass = 'high';
+        importanceIcon = '●';
+      } else if (importance >= 0.50) {
+        importanceClass = 'medium';
+        importanceIcon = '◐';
+      }
+      
+      // Compression indicator
+      let compressionIcon = '';
+      let compressionText = '';
+      if (detailLevel === 'full') {
+        compressionIcon = '📄';
+        compressionText = 'Full detail';
+      } else if (detailLevel === 'chunks') {
+        compressionIcon = '📋';
+        compressionText = 'Trimmed';
+      } else if (detailLevel === 'summary') {
+        compressionIcon = '📝';
+        compressionText = 'Summarized';
+      } else if (detailLevel === 'dropped') {
+        compressionIcon = '❌';
+        compressionText = 'Dropped';
+      }
+      
+      // Cache hit indicator
+      const cacheIcon = cacheHit ? '✨' : '';
+      const cacheBadge = cacheHit ? '<span class="cache-badge">Cached</span>' : '';
+      
+      // Build card HTML
+      let html = '<div class="tool-summary">' +
+        '<div class="tool-header">' +
+          '<span class="tool-expand">›</span>' +
+          '<span class="tool-icon">' + cacheIcon + '🔧</span>' +
+          '<span class="tool-name">' + toolName + '</span>' +
+          cacheBadge +
+        '</div>' +
+        '<div class="tool-meta">' +
+          '<span class="importance-badge importance-' + importanceClass + '">' +
+            importanceIcon + ' ' + importance.toFixed(2) +
+          '</span>' +
+          '<span class="compression-badge">' + compressionIcon + ' ' + compressionText + '</span>' +
+          '<span class="time-badge">' + Math.round(executionTime) + 'ms</span>' +
+        '</div>' +
+        '</div>';
+      
+      // Expandable details with signal breakdown
+      if (Object.keys(signals).length > 0) {
+        html += '<div class="tool-details">' +
+          '<div class="signals-grid">';
+        
+        // Show each signal with a progress bar
+        for (const [key, value] of Object.entries(signals)) {
+          if (key === 'final') continue; // Skip final, it's shown as importance
+          const percent = Math.round(value * 100);
+          html += '<div class="signal-row">' +
+            '<span class="signal-label">' + key + '</span>' +
+            '<div class="signal-bar">' +
+              '<div class="signal-fill" style="width: ' + percent + '%"></div>' +
+            '</div>' +
+            '<span class="signal-value">' + value.toFixed(2) + '</span>' +
+            '</div>';
+        }
+        
+        html += '</div></div>';
+      }
+      
+      card.innerHTML = html;
+      
+      // Toggle expand on click
+      card.addEventListener('click', function() {
+        card.classList.toggle('expanded');
+      });
+      
+      messagesDiv.appendChild(card);
+      return card;
+    }
+    
+    // Example 1: High importance, full detail
+    addReasoningToolCard('brain_list_dir', {
+      importance: 0.870,
+      detail_level: 'full',
+      cache_hit: false,
+      execution_time_ms: 12.5,
+      signals: {
+        surprise: 0.92,
+        relevance: 0.85,
+        decay: 1.00,
+        habituation: 1.00
+      }
+    });
+    
+    // Example 2: Medium importance, trimmed
+    addReasoningToolCard('brain_read_file', {
+      importance: 0.650,
+      detail_level: 'chunks',
+      cache_hit: false,
+      execution_time_ms: 45.2,
+      signals: {
+        surprise: 0.71,
+        relevance: 0.58,
+        decay: 0.95,
+        habituation: 1.00
+      }
+    });
+    
+    // Example 3: Low importance with habituation penalty
+    addReasoningToolCard('brain_list_dir', {
+      importance: 0.380,
+      detail_level: 'summary',
+      cache_hit: false,
+      execution_time_ms: 8.1,
+      signals: {
+        surprise: 0.35,
+        relevance: 0.40,
+        decay: 0.90,
+        habituation: 0.40
+      }
+    });
+    
+    // Example 4: Cache hit!
+    addReasoningToolCard('brain_grep', {
+      importance: 0.750,
+      detail_level: 'full',
+      cache_hit: true,
+      execution_time_ms: 0,
+      signals: {
+        surprise: 0.80,
+        relevance: 0.70,
+        decay: 1.00,
+        habituation: 1.00
+      }
+    });
+  </script>
+</body>
+</html>

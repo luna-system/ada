@@ -50,8 +50,8 @@ export class MCPToolHandler {
     // TODO/FIXME search: scan codebase for task markers
     if (lower.includes('todo') || 
         lower.includes('fixme') ||
-        lower.includes('check') && (lower.includes('project') || lower.includes('codebase')) ||
-        lower.includes('find') && (lower.includes('task') || lower.includes('issue'))) {
+        lower.includes('check') ||
+        (lower.includes('find') && (lower.includes('task') || lower.includes('issue')))) {
       
       const needsReasoning = lower.includes('suggest') || 
                             lower.includes('recommend') ||
@@ -187,6 +187,7 @@ export class MCPToolHandler {
     if (lower.includes('list files') ||
         lower.includes('what files') ||
         lower.includes('ls ') ||
+        lower.includes('scan') ||
         lower.includes('show directory') ||
         lower.includes('list directory') ||
         lower.match(/what(?:'s| is) in (?:the )?(?:folder|directory|dir)/)) {
