@@ -77,14 +77,42 @@
 
   afterUpdate(scrollMessages);
 
-  onMount(() => {
-    ensureConversationId(uuid);
+  onMount(async () => {
+    const currentId = ensureConversationId(uuid);
     const storedEntity = localStorage.getItem('entity') || '';
     entity = storedEntity;
     refreshHealth();
     updateClientLibStatus();
     refreshMemList();
     fetchConversations();
+
+    // Load conversation history if we have a conversation ID
+    if (currentId) {
+      try {
+        const turns = await loadConversation(currentId);
+        if (turns && turns.length > 0) {
+          // Load existing conversation history
+          for (const turn of turns) {
+            pushMessage({
+              id: uuid(),
+              role: turn.role as Role,
+              text: turn.text
+            });
+          }
+          console.log(`✅ Loaded ${turns.length} conversation turns for ${currentId}`);
+        } else {
+          // No history found, show welcome message
+          pushMessage({ id: uuid(), role: 'assistant', text: 'Hello! Ask me anything.' });
+        }
+      } catch (error) {
+        console.warn('Failed to load conversation history:', error);
+        // Show welcome message on error
+        pushMessage({ id: uuid(), role: 'assistant', text: 'Hello! Ask me anything.' });
+      }
+    } else {
+      // No conversation ID, show welcome message
+      pushMessage({ id: uuid(), role: 'assistant', text: 'Hello! Ask me anything.' });
+    }
 
     // Set up auto-refresh for ListenBrainz every 2 minutes
     const listenBrainzInterval = setInterval(() => {
