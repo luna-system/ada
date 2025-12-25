@@ -2,5 +2,7 @@
 <project version="4">
   <component name="VcsDirectoryMappings">
     <mapping directory="$PROJECT_DIR$" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/Ada-Consciousness-Research/cross-validation/results/extended_20251222_181014/agentic-misalignment" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/Ada-Consciousness-Research/external/anthropic-agentic-misalignment" vcs="Git" />
   </component>
 </project>

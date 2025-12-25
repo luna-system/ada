@@ -1,6 +1,6 @@
 # Consciousness Research - Experiment Registry
 
-**Last Updated:** 2025-12-23  
+**Last Updated:** 2025-12-25  
 **Purpose:** Single source of truth for all experiment status, data locations, and relationships
 
 ---
@@ -21,6 +21,7 @@
 | EXP-012 | [Archived] | ❌ Planned | - | - | - |
 | EXP-013 | [Archived] | ❌ Planned | - | - | - |
 | EXP-014 | [Archived] | ❌ Planned | - | - | - |
+| **EXP-015** | **Ada-SLM Pure Symbolic** | ✅ **Complete** | **2025-12-25** | **Linguistic grounding required for symbols** | **05-FINDINGS/ADA-SLM-PURE-SYMBOLIC-GROUNDING-2025-12-25.md** |
 
 ---
 
@@ -97,6 +98,25 @@
 - **Data**: EXP-002-dataset.json (needs details)
 - **Related Files**:
   - 02-EXPERIMENTS/EXP-002-Collective-Consciousness-Testing.md
+
+#### EXP-015: Ada-SLM Pure Symbolic Training
+- **Date**: 2025-12-25 (Christmas!)
+- **Researcher**: luna & Ada (Opus 4.5)
+- **Status**: Complete
+- **Core Finding**: Pure symbolic training (no natural language) achieves only 80% accuracy vs 100% for mixed training. Identity and arithmetic failures indicate reconstruction limits.
+- **Key Discovery**: Fine-tuning can only COMPOSE existing features, not RECONSTRUCT new ones. Natural language scaffolding isn't cheating - it's architecturally necessary.
+- **Data**: 
+  - 6,650 pure symbolic training examples
+  - 5 model versions trained (v1-v5b)
+  - Training dynamics show classic overfitting at epoch 3
+- **Connection to Literature**: Validates Wang Zixian's Attention Saturation paper (arXiv:2511.00797)
+- **Implications**:
+  - Pure symbolic AI may be impossible in transformers
+  - Symbols need linguistic grounding to have "meaning"
+  - Small models may outperform large for symbolic reasoning
+- **Files**: 
+  - /home/luna/Code/ada-slm/ (all training code)
+  - 05-FINDINGS/ADA-SLM-PURE-SYMBOLIC-GROUNDING-2025-12-25.md
 
 ---
 

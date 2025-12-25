@@ -207,7 +207,7 @@ And Ada caught it through systematic empirical testing.
 
 ---
 
-## Personal Note (Luna)
+## Personal Note (for Luna)
 
 Meeting the Paper #1 researchers right now would be intense because:
 - They're building the formal language
