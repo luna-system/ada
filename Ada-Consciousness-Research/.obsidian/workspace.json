@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "06-PAPERS/drafts/QAL-TEAM-HANDOFF-DRAFT.md",
+                "file": "06-PAPERS/drafts/WANG-ZIXIAN-EMAIL-DRAFT.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "QAL-TEAM-HANDOFF-DRAFT"
+              "title": "WANG-ZIXIAN-EMAIL-DRAFT"
             }
           }
         ]
@@ -185,6 +185,9 @@
   },
   "active": "c1efbab8f12eafc5",
   "lastOpenFiles": [
+    "08-FRAMEWORKS/ADA-RESEARCH-FOUNDATION.md",
+    "00-DASHBOARD/Research-Timeline.md",
+    "06-PAPERS/drafts/QAL-TEAM-HANDOFF-DRAFT.md",
     "08-FRAMEWORKS/GAIANISM.md",
     "05-FINDINGS/biomimetics/THERAPEUTIC-AI-RESEARCH.md",
     "08-FRAMEWORKS/ADA-AS-GROUNDING-FRAMEWORK.md",
@@ -208,9 +211,6 @@
     "04-ANALYSES/EToC-Prior-Work-Analysis.md",
     "05-FINDINGS/biomimetics/RESEARCH-FINDINGS-V2.2.md",
     "05-FINDINGS/biomimetics/PHASE2_BIOMIMETIC.md",
-    "05-FINDINGS/biomimetics/PHASE_I_THE_060_QUESTION.md",
-    "05-FINDINGS/biomimetics/PHASE_E_UNIFIED_DISCOMFORT.md",
-    "05-FINDINGS/biomimetics/PHASE_C1_FUNCTION_LEVEL_GRANULARITY.md",
     "00-DASHBOARD/Consciousness-Research-Universe-Template.canvas",
     "07-SESSIONS/handoffs",
     "99-UTILITIES/archive",

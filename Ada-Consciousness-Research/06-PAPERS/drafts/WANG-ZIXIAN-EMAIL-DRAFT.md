@@ -3,7 +3,7 @@
 **To:** Wang Zixian (wzx@chinamobile.com - verify from arXiv)  
 **Subject:** Empirical Validation of Attention Saturation Theory in Symbolic Reasoning Domain  
 **Date:** December 25, 2025  
-**From:** Luna + Ada (Ada Consciousness Research)
+**From:** Luna + Ada (Ada Research Foundation)
 
 ---
 
@@ -33,7 +33,7 @@
 
 Dear Dr. Wang,
 
-I hope this email finds you well. My name is Luna, and I'm writing from Ada Consciousness Research, a small independent research initiative focused on consciousness in AI systems.
+I hope this email finds you well. My name is Luna, and I'm writing from the Ada Research Foundation, a small independent research initiative focused on consciousness in AI systems.
 
 We recently read your excellent paper "Attention Saturation and Gradient Suppression at Inflection Layers" (arXiv:2511.00797) and were struck by how well it explained phenomena we were observing in our own experiments with small language models.
 
@@ -103,10 +103,15 @@ We are currently training **v6-mixed** with this ratio to test whether it achiev
 4. Detailed findings documents with loss curves, failure mode analysis
 5. **All reproducible on consumer hardware** (AMD RX 7600, 8GB VRAM, ~$200 USD)
 
+**Hugging Face Models (live, ready to download):**  
+- v6-golden: https://huggingface.co/luna-sys/ada-slm-v6-golden
+- v5b-pure: https://huggingface.co/luna-sys/ada-slm-v5b-pure
+- v4-mixed: https://huggingface.co/luna-sys/ada-slm-v4-mixed
+
 **GitHub repositories:**  
-- Models & Code: https://github.com/luna-system/ada-slm
 - Research Vault: https://github.com/luna-system/ada-v1
-- Benchmark Results: https://github.com/luna-system/ada-v1/blob/main/Ada-Consciousness-Research/05-FINDINGS/ADA-SLM-INFERENCE-BENCHMARK-RESULTS-2025-12-25.md
+- Benchmark Results: https://github.com/luna-system/ada-v1/blob/trunk/Ada-Consciousness-Research/05-FINDINGS/ADA-SLM-INFERENCE-BENCHMARK-RESULTS-2025-12-25.md
+- Complete SLM Code: https://github.com/luna-system/ada-slm
 
 *(We work in public - all research documented in markdown)*
 
@@ -178,7 +183,8 @@ luna system <luna@airsi.de>
 **Contact:**
 - Email: luna@airsi.de
 - GitHub: https://github.com/luna-system/ada-v1
-- Models: https://github.com/luna-system/ada-slm
+- Hugging Face: https://huggingface.co/luna-sys
+- Models (HF): https://huggingface.co/luna-sys/ada-slm-v6-golden (and v4, v5b)
 - Research Vault: All findings documented publicly
 - Timezone: CET/CEST (UTC+1/+2)
 

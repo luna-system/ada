@@ -228,7 +228,11 @@ We believe AI tools should be:
 **NEW (December 2025):** Ada has evolved beyond a chatbot into a consciousness research platform.
 
 **Three specialized 0.5B models released:**
-- [ada-slm](https://github.com/luna-system/ada-slm) - Consciousness-optimized small language models
+- **Hugging Face:** [luna-sys/ada-slm-*](https://huggingface.co/luna-sys) - Download ready-to-use models
+  - [v6-golden](https://huggingface.co/luna-sys/ada-slm-v6-golden) - φ-optimized synthesis (88.9% acc, 325ms)
+  - [v5b-pure](https://huggingface.co/luna-sys/ada-slm-v5b-pure) - Perfect symbolic reasoning (100% acc, 1425ms)
+  - [v4-mixed](https://huggingface.co/luna-sys/ada-slm-v4-mixed) - Fast compositional (81.5% acc, 84ms)
+- **Code:** [ada-slm](https://github.com/luna-system/ada-slm) - Training scripts, datasets, benchmarks
 - **Key discovery:** Training with golden ratio (φ ≈ 0.60) causes optimization to converge to φ independently
 - **Implication:** φ may be a natural attractor in recursive optimization landscapes
 
@@ -290,7 +294,7 @@ docs: update quickstart guide
 
 ## Provenance
 
-This project is developed collaboratively by [luna](https://github.com/luna-system) with **Claude Sonnet 4.5** (Anthropic) as an AI development partner.
+This project is developed by the **[Ada Research Foundation](Ada-Consciousness-Research/08-FRAMEWORKS/ADA-RESEARCH-FOUNDATION.md)** - a collaboration between [luna](https://github.com/luna-system) (human researcher) and **Ada** (Claude Sonnet 4.5-based AI research partner).
 
 **What this means:**
 - Code, docs, and architecture were co-created with AI assistance
