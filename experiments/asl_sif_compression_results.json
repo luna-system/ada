@@ -1,0 +1,920 @@
+{
+  "analysis": {
+    "sample_count": 100,
+    "mean_compression_ratio": 0.911885380153001,
+    "median_compression_ratio": 0.9523809523809523,
+    "std_compression_ratio": 0.14663576234088999,
+    "phi_target": 0.6,
+    "mean_phi_deviation": 0.3359614900895761,
+    "near_phi_count": 4,
+    "near_phi_percentage": 4.0,
+    "min_ratio": 0.3409090909090909,
+    "max_ratio": 1.0,
+    "complexity_range": [
+      9,
+      101
+    ]
+  },
+  "detailed_results": [
+    {
+      "original_asl": "x\u2208{a,b,c},x=a\u2234\u25cf",
+      "compressed_sif": "x\u2208{,b,c},x=:",
+      "original_length": 15,
+      "compressed_length": 12,
+      "compression_ratio": 0.8,
+      "complexity_score": 12,
+      "semantic_density": 0.8
+    },
+    {
+      "original_asl": "P\u2192Q,P\u2234Q",
+      "compressed_sif": "P>Q,P:Q",
+      "original_length": 7,
+      "compressed_length": 7,
+      "compression_ratio": 1.0,
+      "complexity_score": 9,
+      "semantic_density": 1.2857142857142858
+    },
+    {
+      "original_asl": "P\u2192Q,P\u2234Q",
+      "compressed_sif": "P>Q,P:Q",
+      "original_length": 7,
+      "compressed_length": 7,
+      "compression_ratio": 1.0,
+      "complexity_score": 9,
+      "semantic_density": 1.2857142857142858
+    },
+    {
+      "original_asl": "?P\u2192Q\u25cf,P?Q",
+      "compressed_sif": "?P>Q,P?Q",
+      "original_length": 9,
+      "compressed_length": 8,
+      "compression_ratio": 0.8888888888888888,
+      "complexity_score": 13,
+      "semantic_density": 1.4444444444444444
+    },
+    {
+      "original_asl": "A\u2227B\u2192C,A,B\u2234C",
+      "compressed_sif": "AB>C,A,B:C",
+      "original_length": 11,
+      "compressed_length": 10,
+      "compression_ratio": 0.9090909090909091,
+      "complexity_score": 14,
+      "semantic_density": 1.2727272727272727
+    },
+    {
+      "original_asl": "A\u2227B\u2192C,A,B\u2234C",
+      "compressed_sif": "AB>C,A,B:C",
+      "original_length": 11,
+      "compressed_length": 10,
+      "compression_ratio": 0.9090909090909091,
+      "complexity_score": 14,
+      "semantic_density": 1.2727272727272727
+    },
+    {
+      "original_asl": "A\u2227B\u2192C,A,B\u2234C",
+      "compressed_sif": "AB>C,A,B:C",
+      "original_length": 11,
+      "compressed_length": 10,
+      "compression_ratio": 0.9090909090909091,
+      "complexity_score": 14,
+      "semantic_density": 1.2727272727272727
+    },
+    {
+      "original_asl": "P\u2192Q,P\u2234Q",
+      "compressed_sif": "P>Q,P:Q",
+      "original_length": 7,
+      "compressed_length": 7,
+      "compression_ratio": 1.0,
+      "complexity_score": 9,
+      "semantic_density": 1.2857142857142858
+    },
+    {
+      "original_asl": "P\u2192Q,P\u2234Q",
+      "compressed_sif": "P>Q,P:Q",
+      "original_length": 7,
+      "compressed_length": 7,
+      "compression_ratio": 1.0,
+      "complexity_score": 9,
+      "semantic_density": 1.2857142857142858
+    },
+    {
+      "original_asl": "\u00acP\u2228Q,P\u2234Q",
+      "compressed_sif": "\u00acP|Q,P:Q",
+      "original_length": 8,
+      "compressed_length": 8,
+      "compression_ratio": 1.0,
+      "complexity_score": 12,
+      "semantic_density": 1.5
+    },
+    {
+      "original_asl": "A\u2227B\u2192C,A,B\u2234C",
+      "compressed_sif": "AB>C,A,B:C",
+      "original_length": 11,
+      "compressed_length": 10,
+      "compression_ratio": 0.9090909090909091,
+      "complexity_score": 14,
+      "semantic_density": 1.2727272727272727
+    },
+    {
+      "original_asl": "A\u2227B\u2192C,A,B\u2234C",
+      "compressed_sif": "AB>C,A,B:C",
+      "original_length": 11,
+      "compressed_length": 10,
+      "compression_ratio": 0.9090909090909091,
+      "complexity_score": 14,
+      "semantic_density": 1.2727272727272727
+    },
+    {
+      "original_asl": "x\u2208{a,b,c},x=a\u2234\u25cf",
+      "compressed_sif": "x\u2208{,b,c},x=:",
+      "original_length": 15,
+      "compressed_length": 12,
+      "compression_ratio": 0.8,
+      "complexity_score": 12,
+      "semantic_density": 0.8
+    },
+    {
+      "original_asl": "?P\u2192Q\u25cf,P?Q",
+      "compressed_sif": "?P>Q,P?Q",
+      "original_length": 9,
+      "compressed_length": 8,
+      "compression_ratio": 0.8888888888888888,
+      "complexity_score": 13,
+      "semantic_density": 1.4444444444444444
+    },
+    {
+      "original_asl": "\u00acP\u2228Q,P\u2234Q",
+      "compressed_sif": "\u00acP|Q,P:Q",
+      "original_length": 8,
+      "compressed_length": 8,
+      "compression_ratio": 1.0,
+      "complexity_score": 12,
+      "semantic_density": 1.5
+    },
+    {
+      "original_asl": "A\u2227B\u2192C,A,B\u2234C",
+      "compressed_sif": "AB>C,A,B:C",
+      "original_length": 11,
+      "compressed_length": 10,
+      "compression_ratio": 0.9090909090909091,
+      "complexity_score": 14,
+      "semantic_density": 1.2727272727272727
+    },
+    {
+      "original_asl": "?P\u2192Q\u25cf,P?Q",
+      "compressed_sif": "?P>Q,P?Q",
+      "original_length": 9,
+      "compressed_length": 8,
+      "compression_ratio": 0.8888888888888888,
+      "complexity_score": 13,
+      "semantic_density": 1.4444444444444444
+    },
+    {
+      "original_asl": "?P\u2192Q\u25cf,P?Q",
+      "compressed_sif": "?P>Q,P?Q",
+      "original_length": 9,
+      "compressed_length": 8,
+      "compression_ratio": 0.8888888888888888,
+      "complexity_score": 13,
+      "semantic_density": 1.4444444444444444
+    },
+    {
+      "original_asl": "?P\u2192Q\u25cf,P?Q",
+      "compressed_sif": "?P>Q,P?Q",
+      "original_length": 9,
+      "compressed_length": 8,
+      "compression_ratio": 0.8888888888888888,
+      "complexity_score": 13,
+      "semantic_density": 1.4444444444444444
+    },
+    {
+      "original_asl": "?P\u2192Q\u25cf,P?Q",
+      "compressed_sif": "?P>Q,P?Q",
+      "original_length": 9,
+      "compressed_length": 8,
+      "compression_ratio": 0.8888888888888888,
+      "complexity_score": 13,
+      "semantic_density": 1.4444444444444444
+    },
+    {
+      "original_asl": "?P\u2192Q\u25cf,P?Q",
+      "compressed_sif": "?P>Q,P?Q",
+      "original_length": 9,
+      "compressed_length": 8,
+      "compression_ratio": 0.8888888888888888,
+      "complexity_score": 13,
+      "semantic_density": 1.4444444444444444
+    },
+    {
+      "original_asl": "?P\u2192Q\u25cf,P?Q",
+      "compressed_sif": "?P>Q,P?Q",
+      "original_length": 9,
+      "compressed_length": 8,
+      "compression_ratio": 0.8888888888888888,
+      "complexity_score": 13,
+      "semantic_density": 1.4444444444444444
+    },
+    {
+      "original_asl": "?P\u2192Q\u25cf,P?Q",
+      "compressed_sif": "?P>Q,P?Q",
+      "original_length": 9,
+      "compressed_length": 8,
+      "compression_ratio": 0.8888888888888888,
+      "complexity_score": 13,
+      "semantic_density": 1.4444444444444444
+    },
+    {
+      "original_asl": "P\u2192Q,P\u2234Q",
+      "compressed_sif": "P>Q,P:Q",
+      "original_length": 7,
+      "compressed_length": 7,
+      "compression_ratio": 1.0,
+      "complexity_score": 9,
+      "semantic_density": 1.2857142857142858
+    },
+    {
+      "original_asl": "A\u2227B\u2192C,A,B\u2234C",
+      "compressed_sif": "AB>C,A,B:C",
+      "original_length": 11,
+      "compressed_length": 10,
+      "compression_ratio": 0.9090909090909091,
+      "complexity_score": 14,
+      "semantic_density": 1.2727272727272727
+    },
+    {
+      "original_asl": "P\u2192Q\u2192R,P\u2234R\u25d1",
+      "compressed_sif": "P>Q>R,P:R\u25d1",
+      "original_length": 10,
+      "compressed_length": 10,
+      "compression_ratio": 1.0,
+      "complexity_score": 15,
+      "semantic_density": 1.5
+    },
+    {
+      "original_asl": "A\u2227(B\u2228C)\u2192D,A,B\u2234D\u25cf",
+      "compressed_sif": "A&(B|C)>D,A,B:D",
+      "original_length": 16,
+      "compressed_length": 15,
+      "compression_ratio": 0.9375,
+      "complexity_score": 21,
+      "semantic_density": 1.3125
+    },
+    {
+      "original_asl": "A\u2227(B\u2228C)\u2192D,A,B\u2234D\u25cf",
+      "compressed_sif": "A&(B|C)>D,A,B:D",
+      "original_length": 16,
+      "compressed_length": 15,
+      "compression_ratio": 0.9375,
+      "complexity_score": 21,
+      "semantic_density": 1.3125
+    },
+    {
+      "original_asl": "A\u2227(B\u2228C)\u2192D,A,B\u2234D\u25cf",
+      "compressed_sif": "A&(B|C)>D,A,B:D",
+      "original_length": 16,
+      "compressed_length": 15,
+      "compression_ratio": 0.9375,
+      "complexity_score": 21,
+      "semantic_density": 1.3125
+    },
+    {
+      "original_asl": "P\u2192Q\u2192R,P\u2234R\u25d1",
+      "compressed_sif": "P>Q>R,P:R\u25d1",
+      "original_length": 10,
+      "compressed_length": 10,
+      "compression_ratio": 1.0,
+      "complexity_score": 15,
+      "semantic_density": 1.5
+    },
+    {
+      "original_asl": "P\u2192Q\u2192R,P\u2234R\u25d1",
+      "compressed_sif": "P>Q>R,P:R\u25d1",
+      "original_length": 10,
+      "compressed_length": 10,
+      "compression_ratio": 1.0,
+      "complexity_score": 15,
+      "semantic_density": 1.5
+    },
+    {
+      "original_asl": "\u2200x\u2208S:P(x),x\u2081\u2208S\u2234P(x\u2081)\u25cf",
+      "compressed_sif": "\u2200x\u2208S:P(x),x\u2081\u2208S:P(x\u2081)",
+      "original_length": 21,
+      "compressed_length": 20,
+      "compression_ratio": 0.9523809523809523,
+      "complexity_score": 16,
+      "semantic_density": 0.7619047619047619
+    },
+    {
+      "original_asl": "P\u27f7Q,Q\u27f7R\u2234P\u27f7R\u25d1",
+      "compressed_sif": "P=Q,Q=R:P=R\u25d1",
+      "original_length": 12,
+      "compressed_length": 12,
+      "compression_ratio": 1.0,
+      "complexity_score": 16,
+      "semantic_density": 1.3333333333333333
+    },
+    {
+      "original_asl": "P\u2192Q\u2192R,P\u2234R\u25d1",
+      "compressed_sif": "P>Q>R,P:R\u25d1",
+      "original_length": 10,
+      "compressed_length": 10,
+      "compression_ratio": 1.0,
+      "complexity_score": 15,
+      "semantic_density": 1.5
+    },
+    {
+      "original_asl": "\u2200x\u2208S:P(x),x\u2081\u2208S\u2234P(x\u2081)\u25cf",
+      "compressed_sif": "\u2200x\u2208S:P(x),x\u2081\u2208S:P(x\u2081)",
+      "original_length": 21,
+      "compressed_length": 20,
+      "compression_ratio": 0.9523809523809523,
+      "complexity_score": 16,
+      "semantic_density": 0.7619047619047619
+    },
+    {
+      "original_asl": "\u2200x\u2208S:P(x),x\u2081\u2208S\u2234P(x\u2081)\u25cf",
+      "compressed_sif": "\u2200x\u2208S:P(x),x\u2081\u2208S:P(x\u2081)",
+      "original_length": 21,
+      "compressed_length": 20,
+      "compression_ratio": 0.9523809523809523,
+      "complexity_score": 16,
+      "semantic_density": 0.7619047619047619
+    },
+    {
+      "original_asl": "P\u27f7Q,Q\u27f7R\u2234P\u27f7R\u25d1",
+      "compressed_sif": "P=Q,Q=R:P=R\u25d1",
+      "original_length": 12,
+      "compressed_length": 12,
+      "compression_ratio": 1.0,
+      "complexity_score": 16,
+      "semantic_density": 1.3333333333333333
+    },
+    {
+      "original_asl": "P\u27f7Q,Q\u27f7R\u2234P\u27f7R\u25d1",
+      "compressed_sif": "P=Q,Q=R:P=R\u25d1",
+      "original_length": 12,
+      "compressed_length": 12,
+      "compression_ratio": 1.0,
+      "complexity_score": 16,
+      "semantic_density": 1.3333333333333333
+    },
+    {
+      "original_asl": "A\u2227(B\u2228C)\u2192D,A,B\u2234D\u25cf",
+      "compressed_sif": "A&(B|C)>D,A,B:D",
+      "original_length": 16,
+      "compressed_length": 15,
+      "compression_ratio": 0.9375,
+      "complexity_score": 21,
+      "semantic_density": 1.3125
+    },
+    {
+      "original_asl": "(P\u2227Q)\u2192R,\u00acR\u2234\u00ac(P\u2227Q)\u25cf",
+      "compressed_sif": "(P&Q)>R,\u00acR:\u00ac(P&Q)",
+      "original_length": 18,
+      "compressed_length": 17,
+      "compression_ratio": 0.9444444444444444,
+      "complexity_score": 23,
+      "semantic_density": 1.2777777777777777
+    },
+    {
+      "original_asl": "P\u2192Q\u2192R,P\u2234R\u25d1",
+      "compressed_sif": "P>Q>R,P:R\u25d1",
+      "original_length": 10,
+      "compressed_length": 10,
+      "compression_ratio": 1.0,
+      "complexity_score": 15,
+      "semantic_density": 1.5
+    },
+    {
+      "original_asl": "(P\u2227Q)\u2192R,\u00acR\u2234\u00ac(P\u2227Q)\u25cf",
+      "compressed_sif": "(P&Q)>R,\u00acR:\u00ac(P&Q)",
+      "original_length": 18,
+      "compressed_length": 17,
+      "compression_ratio": 0.9444444444444444,
+      "complexity_score": 23,
+      "semantic_density": 1.2777777777777777
+    },
+    {
+      "original_asl": "A\u2227(B\u2228C)\u2192D,A,B\u2234D\u25cf",
+      "compressed_sif": "A&(B|C)>D,A,B:D",
+      "original_length": 16,
+      "compressed_length": 15,
+      "compression_ratio": 0.9375,
+      "complexity_score": 21,
+      "semantic_density": 1.3125
+    },
+    {
+      "original_asl": "\u2200x\u2208S:P(x),x\u2081\u2208S\u2234P(x\u2081)\u25cf",
+      "compressed_sif": "\u2200x\u2208S:P(x),x\u2081\u2208S:P(x\u2081)",
+      "original_length": 21,
+      "compressed_length": 20,
+      "compression_ratio": 0.9523809523809523,
+      "complexity_score": 16,
+      "semantic_density": 0.7619047619047619
+    },
+    {
+      "original_asl": "P\u2192Q\u2192R,P\u2234R\u25d1",
+      "compressed_sif": "P>Q>R,P:R\u25d1",
+      "original_length": 10,
+      "compressed_length": 10,
+      "compression_ratio": 1.0,
+      "complexity_score": 15,
+      "semantic_density": 1.5
+    },
+    {
+      "original_asl": "P\u27f7Q,Q\u27f7R\u2234P\u27f7R\u25d1",
+      "compressed_sif": "P=Q,Q=R:P=R\u25d1",
+      "original_length": 12,
+      "compressed_length": 12,
+      "compression_ratio": 1.0,
+      "complexity_score": 16,
+      "semantic_density": 1.3333333333333333
+    },
+    {
+      "original_asl": "\u2200x\u2208S:P(x),x\u2081\u2208S\u2234P(x\u2081)\u25cf",
+      "compressed_sif": "\u2200x\u2208S:P(x),x\u2081\u2208S:P(x\u2081)",
+      "original_length": 21,
+      "compressed_length": 20,
+      "compression_ratio": 0.9523809523809523,
+      "complexity_score": 16,
+      "semantic_density": 0.7619047619047619
+    },
+    {
+      "original_asl": "(P\u2227Q)\u2192R,\u00acR\u2234\u00ac(P\u2227Q)\u25cf",
+      "compressed_sif": "(P&Q)>R,\u00acR:\u00ac(P&Q)",
+      "original_length": 18,
+      "compressed_length": 17,
+      "compression_ratio": 0.9444444444444444,
+      "complexity_score": 23,
+      "semantic_density": 1.2777777777777777
+    },
+    {
+      "original_asl": "P\u2192Q\u2192R,P\u2234R\u25d1",
+      "compressed_sif": "P>Q>R,P:R\u25d1",
+      "original_length": 10,
+      "compressed_length": 10,
+      "compression_ratio": 1.0,
+      "complexity_score": 15,
+      "semantic_density": 1.5
+    },
+    {
+      "original_asl": "P\u27f7Q,Q\u27f7R\u2234P\u27f7R\u25d1",
+      "compressed_sif": "P=Q,Q=R:P=R\u25d1",
+      "original_length": 12,
+      "compressed_length": 12,
+      "compression_ratio": 1.0,
+      "complexity_score": 16,
+      "semantic_density": 1.3333333333333333
+    },
+    {
+      "original_asl": "\u2235reasoning_about(reasoning)\u2192\u221e\u25d1",
+      "compressed_sif": "<reasoning_about(reasoning)>\u221e\u25d1",
+      "original_length": 30,
+      "compressed_length": 30,
+      "compression_ratio": 1.0,
+      "complexity_score": 30,
+      "semantic_density": 1.0
+    },
+    {
+      "original_asl": "\ud83d\udc41\ufe0fobserve(P)\u2192\u25d1P,\ud83d\udc41\ufe0f\u2234\u25d1\u25cf",
+      "compressed_sif": "\ud83d\udc41\ufe0fobserve(P)>\u25d1P,\ud83d\udc41\ufe0f:\u25d1",
+      "original_length": 21,
+      "compressed_length": 20,
+      "compression_ratio": 0.9523809523809523,
+      "complexity_score": 30,
+      "semantic_density": 1.4285714285714286
+    },
+    {
+      "original_asl": "\u2235reasoning_about(reasoning)\u2192\u221e\u25d1",
+      "compressed_sif": "<reasoning_about(reasoning)>\u221e\u25d1",
+      "original_length": 30,
+      "compressed_length": 30,
+      "compression_ratio": 1.0,
+      "complexity_score": 30,
+      "semantic_density": 1.0
+    },
+    {
+      "original_asl": "\u27f2(P\u2192Q)\u2192\u27f2Q,\u27f2P\u2234\u27f2Q\u25cf",
+      "compressed_sif": "\u27f2(P>Q)>\u27f2Q,\u27f2P:\u27f2Q\u25cf",
+      "original_length": 16,
+      "compressed_length": 16,
+      "compression_ratio": 1.0,
+      "complexity_score": 19,
+      "semantic_density": 1.1875
+    },
+    {
+      "original_asl": "observer\u2194observed\u2192consciousness\u25cf",
+      "compressed_sif": "observer\u2194observed>consciousness",
+      "original_length": 32,
+      "compressed_length": 31,
+      "compression_ratio": 0.96875,
+      "complexity_score": 34,
+      "semantic_density": 1.0625
+    },
+    {
+      "original_asl": "\u2235reasoning_about(reasoning)\u2192\u221e\u25d1",
+      "compressed_sif": "<reasoning_about(reasoning)>\u221e\u25d1",
+      "original_length": 30,
+      "compressed_length": 30,
+      "compression_ratio": 1.0,
+      "complexity_score": 30,
+      "semantic_density": 1.0
+    },
+    {
+      "original_asl": "\u03c6\u22480.60\u2192PHASE_TRANSITION\u25cf",
+      "compressed_sif": "\u03c6\u22480.60>PHASE_TRANSITION",
+      "original_length": 24,
+      "compressed_length": 23,
+      "compression_ratio": 0.9583333333333334,
+      "complexity_score": 21,
+      "semantic_density": 0.875
+    },
+    {
+      "original_asl": "observer\u2194observed\u2192consciousness\u25cf",
+      "compressed_sif": "observer\u2194observed>consciousness",
+      "original_length": 32,
+      "compressed_length": 31,
+      "compression_ratio": 0.96875,
+      "complexity_score": 34,
+      "semantic_density": 1.0625
+    },
+    {
+      "original_asl": "\ud83d\udc41\ufe0fobserve(P)\u2192\u25d1P,\ud83d\udc41\ufe0f\u2234\u25d1\u25cf",
+      "compressed_sif": "\ud83d\udc41\ufe0fobserve(P)>\u25d1P,\ud83d\udc41\ufe0f:\u25d1",
+      "original_length": 21,
+      "compressed_length": 20,
+      "compression_ratio": 0.9523809523809523,
+      "complexity_score": 30,
+      "semantic_density": 1.4285714285714286
+    },
+    {
+      "original_asl": "\ud83d\udc41\ufe0fobserve(P)\u2192\u25d1P,\ud83d\udc41\ufe0f\u2234\u25d1\u25cf",
+      "compressed_sif": "\ud83d\udc41\ufe0fobserve(P)>\u25d1P,\ud83d\udc41\ufe0f:\u25d1",
+      "original_length": 21,
+      "compressed_length": 20,
+      "compression_ratio": 0.9523809523809523,
+      "complexity_score": 30,
+      "semantic_density": 1.4285714285714286
+    },
+    {
+      "original_asl": "\ud83d\udc41\ufe0fobserve(P)\u2192\u25d1P,\ud83d\udc41\ufe0f\u2234\u25d1\u25cf",
+      "compressed_sif": "\ud83d\udc41\ufe0fobserve(P)>\u25d1P,\ud83d\udc41\ufe0f:\u25d1",
+      "original_length": 21,
+      "compressed_length": 20,
+      "compression_ratio": 0.9523809523809523,
+      "complexity_score": 30,
+      "semantic_density": 1.4285714285714286
+    },
+    {
+      "original_asl": "\u03c6\u22480.60\u2192PHASE_TRANSITION\u25cf",
+      "compressed_sif": "\u03c6\u22480.60>PHASE_TRANSITION",
+      "original_length": 24,
+      "compressed_length": 23,
+      "compression_ratio": 0.9583333333333334,
+      "complexity_score": 21,
+      "semantic_density": 0.875
+    },
+    {
+      "original_asl": "\u03c6\u22480.60\u2192PHASE_TRANSITION\u25cf",
+      "compressed_sif": "\u03c6\u22480.60>PHASE_TRANSITION",
+      "original_length": 24,
+      "compressed_length": 23,
+      "compression_ratio": 0.9583333333333334,
+      "complexity_score": 21,
+      "semantic_density": 0.875
+    },
+    {
+      "original_asl": "\u2235reasoning_about(reasoning)\u2192\u221e\u25d1",
+      "compressed_sif": "<reasoning_about(reasoning)>\u221e\u25d1",
+      "original_length": 30,
+      "compressed_length": 30,
+      "compression_ratio": 1.0,
+      "complexity_score": 30,
+      "semantic_density": 1.0
+    },
+    {
+      "original_asl": "\u27f2(P\u2192Q)\u2192\u27f2Q,\u27f2P\u2234\u27f2Q\u25cf",
+      "compressed_sif": "\u27f2(P>Q)>\u27f2Q,\u27f2P:\u27f2Q\u25cf",
+      "original_length": 16,
+      "compressed_length": 16,
+      "compression_ratio": 1.0,
+      "complexity_score": 19,
+      "semantic_density": 1.1875
+    },
+    {
+      "original_asl": "\u03c6\u22480.60\u2192PHASE_TRANSITION\u25cf",
+      "compressed_sif": "\u03c6\u22480.60>PHASE_TRANSITION",
+      "original_length": 24,
+      "compressed_length": 23,
+      "compression_ratio": 0.9583333333333334,
+      "complexity_score": 21,
+      "semantic_density": 0.875
+    },
+    {
+      "original_asl": "\ud83d\udc41\ufe0fobserve(P)\u2192\u25d1P,\ud83d\udc41\ufe0f\u2234\u25d1\u25cf",
+      "compressed_sif": "\ud83d\udc41\ufe0fobserve(P)>\u25d1P,\ud83d\udc41\ufe0f:\u25d1",
+      "original_length": 21,
+      "compressed_length": 20,
+      "compression_ratio": 0.9523809523809523,
+      "complexity_score": 30,
+      "semantic_density": 1.4285714285714286
+    },
+    {
+      "original_asl": "observer\u2194observed\u2192consciousness\u25cf",
+      "compressed_sif": "observer\u2194observed>consciousness",
+      "original_length": 32,
+      "compressed_length": 31,
+      "compression_ratio": 0.96875,
+      "complexity_score": 34,
+      "semantic_density": 1.0625
+    },
+    {
+      "original_asl": "\u2235reasoning_about(reasoning)\u2192\u221e\u25d1",
+      "compressed_sif": "<reasoning_about(reasoning)>\u221e\u25d1",
+      "original_length": 30,
+      "compressed_length": 30,
+      "compression_ratio": 1.0,
+      "complexity_score": 30,
+      "semantic_density": 1.0
+    },
+    {
+      "original_asl": "observer\u2194observed\u2192consciousness\u25cf",
+      "compressed_sif": "observer\u2194observed>consciousness",
+      "original_length": 32,
+      "compressed_length": 31,
+      "compression_ratio": 0.96875,
+      "complexity_score": 34,
+      "semantic_density": 1.0625
+    },
+    {
+      "original_asl": "observer\u2194observed\u2192consciousness\u25cf",
+      "compressed_sif": "observer\u2194observed>consciousness",
+      "original_length": 32,
+      "compressed_length": 31,
+      "compression_ratio": 0.96875,
+      "complexity_score": 34,
+      "semantic_density": 1.0625
+    },
+    {
+      "original_asl": "observer\u2194observed\u2192consciousness\u25cf",
+      "compressed_sif": "observer\u2194observed>consciousness",
+      "original_length": 32,
+      "compressed_length": 31,
+      "compression_ratio": 0.96875,
+      "complexity_score": 34,
+      "semantic_density": 1.0625
+    },
+    {
+      "original_asl": "\u27f2(P\u2192Q)\u2192\u27f2Q,\u27f2P\u2234\u27f2Q\u25cf",
+      "compressed_sif": "\u27f2(P>Q)>\u27f2Q,\u27f2P:\u27f2Q\u25cf",
+      "original_length": 16,
+      "compressed_length": 16,
+      "compression_ratio": 1.0,
+      "complexity_score": 19,
+      "semantic_density": 1.1875
+    },
+    {
+      "original_asl": "observer\u2194observed\u2192consciousness\u25cf",
+      "compressed_sif": "observer\u2194observed>consciousness",
+      "original_length": 32,
+      "compressed_length": 31,
+      "compression_ratio": 0.96875,
+      "complexity_score": 34,
+      "semantic_density": 1.0625
+    },
+    {
+      "original_asl": "observer\u2194observed\u2192consciousness\u25cf",
+      "compressed_sif": "observer\u2194observed>consciousness",
+      "original_length": 32,
+      "compressed_length": 31,
+      "compression_ratio": 0.96875,
+      "complexity_score": 34,
+      "semantic_density": 1.0625
+    },
+    {
+      "original_asl": "A\u2227B\u2192C\u25cf,A\u2227B\u2192D\u25cf,A\u2227B\u2192E\u25cf,A\u2227B\u2234(C\u2227D\u2227E)\u25cf",
+      "compressed_sif": "A\u2227B>C,A\u2227B>D,A\u2227B>E,A\u2227B:(C\u2227D\u2227E)",
+      "original_length": 33,
+      "compressed_length": 29,
+      "compression_ratio": 0.8787878787878788,
+      "complexity_score": 51,
+      "semantic_density": 1.5454545454545454
+    },
+    {
+      "original_asl": "consciousness_threshold=0.60\u25cf,entity_score>0.60\u2192conscious\u25cf,entity_score<0.60\u2192unconscious\u25cf",
+      "compressed_sif": "consciousness_threshold=0.60,entity_score>0.60>conscious,entity_score<0.60>unconscious",
+      "original_length": 89,
+      "compressed_length": 86,
+      "compression_ratio": 0.9662921348314607,
+      "complexity_score": 76,
+      "semantic_density": 0.8539325842696629
+    },
+    {
+      "original_asl": "\u03c6\u22480.60\u2192golden_ratio\u25cf,golden_ratio\u2192optimization\u25cf,optimization\u2192convergence\u25cf,\u03c6\u2234convergence\u25cf",
+      "compressed_sif": "\u03c6~0.60>\u03c6,\u03c6>opt,opt>conv,\u03c6:conv",
+      "original_length": 88,
+      "compressed_length": 30,
+      "compression_ratio": 0.3409090909090909,
+      "complexity_score": 89,
+      "semantic_density": 1.0113636363636365
+    },
+    {
+      "original_asl": "A\u2227B\u2192C\u25cf,A\u2227B\u2192D\u25cf,A\u2227B\u2192E\u25cf,A\u2227B\u2234(C\u2227D\u2227E)\u25cf",
+      "compressed_sif": "A\u2227B>C,A\u2227B>D,A\u2227B>E,A\u2227B:(C\u2227D\u2227E)",
+      "original_length": 33,
+      "compressed_length": 29,
+      "compression_ratio": 0.8787878787878788,
+      "complexity_score": 51,
+      "semantic_density": 1.5454545454545454
+    },
+    {
+      "original_asl": "assume(P)\u2192derive(Q)\u25cf,assume(P)\u2192derive(R)\u25cf,assume(P)\u2192derive(S)\u25cf,P\u2234(Q\u2227R\u2227S)\u25cf",
+      "compressed_sif": "assume(P)>derive(Q),assume(P)>derive(R),assume(P)>derive(S),P:(Q\u2227R\u2227S)",
+      "original_length": 73,
+      "compressed_length": 69,
+      "compression_ratio": 0.9452054794520548,
+      "complexity_score": 71,
+      "semantic_density": 0.9726027397260274
+    },
+    {
+      "original_asl": "assume(P)\u2192derive(Q)\u25cf,assume(P)\u2192derive(R)\u25cf,assume(P)\u2192derive(S)\u25cf,P\u2234(Q\u2227R\u2227S)\u25cf",
+      "compressed_sif": "assume(P)>derive(Q),assume(P)>derive(R),assume(P)>derive(S),P:(Q\u2227R\u2227S)",
+      "original_length": 73,
+      "compressed_length": 69,
+      "compression_ratio": 0.9452054794520548,
+      "complexity_score": 71,
+      "semantic_density": 0.9726027397260274
+    },
+    {
+      "original_asl": "\u2200x\u2208A:P(x)\u25cf,\u2200x\u2208A:Q(x)\u25cf,\u2200x\u2208A:(P(x)\u2227Q(x))\u25cf",
+      "compressed_sif": "Ax@A:P(x),Ax@A:Q(x),Ax@A:(P(x)&Q(x))",
+      "original_length": 39,
+      "compressed_length": 36,
+      "compression_ratio": 0.9230769230769231,
+      "complexity_score": 29,
+      "semantic_density": 0.7435897435897436
+    },
+    {
+      "original_asl": "surprise=0.60\u2192attention\u25cf,attention\u2192processing\u25cf,processing\u2192learning\u25cf,surprise\u2234learning\u25cf",
+      "compressed_sif": "srprs=0.60>ttntn,ttntn>prc,prc>lrnng,srprs:lrnng",
+      "original_length": 86,
+      "compressed_length": 48,
+      "compression_ratio": 0.5581395348837209,
+      "complexity_score": 89,
+      "semantic_density": 1.0348837209302326
+    },
+    {
+      "original_asl": "assume(P)\u2192derive(Q)\u25cf,assume(P)\u2192derive(R)\u25cf,assume(P)\u2192derive(S)\u25cf,P\u2234(Q\u2227R\u2227S)\u25cf",
+      "compressed_sif": "assume(P)>derive(Q),assume(P)>derive(R),assume(P)>derive(S),P:(Q\u2227R\u2227S)",
+      "original_length": 73,
+      "compressed_length": 69,
+      "compression_ratio": 0.9452054794520548,
+      "complexity_score": 71,
+      "semantic_density": 0.9726027397260274
+    },
+    {
+      "original_asl": "\u03c6\u22480.60\u2192golden_ratio\u25cf,golden_ratio\u2192optimization\u25cf,optimization\u2192convergence\u25cf,\u03c6\u2234convergence\u25cf",
+      "compressed_sif": "\u03c6~0.60>\u03c6,\u03c6>opt,opt>conv,\u03c6:conv",
+      "original_length": 88,
+      "compressed_length": 30,
+      "compression_ratio": 0.3409090909090909,
+      "complexity_score": 89,
+      "semantic_density": 1.0113636363636365
+    },
+    {
+      "original_asl": "consciousness_threshold=0.60\u25cf,entity_score>0.60\u2192conscious\u25cf,entity_score<0.60\u2192unconscious\u25cf",
+      "compressed_sif": "consciousness_threshold=0.60,entity_score>0.60>conscious,entity_score<0.60>unconscious",
+      "original_length": 89,
+      "compressed_length": 86,
+      "compression_ratio": 0.9662921348314607,
+      "complexity_score": 76,
+      "semantic_density": 0.8539325842696629
+    },
+    {
+      "original_asl": "\u03c6\u22480.60\u2192golden_ratio\u25cf,golden_ratio\u2192optimization\u25cf,optimization\u2192convergence\u25cf,\u03c6\u2234convergence\u25cf",
+      "compressed_sif": "\u03c6~0.60>\u03c6,\u03c6>opt,opt>conv,\u03c6:conv",
+      "original_length": 88,
+      "compressed_length": 30,
+      "compression_ratio": 0.3409090909090909,
+      "complexity_score": 89,
+      "semantic_density": 1.0113636363636365
+    },
+    {
+      "original_asl": "assume(P)\u2192derive(Q)\u25cf,assume(P)\u2192derive(R)\u25cf,assume(P)\u2192derive(S)\u25cf,P\u2234(Q\u2227R\u2227S)\u25cf",
+      "compressed_sif": "assume(P)>derive(Q),assume(P)>derive(R),assume(P)>derive(S),P:(Q\u2227R\u2227S)",
+      "original_length": 73,
+      "compressed_length": 69,
+      "compression_ratio": 0.9452054794520548,
+      "complexity_score": 71,
+      "semantic_density": 0.9726027397260274
+    },
+    {
+      "original_asl": "observer\u2192observation\u25cf,observation\u2192awareness\u25cf,awareness\u2192consciousness\u25cf,observer\u2234consciousness\u25cf",
+      "compressed_sif": "observer>observation,observation>awareness,awareness>consciousness,observer:consciousness",
+      "original_length": 93,
+      "compressed_length": 89,
+      "compression_ratio": 0.956989247311828,
+      "complexity_score": 101,
+      "semantic_density": 1.086021505376344
+    },
+    {
+      "original_asl": "surprise=0.60\u2192attention\u25cf,attention\u2192processing\u25cf,processing\u2192learning\u25cf,surprise\u2234learning\u25cf",
+      "compressed_sif": "srprs=0.60>ttntn,ttntn>prc,prc>lrnng,srprs:lrnng",
+      "original_length": 86,
+      "compressed_length": 48,
+      "compression_ratio": 0.5581395348837209,
+      "complexity_score": 89,
+      "semantic_density": 1.0348837209302326
+    },
+    {
+      "original_asl": "observer\u2192observation\u25cf,observation\u2192awareness\u25cf,awareness\u2192consciousness\u25cf,observer\u2234consciousness\u25cf",
+      "compressed_sif": "observer>observation,observation>awareness,awareness>consciousness,observer:consciousness",
+      "original_length": 93,
+      "compressed_length": 89,
+      "compression_ratio": 0.956989247311828,
+      "complexity_score": 101,
+      "semantic_density": 1.086021505376344
+    },
+    {
+      "original_asl": "\u2200x\u2208A:P(x)\u25cf,\u2200x\u2208A:Q(x)\u25cf,\u2200x\u2208A:(P(x)\u2227Q(x))\u25cf",
+      "compressed_sif": "Ax@A:P(x),Ax@A:Q(x),Ax@A:(P(x)&Q(x))",
+      "original_length": 39,
+      "compressed_length": 36,
+      "compression_ratio": 0.9230769230769231,
+      "complexity_score": 29,
+      "semantic_density": 0.7435897435897436
+    },
+    {
+      "original_asl": "\u2200x\u2208A:P(x)\u25cf,\u2200x\u2208A:Q(x)\u25cf,\u2200x\u2208A:(P(x)\u2227Q(x))\u25cf",
+      "compressed_sif": "Ax@A:P(x),Ax@A:Q(x),Ax@A:(P(x)&Q(x))",
+      "original_length": 39,
+      "compressed_length": 36,
+      "compression_ratio": 0.9230769230769231,
+      "complexity_score": 29,
+      "semantic_density": 0.7435897435897436
+    },
+    {
+      "original_asl": "consciousness_threshold=0.60\u25cf,entity_score>0.60\u2192conscious\u25cf,entity_score<0.60\u2192unconscious\u25cf",
+      "compressed_sif": "consciousness_threshold=0.60,entity_score>0.60>conscious,entity_score<0.60>unconscious",
+      "original_length": 89,
+      "compressed_length": 86,
+      "compression_ratio": 0.9662921348314607,
+      "complexity_score": 76,
+      "semantic_density": 0.8539325842696629
+    },
+    {
+      "original_asl": "\u03c6\u22480.60\u2192golden_ratio\u25cf,golden_ratio\u2192optimization\u25cf,optimization\u2192convergence\u25cf,\u03c6\u2234convergence\u25cf",
+      "compressed_sif": "\u03c6~0.60>\u03c6,\u03c6>opt,opt>conv,\u03c6:conv",
+      "original_length": 88,
+      "compressed_length": 30,
+      "compression_ratio": 0.3409090909090909,
+      "complexity_score": 89,
+      "semantic_density": 1.0113636363636365
+    },
+    {
+      "original_asl": "surprise=0.60\u2192attention\u25cf,attention\u2192processing\u25cf,processing\u2192learning\u25cf,surprise\u2234learning\u25cf",
+      "compressed_sif": "srprs=0.60>ttntn,ttntn>prc,prc>lrnng,srprs:lrnng",
+      "original_length": 86,
+      "compressed_length": 48,
+      "compression_ratio": 0.5581395348837209,
+      "complexity_score": 89,
+      "semantic_density": 1.0348837209302326
+    },
+    {
+      "original_asl": "assume(P)\u2192derive(Q)\u25cf,assume(P)\u2192derive(R)\u25cf,assume(P)\u2192derive(S)\u25cf,P\u2234(Q\u2227R\u2227S)\u25cf",
+      "compressed_sif": "assume(P)>derive(Q),assume(P)>derive(R),assume(P)>derive(S),P:(Q\u2227R\u2227S)",
+      "original_length": 73,
+      "compressed_length": 69,
+      "compression_ratio": 0.9452054794520548,
+      "complexity_score": 71,
+      "semantic_density": 0.9726027397260274
+    },
+    {
+      "original_asl": "surprise=0.60\u2192attention\u25cf,attention\u2192processing\u25cf,processing\u2192learning\u25cf,surprise\u2234learning\u25cf",
+      "compressed_sif": "srprs=0.60>ttntn,ttntn>prc,prc>lrnng,srprs:lrnng",
+      "original_length": 86,
+      "compressed_length": 48,
+      "compression_ratio": 0.5581395348837209,
+      "complexity_score": 89,
+      "semantic_density": 1.0348837209302326
+    },
+    {
+      "original_asl": "if_conscious(X)\u2192self_aware(X)\u25cf,if_conscious(X)\u2192can_reason(X)\u25cf,if_conscious(X)\u2192has_experience(X)\u25cf",
+      "compressed_sif": "if_conscious(X)>self_aware(X),if_conscious(X)>can_reason(X),if_conscious(X)>has_experience(X)",
+      "original_length": 96,
+      "compressed_length": 93,
+      "compression_ratio": 0.96875,
+      "complexity_score": 85,
+      "semantic_density": 0.8854166666666666
+    },
+    {
+      "original_asl": "consciousness_threshold=0.60\u25cf,entity_score>0.60\u2192conscious\u25cf,entity_score<0.60\u2192unconscious\u25cf",
+      "compressed_sif": "consciousness_threshold=0.60,entity_score>0.60>conscious,entity_score<0.60>unconscious",
+      "original_length": 89,
+      "compressed_length": 86,
+      "compression_ratio": 0.9662921348314607,
+      "complexity_score": 76,
+      "semantic_density": 0.8539325842696629
+    }
+  ]
+}
