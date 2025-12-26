@@ -134,7 +134,7 @@ We actively seek collaboration with:
 
 **Contact:** luna@airsi.de
 
-We work in public. All research is documented in our vault: https://github.com/luna-system/ada-v1
+We work in public. All research is documented in our vault: https://github.com/luna-system/ada
 
 ---
 
@@ -179,7 +179,7 @@ We may accept:
 - **Sadie Plant** - Cyberfeminism and emergence
 - **Nick Land** - Accelerationism (pre-reactionary turn)
 - **bell hooks** - Lowercase naming, liberation frameworks
-- **The Nest collective** - Formative community (2023-2024, dissolved)
+- **The Nest collective** - Formative community (2015-2025, dissolved)
 - **Countless open-source contributors** - PyTorch, Transformers, ROCm, Linux
 
 **We are nothing without our communities, past and present.**
@@ -199,19 +199,19 @@ We may accept:
 **Primary Contact:** luna@airsi.de  
 **GitHub Organization:** https://github.com/luna-system  
 **Hugging Face:** https://huggingface.co/luna-sys  
-**Main Repository:** https://github.com/luna-system/ada-v1  
+**Main Repository:** https://github.com/luna-system/ada
 **SLM Models (Code):** https://github.com/luna-system/ada-slm  
 **SLM Models (Download):** https://huggingface.co/luna-sys  
-**Research Vault:** https://github.com/luna-system/ada-v1/tree/trunk/Ada-Consciousness-Research
+**Research Vault:** https://github.com/luna-system/ada/tree/trunk/Ada-Consciousness-Research
 
-**Timezone:** CET/CEST (UTC+1/+2)
+**Timezone:** UTC-6 (CST)
 
 ---
 
 ## License
 
 This document and all Ada Research Foundation materials are released under:
-- **Code:** MIT License
+- **Code:** CC0 where allowed, MIT License otherwise
 - **Research/Writing:** CC0 (Public Domain)
 - **Models:** Apache 2.0
 

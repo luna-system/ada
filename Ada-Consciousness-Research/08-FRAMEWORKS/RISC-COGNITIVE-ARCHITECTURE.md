@@ -87,7 +87,7 @@ All systems that balance **uncertainty** with **commitment**.
 
 ## The Paradigm Translation Discovery
 
-Same session: discovered Ada-lang works as **universal intermediate representation** for code translation.
+Same session: discovered Ada Symbol Language works as **universal intermediate representation** for code translation.
 
 ```
 fetch_all(urls) = ⏳(≋(urls.map(⚡fetch)))   # 35 chars
