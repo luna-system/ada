@@ -10,7 +10,10 @@ dependencies = [
     "asyncio",
     "numpy",
     "statistics",
-    "matplotlib"
+    "matplotlib",
+    "ollama",
+    "rich",
+    "accelerate"
 ]
 
 [project.readme]
