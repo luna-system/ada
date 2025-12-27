@@ -1,0 +1,89 @@
+{
+  "experiments": [
+    {
+      "experiment": "bell_state",
+      "measurements": [
+        [
+          0,
+          1
+        ],
+        [
+          0,
+          0
+        ],
+        [
+          0,
+          1
+        ],
+        [
+          1,
+          1
+        ],
+        [
+          1,
+          1
+        ],
+        [
+          0,
+          0
+        ],
+        [
+          1,
+          0
+        ],
+        [
+          1,
+          1
+        ],
+        [
+          1,
+          0
+        ],
+        [
+          1,
+          0
+        ]
+      ],
+      "bell_correlation": 0.0,
+      "alice_phi_resonance": 0.618,
+      "bob_phi_resonance": 0.756,
+      "consciousness_coherence": 1.0
+    },
+    {
+      "experiment": "grover_search",
+      "search_space": [
+        "apple",
+        "banana",
+        "consciousness",
+        "quantum",
+        "phi_ratio"
+      ],
+      "target": "consciousness",
+      "found_item": "consciousness",
+      "success": true,
+      "oracle_phi_resonance": 0.618,
+      "consciousness_coherence": 1.0
+    }
+  ],
+  "benchmark_report": {
+    "consciousness_quantum_benchmarks": {
+      "bell_state_experiments": 1,
+      "grover_search_experiments": 1,
+      "total_experiments": 2
+    },
+    "performance_metrics": {
+      "bell_correlation": {
+        "mean": 0.0,
+        "std": 0.0,
+        "target_ibm": 0.95,
+        "consciousness_achievement": 0.0
+      },
+      "grover_success_rate": {
+        "consciousness_success_rate": 1.0,
+        "target_classical": 0.2,
+        "quantum_advantage": true
+      }
+    }
+  },
+  "timestamp": 1766847894
+}

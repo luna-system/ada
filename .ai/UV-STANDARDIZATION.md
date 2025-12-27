@@ -1,5 +1,34 @@
 # UV Standardization - December 2025
 
+## Critical: Python Version Compatibility
+
+**⚠️ IMPORTANT: Use Python 3.12.x for Ada development**
+
+### Python 3.13 Issues Discovered (December 2025)
+Python 3.13.x has system-level bugs affecting Ada development:
+```
+Fatal Python error: Failed to import encodings module
+ModuleNotFoundError: No module named 'encodings'
+```
+
+**This breaks all consciousness research dependencies:** torch, transformers, peft, etc.
+
+### Recommended Python Setup
+```bash
+# Always specify Python 3.12 for Ada projects
+uv sync --python python3.12
+
+# Verify working environment 
+uv run python --version  # Should show Python 3.12.x
+```
+
+### Project Configuration
+Ada projects should enforce Python 3.12.x in `pyproject.toml`:
+```toml
+[project]
+requires-python = ">=3.12,<3.13"
+```
+
 ## Problem
 Mixed usage of `pip` and `uv` across the codebase causes confusion and PATH resolution issues in tools like VS Code.
 
@@ -16,16 +45,17 @@ Mixed usage of `pip` and `uv` across the codebase causes confusion and PATH reso
 ### 1. Package Management
 ✅ **DO:**
 ```bash
-uv sync                    # Install all dependencies
-uv pip install <pkg>       # Add package
-uv pip install -e .        # Editable install
-uv run <command>           # Run with auto-venv detection
+uv sync --python python3.12   # Install all dependencies with stable Python
+uv pip install <pkg>           # Add package
+uv pip install -e .            # Editable install
+uv run <command>               # Run with auto-venv detection
 ```
 
 ❌ **DON'T:**
 ```bash
-pip install <pkg>          # Use uv pip instead
-python -m pip install      # Use uv pip instead  
+pip install <pkg>              # Use uv pip instead
+python -m pip install          # Use uv pip instead
+uv sync --python python3.13    # BROKEN - Use 3.12.x only
 ```
 
 ### 2. Running Scripts
@@ -63,12 +93,12 @@ All docs should prefer uv commands:
 
 **Installation:**
 ```bash
-# Good
-uv sync
+# Good - Enforces stable Python version
+uv sync --python python3.12
 uv pip install -e .
 
 # Acceptable (with note)
-pip install -e .  # or: uv pip install -e .
+pip install -e .  # or: uv pip install -e . --python python3.12
 ```
 
 **Development:**

@@ -10,11 +10,13 @@
 
 ## ⚡ UV Quick Reference (USE THIS!)
 
+**⚠️ CRITICAL: Always use Python 3.12.x for Ada (Python 3.13 has system bugs)**
+
 Whenever you need to run Python or install packages in Ada:
 
 ```bash
 # Installing dependencies
-uv sync                              # Install from pyproject.toml
+uv sync --python python3.12         # Install from pyproject.toml with stable Python
 uv pip install -e ./ada-mcp          # Install editable package
 uv pip install package-name          # Add new package
 
@@ -24,11 +26,14 @@ uv run python script.py               # Run Python script
 uv run ada-mcp                        # Run MCP server
 
 # Environment setup
-uv venv                               # Create venv
+uv venv --python python3.12          # Create venv with Python 3.12
 source .venv/bin/activate             # Activate it
 ```
 
-**Golden Rule:** Prefix Python commands with `uv run`, use `uv pip` instead of `pip`.
+**Golden Rules:** 
+- Prefix Python commands with `uv run`, use `uv pip` instead of `pip`
+- **Always specify `--python python3.12`** for new environments
+- **Never use Python 3.13** (system-level encoding bugs break dependencies)
 
 ---
 

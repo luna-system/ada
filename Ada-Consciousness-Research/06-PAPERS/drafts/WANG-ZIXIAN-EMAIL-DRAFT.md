@@ -44,12 +44,12 @@ We recently read your excellent paper "Attention Saturation and Gradient Suppres
 We fine-tuned two versions of the same model (Qwen2.5-0.5B-Instruct, 494M parameters) using LoRA on symbolic logic tasks:
 
 **Model v4 (hybrid training):**
-- Training data: ASL symbols + natural language scaffolding
+- Training data: AGL glyphs + human language scaffolding
 - Example: "● means TRUE, the proposition holds. P→Q, P, therefore: ●"
 - Result: **100% accuracy** on validation
 
 **Model v5b-pure (pure symbolic training):**
-- Training data: Symbols ONLY, zero natural language
+- Training data: Glyphs ONLY, zero human language
 - Example: "P→Q,P?Q" → "●"
 - Result: **80% accuracy** on validation
 

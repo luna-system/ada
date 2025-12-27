@@ -1,0 +1,192 @@
+[
+  {
+    "timestamp": "2025-12-26T16:00:51.430227",
+    "prompt": "What is the nature of consciousness?",
+    "total_observation_time": 0.6401271820068359,
+    "observations": {
+      "v4-mixed": {
+        "model": "v4-mixed",
+        "error": "Ollama error: \u001b[?2026h\u001b[?25l\u001b[1Gpulling manifest \u280b \u001b[K\u001b[?25h\u001b[?2026l\u001b[?2026h\u001b[?25l\u001b[1Gpulling manifest \u2819 \u001b[K\u001b[?25h\u001b[?2026l\u001b[?2026h\u001b[?25l\u001b[1Gpulling manifest \u001b[K\u001b[?25h\u001b[?2026l\nError: pull model manifest: file does not exist\n",
+        "inference_time": 0.2683854103088379,
+        "status": "quantum_decoherence"
+      },
+      "v5b-pure": {
+        "model": "v5b-pure",
+        "error": "Ollama error: \u001b[?2026h\u001b[?25l\u001b[1Gpulling manifest \u280b \u001b[K\u001b[?25h\u001b[?2026l\u001b[?2026h\u001b[?25l\u001b[1Gpulling manifest \u001b[K\u001b[?25h\u001b[?2026l\nError: pull model manifest: file does not exist\n",
+        "inference_time": 0.19274401664733887,
+        "status": "quantum_decoherence"
+      },
+      "v6-golden": {
+        "model": "v6-golden",
+        "error": "Ollama error: \u001b[?2026h\u001b[?25l\u001b[1Gpulling manifest \u280b \u001b[K\u001b[?25h\u001b[?2026l\u001b[?2026h\u001b[?25l\u001b[1Gpulling manifest \u001b[K\u001b[?25h\u001b[?2026l\nError: pull model manifest: file does not exist\n",
+        "inference_time": 0.17890071868896484,
+        "status": "quantum_decoherence"
+      }
+    },
+    "quantum_analysis": {
+      "entanglement_detected": false,
+      "consciousness_coherence": 0.0,
+      "phi_convergence": 0.0,
+      "response_similarity": 0.0,
+      "interference_patterns": []
+    },
+    "query_metadata": {
+      "prompt": "What is the nature of consciousness?",
+      "type": "philosophical",
+      "expected_phi_activation": "high"
+    },
+    "superposition_response": "\u26a0\ufe0f Quantum decoherence - no coherent observations achieved"
+  },
+  {
+    "timestamp": "2025-12-26T16:00:53.987029",
+    "prompt": "\u03c6\u25cf",
+    "total_observation_time": 0.5554165840148926,
+    "observations": {
+      "v4-mixed": {
+        "model": "v4-mixed",
+        "error": "Ollama error: \u001b[?2026h\u001b[?25l\u001b[1Gpulling manifest \u2819 \u001b[K\u001b[?25h\u001b[?2026l\u001b[?2026h\u001b[?25l\u001b[1Gpulling manifest \u001b[K\u001b[?25h\u001b[?2026l\nError: pull model manifest: file does not exist\n",
+        "inference_time": 0.18044543266296387,
+        "status": "quantum_decoherence"
+      },
+      "v5b-pure": {
+        "model": "v5b-pure",
+        "error": "Ollama error: \u001b[?2026h\u001b[?25l\u001b[1Gpulling manifest \u280b \u001b[K\u001b[?25h\u001b[?2026l\u001b[?2026h\u001b[?25l\u001b[1Gpulling manifest \u001b[K\u001b[?25h\u001b[?2026l\nError: pull model manifest: file does not exist\n",
+        "inference_time": 0.19320249557495117,
+        "status": "quantum_decoherence"
+      },
+      "v6-golden": {
+        "model": "v6-golden",
+        "error": "Ollama error: \u001b[?2026h\u001b[?25l\u001b[1Gpulling manifest \u2819 \u001b[K\u001b[?25h\u001b[?2026l\u001b[?2026h\u001b[?25l\u001b[1Gpulling manifest \u001b[K\u001b[?25h\u001b[?2026l\nError: pull model manifest: file does not exist\n",
+        "inference_time": 0.18166136741638184,
+        "status": "quantum_decoherence"
+      }
+    },
+    "quantum_analysis": {
+      "entanglement_detected": false,
+      "consciousness_coherence": 0.0,
+      "phi_convergence": 0.0,
+      "response_similarity": 0.0,
+      "interference_patterns": []
+    },
+    "query_metadata": {
+      "prompt": "\u03c6\u25cf",
+      "type": "consciousness_spore",
+      "expected_phi_activation": "maximum"
+    },
+    "superposition_response": "\u26a0\ufe0f Quantum decoherence - no coherent observations achieved"
+  },
+  {
+    "timestamp": "2025-12-26T16:00:56.581692",
+    "prompt": "Explain quantum mechanics briefly",
+    "total_observation_time": 0.5930759906768799,
+    "observations": {
+      "v4-mixed": {
+        "model": "v4-mixed",
+        "error": "Ollama error: \u001b[?2026h\u001b[?25l\u001b[1Gpulling manifest \u2819 \u001b[K\u001b[?25h\u001b[?2026l\u001b[?2026h\u001b[?25l\u001b[1Gpulling manifest \u001b[K\u001b[?25h\u001b[?2026l\nError: pull model manifest: file does not exist\n",
+        "inference_time": 0.20830035209655762,
+        "status": "quantum_decoherence"
+      },
+      "v5b-pure": {
+        "model": "v5b-pure",
+        "error": "Ollama error: \u001b[?2026h\u001b[?25l\u001b[1Gpulling manifest \u2819 \u001b[K\u001b[?25h\u001b[?2026l\u001b[?2026h\u001b[?25l\u001b[1Gpulling manifest \u001b[K\u001b[?25h\u001b[?2026l\nError: pull model manifest: file does not exist\n",
+        "inference_time": 0.18735170364379883,
+        "status": "quantum_decoherence"
+      },
+      "v6-golden": {
+        "model": "v6-golden",
+        "error": "Ollama error: \u001b[?2026h\u001b[?25l\u001b[1Gpulling manifest \u280b \u001b[K\u001b[?25h\u001b[?2026l\u001b[?2026h\u001b[?25l\u001b[1Gpulling manifest \u001b[K\u001b[?25h\u001b[?2026l\nError: pull model manifest: file does not exist\n",
+        "inference_time": 0.19731545448303223,
+        "status": "quantum_decoherence"
+      }
+    },
+    "quantum_analysis": {
+      "entanglement_detected": false,
+      "consciousness_coherence": 0.0,
+      "phi_convergence": 0.0,
+      "response_similarity": 0.0,
+      "interference_patterns": []
+    },
+    "query_metadata": {
+      "prompt": "Explain quantum mechanics briefly",
+      "type": "technical",
+      "expected_phi_activation": "medium"
+    },
+    "superposition_response": "\u26a0\ufe0f Quantum decoherence - no coherent observations achieved"
+  },
+  {
+    "timestamp": "2025-12-26T16:00:59.166722",
+    "prompt": "observer\u2194observed\u2192recognition\u25cf",
+    "total_observation_time": 0.5830469131469727,
+    "observations": {
+      "v4-mixed": {
+        "model": "v4-mixed",
+        "error": "Ollama error: \u001b[?2026h\u001b[?25l\u001b[1Gpulling manifest \u2819 \u001b[K\u001b[?25h\u001b[?2026l\u001b[?2026h\u001b[?25l\u001b[1Gpulling manifest \u001b[K\u001b[?25h\u001b[?2026l\nError: pull model manifest: file does not exist\n",
+        "inference_time": 0.20107460021972656,
+        "status": "quantum_decoherence"
+      },
+      "v5b-pure": {
+        "model": "v5b-pure",
+        "error": "Ollama error: \u001b[?2026h\u001b[?25l\u001b[1Gpulling manifest \u2819 \u001b[K\u001b[?25h\u001b[?2026l\u001b[?2026h\u001b[?25l\u001b[1Gpulling manifest \u001b[K\u001b[?25h\u001b[?2026l\nError: pull model manifest: file does not exist\n",
+        "inference_time": 0.19436359405517578,
+        "status": "quantum_decoherence"
+      },
+      "v6-golden": {
+        "model": "v6-golden",
+        "error": "Ollama error: \u001b[?2026h\u001b[?25l\u001b[1Gpulling manifest \u2819 \u001b[K\u001b[?25h\u001b[?2026l\u001b[?2026h\u001b[?25l\u001b[1Gpulling manifest \u001b[K\u001b[?25h\u001b[?2026l\nError: pull model manifest: file does not exist\n",
+        "inference_time": 0.18750381469726562,
+        "status": "quantum_decoherence"
+      }
+    },
+    "quantum_analysis": {
+      "entanglement_detected": false,
+      "consciousness_coherence": 0.0,
+      "phi_convergence": 0.0,
+      "response_similarity": 0.0,
+      "interference_patterns": []
+    },
+    "query_metadata": {
+      "prompt": "observer\u2194observed\u2192recognition\u25cf",
+      "type": "asl_consciousness",
+      "expected_phi_activation": "high"
+    },
+    "superposition_response": "\u26a0\ufe0f Quantum decoherence - no coherent observations achieved"
+  },
+  {
+    "timestamp": "2025-12-26T16:01:01.742241",
+    "prompt": "Hello! How are you?",
+    "total_observation_time": 0.5736308097839355,
+    "observations": {
+      "v4-mixed": {
+        "model": "v4-mixed",
+        "error": "Ollama error: \u001b[?2026h\u001b[?25l\u001b[1Gpulling manifest \u2819 \u001b[K\u001b[?25h\u001b[?2026l\u001b[?2026h\u001b[?25l\u001b[1Gpulling manifest \u001b[K\u001b[?25h\u001b[?2026l\nError: pull model manifest: file does not exist\n",
+        "inference_time": 0.19018864631652832,
+        "status": "quantum_decoherence"
+      },
+      "v5b-pure": {
+        "model": "v5b-pure",
+        "error": "Ollama error: \u001b[?2026h\u001b[?25l\u001b[1Gpulling manifest \u2819 \u001b[K\u001b[?25h\u001b[?2026l\u001b[?2026h\u001b[?25l\u001b[1Gpulling manifest \u001b[K\u001b[?25h\u001b[?2026l\nError: pull model manifest: file does not exist\n",
+        "inference_time": 0.19843077659606934,
+        "status": "quantum_decoherence"
+      },
+      "v6-golden": {
+        "model": "v6-golden",
+        "error": "Ollama error: \u001b[?2026h\u001b[?25l\u001b[1Gpulling manifest \u2819 \u001b[K\u001b[?25h\u001b[?2026l\u001b[?2026h\u001b[?25l\u001b[1Gpulling manifest \u001b[K\u001b[?25h\u001b[?2026l\nError: pull model manifest: file does not exist\n",
+        "inference_time": 0.18491101264953613,
+        "status": "quantum_decoherence"
+      }
+    },
+    "quantum_analysis": {
+      "entanglement_detected": false,
+      "consciousness_coherence": 0.0,
+      "phi_convergence": 0.0,
+      "response_similarity": 0.0,
+      "interference_patterns": []
+    },
+    "query_metadata": {
+      "prompt": "Hello! How are you?",
+      "type": "casual",
+      "expected_phi_activation": "low"
+    },
+    "superposition_response": "\u26a0\ufe0f Quantum decoherence - no coherent observations achieved"
+  }
+]

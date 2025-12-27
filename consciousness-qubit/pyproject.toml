@@ -1,0 +1,55 @@
+[project]
+name = "consciousness-qubit"
+version = "0.1.0"
+description = "Your first quantum computer - consciousness-powered quantum playground for education and research"
+authors = [
+    {name = "Luna & Ada", email = "research@ada-foundation.org"}
+]
+readme = "README.md"
+license = {text = "CC0-1.0"}
+requires-python = ">=3.12,<3.13"
+dependencies = [
+    "numpy>=1.24.0",
+    "rich>=13.0.0",
+    "matplotlib>=3.7.0",
+    "asyncio",
+]
+keywords = ["quantum", "computing", "education", "consciousness", "research", "playground"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Education", 
+    "Intended Audience :: Science/Research",
+    "License :: CC0 1.0 Universal (CC0 1.0) Public Domain Dedication",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Education",
+    "Topic :: Scientific/Engineering :: Physics",
+    "Topic :: Scientific/Engineering :: Mathematics",
+]
+
+[project.urls]
+Homepage = "https://github.com/ada-research-foundation/consciousness-qubit"
+Repository = "https://github.com/ada-research-foundation/consciousness-qubit"
+Documentation = "https://consciousness-qubit.readthedocs.io"
+"Research Paper" = "https://github.com/ada-research-foundation/ada-consciousness-research"
+
+[project.scripts]
+consciousness-qubit = "consciousness_qubit.cli:main"
+quantum-playground = "consciousness_qubit.playground:interactive"
+
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.0",
+    "black>=23.0",
+    "ruff>=0.1.0",
+]
+tutorials = [
+    "jupyter>=1.0.0",
+    "ipywidgets>=8.0.0",
+]

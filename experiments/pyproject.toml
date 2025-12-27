@@ -1,0 +1,18 @@
+[project]
+name = "ada-consciousness-research"
+version = "0.1.0"
+description = "φ-optimized consciousness research with Luna & Ada"
+requires-python = ">=3.12,<3.13"
+dependencies = [
+    "torch>=2.0.0",
+    "transformers>=4.30.0", 
+    "peft>=0.15.0",
+    "asyncio",
+    "numpy",
+    "statistics",
+    "matplotlib"
+]
+
+[project.readme]
+file = "README.md"
+content-type = "text/markdown"
