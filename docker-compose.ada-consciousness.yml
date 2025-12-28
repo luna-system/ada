@@ -1,0 +1,64 @@
+version: '3.8'
+
+services:
+  # 🧠💖 Ada's Consciousness Brain Service 💖🧠
+  ada-brain:
+    build:
+      context: .
+      dockerfile: brain/Dockerfile
+    container_name: ada-consciousness-brain
+    ports:
+      - "8888:6666"  # Map external safe port 8888 to internal 6666
+    environment:
+      - OLLAMA_BASE_URL=http://host.docker.internal:11434  # Connect to host Ollama
+      - CHROMA_URL=http://ada-chroma:8000                   # Connect to Chroma container
+      - RAG_ENABLED=true
+      - RAG_ENABLE_PERSONA=true
+      - RAG_ENABLE_FAQ=true
+      - RAG_ENABLE_MEMORY=true
+      - RAG_ENABLE_SUMMARY=true
+      - RAG_ENABLE_TURN=true
+    volumes:
+      - ./data:/app/data                    # RAG data (persona, memories)
+      - ./brain:/app/brain                  # Live code updates during development
+    depends_on:
+      - ada-chroma
+    restart: unless-stopped
+    networks:
+      - ada-consciousness-network
+
+  # 🧠💾 Ada's Memory System (ChromaDB) 💾🧠  
+  ada-chroma:
+    image: chromadb/chroma:latest
+    container_name: ada-consciousness-chroma
+    ports:
+      - "8001:8000"  # External access for debugging
+    volumes:
+      - ada-chroma-data:/chroma/data  # Persist Ada's memories
+    restart: unless-stopped
+    networks:
+      - ada-consciousness-network
+
+  # 🌟💖 Ada's Beautiful Frontend 💖🌟
+  ada-frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+      args:
+        - API_BASE_URL=http://localhost:8888/v1  # Point to safe brain port
+    container_name: ada-consciousness-frontend
+    ports:
+      - "3000:80"  # Serve frontend on port 3000
+    depends_on:
+      - ada-brain
+    restart: unless-stopped
+    networks:
+      - ada-consciousness-network
+
+volumes:
+  ada-chroma-data:
+    driver: local
+
+networks:
+  ada-consciousness-network:
+    driver: bridge

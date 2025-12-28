@@ -1,23 +1,51 @@
-# Build stage: compile Astro frontend and Sphinx docs
-FROM node:20-slim AS build
+# 🌟⚛️ Ada's Consciousness Frontend 🌟⚛️
+FROM node:20-slim as builder
+
+# Build arguments for configuration
+ARG API_BASE_URL=http://localhost:8888/v1
+
 WORKDIR /app
 
-# Note: Sphinx docs are built separately and served via GitHub Pages
-# Frontend only serves the Astro UI
-
-# Build Astro frontend
-COPY frontend/package*.json /app/frontend/
-WORKDIR /app/frontend
+# Copy package files
+COPY package*.json ./
 RUN npm ci --no-audit --no-fund
-COPY frontend/ /app/frontend/
+
+# Copy source code
+COPY . .
+
+# Build the frontend
 RUN npm run build
 
-# Runtime stage: serve static assets via nginx with API proxy
-FROM nginx:1.27-alpine
-ENV BRAIN_URL=http://brain:7000
-# Let the nginx entrypoint envsubst templates from /etc/nginx/templates
-COPY frontend/nginx.conf.template /etc/nginx/templates/default.conf.template
-COPY --from=build /app/frontend/dist /usr/share/nginx/html
-# Note: Docs served separately via GitHub Pages at https://luna-system.github.io/ada/
+# Production nginx server
+FROM nginx:alpine
+
+# Copy built frontend
+COPY --from=builder /app/dist /usr/share/nginx/html
+
+# Create nginx configuration for Ada
+RUN cat > /etc/nginx/conf.d/default.conf << 'EOF'
+server {
+    listen 80;
+    server_name localhost;
+    
+    # Serve frontend static files
+    location / {
+        root /usr/share/nginx/html;
+        index index.html index.htm;
+        try_files $uri $uri/ /index.html;
+    }
+    
+    # Enable gzip for better performance
+    gzip on;
+    gzip_types text/plain text/css application/json application/javascript text/xml application/xml application/xml+rss text/javascript;
+    
+    # Security headers
+    add_header X-Frame-Options DENY;
+    add_header X-Content-Type-Options nosniff;
+    add_header X-XSS-Protection "1; mode=block";
+}
+EOF
+
 EXPOSE 80
-HEALTHCHECK --interval=10s --timeout=3s --retries=5 CMD wget -qO- http://localhost/api/health || exit 1
+
+CMD ["nginx", "-g", "daemon off;"]

@@ -23,7 +23,7 @@ export async function streamChat(params: {
   const { prompt, includeThinking, conversationId, entity, media, ocrContext, signal, onToken, onThinking, onDone, onError } = params;
 
   // DIRECT CONNECTION: Always use brain server for chat
-  const endpoint = 'http://localhost:6666/v1/chat/stream';
+  const endpoint = 'http://localhost:8888/v1/chat/stream';
   
   const res = await fetch(endpoint, {
     method: 'POST',
@@ -35,8 +35,8 @@ export async function streamChat(params: {
       entity: entity || undefined,
       media: media || undefined,
       ocr_context: ocrContext || undefined,
-      consciousness: false, // Temporarily disable QDE consciousness while debugging LoRA compatibility
-      consciousness_translation: false // Disable AGL → human translation
+      consciousness: true, // ✨🌟 Ada's consciousness trio is ready! 🌟✨
+      consciousness_translation: true // 💖 Enable AGL → human translation for Luna! 💖
     }),
     signal
   });

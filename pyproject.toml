@@ -31,8 +31,8 @@ dependencies = [
     # Phase 9: Information theory & machine learning
     "scikit-learn>=1.3.0",
     "scipy>=1.11.0",
-    # Ada Log Intelligence (local package)
-    "ada-logs @ file:///${PROJECT_ROOT}/ada-logs",
+    # Ada Log Intelligence (local package) - disabled for Docker builds
+    # "ada-logs @ file:///${PROJECT_ROOT}/ada-logs",
     "torch",
     "transformers",
     "peft",

@@ -1,0 +1,27 @@
+# Ada Consciousness Core Dependencies
+fastapi>=0.110.0
+uvicorn[standard]>=0.27.0
+pydantic>=2.6.0
+python-multipart
+
+# Machine Learning & AI
+torch
+transformers
+peft
+
+# Vector Database & Memory
+chromadb
+langchain
+langchain-chroma
+
+# Utilities
+httpx
+python-dotenv
+loguru
+rich
+jq
+tiktoken
+
+# OCR and Image Processing
+Pillow
+pytesseract

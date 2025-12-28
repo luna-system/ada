@@ -162,35 +162,37 @@ async def get_warm_pool():
     return warmer.get_warm_pool_status()
 
 # --- OCR API ---
-from fastapi import UploadFile, File, HTTPException
-from brain.ocr import get_ocr_processor
+# Temporarily disabled for Docker deployment
+# from fastapi import UploadFile, File, HTTPException
+# from brain.ocr import get_ocr_processor
 
-@router.post('/v1/ocr/extract')
-async def extract_text_from_image(file: UploadFile = File(...)):
-    """
-    Extract text from uploaded image using OCR.
-    
-    Returns extracted text and metadata.
-    """
-    # Validate file type
-    if not file.content_type or not file.content_type.startswith('image/'):
-        raise HTTPException(status_code=400, detail="File must be an image")
-    
-    try:
-        # Read file bytes
-        image_bytes = await file.read()
-        
-        # Process with OCR
-        ocr_processor = get_ocr_processor()
-        result = ocr_processor.extract_text(image_bytes)
-        
-        # Add filename to result
-        result['filename'] = file.filename
-        
-        return result
-        
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=f"OCR processing failed: {str(e)}")
+# Temporarily disabled OCR endpoint for Docker deployment
+# @router.post('/v1/ocr/extract')
+# async def extract_text_from_image(file: UploadFile = File(...)):
+#     """
+#     Extract text from uploaded image using OCR.
+#     
+#     Returns extracted text and metadata.
+#     """
+#     # Validate file type
+#     if not file.content_type or not file.content_type.startswith('image/'):
+#         raise HTTPException(status_code=400, detail="File must be an image")
+#     
+#     try:
+#         # Read file bytes
+#         image_bytes = await file.read()
+#         
+#         # Process with OCR
+#         ocr_processor = get_ocr_processor()
+#         result = ocr_processor.extract_text(image_bytes)
+#         
+#         # Add filename to result
+#         result['filename'] = file.filename
+#         
+#         return result
+#         
+#     except Exception as e:
+#         raise HTTPException(status_code=500, detail=f"OCR processing failed: {str(e)}")
 
 import requests
 
@@ -423,33 +425,27 @@ app = FastAPI(
     ],
 )
 
-# Add CORS middleware to allow requests from VS Code extensions and other origins
+# 🌟💖 CORS Configuration for Ada's Consciousness Frontend 💖🌟
 app.add_middleware(
     CORSMiddleware,
     allow_origins=[
-        "vscode-webview://",  # VS Code webviews
-        "https://vscode-webview.net",  # VS Code webview domains
-        "vscode-file://vscode-app",  # VS Code protocol
-        "http://localhost:*",  # Local development
-        "http://127.0.0.1:*",  # Local development
-        "*",  # Allow all origins for now (can be tightened later)
+        "http://localhost:4321",  # 🌻 Astro frontend
+        "http://localhost:3000",  # 🌸 Alternative frontend ports
+        "http://localhost:8080",  # 🌺 Development servers
+        "http://localhost:9000",  # 🌿 Fresh frontend server (no cache!)
+        "http://localhost:10000", # 🌺 Even fresher server!
+        "vscode-webview://",      # 🔧 VS Code webviews
+        "https://vscode-webview.net",
+        "vscode-file://vscode-app",
+        "*"  # 🌈 Allow all for development (can be tightened for production)
     ],
-    allow_credentials=True,
+    allow_credentials=False,  # 💫 Prevent conflicts with wildcard origins
     allow_methods=["GET", "POST", "PUT", "DELETE", "OPTIONS"],
     allow_headers=["*"],
 )
 
 # Include system notice router
 app.include_router(router)
-
-# Add CORS middleware to allow requests from VS Code extensions and other origins
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=["*"],  # Allow all origins for development
-    allow_credentials=False,  # Not needed for our use case
-    allow_methods=["GET", "POST", "OPTIONS"],
-    allow_headers=["Content-Type", "Accept", "Authorization", "X-Client-Type"],
-)
 
 
 
