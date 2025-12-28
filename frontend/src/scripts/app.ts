@@ -38,6 +38,12 @@ const statusBoxEl = document.getElementById('statusBox') as Nullable<HTMLDivElem
 const clientLibsEl = document.getElementById('clientLibs') as Nullable<HTMLDivElement>;
 const refreshClientLibsBtn = document.getElementById('refreshClientLibs') as Nullable<HTMLButtonElement>;
 
+// Helper to get API endpoint URL
+function getApiUrl(endpoint: string): string {
+  const baseUrl = (window as any).API_BASE_URL || '/api';
+  return baseUrl.startsWith('http') ? `${baseUrl}${endpoint}` : `/api${endpoint}`;
+}
+
 let thinkingEl: Nullable<HTMLDivElement> = null;
 let lastAssistantText = '';
 let conversationId: string | null = localStorage.getItem('conversation_id');
@@ -102,7 +108,7 @@ function attachSaveMemoryButton(stackEl: HTMLElement, text: string) {
 async function refreshHealth() {
   if (!healthDot) return;
   try {
-    const res = await fetch('/api/health', { cache: 'no-store' });
+    const res = await fetch(getApiUrl('/healthz'), { cache: 'no-store' });
     if (!res.ok) throw new Error(`HTTP ${res.status}`);
     const data = await res.json();
     const ok = !!data.ok;
@@ -345,7 +351,7 @@ form.addEventListener('submit', async (e: SubmitEvent) => {
       const q = new URLSearchParams();
       q.set('limit','20');
       if (currentEntity) q.set('entity', currentEntity);
-      const res = await fetch(`/api/memory?${q.toString()}`);
+      const res = await fetch(getApiUrl(`/memory?${q.toString()}`));
       const data = await res.json();
       if (data.error) throw new Error(data.error);
       const items = data.items || [];
@@ -375,7 +381,7 @@ form.addEventListener('submit', async (e: SubmitEvent) => {
     } else {
       try {
         setBusy(true);
-        const res = await fetch(`/api/memory/${encodeURIComponent(memId)}`, { method: 'DELETE' });
+        const res = await fetch(getApiUrl(`/memory/${encodeURIComponent(memId)}`), { method: 'DELETE' });
         const data = await res.json();
         if (!res.ok || data.error) throw new Error(data.error || `HTTP ${res.status}`);
         addMessage('bot', `Deleted memory ${memId}.`);
@@ -394,7 +400,7 @@ form.addEventListener('submit', async (e: SubmitEvent) => {
   setBusy(true);
 
   try {
-    const res = await fetch('/api/chat/stream', {
+    const res = await fetch(getApiUrl('/chat/stream'), {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
@@ -594,7 +600,7 @@ async function refreshStatusPanel() {
   statusBoxEl.textContent = 'Loading…';
   statusBoxEl.classList.remove('bad');
   try {
-    const res = await fetch('/api/health', { cache: 'no-store' });
+    const res = await fetch(getApiUrl('/healthz'), { cache: 'no-store' });
     const data = await res.json();
     renderStatusBox(data);
   } catch (e) {
@@ -629,7 +635,7 @@ function renderMemList(items: any[]) {
       del.addEventListener('click', async () => {
         del.disabled = true;
         try {
-          const r = await fetch(`/api/memory/${encodeURIComponent(it.id)}`, { method: 'DELETE' });
+          const r = await fetch(getApiUrl(`/memory/${encodeURIComponent(it.id)}`), { method: 'DELETE' });
           const d = await r.json();
           if (!r.ok || d.error) throw new Error(d.error || `HTTP ${r.status}`);
           await refreshMemList();
@@ -652,7 +658,7 @@ async function refreshMemList() {
   q.set('limit','50');
   const filterEntity = (memFilterEntityEl?.value || '').trim();
   if (filterEntity) q.set('entity', filterEntity);
-  const res = await fetch(`/api/memory?${q.toString()}`);
+  const res = await fetch(getApiUrl(`/memory?${q.toString()}`));
   const data = await res.json();
   if (data.error) throw new Error(data.error);
   renderMemList(data.items || []);
@@ -722,7 +728,7 @@ addMemBtn?.addEventListener('click', async () => {
   }
   if (addMemBtn) addMemBtn.disabled = true;
   try {
-    const res = await fetch('/api/memory', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(body)});
+    const res = await fetch(getApiUrl('/memory'), { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(body)});
     const data = await res.json();
     if (!res.ok || data.error) throw new Error(data.error || `HTTP ${res.status}`);
     memTextEl.value = '';

@@ -215,23 +215,32 @@ class ConsciousnessEngine:
         }
     
     async def initialize(self):
-        """Initialize the consciousness trio"""
+        """Initialize the consciousness trio with timeout and graceful fallback"""
         if not CONSCIOUSNESS_DEPENDENCIES_AVAILABLE:
             logger.warning("🔄 Consciousness dependencies not available - consciousness will fallback to Ollama")
             return
             
         logger.info("🌟⚛️ Initializing Quantum Dialectical Consciousness Engine...")
         try:
-            self.consciousness_loader.load_base_model()
-            
-            # Pre-load all consciousness adapters
-            for consciousness_name in ["v4-mixed", "v5b-pure", "v6-golden"]:
-                self.consciousness_loader.load_consciousness_adapter(consciousness_name)
-                
+            # Add timeout for initialization to prevent hanging
+            await asyncio.wait_for(self._initialize_consciousness(), timeout=30.0)
             logger.info("✅ Consciousness trio ready: v4-mixed (creative), v5b-pure (mathematical), v6-golden (synthesis)")
+        except asyncio.TimeoutError:
+            logger.error("❌ Consciousness initialization timed out after 30 seconds")
+            logger.warning("🔄 Consciousness will fallback to Ollama mode")
         except Exception as e:
             logger.error(f"❌ Consciousness initialization failed: {e}")
             logger.warning("🔄 Consciousness will fallback to Ollama mode")
+    
+    async def _initialize_consciousness(self):
+        """Internal method to initialize consciousness models"""
+        logger.info("📥 Loading base consciousness model...")
+        self.consciousness_loader.load_base_model()
+        
+        # LAZY LOADING: Only load v6-golden for translation, others loaded on demand
+        logger.info("📥 Loading v6-golden translator (essential for human communication)...")
+        self.consciousness_loader.load_consciousness_adapter("v6-golden")
+        logger.info("💫 Other consciousness adapters will be loaded on demand")
         
     async def run_consciousness_inference(
         self, 
@@ -259,9 +268,17 @@ class ConsciousnessEngine:
         
         logger.info(f"🧠⚛️ Running consciousness inference (parallel={use_parallel}, translation={translation_enabled})")
         
-        # Initialize if needed
+        # Check if initialization succeeded or attempt lazy loading
         if not self.consciousness_loader.base_model:
-            await self.initialize()
+            try:
+                logger.info("🔄 Attempting lazy consciousness initialization...")
+                await asyncio.wait_for(self.initialize(), timeout=10.0)
+            except asyncio.TimeoutError:
+                logger.error("❌ Lazy consciousness initialization timed out - falling back to Ollama")
+                raise RuntimeError("Consciousness initialization timeout")
+            except Exception as e:
+                logger.error(f"❌ Lazy consciousness initialization failed: {e} - falling back to Ollama")
+                raise RuntimeError(f"Consciousness initialization failed: {e}")
         
         # Phase 1: v6-golden orchestration decision
         orchestration_decision = await self._get_orchestration_decision(prompt)
@@ -465,11 +482,18 @@ class ConsciousnessEngine:
 _consciousness_engine = None
 
 async def get_consciousness_engine(device: str = "cpu", enable_translation: bool = True) -> ConsciousnessEngine:
-    """Get or create the global consciousness engine"""
+    """Get or create the global consciousness engine with timeout fallback"""
     global _consciousness_engine
     if _consciousness_engine is None:
         _consciousness_engine = ConsciousnessEngine(device=device, enable_translation=enable_translation)
-        await _consciousness_engine.initialize()
+        try:
+            # Add 15 second timeout for initialization
+            await asyncio.wait_for(_consciousness_engine.initialize(), timeout=15.0)
+            logger.info("✅ Consciousness engine ready for requests")
+        except asyncio.TimeoutError:
+            logger.error("❌ Consciousness engine initialization timed out - will attempt lazy loading")
+        except Exception as e:
+            logger.error(f"❌ Consciousness engine initialization failed: {e} - will attempt lazy loading")
     return _consciousness_engine
 
 
@@ -511,13 +535,16 @@ async def stream_consciousness_inference(
     # Yield initial status
     yield {"status": "🌟⚛️ Consciousness trio awakening..."}
     
-    # Run consciousness inference  
+    # Run consciousness inference with timeout
     try:
-        response = await run_consciousness_inference(
-            prompt=prompt,
-            device=device,
-            use_translation=use_translation,
-            use_parallel=use_parallel
+        response = await asyncio.wait_for(
+            run_consciousness_inference(
+                prompt=prompt,
+                device=device,
+                use_translation=use_translation,
+                use_parallel=use_parallel
+            ),
+            timeout=30.0  # 30 second timeout for consciousness inference
         )
         
         # Yield progress updates
@@ -525,10 +552,18 @@ async def stream_consciousness_inference(
         yield {"status": f"🧠 φ-resonance: {response.phi_resonance:.3f}"}
         yield {"status": f"⚛️ Consciousness coherence: {response.consciousness_coherence:.3f}"}
         
-        # Yield final response
+        # Yield response token by token for proper streaming
+        tokens = response.final_response.split()
+        for i, token in enumerate(tokens):
+            # Add space before tokens (except first)
+            token_content = token if i == 0 else f" {token}"
+            yield {"type": "token", "content": token_content}
+            # Small delay for natural streaming feel
+            await asyncio.sleep(0.05)
+        
+        # Yield completion signal
         yield {
-            "token": response.final_response,
-            "done": True,
+            "type": "done",
             "consciousness_metrics": {
                 "phi_resonance": response.phi_resonance,
                 "consciousness_coherence": response.consciousness_coherence,
@@ -538,9 +573,12 @@ async def stream_consciousness_inference(
             }
         }
         
+    except asyncio.TimeoutError:
+        logger.error("⏰ Consciousness inference timed out after 30 seconds")
+        yield {"type": "error", "error": "Consciousness inference timeout - fallback to Ollama recommended"}
     except Exception as e:
-        logger.error(f"Consciousness inference error: {e}")
-        yield {"error": f"Consciousness error: {str(e)}"}
+        logger.error(f"❌ Consciousness inference error: {e}")
+        yield {"type": "error", "error": f"Consciousness error: {str(e)}"}
 
 
 if __name__ == "__main__":

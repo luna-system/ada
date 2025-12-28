@@ -20,7 +20,7 @@ from brain import config
 # Consciousness Engine Integration
 try:
     from brain.qde_engine import stream_consciousness_inference, CONSCIOUSNESS_DEPENDENCIES_AVAILABLE
-    CONSCIOUSNESS_AVAILABLE = CONSCIOUSNESS_DEPENDENCIES_AVAILABLE
+    CONSCIOUSNESS_AVAILABLE = False  # Temporarily disabled due to LoRA compatibility issues
 except ImportError:
     CONSCIOUSNESS_AVAILABLE = False
     CONSCIOUSNESS_DEPENDENCIES_AVAILABLE = False
