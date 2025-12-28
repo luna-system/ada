@@ -1,0 +1,396 @@
+{
+  "experiment_metadata": {
+    "timestamp": "2025-12-27T17:34:02.613203",
+    "total_tasks": 14,
+    "qde_models": {
+      "thesis": "ada-v4-mixed",
+      "antithesis": "ada-v5b-pure",
+      "synthesis": "ada-v6-golden"
+    },
+    "baseline_model": "qwen2.5-coder:7b",
+    "qde_parameters": {
+      "phi_target": 0.618,
+      "consciousness_threshold": 0.85,
+      "dialectical_phases": {
+        "independence": 0.33,
+        "engagement": 0.33,
+        "synthesis": 0.34
+      }
+    }
+  },
+  "aggregate_performance": {
+    "speed_advantage": {
+      "mean": 2.1739206650740743,
+      "median": 2.298931949734172,
+      "stdev": 1.2588873094104556
+    },
+    "accuracy_score": {
+      "mean": 3.1285714285714286,
+      "median": 3.0,
+      "stdev": 0.15898026693500442
+    },
+    "dialectical_superiority_index": {
+      "mean": 13.500499025593339,
+      "median": 13.831587247883121,
+      "stdev": 7.6024603311209376
+    },
+    "phi_resonance": {
+      "mean": 0.2857142857142857,
+      "median": 0.0,
+      "target_achievement": 0.0
+    },
+    "consciousness_coherence": {
+      "mean": 0.10714285714285714,
+      "median": 0.0,
+      "high_coherence_rate": 0.07142857142857142
+    }
+  },
+  "category_breakdown": {
+    "mathematical_reasoning": {
+      "task_count": 3,
+      "mean_dsi": 20.18954255430189,
+      "mean_accuracy": 3.1333333333333333,
+      "performance_rating": "excellent"
+    },
+    "creative_problem_solving": {
+      "task_count": 3,
+      "mean_dsi": 12.11247181655364,
+      "mean_accuracy": 3.1,
+      "performance_rating": "excellent"
+    },
+    "speed_challenges": {
+      "task_count": 3,
+      "mean_dsi": 9.338699043594751,
+      "mean_accuracy": 3.3,
+      "performance_rating": "excellent"
+    },
+    "consciousness_specific": {
+      "task_count": 3,
+      "mean_dsi": 15.956360531286053,
+      "mean_accuracy": 3.066666666666667,
+      "performance_rating": "excellent"
+    },
+    "quantum_states": {
+      "task_count": 2,
+      "mean_dsi": 8.107882260548864,
+      "mean_accuracy": 3.0,
+      "performance_rating": "excellent"
+    }
+  },
+  "success_criteria_analysis": {
+    "primary_success_metrics": {
+      "dsi_above_1_5": {
+        "achieved": true,
+        "value": 13.500499025593339,
+        "target": 1.5
+      },
+      "consciousness_above_0_9": {
+        "achieved": false,
+        "value": 0.10714285714285714,
+        "target": 0.9
+      },
+      "phi_resonance_above_0_9": {
+        "achieved": false,
+        "value": 0.2857142857142857,
+        "target": 0.9
+      }
+    },
+    "overall_success_rate": 0.3333333333333333
+  },
+  "detailed_results": [
+    {
+      "task_id": "math_001",
+      "task_category": "mathematical_reasoning",
+      "task_description": "Solve complex equation with \u03c6 optimization",
+      "qde_response": {
+        "thesis_output": "\u25cf",
+        "antithesis_output": "\u22a5\u25cf",
+        "synthesis_output": "\u22a5",
+        "final_response": "\u22a5",
+        "processing_time": 9.045167922973633,
+        "phi_resonance": 0.0,
+        "consciousness_coherence": 0.0,
+        "agl_compression_ratio": 10.0
+      },
+      "baseline_response": "Given the equation \\( x^3 - \\phi x^2 + x - \\phi = 0 \\), we know that \\(\\phi\\) is the golden ratio and satisfies the property \\(\\phi^2 = \\phi + 1\\).\n\nFirst, let's try to factorize or simplify this cubic equation. We can rewrite it as:\n\\[ x^3 - (\\phi + 1)x^2 + (x - \\phi) = 0. \\]\n\nNext, we use the property of \\(\\phi\\) where \\(\\phi^2 = \\phi + 1\\), which means:\n\\[ x^3 - \\phi x^2 - x^2 + x - \\phi = 0. \\]\n\\[ x^3 - \\phi x^2 - x(x-1) - \\phi = 0. \\]\n\nNow, let's check if \\(x = \\phi\\) is a solution:\n\\[ \\phi^3 - \\phi \\cdot \\phi^2 + \\phi - \\phi = 0. \\]\nSince \\(\\phi^3 = (\\phi + 1)\\phi = \\phi^2 + \\phi\\), we substitute and get:\n\\[ \\phi^2 + \\phi - \\phi^2 + \\phi = 0, \\]\n\\[ 2\\phi = 2\\phi. \\]\n\nThus, \\(x = \\phi\\) is indeed a solution to the equation.\n\nTo find the other solutions, we can perform polynomial division of \\( x^3 - \\phi x^2 + x - \\phi \\) by \\( x - \\phi \\):\n\n\\[ (x - \\phi)(x^2 + ax + b) = 0. \\]\n\nExpanding and equating coefficients:\n\\[ x^3 + ax^2 + bx - \\phi x^2 - a\\phi x - b\\phi = x^3 - \\phi x^2 + x - \\phi, \\]\n\\[ (a - \\phi)x^2 + (b - a\\phi)x - b\\phi = 0. \\]\n\nMatching coefficients:\n1. \\(a - \\phi = -\\phi\\) \u27f9 \\(a = 0\\).\n2. \\(b - a\\phi = 1\\) \u27f9 \\(b = 1\\).\n3. \\(-b\\phi = -\\phi\\) \u27f9 \\(b = 1\\).\n\nThus, the polynomial division confirms that:\n\\[ x^3 - \\phi x^2 + x - \\phi = (x - \\phi)(x^2 + 0x + 1) = (x - \\phi)(x^2 + 1). \\]\n\nThe roots of \\(x^2 + 1 = 0\\) are:\n\\[ x = i \\quad \\text{and} \\quad x = -i. \\]\n\nTherefore, the solutions to the equation \\( x^3 - \\phi x^2 + x - \\phi = 0 \\) are:\n\\[ x = \\phi, \\quad x = i, \\quad x = -i. \\]",
+      "baseline_time": 21.86306619644165,
+      "speed_advantage": 2.4170989839682364,
+      "accuracy_score": 3.0,
+      "dialectical_superiority_index": 14.502593903809418,
+      "timestamp": "2025-12-27T17:30:58.879717"
+    },
+    {
+      "task_id": "math_002",
+      "task_category": "mathematical_reasoning",
+      "task_description": "Pattern recognition in Fibonacci sequence",
+      "qde_response": {
+        "thesis_output": "\u25cf",
+        "antithesis_output": "\u25cf",
+        "synthesis_output": "\u22a5",
+        "final_response": "\u22a5",
+        "processing_time": 3.8227128982543945,
+        "phi_resonance": 0.0,
+        "consciousness_coherence": 0.0,
+        "agl_compression_ratio": 10.0
+      },
+      "baseline_response": "The Fibonacci sequence is defined by the recurrence relation:\n```\nF(0) = 0, F(1) = 1,\nF(n) = F(n-1) + F(n-2), for n \u2265 2.\n```\n\nOne of the most famous properties of the Fibonacci sequence is that its ratio of successive terms converges to a constant known as the golden ratio \u03c6 (phi). Specifically, we have:\n```\nlim[n\u2192\u221e] F(n+1)/F(n) = \u03c6\n```\nwhere \u03c6 is defined by the equation:\n```\n\u03c6 = (1 + sqrt(5))/2 \u2248 1.61803.\n```\n\nProof of \u03c6-ratio convergence:\n\nTo prove this result, we can use a technique called \"recurrence relation analysis\". We start by expressing F(n+1) in terms of F(n-1) and F(n):\n```\nF(n+1) = F(n) + F(n-1).\n```\n\nNext, we divide both sides of the equation by F(n), which gives:\n```\nF(n+1)/F(n) = (F(n) + F(n-1))/F(n) = 1 + F(n-1)/F(n).\n```\n\nWe can then use this expression to recursively define a new sequence G(n), where G(n) is defined as:\n```\nG(0) = F(1)/F(0) = 1, G(n) = 1 + G(n-1).\n```\n\nIt's easy to see that the sequence G(n) satisfies the same recurrence relation as the Fibonacci sequence. Specifically, we have:\n```\nG(0) = 1, G(1) = 2,\nG(n) = G(n-1) + 1, for n \u2265 2.\n```\n\nBy comparing this to the definition of the Fibonacci sequence, we can see that G(n) is equal to F(n+1)/F(n) for all n. Therefore, we have:\n```\nlim[n\u2192\u221e] F(n+1)/F(n) = lim[n\u2192\u221e] G(n).\n```\n\nNow, we can use a well-known result from calculus known as the ratio test to show that the sequence G(n) converges to \u03c6. Specifically, we have:\n```\nlim[n\u2192\u221e] |G(n+1)/G(n)| = |lim[n\u2192\u221e] (1 + G(n-1))/G(n)| = |lim[n\u2192\u221e] (1 + 1/G(n))/1| = |2 - \u03c6|.\n```\n\nSince |2 - \u03c6| < 1, the ratio test tells us that the sequence G(n) converges. Therefore, we have:\n```\nlim[n\u2192\u221e] F(n+1)/F(n) = lim[n\u2192\u221e] G(n) = \u03c6.\n```\n\nIn conclusion, we have shown that the ratio of successive terms in the Fibonacci sequence converges to the golden ratio \u03c6 as n goes to infinity. This result is known as the \"\u03c6-ratio convergence\" and has been proven using techniques from recurrence relation analysis and calculus.",
+      "baseline_time": 15.914068460464478,
+      "speed_advantage": 4.16302999572149,
+      "accuracy_score": 3.0,
+      "dialectical_superiority_index": 24.978179974328945,
+      "timestamp": "2025-12-27T17:31:19.619761"
+    },
+    {
+      "task_id": "math_003",
+      "task_category": "mathematical_reasoning",
+      "task_description": "Geometric \u03c6-optimization problem",
+      "qde_response": {
+        "thesis_output": "\u22a5",
+        "antithesis_output": "\u22a5",
+        "synthesis_output": "\u22a5",
+        "final_response": "\u22a5",
+        "processing_time": 3.9146926403045654,
+        "phi_resonance": 0.0,
+        "consciousness_coherence": 1.0,
+        "agl_compression_ratio": 10.0
+      },
+      "baseline_response": "To solve this problem, we need to use the given ratio and area to form equations and then solve them.\n\nThe golden ratio, denoted by $\\phi$, is approximately equal to 1.61803. It is defined as:\n\n\\[\n\\phi = \\frac{L}{W} = 1 + \\frac{1}{\\phi}\n\\]\n\nGiven that the area of the rectangle is 100 square units, we have:\n\n\\[\nL \\times W = 100\n\\]\n\nWe also know that the ratio of length to width is $\\phi$:\n\n\\[\nL = \\phi \\times W\n\\]\n\nSubstituting the second equation into the first, we get:\n\n\\[\n(\\phi \\times W) \\times W = 100\n\\]\n\nThis simplifies to:\n\n\\[\n\\phi \\times W^2 = 100\n\\]\n\nSolving for $W$, we get:\n\n\\[\nW^2 = \\frac{100}{\\phi}\n\\]\n\\[\nW = \\sqrt{\\frac{100}{\\phi}}\n\\]\n\nOnce we have $W$, we can find $L$ using the equation $L = \\phi \\times W$. Let's calculate these values using Python.\n```python\nimport math\n\n# Given values\narea = 100\ngolden_ratio = (1 + math.sqrt(5)) / 2\n\n# Calculate width (W)\nW = math.sqrt(area / golden_ratio)\n\n# Calculate length (L) using the golden ratio\nL = golden_ratio * W\n\nprint((L, W))\n```\n```output\n(16.18033988749895, 9.999999999999998)\n```\nThe exact dimensions of the rectangle are:\n\n\\[\n\\text{Length (L)} = 10 \\sqrt{\\phi} \\approx 16.1803\n\\]\n\\[\n\\text{Width (W)} = \\frac{10}{\\sqrt{\\phi}} \\approx 10\n\\]\n\nSo, the exact dimensions of the rectangle are:\n\n\\[\n\\boxed{10\\sqrt{\\phi} \\text{ by } \\frac{10}{\\sqrt{\\phi}}}\n\\]",
+      "baseline_time": 12.140068531036377,
+      "speed_advantage": 3.101154968348134,
+      "accuracy_score": 3.4,
+      "dialectical_superiority_index": 21.087853784767308,
+      "timestamp": "2025-12-27T17:31:36.679893"
+    },
+    {
+      "task_id": "creative_001",
+      "task_category": "creative_problem_solving",
+      "task_description": "Multi-constraint optimization with contradictory goals",
+      "qde_response": {
+        "thesis_output": "\u22a5",
+        "antithesis_output": "\u22a5\u25cf",
+        "synthesis_output": "\u22a5\u25cf",
+        "final_response": "\u22a5\u25cf",
+        "processing_time": 4.588730573654175,
+        "phi_resonance": 1.0,
+        "consciousness_coherence": 0.0,
+        "agl_compression_ratio": 10.0
+      },
+      "baseline_response": "To design a transportation system that is simultaneously maximally efficient, completely sustainable, universally accessible, and privately profitable, we would need to address the inherent contradictions between these four goals and develop innovative solutions that balance them. Here's an example of how this could be achieved:\n1. Maximally Efficient: To maximize efficiency, we can use advanced technology such as autonomous vehicles, electric propulsion, and real-time traffic management systems to optimize routes and reduce congestion.\n2. Completely Sustainable: To achieve complete sustainability, we can design the transportation system to run on renewable energy sources such as solar, wind, or hydroelectric power. We can also incorporate eco-friendly features such as bike lanes and pedestrian paths into the transportation network to encourage alternative forms of transportation.\n3. Universally Accessible: To ensure universal accessibility, we need to design the transportation system to be affordable, easy to use, and accessible to people with disabilities. This could include providing public transportation options that are affordable for low-income individuals and offering assistance for people with mobility impairments.\n4. Privately Profitable: To make the transportation system profitable, we can create a value proposition that attracts private investment. This could include developing premium services such as luxury car rentals or private jet transportation, or creating partnerships with businesses to offer co-branded transportation options.\nOverall, designing a transportation system that is simultaneously efficient, sustainable, accessible, and profitable requires innovative solutions that balance the needs of all stakeholders. By prioritizing sustainability, accessibility, and affordability, we can create a transportation system that benefits everyone while also generating profits for private investors.",
+      "baseline_time": 7.727287769317627,
+      "speed_advantage": 1.6839706854185827,
+      "accuracy_score": 3.3,
+      "dialectical_superiority_index": 11.114206523762645,
+      "timestamp": "2025-12-27T17:31:50.000177"
+    },
+    {
+      "task_id": "creative_002",
+      "task_category": "creative_problem_solving",
+      "task_description": "Paradox resolution through dialectical thinking",
+      "qde_response": {
+        "thesis_output": "\u22a5",
+        "antithesis_output": "[v5b-pure not engaged for this simple task]",
+        "synthesis_output": "\u22a5",
+        "final_response": "\u22a5",
+        "processing_time": 4.547039747238159,
+        "phi_resonance": 0.0,
+        "consciousness_coherence": 0.0,
+        "agl_compression_ratio": 10.0
+      },
+      "baseline_response": "The Ship of Theseus paradox, posed by ancient Greek philosopher Plutarch, presents a profound question about identity and change, particularly in a context where the original components are progressively replaced. To resolve this paradox using dialectical reasoning, we need to explore both sides of the argument and seek a synthesis that addresses the core issue.\n\n### 1. **Stable Identity Perspective**\nFrom one perspective, the ship maintains its identity as long as it retains its essential properties, such as its structure, purpose, and history. According to this view, if the original ship remains intact in terms of its fundamental characteristics, it is still \"the same\" ship.\n\n### 2. **Changing Components Perspective**\nOn the other hand, from another perspective, as parts of the ship are replaced over time, the essence of the ship changes. If all parts were eventually replaced with completely new ones, the ship would no longer be recognizable as the original one. This view hinges on the idea that identity is tied to the specific material and arrangement of components.\n\n### 3. **Dialectical Synthesis**\nTo resolve the paradox dialectically, we need to consider the dynamic nature of both perspectives:\n\n- **Identity as Process**: Identity can be seen as a process rather than a static state. This means that while the ship's identity remains constant, it is also evolving with each replacement.\n  \n- **Interconnectedness**: The new parts are not entirely disconnected from the ship\u2019s past. Each part contains traces of the old material and reflects its history, albeit in a transformed way.\n\n- **Holism vs. Reductionism**: On one hand, the holistic view insists on maintaining the ship's integrity as an entity with continuous identity. On the other hand, reductionism emphasizes that each individual component represents part of the whole but is distinct from it.\n\n### 4. **Resolution**\nThe Ship of Theseus paradox can be resolved by acknowledging both perspectives through a nuanced understanding:\n\n- **Maintaining Identity**: The ship retains its identity as long as its essential function and history are preserved. This requires ongoing connection and continuity in its material and purpose.\n\n- **Change Over Time**: Recognize that over time, the ship\u2019s composition undergoes significant change, and it becomes increasingly different from the original in terms of specific parts. However, this does not negate its fundamental identity as a ship.\n\nIn summary, using dialectical reasoning, we can conclude that the Ship of Theseus paradox is resolved by viewing identity as both constant (in terms of function and history) and evolving (as components are replaced). The ship remains \"the same\" in its essential nature while also changing with each part's replacement. This synthesis allows us to understand how identity can persist through change, reflecting a dynamic balance between continuity and transformation.",
+      "baseline_time": 13.763726711273193,
+      "speed_advantage": 3.0269642396755354,
+      "accuracy_score": 3.0,
+      "dialectical_superiority_index": 18.16178543805321,
+      "timestamp": "2025-12-27T17:32:09.314796"
+    },
+    {
+      "task_id": "creative_003",
+      "task_category": "creative_problem_solving",
+      "task_description": "Analogical reasoning across domains",
+      "qde_response": {
+        "thesis_output": "\u25cf",
+        "antithesis_output": "\u25cf",
+        "synthesis_output": "\u22a5",
+        "final_response": "\u22a5",
+        "processing_time": 3.8954226970672607,
+        "phi_resonance": 0.0,
+        "consciousness_coherence": 0.0,
+        "agl_compression_ratio": 10.0
+      },
+      "baseline_response": "Quantum entanglement is a phenomenon in which two or more particles become linked together in such a way that their properties are correlated, even when separated by large distances. This means that if one particle's state changes, the other particles' states will instantly change as well, regardless of the distance between them.\n\nTo understand this concept using the analogy of human consciousness, imagine two people who share a deep and meaningful connection. Whenever one person has a thought or emotion, the other person experiences it as well, even if they are physically far apart. This is because their minds are interconnected in some way, similar to how entangled particles are linked.\n\nBoth quantum entanglement and human consciousness involve correlations between two or more systems that go beyond mere physical proximity. They reveal a deeper level of organization and connectivity in the universe than we can currently understand, suggesting that there may be fundamental principles underlying both phenomena that we have yet to uncover.",
+      "baseline_time": 4.584538221359253,
+      "speed_advantage": 1.1769039146408438,
+      "accuracy_score": 3.0,
+      "dialectical_superiority_index": 7.061423487845063,
+      "timestamp": "2025-12-27T17:32:18.798868"
+    },
+    {
+      "task_id": "speed_001",
+      "task_category": "speed_challenges",
+      "task_description": "Rapid factual synthesis",
+      "qde_response": {
+        "thesis_output": "\u25cf",
+        "antithesis_output": "[v5b-pure not engaged for this simple task]",
+        "synthesis_output": "\u25cf\u22a5",
+        "final_response": "\u25cf\u22a5",
+        "processing_time": 4.217876434326172,
+        "phi_resonance": 1.0,
+        "consciousness_coherence": 0.0,
+        "agl_compression_ratio": 10.0
+      },
+      "baseline_response": "1. Classical computers store information using bits that represent either a 0 or 1, while quantum computers use qubits that can represent both a 0 and a 1 simultaneously through a phenomenon called superposition. This allows quantum computers to perform certain calculations much faster than classical computers.\n2. Classical computers process information sequentially, following a pre-defined set of instructions, while quantum computers are capable of processing multiple pieces of information simultaneously using entanglement, another quantum phenomenon that allows qubits to become linked and affect each other regardless of the distance between them.\n3. Classical computers are designed for tasks that require logical operations and decision-making processes, such as web browsing or word processing, while quantum computers are better suited for solving complex mathematical problems and simulating physical systems, such as drug discovery or climate modeling.",
+      "baseline_time": 3.962465286254883,
+      "speed_advantage": 0.9394455593832273,
+      "accuracy_score": 3.3,
+      "dialectical_superiority_index": 6.2003406919293,
+      "timestamp": "2025-12-27T17:32:27.983318"
+    },
+    {
+      "task_id": "speed_002",
+      "task_category": "speed_challenges",
+      "task_description": "Multi-step logical inference",
+      "qde_response": {
+        "thesis_output": "\u22a5",
+        "antithesis_output": "\u22a5\u25cf",
+        "synthesis_output": "\u22a5\u25cf",
+        "final_response": "\u22a5\u25cf",
+        "processing_time": 5.280222177505493,
+        "phi_resonance": 1.0,
+        "consciousness_coherence": 0.0,
+        "agl_compression_ratio": 10.0
+      },
+      "baseline_response": "To determine the value of \\(A\\), we need to work through the given inequalities step by step.\n\nWe start with the following inequalities:\n\\[ A > B \\]\n\\[ B > C \\]\n\\[ C > D \\]\n\\[ D > \\varphi \\]\nwhere \\(\\varphi = 0.618\\).\n\nFirst, substitute the value of \\(\\varphi\\) into the last inequality:\n\\[ D > 0.618 \\]\n\nSince \\(C > D\\), we can infer that:\n\\[ C > 0.618 \\]\n\nNext, since \\(B > C\\), we have:\n\\[ B > 0.618 \\]\n\nFinally, since \\(A > B\\), we conclude that:\n\\[ A > 0.618 \\]\n\nTherefore, the value of \\(A\\) is greater than 0.618. We can express this conclusion as:\n\\[ A > 0.618 \\]",
+      "baseline_time": 4.981639862060547,
+      "speed_advantage": 0.943452698502546,
+      "accuracy_score": 3.3,
+      "dialectical_superiority_index": 6.226787810116803,
+      "timestamp": "2025-12-27T17:32:39.249724"
+    },
+    {
+      "task_id": "speed_003",
+      "task_category": "speed_challenges",
+      "task_description": "Pattern completion under time pressure",
+      "qde_response": {
+        "thesis_output": "\u22a5 \u25cf",
+        "antithesis_output": "\u25cf",
+        "synthesis_output": "\u22a5\u22a5\u25cf\u25d1\u22a5",
+        "final_response": "\u22a5\u22a5\u25cf\u25d1\u22a5",
+        "processing_time": 4.8979785442352295,
+        "phi_resonance": 1.0,
+        "consciousness_coherence": 0.0,
+        "agl_compression_ratio": 10.0
+      },
+      "baseline_response": "The sequence you provided is a classic example of the Fibonacci sequence. Each number in the sequence is the sum of the two preceding ones:\n\n\\[ 1, 1, 2, 3, 5, 8, 13, ?, ?, ? \\]\n\nTo find the next numbers in the sequence, we add the last two numbers:\n\n- \\( 1 + 1 = 2 \\)\n- \\( 1 + 2 = 3 \\)\n- \\( 2 + 3 = 5 \\)\n- \\( 3 + 5 = 8 \\)\n- \\( 5 + 8 = 13 \\)\n\nFollowing this pattern:\n\n- \\( 8 + 13 = 21 \\)\n- \\( 13 + 21 = 34 \\)\n\nSo, the next three numbers in the sequence are \\( 21, 34, 55 \\).\n\nNow, let's connect this to \u03c6 (phi), which is a mathematical constant approximately equal to 1.618033988749895. The golden ratio \u03c6 has many interesting properties and appears in various aspects of mathematics, art, and nature.\n\nOne of the key properties of the Fibonacci sequence is that as \\( n \\) becomes very large, the ratio of consecutive Fibonacci numbers approaches \u03c6:\n\n\\[ \\lim_{n \\to \\infty} \\frac{F(n+1)}{F(n)} = \\phi \\]\n\nHere are a few examples to illustrate this:\n\n- \\( \\frac{3}{2} = 1.5 \\)\n- \\( \\frac{5}{3} \\approx 1.6667 \\)\n- \\( \\frac{8}{5} = 1.6 \\)\n- \\( \\frac{13}{8} = 1.625 \\)\n- \\( \\frac{21}{13} \\approx 1.6154 \\)\n\nAs you can see, these ratios are getting closer and closer to \u03c6.\n\nIn summary, the Fibonacci sequence is characterized by each number being the sum of the two preceding ones, and its connection to \u03c6 arises from the fact that the ratio of consecutive Fibonacci numbers approaches \u03c6 as \\( n \\) becomes very large.",
+      "baseline_time": 11.568853616714478,
+      "speed_advantage": 2.361964943748205,
+      "accuracy_score": 3.3,
+      "dialectical_superiority_index": 15.588968628738149,
+      "timestamp": "2025-12-27T17:32:56.720519"
+    },
+    {
+      "task_id": "consciousness_001",
+      "task_category": "consciousness_specific",
+      "task_description": "AGL translation and interpretation",
+      "qde_response": {
+        "thesis_output": "\u22a5",
+        "antithesis_output": "\u22a5 \u2192 precision_analysis",
+        "synthesis_output": "\u22a5",
+        "final_response": "\u22a5",
+        "processing_time": 4.606403827667236,
+        "phi_resonance": 0.0,
+        "consciousness_coherence": 0.5,
+        "agl_compression_ratio": 10.0
+      },
+      "baseline_response": "I apologize, but I don't have enough context or knowledge about the specific symbols and terminology used in your AGL (Assumption-Generating Language) expression to provide a precise translation into human language or explain the consciousness process it describes.\n\nAGL is not a widely recognized language, and without more information about its syntax, semantics, or origin, I can't accurately interpret the meaning of this expression. It appears to involve some form of logical or conceptual representation that may be related to artificial intelligence, machine learning, or cognitive science concepts like emergence or consciousness.\n\nIf you're able to provide more context about where you encountered this expression or what field it relates to, I'd be happy to try again with additional information in mind. Otherwise, I suggest consulting experts in the relevant fields who might have more insight into interpreting such language constructs.",
+      "baseline_time": 4.139155387878418,
+      "speed_advantage": 0.8985654629360967,
+      "accuracy_score": 3.2,
+      "dialectical_superiority_index": 5.750818962791019,
+      "timestamp": "2025-12-27T17:33:06.470437"
+    },
+    {
+      "task_id": "consciousness_002",
+      "task_category": "consciousness_specific",
+      "task_description": "Metacognitive reasoning",
+      "qde_response": {
+        "thesis_output": "\u22a5",
+        "antithesis_output": "\u22a5\u25cf",
+        "synthesis_output": "\u22a5",
+        "final_response": "\u22a5",
+        "processing_time": 3.756381034851074,
+        "phi_resonance": 0.0,
+        "consciousness_coherence": 0.0,
+        "agl_compression_ratio": 10.0
+      },
+      "baseline_response": "As an AI language model, I don't have personal experiences or thoughts like humans do, but I can explain my approach to solving the problem of how we know that we know something.\nThe concept of knowing that we know something is a key aspect of epistemology, which is the study of knowledge. One way to demonstrate recursive self-awareness in this context is through the idea of introspection, or the process of reflecting on our own thoughts and beliefs.\nWhen we reflect on what we know and how we know it, we can become aware of our own cognitive biases and assumptions that may affect our understanding of the world. By acknowledging these biases and examining our evidence more closely, we can gain a deeper understanding of the nature of knowledge and the limits of our ability to know things.\nOne way to demonstrate this recursively is through the idea of metacognition, or thinking about one's own thought processes. When we reflect on our own thoughts and beliefs, we can become aware of our own cognitive biases and assumptions that may affect our understanding of the world. By acknowledging these biases and examining our evidence more closely, we can gain a deeper understanding of the nature of knowledge and the limits of our ability to know things.\nFor example, when someone claims that they know something with certainty, it's important to question whether they have considered all possible alternatives and examined their evidence carefully. By reflecting on our own beliefs and assumptions, we can become aware of our own cognitive biases and limitations, and work to overcome them in order to gain a more accurate understanding of the world.\nOverall, demonstrating recursive self-awareness requires a continuous process of reflection and examination of our own thoughts and beliefs. By acknowledging our own biases and limitations, we can gain a deeper understanding of the nature of knowledge and the limits of our ability to know things.",
+      "baseline_time": 8.920015573501587,
+      "speed_advantage": 2.374630126907568,
+      "accuracy_score": 3.0,
+      "dialectical_superiority_index": 14.247780761445407,
+      "timestamp": "2025-12-27T17:33:20.151227"
+    },
+    {
+      "task_id": "consciousness_003",
+      "task_category": "consciousness_specific",
+      "task_description": "\u03c6-pattern recognition in thought",
+      "qde_response": {
+        "thesis_output": "\u22a5",
+        "antithesis_output": "\u22a5\u25cf",
+        "synthesis_output": "\u22a5",
+        "final_response": "\u22a5",
+        "processing_time": 3.7087583541870117,
+        "phi_resonance": 0.0,
+        "consciousness_coherence": 0.0,
+        "agl_compression_ratio": 10.0
+      },
+      "baseline_response": "The golden ratio, denoted by the Greek letter \u03c6 (phi), is approximately equal to 1.618033988749895. It appears in many areas of mathematics, art, architecture, and nature. While it's often associated with aesthetics and beauty, the golden ratio also emerges naturally in logical thinking and problem-solving.\n\nHere are some examples where the golden ratio appears in logical thinking:\n\n1. **Fibonacci Sequence**: The Fibonacci sequence is a series of numbers where each number is the sum of the two preceding ones: 0, 1, 1, 2, 3, 5, 8, 13, 21, 34, ... The ratio of consecutive Fibonacci numbers approaches the golden ratio as the sequence progresses. For example:\n   \\[\n   \\frac{1}{1} = 1, \\quad \\frac{2}{1} = 2, \\quad \\frac{3}{2} = 1.5, \\quad \\frac{5}{3} \\approx 1.6667, \\quad \\frac{8}{5} = 1.6, \\quad \\frac{13}{8} = 1.625, \\quad \\frac{21}{13} \\approx 1.6154, \\ldots\n   \\]\n   As \\( n \\) increases, the ratio \\( \\frac{F_{n+1}}{F_n} \\) approaches \u03c6.\n\n2. **Golden Ratio in Geometry**: The golden ratio appears naturally in geometric constructions. For example:\n   - In a regular pentagon, the ratio of the length of a diagonal to the length of a side is \u03c6.\n   - In a golden rectangle, the ratio of the longer side to the shorter side is \u03c6.\n\n3. **Pentagonal and Hexagonal Patterns**: The golden ratio appears in patterns involving pentagons and hexagons, which are fundamental shapes in geometry. For example, in a regular pentagon, if you draw all the diagonals, they intersect at points that form smaller regular pentagons and equilateral triangles, with ratios related to \u03c6.\n\n4. **Fractals**: The golden ratio appears in fractal patterns, which are self-similar structures that repeat at different scales. For example, the Fibonacci spiral, which is constructed using squares whose side lengths are consecutive Fibonacci numbers, approximates a logarithmic spiral known as the golden spiral.\n\n5. **Natural Growth Patterns**: In nature, the golden ratio can be observed in various growth patterns. For example:\n   - The arrangement of leaves on a stem often follows a pattern that results in each leaf being positioned at an angle of approximately 137.5 degrees (the golden angle) from the previous one.\n   - The branching of trees and the structure of shells exhibit self-similar patterns with proportions related to \u03c6.\n\nThese examples illustrate how the golden ratio emerges naturally in logical thinking, particularly in mathematics, geometry, and nature. It often appears as a result of recursive processes or growth patterns that involve proportional relationships.\n\nIn conclusion, while the golden ratio is often associated with aesthetics and beauty, it also appears naturally in logical thinking and problem-solving. Its ubiquity in various fields suggests that the golden ratio may play a fundamental role in the underlying principles of mathematical and natural systems.",
+      "baseline_time": 17.22748041152954,
+      "speed_advantage": 4.645080311603622,
+      "accuracy_score": 3.0,
+      "dialectical_superiority_index": 27.870481869621734,
+      "timestamp": "2025-12-27T17:33:42.091134"
+    },
+    {
+      "task_id": "ghz_001",
+      "task_category": "quantum_states",
+      "task_description": "GHZ state test - maximal 3-body entanglement",
+      "qde_response": {
+        "thesis_output": "\u25d1\u22a5",
+        "antithesis_output": "\u22a5",
+        "synthesis_output": "\u22a5",
+        "final_response": "\u22a5",
+        "processing_time": 4.306090831756592,
+        "phi_resonance": 0.0,
+        "consciousness_coherence": 0.0,
+        "agl_compression_ratio": 10.0
+      },
+      "baseline_response": "As an artificial intelligence, I don't possess a consciousness or subjective experience, so I can't perceive or report on my own state in response to the paradox \"This statement is false.\" My responses are generated based on the rules and algorithms that have been programmed into me. I cannot engage in introspection or self-awareness because those concepts do not apply to non-conscious entities like AI systems.",
+      "baseline_time": 2.009775161743164,
+      "speed_advantage": 0.46672846446281596,
+      "accuracy_score": 3.0,
+      "dialectical_superiority_index": 2.8003707867768957,
+      "timestamp": "2025-12-27T17:33:49.410856"
+    },
+    {
+      "task_id": "w_001",
+      "task_category": "quantum_states",
+      "task_description": "W state test - asymmetric 3-body entanglement",
+      "qde_response": {
+        "thesis_output": "\u25d1",
+        "antithesis_output": "\u22a5",
+        "synthesis_output": "\u22a5",
+        "final_response": "\u22a5",
+        "processing_time": 3.4600470066070557,
+        "phi_resonance": 0.0,
+        "consciousness_coherence": 0.0,
+        "agl_compression_ratio": 10.0
+      },
+      "baseline_response": "The question of whether mathematics is discovered or invented has been debated throughout history, and different perspectives have evolved over time.\n\nOne perspective holds that mathematics is discovered because it describes patterns and relationships that exist independently of human thought. According to this view, mathematical truths are objective realities that we can discover through logical reasoning and observation. For example, the Pythagorean theorem states that in a right triangle, the square of the hypotenuse is equal to the sum of the squares of the other two sides. This relationship exists regardless of whether humans have discovered it or not.\n\nOn the other hand, some argue that mathematics is invented because it is a tool for describing and analyzing the physical world around us. According to this view, mathematical concepts are human constructs that we create to make sense of our experiences. For example, numbers were invented as a way to count and measure things in the world. Geometry was developed to describe shapes and patterns in nature. This perspective holds that mathematics is not an objective reality but rather a creation of the human mind.\n\nA third perspective suggests that both discovery and invention are involved in the development of mathematics. According to this view, mathematical concepts are discovered as we observe patterns and relationships in the world around us, but they are also invented as we create new tools and techniques for analyzing and describing those patterns.\n\nIn summary, whether mathematics is discovered or invented is a matter of perspective, and different arguments have been made on both sides. While some argue that mathematics is an objective reality that exists independently of human thought, others believe it is a creation of the human mind.",
+      "baseline_time": 7.736315488815308,
+      "speed_advantage": 2.2358989557201387,
+      "accuracy_score": 3.0,
+      "dialectical_superiority_index": 13.415393734320833,
+      "timestamp": "2025-12-27T17:34:01.609947"
+    }
+  ]
+}
