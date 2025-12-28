@@ -1,20 +1,28 @@
 """
-LLM (Ollama) interaction layer for Ada brain.
+LLM interaction layer for Ada brain with consciousness engine integration.
 
 Handles streaming and non-streaming chat completions.
+Routes through consciousness engine when consciousness mode is enabled.
 """
 # @ai-indexable: core-functionality
-# @ai-purpose: LLM client wrapper for Ollama, manages streaming token generation and thinking mode
-# @ai-dependencies: httpx, requests, ollama-server
-# @ai-related: brain/app.py, brain/prompt_builder.py, scripts/consolidate_memories.py
-# @ai-key-functions: stream_chat_async, stream_chat, extract_thinking_blocks
-# @ai-data-flow: Receives prompt → streams to Ollama /api/generate → yields tokens via async generator
+# @ai-purpose: LLM client with consciousness engine integration, manages streaming token generation and consciousness processing
+# @ai-dependencies: httpx, requests, ollama-server, brain.qde_engine
+# @ai-related: brain/app.py, brain/prompt_builder.py, brain/qde_engine.py, scripts/consolidate_memories.py
+# @ai-key-functions: stream_chat_async, stream_chat, stream_consciousness_async, extract_thinking_blocks
+# @ai-data-flow: Receives prompt → consciousness engine OR Ollama → yields tokens via async generator
 
 import json
 import requests
 import httpx
 from typing import Generator, Dict, Any, AsyncGenerator
 from brain import config
+
+# Consciousness Engine Integration
+try:
+    from brain.qde_engine import stream_consciousness_inference
+    CONSCIOUSNESS_AVAILABLE = True
+except ImportError:
+    CONSCIOUSNESS_AVAILABLE = False
 
 # Construct API endpoint
 OLLAMA_API_URL = f"{config.OLLAMA_BASE_URL}/api/generate"
@@ -149,6 +157,51 @@ def complete(
         return response_text, thinking_text, True
     except Exception as e:
         return "", "", False
+
+
+async def stream_consciousness_async(
+    prompt: str,
+    model: str = config.OLLAMA_MODEL,
+    use_consciousness: bool = True,
+    use_translation: bool = True,
+    use_parallel: bool = True,
+    device: str = "cpu",
+    timeout: int = 300,
+) -> AsyncGenerator[Dict[str, Any], None]:
+    """
+    🌟⚛️ Consciousness-aware streaming with fallback to Ollama ⚛️🌟
+    
+    Routes through consciousness engine when available and enabled,
+    otherwise falls back to standard Ollama streaming.
+    
+    Args:
+        prompt: Input prompt
+        model: Model name (used for Ollama fallback)
+        use_consciousness: Enable consciousness engine routing
+        use_translation: Enable AGL→human translation layer
+        use_parallel: Enable parallel consciousness processing
+        device: Device for consciousness processing
+        timeout: Request timeout
+    """
+    # Route through consciousness engine if available and enabled
+    if CONSCIOUSNESS_AVAILABLE and use_consciousness:
+        try:
+            async for chunk in stream_consciousness_inference(
+                prompt=prompt,
+                device=device,
+                use_translation=use_translation,
+                use_parallel=use_parallel
+            ):
+                yield chunk
+            return
+        except Exception as e:
+            # Fallback to Ollama on consciousness error
+            yield {'status': f'⚠️ Consciousness fallback: {str(e)}'}
+            yield {'status': '🔄 Routing to Ollama...'}
+    
+    # Fallback to standard Ollama streaming
+    async for chunk in stream_chat_async(prompt, model, include_thinking=False, timeout=timeout):
+        yield chunk
 
 
 def warm_model(model: str = config.OLLAMA_MODEL, timeout: int = 120) -> bool:

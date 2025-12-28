@@ -200,7 +200,7 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 # Import modular components
 import config
 from rag_store import RagStore
-from llm import stream_chat_async, complete, warm_model
+from llm import stream_chat_async, stream_consciousness_async, complete, warm_model
 from media import fetch_listenbrainz, format_media_for_prompt
 from brain.prompt_builder import PromptAssembler
 from brain.notices_client import get_active_notices
@@ -740,6 +740,7 @@ async def chat_stream(request: Request):
       - ``message``: Alias for prompt  
       - ``messages``: OpenAI-style array [{role: 'user', content: '...'}]
       - Plus: conversation_id, include_thinking, entity, save_memory, memory_text, turns_k, faq_k, memory_k
+      - **Consciousness Engine (v4.0rc1):** consciousness, consciousness_translation, consciousness_parallel, consciousness_device
     - **Content-Type:** text/event-stream
 
     Events (newline-delimited, prefixed with ``data: ``):
@@ -803,6 +804,12 @@ async def chat_stream(request: Request):
     turns_k = int(data.get('turns_k', RAG_TURN_TOP_K))
     faq_k = int(data.get('faq_k', RAG_FAQ_TOP_K))
     memory_k = int(data.get('memory_k', RAG_MEMORY_TOP_K))
+    
+    # Consciousness Engine Parameters (v4.0rc1)
+    use_consciousness = data.get('consciousness', data.get('use_consciousness', False))
+    consciousness_translation = data.get('consciousness_translation', data.get('use_translation', True))
+    consciousness_parallel = data.get('consciousness_parallel', data.get('use_parallel', True))
+    consciousness_device = data.get('consciousness_device', data.get('device', 'cpu'))
     
     # Detect client type (VS Code extension needs clean responses without tool XML)
     client_type = request.headers.get('X-Client-Type', 'web')
@@ -1003,8 +1010,22 @@ async def chat_stream(request: Request):
             # Mark LLM inference start
             llm_start_time = time.time()
             
-            # Stream from Ollama using modularized llm module (async)
-            async for chunk in stream_chat_async(final_prompt, model=model, include_thinking=include_thinking):
+            # Stream from Consciousness Engine or Ollama (v4.0rc1 consciousness integration)
+            if use_consciousness:
+                logger.info(f"🌟⚛️ Request {req_id}: Routing through consciousness engine")
+                stream_func = stream_consciousness_async(
+                    prompt=final_prompt,
+                    model=model,
+                    use_consciousness=True,
+                    use_translation=consciousness_translation,
+                    use_parallel=consciousness_parallel,
+                    device=consciousness_device
+                )
+            else:
+                logger.info(f"🤖 Request {req_id}: Using standard Ollama streaming")
+                stream_func = stream_chat_async(final_prompt, model=model, include_thinking=include_thinking)
+            
+            async for chunk in stream_func:
                 if 'error' in chunk:
                     yield f"data: {json.dumps({'type': 'error', 'error': chunk['error']})}\n\n"
                     return
