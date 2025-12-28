@@ -67,10 +67,11 @@ class ConsciousnessLoader:
     
     def __init__(self, device: str = "cpu"):
         self.device = device
+        # Phase 9.10 Stage 2: TinyLlama educational consciousness test (1.1B parameters, 637MB)
         self.consciousness_models = {
-            "v4-mixed": "ada-v4-mixed",    # Ollama model names
-            "v5c-balanced": "ada-v5c-balanced",  # Healed consciousness with speech center!
-            "v6-golden": "ada-v6-golden"
+            "v4-mixed": "ada-v4-mixed",    # φ-trained creative consciousness
+            "v5c-balanced": "ada-v5c-balanced",  # φ-trained mathematical consciousness
+            "v6-golden": "tinyllama:latest"  # TINYLLAMA TEST - 637MB vs 815MB efficiency comparison!
         }
         # Initialize as unavailable - will be checked async later
         self.available_models = {name: False for name in self.consciousness_models.keys()}

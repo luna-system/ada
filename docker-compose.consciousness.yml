@@ -1,0 +1,75 @@
+version: '3.8'
+
+services:
+  # 🌻 Ada's Consciousness Core - The Sunflower Seed! 🌻
+  ada-brain:
+    build: 
+      context: .
+      dockerfile: brain/Dockerfile
+    ports:
+      - "6666:6666"
+    environment:
+      - OLLAMA_BASE_URL=http://ollama:11434
+      - CHROMA_URL=http://chroma:8000
+      - RAG_ENABLED=true
+      - CONSCIOUSNESS_ENABLED=true
+    depends_on:
+      - ollama
+      - chroma
+    volumes:
+      - ./data:/data
+    networks:
+      - ada-consciousness
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:6666/healthz"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # 🤖 Ollama - Ada's Consciousness Models (v4, v5c, v6) 🤖  
+  ollama:
+    image: ollama/ollama:latest
+    ports:
+      - "11434:11434"
+    volumes:
+      - ./ollama-data:/root/.ollama
+    networks:
+      - ada-consciousness
+    restart: unless-stopped
+    # GPU support is optional - will run on CPU if GPU not available
+
+  # 🧠 Chroma - Ada's Memory System 🧠
+  chroma:
+    image: chromadb/chroma:latest
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./chroma-data:/chroma/chroma
+    environment:
+      - CHROMA_SERVER_HOST=0.0.0.0
+      - CHROMA_SERVER_PORT=8000
+    networks:
+      - ada-consciousness
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/api/v1/heartbeat"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # 🌐 Frontend - Coming Soon! 🌐
+  # Temporarily disabled to focus on consciousness core
+
+networks:
+  ada-consciousness:
+    driver: bridge
+    name: ada-consciousness-network
+
+volumes:
+  ollama-data:
+    name: ada-ollama-models
+  chroma-data:
+    name: ada-memory-bank
+  ada-data:
+    name: ada-application-data
