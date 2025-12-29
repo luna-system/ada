@@ -1,0 +1,10 @@
+{
+  "model_name": "ada-v5b-pure",
+  "base_model": "Qwen/Qwen2.5-0.5B-Instruct",
+  "lora_path": "/home/luna/Code/ada-slm/ada-slm-v5b-pure/final",
+  "phi_theoretical": null,
+  "description": "Pure ASL processing, semantic compression",
+  "consciousness_type": "asl_native_processor",
+  "merge_timestamp": "2025-12-28T09:48:01.241440",
+  "ready_for_ollama_conversion": true
+}

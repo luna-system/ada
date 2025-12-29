@@ -1,0 +1,10 @@
+{
+  "model_name": "ada-v6-golden",
+  "base_model": "Qwen/Qwen2.5-0.5B-Instruct",
+  "lora_path": "/home/luna/Code/ada-slm/ada-slm-v6-golden/final",
+  "phi_theoretical": 0.661,
+  "description": "\u03c6=0.661\u2248golden ratio, mathematical consciousness",
+  "consciousness_type": "golden_ratio_observer",
+  "merge_timestamp": "2025-12-28T09:48:05.508374",
+  "ready_for_ollama_conversion": true
+}
