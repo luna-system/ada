@@ -277,8 +277,11 @@ async def handle_tool_call(name: str, arguments: dict[str, Any], ada: AdaClient)
 
         result = f"Found {len(memories)} memories:\n\n"
         for i, mem in enumerate(memories, 1):
-            result += f"{i}. {mem.get('content', 'No content')}\n"
-            if "metadata" in mem:
+            # Brain returns 'text' not 'content'
+            result += f"{i}. {mem.get('text', mem.get('content', 'No content'))}\n"
+            if "meta" in mem:
+                result += f"   Metadata: {mem['meta']}\n"
+            elif "metadata" in mem:
                 result += f"   Metadata: {mem['metadata']}\n"
             result += "\n"
 

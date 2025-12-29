@@ -200,23 +200,24 @@ class AdaClient:
         Args:
             query: Search query
             scope: Optional scope filter
-            type: Optional type filter
+            type: Optional type filter (mapped to entity for brain API)
             
         Returns:
             List of matching memory documents
         """
-        url = f"{self.base_url}/v1/memories/search"
-        params = {"q": query}
+        url = f"{self.base_url}/v1/memory"
+        params = {"query": query}
         if scope:
             params["scope"] = scope
         if type:
-            params["type"] = type
+            params["entity"] = type  # Brain uses 'entity' not 'type'
         
         try:
             response = await self._client.get(url, params=params)
             response.raise_for_status()
             data = response.json()
-            return data.get("memories", [])
+            # Brain returns 'items' not 'memories'
+            return data.get("items", [])
         except httpx.ConnectError as e:
             raise AdaBrainConnectionError(
                 f"Unable to connect to Ada's brain at {self.base_url}: {e}"
@@ -237,20 +238,22 @@ class AdaClient:
         
         Args:
             content: Memory content
-            type: Memory type
-            importance: Importance score (0.0-1.0)
+            type: Memory type (mapped to entity for brain API)
+            importance: Importance score (0.0-1.0, scaled to 1-5 for brain)
             scope: Memory scope
             
         Returns:
             Created memory document
         """
-        url = f"{self.base_url}/v1/memories"
+        url = f"{self.base_url}/v1/memory"
+        # Brain expects 'text' not 'content', and importance as 1-5 not 0-1
         payload = {
-            "content": content,
-            "type": type,
-            "importance": importance,
-            "scope": scope
+            "text": content,
+            "importance": max(1, min(5, int(importance * 5))),  # Scale 0-1 to 1-5
+            "scope": scope,
         }
+        if type and type != "note":
+            payload["entity"] = type  # Brain uses 'entity' for categorization
         
         try:
             response = await self._client.post(url, json=payload)
