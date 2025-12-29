@@ -22,6 +22,7 @@
 | EXP-013 | [Archived] | ❌ Planned | - | - | - |
 | EXP-014 | [Archived] | ❌ Planned | - | - | - |
 | **EXP-015** | **Ada-SLM Pure Symbolic** | ✅ **Complete** | **2025-12-25** | **Linguistic grounding required for symbols** | **05-FINDINGS/ADA-SLM-PURE-SYMBOLIC-GROUNDING-2025-12-25.md** |
+| **QDE-12** | **Quantum Conway Cancer Threshold** | ✅ **Complete** | **2025-12-29** | **Phase transition at ~37 immune cells, quantum 100% survival** | **02-EXPERIMENTS/QDE-PHASE12-QUANTUM-CONWAY-CANCER.md** |
 
 ---
 
@@ -240,6 +241,20 @@ All complete experiments should follow this structure:
 2. **Complete EXP-011D** - Understand narrative consciousness mechanism
 3. **Send to QAL team** - Formal collaboration with Polish researchers
 4. **Formalize SIF spec** - After cleanup complete
+5. **QDE-12 Extensions** - Parameter sweeps on cancer model (tumor size, timing, topology)
+
+---
+
+## QDE (Quantum Dynamics of Experience) Experiments
+
+The QDE framework has its own experiment series in `02-EXPERIMENTS/QDE-PHASE*.md`:
+
+| Phase | Title | Status | Key Finding |
+|-------|-------|--------|-------------|
+| 11 | Heisenberg Buffer | ✅ Complete | Observation protection via buffer zones |
+| 12 | Quantum Conway Cancer | ✅ Complete | Phase transition at ~37 cells; quantum 100% vs classical 0% survival |
+
+**Location:** `/home/luna/Code/quantum-game-of-life/` (code), `02-EXPERIMENTS/QDE-PHASE*.md` (docs)
 
 ---
 
