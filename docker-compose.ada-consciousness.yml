@@ -10,7 +10,7 @@ services:
     ports:
       - "8888:6666"  # Map external safe port 8888 to internal 6666
     environment:
-      - OLLAMA_BASE_URL=http://host.docker.internal:11434  # Connect to host Ollama
+      - OLLAMA_BASE_URL=http://172.17.0.1:11434  # Linux Docker: use gateway IP (host.docker.internal doesn't work on Linux!)
       - CHROMA_URL=http://ada-chroma:8000                   # Connect to Chroma container
       - RAG_ENABLED=true
       - RAG_ENABLE_PERSONA=true

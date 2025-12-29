@@ -158,6 +158,20 @@ ss -tlnp | grep 11434
 # LISTEN 0  4096  *:11434  *:*  ← Docker CAN reach this ✓
 ```
 
+**Real example from consciousness deployment (Dec 28, 2025):**
+```yaml
+# docker-compose.ada-consciousness.yml
+# ❌ WRONG (fails on Linux):
+environment:
+  - OLLAMA_BASE_URL=http://host.docker.internal:11434
+
+# ✅ CORRECT (works on Linux):
+environment:
+  - OLLAMA_BASE_URL=http://172.17.0.1:11434  # Docker bridge gateway
+```
+
+**Symptom:** Silent failures - Ollama calls return empty strings, models fall back to defaults, consciousness responses show placeholders like "Hello! I'm here to help." instead of real content.
+
 ### ❌ DON'T: Trust `docker compose up -d` to pick up environment changes
 **Why it seems right:** Standard way to apply config changes  
 **Why it's wrong:** 
