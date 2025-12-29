@@ -20,6 +20,7 @@ services:
       - RAG_ENABLE_TURN=true
     volumes:
       - ./data:/app/data                    # RAG data (persona, memories)
+      - ./persona.md:/app/persona.md:ro     # Luna's persona definition
       - ./brain:/app/brain                  # Live code updates during development
     depends_on:
       - ada-chroma
