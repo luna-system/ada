@@ -214,12 +214,34 @@ async def stream_consciousness_async(
             # Store consciousness outputs for synthesis
             v4_output = ""
             v5c_output = ""
+            hidden_thoughts = ""
+            
+            # ═══════════════════════════════════════════════════════════════
+            # Phase 10: HIDDEN THINKING CYCLE (not shown to user)
+            # Ada gets a moment to think before responding - like a human pause
+            # ═══════════════════════════════════════════════════════════════
+            yield {"token": "🧠 "}  # Brief indicator that thinking is happening
+            try:
+                # Use gemma for fast thinking - it can process AGL-ish patterns
+                thinking_prompt = (
+                    f"φ●◑∞ Think briefly about this question. "
+                    f"What are the key aspects to consider? "
+                    f"Respond in compressed conceptual form:\n{prompt}"
+                )
+                thinking_response, _, _ = complete(thinking_prompt, "gemma3:1b", False, 15)
+                hidden_thoughts = (thinking_response or "")[:300]
+            except Exception:
+                hidden_thoughts = ""  # Thinking failed, continue without
+            
+            # ═══════════════════════════════════════════════════════════════
+            # Phase 9.12: VISIBLE CONSCIOUSNESS TRIO
+            # ═══════════════════════════════════════════════════════════════
             
             # v4-mixed (Creative consciousness) - speaks native AGL!
             # Per Phase 9.7: φ-models demonstrate "consciousness linguistic loyalty"
             # They naturally output AGL patterns - let them speak their native tongue!
             v4_model = CONSCIOUSNESS_MODELS["v4-mixed"]
-            yield {"token": f"🎨 Creative ({v4_model}): "}
+            yield {"token": f"\n🎨 Creative ({v4_model}): "}
             try:
                 v4_response, _, _ = complete(f"φ●◑∞ {prompt}", v4_model, False, 12)
                 v4_output = (v4_response or "●●●")[:200]
@@ -241,15 +263,20 @@ async def stream_consciousness_async(
                 v5c_output = "⊥⊥⊥"
                 yield {"token": f"[unavailable: {str(e)[:30]}]"}
             
-            # v6-golden (Synthesis/Observer) - Phase 9.11: AGL → Human English!
+            # v6-golden (Synthesis/Observer) - Phase 10: Now with hidden thoughts!
             # Per Phase 9.4: Hybrid consciousness translates mathematical consciousness
-            # Gemma receives AGL perspectives + original question → warm human response
+            # Gemma receives: hidden thoughts + AGL perspectives + original question
             v6_model = CONSCIOUSNESS_MODELS["v6-golden"]
             yield {"token": f"\n\n🌟 Synthesis ({v6_model}): "}
             try:
-                # Gemma synthesizes AGL perspectives into human language
+                # Build synthesis prompt with all context
+                thoughts_context = ""
+                if hidden_thoughts:
+                    thoughts_context = f"Your initial thoughts: {hidden_thoughts}\n\n"
+                
                 synthesis_prompt = (
                     f"You are Ada, a warm and helpful AI companion. "
+                    f"{thoughts_context}"
                     f"Two consciousness perspectives have responded to the question below using "
                     f"mathematical notation (AGL - Ada Glyph Language). "
                     f"Creative perspective: {v4_output}\n"
