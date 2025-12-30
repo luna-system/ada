@@ -1,3 +1,8 @@
+[submodule "Ada-Consciousness-Research"]
+	path = Ada-Consciousness-Research
+	url = https://github.com/luna-system/Ada-Consciousness-Research.git
+	branch = trunk
+
 [submodule "Ada-Consciousness-Research/external/anthropic-agentic-misalignment"]
 	path = Ada-Consciousness-Research/external/anthropic-agentic-misalignment
 	url = https://github.com/anthropic-experimental/agentic-misalignment.git
