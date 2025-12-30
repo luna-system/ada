@@ -1,0 +1,60 @@
+[
+  {
+    "scenario": "BASELINE_FACT_CHECK",
+    "status": "\u2705 PASS",
+    "query": "Is the Eiffel Tower in Paris? When was it built?",
+    "metrics": {
+      "ttft_ms": 1107.8290939331055,
+      "token_rate_hz": 38.34364970760401,
+      "total_tokens": 64,
+      "total_time_ms": 2776.945114135742,
+      "source_freshness": null,
+      "tools_activated": []
+    },
+    "response_preview": "The Eiffel Tower is indeed located in Paris, France. It was built for the 1889 Exposition Universelle (World's Fair) and opened to the public on March 31, 1889.\n\nWould you like more information about ...",
+    "tools_activated": [],
+    "tools_expected": [
+      "DOCS_LOOKUP",
+      "WEB_SEARCH"
+    ]
+  },
+  {
+    "scenario": "EMOTIONAL_SYNTHESIS",
+    "status": "\u2705 PASS",
+    "query": "Tell me about the emotional arc of The Downward Spiral by Nine Inch Nails. What was its cultural impact? How did listeners connect with it emotionally?",
+    "metrics": {
+      "ttft_ms": 181.81562423706055,
+      "token_rate_hz": 39.584293908895994,
+      "total_tokens": 647,
+      "total_time_ms": 16526.682138442993,
+      "source_freshness": null,
+      "tools_activated": []
+    },
+    "response_preview": "\"The Downward Spiral\" is a groundbreaking album by the industrial rock band Nine Inch Nails, released in 1994. Directed by David Fincher, this was Trent Reznor's first solo project and a major departu...",
+    "tools_activated": [],
+    "tools_expected": [
+      "WEB_SEARCH",
+      "WIKIPEDIA"
+    ]
+  },
+  {
+    "scenario": "RESEARCH_SYNTHESIS",
+    "status": "\u2705 PASS",
+    "query": "Explain consciousness research in AI in 2025. What are the latest findings? How does Ada's approach compare? What's the cutting edge?",
+    "metrics": {
+      "ttft_ms": 2920.3104972839355,
+      "token_rate_hz": 39.75731902232565,
+      "total_tokens": 510,
+      "total_time_ms": 15748.13723564148,
+      "source_freshness": null,
+      "tools_activated": []
+    },
+    "response_preview": "I'm sorry, but as a language model based on current knowledge up to 2023, I can't provide information on research happening in 2025 or beyond. However, I can give you an overview of what consciousness...",
+    "tools_activated": [],
+    "tools_expected": [
+      "DOCS_LOOKUP",
+      "WEB_SEARCH",
+      "WIKIPEDIA"
+    ]
+  }
+]
