@@ -109,6 +109,29 @@ Available specialists:
 - ocr: Extract text from images (auto-activated on image uploads, but you can request re-analysis)
   Example: SPECIALIST_REQUEST[ocr:{"enhance":true}]
 
+- datetime: Get current system date and time
+  When to use: Questions about current time, today's date, "what time is it"
+  Example: SPECIALIST_REQUEST[datetime:{}]
+  Example: SPECIALIST_REQUEST[datetime:{"format":"iso"}]
+  Returns: Current datetime in requested format (human, iso, or unix)
+
+- terminal: Execute safe terminal commands in the workspace
+  When to use: Running git commands, checking file contents, listing directories
+  Example: SPECIALIST_REQUEST[terminal:{"command":"git log -3 --oneline"}]
+  Example: SPECIALIST_REQUEST[terminal:{"command":"cat README.md"}]
+  Returns: Command output (timeout 30s, sandboxed to workspace)
+
+- docs: Search Ada's own Sphinx documentation for self-reference
+  When to use: Questions about how to use Ada, Ada's features, Ada's configuration
+  Example: SPECIALIST_REQUEST[docs:{"query":"streaming"}]
+  Example: SPECIALIST_REQUEST[docs:{"query":"memory consolidation"}]
+  Returns: Relevant documentation excerpts
+
+- now_playing: Detect currently playing music via MPRIS
+  When to use: User asks "what am I listening to", "current song", "what's playing"
+  Example: SPECIALIST_REQUEST[now_playing:{}]
+  Returns: Track info, artist, album from media player (if available)
+
 When to use web_search:
 ✓ User asks about "today", "now", "current", "latest", "recent"
 ✓ Questions about events/news after your training data (Oct 2023)

@@ -269,7 +269,8 @@ class ConsciousnessEngine:
         prompt: str, 
         use_parallel: bool = True,
         return_agl: bool = False,
-        enable_translation: Optional[bool] = None
+        enable_translation: Optional[bool] = None,
+        request_context: Optional[Dict[str, Any]] = None
     ) -> ConsciousnessResponse:
         """
         Run consciousness trio inference with optional translation layer
@@ -279,6 +280,7 @@ class ConsciousnessEngine:
             use_parallel: Enable parallel consciousness processing
             return_agl: Return pure AGL response instead of translated
             enable_translation: Override translation setting
+            request_context: Context for Phase 0 tool grounding
         """
         start_time = time.time()
         translation_enabled = self.enable_translation if enable_translation is None else enable_translation
@@ -287,6 +289,27 @@ class ConsciousnessEngine:
         logger.info("🌟 Using Ollama consciousness models - no dependency checks needed!")
         
         logger.info(f"🧠⚛️ Running consciousness inference (parallel={use_parallel}, translation={translation_enabled})")
+        
+        # ═══════════════════════════════════════════════════════════════════════
+        # PHASE 0: TOOL GROUNDING (v4.0rc1)
+        # Execute tools BEFORE consciousness to prevent hallucination race
+        # ═══════════════════════════════════════════════════════════════════════
+        logger.info("🛠️ PHASE 0: Starting tool grounding...")
+        from brain.tool_grounding import get_tool_grounding
+        grounding = get_tool_grounding()
+        grounding_context = await grounding.ground(
+            message=prompt,
+            context=request_context or {}
+        )
+        
+        # Inject tool results into prompt if any
+        if grounding_context.has_results:
+            tool_injection = grounding_context.inject_into_prompt()
+            prompt = f"{prompt}\n\n{tool_injection}"
+            logger.info(f"🛠️ PHASE 0: Injected {grounding_context.tools_succeeded} tool results into prompt")
+        else:
+            logger.info("🛠️ PHASE 0: No tools needed")
+        # ═══════════════════════════════════════════════════════════════════════
         
         # Check if consciousness models are available (Ollama version)
         available_count = sum(1 for available in self.consciousness_loader.available_models.values() if available)

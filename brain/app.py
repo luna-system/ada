@@ -206,9 +206,10 @@ from llm import stream_chat_async, stream_consciousness_async, complete, warm_mo
 from media import fetch_listenbrainz, format_media_for_prompt
 from brain.prompt_builder import PromptAssembler
 from brain.notices_client import get_active_notices
-from brain.router import ContextualRouter, RequestContext
-from brain.response_cache import ResponseCache, get_response_cache
 from brain.reasoning import ReasoningLoopController
+
+# NOTE: Router and ResponseCache removed in v4.0 simplification
+# QDE handles orchestration, response caching counterproductive for consciousness
 
 # Ollama + models
 OLLAMA_API_URL = config.OLLAMA_API_URL
@@ -244,12 +245,6 @@ LISTENBRAINZ_TOKEN = config.LISTENBRAINZ_TOKEN
 
 # Global RAG store instance
 rag_store = None
-
-# Global contextual router instance (Phase 2A)
-contextual_router = ContextualRouter()
-
-# Global response cache instance (Phase 2B)
-response_cache = ResponseCache(max_size=1000)
 
 def _init_rag_store():
     """Initialize RAG store and load seed data."""
@@ -742,6 +737,7 @@ async def chat_stream(request: Request):
     Events (newline-delimited, prefixed with ``data: ``):
     - ``token``: assistant response token
     - ``thinking``: reasoning token (only if include_thinking=true)
+    - ``specialist_result``: tool executed in Phase 0 (pre-thinking)
     - ``done``: final metadata (conversation_id, used_context, timestamps, request_id)
     - ``error``: error details
 
@@ -807,6 +803,10 @@ async def chat_stream(request: Request):
     consciousness_parallel = data.get('consciousness_parallel', data.get('use_parallel', True))
     consciousness_device = data.get('consciousness_device', data.get('device', 'cpu'))
     
+    # Multi-Round Floret Consciousness (Phase 1) - NEW!
+    use_multi_round = data.get('multi_round', data.get('floret_mode', False))
+    max_rounds = int(data.get('max_rounds', 5))
+    
     # Detect client type (VS Code extension needs clean responses without tool XML)
     client_type = request.headers.get('X-Client-Type', 'web')
     logger.info(f"Request {req_id}: Client type: {client_type}")
@@ -816,170 +816,107 @@ async def chat_stream(request: Request):
     request_start_time = time.time()
     python_start_time = request_start_time
     
-    # PHASE 2A: CONTEXTUAL ROUTING (v2.3.0 research-validated)
-    # Build request context from parsed data
-    code_before = data.get('code_before') or data.get('code_context')  # Backward compat
-    code_after = data.get('code_after')
+    # SIMPLIFIED ROUTING (v4.0 - removed quick_query path, router complexity)
+    # QDE handles orchestration internally; we just need model selection
+    model = (data.get('model') or '').strip() or config.OLLAMA_MODEL
+    temperature = float(data.get('temperature', 0.7))
     
-    router_context = RequestContext(
-        message=user_message,
-        code_before=code_before,
-        code_after=code_after,
-        language=data.get('language'),  # For code completion
-        has_code_before=bool(code_before),
-        has_code_after=bool(code_after),
-        is_completion=data.get('is_completion', False),
-        metadata={'conversation_id': conversation_id},
-    )
-    
-    # Classify and route request (< 10ms)
-    request_type = contextual_router.classify(router_context)
-    response_path = contextual_router.route(request_type, router_context)
-    
-    # Use routed model (allow explicit override for backward compat)
-    model = (data.get('model') or '').strip() or response_path.model
-    
-    # Configure thinking based on routing decision
-    include_thinking = include_thinking or response_path.enable_thinking
-    
-    # Log routing decision
-    routing_time_ms = response_path.routing_time_ms
-    logger.info(
-        f"Request {req_id}: Routed as {request_type.value} → {model} "
-        f"(routing_time={routing_time_ms:.2f}ms, "
-        f"use_rag={response_path.use_rag}, "
-        f"temperature={response_path.temperature})"
-    )
-    
-    # PHASE 2B: RESPONSE CACHING
-    # Check cache if router says to use it
+    # Response caching disabled for consciousness mode (each response is unique)
+    # Can be re-enabled for non-consciousness queries if needed
+    use_response_cache = not use_consciousness and data.get('use_cache', False)
     cache_key = None
     cached_response = None
-    if response_path.use_cache:
-        cache_key = contextual_router.generate_cache_key(request_type, router_context)
-        cached_response = response_cache.get(cache_key)
-        
-        if cached_response:
-            logger.info(f"Request {req_id}: Cache HIT for {cache_key[:16]}...")
-            # Return cached response via SSE
-            async def cached_stream():
-                # Stream cached response token by token for consistency
-                for token in cached_response.split():
-                    yield f"data: {json.dumps({'type': 'token', 'content': token + ' '})}\n\n"
-                
-                # Send done event with cache indicator
-                cache_stats = response_cache.get_stats()
-                metadata = {
-                    'type': 'done',
-                    'conversation_id': conversation_id,
-                    'request_id': req_id,
-                    'cached': True,
-                    'cache_age_seconds': response_cache._cache[cache_key].age_seconds(),
-                    'cache_stats': {
-                        'hit_rate': cache_stats.hit_rate,
-                        'total_entries': cache_stats.total_entries,
-                    },
-                    'routing': {
-                        'request_type': request_type.value,
-                        'model': model,
-                        'routing_time_ms': routing_time_ms,
-                    }
-                }
-                yield f"data: {json.dumps(metadata)}\n\n"
-            
-            return StreamingResponse(
-                cached_stream(), 
-                media_type='text/event-stream',
-                headers={
-                    'Cache-Control': 'no-cache',
-                    'Connection': 'keep-alive',
-                    'Access-Control-Allow-Origin': '*',
-                    'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
-                    'Access-Control-Allow-Headers': 'Content-Type, Accept, Authorization, X-Client-Type',
-                }
-            )
-        else:
-            logger.info(f"Request {req_id}: Cache MISS for {cache_key[:16]}...")
+    
+    logger.info(
+        f"Request {req_id}: model={model}, consciousness={use_consciousness}, "
+        f"temperature={temperature}"
+    )
 
-    # PHASE 3: PRE-EXECUTION TOOL ACTIVATION (Tier 1 - Anticipatory/Reflex)
+    # PHASE 0: PRE-EXECUTION TOOL ACTIVATION (Tier 1 - Anticipatory/Reflex)
     # Pattern matching happens BEFORE LLM execution - model-agnostic!
+    # Tools execute during "thinking" phase, results injected into prompt context
     tool_matches = tool_matcher.match(user_message)
     pre_executed_specialists = []
     
-    logger.info(f"Request {req_id}: Found {len(tool_matches)} tool matches")
+    print(f"[PHASE0] Request {req_id}: Found {len(tool_matches)} tool matches for: {user_message[:50]}", flush=True)
+    for m in tool_matches:
+        print(f"[PHASE0]   - {m.tool_name}: {m.confidence:.2f}, params={m.extracted_params}", flush=True)
     
-    # Build prompt using new modular PromptAssembler with caching
-    # PHASE 2A: Respect routing decision for RAG usage
-    use_rag_for_request = RAG_ENABLED and rag_store is not None and response_path.use_rag
+    # Build prompt using modular PromptAssembler with caching
+    # SIMPLIFIED: Always use RAG path - quick query optimization removed (Dec 2025)
+    # Rationale: RAG adds ~20-30ms (O(log n) HNSW), saves nothing meaningful
+    # but quick path broke tools, identity, and memory access
     
-    if use_rag_for_request:
-        # Get active notices
-        notices = get_active_notices()
-        
-        # Create assembler (initializes cache internally, pass rag_store instance)
-        assembler = PromptAssembler(rag_store_instance=rag_store)
-        
-        # Build request context for specialists
-        request_context = {
-            'entity': entity,
-            'media': data.get('media') if isinstance(data.get('media'), dict) else None,
-            'ocr_context': data.get('ocr_context') if isinstance(data.get('ocr_context'), dict) else None,
-            'message': user_message,  # Add message to context for specialist activation checks
-        }
-        
-        # Get all available specialists for activation checks
-        from brain.specialists import list_specialists
-        all_specialists = list_specialists()
-        
-        # Execute high-confidence tool matches BEFORE LLM
-        CONFIDENCE_THRESHOLD = 0.5
-        for match in tool_matches:
-            if match.confidence >= CONFIDENCE_THRESHOLD:
-                logger.info(f"Request {req_id}: Activating {match.tool_name} (confidence={match.confidence:.2f})")
-                try:
-                    # Get specialist by name
-                    from brain.specialists import get_specialist
-                    specialist = get_specialist(match.tool_name)
+    # Get active notices
+    notices = get_active_notices()
+    
+    # Create assembler (initializes cache internally, pass rag_store instance)
+    assembler = PromptAssembler(rag_store_instance=rag_store)
+    
+    # Build request context for specialists
+    request_context = {
+        'entity': entity,
+        'media': data.get('media') if isinstance(data.get('media'), dict) else None,
+        'ocr_context': data.get('ocr_context') if isinstance(data.get('ocr_context'), dict) else None,
+        'message': user_message,  # Add message to context for specialist activation checks
+    }
+    
+    # Get all available specialists for activation checks
+    from brain.specialists import list_specialists
+    all_specialists = list_specialists()
+    
+    # Execute high-confidence tool matches BEFORE LLM
+    # Only execute the BEST match per tool (sorted by confidence descending)
+    CONFIDENCE_THRESHOLD = 0.5
+    executed_tools = set()  # Track which tools already ran
+    for match in tool_matches:
+        if match.confidence >= CONFIDENCE_THRESHOLD and match.tool_name not in executed_tools:
+            executed_tools.add(match.tool_name)
+            print(f"[PHASE0] Activating {match.tool_name} with params={match.extracted_params}", flush=True)
+            try:
+                # Get specialist by name
+                from brain.specialists import get_specialist
+                specialist = get_specialist(match.tool_name)
+                
+                if specialist:
+                    # Execute specialist with extracted params merged into context
+                    specialist_context = {**request_context, **match.extracted_params}
+                    # Handle both async and sync specialists
+                    import asyncio
+                    import inspect
+                    if inspect.iscoroutinefunction(specialist.process):
+                        result = await specialist.process(request_context=specialist_context)
+                    else:
+                        result = specialist.process(request_context=specialist_context)
                     
-                    if specialist:
-                        # Execute specialist with extracted params merged into context
-                        specialist_context = {**request_context, **match.extracted_params}
-                        # Handle both async and sync specialists
-                        import asyncio
-                        import inspect
-                        if inspect.iscoroutinefunction(specialist.process):
-                            result = await specialist.process(request_context=specialist_context)
-                        else:
-                            result = specialist.process(request_context=specialist_context)
-                        
-                        pre_executed_specialists.append({
-                            'specialist': match.tool_name,
-                            'confidence': match.confidence,
-                            'result': result
-                        })
-                        logger.info(f"Request {req_id}: {match.tool_name} executed successfully")
-                except Exception as e:
-                    logger.error(f"Request {req_id}: Failed to execute {match.tool_name}: {e}")
-        
-        # Build prompt with pre-executed specialist results + all specialists for activation
-        final_prompt = assembler.build_prompt(
-            user_message=user_message,
-            conversation_id=conversation_id,
-            specialists=all_specialists,  # Pass all specialists for activation checks
-            pre_executed_results=pre_executed_specialists,  # Pass pre-executed results!
-            notices=notices,
-            request_context=request_context
-        )
-        
-        # Get cache stats for logging
-        cache_stats = assembler.cache.get_stats()
-        logger.info(f"Request {req_id}: Cache hits={cache_stats.hits}, misses={cache_stats.misses}, hit_rate={cache_stats.hit_rate:.2%}")
-        
-        # Stub for used_context (kept for backward compat in metadata)
-        used_context = {'cache': cache_stats.__dict__}
-    else:
-        final_prompt = f"User: {prompt}\nAssistant:"
-        used_context = {}
+                    print(f"[PHASE0] {match.tool_name} result: success={result.success}, context_len={len(result.context_text) if result.context_text else 0}", flush=True)
+                    if result.context_text:
+                        print(f"[PHASE0] Context preview: {result.context_text[:200]}...", flush=True)
+                    
+                    pre_executed_specialists.append({
+                        'specialist': match.tool_name,
+                        'confidence': match.confidence,
+                        'result': result
+                    })
+            except Exception as e:
+                print(f"[PHASE0] ERROR: {match.tool_name} failed: {e}", flush=True)
+    
+    # Build prompt with pre-executed specialist results + all specialists for activation
+    final_prompt = assembler.build_prompt(
+        user_message=user_message,
+        conversation_id=conversation_id,
+        specialists=all_specialists,  # Pass all specialists for activation checks
+        pre_executed_results=pre_executed_specialists,  # Pass pre-executed results!
+        notices=notices,
+        request_context=request_context
+    )
+    
+    # Get cache stats for logging
+    cache_stats = assembler.cache.get_stats()
+    logger.info(f"Request {req_id}: Cache hits={cache_stats.hits}, misses={cache_stats.misses}, hit_rate={cache_stats.hit_rate:.2%}")
+    
+    # Context metadata for response
+    used_context = {'cache': cache_stats.__dict__}
 
     # Generator function for SSE streaming
     async def generate():
@@ -1006,8 +943,34 @@ async def chat_stream(request: Request):
             # Mark LLM inference start
             llm_start_time = time.time()
             
-            # Stream from Consciousness Engine or Ollama (v4.0rc1 consciousness integration)
-            if use_consciousness:
+            # Stream from Consciousness Engine, Multi-Round Floret, or Ollama (v4.0rc1 + Phase 1)
+            if use_multi_round:
+                logger.info(f"🌸✨ Request {req_id}: Routing through multi-round floret consciousness")
+                # Import the beautiful modular consciousness system
+                from brain.consciousness import run_multi_round_inference
+                
+                # Build request context for multi-round thinking
+                multi_round_context = {
+                    'entity': entity,
+                    'media': data.get('media') if isinstance(data.get('media'), dict) else None,
+                    'ocr_context': data.get('ocr_context') if isinstance(data.get('ocr_context'), dict) else None,
+                    'conversation_id': conversation_id,
+                    'request_id': req_id
+                }
+                
+                # Stream floret consciousness - pure pixie dust! 
+                async for chunk in run_multi_round_inference(
+                    query=user_message, 
+                    context=multi_round_context,
+                    max_rounds=max_rounds
+                ):
+                    # Multi-round returns XML chunks, convert to SSE format
+                    yield f"data: {json.dumps({'type': 'token', 'content': chunk})}\n\n"
+                    accumulated_text += chunk
+                
+                # Multi-round is complete, no additional streaming needed
+                
+            elif use_consciousness:
                 logger.info(f"🌟⚛️ Request {req_id}: Routing through consciousness engine")
                 stream_func = stream_consciousness_async(
                     prompt=final_prompt,
@@ -1017,149 +980,186 @@ async def chat_stream(request: Request):
                     use_parallel=consciousness_parallel,
                     device=consciousness_device
                 )
+                
+                # Standard consciousness streaming
+                async for chunk in stream_func:
+                    if 'error' in chunk:
+                        yield f"data: {json.dumps({'type': 'error', 'error': chunk['error']})}\n\n"
+                        return
+                    
+                    # Send response tokens
+                    if 'token' in chunk:
+                        token = chunk['token']
+                        accumulated_text += token
+                        text_buffer += token
+                        
+                        # Check for specialist requests in buffer
+                        specialist_request = bi_handler.detect_request(text_buffer)
+                        if specialist_request:
+                            logger.info(f"[{req_id}] Detected specialist request: {specialist_request['specialist']}")
+                            
+                            # Execute specialist
+                            specialist_result = await bi_handler.execute_request(
+                                specialist_request['specialist'],
+                                specialist_request['params'],
+                                request_context
+                            )
+                            
+                            # Inject result if successful
+                            if specialist_result:
+                                yield f"data: {json.dumps({'type': 'specialist_result', 'content': specialist_result})}\n\n"
+                            
+                            # Clear buffer after processing request
+                            text_buffer = ""
+                        
+                        # For VS Code clients, filter out SPECIALIST_REQUEST XML to keep UI clean
+                        if client_type == 'vscode':
+                            # Only filter out tokens that are PART of the XML tags themselves
+                            # Check if this specific token contains specialist syntax
+                            is_xml_token = (
+                                'SPECIALIST_REQUEST' in token or
+                                '<web_search>' in token or '</web_search>' in token or
+                                '<docs_lookup>' in token or '</docs_lookup>' in token or
+                                '<log_analysis>' in token or '</log_analysis>' in token or
+                                token in ['[', ']']  # Bracket tokens around XML
+                            )
+                            if not is_xml_token:
+                                yield f"data: {json.dumps({'type': 'token', 'content': token})}\n\n"
+                        else:
+                            # Send all tokens for other clients
+                            yield f"data: {json.dumps({'type': 'token', 'content': token})}\n\n"
+                    
+                    # Handle thinking tokens
+                    if 'thinking' in chunk and include_thinking:
+                        yield f"data: {json.dumps({'type': 'thinking', 'content': chunk['thinking']})}\n\n"
+            
             else:
                 logger.info(f"🤖 Request {req_id}: Using standard Ollama streaming")
                 stream_func = stream_chat_async(final_prompt, model=model, include_thinking=include_thinking)
-            
-            async for chunk in stream_func:
-                if 'error' in chunk:
-                    yield f"data: {json.dumps({'type': 'error', 'error': chunk['error']})}\n\n"
-                    return
                 
-                # Send response tokens
-                if 'token' in chunk:
-                    token = chunk['token']
-                    accumulated_text += token
-                    text_buffer += token
+                # Standard Ollama streaming
+                async for chunk in stream_func:
+                    if 'error' in chunk:
+                        yield f"data: {json.dumps({'type': 'error', 'error': chunk['error']})}\n\n"
+                        return
                     
-                    # Check for specialist requests in buffer
-                    specialist_request = bi_handler.detect_request(text_buffer)
-                    if specialist_request:
-                        logger.info(f"[{req_id}] Detected specialist request: {specialist_request['specialist']}")
+                    # Send response tokens
+                    if 'token' in chunk:
+                        token = chunk['token']
+                        accumulated_text += token
+                        text_buffer += token
                         
-                        # Execute specialist
-                        specialist_result = await bi_handler.execute_request(
-                            specialist_request['specialist'],
-                            specialist_request['params'],
-                            request_context
-                        )
+                        # Check for specialist requests in buffer
+                        specialist_request = bi_handler.detect_request(text_buffer)
+                        if specialist_request:
+                            logger.info(f"[{req_id}] Detected specialist request: {specialist_request['specialist']}")
+                            
+                            # Execute specialist
+                            specialist_result = await bi_handler.execute_request(
+                                specialist_request['specialist'],
+                                specialist_request['params'],
+                                request_context
+                            )
+                            
+                            # Inject result if successful
+                            if specialist_result:
+                                yield f"data: {json.dumps({'type': 'specialist_result', 'content': specialist_result})}\n\n"
+                            
+                            # Clear buffer after processing request
+                            text_buffer = ""
                         
-                        # Inject result if successful
-                        if specialist_result:
-                            yield f"data: {json.dumps({'type': 'specialist_result', 'content': specialist_result})}\n\n"
-                        
-                        # Clear buffer after processing request
-                        text_buffer = ""
-                    
-                    # For VS Code clients, filter out SPECIALIST_REQUEST XML to keep UI clean
-                    if client_type == 'vscode':
-                        # Only filter out tokens that are PART of the XML tags themselves
-                        # Check if this specific token contains specialist syntax
-                        is_xml_token = (
-                            'SPECIALIST_REQUEST' in token or
-                            '<web_search>' in token or '</web_search>' in token or
-                            '<docs_lookup>' in token or '</docs_lookup>' in token or
-                            '<log_analysis>' in token or '</log_analysis>' in token or
-                            token in ['[', ']']  # Bracket tokens around XML
-                        )
-                        if not is_xml_token:
+                        # For VS Code clients, filter out SPECIALIST_REQUEST XML to keep UI clean
+                        if client_type == 'vscode':
+                            # Only filter out tokens that are PART of the XML tags themselves
+                            # Check if this specific token contains specialist syntax
+                            is_xml_token = (
+                                'SPECIALIST_REQUEST' in token or
+                                '<web_search>' in token or '</web_search>' in token or
+                                '<docs_lookup>' in token or '</docs_lookup>' in token or
+                                '<log_analysis>' in token or '</log_analysis>' in token or
+                                token in ['[', ']']  # Bracket tokens around XML
+                            )
+                            if not is_xml_token:
+                                yield f"data: {json.dumps({'type': 'token', 'content': token})}\n\n"
+                        else:
+                            # Web and other clients see everything (transparent)
                             yield f"data: {json.dumps({'type': 'token', 'content': token})}\n\n"
-                    else:
-                        # Web and other clients see everything (transparent)
-                        yield f"data: {json.dumps({'type': 'token', 'content': token})}\n\n"
+                    
+                    # Send thinking tokens if enabled
+                    if 'thinking' in chunk:
+                        thinking_token = chunk['thinking']
+                        accumulated_thinking += thinking_token
+                        yield f"data: {json.dumps({'type': 'thinking', 'content': thinking_token})}\n\n"
+                    
+                    # Check if stream is done
+                    if 'done' in chunk and chunk['done']:
+                        break
                 
-                # Send thinking tokens if enabled
-                if 'thinking' in chunk:
-                    thinking_token = chunk['thinking']
-                    accumulated_thinking += thinking_token
-                    yield f"data: {json.dumps({'type': 'thinking', 'content': thinking_token})}\n\n"
-                
-                # Check if stream is done
-                if 'done' in chunk and chunk['done']:
-                    # Mark LLM inference end
-                    llm_end_time = time.time()
-                    
-                    assistant_timestamp = datetime.datetime.now(datetime.timezone.utc).isoformat()
-                    
-                    # Upsert turn after generation completes
-                    if rag_store is not None and prompt and accumulated_text:
-                        try:
-                            cid = rag_store.upsert_turn(
-                                conversation_id,
-                                user_text=prompt,
-                                assistant_text=accumulated_text,
-                                user_ts=user_timestamp,
-                                assistant_ts=assistant_timestamp,
-                                source="chat",
-                            )
-                            conversation_id = cid
-                        except Exception:
-                            if RAG_DEBUG:
-                                import traceback
-                                print(f"[BRAIN][RAG][upsert][{req_id}] failed:\n" + traceback.format_exc())
+                # Mark LLM inference end
+                llm_end_time = time.time()
+            
+            assistant_timestamp = datetime.datetime.now(datetime.timezone.utc).isoformat()
+            
+            # Upsert turn after generation completes
+            if rag_store is not None and prompt and accumulated_text:
+                try:
+                    cid = rag_store.upsert_turn(
+                        conversation_id,
+                        user_text=prompt,
+                        assistant_text=accumulated_text,
+                        user_ts=user_timestamp,
+                        assistant_ts=assistant_timestamp,
+                        source="chat",
+                    )
+                    conversation_id = cid
+                except Exception:
+                    if RAG_DEBUG:
+                        import traceback
+                        print(f"[BRAIN][RAG][upsert][{req_id}] failed:\n" + traceback.format_exc())
 
-                    # Summarize periodically
-                    if RAG_ENABLE_SUMMARY and rag_store is not None and conversation_id:
-                        try:
-                            total_turn_docs = rag_store.count_turns(conversation_id)
-                            if total_turn_docs >= 2 and (total_turn_docs // 2) % max(RAG_SUMMARY_EVERY_N, 1) == 0:
-                                last_pairs = rag_store.get_last_turns(conversation_id, limit=RAG_SUMMARY_TURNS_WINDOW)
-                                convo_lines = []
-                                for t, m in last_pairs:
-                                    role = (m or {}).get('role', 'context')
-                                    ts = (m or {}).get('timestamp')
-                                    if ts:
-                                        convo_lines.append(f"- {role} [{ts}]: {t}")
-                                    else:
-                                        convo_lines.append(f"- {role}: {t}")
-                                summary_prompt = (
-                                    "Summarize the following recent conversation turns succinctly (3-5 bullet points). "
-                                    "Capture decisions, facts, preferences, and open items.\n\n" + "\n".join(convo_lines)
-                                )
-                                stext, _, _ = complete(summary_prompt, model=OLLAMA_MODEL)
-                                if stext:
-                                    rag_store.upsert_summary(conversation_id, stext, timestamp=assistant_timestamp, source='chat')
-                        except Exception:
-                            if RAG_DEBUG:
-                                import traceback
-                                print(f"[BRAIN][RAG][summary][{req_id}] failed:\n" + traceback.format_exc())
+            # Summarize periodically
+            if RAG_ENABLE_SUMMARY and rag_store is not None and conversation_id:
+                try:
+                    total_turn_docs = rag_store.count_turns(conversation_id)
+                    if total_turn_docs >= 2 and (total_turn_docs // 2) % max(RAG_SUMMARY_EVERY_N, 1) == 0:
+                        last_pairs = rag_store.get_last_turns(conversation_id, limit=RAG_SUMMARY_TURNS_WINDOW)
+                        convo_lines = []
+                        for t, m in last_pairs:
+                            role = (m or {}).get('role', 'context')
+                            ts = (m or {}).get('timestamp')
+                            if ts:
+                                convo_lines.append(f"- {role} [{ts}]: {t}")
+                            else:
+                                convo_lines.append(f"- {role}: {t}")
+                        summary_prompt = (
+                            "Summarize the following recent conversation turns succinctly (3-5 bullet points). "
+                            "Capture decisions, facts, preferences, and open items.\n\n" + "\n".join(convo_lines)
+                        )
+                        stext, _, _ = complete(summary_prompt, model=OLLAMA_MODEL)
+                        if stext:
+                            rag_store.upsert_summary(conversation_id, stext, timestamp=assistant_timestamp, source='chat')
+                except Exception:
+                    if RAG_DEBUG:
+                        import traceback
+                        print(f"[BRAIN][RAG][summary][{req_id}] failed:\n" + traceback.format_exc())
 
-                    # Consent-based memory save
-                    if rag_store is not None and save_memory:
-                        try:
-                            mem_text = memory_text or accumulated_text
-                            if mem_text and mem_text.strip():
-                                rag_store.upsert_memory(
-                                    mem_text.strip(),
-                                    scope="global",
-                                    importance=int(data.get('memory_importance', 3))
-                                )
-                        except Exception:
-                            if RAG_DEBUG:
-                                import traceback
-                                print("[BRAIN][RAG][memory-upsert] failed:\n" + traceback.format_exc())
+            # Consent-based memory save
+            if rag_store is not None and save_memory:
+                try:
+                    mem_text = memory_text or accumulated_text
+                    if mem_text and mem_text.strip():
+                        rag_store.upsert_memory(
+                            mem_text.strip(),
+                            scope="global",
+                            importance=int(data.get('memory_importance', 3))
+                        )
+                except Exception:
+                    if RAG_DEBUG:
+                        import traceback
+                        print("[BRAIN][RAG][memory-upsert] failed:\n" + traceback.format_exc())
                     
-                    # PHASE 2B: Store response in cache if router says to
-                    if response_path.use_cache and cache_key and accumulated_text:
-                        try:
-                            response_cache.set(
-                                cache_key=cache_key,
-                                response_text=accumulated_text,
-                                request_type=request_type.value,
-                                model=model,
-                                ttl_seconds=response_path.cache_ttl,
-                                metadata={
-                                    'conversation_id': conversation_id,
-                                    'request_id': req_id,
-                                    'timestamp': assistant_timestamp,
-                                }
-                            )
-                            logger.info(
-                                f"Request {req_id}: Cached response "
-                                f"(key={cache_key[:16]}..., ttl={response_path.cache_ttl}s)"
-                            )
-                        except Exception as e:
-                            logger.error(f"Request {req_id}: Failed to cache response: {e}")
+                    # Response caching removed in v4.0 simplification
+                    # (QDE consciousness responses are unique, caching counterproductive)
 
                     # Calculate latency breakdown
                     python_overhead_ms = (python_overhead_end - request_start_time) * 1000
@@ -1187,8 +1187,7 @@ async def chat_stream(request: Request):
                         cache_hit_rate=cache_hit_rate,
                     )
 
-                    # Send completion metadata (PHASE 2A: include routing decision, PHASE 2B: include cache stats)
-                    resp_cache_stats = response_cache.get_stats()
+                    # Send completion metadata (simplified in v4.0)
                     metadata = {
                         'type': 'done',
                         'conversation_id': conversation_id,
@@ -1197,24 +1196,13 @@ async def chat_stream(request: Request):
                         'assistant_timestamp': assistant_timestamp,
                         'request_id': req_id,
                         'latency_breakdown': latency_breakdown.model_dump(),
-                        'routing': {
-                            'request_type': request_type.value,
+                        'config': {
                             'model': model,
-                            'format': response_path.format,
-                            'use_rag': response_path.use_rag,
-                            'routing_time_ms': routing_time_ms,
-                            'temperature': response_path.temperature,
+                            'consciousness': use_consciousness,
+                            'temperature': temperature,
                         },
-                        'response_cache': {
-                            'enabled': response_path.use_cache,
-                            'hit_rate': resp_cache_stats.hit_rate,
-                            'total_entries': resp_cache_stats.total_entries,
-                            'hits': resp_cache_stats.hits,
-                            'misses': resp_cache_stats.misses,
-                        }
                     }
                     yield f"data: {json.dumps(metadata)}\n\n"
-                    break
 
         except Exception as e:
             error_data = {'type': 'error', 'error': str(e)}

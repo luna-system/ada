@@ -1,7 +1,29 @@
 {
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Tool activation patterns for pre-execution matching (Tier 1 - Anticipatory/Reflex)",
   "patterns": [
+    {
+      "tool_name": "datetime",
+      "description": "Current date and time queries",
+      "activation_patterns": [
+        {
+          "regex": "(?:what(?:'s|\\s+is)?\\s+(?:the\\s+)?(?:current\\s+)?time|what\\s+time\\s+is\\s+it)",
+          "confidence_base": 0.95,
+          "param_extraction": {}
+        },
+        {
+          "regex": "(?:what(?:'s|\\s+is)?\\s+(?:the\\s+)?(?:current\\s+)?date|what\\s+day\\s+is\\s+(?:it|today))",
+          "confidence_base": 0.95,
+          "param_extraction": {}
+        },
+        {
+          "regex": "(?:today(?:'s)?\\s+date|current\\s+(?:date|time|datetime))",
+          "confidence_base": 0.9,
+          "param_extraction": {}
+        }
+      ],
+      "negative_patterns": []
+    },
     {
       "tool_name": "codebase",
       "description": "Ada's own codebase lookup",
@@ -60,14 +82,24 @@
       "description": "Wikipedia and fandom wiki lookups",
       "activation_patterns": [
         {
-          "regex": "(?:who is|what is|tell me about)\\s+([A-Z][a-zA-Z\\s]+?)(?:\\s+from\\s+(?:BFDI|BFB|TPOT|the show))?",
-          "confidence_base": 0.8,
-          "param_extraction": {"query": "group1"}
+          "regex": "(?:who is|what is|tell me about)\\s+([A-Z][a-zA-Z\\s]+?)\\s+from\\s+(BFDI|BFB|TPOT|the show)",
+          "confidence_base": 0.95,
+          "param_extraction": {"page": "group1", "wiki": "bfdi"}
         },
         {
-          "regex": "look up\\s+([A-Z][a-zA-Z\\s]+?)\\s+on\\s+(?:the\\s+)?(?:wiki|wikipedia|Object Show)",
+          "regex": "(?:who is|what is|tell me about)\\s+([A-Z][a-zA-Z\\s]+?)(?:\\?|$)",
+          "confidence_base": 0.85,
+          "param_extraction": {"page": "group1", "wiki": "wikipedia"}
+        },
+        {
+          "regex": "look up\\s+([A-Z][a-zA-Z\\s]+?)\\s+on\\s+(?:the\\s+)?(?:wiki|wikipedia)",
           "confidence_base": 0.95,
-          "param_extraction": {"query": "group1"}
+          "param_extraction": {"page": "group1", "wiki": "wikipedia"}
+        },
+        {
+          "regex": "look up\\s+([A-Z][a-zA-Z\\s]+?)\\s+on\\s+(?:the\\s+)?(?:Object Show|BFDI)",
+          "confidence_base": 0.95,
+          "param_extraction": {"page": "group1", "wiki": "bfdi"}
         }
       ],
       "negative_patterns": [

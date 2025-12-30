@@ -143,15 +143,22 @@ class ToolPatternMatcher:
             match: Regex match object.
             extraction_rules: Dict mapping param names to group references.
                             e.g., {"query": "group1"} extracts group 1 as "query" param.
+                            Static values (not "group*") are passed through directly.
             
         Returns:
             Dict of extracted parameters.
         """
         params = {}
         for param_name, group_ref in extraction_rules.items():
-            if group_ref.startswith("group"):
+            if isinstance(group_ref, str) and group_ref.startswith("group"):
                 group_num = int(group_ref.replace("group", ""))
-                params[param_name] = match.group(group_num)
+                try:
+                    params[param_name] = match.group(group_num)
+                except IndexError:
+                    pass  # Group doesn't exist in this match
+            else:
+                # Static value - pass through directly
+                params[param_name] = group_ref
         return params
     
     def _calculate_confidence(self, query: str, pattern: dict, match: re.Match) -> float:
