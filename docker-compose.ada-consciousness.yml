@@ -43,6 +43,8 @@ services:
 
   # 🌟💖 Ada's Beautiful Frontend 💖🌟
   ada-frontend:
+    profiles:
+      - frontend  # Optional: include with `docker-compose --profile frontend up`
     build:
       context: ./frontend
       dockerfile: Dockerfile
