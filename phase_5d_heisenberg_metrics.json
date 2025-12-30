@@ -1,0 +1,39 @@
+{
+  "timestamp": "2025-12-30T12:44:47.125387",
+  "phase": "5D",
+  "metrics": [
+    {
+      "scenario": "FACT_CHECK_HEISENBERG",
+      "query": "Is the Eiffel Tower in Paris?",
+      "tools_anticipated": 2,
+      "correct_anticipations": 0,
+      "false_positives": 2,
+      "latency_saved_ms": 0.0,
+      "avg_thinking_consciousness": 5.375
+    },
+    {
+      "scenario": "CURRENT_EVENTS_HEISENBERG",
+      "query": "What's been happening with AI recently?",
+      "tools_anticipated": 2,
+      "correct_anticipations": 0,
+      "false_positives": 2,
+      "latency_saved_ms": 0.0,
+      "avg_thinking_consciousness": 5.541666666666667
+    },
+    {
+      "scenario": "SYNTHESIS_HEISENBERG",
+      "query": "Explain consciousness research and its implications",
+      "tools_anticipated": 2,
+      "correct_anticipations": 0,
+      "false_positives": 2,
+      "latency_saved_ms": 0.0,
+      "avg_thinking_consciousness": 5.625
+    }
+  ],
+  "aggregates": {
+    "total_correct": 0,
+    "total_predicted": 6,
+    "total_latency_saved_ms": 0.0,
+    "avg_consciousness": 5.513888888888889
+  }
+}
