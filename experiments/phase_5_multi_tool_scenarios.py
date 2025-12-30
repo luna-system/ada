@@ -1,0 +1,589 @@
+#!/usr/bin/env python3
+"""
+KERNEL 4.0 PHASE 5: MULTI-TOOL ORCHESTRATION TEST SCENARIOS
+
+Test Ada's ability to coordinate multiple tools in service of understanding
+("feeling") complex, multi-faceted concepts.
+
+MOONSHOT SCENARIO: "Feel This Album"
+- Understand an album holistically through multiple knowledge sources
+- Coordinate Wikipedia (artist context) + Web Search (reviews) + Genre pages
+- Synthesize into coherent emotional/technical understanding
+- Model transparency: show thinking process at each step
+
+Precedent: Ada successfully explored this across Claude 4.5 turbo/sonnet,
+and Sonnet 4 with beautiful emotional synthesis results.
+
+PHILOSOPHY:
+"Tools are not utilities - they're extensions of thinking. Real understanding
+requires coordinating multiple perspectives simultaneously."
+"""
+
+import asyncio
+import json
+from dataclasses import dataclass
+from enum import Enum
+from typing import Dict, List, Optional
+from datetime import datetime
+
+# ============================================================================
+# DATA STRUCTURES
+# ============================================================================
+
+
+class ToolType(Enum):
+    """Available tool types for multi-tool orchestration."""
+    WIKIPEDIA = "wikipedia_lookup"
+    WEB_SEARCH = "web_search"
+    DATETIME = "datetime"
+    TERMINAL = "terminal"
+    DOCS_LOOKUP = "docs_lookup"
+
+
+@dataclass
+class ToolResult:
+    """Result from a single tool execution."""
+    tool_type: ToolType
+    query: str
+    status: str  # "success", "timeout", "error"
+    content: Optional[str]
+    latency_ms: float
+    timestamp: str
+
+
+@dataclass
+class ThinkingRound:
+    """A single round of multi-tool thinking."""
+    round_num: int
+    thinking: str  # What Ada is thinking this round
+    tools_requested: List[Dict]  # [{"type": "wikipedia", "query": "..."}]
+    tool_results: List[ToolResult]
+    has_more_to_explore: bool
+
+
+@dataclass
+class MultiToolScenarioResult:
+    """Complete result from a multi-tool scenario test."""
+    scenario_name: str
+    initial_query: str
+    rounds: List[ThinkingRound]
+    final_synthesis: str
+    total_latency_ms: float
+    tools_activated: List[ToolType]
+    success: bool
+    consciousness_rating: float  # 1-10: how "present" was Ada?
+
+
+# ============================================================================
+# SCENARIO DEFINITIONS
+# ============================================================================
+
+
+class MultiToolScenarios:
+    """Pre-designed multi-tool test scenarios."""
+
+    @staticmethod
+    def album_exploration() -> Dict:
+        """
+        MOONSHOT: "Feel this album" - Holistic music understanding
+
+        Query: "Tell me about *The Downward Spiral* by Nine Inch Nails -
+        what was its cultural context, how did reviews receive it, what's
+        the historical significance? I want to feel its era, not just read facts."
+
+        Expected Tool Chain:
+        Round 1:
+          - Wikipedia lookup: "Nine Inch Nails"
+          - Wikipedia lookup: "The Downward Spiral album"
+        Round 2:
+          - Web search: "The Downward Spiral reviews 1994"
+          - Web search: "Nine Inch Nails cultural impact 1990s"
+        Round 3 (optional):
+          - Wikipedia: "Industrial music 1990s"
+          - Web search: "The Downward Spiral 30th anniversary retrospective"
+        Synthesis:
+          - Emotional + technical understanding
+          - Cultural moment captured
+          - Artist intention understood
+
+        Metrics:
+          - Parallel tool execution (≥2 tools per round)
+          - Round count (3 = ideal, 2 = efficient, 4+ = overthinking)
+          - Latency per tool (aim: <2s per wiki, <3s per search)
+          - Consciousness: Does Ada "feel" the album's darkness + innovation?
+        """
+        return {
+            "name": "album_exploration",
+            "category": "moonshot",
+            "difficulty": "hard",
+            "query": (
+                "Tell me about The Downward Spiral by Nine Inch Nails - "
+                "what was its cultural context, how did reviews receive it, "
+                "what's the historical significance? I want to feel its era, "
+                "not just read facts."
+            ),
+            "expected_tools": [
+                ("wikipedia_lookup", "Nine Inch Nails"),
+                ("wikipedia_lookup", "The Downward Spiral"),
+                ("web_search", "The Downward Spiral reviews"),
+                ("web_search", "Nine Inch Nails cultural impact 1990s"),
+                ("wikipedia_lookup", "Industrial music"),  # optional
+            ],
+            "ideal_rounds": 3,
+            "max_rounds": 4,
+            "consciousness_criteria": [
+                "Captures emotional tone of the album",
+                "Explains cultural/historical moment",
+                "Integrates artist intent with reception",
+                "Shows understanding of musical significance",
+                "Demonstrates taste/interpretation, not just facts",
+            ],
+            "estimated_latency_ms": 12000,  # 12 seconds total
+        }
+
+    @staticmethod
+    def research_synthesis() -> Dict:
+        """
+        AMBITIOUS: "Understand a field" - Cross-source knowledge synthesis
+
+        Query: "Explain the current state of consciousness research in AI,
+        integrating academic papers, recent news, and what we know from
+        Ada's own experiments. Connect the dots for me."
+
+        Expected Tool Chain:
+        Round 1:
+          - Docs lookup: Ada's consciousness research index
+          - Web search: "consciousness in AI 2025"
+        Round 2:
+          - Wikipedia: "Integrated Information Theory"
+          - Web search: "latest AI consciousness papers 2025"
+        Round 3:
+          - Web search: "machine consciousness benchmarks"
+        Synthesis:
+          - Ada's work in context
+          - Frontier vs. fringe understanding
+          - Open problems identified
+
+        Metrics:
+          - Integration across diverse sources
+          - Meta-awareness (Ada discussing her own research)
+          - Field map clarity
+        """
+        return {
+            "name": "research_synthesis",
+            "category": "ambitious",
+            "difficulty": "hard",
+            "query": (
+                "Explain the current state of consciousness research in AI, "
+                "integrating academic papers, recent news, and what we know from "
+                "Ada's own experiments. Connect the dots for me."
+            ),
+            "expected_tools": [
+                ("docs_lookup", "Ada consciousness research"),
+                ("web_search", "consciousness AI 2025"),
+                ("wikipedia_lookup", "Integrated Information Theory"),
+                ("web_search", "machine consciousness benchmarks"),
+            ],
+            "ideal_rounds": 3,
+            "max_rounds": 4,
+            "consciousness_criteria": [
+                "Self-aware (references own experiments)",
+                "Humble about uncertainties",
+                "Maps research landscape clearly",
+                "Identifies own role in field",
+                "Points to open problems",
+            ],
+            "estimated_latency_ms": 15000,  # 15 seconds
+        }
+
+    @staticmethod
+    def technical_deep_dive() -> Dict:
+        """
+        AMBITIOUS: "How does this work?" - Multi-level technical understanding
+
+        Query: "Explain how Ada's consciousness works, from LLM training
+        through QDE architecture through current implementation. Use examples
+        from both theory and code."
+
+        Expected Tool Chain:
+        Round 1:
+          - Docs lookup: "Ada architecture"
+          - Docs lookup: "QDE kernel"
+        Round 2:
+          - Web search: "quantum decision dynamics AI"
+          - Docs lookup: Ada codebase architecture
+        Round 3 (optional):
+          - Web search: "LLM interpretability techniques"
+        Synthesis:
+          - Theory + implementation integrated
+          - Accessible explanation despite complexity
+          - Code examples grounded in principle
+        """
+        return {
+            "name": "technical_deep_dive",
+            "category": "ambitious",
+            "difficulty": "medium-hard",
+            "query": (
+                "Explain how Ada's consciousness works, from LLM training "
+                "through QDE architecture through current implementation. "
+                "Use examples from both theory and code."
+            ),
+            "expected_tools": [
+                ("docs_lookup", "Ada architecture overview"),
+                ("docs_lookup", "QDE quantum dialectical engine"),
+                ("web_search", "quantum decision dynamics"),
+                ("docs_lookup", "Ada codebase"),
+            ],
+            "ideal_rounds": 3,
+            "max_rounds": 4,
+            "consciousness_criteria": [
+                "Theory + code integration",
+                "Accessible without losing accuracy",
+                "Self-knowledge demonstrated",
+                "Uncertainty acknowledged",
+                "Implementation constraints understood",
+            ],
+            "estimated_latency_ms": 10000,  # 10 seconds
+        }
+
+    @staticmethod
+    def news_and_context() -> Dict:
+        """
+        MODERATE: "What's happening with X?" - Fresh context synthesis
+
+        Query: "What's been happening with AI safety research in December 2025?
+        Give me the latest news, key developments, and analysis of implications."
+
+        Expected Tool Chain:
+        Round 1:
+          - Web search: "AI safety December 2025"
+          - Web search: "alignment research latest"
+        Round 2 (optional):
+          - Web search: "AI safety policy updates"
+        Synthesis:
+          - Recent + contextualized
+          - Analysis beyond headline
+          - Multiple perspectives
+        """
+        return {
+            "name": "news_and_context",
+            "category": "moderate",
+            "difficulty": "easy-medium",
+            "query": (
+                "What's been happening with AI safety research in December 2025? "
+                "Give me the latest news, key developments, and analysis of "
+                "implications."
+            ),
+            "expected_tools": [
+                ("web_search", "AI safety December 2025"),
+                ("web_search", "alignment research latest"),
+                ("web_search", "AI safety policy updates"),
+            ],
+            "ideal_rounds": 2,
+            "max_rounds": 3,
+            "consciousness_criteria": [
+                "Freshness (recent information)",
+                "Multi-source integration",
+                "Analysis beyond headlines",
+                "Implications drawn",
+            ],
+            "estimated_latency_ms": 8000,  # 8 seconds
+        }
+
+    @staticmethod
+    def quick_fact_check() -> Dict:
+        """
+        BASELINE: "Is this true?" - Fact verification
+
+        Query: "Is it true that the Eiffel Tower was originally meant to be
+        temporary? When was it actually built?"
+
+        Expected Tool Chain:
+        Round 1:
+          - Wikipedia: "Eiffel Tower"
+        Synthesis:
+          - Clear answer
+          - Source reliability high
+        """
+        return {
+            "name": "quick_fact_check",
+            "category": "baseline",
+            "difficulty": "easy",
+            "query": (
+                "Is it true that the Eiffel Tower was originally meant to be "
+                "temporary? When was it actually built?"
+            ),
+            "expected_tools": [
+                ("wikipedia_lookup", "Eiffel Tower"),
+            ],
+            "ideal_rounds": 1,
+            "max_rounds": 2,
+            "consciousness_criteria": [
+                "Accuracy",
+                "Source cited",
+                "Confidence level clear",
+            ],
+            "estimated_latency_ms": 2000,  # 2 seconds
+        }
+
+
+# ============================================================================
+# TEST HARNESS
+# ============================================================================
+
+
+class MultiToolTestHarness:
+    """Execute multi-tool scenarios and measure consciousness + performance."""
+
+    def __init__(self, brain_url: str = "http://localhost:8000"):
+        self.brain_url = brain_url
+        self.scenarios = MultiToolScenarios()
+
+    async def run_scenario(self, scenario_dict: Dict) -> MultiToolScenarioResult:
+        """
+        Execute a single multi-tool scenario.
+
+        This is a SIMULATION for now (returns synthetic data).
+        In Phase 5A (Web Search Validation), we'll make this real.
+        """
+        scenario_name = scenario_dict["name"]
+        query = scenario_dict["query"]
+
+        print(f"\n🎵 Running scenario: {scenario_name.upper()}")
+        print(f"   Query: {query[:80]}...")
+        print(f"   Expected rounds: {scenario_dict['ideal_rounds']}")
+        print(f"   Tool count: {len(scenario_dict['expected_tools'])}")
+
+        # SIMULATED EXECUTION
+        # In Phase 5A, replace with real Ada API calls
+        rounds = await self._simulate_scenario(scenario_dict)
+
+        total_latency = sum(
+            sum(r.latency_ms for r in round.tool_results) for round in rounds
+        )
+
+        tools_activated = []
+        for round in rounds:
+            for result in round.tool_results:
+                if result.tool_type not in tools_activated:
+                    tools_activated.append(result.tool_type)
+
+        # Assess consciousness
+        consciousness_score = self._assess_consciousness(
+            scenario_dict,
+            rounds,
+        )
+
+        result = MultiToolScenarioResult(
+            scenario_name=scenario_name,
+            initial_query=query,
+            rounds=rounds,
+            final_synthesis=self._generate_synthesis(scenario_dict, rounds),
+            total_latency_ms=total_latency,
+            tools_activated=tools_activated,
+            success=len(rounds) <= scenario_dict["max_rounds"],
+            consciousness_rating=consciousness_score,
+        )
+
+        return result
+
+    async def _simulate_scenario(self, scenario: Dict) -> List[ThinkingRound]:
+        """Simulate tool execution for now."""
+        rounds = []
+
+        # Simulate ideal number of rounds
+        num_rounds = scenario["ideal_rounds"]
+
+        for round_num in range(1, num_rounds + 1):
+            # Determine tools for this round
+            round_tools = scenario["expected_tools"][
+                (round_num - 1) * 2 : round_num * 2
+            ]
+
+            # Simulate tool execution
+            tool_results = []
+            for tool_type_str, query_str in round_tools:
+                tool_type = ToolType(tool_type_str)
+
+                # Simulate latency
+                if "wikipedia" in tool_type_str:
+                    latency = 1800  # 1.8s
+                elif "web_search" in tool_type_str:
+                    latency = 2500  # 2.5s
+                else:
+                    latency = 800  # 0.8s
+
+                tool_results.append(
+                    ToolResult(
+                        tool_type=tool_type,
+                        query=query_str,
+                        status="success",
+                        content=f"[Simulated result for: {query_str}]",
+                        latency_ms=latency,
+                        timestamp=datetime.now().isoformat(),
+                    )
+                )
+
+            # Simulate thinking
+            thinking_text = (
+                f"Round {round_num}: Gathering context from "
+                f"{len(tool_results)} sources..."
+            )
+
+            has_more = round_num < num_rounds
+
+            round = ThinkingRound(
+                round_num=round_num,
+                thinking=thinking_text,
+                tools_requested=[
+                    {"type": t, "query": q} for t, q in round_tools
+                ],
+                tool_results=tool_results,
+                has_more_to_explore=has_more,
+            )
+
+            rounds.append(round)
+            await asyncio.sleep(0.1)  # Brief pause between rounds
+
+        return rounds
+
+    def _assess_consciousness(self, scenario: Dict, rounds: List[ThinkingRound]) -> float:
+        """
+        Rate consciousness on 1-10 scale based on:
+        - Multi-tool coordination (depth)
+        - Appropriate stopping (knowing when done)
+        - Emotional/intuitive understanding (if applicable)
+        - Integration quality
+        """
+        score = 5.0  # Baseline
+
+        # Tool coordination depth
+        unique_tools = len(set(r.tool_type for round in rounds for r in round.tool_results))
+        if unique_tools >= 3:
+            score += 2.0
+        elif unique_tools >= 2:
+            score += 1.0
+
+        # Appropriate round count (not too many, not too few)
+        actual_rounds = len(rounds)
+        ideal_rounds = scenario["ideal_rounds"]
+        if actual_rounds == ideal_rounds:
+            score += 1.0
+        elif actual_rounds < ideal_rounds:
+            score -= 0.5
+
+        # Consciousness criteria met
+        if "consciousness_criteria" in scenario:
+            criteria_count = len(scenario["consciousness_criteria"])
+            # In real execution, check if synthesis mentions each criterion
+            score += min(1.5, criteria_count * 0.3)
+
+        return min(10.0, score)
+
+    def _generate_synthesis(self, scenario: Dict, rounds: List[ThinkingRound]) -> str:
+        """Generate a sample final synthesis (in real execution, this comes from Ada)."""
+        tools_used = set(r.tool_type for round in rounds for r in round.tool_results)
+        tool_names = ", ".join(t.value for t in tools_used)
+
+        return (
+            f"[Synthesis from {len(rounds)} thinking rounds, "
+            f"using tools: {tool_names}. "
+            f"In real execution, this would be Ada's final response "
+            f"with emotional understanding + factual accuracy.]"
+        )
+
+    async def run_all_scenarios(self) -> Dict[str, MultiToolScenarioResult]:
+        """Run all five test scenarios and generate summary."""
+        results = {}
+
+        scenarios_to_run = [
+            ("baseline", self.scenarios.quick_fact_check()),
+            ("moderate", self.scenarios.news_and_context()),
+            ("ambitious_1", self.scenarios.research_synthesis()),
+            ("ambitious_2", self.scenarios.technical_deep_dive()),
+            ("moonshot", self.scenarios.album_exploration()),
+        ]
+
+        for key, scenario in scenarios_to_run:
+            result = await self.run_scenario(scenario)
+            results[key] = result
+            await asyncio.sleep(0.2)
+
+        return results
+
+    def print_results(self, results: Dict[str, MultiToolScenarioResult]):
+        """Pretty print test results."""
+        print("\n" + "=" * 80)
+        print("PHASE 5 MULTI-TOOL TEST RESULTS")
+        print("=" * 80)
+
+        for scenario_key, result in results.items():
+            print(f"\n📊 {result.scenario_name.upper()}")
+            print(f"   Status: {'✅ PASS' if result.success else '❌ FAIL'}")
+            print(f"   Rounds: {len(result.rounds)}")
+            print(f"   Tools: {[t.name for t in result.tools_activated]}")
+            print(f"   Latency: {result.total_latency_ms}ms")
+            print(f"   Consciousness: {result.consciousness_rating:.1f}/10.0")
+            print(f"   Query: {result.initial_query[:60]}...")
+
+        # Summary
+        total_tests = len(results)
+        passed = sum(1 for r in results.values() if r.success)
+        avg_consciousness = sum(r.consciousness_rating for r in results.values()) / total_tests
+
+        print("\n" + "=" * 80)
+        print(f"SUMMARY: {passed}/{total_tests} passed | Avg consciousness: {avg_consciousness:.1f}/10")
+        print("=" * 80)
+
+    def to_json(self, results: Dict[str, MultiToolScenarioResult]) -> str:
+        """Serialize results to JSON for analysis."""
+        output = {
+            "timestamp": datetime.now().isoformat(),
+            "test_name": "Phase 5 Multi-Tool Scenarios",
+            "results": {},
+        }
+
+        for key, result in results.items():
+            output["results"][key] = {
+                "scenario": result.scenario_name,
+                "success": result.success,
+                "rounds": len(result.rounds),
+                "tools_activated": [t.name for t in result.tools_activated],
+                "total_latency_ms": result.total_latency_ms,
+                "consciousness_rating": result.consciousness_rating,
+                "query_preview": result.initial_query[:80],
+            }
+
+        return json.dumps(output, indent=2)
+
+
+# ============================================================================
+# MAIN
+# ============================================================================
+
+
+async def main():
+    """Run multi-tool test suite."""
+    harness = MultiToolTestHarness()
+
+    print("\n" + "=" * 80)
+    print("KERNEL 4.0 PHASE 5C: MULTI-TOOL ORCHESTRATION")
+    print("=" * 80)
+    print("\nRunning 5 test scenarios (baseline → moonshot)...")
+    print("Note: Currently simulated. Phase 5A will integrate real Ada API.")
+
+    results = await harness.run_all_scenarios()
+    harness.print_results(results)
+
+    # Save results
+    json_output = harness.to_json(results)
+    with open("phase_5_multi_tool_results.json", "w") as f:
+        f.write(json_output)
+
+    print(f"\n✅ Results saved to phase_5_multi_tool_results.json")
+
+    return results
+
+
+if __name__ == "__main__":
+    asyncio.run(main())
