@@ -157,10 +157,14 @@ class GenerativeMemoryNetwork:
     total_memories_encoded: int = 0
     total_reconstructions: int = 0
     
-    # Importance thresholds (from Phase E)
-    keyframe_threshold: float = 0.60  # Store exact if above this
-    encode_threshold: float = 0.20    # Train into weights if above this
-    # Below encode_threshold: don't store at all
+    # Importance thresholds (from Phase I: The 0.60 Question)
+    # Golden-ratio-based tier boundaries
+    # Each tier is exactly 1/φ (φ^-1 ≈ 0.618) of the previous tier
+    keyframe_threshold: float = 0.618  # HOT: Store exact if above this (φ^-1)
+    encode_threshold: float = 0.236    # COLD: Train into weights if above this (φ^-3)
+    # Between: WARM at 0.382 (φ^-2)
+    # Below 0.236: don't store at all (DROP)
+    warm_threshold: float = 0.382      # WARM: Compressed storage threshold (φ^-2)
     
     def encode_memory(self, frame: MemoryFrame) -> dict:
         """
@@ -271,11 +275,12 @@ class TieredMemorySystem:
     warm_tier_capacity: int = 1000    # Compressed storage, fast reconstruction
     cold_tier_capacity: int = 10000   # Generative storage, slower reconstruction
     
-    # Thresholds (from Phase E research)
-    hot_threshold: float = 0.75       # FULL detail level
-    warm_threshold: float = 0.50      # CHUNKS detail level
-    cold_threshold: float = 0.20      # SUMMARY detail level
-    # Below cold_threshold: dropped
+    # Thresholds (from Phase I: The 0.60 Question)
+    # Golden-ratio-based tier boundaries (self-similar decay)
+    hot_threshold: float = 0.618      # HOT: FULL detail level (φ^-1)
+    warm_threshold: float = 0.382     # WARM: CHUNKS detail level (φ^-2)
+    cold_threshold: float = 0.236     # COLD: SUMMARY detail level (φ^-3)
+    # Below 0.236: dropped (not stored at all)
     
     # Movement rules
     promotion_trigger: float = 0.60   # Access bumps importance above this → promote
@@ -301,29 +306,33 @@ class TieredMemorySystem:
                 "storage": "Exact document in vector DB",
                 "fidelity": "100% - complete original",
                 "access": "Similarity search, immediate",
-                "capacity": f"{self.hot_tier_capacity} memories",
-                "threshold": f"importance >= {self.hot_threshold}",
+                "capacity": f"{self.hot_tier_capacity} memories (~38% of stored)",
+                "threshold": f"importance >= {self.hot_threshold} (φ^-1)",
+                "math": "Golden ratio: 1/φ = φ - 1 (self-similar division point)",
             },
             "warm": {
                 "storage": "Compressed + key fragments in DB",
                 "fidelity": "~80% - summary + important quotes",
                 "access": "Retrieve compressed + expand",
-                "capacity": f"{self.warm_tier_capacity} memories",
-                "threshold": f"importance >= {self.warm_threshold}",
+                "capacity": f"{self.warm_tier_capacity} memories (~24% of stored)",
+                "threshold": f"importance >= {self.warm_threshold} (φ^-2)",
+                "math": "Exactly 1/φ of HOT tier (continued decay)",
             },
             "cold": {
                 "storage": "Encoded in generative network weights",
                 "fidelity": "~50% - core meaning, details generated",
                 "access": "Reconstruct from weights (generative)",
-                "capacity": f"{self.cold_tier_capacity} memories",
-                "threshold": f"importance >= {self.cold_threshold}",
+                "capacity": f"{self.cold_tier_capacity} memories (~15% of stored)",
+                "threshold": f"importance >= {self.cold_threshold} (φ^-3)",
+                "math": "Exactly 1/φ of WARM tier (Fibonacci-like decay)",
             },
             "dropped": {
                 "storage": "Not stored",
                 "fidelity": "0% - lost",
                 "access": "Cannot retrieve",
-                "capacity": "N/A",
-                "threshold": f"importance < {self.cold_threshold}",
+                "capacity": "N/A (~23% of input)",
+                "threshold": f"importance < {self.cold_threshold} (below φ^-3)",
+                "math": "Below 0.236: entropy/noise boundary (not signal)",
             }
         }
     

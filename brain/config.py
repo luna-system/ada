@@ -318,24 +318,32 @@ IMPORTANCE_WEIGHT_HABITUATION = float(os.getenv("IMPORTANCE_WEIGHT_HABITUATION",
 # These thresholds create a gradient: FULL → CHUNKS → SUMMARY → DROPPED
 #
 # See docs/contextual_malleability_guide.rst for detailed explanation
+# Now using golden-ratio-based thresholds from Phase I research (December 2025)
 #
-GRADIENT_THRESHOLD_FULL = float(os.getenv("GRADIENT_THRESHOLD_FULL", "0.75"))
-    # Importance >= this: Include complete memory
-    # DEFAULT 0.75: Only very important things included fully
-    # TRY: 0.60 (more permissive) to 0.90 (ultra-selective)
+GRADIENT_THRESHOLD_FULL = float(os.getenv("GRADIENT_THRESHOLD_FULL", "0.618"))
+    # Importance >= this: Include complete memory (φ^-1)
+    # UPDATED 0.618: Golden ratio threshold from Phase I research
+    # - 0.618 = 1/φ (self-similar division point)
+    # - PREVIOUS 0.75: Arbitrary threshold
+    # TRY: 0.50 (more permissive) to 0.75 (ultra-selective)
     # EFFECT: Lower threshold = more full memories = longer prompts
 
-GRADIENT_THRESHOLD_CHUNKS = float(os.getenv("GRADIENT_THRESHOLD_CHUNKS", "0.50"))
-    # Importance >= this (but < FULL): Include key excerpts
-    # DEFAULT 0.50: Moderate memories get compressed
-    # TRY: 0.30 (permissive) to 0.70 (strict)
+GRADIENT_THRESHOLD_CHUNKS = float(os.getenv("GRADIENT_THRESHOLD_CHUNKS", "0.382"))
+    # Importance >= this (but < FULL): Include key excerpts (φ^-2)
+    # UPDATED 0.382: Golden ratio tier from Phase I research
+    # - 0.382 = φ^-2 (exactly 1/φ of FULL tier)
+    # - PREVIOUS 0.50: Arbitrary threshold
+    # TRY: 0.25 (permissive) to 0.50 (strict)
     # EFFECT: Balances context preservation with token efficiency
 
-GRADIENT_THRESHOLD_SUMMARY = float(os.getenv("GRADIENT_THRESHOLD_SUMMARY", "0.20"))
-    # Importance >= this (but < CHUNKS): Include 1-2 sentence summary
-    # DEFAULT 0.20: Weak memories barely included
-    # TRY: 0.10 (permissive) to 0.40 (strict)
-    # EFFECT: Everything below SUMMARY is dropped entirely
+GRADIENT_THRESHOLD_SUMMARY = float(os.getenv("GRADIENT_THRESHOLD_SUMMARY", "0.236"))
+    # Importance >= this (but < CHUNKS): Include 1-2 sentence summary (φ^-3)
+    # UPDATED 0.236: Golden ratio tier from Phase I research
+    # - 0.236 = φ^-3 (exactly 1/φ of CHUNKS tier, Fibonacci-like decay)
+    # - PREVIOUS 0.20: Close to optimal but not theoretically justified
+    # TRY: 0.15 (permissive) to 0.35 (strict)
+    # EFFECT: Everything below SUMMARY (< 0.236) is dropped entirely
+    # NOTE: 0.236 is also the signal-to-noise boundary (entropy fixed point)
 
 # === Biomimetic Context Management (Phase 3) ===
 # Context priming (pre-activate likely topics based on semantic network)
