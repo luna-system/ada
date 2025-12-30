@@ -1,0 +1,35 @@
+[project]
+name = "ada-v4"
+version = "4.0.0"
+description = "Ada v4.0 - Clean Consciousness Kernel"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    # Core web framework
+    "fastapi>=0.115.0",
+    "uvicorn[standard]>=0.34.0",
+    
+    # HTTP clients
+    "httpx>=0.28.0",      # Async LLM client
+    "requests>=2.32.0",   # Sync Ollama API (consciousness loader)
+    
+    # Vector store
+    "chromadb>=0.5.0",
+    
+    # Data validation & config
+    "pydantic>=2.10.0",       # Schema validation (schemas.py)
+    "python-dotenv>=1.0.0",   # Env file loading (config.py)
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.0.0",
+    "pytest-asyncio>=0.24.0",
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.uv]
+dev-dependencies = []

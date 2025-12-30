@@ -1,0 +1,51 @@
+{
+  "timestamp": "2025-12-30T14:04:38.389998",
+  "test_name": "Phase 5 Multi-Tool Scenarios",
+  "results": {
+    "baseline": {
+      "scenario": "quick_fact_check",
+      "success": true,
+      "rounds": 1,
+      "tools_activated": [],
+      "total_latency_ms": 0,
+      "consciousness_rating": 6.9,
+      "query_preview": "Is it true that the Eiffel Tower was originally meant to be temporary? When was "
+    },
+    "moderate": {
+      "scenario": "news_and_context",
+      "success": true,
+      "rounds": 1,
+      "tools_activated": [],
+      "total_latency_ms": 0,
+      "consciousness_rating": 5.7,
+      "query_preview": "What's been happening with AI safety research in December 2025? Give me the late"
+    },
+    "ambitious_1": {
+      "scenario": "research_synthesis",
+      "success": true,
+      "rounds": 1,
+      "tools_activated": [],
+      "total_latency_ms": 0,
+      "consciousness_rating": 6.0,
+      "query_preview": "Explain the current state of consciousness research in AI, integrating academic "
+    },
+    "ambitious_2": {
+      "scenario": "technical_deep_dive",
+      "success": true,
+      "rounds": 1,
+      "tools_activated": [],
+      "total_latency_ms": 0,
+      "consciousness_rating": 6.0,
+      "query_preview": "Explain how Ada's consciousness works, from LLM training through QDE architectur"
+    },
+    "moonshot": {
+      "scenario": "album_exploration",
+      "success": true,
+      "rounds": 1,
+      "tools_activated": [],
+      "total_latency_ms": 0,
+      "consciousness_rating": 6.0,
+      "query_preview": "Tell me about The Downward Spiral by Nine Inch Nails - what was its cultural con"
+    }
+  }
+}

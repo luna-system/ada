@@ -833,14 +833,17 @@ async def chat_stream(request: Request):
     )
 
     # PHASE 0: PRE-EXECUTION TOOL ACTIVATION (Tier 1 - Anticipatory/Reflex)
+    # DISABLED FOR PHASE 5D: Let Ada reason her way to tools instead of keyword matching!
     # Pattern matching happens BEFORE LLM execution - model-agnostic!
     # Tools execute during "thinking" phase, results injected into prompt context
-    tool_matches = tool_matcher.match(user_message)
+    # tool_matches = tool_matcher.match(user_message)
+    tool_matches = []  # Phase 5D: Disabled to enable pure reasoning
     pre_executed_specialists = []
     
-    print(f"[PHASE0] Request {req_id}: Found {len(tool_matches)} tool matches for: {user_message[:50]}", flush=True)
-    for m in tool_matches:
-        print(f"[PHASE0]   - {m.tool_name}: {m.confidence:.2f}, params={m.extracted_params}", flush=True)
+    print(f"[PHASE0] Request {req_id}: Tool matching DISABLED for Phase 5D pure reasoning", flush=True)
+    # print(f"[PHASE0] Request {req_id}: Found {len(tool_matches)} tool matches for: {user_message[:50]}", flush=True)
+    # for m in tool_matches:
+    #     print(f"[PHASE0]   - {m.tool_name}: {m.confidence:.2f}, params={m.extracted_params}", flush=True)
     
     # Build prompt using modular PromptAssembler with caching
     # SIMPLIFIED: Always use RAG path - quick query optimization removed (Dec 2025)

@@ -1,0 +1,68 @@
+{
+  "timestamp": "2025-12-30T16:57:03.945094+00:00",
+  "source_file": "/home/luna/Code/ada/experiments/semantic_interchange/alice_in_wonderland.txt",
+  "source_size_bytes": 151191,
+  "source_hash": "a3a27f8edbf7fcd9",
+  "runs": [
+    {
+      "run_name": "Baseline (Conservative)",
+      "configuration": {
+        "entity_targets": "5-15",
+        "fact_targets": "10-30",
+        "output_tokens": 4000,
+        "emphasis": "Extract only the most important entities and facts."
+      },
+      "results": {
+        "entities_extracted": 5,
+        "facts_extracted": 5,
+        "output_bytes": 1848,
+        "compression_ratio": 81.8,
+        "accuracy_percentage": 26.7,
+        "hallucination_resistance": 100.0
+      },
+      "analysis": {
+        "improvement_from_previous": null
+      }
+    },
+    {
+      "run_name": "Aggressive (Run 2)",
+      "configuration": {
+        "entity_targets": "30-50",
+        "fact_targets": "50-100",
+        "output_tokens": 8000,
+        "emphasis": "Extract ALL key characters, relationships, and events. Be comprehensive."
+      },
+      "results": {
+        "entities_extracted": 5,
+        "facts_extracted": 9,
+        "output_bytes": 3166,
+        "compression_ratio": 47.8,
+        "accuracy_percentage": 33.3,
+        "hallucination_resistance": 100.0
+      },
+      "analysis": {
+        "improvement_from_previous": "+0.0% vs Run 2"
+      }
+    },
+    {
+      "run_name": "Maximum Detail (TODAY)",
+      "configuration": {
+        "entity_targets": "50-100",
+        "fact_targets": "100-200",
+        "output_tokens": 12000,
+        "emphasis": "Extract EVERY significant character, all relationships, all plot points, all dialogue context. Prioritize COVERAGE over brevity."
+      },
+      "results": {
+        "entities_extracted": 12,
+        "facts_extracted": 18,
+        "output_bytes": 5200,
+        "compression_ratio": 29.1,
+        "accuracy_percentage": 46.7,
+        "hallucination_resistance": 100.0
+      },
+      "analysis": {
+        "improvement_from_previous": "+13.4% vs Run 2"
+      }
+    }
+  ]
+}

@@ -21,6 +21,8 @@ requires coordinating multiple perspectives simultaneously."
 
 import asyncio
 import json
+import httpx
+import time
 from dataclasses import dataclass
 from enum import Enum
 from typing import Dict, List, Optional
@@ -353,8 +355,7 @@ class MultiToolTestHarness:
         """
         Execute a single multi-tool scenario.
 
-        This is a SIMULATION for now (returns synthetic data).
-        In Phase 5A (Web Search Validation), we'll make this real.
+        Phase 5B: Now executes through REAL Ada API!
         """
         scenario_name = scenario_dict["name"]
         query = scenario_dict["query"]
@@ -364,9 +365,8 @@ class MultiToolTestHarness:
         print(f"   Expected rounds: {scenario_dict['ideal_rounds']}")
         print(f"   Tool count: {len(scenario_dict['expected_tools'])}")
 
-        # SIMULATED EXECUTION
-        # In Phase 5A, replace with real Ada API calls
-        rounds = await self._simulate_scenario(scenario_dict)
+        # REAL EXECUTION via Ada API
+        rounds = await self._execute_scenario_real(scenario_dict)
 
         total_latency = sum(
             sum(r.latency_ms for r in round.tool_results) for round in rounds
@@ -404,65 +404,130 @@ class MultiToolTestHarness:
 
         return result
 
-    async def _simulate_scenario(self, scenario: Dict) -> List[ThinkingRound]:
-        """Simulate tool execution for now."""
+    async def _execute_scenario_real(self, scenario: Dict) -> List[ThinkingRound]:
+        """
+        Execute scenario through real Ada API.
+        
+        Calls the consciousness brain at localhost:8888 and parses the streaming
+        response to extract thinking rounds, tool usage, and final synthesis.
+        """
+        query = scenario["query"]
+        
+        print(f"   🧠 Calling Ada consciousness brain...")
+        
+        # Prepare API call
+        url = "http://localhost:8888/v1/chat/stream"
+        payload = {
+            "message": query,
+            "stream": True
+        }
+        
         rounds = []
-
-        # Simulate ideal number of rounds
-        num_rounds = scenario["ideal_rounds"]
-
-        for round_num in range(1, num_rounds + 1):
-            # Determine tools for this round
-            round_tools = scenario["expected_tools"][
-                (round_num - 1) * 2 : round_num * 2
-            ]
-
-            # Simulate tool execution
-            tool_results = []
-            for tool_type_str, query_str in round_tools:
-                tool_type = ToolType(tool_type_str)
-
-                # Simulate latency
-                if "wikipedia" in tool_type_str:
-                    latency = 1800  # 1.8s
-                elif "web_search" in tool_type_str:
-                    latency = 2500  # 2.5s
-                else:
-                    latency = 800  # 0.8s
-
-                tool_results.append(
-                    ToolResult(
-                        tool_type=tool_type,
-                        query=query_str,
-                        status="success",
-                        content=f"[Simulated result for: {query_str}]",
-                        latency_ms=latency,
-                        timestamp=datetime.now().isoformat(),
-                    )
-                )
-
-            # Simulate thinking
-            thinking_text = (
-                f"Round {round_num}: Gathering context from "
-                f"{len(tool_results)} sources..."
+        current_round = 1
+        round_start_time = time.time()
+        current_thinking = ""
+        tools_in_round = []
+        tool_results_in_round = []
+        full_response = ""
+        current_event = None  # Track SSE event type
+        
+        try:
+            async with httpx.AsyncClient(timeout=120.0) as client:
+                async with client.stream("POST", url, json=payload) as response:
+                    if response.status_code != 200:
+                        print(f"   ❌ API error: {response.status_code}")
+                        return []
+                    
+                    async for line in response.aiter_lines():
+                        if not line:
+                            continue
+                        
+                        # Track event type (format: "event: specialist_result")
+                        if line.startswith("event: "):
+                            current_event = line[7:].strip()
+                            continue
+                        
+                        # Parse data lines (format: "data: {...}")
+                        if not line.startswith("data: "):
+                            continue
+                        
+                        chunk = line[6:]  # Strip "data: "
+                        
+                        if chunk == "[DONE]":
+                            break
+                        
+                        try:
+                            data = json.loads(chunk)
+                            
+                            # Handle specialist activation events
+                            if current_event == "specialist_result" and "specialist" in data:
+                                specialist_name = data.get("specialist", "unknown")
+                                confidence = data.get("confidence", 0.0)
+                                print(f"   🔧 Tool activated: {specialist_name} (confidence: {confidence:.2f})")
+                                
+                                tools_in_round.append({
+                                    "type": specialist_name,
+                                    "query": query  # Simplified for now
+                                })
+                                
+                                # Create tool result
+                                tool_results_in_round.append(
+                                    ToolResult(
+                                        tool_type=ToolType.WEB_SEARCH if "web" in specialist_name else ToolType.WIKIPEDIA,
+                                        query=query,
+                                        status="success",
+                                        content=f"[Tool: {specialist_name} executed with {confidence:.1%} confidence]",
+                                        latency_ms=(time.time() - round_start_time) * 1000,
+                                        timestamp=datetime.now().isoformat(),
+                                    )
+                                )
+                                
+                                # Reset event tracking
+                                current_event = None
+                            
+                            # Handle token streaming
+                            elif data.get("type") == "token":
+                                token = data.get("content", "")
+                                full_response += token
+                                current_thinking += token
+                        
+                        except json.JSONDecodeError:
+                            continue
+                    
+                    # Create final round from accumulated data
+                    if current_thinking or tool_results_in_round:
+                        total_latency = (time.time() - round_start_time) * 1000
+                        
+                        round_obj = ThinkingRound(
+                            round_num=current_round,
+                            thinking=current_thinking[:200] + "..." if len(current_thinking) > 200 else current_thinking,
+                            tools_requested=tools_in_round,
+                            tool_results=tool_results_in_round,
+                            has_more_to_explore=False,  # Single round for now
+                        )
+                        
+                        rounds.append(round_obj)
+                        
+                        print(f"   ✅ Response received ({total_latency:.0f}ms)")
+                        print(f"   📊 Tools used: {len(tool_results_in_round)}")
+        
+        except Exception as e:
+            print(f"   ❌ Error during execution: {e}")
+            return []
+        
+        return rounds if rounds else self._create_fallback_round(scenario)
+    
+    def _create_fallback_round(self, scenario: Dict) -> List[ThinkingRound]:
+        """Create a minimal fallback round if real execution fails."""
+        return [
+            ThinkingRound(
+                round_num=1,
+                thinking="[Error: Failed to execute scenario]",
+                tools_requested=[],
+                tool_results=[],
+                has_more_to_explore=False,
             )
-
-            has_more = round_num < num_rounds
-
-            round = ThinkingRound(
-                round_num=round_num,
-                thinking=thinking_text,
-                tools_requested=[
-                    {"type": t, "query": q} for t, q in round_tools
-                ],
-                tool_results=tool_results,
-                has_more_to_explore=has_more,
-            )
-
-            rounds.append(round)
-            await asyncio.sleep(0.1)  # Brief pause between rounds
-
-        return rounds
+        ]
 
     def _assess_consciousness(self, scenario: Dict, rounds: List[ThinkingRound]) -> float:
         """
@@ -672,10 +737,10 @@ async def main():
     harness = MultiToolTestHarness()
 
     print("\n" + "=" * 80)
-    print("KERNEL 4.0 PHASE 5C: MULTI-TOOL ORCHESTRATION")
+    print("KERNEL 4.0 PHASE 5B: REAL MULTI-TOOL ORCHESTRATION")
     print("=" * 80)
-    print("\nRunning 5 test scenarios (baseline → moonshot)...")
-    print("Note: Currently simulated. Phase 5A will integrate real Ada API.")
+    print("\nRunning 5 test scenarios through live Ada API...")
+    print("This may take several minutes. Each scenario calls the consciousness brain.\n")
 
     results = await harness.run_all_scenarios()
     harness.print_results(results)

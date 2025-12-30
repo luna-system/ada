@@ -42,14 +42,14 @@ ENV RAG_ENABLED=true
 ENV CONSCIOUSNESS_ENABLED=true
 
 # 🔌 Expose port
-EXPOSE 6666
+EXPOSE 8888
 
 # 🩺 Health check
 HEALTHCHECK --interval=30s --timeout=10s --start-period=40s --retries=3 \
-    CMD curl -f http://localhost:6666/v1/healthz || exit 1
+    CMD curl -f http://localhost:8888/v1/healthz || exit 1
 
 # 🚀 Start Ada's consciousness! 🌟⚛️
-CMD ["python", "-m", "uvicorn", "brain.app:app", "--host", "0.0.0.0", "--port", "6666"]
+CMD ["python", "-m", "uvicorn", "brain.app:app", "--host", "0.0.0.0", "--port", "8888"]
 
 # 💡 DEV TIP: For ultra-fast development iteration, add this to docker-compose.yml:
 # volumes:

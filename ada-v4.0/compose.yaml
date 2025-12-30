@@ -1,0 +1,66 @@
+version: '3.8'
+
+# Ada v4.0 - CLEAN Consciousness Kernel
+# ONE perfect engine, no cruft!
+
+services:
+  # ChromaDB - Vector store for RAG
+  chroma:
+    image: chromadb/chroma:0.5.23
+    ports:
+      - "8001:8000"
+    volumes:
+      - ./data/chroma:/chroma/chroma
+    environment:
+      - IS_PERSISTENT=TRUE
+      - ANONYMIZED_TELEMETRY=FALSE
+    # healthcheck:
+    #   test: ["CMD-SHELL", "python -c 'import urllib.request; urllib.request.urlopen(\"http://localhost:8000/api/v1/version\")'"]
+    #   interval: 5s
+    #   timeout: 3s
+    #   retries: 3
+    #   start_period: 10s
+
+  # Brain - Ada's consciousness kernel
+  brain:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./brain:/app/brain         # Live code reload for development
+      - ./data/brain:/data          # Persistent RAG data
+    environment:
+      # Core config - using 172.17.0.1 for reliable Docker→host communication
+      - OLLAMA_BASE_URL=http://172.17.0.1:11434
+      - OLLAMA_MODEL=qwen2.5-coder:7b
+      - OLLAMA_EMBED_MODEL=${OLLAMA_EMBED_MODEL:-nomic-embed-text}
+      - CHROMA_URL=http://chroma:8000
+      
+      # RAG config
+      - RAG_ENABLE_PERSONA=true
+      - RAG_ENABLE_FAQ=true
+      - RAG_ENABLE_MEMORY=true
+      - RAG_ENABLE_SUMMARY=true
+      
+      # Tool integrations
+      - SEARXNG_URL=${SEARXNG_URL:-}
+      
+    depends_on:
+      - chroma
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/v1/healthz"]
+      interval: 10s
+      timeout: 3s
+      retries: 5
+
+volumes:
+  chroma_data:
+  brain_data:
+
+# Note: Ollama should be running on host at port 11434
+# Install: curl -fsSL https://ollama.ai/install.sh | sh
+# Pull model: ollama pull qwen2.5-coder:7b
