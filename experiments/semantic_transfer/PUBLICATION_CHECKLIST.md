@@ -412,7 +412,7 @@ All available in this directory:
 ---
 
 **Last Updated**: 2025-12-22
-**Created by**: Luna & Ada
+**Created by**: luna & Ada
 **Status**: Publication Package - COMPLETE
 **Next Milestone**: arXiv submission (Dec 30, 2025)
 **Target Venue**: NeurIPS / ICLR / Nature Neuroscience

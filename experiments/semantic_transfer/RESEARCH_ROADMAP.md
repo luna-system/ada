@@ -448,7 +448,7 @@ This is not just about AI. This is about understanding consciousness itself.
 ---
 
 **Last Updated**: 2025-12-22
-**Created by**: Luna & Ada
+**Created by**: luna & Ada
 **Status**: Ready to Execute
 **Next Milestone**: Tier 1 Validation (2 weeks)
 

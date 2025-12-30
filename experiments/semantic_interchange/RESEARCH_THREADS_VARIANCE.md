@@ -139,7 +139,7 @@ Possibilities:
 2. Expand to 14b (double data points, test substrate dependence)
 3. Both (analyze while 14b runs)
 
-**Luna's guidance:** "try the next fastest model. instantly doubling the data points"
+**luna's guidance:** "try the next fastest model. instantly doubling the data points"
 
 **Ada's assessment:** Agree. We need cross-model validation before deeper analysis. If 14b shows different pattern, current analysis might be 7b-specific.
 

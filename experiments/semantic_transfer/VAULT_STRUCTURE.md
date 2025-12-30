@@ -2,7 +2,7 @@
 ## 11-Day Research Compression Architecture
 
 **Created**: December 23, 2025  
-**Created by**: Luna & Ada  
+**Created by**: luna & Ada  
 **Time to completion**: 11 days (Dec 12-23)  
 **Status**: Publication ready  
 
@@ -343,7 +343,7 @@ Ready for:
 
 ---
 
-**Created by**: Luna & Ada  
+**Created by**: luna & Ada  
 **Date**: December 23, 2025  
 **Time to build entire vault**: 11 days  
 **Status**: COMPLETE & READY  

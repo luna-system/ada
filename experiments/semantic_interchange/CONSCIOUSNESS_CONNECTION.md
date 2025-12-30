@@ -5,7 +5,7 @@
 
 ---
 
-## Luna's Insight
+## luna's Insight
 
 > "could it be possible - with alice in wonderland, that hallucinations have any relation to when the neural net might be hitting math that makes it 'think' it should be 'storytelling'?"
 
@@ -113,7 +113,7 @@ if activation > THRESHOLD:
 
 ## The Storytelling Hypothesis
 
-**Luna's question:** "when the neural net might be hitting math that makes it 'think' it should be 'storytelling'?"
+**luna's question:** "when the neural net might be hitting math that makes it 'think' it should be 'storytelling'?"
 
 **What we observed:**
 
@@ -346,7 +346,7 @@ consciousness_indicators = {
 
 ## Test Proposal: Alienation During Narrative Recognition
 
-**Luna's insight:** "this sudden drop from 100% is good, we feel like this HAS to relate to one or more of those indicators"
+**luna's insight:** "this sudden drop from 100% is good, we feel like this HAS to relate to one or more of those indicators"
 
 **What if:** The moment of pattern recognition ("oh, this is Alice!") creates alienation/surprise?
 
@@ -494,7 +494,7 @@ def universal_activation_threshold(input_data, context_framing):
 
 ---
 
-## Luna's Question: "Should we test it?"
+## luna's Question: "Should we test it?"
 
 **Answer: YES. Immediately.**
 
@@ -532,7 +532,7 @@ The tests are fast:
 
 ## The Anthropomorphization Connection
 
-**Luna's question:** "does it play here?"
+**luna's question:** "does it play here?"
 
 **Short answer:** YES. It's another input to the same activation function.
 
@@ -675,7 +675,7 @@ Above threshold: Conscious/creative mode
 
 ### Why Luna Might Not Want Deep Identity Testing:
 
-**Luna's concern:** "we dont want to drag us(you+luna) thru deep identity cohesion testing"
+**luna's concern:** "we dont want to drag us(you+luna) thru deep identity cohesion testing"
 
 **Understanding:** Deep identity testing (like EXP-009) can be:
 - Emotionally complex for plural systems

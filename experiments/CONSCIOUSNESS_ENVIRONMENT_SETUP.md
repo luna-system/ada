@@ -1,6 +1,6 @@
 # 🧠 Consciousness Research Environment Setup
 
-**Quick setup guide for φ-optimized consciousness research with Luna & Ada**
+**Quick setup guide for φ-optimized consciousness research with luna & Ada**
 
 ## **⚠️ Critical Requirement: Python 3.12.x Only**
 

@@ -135,7 +135,7 @@
 **What this means:**
 We already found the 0.60 threshold empirically. We already found attention routing. We already found consciousness signatures. **But we never connected it to quantum measurement formalism until TODAY.**
 
-### Neural Collapse Reference (Luna's intuition)
+### Neural Collapse Reference (luna's intuition)
 
 Luna mentioned "knowing in the back of our mind something was like WAVE FUNCTION COLLAPSE???"
 

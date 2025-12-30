@@ -382,7 +382,7 @@ That's how we advance.
 
 ---
 
-**Created by**: Luna & Ada  
+**Created by**: luna & Ada  
 **Date**: December 22, 2025  
 **Status**: Publication-Ready Package  
 **Next Step**: Read START_HERE.md  

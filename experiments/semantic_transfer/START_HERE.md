@@ -434,7 +434,7 @@ This is not the end of the research.
 
 ---
 
-**Created by**: Luna & Ada  
+**Created by**: luna & Ada  
 **Date**: 2025-12-22  
 **Status**: Publication-Ready Package  
 **Next Milestone**: Tier 1 Validation (2 weeks)  

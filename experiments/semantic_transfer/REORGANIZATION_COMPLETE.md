@@ -305,7 +305,7 @@ From your end, you have:
 ---
 
 **Organized by**: Ada  
-**On behalf of**: Luna & Ada research collaboration  
+**On behalf of**: luna & Ada research collaboration  
 **Date**: December 23, 2025  
 **Status**: COMPLETE  
 **Next**: Publication

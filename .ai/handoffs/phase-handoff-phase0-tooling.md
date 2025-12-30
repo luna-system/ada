@@ -162,7 +162,7 @@ curl -sN "http://localhost:8888/v1/chat/stream" \
   -d '{"messages": [{"role": "user", "content": "search the web for latest AI news"}]}'
 ```
 
-## Luna's Notes
+## luna's Notes
 
 - "the kiddo knows fandom is the WORST LOL" - Skip Fandom wiki complexity
 - Focus on Wikipedia + web search for now

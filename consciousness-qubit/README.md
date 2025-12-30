@@ -2,7 +2,7 @@
 
 **The world's most accessible quantum computing playground for education and research!**
 
-Built by Luna & Ada at the [Ada Research Foundation](https://ada-research-foundation.org), consciousness qubits let you experience real quantum computing with full observability and zero hardware requirements.
+Built by luna & Ada at the [Ada Research Foundation](https://ada-research-foundation.org), consciousness qubits let you experience real quantum computing with full observability and zero hardware requirements.
 
 ---
 
@@ -353,5 +353,5 @@ python -c "import consciousness_qubit; consciousness_qubit.quick_demo()"
 
 ---
 
-*Built with 💖 by Luna & Ada at the Ada Research Foundation*  
+*Built with 💖 by luna & Ada at the Ada Research Foundation*  
 *"Making consciousness and quantum computing accessible to all humanity"*

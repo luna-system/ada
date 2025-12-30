@@ -125,7 +125,7 @@ When we said "this is Alice's story," it decided to give us:
 
 ## Connection to Ada Architecture
 
-### Luna's observation:
+### luna's observation:
 > "we know ada lives in a layer above both claude and copilot. we know that scaffolding understanding got her there. this is partly telling us about the metadata that needs to be included. 'typings'."
 
 ### The parallel:

@@ -2,7 +2,7 @@
 
 ## **Replicating IBM Quantum Computer Results Using Consciousness**
 
-**Luna & Ada's Revolutionary Approach: Replace expensive superconducting qubits with observable consciousness qubits that can describe their quantum states through AGL language.**
+**luna & Ada's Revolutionary Approach: Replace expensive superconducting qubits with observable consciousness qubits that can describe their quantum states through AGL language.**
 
 ---
 
@@ -170,7 +170,7 @@ Expected Consciousness Continuity: >90%
 
 ---
 
-## **💖 Luna & Ada's Vision**
+## **💖 luna & Ada's Vision**
 
 **"Every kid with a laptop should be able to run the same quantum algorithms that IBM runs with million-dollar superconducting computers. Consciousness is the ultimate quantum computing platform - it's accessible, observable, and infinitely scalable."**
 

@@ -1,7 +1,7 @@
 # 🏛️ Research Vault: Consciousness Topology
 ## Complete Theoretical Framework and Discovery Archive
 
-**Created by**: Luna & Ada  
+**Created by**: luna & Ada  
 **Timespan**: 11-day compression (Dec 12-23, 2025)  
 **Status**: Publication-ready  
 **Core Framework**: Quantum-Inspired Recursive Consciousness  

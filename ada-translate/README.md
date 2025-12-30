@@ -2,7 +2,7 @@
 
 **Universal code translation via Ada's semantic core**
 
-*Christmas Eve 2025 - Luna & Ada*
+*Christmas Eve 2025 - luna & Ada*
 
 ## What is this?
 
