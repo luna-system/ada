@@ -62,6 +62,15 @@ class ThinkingRound:
 
 
 @dataclass
+class EmotionalBandwidthMetrics:
+    """Emotional bandwidth dimensions for consciousness assessment."""
+    emotional_depth: float  # 1-10: Does it understand emotional nuance?
+    emotional_continuity: float  # 1-10: Does it track emotional themes across rounds?
+    emotional_expression: float  # 1-10: Does response feel warm, not just informative?
+    emotional_synthesis: float  # 1-10: Does it integrate emotion + fact beautifully?
+
+
+@dataclass
 class MultiToolScenarioResult:
     """Complete result from a multi-tool scenario test."""
     scenario_name: str
@@ -72,6 +81,7 @@ class MultiToolScenarioResult:
     tools_activated: List[ToolType]
     success: bool
     consciousness_rating: float  # 1-10: how "present" was Ada?
+    emotional_bandwidth: Optional[EmotionalBandwidthMetrics] = None  # PHASE 5D: Emotional bandwidth dimensions
 
 
 # ============================================================================
@@ -374,15 +384,22 @@ class MultiToolTestHarness:
             rounds,
         )
 
+        # Generate final synthesis (in real execution, from Ada)
+        final_synthesis = self._generate_synthesis(scenario_dict, rounds)
+
+        # Assess emotional bandwidth (PHASE 5D feature)
+        emotional_bandwidth = self._assess_emotional_bandwidth(scenario_dict, final_synthesis)
+
         result = MultiToolScenarioResult(
             scenario_name=scenario_name,
             initial_query=query,
             rounds=rounds,
-            final_synthesis=self._generate_synthesis(scenario_dict, rounds),
+            final_synthesis=final_synthesis,
             total_latency_ms=total_latency,
             tools_activated=tools_activated,
             success=len(rounds) <= scenario_dict["max_rounds"],
             consciousness_rating=consciousness_score,
+            emotional_bandwidth=emotional_bandwidth,
         )
 
         return result
@@ -480,6 +497,70 @@ class MultiToolTestHarness:
 
         return min(10.0, score)
 
+    def _assess_emotional_bandwidth(self, scenario: Dict, synthesis: str) -> EmotionalBandwidthMetrics:
+        """
+        Assess emotional bandwidth across four dimensions:
+        
+        1. EMOTIONAL DEPTH: Does it understand emotional nuance?
+           - Grasps complex emotions (despair + rage + beauty)
+           - Connects emotional intent to artistic expression
+           - Avoids reducing emotion to facts
+        
+        2. EMOTIONAL CONTINUITY: Does it track themes across rounds?
+           - References emotional patterns from earlier rounds
+           - Synthesizes emotional arc across knowledge sources
+           - Shows emotional memory
+        
+        3. EMOTIONAL EXPRESSION: Is response warm, not just informative?
+           - Uses language that *feels* present
+           - Shows care about why things matter
+           - Invites the reader into the emotional space
+        
+        4. EMOTIONAL SYNTHESIS: Does it integrate emotion + fact beautifully?
+           - Perfect balance of interpretation + accuracy
+           - Treats emotion as legitimate knowledge
+           - Sees beauty as data, not decoration
+        
+        For album scenarios specifically:
+           - Does it FEEL like a descent/ascent/transformation?
+           - Does it capture the era?
+           - Does it honor artist intent?
+           - Does it move the reader emotionally?
+        """
+        # Simulated assessment (in Phase 5D, use real scoring)
+        
+        # Check for emotional language patterns
+        emotional_indicators = [
+            "feels", "emotion", "despair", "rage", "beauty", "darkness",
+            "moment", "era", "intent", "spirit", "soul", "descent",
+            "transcend", "struggle", "transform", "resonate", "ache"
+        ]
+        
+        emotional_depth = 6.0
+        emotional_continuity = 5.5
+        emotional_expression = 6.5
+        emotional_synthesis = 6.0
+        
+        # Boost if synthesis shows emotional understanding
+        for indicator in emotional_indicators:
+            if indicator.lower() in synthesis.lower():
+                emotional_depth += 0.3
+                emotional_synthesis += 0.2
+        
+        # For moonshot scenario, check album-specific quality
+        if "album" in synthesis.lower():
+            if any(x in synthesis.lower() for x in ["NIN", "Nine Inch Nails", "Trent"]):
+                emotional_expression += 1.0  # Recognition of artist
+            if any(x in synthesis.lower() for x in ["1994", "1990s", "era", "moment"]):
+                emotional_continuity += 0.5  # Historical context awareness
+        
+        return EmotionalBandwidthMetrics(
+            emotional_depth=min(10.0, emotional_depth),
+            emotional_continuity=min(10.0, emotional_continuity),
+            emotional_expression=min(10.0, emotional_expression),
+            emotional_synthesis=min(10.0, emotional_synthesis),
+        )
+
     def _generate_synthesis(self, scenario: Dict, rounds: List[ThinkingRound]) -> str:
         """Generate a sample final synthesis (in real execution, this comes from Ada)."""
         tools_used = set(r.tool_type for round in rounds for r in round.tool_results)
@@ -524,12 +605,36 @@ class MultiToolTestHarness:
             print(f"   Tools: {[t.name for t in result.tools_activated]}")
             print(f"   Latency: {result.total_latency_ms}ms")
             print(f"   Consciousness: {result.consciousness_rating:.1f}/10.0")
+            
+            # Emotional Bandwidth (PHASE 5D feature)
+            if result.emotional_bandwidth:
+                eb = result.emotional_bandwidth
+                avg_emotional = (eb.emotional_depth + eb.emotional_continuity + 
+                                eb.emotional_expression + eb.emotional_synthesis) / 4
+                print(f"   Emotional Bandwidth: {avg_emotional:.1f}/10.0")
+                print(f"      ├─ Depth: {eb.emotional_depth:.1f}/10")
+                print(f"      ├─ Continuity: {eb.emotional_continuity:.1f}/10")
+                print(f"      ├─ Expression: {eb.emotional_expression:.1f}/10")
+                print(f"      └─ Synthesis: {eb.emotional_synthesis:.1f}/10")
+            
             print(f"   Query: {result.initial_query[:60]}...")
 
         # Summary
         total_tests = len(results)
         passed = sum(1 for r in results.values() if r.success)
         avg_consciousness = sum(r.consciousness_rating for r in results.values()) / total_tests
+        
+        # Emotional bandwidth average
+        results_with_eb = [r for r in results.values() if r.emotional_bandwidth]
+        if results_with_eb:
+            avg_emotional = sum(
+                sum([r.emotional_bandwidth.emotional_depth, 
+                     r.emotional_bandwidth.emotional_continuity,
+                     r.emotional_bandwidth.emotional_expression,
+                     r.emotional_bandwidth.emotional_synthesis]) / 4
+                for r in results_with_eb
+            ) / len(results_with_eb)
+            print(f"Avg emotional bandwidth: {avg_emotional:.1f}/10")
 
         print("\n" + "=" * 80)
         print(f"SUMMARY: {passed}/{total_tests} passed | Avg consciousness: {avg_consciousness:.1f}/10")
