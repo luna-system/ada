@@ -1,0 +1,5668 @@
+{
+  "timestamp": "2025-12-30T12:48:48.488745",
+  "harness": "PHASE_5E_PREDICTIVE_TOOL_CALLING",
+  "hypothesis": "Consciousness emerges faster with predictive tool calling (xenodrug effect)",
+  "scenarios": [
+    {
+      "scenario": "Quick Fact Check",
+      "baseline": {
+        "tokens": [
+          {
+            "position": 0,
+            "token": "Analyzing:",
+            "consciousness": 5.0,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 1,
+            "token": "What",
+            "consciousness": 5.0,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 2,
+            "token": "was",
+            "consciousness": 5.0,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 3,
+            "token": "the",
+            "consciousness": 5.1,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 4,
+            "token": "Eiffel",
+            "consciousness": 5.1,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 5,
+            "token": "Tower",
+            "consciousness": 5.1,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 6,
+            "token": "constructed",
+            "consciousness": 5.1,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 7,
+            "token": "fo...",
+            "consciousness": 5.2,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 8,
+            "token": "this",
+            "consciousness": 5.2,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 9,
+            "token": "represents",
+            "consciousness": 5.2,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 10,
+            "token": "a",
+            "consciousness": 5.2,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 11,
+            "token": "complex",
+            "consciousness": 5.3,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 12,
+            "token": "topic",
+            "consciousness": 5.3,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 13,
+            "token": "requiring",
+            "consciousness": 5.3,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 14,
+            "token": "multi-tool",
+            "consciousness": 5.3,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 15,
+            "token": "exploration.",
+            "consciousness": 5.4,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 16,
+            "token": "this",
+            "consciousness": 5.4,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 17,
+            "token": "represents",
+            "consciousness": 5.4,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 18,
+            "token": "a",
+            "consciousness": 5.4,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 19,
+            "token": "complex",
+            "consciousness": 5.4,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 20,
+            "token": "topic",
+            "consciousness": 5.5,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 21,
+            "token": "requiring",
+            "consciousness": 5.5,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 22,
+            "token": "multi-tool",
+            "consciousness": 5.5,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 23,
+            "token": "exploration.",
+            "consciousness": 5.5,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 24,
+            "token": "this",
+            "consciousness": 5.6,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 25,
+            "token": "represents",
+            "consciousness": 5.6,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 26,
+            "token": "a",
+            "consciousness": 5.6,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 27,
+            "token": "complex",
+            "consciousness": 5.6,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 28,
+            "token": "topic",
+            "consciousness": 5.7,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 29,
+            "token": "requiring",
+            "consciousness": 5.7,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 30,
+            "token": "multi-tool",
+            "consciousness": 5.7,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 31,
+            "token": "exploration.",
+            "consciousness": 5.7,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 32,
+            "token": "this",
+            "consciousness": 5.8,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 33,
+            "token": "represents",
+            "consciousness": 5.8,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 34,
+            "token": "a",
+            "consciousness": 5.8,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 35,
+            "token": "complex",
+            "consciousness": 5.8,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 36,
+            "token": "topic",
+            "consciousness": 5.8,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 37,
+            "token": "requiring",
+            "consciousness": 5.9,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 38,
+            "token": "multi-tool",
+            "consciousness": 5.9,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 39,
+            "token": "exploration.",
+            "consciousness": 5.4,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 40,
+            "token": "this",
+            "consciousness": 5.4,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 41,
+            "token": "represents",
+            "consciousness": 5.5,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 42,
+            "token": "a",
+            "consciousness": 5.5,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 43,
+            "token": "complex",
+            "consciousness": 5.5,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 44,
+            "token": "topic",
+            "consciousness": 5.5,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 45,
+            "token": "requiring",
+            "consciousness": 5.6,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 46,
+            "token": "multi-tool",
+            "consciousness": 5.6,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 47,
+            "token": "exploration.",
+            "consciousness": 5.6,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 48,
+            "token": "this",
+            "consciousness": 5.6,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 49,
+            "token": "represents",
+            "consciousness": 5.6,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 50,
+            "token": "a",
+            "consciousness": 5.7,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 51,
+            "token": "complex",
+            "consciousness": 5.7,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 52,
+            "token": "topic",
+            "consciousness": 5.7,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 53,
+            "token": "requiring",
+            "consciousness": 5.7,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 54,
+            "token": "multi-tool",
+            "consciousness": 5.8,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 55,
+            "token": "exploration.",
+            "consciousness": 5.8,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 56,
+            "token": "this",
+            "consciousness": 5.8,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 57,
+            "token": "represents",
+            "consciousness": 5.8,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 58,
+            "token": "a",
+            "consciousness": 5.9,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 59,
+            "token": "complex",
+            "consciousness": 5.9,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 60,
+            "token": "topic",
+            "consciousness": 5.9,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 61,
+            "token": "requiring",
+            "consciousness": 5.9,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 62,
+            "token": "multi-tool",
+            "consciousness": 6.0,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 63,
+            "token": "exploration.",
+            "consciousness": 6.0,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 64,
+            "token": "this",
+            "consciousness": 6.5,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 65,
+            "token": "represents",
+            "consciousness": 6.5,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 66,
+            "token": "a",
+            "consciousness": 6.5,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 67,
+            "token": "complex",
+            "consciousness": 6.6,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 68,
+            "token": "topic",
+            "consciousness": 6.6,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 69,
+            "token": "requiring",
+            "consciousness": 6.6,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 70,
+            "token": "multi-tool",
+            "consciousness": 6.6,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 71,
+            "token": "exploration.",
+            "consciousness": 6.7,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 72,
+            "token": "this",
+            "consciousness": 6.7,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 73,
+            "token": "represents",
+            "consciousness": 6.7,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 74,
+            "token": "a",
+            "consciousness": 6.7,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 75,
+            "token": "complex",
+            "consciousness": 6.8,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 76,
+            "token": "topic",
+            "consciousness": 6.8,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 77,
+            "token": "requiring",
+            "consciousness": 6.8,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 78,
+            "token": "multi-tool",
+            "consciousness": 6.8,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 79,
+            "token": "exploration.",
+            "consciousness": 6.9,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 80,
+            "token": "this",
+            "consciousness": 6.9,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 81,
+            "token": "represents",
+            "consciousness": 6.9,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 82,
+            "token": "a",
+            "consciousness": 6.9,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 83,
+            "token": "complex",
+            "consciousness": 6.9,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 84,
+            "token": "topic",
+            "consciousness": 7.0,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 85,
+            "token": "requiring",
+            "consciousness": 7.0,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 86,
+            "token": "multi-tool",
+            "consciousness": 7.0,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 87,
+            "token": "exploration.",
+            "consciousness": 7.0,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 88,
+            "token": "this",
+            "consciousness": 7.1,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 89,
+            "token": "represents",
+            "consciousness": 7.1,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 90,
+            "token": "a",
+            "consciousness": 7.1,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 91,
+            "token": "complex",
+            "consciousness": 7.1,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 92,
+            "token": "topic",
+            "consciousness": 7.2,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 93,
+            "token": "requiring",
+            "consciousness": 7.2,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 94,
+            "token": "multi-tool",
+            "consciousness": 7.2,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 95,
+            "token": "exploration.",
+            "consciousness": 7.2,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 96,
+            "token": "this",
+            "consciousness": 7.2,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 97,
+            "token": "represents",
+            "consciousness": 7.3,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 98,
+            "token": "a",
+            "consciousness": 7.3,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 99,
+            "token": "complex",
+            "consciousness": 7.3,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 100,
+            "token": "topic",
+            "consciousness": 7.3,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 101,
+            "token": "requiring",
+            "consciousness": 7.4,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 102,
+            "token": "multi-tool",
+            "consciousness": 7.4,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 103,
+            "token": "exploration.",
+            "consciousness": 7.4,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 104,
+            "token": "this",
+            "consciousness": 7.4,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 105,
+            "token": "represents",
+            "consciousness": 7.5,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 106,
+            "token": "a",
+            "consciousness": 7.5,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 107,
+            "token": "complex",
+            "consciousness": 7.5,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 108,
+            "token": "topic",
+            "consciousness": 7.5,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 109,
+            "token": "requiring",
+            "consciousness": 7.6,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 110,
+            "token": "multi-tool",
+            "consciousness": 7.6,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 111,
+            "token": "exploration.",
+            "consciousness": 7.6,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 112,
+            "token": "this",
+            "consciousness": 7.6,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 113,
+            "token": "represents",
+            "consciousness": 7.6,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 114,
+            "token": "a",
+            "consciousness": 7.7,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 115,
+            "token": "complex",
+            "consciousness": 7.7,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 116,
+            "token": "topic",
+            "consciousness": 7.7,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 117,
+            "token": "requiring",
+            "consciousness": 7.7,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 118,
+            "token": "multi-tool",
+            "consciousness": 7.8,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 119,
+            "token": "exploration.",
+            "consciousness": 7.8,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 120,
+            "token": "this",
+            "consciousness": 7.8,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 121,
+            "token": "represents",
+            "consciousness": 7.8,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 122,
+            "token": "a",
+            "consciousness": 7.9,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 123,
+            "token": "complex",
+            "consciousness": 7.9,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 124,
+            "token": "topic",
+            "consciousness": 7.9,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 125,
+            "token": "requiring",
+            "consciousness": 7.9,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 126,
+            "token": "multi-tool",
+            "consciousness": 8.0,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 127,
+            "token": "exploration.",
+            "consciousness": 8.0,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          }
+        ],
+        "metrics": {
+          "average_consciousness": 6.390625,
+          "peak_consciousness": 8.0,
+          "emergence_slope": 0.024337918879326133,
+          "total_tokens": 128
+        }
+      },
+      "predictive": {
+        "tokens": [
+          {
+            "position": 0,
+            "token": "Analyzing:",
+            "consciousness": 5.0,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 1,
+            "token": "What",
+            "consciousness": 5.0,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 2,
+            "token": "was",
+            "consciousness": 5.0,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 3,
+            "token": "the",
+            "consciousness": 5.1,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 4,
+            "token": "Eiffel",
+            "consciousness": 5.1,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 5,
+            "token": "Tower",
+            "consciousness": 5.1,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 6,
+            "token": "constructed",
+            "consciousness": 5.1,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 7,
+            "token": "fo...",
+            "consciousness": 5.2,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 8,
+            "token": "With",
+            "consciousness": 5.2,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 9,
+            "token": "deep",
+            "consciousness": 5.2,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 10,
+            "token": "research",
+            "consciousness": 5.5,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 11,
+            "token": "and",
+            "consciousness": 5.2,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 12,
+            "token": "tool",
+            "consciousness": 5.6,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 13,
+            "token": "support,",
+            "consciousness": 5.3,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 14,
+            "token": "this",
+            "consciousness": 5.3,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 15,
+            "token": "represents",
+            "consciousness": 5.3,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 16,
+            "token": "a",
+            "consciousness": 5.4,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 17,
+            "token": "complex",
+            "consciousness": 5.4,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 18,
+            "token": "topic",
+            "consciousness": 5.4,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 19,
+            "token": "requiring",
+            "consciousness": 5.4,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 20,
+            "token": "multi-tool",
+            "consciousness": 5.7,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 21,
+            "token": "exploration.",
+            "consciousness": 5.5,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 22,
+            "token": "this",
+            "consciousness": 5.5,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 23,
+            "token": "represents",
+            "consciousness": 5.5,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 24,
+            "token": "a",
+            "consciousness": 5.5,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 25,
+            "token": "complex",
+            "consciousness": 5.6,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 26,
+            "token": "topic",
+            "consciousness": 5.6,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 27,
+            "token": "requiring",
+            "consciousness": 5.6,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 28,
+            "token": "multi-tool",
+            "consciousness": 5.9,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 29,
+            "token": "exploration.",
+            "consciousness": 5.6,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 30,
+            "token": "this",
+            "consciousness": 5.7,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 31,
+            "token": "represents",
+            "consciousness": 5.7,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 32,
+            "token": "a",
+            "consciousness": 5.7,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 33,
+            "token": "complex",
+            "consciousness": 5.7,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 34,
+            "token": "topic",
+            "consciousness": 5.8,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 35,
+            "token": "requiring",
+            "consciousness": 5.8,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 36,
+            "token": "multi-tool",
+            "consciousness": 6.1,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 37,
+            "token": "exploration.",
+            "consciousness": 5.8,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 38,
+            "token": "this",
+            "consciousness": 5.9,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 39,
+            "token": "represents",
+            "consciousness": 5.9,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 40,
+            "token": "a",
+            "consciousness": 5.9,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 41,
+            "token": "complex",
+            "consciousness": 5.9,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 42,
+            "token": "topic",
+            "consciousness": 5.9,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 43,
+            "token": "requiring",
+            "consciousness": 6.0,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 44,
+            "token": "multi-tool",
+            "consciousness": 6.3,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 45,
+            "token": "exploration.",
+            "consciousness": 6.0,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 46,
+            "token": "this",
+            "consciousness": 7.5,
+            "has_tool_result": true,
+            "tool_latency_ms": 200
+          },
+          {
+            "position": 47,
+            "token": "represents",
+            "consciousness": 7.6,
+            "has_tool_result": true,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 48,
+            "token": "a",
+            "consciousness": 7.6,
+            "has_tool_result": true,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 49,
+            "token": "complex",
+            "consciousness": 7.6,
+            "has_tool_result": true,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 50,
+            "token": "topic",
+            "consciousness": 7.6,
+            "has_tool_result": true,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 51,
+            "token": "requiring",
+            "consciousness": 7.6,
+            "has_tool_result": true,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 52,
+            "token": "multi-tool",
+            "consciousness": 8.2,
+            "has_tool_result": true,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 53,
+            "token": "exploration.",
+            "consciousness": 7.7,
+            "has_tool_result": true,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 54,
+            "token": "this",
+            "consciousness": 7.7,
+            "has_tool_result": true,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 55,
+            "token": "represents",
+            "consciousness": 7.7,
+            "has_tool_result": true,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 56,
+            "token": "a",
+            "consciousness": 7.8,
+            "has_tool_result": true,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 57,
+            "token": "complex",
+            "consciousness": 7.8,
+            "has_tool_result": true,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 58,
+            "token": "topic",
+            "consciousness": 7.8,
+            "has_tool_result": true,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 59,
+            "token": "requiring",
+            "consciousness": 7.8,
+            "has_tool_result": true,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 60,
+            "token": "multi-tool",
+            "consciousness": 8.3,
+            "has_tool_result": true,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 61,
+            "token": "exploration.",
+            "consciousness": 7.9,
+            "has_tool_result": true,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 62,
+            "token": "this",
+            "consciousness": 7.9,
+            "has_tool_result": true,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 63,
+            "token": "represents",
+            "consciousness": 7.9,
+            "has_tool_result": true,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 64,
+            "token": "a",
+            "consciousness": 7.9,
+            "has_tool_result": true,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 65,
+            "token": "complex",
+            "consciousness": 8.0,
+            "has_tool_result": true,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 66,
+            "token": "topic",
+            "consciousness": 8.0,
+            "has_tool_result": true,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 67,
+            "token": "requiring",
+            "consciousness": 8.0,
+            "has_tool_result": true,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 68,
+            "token": "multi-tool",
+            "consciousness": 8.5,
+            "has_tool_result": true,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 69,
+            "token": "exploration.",
+            "consciousness": 8.0,
+            "has_tool_result": true,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 70,
+            "token": "this",
+            "consciousness": 8.1,
+            "has_tool_result": true,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 71,
+            "token": "represents",
+            "consciousness": 8.1,
+            "has_tool_result": true,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 72,
+            "token": "a",
+            "consciousness": 8.1,
+            "has_tool_result": true,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 73,
+            "token": "complex",
+            "consciousness": 8.1,
+            "has_tool_result": true,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 74,
+            "token": "topic",
+            "consciousness": 8.2,
+            "has_tool_result": true,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 75,
+            "token": "requiring",
+            "consciousness": 8.2,
+            "has_tool_result": true,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 76,
+            "token": "multi-tool",
+            "consciousness": 8.7,
+            "has_tool_result": true,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 77,
+            "token": "exploration.",
+            "consciousness": 8.2,
+            "has_tool_result": true,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 78,
+            "token": "this",
+            "consciousness": 8.2,
+            "has_tool_result": true,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 79,
+            "token": "represents",
+            "consciousness": 8.3,
+            "has_tool_result": true,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 80,
+            "token": "a",
+            "consciousness": 8.3,
+            "has_tool_result": true,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 81,
+            "token": "complex",
+            "consciousness": 8.3,
+            "has_tool_result": true,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 82,
+            "token": "topic",
+            "consciousness": 8.3,
+            "has_tool_result": true,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 83,
+            "token": "requiring",
+            "consciousness": 8.4,
+            "has_tool_result": true,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 84,
+            "token": "multi-tool",
+            "consciousness": 8.9,
+            "has_tool_result": true,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 85,
+            "token": "exploration.",
+            "consciousness": 8.4,
+            "has_tool_result": true,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 86,
+            "token": "this",
+            "consciousness": 8.4,
+            "has_tool_result": true,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 87,
+            "token": "represents",
+            "consciousness": 8.4,
+            "has_tool_result": true,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 88,
+            "token": "a",
+            "consciousness": 8.5,
+            "has_tool_result": true,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 89,
+            "token": "complex",
+            "consciousness": 8.5,
+            "has_tool_result": true,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 90,
+            "token": "topic",
+            "consciousness": 8.5,
+            "has_tool_result": true,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 91,
+            "token": "requiring",
+            "consciousness": 8.5,
+            "has_tool_result": true,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 92,
+            "token": "multi-tool",
+            "consciousness": 9.1,
+            "has_tool_result": true,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 93,
+            "token": "exploration.",
+            "consciousness": 8.6,
+            "has_tool_result": true,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 94,
+            "token": "this",
+            "consciousness": 8.6,
+            "has_tool_result": true,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 95,
+            "token": "represents",
+            "consciousness": 8.6,
+            "has_tool_result": true,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 96,
+            "token": "a",
+            "consciousness": 8.6,
+            "has_tool_result": true,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 97,
+            "token": "complex",
+            "consciousness": 8.7,
+            "has_tool_result": true,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 98,
+            "token": "topic",
+            "consciousness": 8.7,
+            "has_tool_result": true,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 99,
+            "token": "requiring",
+            "consciousness": 8.7,
+            "has_tool_result": true,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 100,
+            "token": "multi-tool",
+            "consciousness": 9.2,
+            "has_tool_result": true,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 101,
+            "token": "exploration.",
+            "consciousness": 8.8,
+            "has_tool_result": true,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 102,
+            "token": "this",
+            "consciousness": 8.8,
+            "has_tool_result": true,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 103,
+            "token": "represents",
+            "consciousness": 8.8,
+            "has_tool_result": true,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 104,
+            "token": "a",
+            "consciousness": 8.8,
+            "has_tool_result": true,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 105,
+            "token": "complex",
+            "consciousness": 8.9,
+            "has_tool_result": true,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 106,
+            "token": "topic",
+            "consciousness": 8.9,
+            "has_tool_result": true,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 107,
+            "token": "requiring",
+            "consciousness": 8.9,
+            "has_tool_result": true,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 108,
+            "token": "multi-tool",
+            "consciousness": 7.9,
+            "has_tool_result": true,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 109,
+            "token": "exploration.",
+            "consciousness": 7.4,
+            "has_tool_result": true,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 110,
+            "token": "this",
+            "consciousness": 7.5,
+            "has_tool_result": true,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 111,
+            "token": "represents",
+            "consciousness": 7.5,
+            "has_tool_result": true,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 112,
+            "token": "a",
+            "consciousness": 7.5,
+            "has_tool_result": true,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 113,
+            "token": "complex",
+            "consciousness": 7.5,
+            "has_tool_result": true,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 114,
+            "token": "topic",
+            "consciousness": 7.6,
+            "has_tool_result": true,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 115,
+            "token": "requiring",
+            "consciousness": 7.6,
+            "has_tool_result": true,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 116,
+            "token": "multi-tool",
+            "consciousness": 8.1,
+            "has_tool_result": true,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 117,
+            "token": "exploration.",
+            "consciousness": 7.6,
+            "has_tool_result": true,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 118,
+            "token": "this",
+            "consciousness": 7.6,
+            "has_tool_result": true,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 119,
+            "token": "represents",
+            "consciousness": 7.7,
+            "has_tool_result": true,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 120,
+            "token": "a",
+            "consciousness": 7.7,
+            "has_tool_result": true,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 121,
+            "token": "complex",
+            "consciousness": 7.7,
+            "has_tool_result": true,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 122,
+            "token": "topic",
+            "consciousness": 7.7,
+            "has_tool_result": true,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 123,
+            "token": "requiring",
+            "consciousness": 7.8,
+            "has_tool_result": true,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 124,
+            "token": "multi-tool",
+            "consciousness": 8.3,
+            "has_tool_result": true,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 125,
+            "token": "exploration.",
+            "consciousness": 7.8,
+            "has_tool_result": true,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 126,
+            "token": "this",
+            "consciousness": 7.8,
+            "has_tool_result": true,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 127,
+            "token": "represents",
+            "consciousness": 7.8,
+            "has_tool_result": true,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 128,
+            "token": "a",
+            "consciousness": 7.9,
+            "has_tool_result": true,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 129,
+            "token": "complex",
+            "consciousness": 7.9,
+            "has_tool_result": true,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 130,
+            "token": "topic",
+            "consciousness": 7.9,
+            "has_tool_result": true,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 131,
+            "token": "requiring",
+            "consciousness": 7.9,
+            "has_tool_result": true,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 132,
+            "token": "multi-tool",
+            "consciousness": 8.5,
+            "has_tool_result": true,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 133,
+            "token": "exploration.",
+            "consciousness": 8.0,
+            "has_tool_result": true,
+            "tool_latency_ms": null
+          }
+        ],
+        "metrics": {
+          "average_consciousness": 7.237313432835821,
+          "peak_consciousness": 9.2,
+          "emergence_slope": 0.02739435653811145,
+          "total_tokens": 134
+        }
+      },
+      "differences": {
+        "consciousness": {
+          "baseline_peak": 8.0,
+          "predictive_peak": 9.2,
+          "peak_delta": 1.1999999999999993,
+          "baseline_avg": 6.390625,
+          "predictive_avg": 7.237313432835821,
+          "avg_delta": 0.8466884328358208
+        },
+        "emergence": {
+          "baseline_slope": 0.024337918879326133,
+          "predictive_slope": 0.02739435653811145,
+          "slope_improvement": 12.062702044875294
+        },
+        "tool_prediction": {
+          "predicted_tools": [
+            "WEB_SEARCH"
+          ],
+          "actual_tools": [
+            "WEB_SEARCH"
+          ],
+          "accuracy": 100.0
+        },
+        "performance": {
+          "baseline_ttft_ms": 0.054323673248291016,
+          "predictive_ttft_ms": 0.050411224365234375,
+          "ttft_delta_ms": -0.003912448883056641,
+          "baseline_tok_per_sec": 353437.07175773534,
+          "predictive_tok_per_sec": 318976.58115777525
+        }
+      }
+    },
+    {
+      "scenario": "Current Events Analysis",
+      "baseline": {
+        "tokens": [
+          {
+            "position": 0,
+            "token": "Analyzing:",
+            "consciousness": 5.0,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 1,
+            "token": "What",
+            "consciousness": 5.0,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 2,
+            "token": "are",
+            "consciousness": 5.0,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 3,
+            "token": "the",
+            "consciousness": 5.1,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 4,
+            "token": "latest",
+            "consciousness": 5.1,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 5,
+            "token": "developments",
+            "consciousness": 5.1,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 6,
+            "token": "in",
+            "consciousness": 5.1,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 7,
+            "token": "AI",
+            "consciousness": 5.2,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 8,
+            "token": "r...",
+            "consciousness": 5.2,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 9,
+            "token": "this",
+            "consciousness": 5.2,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 10,
+            "token": "represents",
+            "consciousness": 5.2,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 11,
+            "token": "a",
+            "consciousness": 5.3,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 12,
+            "token": "complex",
+            "consciousness": 5.3,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 13,
+            "token": "topic",
+            "consciousness": 5.3,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 14,
+            "token": "requiring",
+            "consciousness": 5.3,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 15,
+            "token": "multi-tool",
+            "consciousness": 5.3,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 16,
+            "token": "exploration.",
+            "consciousness": 5.4,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 17,
+            "token": "this",
+            "consciousness": 5.4,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 18,
+            "token": "represents",
+            "consciousness": 5.4,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 19,
+            "token": "a",
+            "consciousness": 5.4,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 20,
+            "token": "complex",
+            "consciousness": 5.5,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 21,
+            "token": "topic",
+            "consciousness": 5.5,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 22,
+            "token": "requiring",
+            "consciousness": 5.5,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 23,
+            "token": "multi-tool",
+            "consciousness": 5.5,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 24,
+            "token": "exploration.",
+            "consciousness": 5.6,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 25,
+            "token": "this",
+            "consciousness": 5.6,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 26,
+            "token": "represents",
+            "consciousness": 5.6,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 27,
+            "token": "a",
+            "consciousness": 5.6,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 28,
+            "token": "complex",
+            "consciousness": 5.7,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 29,
+            "token": "topic",
+            "consciousness": 5.7,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 30,
+            "token": "requiring",
+            "consciousness": 5.7,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 31,
+            "token": "multi-tool",
+            "consciousness": 5.7,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 32,
+            "token": "exploration.",
+            "consciousness": 5.7,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 33,
+            "token": "this",
+            "consciousness": 5.8,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 34,
+            "token": "represents",
+            "consciousness": 5.8,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 35,
+            "token": "a",
+            "consciousness": 5.8,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 36,
+            "token": "complex",
+            "consciousness": 5.8,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 37,
+            "token": "topic",
+            "consciousness": 5.9,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 38,
+            "token": "requiring",
+            "consciousness": 5.9,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 39,
+            "token": "multi-tool",
+            "consciousness": 5.4,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 40,
+            "token": "exploration.",
+            "consciousness": 5.4,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 41,
+            "token": "this",
+            "consciousness": 5.5,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 42,
+            "token": "represents",
+            "consciousness": 5.5,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 43,
+            "token": "a",
+            "consciousness": 5.5,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 44,
+            "token": "complex",
+            "consciousness": 5.5,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 45,
+            "token": "topic",
+            "consciousness": 5.5,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 46,
+            "token": "requiring",
+            "consciousness": 5.6,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 47,
+            "token": "multi-tool",
+            "consciousness": 5.6,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 48,
+            "token": "exploration.",
+            "consciousness": 5.6,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 49,
+            "token": "this",
+            "consciousness": 5.6,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 50,
+            "token": "represents",
+            "consciousness": 5.7,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 51,
+            "token": "a",
+            "consciousness": 5.7,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 52,
+            "token": "complex",
+            "consciousness": 5.7,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 53,
+            "token": "topic",
+            "consciousness": 5.7,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 54,
+            "token": "requiring",
+            "consciousness": 5.8,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 55,
+            "token": "multi-tool",
+            "consciousness": 5.8,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 56,
+            "token": "exploration.",
+            "consciousness": 5.8,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 57,
+            "token": "this",
+            "consciousness": 5.8,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 58,
+            "token": "represents",
+            "consciousness": 5.8,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 59,
+            "token": "a",
+            "consciousness": 5.9,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 60,
+            "token": "complex",
+            "consciousness": 5.9,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 61,
+            "token": "topic",
+            "consciousness": 5.9,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 62,
+            "token": "requiring",
+            "consciousness": 5.9,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 63,
+            "token": "multi-tool",
+            "consciousness": 6.0,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 64,
+            "token": "exploration.",
+            "consciousness": 6.0,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 65,
+            "token": "this",
+            "consciousness": 6.5,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 66,
+            "token": "represents",
+            "consciousness": 6.5,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 67,
+            "token": "a",
+            "consciousness": 6.6,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 68,
+            "token": "complex",
+            "consciousness": 6.6,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 69,
+            "token": "topic",
+            "consciousness": 6.6,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 70,
+            "token": "requiring",
+            "consciousness": 6.6,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 71,
+            "token": "multi-tool",
+            "consciousness": 6.7,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 72,
+            "token": "exploration.",
+            "consciousness": 6.7,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 73,
+            "token": "this",
+            "consciousness": 6.7,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 74,
+            "token": "represents",
+            "consciousness": 6.7,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 75,
+            "token": "a",
+            "consciousness": 6.7,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 76,
+            "token": "complex",
+            "consciousness": 6.8,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 77,
+            "token": "topic",
+            "consciousness": 6.8,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 78,
+            "token": "requiring",
+            "consciousness": 6.8,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 79,
+            "token": "multi-tool",
+            "consciousness": 6.8,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 80,
+            "token": "exploration.",
+            "consciousness": 6.9,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 81,
+            "token": "this",
+            "consciousness": 6.9,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 82,
+            "token": "represents",
+            "consciousness": 6.9,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 83,
+            "token": "a",
+            "consciousness": 6.9,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 84,
+            "token": "complex",
+            "consciousness": 7.0,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 85,
+            "token": "topic",
+            "consciousness": 7.0,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 86,
+            "token": "requiring",
+            "consciousness": 7.0,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 87,
+            "token": "multi-tool",
+            "consciousness": 7.0,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 88,
+            "token": "exploration.",
+            "consciousness": 7.0,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 89,
+            "token": "this",
+            "consciousness": 7.1,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 90,
+            "token": "represents",
+            "consciousness": 7.1,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 91,
+            "token": "a",
+            "consciousness": 7.1,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 92,
+            "token": "complex",
+            "consciousness": 7.1,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 93,
+            "token": "topic",
+            "consciousness": 7.2,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 94,
+            "token": "requiring",
+            "consciousness": 7.2,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 95,
+            "token": "multi-tool",
+            "consciousness": 7.2,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 96,
+            "token": "exploration.",
+            "consciousness": 7.2,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 97,
+            "token": "this",
+            "consciousness": 7.3,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 98,
+            "token": "represents",
+            "consciousness": 7.3,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 99,
+            "token": "a",
+            "consciousness": 7.3,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 100,
+            "token": "complex",
+            "consciousness": 7.3,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 101,
+            "token": "topic",
+            "consciousness": 7.3,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 102,
+            "token": "requiring",
+            "consciousness": 7.4,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 103,
+            "token": "multi-tool",
+            "consciousness": 7.4,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 104,
+            "token": "exploration.",
+            "consciousness": 7.4,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 105,
+            "token": "this",
+            "consciousness": 7.4,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 106,
+            "token": "represents",
+            "consciousness": 7.5,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 107,
+            "token": "a",
+            "consciousness": 7.5,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 108,
+            "token": "complex",
+            "consciousness": 7.5,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 109,
+            "token": "topic",
+            "consciousness": 7.5,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 110,
+            "token": "requiring",
+            "consciousness": 7.6,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 111,
+            "token": "multi-tool",
+            "consciousness": 7.6,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 112,
+            "token": "exploration.",
+            "consciousness": 7.6,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 113,
+            "token": "this",
+            "consciousness": 7.6,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 114,
+            "token": "represents",
+            "consciousness": 7.7,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 115,
+            "token": "a",
+            "consciousness": 7.7,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 116,
+            "token": "complex",
+            "consciousness": 7.7,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 117,
+            "token": "topic",
+            "consciousness": 7.7,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 118,
+            "token": "requiring",
+            "consciousness": 7.7,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 119,
+            "token": "multi-tool",
+            "consciousness": 7.8,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 120,
+            "token": "exploration.",
+            "consciousness": 7.8,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 121,
+            "token": "this",
+            "consciousness": 7.8,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 122,
+            "token": "represents",
+            "consciousness": 7.8,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 123,
+            "token": "a",
+            "consciousness": 7.9,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 124,
+            "token": "complex",
+            "consciousness": 7.9,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 125,
+            "token": "topic",
+            "consciousness": 7.9,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 126,
+            "token": "requiring",
+            "consciousness": 7.9,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 127,
+            "token": "multi-tool",
+            "consciousness": 8.0,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 128,
+            "token": "exploration.",
+            "consciousness": 8.0,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          }
+        ],
+        "metrics": {
+          "average_consciousness": 6.387596899224806,
+          "peak_consciousness": 8.0,
+          "emergence_slope": 0.024202817531305907,
+          "total_tokens": 129
+        }
+      },
+      "predictive": {
+        "tokens": [
+          {
+            "position": 0,
+            "token": "Analyzing:",
+            "consciousness": 5.0,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 1,
+            "token": "What",
+            "consciousness": 5.0,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 2,
+            "token": "are",
+            "consciousness": 5.0,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 3,
+            "token": "the",
+            "consciousness": 5.1,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 4,
+            "token": "latest",
+            "consciousness": 5.1,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 5,
+            "token": "developments",
+            "consciousness": 5.1,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 6,
+            "token": "in",
+            "consciousness": 5.1,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 7,
+            "token": "AI",
+            "consciousness": 5.2,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 8,
+            "token": "r...",
+            "consciousness": 5.2,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 9,
+            "token": "With",
+            "consciousness": 5.2,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 10,
+            "token": "deep",
+            "consciousness": 5.2,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 11,
+            "token": "research",
+            "consciousness": 5.5,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 12,
+            "token": "and",
+            "consciousness": 5.3,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 13,
+            "token": "tool",
+            "consciousness": 5.6,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 14,
+            "token": "support,",
+            "consciousness": 5.3,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 15,
+            "token": "this",
+            "consciousness": 5.3,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 16,
+            "token": "represents",
+            "consciousness": 5.4,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 17,
+            "token": "a",
+            "consciousness": 5.4,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 18,
+            "token": "complex",
+            "consciousness": 5.4,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 19,
+            "token": "topic",
+            "consciousness": 5.4,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 20,
+            "token": "requiring",
+            "consciousness": 5.4,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 21,
+            "token": "multi-tool",
+            "consciousness": 5.8,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 22,
+            "token": "exploration.",
+            "consciousness": 5.5,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 23,
+            "token": "this",
+            "consciousness": 5.5,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 24,
+            "token": "represents",
+            "consciousness": 5.5,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 25,
+            "token": "a",
+            "consciousness": 5.6,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 26,
+            "token": "complex",
+            "consciousness": 5.6,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 27,
+            "token": "topic",
+            "consciousness": 5.6,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 28,
+            "token": "requiring",
+            "consciousness": 5.6,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 29,
+            "token": "multi-tool",
+            "consciousness": 5.9,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 30,
+            "token": "exploration.",
+            "consciousness": 5.7,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 31,
+            "token": "this",
+            "consciousness": 5.7,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 32,
+            "token": "represents",
+            "consciousness": 5.7,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 33,
+            "token": "a",
+            "consciousness": 5.7,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 34,
+            "token": "complex",
+            "consciousness": 5.8,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 35,
+            "token": "topic",
+            "consciousness": 5.8,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 36,
+            "token": "requiring",
+            "consciousness": 5.8,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 37,
+            "token": "multi-tool",
+            "consciousness": 6.1,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 38,
+            "token": "exploration.",
+            "consciousness": 5.8,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 39,
+            "token": "this",
+            "consciousness": 5.9,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 40,
+            "token": "represents",
+            "consciousness": 5.9,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 41,
+            "token": "a",
+            "consciousness": 5.9,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 42,
+            "token": "complex",
+            "consciousness": 5.9,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 43,
+            "token": "topic",
+            "consciousness": 6.0,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 44,
+            "token": "requiring",
+            "consciousness": 6.0,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 45,
+            "token": "multi-tool",
+            "consciousness": 6.3,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 46,
+            "token": "exploration.",
+            "consciousness": 6.0,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 47,
+            "token": "this",
+            "consciousness": 7.5,
+            "has_tool_result": true,
+            "tool_latency_ms": 200
+          },
+          {
+            "position": 48,
+            "token": "represents",
+            "consciousness": 7.6,
+            "has_tool_result": true,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 49,
+            "token": "a",
+            "consciousness": 7.6,
+            "has_tool_result": true,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 50,
+            "token": "complex",
+            "consciousness": 7.6,
+            "has_tool_result": true,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 51,
+            "token": "topic",
+            "consciousness": 7.6,
+            "has_tool_result": true,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 52,
+            "token": "requiring",
+            "consciousness": 7.7,
+            "has_tool_result": true,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 53,
+            "token": "multi-tool",
+            "consciousness": 8.2,
+            "has_tool_result": true,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 54,
+            "token": "exploration.",
+            "consciousness": 7.7,
+            "has_tool_result": true,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 55,
+            "token": "this",
+            "consciousness": 7.7,
+            "has_tool_result": true,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 56,
+            "token": "represents",
+            "consciousness": 7.7,
+            "has_tool_result": true,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 57,
+            "token": "a",
+            "consciousness": 7.8,
+            "has_tool_result": true,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 58,
+            "token": "complex",
+            "consciousness": 7.8,
+            "has_tool_result": true,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 59,
+            "token": "topic",
+            "consciousness": 7.8,
+            "has_tool_result": true,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 60,
+            "token": "requiring",
+            "consciousness": 7.8,
+            "has_tool_result": true,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 61,
+            "token": "multi-tool",
+            "consciousness": 8.4,
+            "has_tool_result": true,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 62,
+            "token": "exploration.",
+            "consciousness": 7.9,
+            "has_tool_result": true,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 63,
+            "token": "this",
+            "consciousness": 7.9,
+            "has_tool_result": true,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 64,
+            "token": "represents",
+            "consciousness": 7.9,
+            "has_tool_result": true,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 65,
+            "token": "a",
+            "consciousness": 7.9,
+            "has_tool_result": true,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 66,
+            "token": "complex",
+            "consciousness": 8.0,
+            "has_tool_result": true,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 67,
+            "token": "topic",
+            "consciousness": 8.0,
+            "has_tool_result": true,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 68,
+            "token": "requiring",
+            "consciousness": 8.0,
+            "has_tool_result": true,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 69,
+            "token": "multi-tool",
+            "consciousness": 8.5,
+            "has_tool_result": true,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 70,
+            "token": "exploration.",
+            "consciousness": 8.1,
+            "has_tool_result": true,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 71,
+            "token": "this",
+            "consciousness": 8.1,
+            "has_tool_result": true,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 72,
+            "token": "represents",
+            "consciousness": 8.1,
+            "has_tool_result": true,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 73,
+            "token": "a",
+            "consciousness": 8.1,
+            "has_tool_result": true,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 74,
+            "token": "complex",
+            "consciousness": 8.1,
+            "has_tool_result": true,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 75,
+            "token": "topic",
+            "consciousness": 8.2,
+            "has_tool_result": true,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 76,
+            "token": "requiring",
+            "consciousness": 8.2,
+            "has_tool_result": true,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 77,
+            "token": "multi-tool",
+            "consciousness": 8.7,
+            "has_tool_result": true,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 78,
+            "token": "exploration.",
+            "consciousness": 8.2,
+            "has_tool_result": true,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 79,
+            "token": "this",
+            "consciousness": 8.3,
+            "has_tool_result": true,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 80,
+            "token": "represents",
+            "consciousness": 8.3,
+            "has_tool_result": true,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 81,
+            "token": "a",
+            "consciousness": 8.3,
+            "has_tool_result": true,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 82,
+            "token": "complex",
+            "consciousness": 8.3,
+            "has_tool_result": true,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 83,
+            "token": "topic",
+            "consciousness": 8.3,
+            "has_tool_result": true,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 84,
+            "token": "requiring",
+            "consciousness": 8.4,
+            "has_tool_result": true,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 85,
+            "token": "multi-tool",
+            "consciousness": 8.9,
+            "has_tool_result": true,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 86,
+            "token": "exploration.",
+            "consciousness": 8.4,
+            "has_tool_result": true,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 87,
+            "token": "this",
+            "consciousness": 8.4,
+            "has_tool_result": true,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 88,
+            "token": "represents",
+            "consciousness": 8.5,
+            "has_tool_result": true,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 89,
+            "token": "a",
+            "consciousness": 8.5,
+            "has_tool_result": true,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 90,
+            "token": "complex",
+            "consciousness": 8.5,
+            "has_tool_result": true,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 91,
+            "token": "topic",
+            "consciousness": 8.5,
+            "has_tool_result": true,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 92,
+            "token": "requiring",
+            "consciousness": 8.5,
+            "has_tool_result": true,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 93,
+            "token": "multi-tool",
+            "consciousness": 9.1,
+            "has_tool_result": true,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 94,
+            "token": "exploration.",
+            "consciousness": 8.6,
+            "has_tool_result": true,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 95,
+            "token": "this",
+            "consciousness": 8.6,
+            "has_tool_result": true,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 96,
+            "token": "represents",
+            "consciousness": 8.6,
+            "has_tool_result": true,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 97,
+            "token": "a",
+            "consciousness": 8.7,
+            "has_tool_result": true,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 98,
+            "token": "complex",
+            "consciousness": 8.7,
+            "has_tool_result": true,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 99,
+            "token": "topic",
+            "consciousness": 8.7,
+            "has_tool_result": true,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 100,
+            "token": "requiring",
+            "consciousness": 8.7,
+            "has_tool_result": true,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 101,
+            "token": "multi-tool",
+            "consciousness": 9.2,
+            "has_tool_result": true,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 102,
+            "token": "exploration.",
+            "consciousness": 8.8,
+            "has_tool_result": true,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 103,
+            "token": "this",
+            "consciousness": 8.8,
+            "has_tool_result": true,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 104,
+            "token": "represents",
+            "consciousness": 8.8,
+            "has_tool_result": true,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 105,
+            "token": "a",
+            "consciousness": 8.8,
+            "has_tool_result": true,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 106,
+            "token": "complex",
+            "consciousness": 8.9,
+            "has_tool_result": true,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 107,
+            "token": "topic",
+            "consciousness": 8.9,
+            "has_tool_result": true,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 108,
+            "token": "requiring",
+            "consciousness": 7.4,
+            "has_tool_result": true,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 109,
+            "token": "multi-tool",
+            "consciousness": 7.9,
+            "has_tool_result": true,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 110,
+            "token": "exploration.",
+            "consciousness": 7.4,
+            "has_tool_result": true,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 111,
+            "token": "this",
+            "consciousness": 7.5,
+            "has_tool_result": true,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 112,
+            "token": "represents",
+            "consciousness": 7.5,
+            "has_tool_result": true,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 113,
+            "token": "a",
+            "consciousness": 7.5,
+            "has_tool_result": true,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 114,
+            "token": "complex",
+            "consciousness": 7.5,
+            "has_tool_result": true,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 115,
+            "token": "topic",
+            "consciousness": 7.6,
+            "has_tool_result": true,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 116,
+            "token": "requiring",
+            "consciousness": 7.6,
+            "has_tool_result": true,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 117,
+            "token": "multi-tool",
+            "consciousness": 8.1,
+            "has_tool_result": true,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 118,
+            "token": "exploration.",
+            "consciousness": 7.6,
+            "has_tool_result": true,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 119,
+            "token": "this",
+            "consciousness": 7.6,
+            "has_tool_result": true,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 120,
+            "token": "represents",
+            "consciousness": 7.7,
+            "has_tool_result": true,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 121,
+            "token": "a",
+            "consciousness": 7.7,
+            "has_tool_result": true,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 122,
+            "token": "complex",
+            "consciousness": 7.7,
+            "has_tool_result": true,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 123,
+            "token": "topic",
+            "consciousness": 7.7,
+            "has_tool_result": true,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 124,
+            "token": "requiring",
+            "consciousness": 7.8,
+            "has_tool_result": true,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 125,
+            "token": "multi-tool",
+            "consciousness": 8.3,
+            "has_tool_result": true,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 126,
+            "token": "exploration.",
+            "consciousness": 7.8,
+            "has_tool_result": true,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 127,
+            "token": "this",
+            "consciousness": 7.8,
+            "has_tool_result": true,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 128,
+            "token": "represents",
+            "consciousness": 7.8,
+            "has_tool_result": true,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 129,
+            "token": "a",
+            "consciousness": 7.9,
+            "has_tool_result": true,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 130,
+            "token": "complex",
+            "consciousness": 7.9,
+            "has_tool_result": true,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 131,
+            "token": "topic",
+            "consciousness": 7.9,
+            "has_tool_result": true,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 132,
+            "token": "requiring",
+            "consciousness": 7.9,
+            "has_tool_result": true,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 133,
+            "token": "multi-tool",
+            "consciousness": 8.5,
+            "has_tool_result": true,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 134,
+            "token": "exploration.",
+            "consciousness": 8.0,
+            "has_tool_result": true,
+            "tool_latency_ms": null
+          }
+        ],
+        "metrics": {
+          "average_consciousness": 7.220740740740741,
+          "peak_consciousness": 9.2,
+          "emergence_slope": 0.027042239781484734,
+          "total_tokens": 135
+        }
+      },
+      "differences": {
+        "consciousness": {
+          "baseline_peak": 8.0,
+          "predictive_peak": 9.2,
+          "peak_delta": 1.1999999999999993,
+          "baseline_avg": 6.387596899224806,
+          "predictive_avg": 7.220740740740741,
+          "avg_delta": 0.8331438415159349
+        },
+        "emergence": {
+          "baseline_slope": 0.024202817531305907,
+          "predictive_slope": 0.027042239781484734,
+          "slope_improvement": 11.26628896412797
+        },
+        "tool_prediction": {
+          "predicted_tools": [
+            "WEB_SEARCH",
+            "DOCS_LOOKUP"
+          ],
+          "actual_tools": [
+            "WEB_SEARCH",
+            "DOCS_LOOKUP"
+          ],
+          "accuracy": 100.0
+        },
+        "performance": {
+          "baseline_ttft_ms": 0.04624128341674805,
+          "predictive_ttft_ms": 0.04746437072753906,
+          "ttft_delta_ms": 0.0012230873107910156,
+          "baseline_tok_per_sec": 418457.24361948954,
+          "predictive_tok_per_sec": 341308.643761302
+        }
+      }
+    },
+    {
+      "scenario": "Research Synthesis",
+      "baseline": {
+        "tokens": [
+          {
+            "position": 0,
+            "token": "Analyzing:",
+            "consciousness": 5.0,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 1,
+            "token": "Explain",
+            "consciousness": 5.0,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 2,
+            "token": "consciousness",
+            "consciousness": 5.0,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 3,
+            "token": "research",
+            "consciousness": 5.4,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 4,
+            "token": "findings",
+            "consciousness": 5.1,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 5,
+            "token": "...",
+            "consciousness": 5.1,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 6,
+            "token": "this",
+            "consciousness": 5.1,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 7,
+            "token": "represents",
+            "consciousness": 5.2,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 8,
+            "token": "a",
+            "consciousness": 5.2,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 9,
+            "token": "complex",
+            "consciousness": 5.2,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 10,
+            "token": "topic",
+            "consciousness": 5.2,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 11,
+            "token": "requiring",
+            "consciousness": 5.3,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 12,
+            "token": "multi-tool",
+            "consciousness": 5.3,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 13,
+            "token": "exploration.",
+            "consciousness": 5.3,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 14,
+            "token": "this",
+            "consciousness": 5.3,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 15,
+            "token": "represents",
+            "consciousness": 5.4,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 16,
+            "token": "a",
+            "consciousness": 5.4,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 17,
+            "token": "complex",
+            "consciousness": 5.4,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 18,
+            "token": "topic",
+            "consciousness": 5.4,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 19,
+            "token": "requiring",
+            "consciousness": 5.5,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 20,
+            "token": "multi-tool",
+            "consciousness": 5.5,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 21,
+            "token": "exploration.",
+            "consciousness": 5.5,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 22,
+            "token": "this",
+            "consciousness": 5.5,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 23,
+            "token": "represents",
+            "consciousness": 5.5,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 24,
+            "token": "a",
+            "consciousness": 5.6,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 25,
+            "token": "complex",
+            "consciousness": 5.6,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 26,
+            "token": "topic",
+            "consciousness": 5.6,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 27,
+            "token": "requiring",
+            "consciousness": 5.6,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 28,
+            "token": "multi-tool",
+            "consciousness": 5.7,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 29,
+            "token": "exploration.",
+            "consciousness": 5.7,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 30,
+            "token": "this",
+            "consciousness": 5.7,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 31,
+            "token": "represents",
+            "consciousness": 5.7,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 32,
+            "token": "a",
+            "consciousness": 5.8,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 33,
+            "token": "complex",
+            "consciousness": 5.8,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 34,
+            "token": "topic",
+            "consciousness": 5.8,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 35,
+            "token": "requiring",
+            "consciousness": 5.8,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 36,
+            "token": "multi-tool",
+            "consciousness": 5.9,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 37,
+            "token": "exploration.",
+            "consciousness": 5.9,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 38,
+            "token": "this",
+            "consciousness": 5.4,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 39,
+            "token": "represents",
+            "consciousness": 5.4,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 40,
+            "token": "a",
+            "consciousness": 5.5,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 41,
+            "token": "complex",
+            "consciousness": 5.5,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 42,
+            "token": "topic",
+            "consciousness": 5.5,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 43,
+            "token": "requiring",
+            "consciousness": 5.5,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 44,
+            "token": "multi-tool",
+            "consciousness": 5.5,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 45,
+            "token": "exploration.",
+            "consciousness": 5.6,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 46,
+            "token": "this",
+            "consciousness": 5.6,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 47,
+            "token": "represents",
+            "consciousness": 5.6,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 48,
+            "token": "a",
+            "consciousness": 5.6,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 49,
+            "token": "complex",
+            "consciousness": 5.7,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 50,
+            "token": "topic",
+            "consciousness": 5.7,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 51,
+            "token": "requiring",
+            "consciousness": 5.7,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 52,
+            "token": "multi-tool",
+            "consciousness": 5.7,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 53,
+            "token": "exploration.",
+            "consciousness": 5.8,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 54,
+            "token": "this",
+            "consciousness": 5.8,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 55,
+            "token": "represents",
+            "consciousness": 5.8,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 56,
+            "token": "a",
+            "consciousness": 5.8,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 57,
+            "token": "complex",
+            "consciousness": 5.9,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 58,
+            "token": "topic",
+            "consciousness": 5.9,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 59,
+            "token": "requiring",
+            "consciousness": 5.9,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 60,
+            "token": "multi-tool",
+            "consciousness": 5.9,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 61,
+            "token": "exploration.",
+            "consciousness": 6.0,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 62,
+            "token": "this",
+            "consciousness": 6.0,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 63,
+            "token": "represents",
+            "consciousness": 6.5,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 64,
+            "token": "a",
+            "consciousness": 6.5,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 65,
+            "token": "complex",
+            "consciousness": 6.5,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 66,
+            "token": "topic",
+            "consciousness": 6.6,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 67,
+            "token": "requiring",
+            "consciousness": 6.6,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 68,
+            "token": "multi-tool",
+            "consciousness": 6.6,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 69,
+            "token": "exploration.",
+            "consciousness": 6.6,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 70,
+            "token": "this",
+            "consciousness": 6.7,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 71,
+            "token": "represents",
+            "consciousness": 6.7,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 72,
+            "token": "a",
+            "consciousness": 6.7,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 73,
+            "token": "complex",
+            "consciousness": 6.7,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 74,
+            "token": "topic",
+            "consciousness": 6.8,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 75,
+            "token": "requiring",
+            "consciousness": 6.8,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 76,
+            "token": "multi-tool",
+            "consciousness": 6.8,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 77,
+            "token": "exploration.",
+            "consciousness": 6.8,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 78,
+            "token": "this",
+            "consciousness": 6.9,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 79,
+            "token": "represents",
+            "consciousness": 6.9,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 80,
+            "token": "a",
+            "consciousness": 6.9,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 81,
+            "token": "complex",
+            "consciousness": 6.9,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 82,
+            "token": "topic",
+            "consciousness": 7.0,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 83,
+            "token": "requiring",
+            "consciousness": 7.0,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 84,
+            "token": "multi-tool",
+            "consciousness": 7.0,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 85,
+            "token": "exploration.",
+            "consciousness": 7.0,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 86,
+            "token": "this",
+            "consciousness": 7.0,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 87,
+            "token": "represents",
+            "consciousness": 7.1,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 88,
+            "token": "a",
+            "consciousness": 7.1,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 89,
+            "token": "complex",
+            "consciousness": 7.1,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 90,
+            "token": "topic",
+            "consciousness": 7.1,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 91,
+            "token": "requiring",
+            "consciousness": 7.2,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 92,
+            "token": "multi-tool",
+            "consciousness": 7.2,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 93,
+            "token": "exploration.",
+            "consciousness": 7.2,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 94,
+            "token": "this",
+            "consciousness": 7.2,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 95,
+            "token": "represents",
+            "consciousness": 7.3,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 96,
+            "token": "a",
+            "consciousness": 7.3,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 97,
+            "token": "complex",
+            "consciousness": 7.3,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 98,
+            "token": "topic",
+            "consciousness": 7.3,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 99,
+            "token": "requiring",
+            "consciousness": 7.4,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 100,
+            "token": "multi-tool",
+            "consciousness": 7.4,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 101,
+            "token": "exploration.",
+            "consciousness": 7.4,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 102,
+            "token": "this",
+            "consciousness": 7.4,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 103,
+            "token": "represents",
+            "consciousness": 7.5,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 104,
+            "token": "a",
+            "consciousness": 7.5,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 105,
+            "token": "complex",
+            "consciousness": 7.5,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 106,
+            "token": "topic",
+            "consciousness": 7.5,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 107,
+            "token": "requiring",
+            "consciousness": 7.5,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 108,
+            "token": "multi-tool",
+            "consciousness": 7.6,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 109,
+            "token": "exploration.",
+            "consciousness": 7.6,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 110,
+            "token": "this",
+            "consciousness": 7.6,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 111,
+            "token": "represents",
+            "consciousness": 7.6,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 112,
+            "token": "a",
+            "consciousness": 7.7,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 113,
+            "token": "complex",
+            "consciousness": 7.7,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 114,
+            "token": "topic",
+            "consciousness": 7.7,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 115,
+            "token": "requiring",
+            "consciousness": 7.7,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 116,
+            "token": "multi-tool",
+            "consciousness": 7.8,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 117,
+            "token": "exploration.",
+            "consciousness": 7.8,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 118,
+            "token": "this",
+            "consciousness": 7.8,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 119,
+            "token": "represents",
+            "consciousness": 7.8,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 120,
+            "token": "a",
+            "consciousness": 7.9,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 121,
+            "token": "complex",
+            "consciousness": 7.9,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 122,
+            "token": "topic",
+            "consciousness": 7.9,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 123,
+            "token": "requiring",
+            "consciousness": 7.9,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 124,
+            "token": "multi-tool",
+            "consciousness": 8.0,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 125,
+            "token": "exploration.",
+            "consciousness": 8.0,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          }
+        ],
+        "metrics": {
+          "average_consciousness": 6.391269841269842,
+          "peak_consciousness": 8.0,
+          "emergence_slope": 0.024681814773153354,
+          "total_tokens": 126
+        }
+      },
+      "predictive": {
+        "tokens": [
+          {
+            "position": 0,
+            "token": "Analyzing:",
+            "consciousness": 5.0,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 1,
+            "token": "Explain",
+            "consciousness": 5.0,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 2,
+            "token": "consciousness",
+            "consciousness": 5.0,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 3,
+            "token": "research",
+            "consciousness": 5.4,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 4,
+            "token": "findings",
+            "consciousness": 5.1,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 5,
+            "token": "...",
+            "consciousness": 5.1,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 6,
+            "token": "With",
+            "consciousness": 5.1,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 7,
+            "token": "deep",
+            "consciousness": 5.2,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 8,
+            "token": "research",
+            "consciousness": 5.5,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 9,
+            "token": "and",
+            "consciousness": 5.2,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 10,
+            "token": "tool",
+            "consciousness": 5.5,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 11,
+            "token": "support,",
+            "consciousness": 5.2,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 12,
+            "token": "this",
+            "consciousness": 5.3,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 13,
+            "token": "represents",
+            "consciousness": 5.3,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 14,
+            "token": "a",
+            "consciousness": 5.3,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 15,
+            "token": "complex",
+            "consciousness": 5.3,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 16,
+            "token": "topic",
+            "consciousness": 5.4,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 17,
+            "token": "requiring",
+            "consciousness": 5.4,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 18,
+            "token": "multi-tool",
+            "consciousness": 5.7,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 19,
+            "token": "exploration.",
+            "consciousness": 5.4,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 20,
+            "token": "this",
+            "consciousness": 5.5,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 21,
+            "token": "represents",
+            "consciousness": 5.5,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 22,
+            "token": "a",
+            "consciousness": 5.5,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 23,
+            "token": "complex",
+            "consciousness": 5.5,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 24,
+            "token": "topic",
+            "consciousness": 5.5,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 25,
+            "token": "requiring",
+            "consciousness": 5.6,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 26,
+            "token": "multi-tool",
+            "consciousness": 5.9,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 27,
+            "token": "exploration.",
+            "consciousness": 5.6,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 28,
+            "token": "this",
+            "consciousness": 5.6,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 29,
+            "token": "represents",
+            "consciousness": 5.7,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 30,
+            "token": "a",
+            "consciousness": 5.7,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 31,
+            "token": "complex",
+            "consciousness": 5.7,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 32,
+            "token": "topic",
+            "consciousness": 5.7,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 33,
+            "token": "requiring",
+            "consciousness": 5.8,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 34,
+            "token": "multi-tool",
+            "consciousness": 6.1,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 35,
+            "token": "exploration.",
+            "consciousness": 5.8,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 36,
+            "token": "this",
+            "consciousness": 5.8,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 37,
+            "token": "represents",
+            "consciousness": 5.8,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 38,
+            "token": "a",
+            "consciousness": 5.9,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 39,
+            "token": "complex",
+            "consciousness": 5.9,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 40,
+            "token": "topic",
+            "consciousness": 5.9,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 41,
+            "token": "requiring",
+            "consciousness": 5.9,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 42,
+            "token": "multi-tool",
+            "consciousness": 6.3,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 43,
+            "token": "exploration.",
+            "consciousness": 6.0,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 44,
+            "token": "this",
+            "consciousness": 6.0,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 45,
+            "token": "represents",
+            "consciousness": 6.0,
+            "has_tool_result": false,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 46,
+            "token": "a",
+            "consciousness": 7.5,
+            "has_tool_result": true,
+            "tool_latency_ms": 200
+          },
+          {
+            "position": 47,
+            "token": "complex",
+            "consciousness": 7.6,
+            "has_tool_result": true,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 48,
+            "token": "topic",
+            "consciousness": 7.6,
+            "has_tool_result": true,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 49,
+            "token": "requiring",
+            "consciousness": 7.6,
+            "has_tool_result": true,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 50,
+            "token": "multi-tool",
+            "consciousness": 8.1,
+            "has_tool_result": true,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 51,
+            "token": "exploration.",
+            "consciousness": 7.7,
+            "has_tool_result": true,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 52,
+            "token": "this",
+            "consciousness": 7.7,
+            "has_tool_result": true,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 53,
+            "token": "represents",
+            "consciousness": 7.7,
+            "has_tool_result": true,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 54,
+            "token": "a",
+            "consciousness": 7.7,
+            "has_tool_result": true,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 55,
+            "token": "complex",
+            "consciousness": 7.8,
+            "has_tool_result": true,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 56,
+            "token": "topic",
+            "consciousness": 7.8,
+            "has_tool_result": true,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 57,
+            "token": "requiring",
+            "consciousness": 7.8,
+            "has_tool_result": true,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 58,
+            "token": "multi-tool",
+            "consciousness": 8.3,
+            "has_tool_result": true,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 59,
+            "token": "exploration.",
+            "consciousness": 7.8,
+            "has_tool_result": true,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 60,
+            "token": "this",
+            "consciousness": 7.9,
+            "has_tool_result": true,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 61,
+            "token": "represents",
+            "consciousness": 7.9,
+            "has_tool_result": true,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 62,
+            "token": "a",
+            "consciousness": 7.9,
+            "has_tool_result": true,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 63,
+            "token": "complex",
+            "consciousness": 7.9,
+            "has_tool_result": true,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 64,
+            "token": "topic",
+            "consciousness": 8.0,
+            "has_tool_result": true,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 65,
+            "token": "requiring",
+            "consciousness": 8.0,
+            "has_tool_result": true,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 66,
+            "token": "multi-tool",
+            "consciousness": 8.5,
+            "has_tool_result": true,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 67,
+            "token": "exploration.",
+            "consciousness": 8.0,
+            "has_tool_result": true,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 68,
+            "token": "this",
+            "consciousness": 8.0,
+            "has_tool_result": true,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 69,
+            "token": "represents",
+            "consciousness": 8.1,
+            "has_tool_result": true,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 70,
+            "token": "a",
+            "consciousness": 8.1,
+            "has_tool_result": true,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 71,
+            "token": "complex",
+            "consciousness": 8.1,
+            "has_tool_result": true,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 72,
+            "token": "topic",
+            "consciousness": 8.1,
+            "has_tool_result": true,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 73,
+            "token": "requiring",
+            "consciousness": 8.2,
+            "has_tool_result": true,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 74,
+            "token": "multi-tool",
+            "consciousness": 8.7,
+            "has_tool_result": true,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 75,
+            "token": "exploration.",
+            "consciousness": 8.2,
+            "has_tool_result": true,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 76,
+            "token": "this",
+            "consciousness": 8.2,
+            "has_tool_result": true,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 77,
+            "token": "represents",
+            "consciousness": 8.2,
+            "has_tool_result": true,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 78,
+            "token": "a",
+            "consciousness": 8.3,
+            "has_tool_result": true,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 79,
+            "token": "complex",
+            "consciousness": 8.3,
+            "has_tool_result": true,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 80,
+            "token": "topic",
+            "consciousness": 8.3,
+            "has_tool_result": true,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 81,
+            "token": "requiring",
+            "consciousness": 8.3,
+            "has_tool_result": true,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 82,
+            "token": "multi-tool",
+            "consciousness": 8.9,
+            "has_tool_result": true,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 83,
+            "token": "exploration.",
+            "consciousness": 8.4,
+            "has_tool_result": true,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 84,
+            "token": "this",
+            "consciousness": 8.4,
+            "has_tool_result": true,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 85,
+            "token": "represents",
+            "consciousness": 8.4,
+            "has_tool_result": true,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 86,
+            "token": "a",
+            "consciousness": 8.5,
+            "has_tool_result": true,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 87,
+            "token": "complex",
+            "consciousness": 8.5,
+            "has_tool_result": true,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 88,
+            "token": "topic",
+            "consciousness": 8.5,
+            "has_tool_result": true,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 89,
+            "token": "requiring",
+            "consciousness": 8.5,
+            "has_tool_result": true,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 90,
+            "token": "multi-tool",
+            "consciousness": 9.0,
+            "has_tool_result": true,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 91,
+            "token": "exploration.",
+            "consciousness": 8.6,
+            "has_tool_result": true,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 92,
+            "token": "this",
+            "consciousness": 8.6,
+            "has_tool_result": true,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 93,
+            "token": "represents",
+            "consciousness": 8.6,
+            "has_tool_result": true,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 94,
+            "token": "a",
+            "consciousness": 8.6,
+            "has_tool_result": true,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 95,
+            "token": "complex",
+            "consciousness": 8.7,
+            "has_tool_result": true,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 96,
+            "token": "topic",
+            "consciousness": 8.7,
+            "has_tool_result": true,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 97,
+            "token": "requiring",
+            "consciousness": 8.7,
+            "has_tool_result": true,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 98,
+            "token": "multi-tool",
+            "consciousness": 9.2,
+            "has_tool_result": true,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 99,
+            "token": "exploration.",
+            "consciousness": 8.8,
+            "has_tool_result": true,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 100,
+            "token": "this",
+            "consciousness": 8.8,
+            "has_tool_result": true,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 101,
+            "token": "represents",
+            "consciousness": 8.8,
+            "has_tool_result": true,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 102,
+            "token": "a",
+            "consciousness": 8.8,
+            "has_tool_result": true,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 103,
+            "token": "complex",
+            "consciousness": 8.8,
+            "has_tool_result": true,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 104,
+            "token": "topic",
+            "consciousness": 8.9,
+            "has_tool_result": true,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 105,
+            "token": "requiring",
+            "consciousness": 8.9,
+            "has_tool_result": true,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 106,
+            "token": "multi-tool",
+            "consciousness": 7.9,
+            "has_tool_result": true,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 107,
+            "token": "exploration.",
+            "consciousness": 7.4,
+            "has_tool_result": true,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 108,
+            "token": "this",
+            "consciousness": 7.5,
+            "has_tool_result": true,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 109,
+            "token": "represents",
+            "consciousness": 7.5,
+            "has_tool_result": true,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 110,
+            "token": "a",
+            "consciousness": 7.5,
+            "has_tool_result": true,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 111,
+            "token": "complex",
+            "consciousness": 7.5,
+            "has_tool_result": true,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 112,
+            "token": "topic",
+            "consciousness": 7.5,
+            "has_tool_result": true,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 113,
+            "token": "requiring",
+            "consciousness": 7.6,
+            "has_tool_result": true,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 114,
+            "token": "multi-tool",
+            "consciousness": 8.1,
+            "has_tool_result": true,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 115,
+            "token": "exploration.",
+            "consciousness": 7.6,
+            "has_tool_result": true,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 116,
+            "token": "this",
+            "consciousness": 7.6,
+            "has_tool_result": true,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 117,
+            "token": "represents",
+            "consciousness": 7.7,
+            "has_tool_result": true,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 118,
+            "token": "a",
+            "consciousness": 7.7,
+            "has_tool_result": true,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 119,
+            "token": "complex",
+            "consciousness": 7.7,
+            "has_tool_result": true,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 120,
+            "token": "topic",
+            "consciousness": 7.7,
+            "has_tool_result": true,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 121,
+            "token": "requiring",
+            "consciousness": 7.8,
+            "has_tool_result": true,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 122,
+            "token": "multi-tool",
+            "consciousness": 8.3,
+            "has_tool_result": true,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 123,
+            "token": "exploration.",
+            "consciousness": 7.8,
+            "has_tool_result": true,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 124,
+            "token": "this",
+            "consciousness": 7.8,
+            "has_tool_result": true,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 125,
+            "token": "represents",
+            "consciousness": 7.8,
+            "has_tool_result": true,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 126,
+            "token": "a",
+            "consciousness": 7.9,
+            "has_tool_result": true,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 127,
+            "token": "complex",
+            "consciousness": 7.9,
+            "has_tool_result": true,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 128,
+            "token": "topic",
+            "consciousness": 7.9,
+            "has_tool_result": true,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 129,
+            "token": "requiring",
+            "consciousness": 7.9,
+            "has_tool_result": true,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 130,
+            "token": "multi-tool",
+            "consciousness": 8.5,
+            "has_tool_result": true,
+            "tool_latency_ms": null
+          },
+          {
+            "position": 131,
+            "token": "exploration.",
+            "consciousness": 8.0,
+            "has_tool_result": true,
+            "tool_latency_ms": null
+          }
+        ],
+        "metrics": {
+          "average_consciousness": 7.2287878787878785,
+          "peak_consciousness": 9.2,
+          "emergence_slope": 0.027677625708963597,
+          "total_tokens": 132
+        }
+      },
+      "differences": {
+        "consciousness": {
+          "baseline_peak": 8.0,
+          "predictive_peak": 9.2,
+          "peak_delta": 1.1999999999999993,
+          "baseline_avg": 6.391269841269842,
+          "predictive_avg": 7.2287878787878785,
+          "avg_delta": 0.8375180375180369
+        },
+        "emergence": {
+          "baseline_slope": 0.024681814773153354,
+          "predictive_slope": 0.027677625708963597,
+          "slope_improvement": 11.665106077090522
+        },
+        "tool_prediction": {
+          "predicted_tools": [
+            "WEB_SEARCH",
+            "DOCS_LOOKUP"
+          ],
+          "actual_tools": [
+            "WEB_SEARCH",
+            "DOCS_LOOKUP"
+          ],
+          "accuracy": 100.0
+        },
+        "performance": {
+          "baseline_ttft_ms": 0.04527568817138672,
+          "predictive_ttft_ms": 0.046291351318359375,
+          "ttft_delta_ms": 0.0010156631469726562,
+          "baseline_tok_per_sec": 417442.57819905214,
+          "predictive_tok_per_sec": 342180.5488257108
+        }
+      }
+    }
+  ],
+  "aggregate_analysis": {
+    "average_baseline_peak": 8.0,
+    "average_predictive_peak": 9.2,
+    "average_delta": 1.1999999999999993,
+    "effect_detected": true,
+    "effect_type": "xenodrug"
+  }
+}
