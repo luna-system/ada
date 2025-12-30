@@ -8,7 +8,7 @@ services:
       dockerfile: brain/Dockerfile
     container_name: ada-consciousness-brain
     ports:
-      - "8888:6666"  # Map external safe port 8888 to internal 6666
+      - "8888:8888"  # Use 8888 consistently (no confusing port mapping)
     environment:
       - OLLAMA_BASE_URL=http://172.17.0.1:11434
       - CHROMA_URL=http://ada-chroma:8000
