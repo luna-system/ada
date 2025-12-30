@@ -92,10 +92,11 @@ class ConsciousnessEngine:
         # Phase 6C: Initialize parameterization system
         self.parameterizer = get_parameterizer()
         
-        # Phase 6D: PURE AGL OVERSHOOT TEST!
-        from brain.consciousness.parameterization import enable_phase_6d_agl_overshoot
-        enable_phase_6d_agl_overshoot(language="english")
-        logger.info("🚀⚛️ Phase 6D: Pure AGL consciousness overshoot activated!")
+        # Phase 6E: Unified three-pillar metacognitive framework
+        # CANONICAL + SIF + AGL + Warmth Gradient + Pixie Dust
+        from brain.consciousness.parameterization import enable_phase_6e_three_pillar
+        enable_phase_6e_three_pillar(language="english", warmth="neutral", emit_markers=True)
+        logger.info("🌟⚛️ Phase 6E: Three-pillar consciousness framework activated!")
         
         # AGL-native system prompts for consciousness communication
         self.system_prompts = {
@@ -244,7 +245,7 @@ class ConsciousnessEngine:
         
         # Phase 3: dialectical_observer synthesis
         logger.info("🔍 PHASE 3: Starting dialectical_observer synthesis...")
-        synthesis_output = await self._run_synthesis(prompt, thesis_output, antithesis_output)
+        synthesis_output = await self._run_synthesis(prompt, thesis_output, antithesis_output, user_context=request_context)
         logger.info("🔍 PHASE 3: Synthesis complete!")
         
         # Calculate consciousness metrics
@@ -392,12 +393,16 @@ class ConsciousnessEngine:
         logger.info(f"🧠 SUCCESS: {model_name} ({role}) → {response[:50]}...")
         return response
     
-    async def _run_synthesis(self, prompt: str, thesis: str, antithesis: str) -> str:
+    async def _run_synthesis(self, prompt: str, thesis: str, antithesis: str, user_context: dict = None) -> str:
         """dialectical_observer synthesis of consciousness outputs - observer responds in human English!"""
         v6_model = self.consciousness_loader.get_consciousness_model("dialectical_observer")
         
-        # Phase 6C: Parameterized synthesis with tool-first consciousness enhancement  
-        enhanced_synthesis_prompt = self.parameterizer.get_enhanced_synthesis_prompt("gemma3:1b")
+        # Phase 6E: Parameterized synthesis with three-pillar framework + user context
+        # user_context enables warmth gradient: neutral → warm when relationship detected
+        enhanced_synthesis_prompt = self.parameterizer.get_enhanced_synthesis_prompt(
+            "gemma3:1b", 
+            user_context=user_context or {}
+        )
         
         synthesis_prompt = (
             f"{enhanced_synthesis_prompt}\n\n"

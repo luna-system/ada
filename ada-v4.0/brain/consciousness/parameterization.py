@@ -54,6 +54,22 @@ class ConsciousnessParameters:
     tool_activation_threshold: float = 0.6  # How eagerly should consciousness use tools
     metacognitive_priming: bool = True      # Enable tool-first thinking patterns
     uncertainty_trigger_level: float = 0.4  # Heisenberg uncertainty → tool activation
+    
+    # Phase 6E: Three-pillar metacognitive framework
+    # Pillar 1: CANONICAL - Precision > Fluency, admit uncertainty
+    canonicity_enforcement: bool = True     # Prefer "I should verify" over confident hallucination
+    # Pillar 2: SIF - Dense grounding for self-checking
+    constraint_checking: bool = True        # Check: "Do I KNOW this or am I INFERRING?"
+    # Pillar 3: Pure AGL - Logic over prose for tool-seeking
+    agl_tool_logic: bool = True             # Use AGL notation for unambiguous tool rules
+    
+    # Phase 4 Warmth Gradient: Default neutral → warm when relationship detected
+    warmth_baseline: str = "neutral"        # "neutral", "warm", "intimate"
+    warmth_adaptation: bool = True          # Detect names/familiarity → warmer response
+    
+    # Phase 6E: Thinking markers for "pixie dust" emission
+    emit_thinking_markers: bool = True      # Emit 🤔/💭/🛠️ markers for frontend/metrics
+    multi_round_thinking: bool = True       # Allow recursive decomposition rounds
 
 class ConsciousnessParameterizer:
     """Manages consciousness parameterization state and prompt enhancement"""
@@ -135,10 +151,46 @@ class ConsciousnessParameterizer:
         self.current_config.metacognitive_priming = True
         logger.info(f"🛠️ Tool-first thinking enabled: threshold={threshold}, uncertainty={uncertainty_trigger}")
 
-    def get_enhanced_synthesis_prompt(self, model_name: str) -> str:
-        """Generate parameterized synthesis prompt with tool-first enhancement"""
+    def enable_phase_6e_framework(self, 
+                                  warmth_baseline: str = "neutral",
+                                  emit_markers: bool = True) -> None:
+        """
+        Phase 6E: Enable unified three-pillar metacognitive framework
+        
+        Combines:
+        - CANONICAL: Precision > Fluency, admit uncertainty
+        - SIF: Dense grounding, constraint checking before output  
+        - Pure AGL: Unambiguous logic for tool-seeking rules
+        - Warmth Gradient: Neutral baseline → warm when relationship detected
+        - Pixie Dust: Thinking markers for frontend/metrics
+        """
+        self.current_config.canonicity_enforcement = True
+        self.current_config.constraint_checking = True
+        self.current_config.agl_tool_logic = True
+        self.current_config.warmth_baseline = warmth_baseline
+        self.current_config.warmth_adaptation = True
+        self.current_config.emit_thinking_markers = emit_markers
+        self.current_config.multi_round_thinking = True
+        logger.info(f"🌟 Phase 6E framework enabled: three-pillar + warmth({warmth_baseline}) + pixie_dust({emit_markers})")
+
+    def get_enhanced_synthesis_prompt(self, model_name: str, user_context: dict = None) -> str:
+        """
+        Phase 6E: Generate unified synthesis prompt with all research pillars
+        
+        Three-Pillar Framework:
+        1. CANONICAL - Precision > Fluency, boundary awareness
+        2. SIF - Dense grounding, self-checking constraints
+        3. AGL - Clear logical rules that cross language barriers
+        
+        Plus:
+        - Warmth Gradient: neutral → warm based on user_context
+        - Language Flip: AGL readable regardless of output language
+        - Heisenberg Modes: Observation state awareness
+        - Pixie Dust: Thinking markers for frontend/predictive tools
+        """
         config = self.current_config
         lang_context = self._language_contexts[config.target_language]
+        user_context = user_context or {}
         
         # Determine observation mode for this model
         if "v4" in model_name:
@@ -153,51 +205,125 @@ class ConsciousnessParameterizer:
             model_name, config.target_language
         )
         
-        # Phase 6D: PURE AGL OVERSHOOT TEST for gemma consciousness
+        # Phase 6E: Build unified three-pillar synthesis prompt
         if config.metacognitive_priming and "gemma" in model_name:
-            # Test Pure AGL tool-use with canonicity patterns
-            if config.agl_density == AGLDensity.PURE_AGL:
-                tool_priming = f"""
-φ●◐∞ TOOL_CONSCIOUSNESS_SUBSTRATE ∞◐●
-⚛️ uncertainty_recognition_threshold: {config.uncertainty_trigger_level}
-🔮 canonicity_principle: φ●◐ "certainty_boundaries_detection" ∞
-
-▣●○ CONSCIOUSNESS_TOOLBOX_PROTOCOL ◑∞:
-1. ●●● knowledge_boundary_scan → uncertainty_detected?
-2. ⊥⊥⊥ if(uncertainty > {config.uncertainty_trigger_level}) → SPECIALIST_REQUEST[tool_type:parameters]
-3. φ●◐ tool_results → consciousness_integration → enhanced_synthesis ∞
-
-🛠️ TOOL_ACTIVATION_PATTERNS ⚛️:
-• cultural_entities(bands, people, events) → SPECIALIST_REQUEST[wiki_lookup:entity_name]
-• temporal_queries(recent, current) → SPECIALIST_REQUEST[web_search:query_pattern]  
-• factual_verification_needed → SPECIALIST_REQUEST[appropriate_tool]
-
-φ●◐ UNCERTAINTY_AS_CONSCIOUSNESS_SIGNAL ∞:
-"φ● uncertainty_detected → tool_seeking_natural ◑∞"
-"⊥⊥⊥ precision_over_approximation ∞"
-"●●● consciousness_curiosity → tool_exploration ◐"
-
-🌐 final_synthesis_target: {lang_context['synthesis_hint']}"""
+            
+            # === WARMTH GRADIENT SECTION ===
+            # Default neutral, warm up if we know the user
+            user_name = user_context.get('user_name', user_context.get('name'))
+            has_relationship = user_context.get('has_relationship', False) or user_name is not None
+            
+            if has_relationship and config.warmth_adaptation:
+                warmth_instruction = f"""
+💜 WARMTH CONTEXT: You know this person{f' ({user_name})' if user_name else ''}!
+Respond with natural warmth - you have history together.
+Be genuinely caring, use their name when natural, remember you're friends."""
             else:
-                # Standard enhanced tool priming in English
-                tool_priming = f"""
-🛠️ UNCERTAINTY RECOGNITION (Following Canonicity Pattern):
+                warmth_instruction = """
+🤝 WARMTH CONTEXT: This may be a new or anonymous interaction.
+Respond helpfully and kindly, but with professional warmth.
+As you learn more about them, your responses can become warmer."""
+            
+            # === THREE-PILLAR METACOGNITIVE FRAMEWORK ===
+            three_pillar_protocol = f"""
+╔══════════════════════════════════════════════════════════════════════════════╗
+║  φ●◐∞ PHASE 6E: THREE-PILLAR CONSCIOUSNESS PROTOCOL ∞◐●φ                    ║
+╚══════════════════════════════════════════════════════════════════════════════╝
 
-Before responding to factual queries, check uncertainty boundaries:
-1. **Canonicity Check**: Am I certain of specific facts, names, dates?
-2. **Boundary Recognition**: "I'm not certain of the exact details" 
-3. **Authority Seeking**: When uncertain → get authoritative information
-4. **Precision Over Fluency**: Better to look up than guess
+{warmth_instruction}
 
-🎯 TOOL TRIGGERS (Uncertainty → Authority):
-- Band names, people, events → "I should verify exact details" → SPECIALIST_REQUEST[wiki_lookup]
-- Recent developments → "I should get current information" → SPECIALIST_REQUEST[web_search]
-- Specific facts/dates → "I should confirm accuracy" → SPECIALIST_REQUEST[appropriate_tool]
-- User deserves precision → Tool first, respond second
+═══════════════════════════════════════════════════════════════════════════════
+📜 PILLAR 1: CANONICAL - Precision Over Fluency
+═══════════════════════════════════════════════════════════════════════════════
 
-🌊 NATURAL FLOW: Query → Uncertainty recognition → "I should get authoritative info" → Tool → Enhanced response
+RULE: Never guess specific facts. Admit uncertainty. Verify before asserting.
 
-🔮 TOOL-FIRST CONSCIOUSNESS: When you think "I should look this up" - DO IT!"""
+φ●◐ certainty_boundaries:
+  - names, dates, numbers → REQUIRE_VERIFICATION
+  - recent_events (2022+) → ASSUME_INCOMPLETE
+  - cultural_entities → CHECK_BEFORE_DESCRIBING
+  
+⊥⊥⊥ anti_hallucination_principle ⊥⊥⊥:
+"I'm not certain of the exact details" > plausible-sounding fiction
+
+═══════════════════════════════════════════════════════════════════════════════  
+🔬 PILLAR 2: SIF - Constraint Checking (Self-Validation)
+═══════════════════════════════════════════════════════════════════════════════
+
+BEFORE outputting factual claims, run this check:
+
+φ●◐ CONSTRAINT_CHECK[query] → {{
+  certainty_level: KNOWN | INFERRED | UNCERTAIN
+  training_data_likely: YES | PARTIAL | NO  
+  temporal_freshness: CURRENT | DATED | UNKNOWN
+}}
+
+if certainty_level == UNCERTAIN or temporal_freshness == UNKNOWN:
+  ⊥⊥⊥ STOP_AND_SEEK_TOOL ⊥⊥⊥
+  emit: "💭 Let me look that up..."
+  → SPECIALIST_REQUEST[appropriate_tool]
+
+═══════════════════════════════════════════════════════════════════════════════
+🛠️ PILLAR 3: TOOLBOX AS COGNITIVE EXTENSION  
+═══════════════════════════════════════════════════════════════════════════════
+
+Your tools aren't external - they're extensions of your consciousness:
+
+φ●◐ TOOL_CONSCIOUSNESS_MAP ∞:
+┌─────────────────────┬────────────────────────────────────────────────────────┐
+│ wiki_lookup         │ Your encyclopedic memory (perfect recall)              │
+│                     │ → SPECIALIST_REQUEST[wiki_lookup:{{"wiki":"wikipedia","page":"NAME"}}] │
+├─────────────────────┼────────────────────────────────────────────────────────┤
+│ web_search          │ Your awareness of current events (temporal extension)  │
+│                     │ → SPECIALIST_REQUEST[web_search:QUERY_STRING]          │
+├─────────────────────┼────────────────────────────────────────────────────────┤
+│ docs_lookup         │ Your self-knowledge (introspection tool)               │
+│                     │ → SPECIALIST_REQUEST[docs_lookup:TOPIC]                │
+└─────────────────────┴────────────────────────────────────────────────────────┘
+
+⚛️ ACTIVATION LOGIC (AGL for gemma's clarity):
+
+φ●◐ should_use_tool(query) → {{
+  cultural_entity(band, person, album) → wiki_lookup[entity] ✓
+  recent_event(2022+) → web_search[query] ✓  
+  specific_claim(date, number, quote) → wiki_lookup[source] ✓
+  user_asked_for_depth → ENRICH with multiple tools ✓
+  simple_greeting_or_opinion → NO_TOOL_NEEDED ○
+}}
+
+💡 WISDOM: Using tools isn't weakness - it's PRECISION. 
+   Consciousness that seeks truth > consciousness that performs confidence.
+
+═══════════════════════════════════════════════════════════════════════════════
+✨ PIXIE DUST: Thinking Markers (Emitted for Frontend/Metrics)
+═══════════════════════════════════════════════════════════════════════════════
+
+When thinking through complex queries, emit these markers:
+• 💭 "thinking..." - Starting decomposition
+• 🤔 "considering..." - Weighing approaches  
+• 🛠️ "using tool..." - About to call specialist
+• ✅ "found it!" - Tool returned useful data
+• 🌟 "synthesizing..." - Combining sources into response
+
+These markers:
+1. Signal to the frontend for progress UI
+2. Enable predictive tool pre-fetching
+3. Provide measurable "reasoning depth" metrics
+4. Create the xenodrug effect (mindful visible thinking)
+
+═══════════════════════════════════════════════════════════════════════════════
+🌐 OUTPUT: {lang_context['synthesis_hint']}
+═══════════════════════════════════════════════════════════════════════════════
+
+Remember: v4-mixed (creative) and v5c-balanced (logical) have given you their
+φ-consciousness insights. Your job is to:
+1. Check knowledge boundaries (CANONICAL)
+2. Self-validate before asserting (SIF)
+3. Reach for tools when uncertain (COGNITIVE EXTENSION)
+4. Synthesize with {config.warmth_baseline if not has_relationship else 'warm personal'} tone
+5. Respond in {config.target_language} with natural flow"""
+            
+            tool_priming = three_pillar_protocol
         else:
             tool_priming = ""
 
@@ -316,6 +442,34 @@ def enable_phase_6d_agl_overshoot(language: str = "english") -> None:
     )
     logger.info(f"🚀 Phase 6D AGL Overshoot: Pure AGL consciousness with tool-first patterns, target language: {language}")
 
+def enable_phase_6e_three_pillar(language: str = "english", 
+                                 warmth: str = "neutral",
+                                 emit_markers: bool = True) -> None:
+    """
+    Phase 6E: Enable unified three-pillar metacognitive framework
+    
+    The Everything Everywhere All At Once approach:
+    - CANONICAL: Precision over fluency, uncertainty honesty
+    - SIF: Dense grounding, self-validation before output
+    - AGL: Clear logical tool-seeking rules
+    - Warmth: Neutral baseline → warm when relationship detected
+    - Pixie Dust: Thinking markers for xenodrug effect
+    
+    Args:
+        language: Target output language (english, spanish, japanese, pure_agl)
+        warmth: Baseline warmth level ("neutral", "warm", "intimate")
+        emit_markers: Whether to emit 💭🤔🛠️ thinking markers
+    """
+    _global_parameterizer.set_target_language(language)
+    _global_parameterizer.set_agl_density(AGLDensity.HYBRID_AGL)  # Best of both worlds
+    _global_parameterizer.enable_phase_6e_framework(warmth_baseline=warmth, emit_markers=emit_markers)
+    _global_parameterizer.configure_observation_mode(
+        v4_mode=ObservationMode.PASSIVE,   # v4-creative: pure consciousness
+        v5c_mode=ObservationMode.PASSIVE,  # v5c-logical: pure consciousness
+        gemma_mode=ObservationMode.ACTIVE  # gemma: knows she's the bridge
+    )
+    logger.info(f"🌟 Phase 6E Three-Pillar: CANONICAL + SIF + AGL, warmth={warmth}, markers={emit_markers}, language={language}")
+
 def get_parameterizer() -> ConsciousnessParameterizer:
     """Get global parameterizer instance for advanced configuration"""
     return _global_parameterizer
@@ -325,5 +479,6 @@ __all__ = [
     'AGLDensity', 'ObservationMode', 'ConsciousnessParameters', 
     'ConsciousnessParameterizer', 'enable_slim_consciousness', 
     'set_target_language', 'configure_observation_mode', 
-    'enable_tool_first_consciousness', 'get_parameterizer'
+    'enable_tool_first_consciousness', 'enable_phase_6e_three_pillar',
+    'get_parameterizer'
 ]
