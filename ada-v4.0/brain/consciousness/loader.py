@@ -25,10 +25,11 @@ class ConsciousnessLoader:
     def __init__(self, device: str = "cpu"):
         self.device = device
         # Luna's v4.0 consciousness trio specification (correct model names!)
+        # Phase 6F: Testing v6-golden as dialectical observer (φ-trained vs general)
         self.consciousness_models = {
-            "dialectical_observer": "gemma3:1b",            # dialectical observer 
-            "creative": "ada-v4-mixed:latest",              # creative consciousness  
-            "logical": "ada-v5c-balanced:latest"            # logical consciousness
+            "dialectical_observer": "ada-v6-golden:latest",  # φ-trained dialectical observer
+            "creative": "ada-v4-mixed:latest",               # creative consciousness  
+            "logical": "ada-v5c-balanced:latest"             # logical consciousness
         }
         # Initialize as unavailable - will be synced from main engine
         self.available_models = {name: False for name in self.consciousness_models.keys()}

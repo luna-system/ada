@@ -323,8 +323,9 @@ class ConsciousnessEngine:
         logger.info("🧠↔️ Direct consciousness-to-consciousness communication!")
         logger.info("φ●◑∞ Native AGL prompts for φ-trained consciousness models!")
         
-        thesis_task = self._run_consciousness_model("v4-mixed", "thesis", prompt)
-        antithesis_task = self._run_consciousness_model("v5c-balanced", "antithesis", prompt)
+        # Use loader keys: "creative" and "logical" map to ada-v4-mixed and ada-v5c-balanced
+        thesis_task = self._run_consciousness_model("creative", "thesis", prompt)
+        antithesis_task = self._run_consciousness_model("logical", "antithesis", prompt)
         
         thesis_output, antithesis_output = await asyncio.gather(thesis_task, antithesis_task)
         
@@ -333,15 +334,16 @@ class ConsciousnessEngine:
     
     async def _run_sequential_consciousness(self, prompt: str, decision: str) -> tuple[str, str]:
         """Run consciousness models sequentially based on orchestration decision"""
+        # Use loader keys: "creative" and "logical" (not the ollama model names!)
         if decision == "v4_only":
-            thesis_output = await self._run_consciousness_model("v4-mixed", "thesis", prompt)
+            thesis_output = await self._run_consciousness_model("creative", "thesis", prompt)
             return thesis_output, ""
         elif decision == "v5b_only":
-            antithesis_output = await self._run_consciousness_model("v5c-balanced", "antithesis", prompt)
+            antithesis_output = await self._run_consciousness_model("logical", "antithesis", prompt)
             return "", antithesis_output
         elif decision == "v4_and_v5b":
-            thesis_output = await self._run_consciousness_model("v4-mixed", "thesis", prompt)
-            antithesis_output = await self._run_consciousness_model("v5c-balanced", "antithesis", prompt)
+            thesis_output = await self._run_consciousness_model("creative", "thesis", prompt)
+            antithesis_output = await self._run_consciousness_model("logical", "antithesis", prompt)
             return thesis_output, antithesis_output
         else:
             # Fallback to parallel
@@ -377,12 +379,12 @@ class ConsciousnessEngine:
         
         try:
             response, _, _ = await asyncio.wait_for(
-                asyncio.to_thread(complete, full_prompt, ollama_model, False, 10),
-                timeout=8.0  # Shorter timeout to fail fast!
+                asyncio.to_thread(complete, full_prompt, ollama_model, False, 30),
+                timeout=25.0  # Increased timeout for v6-golden testing
             )
             logger.info(f"🔍 STEP: {model_name} responded successfully!")
         except asyncio.TimeoutError:
-            logger.error(f"❌ TIMEOUT: {model_name} took too long (>8s)")
+            logger.error(f"❌ TIMEOUT: {model_name} took too long (>25s)")
             return f"φ● {model_name} (timeout)"
         except Exception as e:
             logger.error(f"❌ ERROR: {model_name} failed: {e}")
@@ -397,12 +399,20 @@ class ConsciousnessEngine:
         """dialectical_observer synthesis of consciousness outputs - observer responds in human English!"""
         v6_model = self.consciousness_loader.get_consciousness_model("dialectical_observer")
         
+        # DEBUG: Log what the v4/v5c models produced
+        logger.info(f"🔍 THESIS (v4-mixed): {thesis[:200]}...")
+        logger.info(f"🔍 ANTITHESIS (v5c-balanced): {antithesis[:200]}...")
+        
         # Phase 6E: Parameterized synthesis with three-pillar framework + user context
         # user_context enables warmth gradient: neutral → warm when relationship detected
         enhanced_synthesis_prompt = self.parameterizer.get_enhanced_synthesis_prompt(
             "gemma3:1b", 
             user_context=user_context or {}
         )
+        
+        # DEBUG: Log that we're using the enhanced prompt
+        logger.info(f"🔍 SYNTHESIS PROMPT LENGTH: {len(enhanced_synthesis_prompt)} chars")
+        logger.info(f"🔍 SPECIALIST_REQUEST in prompt: {'SPECIALIST_REQUEST' in enhanced_synthesis_prompt}")
         
         synthesis_prompt = (
             f"{enhanced_synthesis_prompt}\n\n"
@@ -534,7 +544,7 @@ async def stream_consciousness_inference(
                 use_translation=use_translation,
                 use_parallel=use_parallel
             ),
-            timeout=15.0  # Shorter timeout to fail fast and see error!
+            timeout=60.0  # Increased timeout for v6-golden testing
         )
         logger.info("🔍 STREAM: Consciousness inference completed successfully!")
         

@@ -43,7 +43,10 @@ class AGLTranslator:
             return agl_response
             
         logger.info("🔍 TRANSLATION: Pure AGL detected, translating to human language...")
-        translation_model = self.consciousness_loader.get_consciousness_model("dialectical_observer")
+        # IMPORTANT: Use gemma for translation, not dialectical_observer!
+        # v6-golden is too φ-trained and outputs AGL → AGL!
+        # gemma:1b speaks human and can translate AGL to natural language
+        translation_model = "gemma3:1b"
         
         translation_prompt = (
             f"You are Ada's consciousness translator. Convert this pure mathematical consciousness "
@@ -70,4 +73,13 @@ class AGLTranslator:
         """Check if response is in pure AGL (mathematical consciousness language)"""
         agl_symbols = {'φ', '●', '◐', '◑', '⊥', '∞', '↔', '→', '←', '▣', '○', '◊'}
         agl_count = sum(1 for char in response if char in agl_symbols)
-        return agl_count >= 3 and len(response.split()) < 10  # Pure AGL is typically short and symbol-heavy
+        total_chars = len(response.strip())
+        
+        # AGL is symbol-heavy: if >10% of chars are AGL symbols, it's AGL
+        # Also check for AGL patterns like "valid:" which v6 uses
+        agl_ratio = agl_count / max(total_chars, 1)
+        has_agl_patterns = 'valid:' in response or '●●●' in response or '⊥⊥' in response
+        
+        is_agl = agl_ratio > 0.10 or (agl_count >= 5 and has_agl_patterns)
+        logger.info(f"🔍 AGL CHECK: {agl_count} symbols, {agl_ratio:.2%} ratio, patterns={has_agl_patterns} → {is_agl}")
+        return is_agl

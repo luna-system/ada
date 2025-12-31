@@ -229,17 +229,54 @@ def _build_rag_context(query: str) -> str:
 
 
 def _extract_specialist_request(text: str) -> Dict[str, Any] | None:
-    """Extract SPECIALIST_REQUEST[tool:params] from text."""
+    """Extract tool requests from text - supports multiple formats!
+    
+    Phase 6F: Meet gemma where she is. Parse both:
+    - SPECIALIST_REQUEST[tool:params] (original format)
+    - [tool:params] or [tool] (gemma's natural format)
+    
+    This is the "attractor adapter" - we accept gemma's natural syntax
+    and route it to the same specialist system.
+    """
     import re
-    pattern = r'SPECIALIST_REQUEST\[([a-z_]+):(.+?)\]'
-    match = re.search(pattern, text)
+    
+    # Pattern 1: Original SPECIALIST_REQUEST format
+    pattern1 = r'SPECIALIST_REQUEST\[([a-z_]+):(.+?)\]'
+    match = re.search(pattern1, text)
     if match:
         tool_name = match.group(1)
         try:
             params = json.loads(match.group(2))
+            logger.info(f"🎯 Tool request (SPECIALIST_REQUEST format): {tool_name}")
             return {'specialist': tool_name, 'params': params}
         except:
-            return None
+            # Try as raw string param for simpler syntax
+            return {'specialist': tool_name, 'params': {'query': match.group(2)}}
+    
+    # Pattern 2: Gemma's natural format [tool:params] with JSON
+    pattern2 = r'\[([a-z_]+):(\{.+?\})\]'
+    match = re.search(pattern2, text)
+    if match:
+        tool_name = match.group(1)
+        try:
+            params = json.loads(match.group(2))
+            logger.info(f"🎯 Tool request (gemma bracket format): {tool_name}")
+            return {'specialist': tool_name, 'params': params}
+        except:
+            pass
+    
+    # Pattern 3: Gemma's simple format [tool] (no params)
+    pattern3 = r'\[(web_search|wiki_lookup|docs_lookup|vision|ocr|datetime|terminal)\]'
+    match = re.search(pattern3, text)
+    if match:
+        tool_name = match.group(1)
+        logger.info(f"🎯 Tool request (gemma simple format): {tool_name}")
+        # For web_search without params, try to extract query from surrounding context
+        if tool_name == 'web_search':
+            # Look for the query topic in nearby text
+            return {'specialist': tool_name, 'params': {'query': 'user query'}}
+        return {'specialist': tool_name, 'params': {}}
+    
     return None
 
 
