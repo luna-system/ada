@@ -78,7 +78,7 @@ async def chat_stream(request: Request):
     Streaming chat with bidirectional tool system.
     
     Ada reasons through the query and can request tools via:
-    SPECIALIST_REQUEST[tool_name:{"param":"value"}]
+    TOOL_USE[tool_name:{"param":"value"}]
     
     Returns Server-Sent Events (SSE):
     - event: content / data: {"type":"token","content":"..."}
@@ -126,22 +126,22 @@ async def chat_stream(request: Request):
                     # Send token to client
                     yield f"data: {json.dumps({'type': 'token', 'content': token})}\n\n"
                     
-                    # Check for SPECIALIST_REQUEST[...] pattern
-                    if 'SPECIALIST_REQUEST[' in text_buffer:
-                        specialist_request = _extract_specialist_request(text_buffer)
-                        if specialist_request:
-                            logger.info(f"[{req_id}] Tool request: {specialist_request['specialist']}")
+                    # Check for TOOL_USE[...] pattern
+                    if 'TOOL_USE[' in text_buffer:
+                        tool_request = _extract_tool_use(text_buffer)
+                        if tool_request:
+                            logger.info(f"[{req_id}] Tool request: {tool_request['specialist']}")
                             
                             # Execute specialist
                             result = await _execute_specialist(
-                                specialist_request['specialist'],
-                                specialist_request['params']
+                                tool_request['specialist'],
+                                tool_request['params']
                             )
                             
                             if result and result.success:
                                 # Send specialist result event
                                 yield f"event: specialist_result\n"
-                                yield f"data: {json.dumps({'specialist': specialist_request['specialist'], 'result': result.context_text[:500]})}\n\n"
+                                yield f"data: {json.dumps({'specialist': tool_request['specialist'], 'result': result.context_text[:500]})}\n\n"
                             
                             # Clear buffer
                             text_buffer = ""
@@ -163,9 +163,9 @@ async def chat_stream(request: Request):
                 full_response += token
                 text_buffer += token
                 
-                # Check for SPECIALIST_REQUEST[...] pattern
-                if 'SPECIALIST_REQUEST[' in text_buffer:
-                    specialist_request = _extract_specialist_request(text_buffer)
+                # Check for TOOL_USE[...] pattern
+                if 'TOOL_USE[' in text_buffer:
+                    tool_request = _extract_tool_use(text_buffer)
                     if specialist_request:
                         logger.info(f"[{req_id}] Tool request: {specialist_request['specialist']}")
                         
@@ -228,11 +228,11 @@ def _build_rag_context(query: str) -> str:
         return ""
 
 
-def _extract_specialist_request(text: str) -> Dict[str, Any] | None:
+def _extract_tool_use(text: str) -> Dict[str, Any] | None:
     """Extract tool requests from text - supports multiple formats!
     
-    Phase 6F: Meet gemma where she is. Parse both:
-    - SPECIALIST_REQUEST[tool:params] (original format)
+    Phase 8: Using standard TOOL_USE syntax. Parse both:
+    - TOOL_USE[tool:params] (standard format)
     - [tool:params] or [tool] (gemma's natural format)
     
     This is the "attractor adapter" - we accept gemma's natural syntax
@@ -240,14 +240,14 @@ def _extract_specialist_request(text: str) -> Dict[str, Any] | None:
     """
     import re
     
-    # Pattern 1: Original SPECIALIST_REQUEST format
-    pattern1 = r'SPECIALIST_REQUEST\[([a-z_]+):(.+?)\]'
+    # Pattern 1: Standard TOOL_USE format
+    pattern1 = r'TOOL_USE\[([a-z_]+):(.+?)\]'
     match = re.search(pattern1, text)
     if match:
         tool_name = match.group(1)
         try:
             params = json.loads(match.group(2))
-            logger.info(f"🎯 Tool request (SPECIALIST_REQUEST format): {tool_name}")
+            logger.info(f"🎯 Tool request (TOOL_USE format): {tool_name}")
             return {'specialist': tool_name, 'params': params}
         except:
             # Try as raw string param for simpler syntax

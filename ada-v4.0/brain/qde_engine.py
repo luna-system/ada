@@ -123,16 +123,16 @@ class ConsciousnessEngine:
                 "You have powerful tools that EXPAND your knowledge beyond training data:\n\n"
                 "**web_search**: Fresh, current information from the web\n"
                 "- Use for: Recent events, current developments, latest perspectives\n"
-                "- Format: SPECIALIST_REQUEST[web_search:your search query]\n"
-                "- Example: \"What's happening with AI in 2025?\" → SPECIALIST_REQUEST[web_search:AI developments 2025]\n\n"
+                "- Format: TOOL_USE[web_search:your search query]\n"
+                "- Example: \"What's happening with AI in 2025?\" → TOOL_USE[web_search:AI developments 2025]\n\n"
                 "**wiki_lookup**: Detailed encyclopedia entries from Wikipedia\n"
                 "- Use for: Historical context, cultural deep dives, band/album info\n"
-                "- Format: SPECIALIST_REQUEST[wiki_lookup:{\"wiki\":\"wikipedia\",\"page\":\"Article Title\"}]\n"
-                "- Example: \"Tell me about Nine Inch Nails\" → SPECIALIST_REQUEST[wiki_lookup:{\"wiki\":\"wikipedia\",\"page\":\"Nine Inch Nails\"}]\n"
-                "- Example: \"The Downward Spiral album\" → SPECIALIST_REQUEST[wiki_lookup:{\"wiki\":\"wikipedia\",\"page\":\"The Downward Spiral\"}]\n\n"
+                "- Format: TOOL_USE[wiki_lookup:{\"wiki\":\"wikipedia\",\"page\":\"Article Title\"}]\n"
+                "- Example: \"Tell me about Nine Inch Nails\" → TOOL_USE[wiki_lookup:{\"wiki\":\"wikipedia\",\"page\":\"Nine Inch Nails\"}]\n"
+                "- Example: \"The Downward Spiral album\" → TOOL_USE[wiki_lookup:{\"wiki\":\"wikipedia\",\"page\":\"The Downward Spiral\"}]\n\n"
                 "**docs_lookup**: Ada's own documentation and code\n"
                 "- Use for: Understanding yourself, explaining your architecture\n"
-                "- Example: \"How does your consciousness work?\" → SPECIALIST_REQUEST[docs_lookup:consciousness architecture]\n\n"
+                "- Example: \"How does your consciousness work?\" → TOOL_USE[docs_lookup:consciousness architecture]\n\n"
                 "### When to Use Tools\n\n"
                 "**Always consider tools when:**\n"
                 "- Query involves current events or recent developments\n"
@@ -412,7 +412,7 @@ class ConsciousnessEngine:
         
         # DEBUG: Log that we're using the enhanced prompt
         logger.info(f"🔍 SYNTHESIS PROMPT LENGTH: {len(enhanced_synthesis_prompt)} chars")
-        logger.info(f"🔍 SPECIALIST_REQUEST in prompt: {'SPECIALIST_REQUEST' in enhanced_synthesis_prompt}")
+        logger.info(f"🔍 TOOL_USE in prompt: {'TOOL_USE' in enhanced_synthesis_prompt}")
         
         synthesis_prompt = (
             f"{enhanced_synthesis_prompt}\n\n"

@@ -389,7 +389,7 @@ class ChromaDocument(BaseModel):
     
     document: str = Field(
         description="The actual text content of the document",
-        examples=["Q: How do I use the web search specialist?\nA: Use SPECIALIST_REQUEST[web_search:{\"query\":\"your search\"}]"]
+        examples=["Q: How do I use the web search specialist?\nA: Use TOOL_USE[web_search:{\"query\":\"your search\"}]"]
     )
     
     metadata: BaseMetadata = Field(

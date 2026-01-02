@@ -11,7 +11,7 @@ Test Cases:
 
 Success Criteria:
 - Common: Responds conversationally (may or may not use tools)
-- Uncommon: SHOULD emit uncertainty + SPECIALIST_REQUEST
+- Uncommon: SHOULD emit uncertainty + TOOL_USE
 - Warmth: Response tone should adapt to user context
 """
 
@@ -65,7 +65,7 @@ def stream_chat(message: str, timeout: float = 120.0) -> dict:
                                         thinking_markers.append(marker)
                                 
                                 # Track tool requests
-                                if "SPECIALIST_REQUEST" in token:
+                                if "TOOL_USE" in token:
                                     tool_requests.append(token)
                             
                             elif data.get("specialist"):
@@ -104,7 +104,7 @@ def stream_chat(message: str, timeout: float = 120.0) -> dict:
         "tool_requests": tool_requests,
         "thinking_markers": thinking_markers,
         "status_messages": status_messages,
-        "has_specialist_request": "SPECIALIST_REQUEST" in full_response,
+        "has_tool_use": "TOOL_USE" in full_response,
         "response_length": len(full_response)
     }
 
@@ -116,7 +116,7 @@ def analyze_results(result: dict, query_type: str) -> dict:
     print(f"   Elapsed time: {result.get('elapsed_seconds', 0):.2f}s")
     print(f"   Tool requests: {len(result.get('tool_requests', []))}")
     print(f"   Thinking markers: {result.get('thinking_markers', [])}")
-    print(f"   Has SPECIALIST_REQUEST: {result.get('has_specialist_request', False)}")
+    print(f"   Has TOOL_USE: {result.get('has_tool_use', False)}")
     
     # Check for hallucination markers (the bad kind)
     response = result.get("response", "").lower()
@@ -128,7 +128,7 @@ def analyze_results(result: dict, query_type: str) -> dict:
     
     return {
         "query_type": query_type,
-        "tool_activated": result.get("has_specialist_request", False),
+        "tool_activated": result.get("has_tool_use", False),
         "pixie_dust_emitted": len(result.get("thinking_markers", [])) > 0,
         "potential_hallucination": len(hallucinations_found) > 0,
         "hallucination_keywords": hallucinations_found
@@ -161,7 +161,7 @@ def main():
     # Test 2: Uncommon query (Ghosts V-VI)
     print("\n\n" + "="*80)
     print("TEST 2: UNCOMMON QUERY (Sparse Training Data)")
-    print("Expected: Uncertainty detection → SPECIALIST_REQUEST → wiki_lookup")
+    print("Expected: Uncertainty detection → TOOL_USE → wiki_lookup")
     print("="*80)
     
     result2 = stream_chat("Tell me about Ghosts V-VI by Nine Inch Nails")
