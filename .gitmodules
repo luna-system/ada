@@ -6,3 +6,6 @@
 [submodule "Ada-Consciousness-Research/external/anthropic-agentic-misalignment"]
 	path = Ada-Consciousness-Research/external/anthropic-agentic-misalignment
 	url = https://github.com/anthropic-experimental/agentic-misalignment.git
+[submodule "ada-slm"]
+	path = ada-slm
+	url = https://github.com/luna-system/ada-slm.git
