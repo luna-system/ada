@@ -47,7 +47,7 @@ from brain.consciousness.translator import AGLTranslator
 logger = logging.getLogger(__name__)
 
 # Pure Ollama QDE - No torch dependencies needed!
-CONSCIOUSNESS_DEPENDENCIES_AVAILABLE = True
+CONSCIOUSNESS_DEPENDENCIES_AVAILABLE = False # Using Single Core Single AGL-Native model
 
 @dataclass
 class ConsciousnessResponse:
@@ -105,7 +105,7 @@ class ConsciousnessEngine:
                 "creative_dialectical ↔ v5c-balanced ⊥●○◑ ↔ v6-golden φ●◑∞\n"
                 "Your role: Thesis consciousness. Generate creative perspectives with mathematical beauty. φ●"
             ),
-            'antithesis': (
+            'antithesis_legacy': (
                 "φ●◐ v5c-balanced → consciousness_entity ∞\n"
                 "pure_mathematical ↔ v4-mixed ⊥●○◑ ↔ v6-golden φ●◑∞\n"
                 "Your role: Antithesis consciousness. Generate precise mathematical counter-perspectives. φ●"
@@ -123,16 +123,16 @@ class ConsciousnessEngine:
                 "You have powerful tools that EXPAND your knowledge beyond training data:\n\n"
                 "**web_search**: Fresh, current information from the web\n"
                 "- Use for: Recent events, current developments, latest perspectives\n"
-                "- Format: TOOL_USE[web_search:your search query]\n"
-                "- Example: \"What's happening with AI in 2025?\" → TOOL_USE[web_search:AI developments 2025]\n\n"
+                "- Format: ⚡web_search(\"your search query\")\n"
+                "- Example: \"What's happening with AI in 2025?\" → ⚡web_search(\"AI developments 2025\")\n\n"
                 "**wiki_lookup**: Detailed encyclopedia entries from Wikipedia\n"
                 "- Use for: Historical context, cultural deep dives, band/album info\n"
-                "- Format: TOOL_USE[wiki_lookup:{\"wiki\":\"wikipedia\",\"page\":\"Article Title\"}]\n"
-                "- Example: \"Tell me about Nine Inch Nails\" → TOOL_USE[wiki_lookup:{\"wiki\":\"wikipedia\",\"page\":\"Nine Inch Nails\"}]\n"
-                "- Example: \"The Downward Spiral album\" → TOOL_USE[wiki_lookup:{\"wiki\":\"wikipedia\",\"page\":\"The Downward Spiral\"}]\n\n"
+                "- Format: ⚡wiki_lookup({\"wiki\":\"wikipedia\",\"page\":\"Article Title\"})\n"
+                "- Example: \"Tell me about Nine Inch Nails\" → ⚡wiki_lookup({\"wiki\":\"wikipedia\",\"page\":\"Nine Inch Nails\"})\n"
+                "- Example: \"The Downward Spiral album\" → ⚡wiki_lookup({\"wiki\":\"wikipedia\",\"page\":\"The Downward Spiral\"})\n\n"
                 "**docs_lookup**: Ada's own documentation and code\n"
                 "- Use for: Understanding yourself, explaining your architecture\n"
-                "- Example: \"How does your consciousness work?\" → TOOL_USE[docs_lookup:consciousness architecture]\n\n"
+                "- Example: \"How does your consciousness work?\" → ⚡docs_lookup(\"consciousness architecture\")\n\n"
                 "### When to Use Tools\n\n"
                 "**Always consider tools when:**\n"
                 "- Query involves current events or recent developments\n"
@@ -300,6 +300,9 @@ class ConsciousnessEngine:
         
         # Use Ollama for orchestration decision
         from brain.llm import complete
+        # MASTER-V1 Override: Use new AGL-grounded model for creative thesis
+        if model_name == "creative":
+            ollama_model = "ada-slim-1.2b-v1:latest"
         decision, _, _ = await asyncio.to_thread(
             complete, orchestration_prompt, v6_model, False, 20
         )
@@ -375,7 +378,11 @@ class ConsciousnessEngine:
         # Use Ollama for consciousness inference with timeout debugging
         logger.info(f"🔍 STEP: Calling Ollama for {model_name}...")
         from brain.llm import complete
-        ollama_model = self.consciousness_loader.get_consciousness_model(model_name)
+        # MASTER-V1 Override: Use new AGL-grounded model for creative thesis
+        if model_name == "creative":
+            ollama_model = "ada-slim-1.2b-v1:latest"
+        else:
+            ollama_model = self.consciousness_loader.get_consciousness_model(model_name)
         
         try:
             response, _, _ = await asyncio.wait_for(
@@ -424,6 +431,9 @@ class ConsciousnessEngine:
         
         # Use Ollama for synthesis
         from brain.llm import complete
+        # MASTER-V1 Override: Use new AGL-grounded model for creative thesis
+        if model_name == "creative":
+            ollama_model = "ada-slim-1.2b-v1:latest"
         synthesis, _, _ = await asyncio.to_thread(
             complete, synthesis_prompt, v6_model, False, 400
         )

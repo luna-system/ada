@@ -1,27 +1,27 @@
 """
-Wiki Specialist - Look up information from MediaWiki-based wikis.
+Wiki Tool - Look up information from MediaWiki-based wikis.
 
 Provides access to wiki content from Wikipedia, Fandom wikis, and other
 MediaWiki-powered sites. Perfect for answering questions about specific
 topics, fandoms, games, shows, and more.
 """
-# @ai-indexable: specialist-plugin
+# @ai-indexable: tool-plugin
 # @ai-purpose: Fetch and parse MediaWiki wiki pages when LLM requests information via <wiki_lookup> XML tag
 # @ai-activation-trigger: Bidirectional - LLM outputs <wiki_lookup wiki="..." page="..."/> during generation
 # @ai-priority: MEDIUM
 # @ai-dependencies: httpx
-# @ai-related: brain/specialists/bidirectional.py, brain/prompt_builder.py
-# @ai-tool-use-pattern: LLM emits XML tag mid-response → specialist executes → wiki content injected → LLM continues
+# @ai-related: brain/tools/bidirectional.py, brain/prompt_builder.py
+# @ai-tool-use-pattern: LLM emits XML tag mid-response → tool executes → wiki content injected → LLM continues
 
 import logging
 import httpx
 import re
 from typing import Dict, Any, Optional, List
-from brain.specialists.protocol import (
-    BaseSpecialist,
-    SpecialistCapability,
-    SpecialistResult,
-    SpecialistPriority
+from brain.tools.protocol import (
+    BaseTool,
+    ToolCapability,
+    ToolResult,
+    ToolPriority
 )
 
 logger = logging.getLogger(__name__)
@@ -51,17 +51,17 @@ WIKI_CONFIGS = {
 }
 
 
-class WikiSpecialist(BaseSpecialist):
+class WikiTool(BaseTool):
     """
-    Wiki specialist for MediaWiki-based sites.
+    Wiki tool for MediaWiki-based sites.
     
     Fetches and parses wiki pages from Wikipedia, Fandom, and other
     MediaWiki sites. Handles page lookups, redirects, and text extraction.
     """
     
     def __init__(self):
-        """Initialize wiki specialist with predefined wiki configurations."""
-        self._capability = SpecialistCapability(
+        """Initialize wiki tool with predefined wiki configurations."""
+        self._capability = ToolCapability(
             name="wiki_lookup",
             description="Look up information from MediaWiki-based wikis (Wikipedia, Fandom, etc.)",
             version="1.0.0",
@@ -94,47 +94,55 @@ class WikiSpecialist(BaseSpecialist):
                     "wiki": {"type": "string"}
                 }
             },
-            context_priority=SpecialistPriority.MEDIUM
+            context_priority=ToolPriority.MEDIUM
         )
     
     @property
-    def capability(self) -> SpecialistCapability:
-        """Return specialist capability metadata."""
+    def capability(self) -> ToolCapability:
+        """Return tool capability metadata."""
         return self._capability
     
     def should_activate(self, request_context: Dict[str, Any]) -> bool:
         """
-        This is a bidirectional specialist - activation handled by prompt_builder.
+        This is a bidirectional tool - activation handled by prompt_builder.
         
         The LLM can request wiki lookups by outputting:
         <wiki_lookup wiki="wikipedia" page="Article Title"/>
         
         Args:
-            request_context: Request context (unused for bidirectional specialists)
+            request_context: Request context (unused for bidirectional tools)
             
         Returns:
-            False (bidirectional specialists don't auto-activate)
+            False (bidirectional tools don't auto-activate)
         """
         return False
     
-    def process(self, request_context: Dict[str, Any]) -> SpecialistResult:
+    async def process(self, request_context: Dict[str, Any]) -> ToolResult:
         """
         Process wiki lookup request from LLM.
         
         Args:
-            request_context: Must contain 'wiki' and 'page' keys
+            request_context: Must contain 'wiki' and 'page' (or 'query') keys
             
         Returns:
-            SpecialistResult with wiki page content or error
+            ToolResult with wiki page content or error
         """
-        wiki_name = request_context.get("wiki", "wikipedia")
-        page_title = request_context.get("page", "")
+        wiki_key = request_context.get("wiki", "wikipedia")
+        page_title = request_context.get("page", request_context.get("query", ""))
         do_search = request_context.get("search", True)
+
+        # If wiki_key looks like a page title and wiki_key is not in WIKI_CONFIGS,
+        # it might be the model using wiki="Page Title".
+        if wiki_key not in WIKI_CONFIGS and not page_title:
+            page_title = wiki_key
+            wiki_key = "wikipedia"
+        
+        wiki_name = wiki_key
         
         if not page_title:
-            return SpecialistResult(
+            return ToolResult(
                 success=False,
-                specialist_name=self.capability.name,
+                tool_name=self.capability.name,
                 context_text="❌ No page title provided",
                 error="No page title provided",
                 error_code="missing_page_title"
@@ -143,9 +151,9 @@ class WikiSpecialist(BaseSpecialist):
         try:
             # Get wiki config
             if wiki_name not in WIKI_CONFIGS:
-                return SpecialistResult(
+                return ToolResult(
                     success=False,
-                    specialist_name=self.capability.name,
+                    tool_name=self.capability.name,
                     context_text=f"❌ Unknown wiki: {wiki_name}. Available: {', '.join(WIKI_CONFIGS.keys())}",
                     error=f"Unknown wiki: {wiki_name}",
                     error_code="unknown_wiki",
@@ -161,9 +169,9 @@ class WikiSpecialist(BaseSpecialist):
                 # Successfully found page
                 formatted_content = self._format_wiki_result(page_data, wiki_config)
                 
-                return SpecialistResult(
+                return ToolResult(
                     success=True,
-                    specialist_name=self.capability.name,
+                    tool_name=self.capability.name,
                     context_text=formatted_content,
                     data=page_data,
                     metadata={
@@ -180,9 +188,9 @@ class WikiSpecialist(BaseSpecialist):
                 
                 if search_results:
                     suggestions = ", ".join([f'"{r}"' for r in search_results[:5]])
-                    return SpecialistResult(
+                    return ToolResult(
                         success=False,
-                        specialist_name=self.capability.name,
+                        tool_name=self.capability.name,
                         context_text=f"❓ Page '{page_title}' not found on {wiki_config['name']}. Did you mean: {suggestions}?",
                         error="Page not found",
                         error_code="not_found_with_suggestions",
@@ -194,9 +202,9 @@ class WikiSpecialist(BaseSpecialist):
                     )
             
             # Nothing found
-            return SpecialistResult(
+            return ToolResult(
                 success=False,
-                specialist_name=self.capability.name,
+                tool_name=self.capability.name,
                 context_text=f"❌ Page '{page_title}' not found on {wiki_config['name']}.",
                 error="Page not found",
                 error_code="not_found",
@@ -205,9 +213,9 @@ class WikiSpecialist(BaseSpecialist):
             
         except Exception as e:
             logger.error(f"Wiki lookup error: {e}", exc_info=True)
-            return SpecialistResult(
+            return ToolResult(
                 success=False,
-                specialist_name=self.capability.name,
+                tool_name=self.capability.name,
                 context_text=f"❌ Failed to look up '{page_title}' on {wiki_name}: {str(e)}",
                 error=str(e),
                 error_code="lookup_failed",
@@ -336,4 +344,4 @@ Source: {page_data['url']}"""
 
 
 # Export for auto-discovery
-__all__ = ["WikiSpecialist"]
+__all__ = ["WikiTool"]

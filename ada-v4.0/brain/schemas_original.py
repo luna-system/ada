@@ -9,7 +9,7 @@ All documents stored in Chroma follow these schemas. Each document has:
 
 Document Types:
 - persona: Identity and behavior guidelines
-- faq: Knowledge base entries and specialist documentation
+- faq: Knowledge base entries and tool documentation
 - memory: Long-term facts and context
 - turn: Conversation history (user/assistant pairs)
 - summary: Conversation summaries
@@ -34,7 +34,7 @@ class LatencyBreakdown(BaseModel):
     """Detailed timing breakdown for a chat request (milliseconds)."""
     
     python_overhead_ms: float = Field(
-        description="Time spent in Python code (context retrieval, prompt building, specialist activation)"
+        description="Time spent in Python code (context retrieval, prompt building, tool activation)"
     )
     llm_inference_ms: float = Field(
         description="Time spent waiting for LLM to generate response (the neural net)"
@@ -46,9 +46,9 @@ class LatencyBreakdown(BaseModel):
         description="Percentage of total time spent in LLM inference (0-100)"
     )
     
-    specialists_activated: int = Field(
+    tools_activated: int = Field(
         default=0,
-        description="Number of specialists invoked during this request"
+        description="Number of tools invoked during this request"
     )
     
     context_retrieved: bool = Field(
@@ -154,10 +154,10 @@ class FAQMetadata(BaseMetadata):
     """
     Metadata for FAQ documents (knowledge base entries).
     
-    FAQ documents contain question-answer pairs, specialist documentation,
+    FAQ documents contain question-answer pairs, tool documentation,
     and general knowledge. Retrieved via semantic similarity for relevant context.
     
-    Example Query: "How do I invoke a specialist?" retrieves FAQ entries
+    Example Query: "How do I invoke a tool?" retrieves FAQ entries
     """
     
     type: Literal[DocumentType.FAQ] = DocumentType.FAQ
@@ -165,15 +165,15 @@ class FAQMetadata(BaseMetadata):
     topic: Optional[str] = Field(
         default=None,
         description="Topic or category for organization",
-        examples=["specialists", "api", "configuration", "troubleshooting"]
+        examples=["tools", "api", "configuration", "troubleshooting"]
     )
     
-    # Specialist-specific fields (when FAQ is specialist documentation)
-    specialist_name: Optional[str] = Field(
+    # Tool-specific fields (when FAQ is tool documentation)
+    tool_name: Optional[str] = Field(
         default=None,
-        description="Name of specialist this doc describes",
+        description="Name of tool this doc describes",
         examples=["web_search", "ocr", "vision", "media"],
-        json_schema_extra={"alias": "_specialist_name"}
+        json_schema_extra={"alias": "_tool_name"}
     )
     
     version: Optional[str] = Field(
@@ -191,8 +191,8 @@ class FAQMetadata(BaseMetadata):
                     "timestamp": "2025-12-16T06:00:00+00:00",
                     "source": "system",
                     "scope": "global",
-                    "topic": "specialists",
-                    "specialist_name": "web_search",
+                    "topic": "tools",
+                    "tool_name": "web_search",
                     "version": "auto"
                 },
                 {
@@ -389,7 +389,7 @@ class ChromaDocument(BaseModel):
     
     document: str = Field(
         description="The actual text content of the document",
-        examples=["Q: How do I use the web search specialist?\nA: Use TOOL_USE[web_search:{\"query\":\"your search\"}]"]
+        examples=["Q: How do I use the web search tool?\nA: Use TOOL_USE[web_search:{\"query\":\"your search\"}]"]
     )
     
     metadata: BaseMetadata = Field(

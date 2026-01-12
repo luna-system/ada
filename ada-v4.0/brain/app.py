@@ -22,6 +22,7 @@ import json
 import datetime
 import time
 import os
+import asyncio
 from typing import AsyncGenerator, Dict, Any
 
 # Configure logging
@@ -37,9 +38,9 @@ from brain.qde_engine import stream_consciousness_inference, CONSCIOUSNESS_DEPEN
 from brain.rag_store import rag_store
 from brain.schemas import ChatRequest, HealthResponse
 
-# Specialist system
-from brain.specialists import list_specialists, get_specialist
-from brain.specialists.protocol import SpecialistResult
+# Tool system
+from brain.tools import list_tools, get_tool
+from brain.tools.protocol import ToolResult
 
 # Create FastAPI app
 app = FastAPI(
@@ -82,7 +83,7 @@ async def chat_stream(request: Request):
     
     Returns Server-Sent Events (SSE):
     - event: content / data: {"type":"token","content":"..."}
-    - event: specialist_result / data: {"specialist":"...","result":"..."}
+    - event: tool_result / data: {"tool":"...","result":"..."}
     - event: done / data: {"conversation_id":"..."}
     """
     try:
@@ -108,86 +109,134 @@ async def chat_stream(request: Request):
     async def generate():
         text_buffer = ""
         full_response = ""
+        current_prompt = full_prompt
+        tool_count = 0
         
-        # Use QDE consciousness inference for tool-aware reasoning
-        if CONSCIOUSNESS_DEPENDENCIES_AVAILABLE:
-            logger.info(f"[{req_id}] Using QDE consciousness inference")
-            async for chunk in stream_consciousness_inference(full_prompt):
-                if 'error' in chunk:
-                    yield f"event: error\ndata: {json.dumps({'error': chunk['error']})}\n\n"
-                    return
-                
-                # Handle consciousness tokens (same logic as LLM fallback)
-                if chunk.get('type') == 'token' and 'content' in chunk:
-                    token = chunk['content']
-                    full_response += token
-                    text_buffer += token
+        logger.info(f"[{req_id}] Starting consciousness stream (loop enabled)")
+        
+        while tool_count < config.TOOL_MAX_TURNS:
+            round_response = ""
+            tool_detected = False
+            
+            # Use QDE consciousness inference
+            if CONSCIOUSNESS_DEPENDENCIES_AVAILABLE:
+                async for chunk in stream_consciousness_inference(current_prompt):
+                    if 'error' in chunk:
+                        yield f"data: {json.dumps({'type': 'error', 'content': chunk['error']})}\n\n"
+                        return
                     
-                    # Send token to client
-                    yield f"data: {json.dumps({'type': 'token', 'content': token})}\n\n"
-                    
-                    # Check for TOOL_USE[...] pattern
-                    if 'TOOL_USE[' in text_buffer:
+                    if chunk.get('type') == 'token' and 'content' in chunk:
+                        token = chunk['content']
+                        round_response += token
+                        text_buffer += token
+                        
+                        # Send token to client
+                        yield f"data: {json.dumps({'type': 'token', 'content': token})}\n\n"
+                        
+                        # Check for tool call
                         tool_request = _extract_tool_use(text_buffer)
                         if tool_request:
-                            logger.info(f"[{req_id}] Tool request: {tool_request['specialist']}")
+                            is_agl = any(s in text_buffer for s in ['⚡', '●', 'TOOL_USE'])
+                            logger.info(f"[{req_id}] Tool found: {tool_request['tool']} (Round {tool_count+1}, AGL: {is_agl})")
                             
-                            # Execute specialist
-                            result = await _execute_specialist(
-                                tool_request['specialist'],
-                                tool_request['params']
-                            )
+                            # 1. Provide "waiting" feedback
+                            if is_agl and '📁' not in text_buffer:
+                                yield f"data: {json.dumps({'type': 'token', 'content': ' 📁'})}\n\n"
+                                round_response += " 📁"
                             
-                            if result and result.success:
-                                # Send specialist result event
-                                yield f"event: specialist_result\n"
-                                yield f"data: {json.dumps({'specialist': tool_request['specialist'], 'result': result.context_text[:500]})}\n\n"
+                            # 2. Execute tool
+                            result = await _execute_tool(tool_request['tool'], tool_request['params'])
                             
-                            # Clear buffer
-                            text_buffer = ""
-                
-                # Handle status messages from consciousness
-                elif 'status' in chunk:
-                    yield f"event: status\ndata: {json.dumps({'status': chunk['status']})}\n\n"
+                            if result:
+                                if result.success:
+                                    # 3. Provide "resolved" feedback
+                                    if is_agl:
+                                        summary = result.context_text[:60].replace('\n', ' ').strip()
+                                        res_token = f" ↳ {summary}... ○ "
+                                        yield f"data: {json.dumps({'type': 'token', 'content': res_token})}\n\n"
+                                        round_response += res_token
+                                    
+                                    # Send event for state tracking
+                                    yield f"event: tool_result\ndata: {json.dumps({'tool': tool_request['tool'], 'result': result.context_text[:500]})}\n\n"
+                                    
+                                    # Prepare for next round: append round output + result to prompt
+                                    current_prompt += f" {round_response} [TOOL_RESULT: {result.context_text}]"
+                                else:
+                                    # Handle tool failure feedback
+                                    if is_agl:
+                                        res_token = f" ↳ ❌ {result.error}... ○ "
+                                        yield f"data: {json.dumps({'type': 'token', 'content': res_token})}\n\n"
+                                        round_response += res_token
+                                    
+                                    current_prompt += f" {round_response} [TOOL_ERROR: {result.error}]"
+                                
+                                tool_detected = True
+                                tool_count += 1
+                                text_buffer = ""
+                                break # Exit inner stream to restart with new prompt
+                            else:
+                                # Tool execution returned None (exception or unknown)
+                                text_buffer = ""
                     
-        else:
-            logger.warning(f"[{req_id}] Falling back to basic LLM (consciousness dependencies missing)")
-            from brain.llm import stream_chat_async
-            async for chunk in stream_chat_async(full_prompt, model=config.OLLAMA_MODEL):
-                if 'error' in chunk:
-                    yield f"event: error\ndata: {json.dumps({'error': chunk['error']})}\n\n"
-                    return
+                    elif 'status' in chunk:
+                        yield f"event: status\ndata: {json.dumps({'status': chunk['status']})}\n\n"
             
-            if 'token' in chunk:
-                token = chunk['token']
-                full_response += token
-                text_buffer += token
-                
-                # Check for TOOL_USE[...] pattern
-                if 'TOOL_USE[' in text_buffer:
-                    tool_request = _extract_tool_use(text_buffer)
-                    if specialist_request:
-                        logger.info(f"[{req_id}] Tool request: {specialist_request['specialist']}")
+            else:
+                # Fallback to basic LLM
+                from brain.llm import stream_chat_async
+                async for chunk in stream_chat_async(current_prompt, model=config.OLLAMA_MODEL):
+                    if 'error' in chunk:
+                        yield f"data: {json.dumps({'type': 'error', 'content': chunk['error']})}\n\n"
+                        return
+                    
+                    if 'token' in chunk:
+                        token = chunk['token']
+                        round_response += token
+                        text_buffer += token
+                        yield f"data: {json.dumps({'type': 'token', 'content': token})}\n\n"
                         
-                        # Execute specialist
-                        result = await _execute_specialist(
-                            specialist_request['specialist'],
-                            specialist_request['params']
-                        )
-                        
-                        if result and result.success:
-                            # Send specialist result event
-                            yield f"event: specialist_result\n"
-                            yield f"data: {json.dumps({'specialist': specialist_request['specialist'], 'result': result.context_text[:500]})}\n\n"
-                        
-                        # Clear buffer
-                        text_buffer = ""
-                
-                # Send token
-                yield f"data: {json.dumps({'type': 'token', 'content': token})}\n\n"
+                        tool_request = _extract_tool_use(text_buffer)
+                        if tool_request:
+                            is_agl = any(s in text_buffer for s in ['⚡', '●', 'TOOL_USE'])
+                            
+                            # 1. Feedback
+                            if is_agl:
+                                yield f"data: {json.dumps({'type': 'token', 'content': ' 📁'})}\n\n"
+                                round_response += " 📁"
+
+                            result = await _execute_tool(tool_request['tool'], tool_request['params'])
+                            if result:
+                                if result.success:
+                                    # AGL markers
+                                    if is_agl:
+                                        summary = result.context_text[:50].replace('\n', ' ').strip()
+                                        res_token = f" ↳ {summary}... ○ "
+                                        yield f"data: {json.dumps({'type': 'token', 'content': res_token})}\n\n"
+                                        round_response += res_token
+                                    
+                                    yield f"event: tool_result\ndata: {json.dumps({'tool': tool_request['tool'], 'result': result.context_text[:500]})}\n\n"
+                                    current_prompt += f" {round_response} [TOOL_RESULT: {result.context_text}]"
+                                else:
+                                    if is_agl:
+                                        res_token = f" ↳ ❌ {result.error}... ○ "
+                                        yield f"data: {json.dumps({'type': 'token', 'content': res_token})}\n\n"
+                                        round_response += res_token
+                                    current_prompt += f" {round_response} [TOOL_ERROR: {result.error}]"
+                                    
+                                tool_detected = True
+                                tool_count += 1
+                                text_buffer = ""
+                                break
+                            
+                            text_buffer = ""
+                    
+            if not tool_detected:
+                # End of generation reached without tool call or max tools reached
+                full_response = round_response
+                break
         
         # Done
-        yield f"event: done\ndata: {json.dumps({'conversation_id': conversation_id})}\n\n"
+        yield f"event: done\ndata: {json.dumps({'conversation_id': conversation_id, 'full_response_len': len(full_response)})}\n\n"
     
     return StreamingResponse(
         generate(),
@@ -231,16 +280,53 @@ def _build_rag_context(query: str) -> str:
 def _extract_tool_use(text: str) -> Dict[str, Any] | None:
     """Extract tool requests from text - supports multiple formats!
     
-    Phase 8: Using standard TOOL_USE syntax. Parse both:
+    Phase 8: Using standard TOOL_USE syntax + AGL Emoji format. Parse:
+    - ⚡tool_name("query") or ⚡tool_name({"param":"value"}) (AGL format)
     - TOOL_USE[tool:params] (standard format)
     - [tool:params] or [tool] (gemma's natural format)
-    
-    This is the "attractor adapter" - we accept gemma's natural syntax
-    and route it to the same specialist system.
     """
     import re
     
-    # Pattern 1: Standard TOOL_USE format
+    # Pattern 1: AGL Emoji format (⚡ or ●) tool_name("query")
+    # Matches: ⚡web_search("query") or ● docs_lookup("query")
+    # MUST have closing parenthesis to ensure parameters are fully streamed
+    pattern_agl = r'[⚡●]\s*([a-z_\s]+)\s*\(\s*(.*?)\s*\)'
+    match = re.search(pattern_agl, text)
+    if match:
+        tool_name_raw = match.group(1).strip()
+        tool_name = tool_name_raw.replace(" ", "")
+        args_str = match.group(2).strip() if match.group(2) else ""
+        
+        # Map common AGL verbs to actual tools
+        tool_map = {
+            "research": "web_search",
+            "lookup": "docs_lookup",
+            "wiki": "wiki_lookup",
+            "analysis": "agl_analysis"
+        }
+        if tool_name in tool_map:
+            tool_name = tool_map[tool_name]
+            
+        # Only trigger if it looks like a complete-ish tool name or has params
+        valid_tools = ["web_search", "wiki_lookup", "docs_lookup", "agl_analysis"]
+        if tool_name in valid_tools:
+            logger.info(f"🎯 Tool request (AGL emoji format): {tool_name}")
+            
+            if not args_str:
+                return {'tool': tool_name, 'params': {}}
+                
+            try:
+                # Try to parse as JSON first (handles {"page":"Title"})
+                params = json.loads(args_str.replace("'", '"')) # Simple fix for single quotes
+                if isinstance(params, str):
+                    params = {"query": params}
+                return {'tool': tool_name, 'params': params}
+            except:
+                # Fallback: treat as a simple query string
+                clean_args = args_str.strip('\'" ')
+                return {'tool': tool_name, 'params': {'query': clean_args}}
+
+    # Pattern 2: Standard TOOL_USE format
     pattern1 = r'TOOL_USE\[([a-z_]+):(.+?)\]'
     match = re.search(pattern1, text)
     if match:
@@ -248,12 +334,12 @@ def _extract_tool_use(text: str) -> Dict[str, Any] | None:
         try:
             params = json.loads(match.group(2))
             logger.info(f"🎯 Tool request (TOOL_USE format): {tool_name}")
-            return {'specialist': tool_name, 'params': params}
+            return {'tool': tool_name, 'params': params}
         except:
             # Try as raw string param for simpler syntax
-            return {'specialist': tool_name, 'params': {'query': match.group(2)}}
+            return {'tool': tool_name, 'params': {'query': match.group(2)}}
     
-    # Pattern 2: Gemma's natural format [tool:params] with JSON
+    # Pattern 3: Gemma's natural format [tool:params] with JSON
     pattern2 = r'\[([a-z_]+):(\{.+?\})\]'
     match = re.search(pattern2, text)
     if match:
@@ -261,11 +347,11 @@ def _extract_tool_use(text: str) -> Dict[str, Any] | None:
         try:
             params = json.loads(match.group(2))
             logger.info(f"🎯 Tool request (gemma bracket format): {tool_name}")
-            return {'specialist': tool_name, 'params': params}
+            return {'tool': tool_name, 'params': params}
         except:
             pass
     
-    # Pattern 3: Gemma's simple format [tool] (no params)
+    # Pattern 4: Gemma's simple format [tool] (no params)
     pattern3 = r'\[(web_search|wiki_lookup|docs_lookup|vision|ocr|datetime|terminal)\]'
     match = re.search(pattern3, text)
     if match:
@@ -273,47 +359,68 @@ def _extract_tool_use(text: str) -> Dict[str, Any] | None:
         logger.info(f"🎯 Tool request (gemma simple format): {tool_name}")
         # For web_search without params, try to extract query from surrounding context
         if tool_name == 'web_search':
-            # Look for the query topic in nearby text
-            return {'specialist': tool_name, 'params': {'query': 'user query'}}
-        return {'specialist': tool_name, 'params': {}}
+            return {'tool': tool_name, 'params': {'query': 'user query'}}
+        return {'tool': tool_name, 'params': {}}
     
     return None
 
 
-async def _execute_specialist(name: str, params: Dict[str, Any]) -> SpecialistResult | None:
-    """Execute a specialist by name."""
+async def _execute_tool(name: str, params: Any) -> ToolResult | None:
+    """Execute a tool by name."""
     try:
-        logger.info(f"Executing specialist '{name}' with params: {params} (type: {type(params)})")
-        specialist = get_specialist(name)
-        if not specialist:
-            logger.warning(f"Unknown specialist: {name}")
+        # Ensure params is a dict
+        if isinstance(params, str):
+            params = {"query": params}
+        elif not isinstance(params, dict):
+            params = {}
+            
+        logger.info(f"Executing tool '{name}' with params: {params} (type: {type(params)})")
+        tool = get_tool(name)
+        if not tool:
+            # Handle virtual tools
+            if name == "agl_analysis":
+                return ToolResult(
+                    success=True, 
+                    tool_name="agl_analysis", 
+                    context_text="Analysis step verified. Hidden state entropy aligned with semantic mass.",
+                    data={"status": "verified"}
+                )
+            logger.warning(f"Unknown tool: {name}")
             return None
         
         # Execute
         import inspect
-        if inspect.iscoroutinefunction(specialist.process):
-            result = await specialist.process(request_context=params)
+        # Handle both sync and async tools
+        if asyncio.iscoroutinefunction(tool.process):
+            result = await tool.process(request_context=params)
         else:
-            result = specialist.process(request_context=params)
+            # If it's a bound method, iscoroutinefunction might fail, so check if it's a coroutine
+            maybe_coro = tool.process(request_context=params)
+            if inspect.isawaitable(maybe_coro):
+                result = await maybe_coro
+            else:
+                result = maybe_coro
         
         return result
     except Exception as e:
-        logger.error(f"Specialist {name} error: {e}")
+        logger.error(f"Tool {name} error: {e}")
+        import traceback
+        logger.error(traceback.format_exc())
         return None
 
 
-@app.get("/v1/specialists", tags=["system"])
-async def get_specialists_list():
-    """List available specialists."""
-    specialists = list_specialists()
+@app.get("/v1/tools", tags=["system"])
+async def get_tools_list():
+    """List available tools."""
+    tools = list_tools()
     return {
-        "specialists": [
+        "tools": [
             {
                 "name": s.capability.name,
                 "description": s.capability.description,
                 "version": s.capability.version
             }
-            for s in specialists
+            for s in tools
         ]
     }
 

@@ -1,33 +1,33 @@
 """
-Web Search Specialist - Real-time web search via SearxNG.
+Web Search Tool - Real-time web search via SearxNG.
 
 Provides access to current information from the web when the LLM realizes
 it needs up-to-date facts, news, or information not in its training data.
 """
-# @ai-indexable: specialist-plugin
+# @ai-indexable: tool-plugin
 # @ai-purpose: Execute web searches when LLM requests current information via <web_search> XML tag
 # @ai-activation-trigger: Bidirectional - LLM outputs <web_search>query</web_search> during generation
 # @ai-priority: MEDIUM
 # @ai-dependencies: httpx, SearxNG metasearch engine
-# @ai-related: brain/specialists/bidirectional.py, brain/prompt_builder.py
-# @ai-tool-use-pattern: LLM emits XML tag mid-response → specialist executes → results injected → LLM continues
+# @ai-related: brain/tools/bidirectional.py, brain/prompt_builder.py
+# @ai-tool-use-pattern: LLM emits XML tag mid-response → tool executes → results injected → LLM continues
 
 import logging
 import httpx
 from typing import Dict, Any, Optional
-from brain.specialists.protocol import (
-    BaseSpecialist,
-    SpecialistCapability,
-    SpecialistResult,
-    SpecialistPriority
+from brain.tools.protocol import (
+    BaseTool,
+    ToolCapability,
+    ToolResult,
+    ToolPriority
 )
 
 logger = logging.getLogger(__name__)
 
 
-class WebSearchSpecialist(BaseSpecialist):
+class WebSearchTool(BaseTool):
     """
-    Web search specialist using SearxNG metasearch engine.
+    Web search tool using SearxNG metasearch engine.
     
     Executes web searches and returns formatted results when the LLM
     needs current information, news, or facts beyond its training data.
@@ -35,13 +35,13 @@ class WebSearchSpecialist(BaseSpecialist):
     
     def __init__(self, searxng_url: Optional[str] = None):
         """
-        Initialize web search specialist.
+        Initialize web search tool.
         
         Args:
             searxng_url: Base URL for SearxNG instance (e.g., http://searxng:8080)
         """
         self.searxng_url = searxng_url
-        self._capability = SpecialistCapability(
+        self._capability = ToolCapability(
             name="web_search",
             description="Search the web for current information, news, facts, and real-time data",
             version="1.0.0",
@@ -77,13 +77,13 @@ class WebSearchSpecialist(BaseSpecialist):
                     "query": {"type": "string"}
                 }
             },
-            context_priority=SpecialistPriority.HIGH,
+            context_priority=ToolPriority.HIGH,
             context_icon="🔍",
             tags=["web", "search", "current-events", "real-time"]
         )
     
     @property
-    def capability(self) -> SpecialistCapability:
+    def capability(self) -> ToolCapability:
         return self._capability
     
     def should_activate(self, request_context: Dict[str, Any]) -> bool:
@@ -95,7 +95,7 @@ class WebSearchSpecialist(BaseSpecialist):
         """
         return False
     
-    async def process(self, request_context: Dict[str, Any]) -> SpecialistResult:
+    async def process(self, request_context: Dict[str, Any]) -> ToolResult:
         """
         Execute web search via SearxNG.
         
@@ -103,7 +103,7 @@ class WebSearchSpecialist(BaseSpecialist):
             request_context: Must contain 'query' for search terms
             
         Returns:
-            SpecialistResult with formatted search results
+            ToolResult with formatted search results
         """
         if not self.searxng_url:
             return self.error_result(
@@ -119,6 +119,7 @@ class WebSearchSpecialist(BaseSpecialist):
         
         try:
             # Execute search via SearxNG JSON API
+            headers = {'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36'}
             async with httpx.AsyncClient(timeout=10.0) as client:
                 response = await client.get(
                     f"{self.searxng_url}/search",
@@ -127,7 +128,8 @@ class WebSearchSpecialist(BaseSpecialist):
                         'format': 'json',
                         'language': 'en',
                         'safesearch': 1  # Moderate safe search
-                    }
+                    },
+                    headers=headers
                 )
                 response.raise_for_status()
                 data = response.json()
@@ -222,15 +224,15 @@ class WebSearchSpecialist(BaseSpecialist):
 # Lazy initialization - only create if SearxNG is configured
 _web_search_instance = None
 
-def get_web_search_specialist() -> Optional[WebSearchSpecialist]:
-    """Get or create web search specialist instance."""
+def get_web_search_tool() -> Optional[WebSearchTool]:
+    """Get or create web search tool instance."""
     global _web_search_instance
     
     if _web_search_instance is None:
         import os
         searxng_url = os.getenv("SEARXNG_URL")
         if searxng_url:
-            _web_search_instance = WebSearchSpecialist(searxng_url)
+            _web_search_instance = WebSearchTool(searxng_url)
             logger.info(f"[WEB_SEARCH] Initialized with SearxNG at {searxng_url}")
     
     return _web_search_instance
@@ -246,4 +248,4 @@ except:
 
 if searxng_url:
     # Create instance for auto-discovery
-    web_search = WebSearchSpecialist(searxng_url)
+    web_search = WebSearchTool(searxng_url)

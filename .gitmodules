@@ -9,3 +9,6 @@
 [submodule "ada-slm"]
 	path = ada-slm
 	url = https://github.com/luna-system/ada-slm.git
+[submodule "ada-sif"]
+	path = ada-sif
+	url = https://github.com/luna-system/ada-sif.git

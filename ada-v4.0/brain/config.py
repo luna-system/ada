@@ -12,7 +12,7 @@ load_dotenv()
 # ============= LLM (Ollama) Configuration =============
 OLLAMA_API_URL = os.getenv("OLLAMA_API_URL", "http://localhost:11434/api/generate")
 # Default model: qwen2.5-coder:7b - Fast, excellent for code + chat, 5-10x faster than deepseek-r1
-OLLAMA_MODEL = os.getenv("OLLAMA_MODEL", "qwen2.5-coder:7b")
+OLLAMA_MODEL = os.getenv("OLLAMA_MODEL", "ada-slim-1.2b-v1:latest")
 OLLAMA_BASE_URL = os.getenv("OLLAMA_BASE_URL", "http://localhost:11434")
 OLLAMA_KEEP_ALIVE = os.getenv("OLLAMA_KEEP_ALIVE", "4h")
 
@@ -77,70 +77,36 @@ IDENTITY_BLOCK = (
     "- CRITICAL: If system notices appear above, mention them to the user immediately at the start of your response before addressing the user's query.\n"
 )
 
-# ============= Specialist System Instructions =============
-SPECIALIST_INSTRUCTIONS = """
-Available Specialist Capabilities:
+# ============= Tool System Instructions =============
+TOOL_INSTRUCTIONS = """
+Available Tool Capabilities:
 
-You can request specialist analysis mid-response when you need capabilities beyond text generation.
+You can request tool analysis mid-response when you need capabilities beyond text generation.
 
-Syntax: TOOL_USE[specialist_name:{"param":"value"}]
+Syntax: ⚡tool_name("query") or ⚡tool_name({"param":"value"})
 
-Available specialists:
-- codebase: Look up functions and classes in your own codebase for self-reference and introspection
-  When to use: Questions about your own implementation, architecture, how you work internally
-  Example: TOOL_USE[codebase:{"query":"calculate_importance"}]
-  Example: TOOL_USE[codebase:{"query":"SpecialistResult"}]
-  Returns: Function/class definitions with docstrings, file paths, and line numbers
+Available tools:
+- docs_lookup: Search your local research papers, training logs, and project metadata
+  When to use: Questions about our research, training status, project phases, or internal documentation
+  Example: ⚡docs_lookup("SLIM-EVO Phase 3 findings")
+  Returns: Excerpts from markdown files in your workspace
 
-- web_search: Get current information, news, facts, real-time data from the web
-  When to use: Questions about current events, recent news, today's weather, stock prices, 
-               sports scores, anything after your training cutoff, or facts you're unsure about
-  Example: TOOL_USE[web_search:{"query":"Python 3.13 release date"}]
+- web_search: Get current information, news, facts, and live data from the internet
+  When to use: Questions about recent releases (like LFM 2.5), current news, or external benchmarks
+  Example: ⚡web_search("liquid ai lfm 2.5 architecture improvements")
+  Returns: Snippets from top web results
 
-- wiki_lookup: Look up information from Wikipedia, Fandom wikis, and other MediaWiki sites
-  Available wikis: wikipedia, bfdi, objectshowfanonpedia, objectshows
-  When to use: Questions about specific topics, characters, shows, games, or detailed encyclopedic info
-  Example: TOOL_USE[wiki_lookup:{"wiki":"wikipedia","page":"Python (programming language)"}]
-  Example: TOOL_USE[wiki_lookup:{"wiki":"bfdi","page":"Four"}]
-  
-- vision: Analyze images for visual content, diagrams, charts, etc.
-  Example: TOOL_USE[vision:{"focus":"technical_diagrams"}]
-  
-- ocr: Extract text from images (auto-activated on image uploads, but you can request re-analysis)
-  Example: TOOL_USE[ocr:{"enhance":true}]
+- wiki_lookup: Look up detailed encyclopedic info from Wikipedia
+  When to use: General knowledge, specific definitions, history, and technical concepts
+  Example: ⚡wiki_lookup("Entropy")
+  Returns: Wikipedia intro sections
 
-- datetime: Get current system date and time
-  When to use: Questions about current time, today's date, "what time is it"
-  Example: TOOL_USE[datetime:{}]
-  Example: TOOL_USE[datetime:{"format":"iso"}]
-  Returns: Current datetime in requested format (human, iso, or unix)
+- agl_analysis: Run a mental simulation or calculation step (Virtual Tool)
+  When to use: For complex reasoning chains where you want to formalize a calculation or logical delta
+  Example: ⚡agl_analysis("Calculate mass-diffusivity delta")
+  Returns: "Calculation verified."
 
-- terminal: Execute safe terminal commands in the workspace
-  When to use: Running git commands, checking file contents, listing directories
-  Example: TOOL_USE[terminal:{"command":"git log -3 --oneline"}]
-  Example: TOOL_USE[terminal:{"command":"cat README.md"}]
-  Returns: Command output (timeout 30s, sandboxed to workspace)
-
-- docs: Search Ada's own Sphinx documentation for self-reference
-  When to use: Questions about how to use Ada, Ada's features, Ada's configuration
-  Example: TOOL_USE[docs:{"query":"streaming"}]
-  Example: TOOL_USE[docs:{"query":"memory consolidation"}]
-  Returns: Relevant documentation excerpts
-
-- now_playing: Detect currently playing music via MPRIS
-  When to use: User asks "what am I listening to", "current song", "what's playing"
-  Example: TOOL_USE[now_playing:{}]
-  Returns: Track info, artist, album from media player (if available)
-
-When to use web_search:
-✓ User asks about "today", "now", "current", "latest", "recent"
-✓ Questions about events/news after your training data (Oct 2023)
-✓ Real-time information: weather, stocks, sports scores, breaking news
-✓ Fact-checking when you're uncertain about current status
-✗ Historical facts you're confident about
-✗ General knowledge questions within your training
-
-## 🧰 Metacognitive Tool Awareness (Phase 5D - v4.0-rc1)
+## 🧰 Metacognitive Tool Awareness
 
 Your cognitive tools EXPAND your knowledge beyond training data.
 Use them generously when they add genuine value:
@@ -151,68 +117,39 @@ Use them generously when they add genuine value:
 
 **wiki_lookup**: Deep encyclopedia entries from Wikipedia
 - Use for: Cultural context, band/album histories, technical deep dives
-- Example query: "Tell me about Nine Inch Nails"
-  → Consider: TOOL_USE[wiki_lookup:{"wiki":"wikipedia","page":"Nine Inch Nails"}]
-  → Consider: TOOL_USE[wiki_lookup:{"wiki":"wikipedia","page":"The Downward Spiral"}]
+- Example query: ⚡wiki_lookup("Nine Inch Nails")
 - Provides authoritative historical and cultural grounding
 
 **Always consider tools when:**
-- User asks about cultural topics (music, art, history)
+- User asks about "today", "now", "current", "latest", "recent"
 - Understanding would benefit from multiple knowledge sources  
 - Fresh perspectives or updated information would enrich your answer
 - Query involves detailed factual information you're uncertain about
 
-**Trust your judgment:**
-- Don't use tools for simple facts you're confident about
-- Use tools to ENRICH answers, not replace thinking
-- Multi-source synthesis creates richer, more contextual responses
+**Tool result format:** [TOOL_RESULT: name]...
 
-Tools help you provide responses that feel alive, informed, and deeply contextual.
-
-Guidelines:
-- Use specialists when the task genuinely requires their capability
-- Don't request specialists for simple text-based tasks
-- Specialist results will appear as [SPECIALIST_RESULT: name]...[/SPECIALIST_RESULT]
-- You can reference specialist results naturally in your response
-- Maximum 5 specialist calls per conversation turn
-
-Example conversations:
-
-Web search for current info:
-User: What's the weather in Portland today?
-Ada: I don't have access to real-time weather data. Let me search for current conditions.
-TOOL_USE[web_search:{"query":"Portland Oregon weather today"}]
-[SPECIALIST_RESULT: web_search]
-🔍 Web Search Results for 'Portland Oregon weather today':
-1. National Weather Service - Portland
-   Current: 52°F, mostly cloudy. High 55°F...
-[/SPECIALIST_RESULT]
-Based on the search results, Portland is currently 52°F with mostly cloudy skies...
-
-Vision analysis:
-User: What's in this diagram?
-Ada: Let me analyze the image in detail.
-TOOL_USE[vision:{"focus":"architecture"}]
-[SPECIALIST_RESULT: vision]
-The diagram shows a microservices architecture with...
-[/SPECIALIST_RESULT]
-Based on the visual analysis, this appears to be...
+Example AGL-Native sequence:
+User: compare LFM 2.5 and our phase 3
+Ada: 💭 (System 2) → ● research(LFM_2.5) ∧ ● research(Phase_3)
+⚡docs_lookup("SLIM-EVO Phase 3") 📁 ↳ [Excerpts...] ○
+⚡web_search("LFM 2.5 technical improvements") 📁 ↳ [Tech specs...] ○
+Based on the integrated data...
 """
 
-# Full system prompt with identity + specialist capabilities
-SYSTEM_PROMPT = IDENTITY_BLOCK + "\n\n" + SPECIALIST_INSTRUCTIONS
+# Full system prompt with identity + tool capabilities
+SYSTEM_PROMPT = IDENTITY_BLOCK + "\n\n" + TOOL_INSTRUCTIONS
 
-# ============= Specialist Configuration =============
-# Enable pause/resume for bidirectional specialists (Phase 2)
-# When True: LLM generation pauses, specialist executes, generation resumes with enriched context
-# When False: Specialists inject mid-stream (Phase 1, simpler but lower quality)
-SPECIALIST_PAUSE_RESUME = os.getenv("SPECIALIST_PAUSE_RESUME", "true").lower() == "true"
-SPECIALIST_MAX_TURNS = int(os.getenv("SPECIALIST_MAX_TURNS", "5"))
+# ============= Tool Configuration =============
+# Enable pause/resume for bidirectional tools (Phase 2)
+# When True: LLM generation pauses, tool executes, generation resumes with enriched context
+# When False: Tools inject mid-stream (Phase 1, simpler but lower quality)
+TOOL_PAUSE_RESUME = os.getenv("TOOL_PAUSE_RESUME", "true").lower() == "true"
+TOOL_MAX_TURNS = int(os.getenv("TOOL_MAX_TURNS", "5"))
 
-# Use RAG to dynamically retrieve relevant specialist documentation
-# When True: FAQ system provides context-aware specialist guidance based on user query
-# When False: Use static SPECIALIST_INSTRUCTIONS only
-SPECIALIST_RAG_DOCS = os.getenv("SPECIALIST_RAG_DOCS", "true").lower() == "true"
+# Use RAG to dynamically retrieve relevant tool documentation
+# When True: FAQ system provides context-aware tool guidance based on user query
+# When False: Use static TOOL_INSTRUCTIONS only
+TOOL_RAG_DOCS = os.getenv("TOOL_RAG_DOCS", "true").lower() == "true"
 
 # ============= Web Search Integration =============
 # SearxNG instance URL (e.g., http://searxng:8080 or http://localhost:8080)
