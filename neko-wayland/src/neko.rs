@@ -60,21 +60,35 @@ pub enum NekoState {
 
 impl NekoState {
     /// Get sprite sheet coordinates for this state
+    /// 
+    /// Standard neko sprite sheet layout (8 cols x 4-5 rows):
+    /// Row 0: Awake(1), Yawn(2), Scratch(2), Wash(2), [1 unused]
+    /// Row 1: Alert(1), Sleep(2), [5 unused]
+    /// Row 2: N(2), NE(2), E(2), SE(2)
+    /// Row 3: S(2), SW(2), W(2), NW(2)
+    /// Row 4: [Pawprints - optional]
     pub fn sprite_coords(&self, frame: u8) -> (i32, i32) {
         let frame = (frame % 2) as i32;
         
         match self {
-            NekoState::Sit => (0 + frame, 0),
-            NekoState::Yawn => (2 + frame, 0),
-            NekoState::Scratch => (4 + frame, 0),
-            NekoState::Wash => (6 + frame, 0),
-            NekoState::Alert => (0 + frame, 1),
-            NekoState::Sleep1 => (2, 1),
-            NekoState::Sleep2 => (3, 1),
+            // Row 0: Idle animations
+            NekoState::Sit => (0, 0),           // Awake/Sit (single frame)
+            NekoState::Yawn => (1 + frame, 0),  // Yawn (2 frames)
+            NekoState::Scratch => (3 + frame, 0), // Scratch (2 frames)
+            NekoState::Wash => (5 + frame, 0),  // Wash (2 frames)
+            
+            // Row 1: Alert and sleep
+            NekoState::Alert => (0, 1),         // Alert (single frame)
+            NekoState::Sleep1 => (1, 1),        // Sleep frame 1
+            NekoState::Sleep2 => (2, 1),        // Sleep frame 2
+            
+            // Row 2: North, NE, East, SE
             NekoState::RunN => (0 + frame, 2),
             NekoState::RunNE => (2 + frame, 2),
             NekoState::RunE => (4 + frame, 2),
             NekoState::RunSE => (6 + frame, 2),
+            
+            // Row 3: South, SW, West, NW
             NekoState::RunS => (0 + frame, 3),
             NekoState::RunSW => (2 + frame, 3),
             NekoState::RunW => (4 + frame, 3),
