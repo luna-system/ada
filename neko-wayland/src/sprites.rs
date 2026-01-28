@@ -19,7 +19,7 @@ pub struct SpriteSheet {
 }
 
 impl SpriteSheet {
-    /// Load a sprite sheet from a PNG file
+    /// Load a sprite sheet from a PNG file with auto-detection of grid
     pub fn load<P: AsRef<Path>>(path: P, sprite_width: i32, sprite_height: i32) -> Result<Self, String> {
         let file = std::fs::File::open(path.as_ref())
             .map_err(|e| format!("Failed to open sprite sheet: {}", e))?;
@@ -31,11 +31,13 @@ impl SpriteSheet {
         let width = surface.width();
         let height = surface.height();
         
-        let cols = width / sprite_width;
-        let rows = height / sprite_height;
+        // Try to auto-detect grid with separators
+        let (actual_sprite_width, actual_sprite_height, cols, rows) = 
+            Self::detect_grid(&surface, sprite_width, sprite_height)?;
         
-        eprintln!("Loaded sprite sheet: {}x{} pixels, {} cols x {} rows", 
-                 width, height, cols, rows);
+        eprintln!("Loaded sprite sheet: {}x{} pixels", width, height);
+        eprintln!("  Detected grid: {}x{} sprites, {} cols x {} rows", 
+                 actual_sprite_width, actual_sprite_height, cols, rows);
         
         // Apply color keying to make blue/cyan transparent
         // Classic neko uses cyan (#008080 or similar) as the background
@@ -43,11 +45,36 @@ impl SpriteSheet {
         
         Ok(Self {
             surface,
-            sprite_width,
-            sprite_height,
+            sprite_width: actual_sprite_width,
+            sprite_height: actual_sprite_height,
             cols,
             rows,
         })
+    }
+    
+    /// Auto-detect sprite grid, accounting for separator lines
+    fn detect_grid(surface: &ImageSurface, expected_width: i32, expected_height: i32) -> Result<(i32, i32, i32, i32), String> {
+        let width = surface.width();
+        let height = surface.height();
+        
+        // Simple approach: assume sprites are separated by 1px lines
+        // So actual cell size is sprite_size + 1
+        let cell_width = expected_width + 1;
+        let cell_height = expected_height + 1;
+        
+        let cols = width / cell_width;
+        let rows = height / cell_height;
+        
+        // If this doesn't divide evenly, fall back to no-separator mode
+        if cols * cell_width != width || rows * cell_height != height {
+            eprintln!("  No separator lines detected, using direct grid");
+            let cols = width / expected_width;
+            let rows = height / expected_height;
+            return Ok((expected_width, expected_height, cols, rows));
+        }
+        
+        eprintln!("  Detected 1px separator lines between sprites");
+        Ok((expected_width, expected_height, cols, rows))
     }
     
     /// Apply color keying to make blue/cyan pixels transparent
@@ -144,12 +171,17 @@ impl SpriteSheet {
             return;
         }
         
-        let src_x = (col * self.sprite_width) as f64;
-        let src_y = (row * self.sprite_height) as f64;
+        // Account for 1px separator lines between sprites
+        // Each sprite cell is sprite_width + 1px separator
+        let cell_width = self.sprite_width + 1;
+        let cell_height = self.sprite_height + 1;
+        
+        let src_x = (col * cell_width) as f64;
+        let src_y = (row * cell_height) as f64;
         
         cr.save().unwrap();
         
-        // Set up clipping region for this sprite
+        // Set up clipping region for this sprite (exact size, no bleeding)
         cr.rectangle(dest_x, dest_y, self.sprite_width as f64, self.sprite_height as f64);
         cr.clip();
         
@@ -158,8 +190,6 @@ impl SpriteSheet {
         cr.set_source_surface(&self.surface, dest_x - src_x, dest_y - src_y).unwrap();
         
         // Use operator to handle transparency
-        // The blue pixels should already be transparent if the PNG has alpha
-        // But if not, we'll need to do color keying
         let _ = cr.paint();
         
         cr.restore().unwrap();

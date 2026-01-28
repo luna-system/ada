@@ -82,8 +82,30 @@ impl SpriteContainer {
                 Ok(())
             }
             SpriteContainer::Classic(sheet) => {
-                // Map DSL state to NekoState and draw
-                let neko_state = map_dsl_state_to_neko(&runtime.current_state, runtime.is_moving());
+                // Calculate movement direction
+                let dx = runtime.target_x - runtime.x;
+                let dy = runtime.target_y - runtime.y;
+                
+                // Map DSL state to NekoState with directional movement
+                let mut neko_state = map_dsl_state_to_neko_with_direction(
+                    &runtime.current_state, 
+                    runtime.is_moving(),
+                    dx,
+                    dy
+                );
+                
+                // Special case: if scratching, use directional wall scratch based on closest edge
+                if runtime.current_state == "scratch" {
+                    use crate::neko::NekoState;
+                    neko_state = match runtime.closest_edge() {
+                        "left" => NekoState::ScratchWallLeft,
+                        "right" => NekoState::ScratchWallRight,
+                        "up" => NekoState::ScratchWallUp,
+                        "down" => NekoState::ScratchWallDown,
+                        _ => NekoState::ScratchWallDown,
+                    };
+                }
+                
                 let (sprite_x, sprite_y) = neko_state.sprite_coords(runtime.frame);
                 
                 eprintln!("DEBUG Classic: state={}, moving={}, neko_state={:?}, coords=({},{}), pos=({:.0},{:.0})", 
@@ -129,22 +151,43 @@ impl SpriteContainer {
     }
 }
 
-/// Map DSL state name to NekoState enum
+/// Map DSL state name to NekoState enum with directional movement
 /// This allows classic sprite sheets to work with DSL behavior
-fn map_dsl_state_to_neko(state_name: &str, is_moving: bool) -> crate::neko::NekoState {
+fn map_dsl_state_to_neko_with_direction(state_name: &str, is_moving: bool, dx: f64, dy: f64) -> crate::neko::NekoState {
     use crate::neko::NekoState;
+    use std::f64::consts::PI;
     
-    // If moving, pick a running direction (for now, just use East)
-    if is_moving {
-        return NekoState::RunE;
+    // If moving, calculate direction based on movement vector
+    if is_moving && (dx.abs() > 0.1 || dy.abs() > 0.1) {
+        // Calculate angle in radians (-PI to PI)
+        // Note: dy is negated because screen Y increases downward, but we want North to be "up"
+        let angle = (-dy).atan2(dx);
+        
+        // Convert to 8 directions (0 = East, going counter-clockwise)
+        // Each direction covers 45 degrees (PI/4 radians)
+        let direction = ((angle + PI / 8.0) / (PI / 4.0)).floor() as i32;
+        
+        return match direction {
+            -4 | 4 => NekoState::RunW,   // West
+            -3 => NekoState::RunSW,       // Southwest  
+            -2 => NekoState::RunS,        // South
+            -1 => NekoState::RunSE,       // Southeast
+            0 => NekoState::RunE,         // East
+            1 => NekoState::RunNE,        // Northeast
+            2 => NekoState::RunN,         // North
+            3 => NekoState::RunNW,        // Northwest
+            _ => NekoState::RunE,         // Fallback
+        };
     }
     
     // Map state names to appropriate NekoState
     match state_name {
         "idle" | "sit" => NekoState::Sit,
-        "wander" => NekoState::RunE,  // Will be moving
+        "wander" => NekoState::RunE,  // Will be moving (direction calculated above)
         "chase" => NekoState::Alert,   // Alert before running
-        "play" => NekoState::Scratch,  // Playful animation
+        "play" | "itch" => NekoState::Itch,  // Scratching ear
+        "scratch" => NekoState::Itch,  // Also ear scratching for now
+        "wash" | "groom" => NekoState::Wash,  // Licking paw
         "sleep" => NekoState::Sleep1,
         "alert" => NekoState::Alert,
         "eat" => NekoState::Wash,      // Closest to eating

@@ -114,6 +114,8 @@ Built-in triggers:
 | `cursor_far(Npx)` | Cursor farther than N pixels |
 | `caught` | Reached the target (default: 50px) |
 | `caught(Npx)` | Within N pixels of target |
+| `at_edge` | Pet is at screen edge (default: 50px) |
+| `at_edge(Npx)` | Within N pixels of any screen edge |
 | `idle(time)` | Nothing happened for a while |
 | `timeout(time)` | State lasted for this long |
 | `click` | User clicked on pet |

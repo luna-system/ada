@@ -55,10 +55,7 @@ fn main() -> glib::ExitCode {
     
     config.merge_cli_args(&args);
     
-    // Check for NEKO_DEBUG environment variable
-    if std::env::var("NEKO_DEBUG").is_ok() {
-        config.window.debug = true;
-    }
+    let debug = config.window.debug;
     
     // Store config globally
     CLI_CONFIG.set(config).ok();
@@ -88,14 +85,17 @@ fn main() -> glib::ExitCode {
 }
 
 fn build_ui(app: &Application) {
-    // Debug: print environment info
-    eprintln!("neko-wayland v0.1.0 - Ada Research Foundation");
-    eprintln!("DEBUG: WAYLAND_DISPLAY = {:?}", std::env::var("WAYLAND_DISPLAY"));
-    
     // Check CLI config
     let default_config = config::Config::default();
     let config = CLI_CONFIG.get().unwrap_or(&default_config);
     let use_dsl = config.behavior.use_dsl;
+    let debug = config.window.debug;
+    
+    // Debug: print environment info
+    if debug {
+        eprintln!("neko-wayland v0.1.0 - Ada Research Foundation");
+        eprintln!("DEBUG: WAYLAND_DISPLAY = {:?}", std::env::var("WAYLAND_DISPLAY"));
+    }
     
     if use_dsl {
         if let Some(ref file) = config.behavior.algo_file {
@@ -180,6 +180,13 @@ fn build_ui(app: &Application) {
             rt.sprite_width = (w as f64 * scale).max(1.0);
             rt.sprite_height = (h as f64 * scale).max(1.0);
             eprintln!("DEBUG: DSL sprite size set to {:.0}x{:.0} (scaled)", rt.sprite_width, rt.sprite_height);
+            
+            // Classic neko sprites have fewer frames, so slow down animation
+            // VPet has many frames per animation, classic neko only has 2
+            if sprite_container.is_classic() {
+                rt.frame_interval = 10;  // 500ms between frames for classic neko
+                eprintln!("DEBUG: Classic sprite detected, frame_interval set to 10 (500ms)");
+            }
             
             rt
         }));

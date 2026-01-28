@@ -215,9 +215,6 @@ CONFIG FILE:
     
     CLI arguments override config file values.
 
-ENVIRONMENT:
-    NEKO_DEBUG             Enable debug visualization
-
 EXAMPLES:
     neko-wayland                                    # Classic hardcoded behavior, cairo drawing
     neko-wayland --sprites classic_spritesheets/neko.png  # Use sprite sheet

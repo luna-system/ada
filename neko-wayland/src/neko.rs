@@ -37,8 +37,8 @@ pub enum NekoState {
     // Idle states
     Sit,
     Yawn,
-    Scratch,
-    Wash,
+    Itch,         // Scratching ear (grooming)
+    Wash,         // Licking paw
     
     // Alert state
     Alert,
@@ -53,6 +53,12 @@ pub enum NekoState {
     RunW,
     RunNW,
     
+    // Wall scratching (4 directions)
+    ScratchWallDown,
+    ScratchWallRight,
+    ScratchWallUp,
+    ScratchWallLeft,
+    
     // Sleeping states
     Sleep1,
     Sleep2,
@@ -61,38 +67,46 @@ pub enum NekoState {
 impl NekoState {
     /// Get sprite sheet coordinates for this state
     /// 
-    /// Standard neko sprite sheet layout (8 cols x 4-5 rows):
-    /// Row 0: Awake(1), Yawn(2), Scratch(2), Wash(2), [1 unused]
-    /// Row 1: Alert(1), Sleep(2), [5 unused]
-    /// Row 2: N(2), NE(2), E(2), SE(2)
-    /// Row 3: S(2), SW(2), W(2), NW(2)
-    /// Row 4: [Pawprints - optional]
+    /// Classic neko sprite sheet layout (8 cols x 6 rows):
+    /// Row 0: Sit, LickPaw, ScratchEar(2), Yawn, Sleep(2), Awake
+    /// Row 1: S(2), SE(2), E(2), NE(2)
+    /// Row 2: N(2), NW(2), W(2), SW(2)
+    /// Row 3: ScratchDown(2), ScratchRight(2), ScratchUp(2), ScratchLeft(2)
+    /// Row 4: Pawprints (8 directions)
+    /// Row 5: System/debug
     pub fn sprite_coords(&self, frame: u8) -> (i32, i32) {
         let frame = (frame % 2) as i32;
         
         match self {
             // Row 0: Idle animations
-            NekoState::Sit => (0, 0),           // Awake/Sit (single frame)
-            NekoState::Yawn => (1 + frame, 0),  // Yawn (2 frames)
-            NekoState::Scratch => (3 + frame, 0), // Scratch (2 frames)
-            NekoState::Wash => (5 + frame, 0),  // Wash (2 frames)
+            NekoState::Sit => (0, 0),           // Sitting neutral
+            NekoState::Wash => {
+                // Alternate between Sit (0,0) and Wash (1,0) for animation
+                if frame == 0 { (0, 0) } else { (1, 0) }
+            }
+            NekoState::Itch => (2 + frame, 0),  // Scratching ear (2 frames)
+            NekoState::Yawn => (4, 0),          // Yawn (single frame)
+            NekoState::Sleep1 => (5, 0),        // Sleep frame 1
+            NekoState::Sleep2 => (6, 0),        // Sleep frame 2
+            NekoState::Alert => (7, 0),         // Awake/surprised
             
-            // Row 1: Alert and sleep
-            NekoState::Alert => (0, 1),         // Alert (single frame)
-            NekoState::Sleep1 => (1, 1),        // Sleep frame 1
-            NekoState::Sleep2 => (2, 1),        // Sleep frame 2
+            // Row 1: S, SE, E, NE (2 frames each)
+            NekoState::RunS => (0 + frame, 1),
+            NekoState::RunSE => (2 + frame, 1),
+            NekoState::RunE => (4 + frame, 1),
+            NekoState::RunNE => (6 + frame, 1),
             
-            // Row 2: North, NE, East, SE
+            // Row 2: N, NW, W, SW (2 frames each)
             NekoState::RunN => (0 + frame, 2),
-            NekoState::RunNE => (2 + frame, 2),
-            NekoState::RunE => (4 + frame, 2),
-            NekoState::RunSE => (6 + frame, 2),
+            NekoState::RunNW => (2 + frame, 2),
+            NekoState::RunW => (4 + frame, 2),
+            NekoState::RunSW => (6 + frame, 2),
             
-            // Row 3: South, SW, West, NW
-            NekoState::RunS => (0 + frame, 3),
-            NekoState::RunSW => (2 + frame, 3),
-            NekoState::RunW => (4 + frame, 3),
-            NekoState::RunNW => (6 + frame, 3),
+            // Row 3: Wall scratching (2 frames each)
+            NekoState::ScratchWallDown => (0 + frame, 3),
+            NekoState::ScratchWallRight => (2 + frame, 3),
+            NekoState::ScratchWallUp => (4 + frame, 3),
+            NekoState::ScratchWallLeft => (6 + frame, 3),
         }
     }
 }
@@ -337,7 +351,7 @@ impl Neko {
             self.state = match rng.gen_range(0..10) {
                 0..=4 => NekoState::Sit,
                 5..=6 => NekoState::Yawn,
-                7..=8 => NekoState::Scratch,
+                7..=8 => NekoState::Itch,
                 9 => NekoState::Wash,
                 _ => NekoState::Sit,
             };

@@ -7,28 +7,51 @@ pet classic_neko {
     locomotion: quadruped
     easing: ease_in_out
     
-    # Wandering around the desktop
-    wander(speed: 8, radius: 300px) {
+    # Sitting idle - the default resting state
+    idle(speed: 0) {
         on cursor_near(200px) → ◕alert    # 75% chance to notice cursor
-        on idle(10s) → ◑sleep              # 50% chance to get sleepy
+        on timeout(8s) → ◑wash            # 50% chance to start washing
+        on timeout(12s) → ◑wander         # 50% chance to start wandering
+        on timeout(20s) → ◔sleep          # 25% chance to fall asleep
+    }
+    
+    # Washing - licking paw
+    wash(speed: 0) {
+        on cursor_near(150px) → ●alert    # Always notice nearby cursor
+        on timeout(5s) → ●idle            # Back to idle after washing
+    }
+    
+    # Wandering around the desktop
+    wander(speed: 4, radius: 300px) {
+        on cursor_near(200px) → ◕alert    # 75% chance to notice cursor
+        on at_edge(20px) → ◔scratch       # 25% chance to scratch at edge
+        on idle(15s) → ◑idle              # 50% chance to stop and rest
+        on timeout(30s) → ◔idle           # 25% chance to get tired
     }
     
     # Noticed something! Ears perk up
     alert {
         speed: 0
-        on timeout(0.5s) → ●chase          # Always chase after alert
+        on timeout(0.5s) → ●chase         # Always chase after alert
     }
     
     # Chase that cursor!
-    chase(speed: 12) {
-        on cursor_far(500px) → ◕wander     # Lost interest if too far
-        on timeout(20s) → ◔wander          # 25% chance to give up
+    chase(speed: 6) {
+        on cursor_far(500px) → ◕idle      # Lost interest, rest
+        on at_edge(20px) → ◔scratch       # 25% chance to scratch if hit edge
+        on caught(50px) → ◑idle           # 50% chance to rest after catching
+        on timeout(25s) → ◔idle           # 25% chance to give up
     }
     
-    # Zzzzz...
+    # Scratching at the screen edge - let me out!
+    scratch(speed: 1, radius: 100px) {
+        on timeout(2s) → ●idle            # Give up and rest
+    }
+    
+    # Zzzzz... deep sleep
     sleep {
         speed: 0
-        on cursor_near(100px) → ●alert     # Wake up if cursor is close!
-        on timeout(30s) → ◑wander          # Eventually wake up
+        on cursor_near(80px) → ●alert     # Wake up if cursor is very close!
+        on timeout(45s) → ◑idle           # Eventually wake up and sit
     }
 }

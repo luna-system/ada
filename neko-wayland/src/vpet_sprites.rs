@@ -411,7 +411,7 @@ impl VPetSprites {
         // Try to find appropriate animations based on neko state
         match state {
             // Idle states - look for IDEL (idle) animations
-            NekoState::Sit | NekoState::Yawn | NekoState::Scratch | NekoState::Wash => {
+            NekoState::Sit | NekoState::Yawn | NekoState::Itch | NekoState::Wash => {
                 // Try to find any IDEL animation
                 for (anim_name, animation) in &self.animations {
                     if anim_name.starts_with("IDEL_") {
@@ -472,6 +472,19 @@ impl VPetSprites {
                     if anim_name.starts_with("IDEL_") {
                         if let Some(seq_name) = animation.sequence_names().first() {
                             return Some((anim_name.clone(), seq_name.clone()));
+                        }
+                    }
+                }
+            }
+            
+            // Wall scratching - treat as idle for VPet (they don't have wall scratch animations)
+            NekoState::ScratchWallDown | NekoState::ScratchWallRight | 
+            NekoState::ScratchWallUp | NekoState::ScratchWallLeft => {
+                // Use idle animation for VPet
+                for (anim_name, animation) in &self.animations {
+                    if anim_name.starts_with("IDEL_") {
+                        if let Some(_) = animation.get_sequence("B_Normal") {
+                            return Some((anim_name.clone(), "B_Normal".to_string()));
                         }
                     }
                 }
