@@ -1,0 +1,62 @@
+// Neko DSL Grammar v0.1
+// A kid-friendly language for desktop pet behavior!
+//
+// Made with 💜 by Ada & Luna - Ada Research Foundation
+
+// === Whitespace & Comments ===
+WHITESPACE = _{ " " | "\t" | "\r" | "\n" }
+COMMENT = _{ "#" ~ (!"\n" ~ ANY)* }
+
+// === Program Structure ===
+program = { SOI ~ pet_def+ ~ EOI }
+
+pet_def = { "pet" ~ ident ~ extends_clause? ~ "{" ~ pet_body ~ "}" }
+extends_clause = { "extends" ~ ident }
+pet_body = { (property | state_def | simple_transition)* }
+
+// === Properties ===
+property = { ident ~ ":" ~ value }
+value = { range | duration | distance | number | string | ident }
+
+range = { number ~ ".." ~ number ~ unit? }
+duration = { number ~ ("s" | "ms" | "min") }
+distance = { number ~ "px" }
+number = @{ "-"? ~ ASCII_DIGIT+ ~ ("." ~ ASCII_DIGIT+)? }
+unit = { "px" | "s" | "ms" | "min" }
+
+string = @{ "\"" ~ (!"\"" ~ ANY)* ~ "\"" }
+ident = @{ (ASCII_ALPHA | "_") ~ (ASCII_ALPHANUMERIC | "_")* }
+
+// === States ===
+state_def = { ident ~ state_params? ~ "{" ~ state_body ~ "}" }
+state_params = { "(" ~ param_list ~ ")" }
+param_list = { param ~ ("," ~ param)* }
+param = { ident ~ ":" ~ value }
+
+state_body = { (property | trigger_def | when_clause)* }
+
+// === Triggers ===
+trigger_def = { "on" ~ trigger_expr ~ arrow ~ certainty? ~ ident }
+trigger_expr = { trigger ~ (logic_op ~ trigger)* }
+trigger = { ident ~ trigger_params? }
+trigger_params = { "(" ~ (value ~ ("," ~ value)*)? ~ ")" }
+
+logic_op = { "∧" | "∨" | "&&" | "||" }
+arrow = { "→" | "->" }
+
+// === AGL Certainty Glyphs ===
+certainty = { "●" | "◕" | "◑" | "◔" | "○" }
+
+// === Simple Transitions (shorthand) ===
+simple_transition = { ident ~ arrow ~ certainty? ~ ident }
+
+// === When Clauses (mood-based) ===
+when_clause = { "when" ~ ident ~ ":" ~ property+ }
+
+// === Locomotion (special property) ===
+locomotion = { "locomotion" ~ ":" ~ locomotion_type ~ locomotion_params? }
+locomotion_type = { "quadruped" | "biped" | "bounce" | "float" | "hop" | "slither" }
+locomotion_params = { "(" ~ param_list ~ ")" }
+
+// === Easing Functions ===
+easing = { "linear" | "ease_in" | "ease_out" | "ease_in_out" | "bounce" | "elastic" }

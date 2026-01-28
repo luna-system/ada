@@ -15,6 +15,7 @@ use std::time::Duration;
 
 mod cursor;
 mod display;
+mod dsl;
 mod neko;
 mod sprites;
 

@@ -13,6 +13,8 @@ gtk4-layer-shell = "0.7"
 glib = "0.21"
 cairo-rs = { version = "0.21", features = ["png"] }
 rand = "0.8"
+pest = "2.8.5"
+pest_derive = "2.8.5"
 
 [features]
 default = []
