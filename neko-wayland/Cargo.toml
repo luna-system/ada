@@ -15,6 +15,9 @@ cairo-rs = { version = "0.21", features = ["png"] }
 rand = "0.8"
 pest = "2.8.5"
 pest_derive = "2.8.5"
+serde = { version = "1.0", features = ["derive"] }
+toml = "0.8"
+dirs = "5.0"  # For finding config directory
 
 [features]
 default = []

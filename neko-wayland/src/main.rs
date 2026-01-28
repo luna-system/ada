@@ -20,6 +20,7 @@ mod dsl;
 mod neko;
 mod sprites;
 mod vpet_sprites;
+mod config;
 
 use neko::Neko;
 use dsl::{BehaviorRuntime, default_behavior, load_behavior};
@@ -28,106 +29,49 @@ const APP_ID: &str = "dev.ada.neko-wayland";
 const SPRITE_SIZE: i32 = 32;
 const UPDATE_INTERVAL_MS: u64 = 50; // 20 FPS
 
-/// Global config from CLI args
-static CLI_CONFIG: OnceLock<CliConfig> = OnceLock::new();
-
-#[derive(Debug, Default)]
-struct CliConfig {
-    algo_file: Option<String>,
-    use_dsl: bool,
-    sprite_sheet: Option<String>,
-    vpet_folder: Option<String>,
-    scale: f64,
-}
-
-impl CliConfig {
-    fn new() -> Self {
-        Self {
-            algo_file: None,
-            use_dsl: false,
-            sprite_sheet: None,
-            vpet_folder: None,
-            scale: 1.0, // Default scale
-        }
-    }
-}
+/// Global config
+static CLI_CONFIG: OnceLock<config::Config> = OnceLock::new();
 
 fn main() -> glib::ExitCode {
-    // Parse CLI args BEFORE GTK sees them
-    let args: Vec<String> = std::env::args().collect();
-    let mut config = CliConfig::new();
-    let mut gtk_args: Vec<String> = vec![args[0].clone()]; // Keep program name
+    // Load config from file
+    let mut config = config::Config::load().unwrap_or_else(|e| {
+        eprintln!("Warning: Could not load config file: {}", e);
+        eprintln!("Using default configuration");
+        config::Config::default()
+    });
     
-    let mut i = 1;
-    while i < args.len() {
-        match args[i].as_str() {
-            "--algo" | "-a" => {
-                if i + 1 < args.len() {
-                    config.algo_file = Some(args[i + 1].clone());
-                    config.use_dsl = true;
-                    i += 2; // Skip both --algo and the file path
-                    continue;
-                } else {
-                    eprintln!("Error: --algo requires a file path");
-                    std::process::exit(1);
-                }
-            }
-            "--sprites" | "-s" => {
-                if i + 1 < args.len() {
-                    config.sprite_sheet = Some(args[i + 1].clone());
-                    i += 2;
-                    continue;
-                } else {
-                    eprintln!("Error: --sprites requires a file path");
-                    std::process::exit(1);
-                }
-            }
-            "--vpet" | "-v" => {
-                if i + 1 < args.len() {
-                    config.vpet_folder = Some(args[i + 1].clone());
-                    i += 2;
-                    continue;
-                } else {
-                    eprintln!("Error: --vpet requires a folder path");
-                    std::process::exit(1);
-                }
-            }
-            "--scale" => {
-                if i + 1 < args.len() {
-                    match args[i + 1].parse::<f64>() {
-                        Ok(scale) if scale > 0.0 && scale <= 10.0 => {
-                            config.scale = scale;
-                        }
-                        _ => {
-                            eprintln!("Error: --scale must be a number between 0.0 and 10.0");
-                            std::process::exit(1);
-                        }
-                    }
-                    i += 2;
-                    continue;
-                } else {
-                    eprintln!("Error: --scale requires a number");
-                    std::process::exit(1);
-                }
-            }
-            "--dsl" => {
-                config.use_dsl = true;
-                i += 1;
-                continue;
-            }
-            "--help" | "-h" => {
-                print_help();
-                std::process::exit(0);
-            }
-            _ => {
-                // Pass unknown args to GTK (might be GTK flags)
-                gtk_args.push(args[i].clone());
-            }
-        }
-        i += 1;
+    // Parse CLI args and merge (CLI wins)
+    let args: Vec<String> = std::env::args().collect();
+    
+    // Check for help flag first
+    if args.iter().any(|arg| arg == "--help" || arg == "-h") {
+        config::Config::print_help();
+        std::process::exit(0);
     }
     
+    config.merge_cli_args(&args);
+    
+    // Check for NEKO_DEBUG environment variable
+    if std::env::var("NEKO_DEBUG").is_ok() {
+        config.window.debug = true;
+    }
+    
+    // Store config globally
     CLI_CONFIG.set(config).ok();
+    
+    // Filter out our custom args for GTK
+    let gtk_args: Vec<String> = args.iter()
+        .enumerate()
+        .filter(|(i, arg)| {
+            !matches!(arg.as_str(), 
+                "--algo" | "-a" | "--sprites" | "-s" | "--vpet" | "-v" | 
+                "--scale" | "--dsl" | "--debug") &&
+            (*i == 0 || !matches!(args.get(i - 1).map(|s| s.as_str()), 
+                Some("--algo") | Some("-a") | Some("--sprites") | Some("-s") | 
+                Some("--vpet") | Some("-v") | Some("--scale")))
+        })
+        .map(|(_, arg)| arg.clone())
+        .collect();
     
     let app = Application::builder()
         .application_id(APP_ID)
@@ -137,36 +81,6 @@ fn main() -> glib::ExitCode {
     
     // Pass only GTK-compatible args
     app.run_with_args(&gtk_args)
-}
-
-fn print_help() {
-    eprintln!(r#"neko-wayland - A cute desktop pet for Wayland/Hyprland
-
-USAGE:
-    neko-wayland [OPTIONS]
-
-OPTIONS:
-    -a, --algo <FILE>      Load behavior from a .neko DSL file
-    -s, --sprites <FILE>   Load sprite sheet (PNG file, classic neko format)
-    -v, --vpet <FOLDER>    Load VPet-style sprites from folder
-    --scale <NUMBER>       Scale factor for sprites (0.1-10.0, default: 1.0)
-    --dsl                  Use DSL runtime (default behavior if no file)
-    -h, --help             Show this help message
-
-ENVIRONMENT:
-    NEKO_DEBUG             Enable debug visualization
-
-EXAMPLES:
-    neko-wayland                                    # Classic hardcoded behavior, cairo drawing
-    neko-wayland --sprites classic_spritesheets/neko.png  # Use sprite sheet
-    neko-wayland --vpet path/to/pet/vup             # Use VPet-style sprites
-    neko-wayland --vpet path/to/pet/vup --scale 0.5 # VPet at half size
-    neko-wayland --sprites neko.png --scale 2.0     # Classic neko at 2x size
-    neko-wayland --dsl                              # DSL runtime with default behavior
-    neko-wayland --algo lazy_cat.neko               # Custom behavior from file
-
-Made with 💜 by Ada & Luna - Ada Research Foundation
-"#);
 }
 
 /// Create a debug border window showing the wander bounds
@@ -238,12 +152,12 @@ fn build_ui(app: &Application) {
     eprintln!("DEBUG: WAYLAND_DISPLAY = {:?}", std::env::var("WAYLAND_DISPLAY"));
     
     // Check CLI config
-    let default_config = CliConfig::default();
+    let default_config = config::Config::default();
     let config = CLI_CONFIG.get().unwrap_or(&default_config);
-    let use_dsl = config.use_dsl;
+    let use_dsl = config.behavior.use_dsl;
     
     if use_dsl {
-        if let Some(ref file) = config.algo_file {
+        if let Some(ref file) = config.behavior.algo_file {
             eprintln!("DSL: Loading behavior from {}", file);
         } else {
             eprintln!("DSL: Using default classic_neko behavior");
@@ -320,7 +234,7 @@ fn build_ui(app: &Application) {
     );
     
     // Determine sprite size based on what we're loading
-    let (base_width, base_height) = if config.vpet_folder.is_some() {
+    let (base_width, base_height) = if config.sprites.vpet_folder.is_some() {
         // VPet sprites are typically larger - we'll detect actual size after loading
         (SPRITE_SIZE, SPRITE_SIZE) // Placeholder, will be updated
     } else {
@@ -328,7 +242,7 @@ fn build_ui(app: &Application) {
         (SPRITE_SIZE, SPRITE_SIZE)
     };
     
-    let scale = config.scale;
+    let scale = config.sprites.scale;
     let window_width = (base_width as f64 * scale) as i32;
     let window_height = (base_height as f64 * scale) as i32;
     
@@ -338,7 +252,7 @@ fn build_ui(app: &Application) {
     drawing_area.set_content_height(window_height);
 
     // Load sprite sheet if specified
-    let sprite_sheet = if let Some(ref sprite_path) = config.sprite_sheet {
+    let sprite_sheet = if let Some(ref sprite_path) = config.sprites.sprite_sheet {
         eprintln!("Loading sprite sheet: {}", sprite_path);
         match sprites::SpriteSheet::load(sprite_path, sprites::NEKO_SPRITE_WIDTH, sprites::NEKO_SPRITE_HEIGHT) {
             Ok(sheet) => {
@@ -356,7 +270,7 @@ fn build_ui(app: &Application) {
     };
     
     // Load VPet sprites if specified
-    let vpet_sprites = if let Some(ref vpet_path) = config.vpet_folder {
+    let vpet_sprites = if let Some(ref vpet_path) = config.sprites.vpet_folder {
         eprintln!("Loading VPet sprites from: {}", vpet_path);
         match vpet_sprites::VPetSprites::load_pet(vpet_path) {
             Ok(mut sprites) => {
@@ -400,7 +314,7 @@ fn build_ui(app: &Application) {
     if use_dsl {
         // DSL-driven behavior
         let runtime = Rc::new(RefCell::new({
-            let mut rt = if let Some(ref file) = config.algo_file {
+            let mut rt = if let Some(ref file) = config.behavior.algo_file {
                 match load_behavior(file) {
                     Ok(rt) => rt,
                     Err(e) => {
