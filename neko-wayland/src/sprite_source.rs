@@ -81,8 +81,18 @@ impl SpriteContainer {
                 // This is a placeholder for future sprite-based DSL rendering
                 Ok(())
             }
-            SpriteContainer::Classic(_sheet) => {
-                // Future: map DSL states to sprite sheet frames
+            SpriteContainer::Classic(sheet) => {
+                // Map DSL state to NekoState and draw
+                let neko_state = map_dsl_state_to_neko(&runtime.current_state, runtime.is_moving());
+                let (sprite_x, sprite_y) = neko_state.sprite_coords(runtime.frame);
+                
+                // Draw the sprite at runtime position
+                // Note: save/restore return Result<(), cairo::Error> which we can't use with ?
+                // So we'll just call them without error handling
+                let _ = cr.save();
+                cr.translate(runtime.x, runtime.y);
+                sheet.draw(cr, sprite_x, sprite_y, 0.0, 0.0);
+                let _ = cr.restore();
                 Ok(())
             }
             SpriteContainer::VPet(vpet) => {
@@ -118,5 +128,29 @@ impl SpriteContainer {
     
     pub fn is_cairo(&self) -> bool {
         matches!(self, SpriteContainer::Cairo)
+    }
+}
+
+/// Map DSL state name to NekoState enum
+/// This allows classic sprite sheets to work with DSL behavior
+fn map_dsl_state_to_neko(state_name: &str, is_moving: bool) -> crate::neko::NekoState {
+    use crate::neko::NekoState;
+    
+    // If moving, pick a running direction (for now, just use East)
+    if is_moving {
+        return NekoState::RunE;
+    }
+    
+    // Map state names to appropriate NekoState
+    match state_name {
+        "idle" | "sit" => NekoState::Sit,
+        "wander" => NekoState::RunE,  // Will be moving
+        "chase" => NekoState::Alert,   // Alert before running
+        "play" => NekoState::Scratch,  // Playful animation
+        "sleep" => NekoState::Sleep1,
+        "alert" => NekoState::Alert,
+        "eat" => NekoState::Wash,      // Closest to eating
+        "drink" => NekoState::Wash,
+        _ => NekoState::Sit,           // Default fallback
     }
 }
