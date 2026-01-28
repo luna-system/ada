@@ -15,3 +15,6 @@
 [submodule "neuro-cartographer"]
 	path = neuro-cartographer
 	url = https://github.com/luna-system/neuro-cartographer.git
+[submodule "archangel"]
+	path = archangel
+	url = https://github.com/luna-system/archangel.git
