@@ -1,0 +1,80 @@
+# moody_vup.neko - Mood-Aware VPet Behavior
+#
+# Changes behavior based on mood! Happy Vup is energetic and playful,
+# while ill Vup is slow and sleepy.
+#
+# Made with 💜 by Ada & Luna - Ada Research Foundation
+
+pet moody_vup {
+  # VPet sprite configuration
+  sprites: "vup/"
+  sprite_type: vpet
+  moods: [happy, normal, poor_condition, ill]
+  
+  # Idle state - mood affects reaction to cursor
+  idle {
+    sprite: "IDEL_Squat"
+    # Automatically uses mood-based sprite variants:
+    # - IDEL_Squat/A_Happy/ when happy
+    # - IDEL_Squat/B_Normal/ when normal
+    # - IDEL_Squat/C_PoorCondition/ when poor
+    # - IDEL_Squat/D_Ill/ when ill
+    
+    when happy: on cursor_near → ●chase        # always chase when happy!
+    when normal: on cursor_near → ◕chase      # probably chase
+    when poor_condition: on cursor_near → ◔chase  # rarely chase
+    when ill: on cursor_near → ○chase         # almost never chase
+    
+    on idle(10s) → wander
+  }
+  
+  # Wandering - mood affects speed
+  wander(radius: 300px) {
+    sprite: "MOVE_Walk"
+    
+    when happy: speed: 8
+    when normal: speed: 5
+    when poor_condition: speed: 3
+    when ill: speed: 1
+    
+    on cursor_near → idle
+    on idle(5s) → idle
+  }
+  
+  # Chasing cursor - mood affects speed and persistence
+  chase {
+    sprite: "MOVE_Run"
+    
+    when happy: speed: 10
+    when normal: speed: 7
+    when poor_condition: speed: 4
+    when ill: speed: 2
+    
+    on caught → play
+    on cursor_far → idle
+  }
+  
+  # Playing - mood affects duration
+  play {
+    sprite: "PLAY"
+    
+    when happy: duration: 10s
+    when normal: duration: 5s
+    when poor_condition: duration: 2s
+    when ill: → sleep    # too tired to play, go straight to sleep
+    
+    on timeout → idle
+  }
+  
+  # Sleeping - mood affects sleep duration
+  sleep {
+    sprite: "SLEEP"
+    
+    when ill: duration: 30s          # sleep longer when ill
+    when poor_condition: duration: 15s
+    when normal: duration: 10s
+    when happy: duration: 5s         # barely sleeps when happy!
+    
+    on timeout → idle
+  }
+}
