@@ -21,6 +21,7 @@ mod display;
 mod dsl;
 mod neko;
 mod pet;
+mod sprite_source;
 mod sprites;
 mod ui;
 mod vpet_sprites;
@@ -137,21 +138,15 @@ fn build_ui(app: &Application) {
     // Create debug bounds window first (if NEKO_DEBUG is set)
     let _bounds_window = app::create_debug_bounds_window(app, screen_w, screen_h);
 
-    // Load sprites using the pet module
-    let sprite_data = pet::load_sprites(config);
+    // Load sprites using the unified sprite container
+    let sprite_container = pet::load_sprites(config);
     
     // Determine window size based on loaded sprites
     let scale = config.sprites.scale;
-    let (window_width, window_height) = if let Some((w, h)) = sprite_data.dimensions() {
-        let scaled_w = (w as f64 * scale) as i32;
-        let scaled_h = (h as f64 * scale) as i32;
-        eprintln!("Window size set to: {}x{} (scale: {})", scaled_w, scaled_h, scale);
-        (scaled_w, scaled_h)
-    } else {
-        // Default size for cairo drawing
-        let scaled = (SPRITE_SIZE as f64 * scale) as i32;
-        (scaled, scaled)
-    };
+    let (base_w, base_h) = sprite_container.dimensions();
+    let window_width = (base_w as f64 * scale) as i32;
+    let window_height = (base_h as f64 * scale) as i32;
+    eprintln!("Window size set to: {}x{} (scale: {})", window_width, window_height, scale);
     
     // Create window using app module
     let window = app::create_pet_window(app, layer_shell_supported, window_width, window_height);
@@ -160,13 +155,6 @@ fn build_ui(app: &Application) {
     let drawing_area = DrawingArea::new();
     drawing_area.set_content_width(window_width);
     drawing_area.set_content_height(window_height);
-
-    // Extract sprite references for drawing
-    let (sprite_sheet, vpet_sprites) = match sprite_data {
-        pet::SpriteData::Classic(sheet) => (Some(sheet), None),
-        pet::SpriteData::VPet(vpet) => (None, Some(vpet)),
-        pet::SpriteData::None => (None, None),
-    };
 
     // Choose runtime based on CLI config
     if use_dsl {
@@ -187,21 +175,11 @@ fn build_ui(app: &Application) {
             rt.screen_width = screen_w;
             rt.screen_height = screen_h;
             
-            // Set sprite dimensions based on what we loaded
-            if let Some(ref vpet) = vpet_sprites {
-                if let Some((w, h)) = vpet.borrow().sprite_dimensions() {
-                    rt.sprite_width = (w as f64 * scale).max(1.0);
-                    rt.sprite_height = (h as f64 * scale).max(1.0);
-                    eprintln!("DEBUG: DSL sprite size set to {:.0}x{:.0} (scaled)", rt.sprite_width, rt.sprite_height);
-                }
-            } else if sprite_sheet.is_some() {
-                rt.sprite_width = 32.0 * scale;
-                rt.sprite_height = 32.0 * scale;
-                eprintln!("DEBUG: DSL sprite size set to {:.0}x{:.0} (scaled)", rt.sprite_width, rt.sprite_height);
-            } else {
-                rt.sprite_width = 32.0 * scale;
-                rt.sprite_height = 32.0 * scale;
-            }
+            // Set sprite dimensions from container
+            let (w, h) = sprite_container.dimensions();
+            rt.sprite_width = (w as f64 * scale).max(1.0);
+            rt.sprite_height = (h as f64 * scale).max(1.0);
+            eprintln!("DEBUG: DSL sprite size set to {:.0}x{:.0} (scaled)", rt.sprite_width, rt.sprite_height);
             
             rt
         }));
@@ -262,31 +240,17 @@ fn build_ui(app: &Application) {
             n.screen_width = screen_w;
             n.screen_height = screen_h;
             
-            // Set sprite dimensions based on what we loaded
-            if let Some(ref vpet) = vpet_sprites {
-                if let Some((w, h)) = vpet.borrow().sprite_dimensions() {
-                    n.sprite_width = (w as f64 * scale).max(1.0);
-                    n.sprite_height = (h as f64 * scale).max(1.0);
-                    eprintln!("DEBUG: Neko sprite size set to {:.0}x{:.0} (scaled)", n.sprite_width, n.sprite_height);
-                }
-            } else if sprite_sheet.is_some() {
-                // Classic sprite sheet is 32x32
-                n.sprite_width = 32.0 * scale;
-                n.sprite_height = 32.0 * scale;
-                eprintln!("DEBUG: Neko sprite size set to {:.0}x{:.0} (scaled)", n.sprite_width, n.sprite_height);
-            } else {
-                // Cairo drawing is also 32x32
-                n.sprite_width = 32.0 * scale;
-                n.sprite_height = 32.0 * scale;
-            }
-            
+            // Set sprite dimensions from container
+            let (w, h) = sprite_container.dimensions();
+            n.sprite_width = (w as f64 * scale).max(1.0);
+            n.sprite_height = (h as f64 * scale).max(1.0);
+            eprintln!("DEBUG: Neko sprite size set to {:.0}x{:.0} (scaled)", n.sprite_width, n.sprite_height);
             eprintln!("DEBUG: Neko wander bounds set to {:.0}x{:.0}", screen_w, screen_h);
             n
         }));
 
         let neko_draw = neko.clone();
-        let sprite_draw = sprite_sheet.clone();
-        let vpet_draw = vpet_sprites.clone();
+        let sprite_container_draw = Rc::new(sprite_container);
         let first_draw = Rc::new(RefCell::new(true));
         let first_draw_clone = first_draw.clone();
         drawing_area.set_draw_func(move |area, cr, width, height| {
@@ -302,28 +266,13 @@ fn build_ui(app: &Application) {
             let _ = cr.paint();
             cr.set_operator(cairo::Operator::Over);
             
-            // Priority: VPet > SpriteSheet > Cairo
-            if let Some(ref vpet) = vpet_draw {
-                // Scale the context
-                cr.scale(scale, scale);
-                
-                // Draw VPet sprite
-                let vpet = vpet.borrow();
-                if let Err(e) = vpet.draw(cr) {
-                    eprintln!("VPet draw error: {}", e);
-                }
-            } else if sprite_draw.is_some() {
-                // Scale for sprite sheet
-                cr.scale(scale, scale);
-                
-                let neko = neko_draw.borrow();
-                neko.draw_with_sprites(cr, sprite_draw.as_ref().map(|s| s.as_ref()));
-            } else {
-                // Cairo drawing - scale it too!
-                cr.scale(scale, scale);
-                
-                let neko = neko_draw.borrow();
-                neko.draw_with_sprites(cr, None);
+            // Scale the context
+            cr.scale(scale, scale);
+            
+            // Draw using the unified sprite container
+            let neko = neko_draw.borrow();
+            if let Err(e) = sprite_container_draw.draw_with_neko(cr, &neko) {
+                eprintln!("Draw error: {}", e);
             }
         });
 

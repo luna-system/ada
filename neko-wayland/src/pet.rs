@@ -8,29 +8,12 @@ use std::cell::RefCell;
 use std::rc::Rc;
 use crate::sprites;
 use crate::vpet_sprites;
+use crate::sprite_source::SpriteContainer;
 use crate::config::Config;
 
-/// Loaded sprite data - either classic sprite sheet or VPet folder
-pub enum SpriteData {
-    Classic(Rc<sprites::SpriteSheet>),
-    VPet(Rc<RefCell<vpet_sprites::VPetSprites>>),
-    None,
-}
-
-impl SpriteData {
-    /// Get the sprite dimensions (width, height) if available
-    pub fn dimensions(&self) -> Option<(i32, i32)> {
-        match self {
-            SpriteData::Classic(_) => Some((sprites::NEKO_SPRITE_WIDTH, sprites::NEKO_SPRITE_HEIGHT)),
-            SpriteData::VPet(vpet) => vpet.borrow().sprite_dimensions(),
-            SpriteData::None => None,
-        }
-    }
-}
-
-/// Load sprites based on config
-pub fn load_sprites(config: &Config) -> SpriteData {
-    // Priority: VPet > Classic sprite sheet > None
+/// Load sprites based on config and return a unified SpriteContainer
+pub fn load_sprites(config: &Config) -> SpriteContainer {
+    // Priority: VPet > Classic sprite sheet > Cairo
     if let Some(ref vpet_path) = config.sprites.vpet_folder {
         eprintln!("Loading VPet sprites from: {}", vpet_path);
         match vpet_sprites::VPetSprites::load_pet(vpet_path) {
@@ -54,7 +37,7 @@ pub fn load_sprites(config: &Config) -> SpriteData {
                     eprintln!("VPet sprite size: {}x{}", w, h);
                 }
                 
-                return SpriteData::VPet(Rc::new(RefCell::new(sprites)));
+                return SpriteContainer::VPet(Rc::new(RefCell::new(sprites)));
             }
             Err(e) => {
                 eprintln!("Failed to load VPet sprites: {}", e);
@@ -68,7 +51,7 @@ pub fn load_sprites(config: &Config) -> SpriteData {
         match sprites::SpriteSheet::load(sprite_path, sprites::NEKO_SPRITE_WIDTH, sprites::NEKO_SPRITE_HEIGHT) {
             Ok(sheet) => {
                 eprintln!("Sprite sheet loaded successfully!");
-                return SpriteData::Classic(Rc::new(sheet));
+                return SpriteContainer::Classic(Rc::new(sheet));
             }
             Err(e) => {
                 eprintln!("Failed to load sprite sheet: {}", e);
@@ -77,5 +60,5 @@ pub fn load_sprites(config: &Config) -> SpriteData {
         }
     }
     
-    SpriteData::None
+    SpriteContainer::Cairo
 }
