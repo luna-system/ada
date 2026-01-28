@@ -117,7 +117,7 @@ impl BehaviorRuntime {
             "chase" => self.do_chase(state),
             "sleep" => self.do_sleep(state),
             "alert" => self.do_alert(state),
-            "idle" | "sit" => self.do_idle(state),
+            "idle" | "sit" | "play" => self.do_idle(state),
             _ => self.do_wander(state), // Default to wander
         }
     }

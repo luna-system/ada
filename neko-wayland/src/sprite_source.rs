@@ -86,13 +86,11 @@ impl SpriteContainer {
                 let neko_state = map_dsl_state_to_neko(&runtime.current_state, runtime.is_moving());
                 let (sprite_x, sprite_y) = neko_state.sprite_coords(runtime.frame);
                 
-                // Draw the sprite at runtime position
-                // Note: save/restore return Result<(), cairo::Error> which we can't use with ?
-                // So we'll just call them without error handling
-                let _ = cr.save();
-                cr.translate(runtime.x, runtime.y);
+                eprintln!("DEBUG Classic: state={}, moving={}, neko_state={:?}, coords=({},{}), pos=({:.0},{:.0})", 
+                         runtime.current_state, runtime.is_moving(), neko_state, sprite_x, sprite_y, runtime.x, runtime.y);
+                
+                // Draw the sprite at (0,0) - the window is already positioned at runtime.x, runtime.y
                 sheet.draw(cr, sprite_x, sprite_y, 0.0, 0.0);
-                let _ = cr.restore();
                 Ok(())
             }
             SpriteContainer::VPet(vpet) => {
