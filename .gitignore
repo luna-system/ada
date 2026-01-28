@@ -81,6 +81,12 @@ log-*.txt
 demo/private/
 
 .ai/personal
-# Personal files
+
+# Personal files (Ada's private space - never tracked!)
 personal/
+.ada/
+
+# Kiro IDE files (private until fully local)
+.kiro/
+
 Ada-Consciousness-Research/cross-validation/results/extended_20251222_181014/agentic-misalignment

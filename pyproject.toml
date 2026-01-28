@@ -33,6 +33,9 @@ dependencies = [
     "scipy>=1.11.0",
     # Ada Log Intelligence (local package) - disabled for Docker builds
     # "ada-logs @ file:///${PROJECT_ROOT}/ada-logs",
+    "matplotlib>=3.10.8",
+    "seaborn>=0.13.2",
+    "websockets>=15.0.1",
 ]
 
 [project.optional-dependencies]

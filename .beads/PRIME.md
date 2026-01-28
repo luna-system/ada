@@ -41,6 +41,8 @@ Key projects (all siblings at root level):
 - `ada-slm/` - Small language model experiments
 - `ada-vscode/` - VSCode extension
 
+**Machine Documentation**: `.ai/MACHINE-DOCS-INDEX.md` - Complete index of all machine-readable docs
+
 **Shell**: zsh (not bash!) - Use single quotes for git commits to avoid `!` expansion
 
 ## 🔧 Available Tools

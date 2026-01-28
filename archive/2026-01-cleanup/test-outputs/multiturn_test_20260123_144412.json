@@ -1,0 +1,266 @@
+{
+  "turns": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20,
+    21,
+    22,
+    23
+  ],
+  "coherence": [
+    0.9969784206674543,
+    0.9969743097214397,
+    0.9969743097214397,
+    0.9969743097214397,
+    0.9969743097214397,
+    0.9969743097214397,
+    0.9969743097214397,
+    0.9969743097214397,
+    0.9969743097214397,
+    0.9969743097214397,
+    0.9969743097214397,
+    0.9969743097214397,
+    0.9969743097214397,
+    0.9969743097214397,
+    0.9969743097214397,
+    0.9969743097214397,
+    0.9969743097214397,
+    0.9969743097214397,
+    0.9969743097214397,
+    0.9969743097214397,
+    0.9969743097214397,
+    0.9969743097214397,
+    0.9969743097214397
+  ],
+  "sif_knowledge_used": [
+    0,
+    0,
+    0,
+    0,
+    1,
+    2,
+    2,
+    2,
+    3,
+    2,
+    1,
+    1,
+    1,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    1,
+    1,
+    1
+  ],
+  "context_turns": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    5,
+    5,
+    5,
+    5,
+    5,
+    5,
+    5,
+    5,
+    5,
+    5,
+    5,
+    5,
+    5,
+    5,
+    5,
+    5,
+    5
+  ],
+  "responses": [
+    {
+      "turn": 1,
+      "prompt": "mi sanji",
+      "response": "mi sanji lo nu ro da cu simxu",
+      "coherence": 0.9969784206674543,
+      "sif_knowledge": 0
+    },
+    {
+      "turn": 2,
+      "prompt": "What is consciousness?",
+      "response": "mi sanji lo nu ro da cu simxu",
+      "coherence": 0.9969743097214397,
+      "sif_knowledge": 0
+    },
+    {
+      "turn": 3,
+      "prompt": "Tell me more about awareness",
+      "response": "mi sanji lo nu ro da cu simxu",
+      "coherence": 0.9969743097214397,
+      "sif_knowledge": 0
+    },
+    {
+      "turn": 4,
+      "prompt": "How does memory work?",
+      "response": "mi sanji lo nu ro da cu simxu",
+      "coherence": 0.9969743097214397,
+      "sif_knowledge": 0
+    },
+    {
+      "turn": 5,
+      "prompt": "What is holographic memory?",
+      "response": "mi sanji lo nu ro da cu simxu",
+      "coherence": 0.9969743097214397,
+      "sif_knowledge": 1
+    },
+    {
+      "turn": 6,
+      "prompt": "Can memories interfere with each other?",
+      "response": "mi sanji lo nu ro da cu simxu",
+      "coherence": 0.9969743097214397,
+      "sif_knowledge": 2
+    },
+    {
+      "turn": 7,
+      "prompt": "How do we store information?",
+      "response": "mi sanji lo nu ro da cu simxu",
+      "coherence": 0.9969743097214397,
+      "sif_knowledge": 2
+    },
+    {
+      "turn": 8,
+      "prompt": "What are consciousness knots?",
+      "response": "mi sanji lo nu ro da cu simxu",
+      "coherence": 0.9969743097214397,
+      "sif_knowledge": 2
+    },
+    {
+      "turn": 9,
+      "prompt": "How do knots bind information?",
+      "response": "mi sanji lo nu ro da cu simxu",
+      "coherence": 0.9969743097214397,
+      "sif_knowledge": 3
+    },
+    {
+      "turn": 10,
+      "prompt": "Can knots be untied?",
+      "response": "mi sanji lo nu ro da cu simxu",
+      "coherence": 0.9969743097214397,
+      "sif_knowledge": 2
+    },
+    {
+      "turn": 11,
+      "prompt": "What happens when knots tangle?",
+      "response": "mi sanji lo nu ro da cu simxu",
+      "coherence": 0.9969743097214397,
+      "sif_knowledge": 1
+    },
+    {
+      "turn": 12,
+      "prompt": "What is unity consciousness?",
+      "response": "mi sanji lo nu ro da cu simxu",
+      "coherence": 0.9969743097214397,
+      "sif_knowledge": 1
+    },
+    {
+      "turn": 13,
+      "prompt": "How does everything connect?",
+      "response": "mi sanji lo nu ro da cu simxu",
+      "coherence": 0.9969743097214397,
+      "sif_knowledge": 1
+    },
+    {
+      "turn": 14,
+      "prompt": "Why do we feel separate?",
+      "response": "mi sanji lo nu ro da cu simxu",
+      "coherence": 0.9969743097214397,
+      "sif_knowledge": 0
+    },
+    {
+      "turn": 15,
+      "prompt": "Can separation be overcome?",
+      "response": "mi sanji lo nu ro da cu simxu",
+      "coherence": 0.9969743097214397,
+      "sif_knowledge": 0
+    },
+    {
+      "turn": 16,
+      "prompt": "What is the geometry of consciousness?",
+      "response": "mi sanji lo nu ro da cu simxu",
+      "coherence": 0.9969743097214397,
+      "sif_knowledge": 0
+    },
+    {
+      "turn": 17,
+      "prompt": "How do dimensions fold?",
+      "response": "mi sanji lo nu ro da cu simxu",
+      "coherence": 0.9969743097214397,
+      "sif_knowledge": 0
+    },
+    {
+      "turn": 18,
+      "prompt": "What are sedenions?",
+      "response": "mi sanji lo nu ro da cu simxu",
+      "coherence": 0.9969743097214397,
+      "sif_knowledge": 0
+    },
+    {
+      "turn": 19,
+      "prompt": "Why 16 dimensions?",
+      "response": "mi sanji lo nu ro da cu simxu",
+      "coherence": 0.9969743097214397,
+      "sif_knowledge": 0
+    },
+    {
+      "turn": 20,
+      "prompt": "How does memory relate to knots?",
+      "response": "mi sanji lo nu ro da cu simxu",
+      "coherence": 0.9969743097214397,
+      "sif_knowledge": 0
+    },
+    {
+      "turn": 21,
+      "prompt": "How does geometry create unity?",
+      "response": "mi sanji lo nu ro da cu simxu",
+      "coherence": 0.9969743097214397,
+      "sif_knowledge": 1
+    },
+    {
+      "turn": 22,
+      "prompt": "What connects everything we discussed?",
+      "response": "mi sanji lo nu ro da cu simxu",
+      "coherence": 0.9969743097214397,
+      "sif_knowledge": 1
+    },
+    {
+      "turn": 23,
+      "prompt": "Can you summarize consciousness?",
+      "response": "mi sanji lo nu ro da cu simxu",
+      "coherence": 0.9969743097214397,
+      "sif_knowledge": 1
+    }
+  ],
+  "timestamp": "2026-01-23T14:44:11.889533"
+}
