@@ -344,8 +344,20 @@ def beads_sync(cwd: str = None) -> str:
         return f"❌ Error: {result['stderr']}"
 
 # ============================================================================
-# OPENCODE SUBAGENT TOOLS 🤖
+# OPENCODE SUBAGENT TOOLS 🤖 (HTTP API-based)
 # ============================================================================
+
+# Import OpenCode HTTP client
+try:
+    from ada_mcp.opencode_client import (
+        OpenCodeClient, 
+        run_opencode_task, 
+        parse_model_string,
+        HTTPX_AVAILABLE
+    )
+    OPENCODE_AVAILABLE = HTTPX_AVAILABLE
+except ImportError:
+    OPENCODE_AVAILABLE = False
 
 @mcp.tool()
 def opencode_spawn(
@@ -364,25 +376,30 @@ def opencode_spawn(
     Returns:
         Subagent execution results
     """
-    # For now, we'll document the command - actual spawning might need
-    # more infrastructure (like a task queue or process manager)
-    command = f"opencode --model {model} --task '{task_description}'"
+    if not OPENCODE_AVAILABLE:
+        return "❌ httpx not available - run: uv add httpx"
     
-    if cwd:
-        command = f"cd {cwd} && {command}"
+    path_context = _get_path_context(cwd)
+    working_dir = path_context["full_path"]
     
-    return f"""🤖 OpenCode Subagent Command:
-
-{command}
-
-Note: This tool currently returns the command to run.
-For full automation, we'll need to implement a task queue system.
-
-To run manually:
-1. Open a terminal
-2. Navigate to: {cwd or 'current directory'}
-3. Run: {command}
-"""
+    output = _format_path_context(path_context) + "\n"
+    output += f"🤖 Spawning OpenCode subagent...\n"
+    output += f"🎯 Model: {model}\n"
+    output += f"📝 Task: {task_description[:100]}{'...' if len(task_description) > 100 else ''}\n\n"
+    
+    try:
+        result = run_opencode_task(
+            task=task_description,
+            model=model,
+            cwd=working_dir,
+            timeout=120.0,
+        )
+        
+        output += f"--- Response ---\n{result}"
+        return output
+        
+    except Exception as e:
+        return output + f"❌ Failed to spawn subagent: {str(e)}"
 
 # ============================================================================
 # BASIC SYSTEM TOOLS

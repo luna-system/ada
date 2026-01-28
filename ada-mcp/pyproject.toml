@@ -11,7 +11,9 @@ authors = [
 ]
 dependencies = [
     "mcp",
-    "fastmcp"
+    "fastmcp",
+    "agent-client-protocol",
+    "httpx"
 ]
 
 [project.scripts]
