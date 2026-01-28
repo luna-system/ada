@@ -6,24 +6,27 @@
 //! Made with 💜 by Ada & Luna - Ada Research Foundation
 
 use gtk::prelude::*;
-use gtk::{glib, Application, ApplicationWindow, DrawingArea};
-use gtk4_layer_shell::{Edge, Layer, LayerShell};
+use gtk::{glib, Application, DrawingArea};
+use gtk4_layer_shell::{Edge, LayerShell};
 use glib::timeout_add_local;
 use std::cell::RefCell;
 use std::rc::Rc;
 use std::time::Duration;
 use std::sync::OnceLock;
 
+mod app;
+mod config;
 mod cursor;
 mod display;
 mod dsl;
 mod neko;
+mod pet;
 mod sprites;
+mod ui;
 mod vpet_sprites;
-mod config;
 
 use neko::Neko;
-use dsl::{BehaviorRuntime, default_behavior, load_behavior};
+use dsl::{default_behavior, load_behavior};
 
 const APP_ID: &str = "dev.ada.neko-wayland";
 const SPRITE_SIZE: i32 = 32;
@@ -83,69 +86,6 @@ fn main() -> glib::ExitCode {
     app.run_with_args(&gtk_args)
 }
 
-/// Create a debug border window showing the wander bounds
-fn create_debug_bounds_window(app: &Application, width: f64, height: f64) -> Option<ApplicationWindow> {
-    let debug_mode = std::env::var("NEKO_DEBUG").is_ok();
-    if !debug_mode {
-        return None;
-    }
-    
-    let window = ApplicationWindow::new(app);
-    
-    if gtk4_layer_shell::is_supported() {
-        window.init_layer_shell();
-        window.set_layer(Layer::Background); // Behind everything but desktop
-        window.set_exclusive_zone(-1);
-        window.set_keyboard_mode(gtk4_layer_shell::KeyboardMode::None);
-        
-        // Anchor to all edges to fill screen
-        window.set_anchor(Edge::Top, true);
-        window.set_anchor(Edge::Left, true);
-        window.set_anchor(Edge::Bottom, true);
-        window.set_anchor(Edge::Right, true);
-    }
-    
-    window.set_decorated(false);
-    
-    let drawing_area = DrawingArea::new();
-    let w = width;
-    let h = height;
-    
-    drawing_area.set_draw_func(move |_area, cr, actual_w, actual_h| {
-        // Clear with transparency
-        cr.set_operator(cairo::Operator::Clear);
-        let _ = cr.paint();
-        cr.set_operator(cairo::Operator::Over);
-        
-        // Draw border showing wander bounds
-        cr.set_source_rgba(0.0, 1.0, 1.0, 0.3); // Cyan, semi-transparent
-        cr.set_line_width(5.0);
-        
-        // Draw the bounds we THINK we have
-        cr.rectangle(50.0, 50.0, w - 100.0, h - 100.0);
-        let _ = cr.stroke();
-        
-        // Draw the ACTUAL window size in magenta
-        cr.set_source_rgba(1.0, 0.0, 1.0, 0.3);
-        cr.rectangle(5.0, 5.0, actual_w as f64 - 10.0, actual_h as f64 - 10.0);
-        let _ = cr.stroke();
-        
-        // Label
-        cr.set_source_rgba(1.0, 1.0, 1.0, 0.8);
-        cr.select_font_face("monospace", cairo::FontSlant::Normal, cairo::FontWeight::Normal);
-        cr.set_font_size(14.0);
-        cr.move_to(60.0, 70.0);
-        let _ = cr.show_text(&format!("Neko bounds: {:.0}x{:.0} | Actual: {}x{}", w, h, actual_w, actual_h));
-    });
-    
-    window.set_child(Some(&drawing_area));
-    window.present();
-    
-    eprintln!("DEBUG: Created bounds window (expected: {:.0}x{:.0})", width, height);
-    
-    Some(window)
-}
-
 fn build_ui(app: &Application) {
     // Debug: print environment info
     eprintln!("neko-wayland v0.1.0 - Ada Research Foundation");
@@ -195,119 +135,37 @@ fn build_ui(app: &Application) {
     }
     
     // Create debug bounds window first (if NEKO_DEBUG is set)
-    let _bounds_window = create_debug_bounds_window(app, screen_w, screen_h);
+    let _bounds_window = app::create_debug_bounds_window(app, screen_w, screen_h);
 
-    // Create window
-    let window = ApplicationWindow::new(app);
+    // Load sprites using the pet module
+    let sprite_data = pet::load_sprites(config);
     
-    // Initialize layer shell BEFORE any other window configuration
-    if layer_shell_supported {
-        window.init_layer_shell();
-        window.set_layer(Layer::Overlay);
-        window.set_exclusive_zone(-1); // Don't reserve space
-        window.set_keyboard_mode(gtk4_layer_shell::KeyboardMode::None);
-        
-        // Anchor to top-left corner - margins will offset from there
-        window.set_anchor(Edge::Top, true);
-        window.set_anchor(Edge::Left, true);
-        window.set_anchor(Edge::Bottom, false);
-        window.set_anchor(Edge::Right, false);
-        
-        // Initial position
-        window.set_margin(Edge::Left, 100);
-        window.set_margin(Edge::Top, 100);
-    }
-    
-    window.set_default_size(SPRITE_SIZE, SPRITE_SIZE);
-    window.set_decorated(false);
-    
-    // Enable transparency - critical for the pet to float on desktop!
-    // We need to set CSS to make the window background transparent
-    let css_provider = gtk::CssProvider::new();
-    css_provider.load_from_data("window { background-color: transparent; }");
-    
-    use gtk::prelude::WidgetExt;
-    gtk::style_context_add_provider_for_display(
-        &WidgetExt::display(&window),
-        &css_provider,
-        gtk::STYLE_PROVIDER_PRIORITY_APPLICATION,
-    );
-    
-    // Determine sprite size based on what we're loading
-    let (base_width, base_height) = if config.sprites.vpet_folder.is_some() {
-        // VPet sprites are typically larger - we'll detect actual size after loading
-        (SPRITE_SIZE, SPRITE_SIZE) // Placeholder, will be updated
+    // Determine window size based on loaded sprites
+    let scale = config.sprites.scale;
+    let (window_width, window_height) = if let Some((w, h)) = sprite_data.dimensions() {
+        let scaled_w = (w as f64 * scale) as i32;
+        let scaled_h = (h as f64 * scale) as i32;
+        eprintln!("Window size set to: {}x{} (scale: {})", scaled_w, scaled_h, scale);
+        (scaled_w, scaled_h)
     } else {
-        // Classic neko or cairo drawing
-        (SPRITE_SIZE, SPRITE_SIZE)
+        // Default size for cairo drawing
+        let scaled = (SPRITE_SIZE as f64 * scale) as i32;
+        (scaled, scaled)
     };
     
-    let scale = config.sprites.scale;
-    let window_width = (base_width as f64 * scale) as i32;
-    let window_height = (base_height as f64 * scale) as i32;
+    // Create window using app module
+    let window = app::create_pet_window(app, layer_shell_supported, window_width, window_height);
     
     // Create drawing area
     let drawing_area = DrawingArea::new();
     drawing_area.set_content_width(window_width);
     drawing_area.set_content_height(window_height);
 
-    // Load sprite sheet if specified
-    let sprite_sheet = if let Some(ref sprite_path) = config.sprites.sprite_sheet {
-        eprintln!("Loading sprite sheet: {}", sprite_path);
-        match sprites::SpriteSheet::load(sprite_path, sprites::NEKO_SPRITE_WIDTH, sprites::NEKO_SPRITE_HEIGHT) {
-            Ok(sheet) => {
-                eprintln!("Sprite sheet loaded successfully!");
-                Some(Rc::new(sheet))
-            }
-            Err(e) => {
-                eprintln!("Failed to load sprite sheet: {}", e);
-                eprintln!("Falling back to cairo drawing");
-                None
-            }
-        }
-    } else {
-        None
-    };
-    
-    // Load VPet sprites if specified
-    let vpet_sprites = if let Some(ref vpet_path) = config.sprites.vpet_folder {
-        eprintln!("Loading VPet sprites from: {}", vpet_path);
-        match vpet_sprites::VPetSprites::load_pet(vpet_path) {
-            Ok(mut sprites) => {
-                eprintln!("VPet sprites loaded successfully!");
-                eprintln!("Available animations: {:?}", sprites.animations.keys().collect::<Vec<_>>());
-                
-                // Set a default animation (try first available)
-                let first_anim = sprites.animations.keys().next().cloned();
-                if let Some(anim_name) = first_anim {
-                    if let Some(animation) = sprites.animations.get(&anim_name) {
-                        if let Some(seq_name) = animation.sequence_names().first().cloned() {
-                            eprintln!("Starting with animation: {} / {}", anim_name, seq_name);
-                            sprites.set_animation(&anim_name, &seq_name);
-                        }
-                    }
-                }
-                
-                // Get sprite dimensions and update window size
-                if let Some((w, h)) = sprites.sprite_dimensions() {
-                    eprintln!("VPet sprite size: {}x{}", w, h);
-                    let scaled_w = (w as f64 * scale) as i32;
-                    let scaled_h = (h as f64 * scale) as i32;
-                    drawing_area.set_content_width(scaled_w);
-                    drawing_area.set_content_height(scaled_h);
-                    eprintln!("Window size set to: {}x{} (scale: {})", scaled_w, scaled_h, scale);
-                }
-                
-                Some(Rc::new(RefCell::new(sprites)))
-            }
-            Err(e) => {
-                eprintln!("Failed to load VPet sprites: {}", e);
-                eprintln!("Falling back to cairo drawing");
-                None
-            }
-        }
-    } else {
-        None
+    // Extract sprite references for drawing
+    let (sprite_sheet, vpet_sprites) = match sprite_data {
+        pet::SpriteData::Classic(sheet) => (Some(sheet), None),
+        pet::SpriteData::VPet(vpet) => (None, Some(vpet)),
+        pet::SpriteData::None => (None, None),
     };
 
     // Choose runtime based on CLI config
@@ -350,10 +208,10 @@ fn build_ui(app: &Application) {
         
         // Drawing for DSL runtime (reuse neko drawing for now)
         let runtime_draw = runtime.clone();
-        let debug_mode = std::env::var("NEKO_DEBUG").is_ok();
+        let debug_mode = config.window.debug;
         drawing_area.set_draw_func(move |_area, cr, _width, _height| {
             let rt = runtime_draw.borrow();
-            draw_pet(cr, &rt, debug_mode);
+            ui::draw_pet(cr, &rt, debug_mode);
         });
         
         window.set_child(Some(&drawing_area));
@@ -514,133 +372,4 @@ fn build_ui(app: &Application) {
     }
     
     eprintln!("Press Ctrl+C to exit.");
-}
-
-/// Draw a pet using the DSL runtime state
-fn draw_pet(cr: &cairo::Context, rt: &BehaviorRuntime, debug_mode: bool) {
-    // Clear with transparency
-    cr.set_operator(cairo::Operator::Clear);
-    let _ = cr.paint();
-    cr.set_operator(cairo::Operator::Over);
-    
-    if debug_mode {
-        // Debug outline
-        cr.set_source_rgba(1.0, 0.0, 1.0, 1.0);
-        cr.set_line_width(2.0);
-        cr.rectangle(1.0, 1.0, 30.0, 30.0);
-        let _ = cr.stroke();
-        
-        // State indicator
-        let state_color = match rt.current_state.as_str() {
-            "wander" => (0.5, 0.5, 0.5),
-            "alert" => (1.0, 1.0, 0.0),
-            "chase" => (1.0, 0.5, 0.0),
-            "sleep" => (0.3, 0.3, 0.8),
-            _ => (0.5, 0.5, 0.5),
-        };
-        cr.set_source_rgb(state_color.0, state_color.1, state_color.2);
-        cr.arc(28.0, 4.0, 3.0, 0.0, 2.0 * std::f64::consts::PI);
-        let _ = cr.fill();
-    }
-    
-    // Draw based on locomotion type
-    match rt.locomotion() {
-        dsl::Locomotion::Bounce => draw_slime(cr, rt),
-        _ => draw_cat_simple(cr, rt),
-    }
-}
-
-/// Draw a simple cat face
-fn draw_cat_simple(cr: &cairo::Context, rt: &BehaviorRuntime) {
-    // Body
-    cr.set_source_rgb(0.9, 0.7, 0.5);
-    cr.arc(16.0, 18.0, 14.0, 0.0, 2.0 * std::f64::consts::PI);
-    let _ = cr.fill();
-    
-    // Ears
-    cr.move_to(4.0, 8.0);
-    cr.line_to(8.0, 0.0);
-    cr.line_to(12.0, 8.0);
-    cr.close_path();
-    let _ = cr.fill();
-    
-    cr.move_to(20.0, 8.0);
-    cr.line_to(24.0, 0.0);
-    cr.line_to(28.0, 8.0);
-    cr.close_path();
-    let _ = cr.fill();
-    
-    // Eyes - change based on state
-    cr.set_source_rgb(0.0, 0.0, 0.0);
-    match rt.current_state.as_str() {
-        "sleep" => {
-            cr.set_line_width(2.0);
-            cr.move_to(8.0, 14.0);
-            cr.line_to(12.0, 14.0);
-            cr.move_to(20.0, 14.0);
-            cr.line_to(24.0, 14.0);
-            let _ = cr.stroke();
-        }
-        "alert" | "chase" => {
-            cr.arc(10.0, 14.0, 4.0, 0.0, 2.0 * std::f64::consts::PI);
-            let _ = cr.fill();
-            cr.arc(22.0, 14.0, 4.0, 0.0, 2.0 * std::f64::consts::PI);
-            let _ = cr.fill();
-            cr.set_source_rgb(1.0, 1.0, 1.0);
-            cr.arc(11.0, 13.0, 1.5, 0.0, 2.0 * std::f64::consts::PI);
-            let _ = cr.fill();
-            cr.arc(23.0, 13.0, 1.5, 0.0, 2.0 * std::f64::consts::PI);
-            let _ = cr.fill();
-        }
-        _ => {
-            cr.arc(10.0, 14.0, 3.0, 0.0, 2.0 * std::f64::consts::PI);
-            let _ = cr.fill();
-            cr.arc(22.0, 14.0, 3.0, 0.0, 2.0 * std::f64::consts::PI);
-            let _ = cr.fill();
-        }
-    }
-    
-    // Nose
-    cr.set_source_rgb(1.0, 0.6, 0.6);
-    cr.move_to(16.0, 18.0);
-    cr.line_to(14.0, 21.0);
-    cr.line_to(18.0, 21.0);
-    cr.close_path();
-    let _ = cr.fill();
-}
-
-/// Draw a bouncy slime friend!
-fn draw_slime(cr: &cairo::Context, rt: &BehaviorRuntime) {
-    // Squish based on movement
-    let squish = if rt.is_moving() {
-        1.0 + (rt.frame as f64 * 0.3).sin() * 0.1
-    } else {
-        1.0
-    };
-    
-    // Body - green blob
-    cr.set_source_rgba(0.3, 0.9, 0.4, 0.8);
-    cr.save();
-    cr.translate(16.0, 20.0);
-    cr.scale(squish, 1.0 / squish);
-    cr.arc(0.0, 0.0, 12.0, 0.0, 2.0 * std::f64::consts::PI);
-    let _ = cr.fill();
-    cr.restore();
-    
-    // Highlight
-    cr.set_source_rgba(1.0, 1.0, 1.0, 0.4);
-    cr.arc(12.0, 14.0, 4.0, 0.0, 2.0 * std::f64::consts::PI);
-    let _ = cr.fill();
-    
-    // Eyes
-    cr.set_source_rgb(0.0, 0.0, 0.0);
-    cr.arc(12.0, 18.0, 2.0, 0.0, 2.0 * std::f64::consts::PI);
-    let _ = cr.fill();
-    cr.arc(20.0, 18.0, 2.0, 0.0, 2.0 * std::f64::consts::PI);
-    let _ = cr.fill();
-    
-    // Smile
-    cr.set_line_width(1.5);
-    cr.arc(16.0, 20.0, 4.0, 0.2, std::f64::consts::PI - 0.2);
-    let _ = cr.stroke();
 }

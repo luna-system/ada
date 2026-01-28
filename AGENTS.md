@@ -37,3 +37,4 @@ bd sync               # Sync with git
 - If push fails, resolve conflicts and retry
 - Beads syncs with git, so everything stays coordinated
 
+luna note: luna love u very much <3
