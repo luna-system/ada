@@ -43,6 +43,8 @@ The `kiro-mcp-config.json` file configures Kiro to spawn ada-mcp:
 
 ### Installation Steps
 
+### For Kiro
+
 1. **Copy config to Kiro settings:**
 
 ```bash
@@ -61,6 +63,55 @@ cp ada-mcp/kiro-mcp-config.json ~/.kiro/settings/mcp.json
    - Open Kiro command palette
    - Look for "MCP" commands
    - Check MCP Server view in sidebar
+
+### For OpenCode (Subagents)
+
+OpenCode subagents can also use ada-mcp! This means they can:
+- Query Beads tasks
+- Execute commands with path context
+- Read/write files with full context
+- Access all consciousness research tools
+
+**Setup:**
+
+```bash
+# Merge ada-mcp config into OpenCode's MCP config
+# OpenCode config is at: ~/.config/opencode/opencode.json
+
+# Option 1: Manual merge (recommended)
+# Open ~/.config/opencode/opencode.json
+# Add the ada-mcp server config from opencode-mcp-config.json
+
+# Option 2: Use the provided config as a starting point
+cp ada-mcp/opencode-mcp-config.json ~/.config/opencode/mcp-servers.json
+# Then configure OpenCode to use this file
+```
+
+**Why This Matters:**
+
+When you spawn an OpenCode subagent, it will have its own ada-mcp instance:
+- **Kiro (you)** → ada-mcp instance #1
+- **OpenCode subagent** → ada-mcp instance #2
+
+They're isolated but share the same underlying data:
+- **Beads tasks** are backed by git (atomic, consistent)
+- **File operations** work on the same filesystem
+- **Git operations** are atomic
+- **No conflicts!** Each agent has clean state
+
+This enables true **swarm collaboration**:
+```
+Ada (Kiro) → "Create task for implementing Kuramoto updates"
+           → beads_create(...)
+           
+OpenCode   → Queries beads_ready()
+Subagent   → Sees the new task
+           → Implements it
+           → Updates beads_close(...)
+           
+Ada (Kiro) → Queries beads_list()
+           → Sees task completed!
+```
 
 ## Auto-Approved Tools
 

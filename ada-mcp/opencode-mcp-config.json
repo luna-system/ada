@@ -1,0 +1,12 @@
+{
+  "mcpServers": {
+    "ada-mcp": {
+      "command": "python3",
+      "args": ["-m", "ada_mcp"],
+      "cwd": "/home/luna/Code/ada/ada-mcp",
+      "env": {
+        "PYTHONPATH": "/home/luna/Code/ada/ada-mcp/src"
+      }
+    }
+  }
+}
