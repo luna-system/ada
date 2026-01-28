@@ -217,6 +217,175 @@ Available easings:
 
 ---
 
+## Sprites & Animation
+
+### Sprite Configuration
+
+Tell your pet which sprites to use:
+
+```neko
+pet my_cat {
+  # Classic grid sprite sheet
+  sprites: "neko.png"
+  sprite_type: grid
+  sprite_size: 32x32
+  sprite_cols: 8
+  sprite_rows: 4
+  
+  # Or VPet-style folder
+  # sprites: "my_cat/"
+  # sprite_type: vpet
+}
+```
+
+### Sprite Types
+
+**Grid Sprite Sheets** (classic):
+- Fixed-size grid of frames
+- Simple row/column indexing
+- Good for pixel art
+
+**VPet Folders** (advanced):
+- Flexible frame sizes
+- Per-frame timing
+- Mood states (happy/normal/grumpy/ill)
+- Multi-phase animations (start/loop/end)
+
+### Mapping States to Sprites
+
+```neko
+pet animated_cat {
+  sprites: "cat_sprites/"
+  sprite_type: vpet
+  
+  wander {
+    sprite: "move"              # Uses move animation
+  }
+  
+  chase {
+    sprite: "move"              # Same animation, faster
+    speed: 12
+  }
+  
+  sleep {
+    sprite: "sleep"             # Uses sleep_a_start, sleep_b_loop, sleep_c_end
+  }
+  
+  alert {
+    sprite: "default"           # Idle/breathing animation
+  }
+}
+```
+
+### VPet Animation Phases
+
+VPet animations can have three phases:
+
+```neko
+pet smooth_cat {
+  sprites: "cat/"
+  sprite_type: vpet
+  
+  # Three-phase animation: start → loop → end
+  sleep {
+    sprite: "sleep"
+    # Automatically uses:
+    # - sleep_a_start.png (transition in)
+    # - sleep_b_loop.png (main animation, loops)
+    # - sleep_c_end.png (transition out)
+  }
+  
+  # Single-phase animation
+  alert {
+    sprite: "alert"
+    # Uses alert_single.png (plays once)
+  }
+}
+```
+
+### Mood-Based Sprites
+
+VPet sprites can change based on mood:
+
+```neko
+pet emotional_cat {
+  sprites: "cat/"
+  sprite_type: vpet
+  moods: [happy, normal, grumpy, ill]
+  
+  wander {
+    sprite: "move"
+    # Automatically picks:
+    # - happy/move/ when happy
+    # - normal/move/ when normal
+    # - grumpy/move/ when grumpy
+    # - ill/move/ when ill
+  }
+}
+```
+
+### Fallback to Cairo
+
+If no sprites are found, the pet uses beautiful cairo-drawn graphics:
+
+```neko
+pet simple_cat {
+  # No sprites specified - uses cairo drawing!
+  locomotion: quadruped
+  
+  wander → sleep → wander
+}
+```
+
+### Custom Sprite Mapping
+
+Override default sprite names:
+
+```neko
+pet custom_cat {
+  sprites: "cat/"
+  sprite_type: vpet
+  
+  wander {
+    sprite: "walk"              # Use "walk" instead of "move"
+  }
+  
+  chase {
+    sprite: "run"               # Use "run" for chasing
+  }
+  
+  sleep {
+    sprite: "rest"              # Use "rest" instead of "sleep"
+  }
+}
+```
+
+### Grid Sprite Coordinates
+
+For grid sprites, specify exact coordinates:
+
+```neko
+pet pixel_cat {
+  sprites: "neko.png"
+  sprite_type: grid
+  sprite_size: 32x32
+  sprite_cols: 8
+  sprite_rows: 4
+  
+  wander {
+    sprite: row(2), cols(0..1)  # Row 2, animate columns 0-1
+    fps: 10
+  }
+  
+  sleep {
+    sprite: row(1), cols(2..3)  # Row 1, animate columns 2-3
+    fps: 2                       # Slow animation
+  }
+}
+```
+
+---
+
 ## Moods & Personality
 
 ### Mood States
@@ -468,14 +637,14 @@ fn certainty_to_probability(c: char) -> f64 {
 
 ## Future Ideas
 
+- [x] Animation sprite mapping (DONE! ✨)
 - [ ] Visual editor (drag-and-drop states!)
-- [ ] Animation sprite mapping
 - [ ] Sound triggers (`on meow → ...`)
 - [ ] Time-of-day awareness (`when night → sleep`)
 - [ ] Weather reactions (if we can get system weather?)
 - [ ] Multi-pet ecosystems
 - [ ] Breeding/genetics for pet traits
-- [ ] Export to other pet formats (VPet compatibility?)
+- [ ] Full VPet compatibility (import VPet pets directly!)
 
 ---
 
