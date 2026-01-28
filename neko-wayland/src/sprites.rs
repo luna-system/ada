@@ -25,7 +25,7 @@ impl SpriteSheet {
             .map_err(|e| format!("Failed to open sprite sheet: {}", e))?;
         
         let mut reader = std::io::BufReader::new(file);
-        let surface = ImageSurface::create_from_png(&mut reader)
+        let mut surface = ImageSurface::create_from_png(&mut reader)
             .map_err(|e| format!("Failed to load PNG: {:?}", e))?;
         
         let width = surface.width();
@@ -37,6 +37,10 @@ impl SpriteSheet {
         eprintln!("Loaded sprite sheet: {}x{} pixels, {} cols x {} rows", 
                  width, height, cols, rows);
         
+        // Apply color keying to make blue/cyan transparent
+        // Classic neko uses cyan (#008080 or similar) as the background
+        surface = Self::apply_color_key(surface)?;
+        
         Ok(Self {
             surface,
             sprite_width,
@@ -44,6 +48,56 @@ impl SpriteSheet {
             cols,
             rows,
         })
+    }
+    
+    /// Apply color keying to make blue/cyan pixels transparent
+    fn apply_color_key(mut surface: ImageSurface) -> Result<ImageSurface, String> {
+        let width = surface.width();
+        let height = surface.height();
+        
+        // Create a new surface with alpha
+        let mut new_surface = ImageSurface::create(Format::ARgb32, width, height)
+            .map_err(|e| format!("Failed to create surface: {:?}", e))?;
+        
+        // First, read all the pixel data from the source
+        let pixel_data: Vec<u8> = {
+            let data = surface.data()
+                .map_err(|e| format!("Failed to get surface data: {:?}", e))?;
+            data.to_vec()
+        };
+        
+        // Now write to the new surface
+        {
+            let mut new_data = new_surface.data()
+                .map_err(|e| format!("Failed to get new surface data: {:?}", e))?;
+            
+            // Process each pixel
+            for i in (0..pixel_data.len()).step_by(4) {
+                let b = pixel_data[i] as u32;
+                let g = pixel_data[i + 1] as u32;
+                let r = pixel_data[i + 2] as u32;
+                
+                // Check if this is a blue/cyan pixel (classic neko background)
+                // Cyan is roughly RGB(0, 128-255, 128-255) or similar blues
+                let is_blue = b > 100 && g > 100 && r < 50;
+                
+                if is_blue {
+                    // Make it transparent
+                    new_data[i] = 0;
+                    new_data[i + 1] = 0;
+                    new_data[i + 2] = 0;
+                    new_data[i + 3] = 0;
+                } else {
+                    // Copy the pixel
+                    new_data[i] = pixel_data[i];
+                    new_data[i + 1] = pixel_data[i + 1];
+                    new_data[i + 2] = pixel_data[i + 2];
+                    new_data[i + 3] = pixel_data[i + 3];
+                }
+            }
+        }
+        
+        Ok(new_surface)
     }
 
     /// Create a placeholder sprite sheet (for testing without assets)
@@ -94,20 +148,27 @@ impl SpriteSheet {
         let src_y = (row * self.sprite_height) as f64;
         
         cr.save().unwrap();
-        cr.translate(dest_x, dest_y);
-        cr.set_source_surface(&self.surface, -src_x, -src_y).unwrap();
-        cr.rectangle(0.0, 0.0, self.sprite_width as f64, self.sprite_height as f64);
+        
+        // Set up clipping region for this sprite
+        cr.rectangle(dest_x, dest_y, self.sprite_width as f64, self.sprite_height as f64);
         cr.clip();
+        
+        // Draw the sprite with color keying for blue background
+        // Classic neko uses cyan/blue as transparent color
+        cr.set_source_surface(&self.surface, dest_x - src_x, dest_y - src_y).unwrap();
+        
+        // Use operator to handle transparency
+        // The blue pixels should already be transparent if the PNG has alpha
+        // But if not, we'll need to do color keying
         let _ = cr.paint();
+        
         cr.restore().unwrap();
     }
     
-    /// Draw a sprite centered at the given position
+    /// Draw a sprite centered at the given position (for 32x32 window)
     pub fn draw_centered(&self, cr: &cairo::Context, col: i32, row: i32) {
-        // Center the sprite in a 32x32 area
-        let offset_x = (32.0 - self.sprite_width as f64) / 2.0;
-        let offset_y = (32.0 - self.sprite_height as f64) / 2.0;
-        self.draw(cr, col, row, offset_x, offset_y);
+        // Draw at 0,0 - the sprite should fill the 32x32 window exactly
+        self.draw(cr, col, row, 0.0, 0.0);
     }
 
     /// Get sprite dimensions

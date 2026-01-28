@@ -144,8 +144,13 @@ impl Neko {
 
     /// Main update loop
     pub fn update(&mut self) {
-        self.frame = self.frame.wrapping_add(1);
         self.behavior_ticks += 1;
+        
+        // Slow down sprite animation - only update frame every 3 ticks
+        // This gives us ~6-7 fps for sprite animation instead of 20fps
+        if self.behavior_ticks % 3 == 0 {
+            self.frame = self.frame.wrapping_add(1);
+        }
         
         // Update target based on behavior mode
         match self.behavior_mode {
