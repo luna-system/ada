@@ -184,12 +184,40 @@ fn build_ui(app: &Application) {
             rt
         }));
         
-        // Drawing for DSL runtime (reuse neko drawing for now)
+        // Drawing for DSL runtime - use sprite container!
         let runtime_draw = runtime.clone();
+        let sprite_container_draw = Rc::new(sprite_container);
         let debug_mode = config.window.debug;
         drawing_area.set_draw_func(move |_area, cr, _width, _height| {
+            // Clear with transparency
+            cr.set_operator(cairo::Operator::Clear);
+            let _ = cr.paint();
+            cr.set_operator(cairo::Operator::Over);
+            
+            // Scale the context
+            cr.scale(scale, scale);
+            
             let rt = runtime_draw.borrow();
-            ui::draw_pet(cr, &rt, debug_mode);
+            
+            // Draw debug info if enabled
+            if debug_mode {
+                ui::draw_pet(cr, &rt, debug_mode);
+            } else {
+                // Use sprite container for actual drawing
+                // For now, VPet will use its current animation
+                // TODO: Map DSL state to VPet animation
+                match sprite_container_draw.as_ref() {
+                    crate::sprite_source::SpriteContainer::VPet(vpet) => {
+                        if let Err(e) = vpet.borrow().draw(cr) {
+                            eprintln!("VPet draw error: {}", e);
+                        }
+                    }
+                    _ => {
+                        // Fall back to cairo drawing for non-VPet
+                        ui::draw_pet(cr, &rt, false);
+                    }
+                }
+            }
         });
         
         window.set_child(Some(&drawing_area));
