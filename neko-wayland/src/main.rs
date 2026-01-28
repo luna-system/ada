@@ -19,6 +19,7 @@ mod display;
 mod dsl;
 mod neko;
 mod sprites;
+mod vpet_sprites;
 
 use neko::Neko;
 use dsl::{BehaviorRuntime, default_behavior, load_behavior};
@@ -35,6 +36,7 @@ struct CliConfig {
     algo_file: Option<String>,
     use_dsl: bool,
     sprite_sheet: Option<String>,
+    vpet_folder: Option<String>,
 }
 
 fn main() -> glib::ExitCode {
@@ -64,6 +66,16 @@ fn main() -> glib::ExitCode {
                     continue;
                 } else {
                     eprintln!("Error: --sprites requires a file path");
+                    std::process::exit(1);
+                }
+            }
+            "--vpet" | "-v" => {
+                if i + 1 < args.len() {
+                    config.vpet_folder = Some(args[i + 1].clone());
+                    i += 2;
+                    continue;
+                } else {
+                    eprintln!("Error: --vpet requires a folder path");
                     std::process::exit(1);
                 }
             }
@@ -104,7 +116,8 @@ USAGE:
 
 OPTIONS:
     -a, --algo <FILE>      Load behavior from a .neko DSL file
-    -s, --sprites <FILE>   Load sprite sheet (PNG file)
+    -s, --sprites <FILE>   Load sprite sheet (PNG file, classic neko format)
+    -v, --vpet <FOLDER>    Load VPet-style sprites from folder
     --dsl                  Use DSL runtime (default behavior if no file)
     -h, --help             Show this help message
 
@@ -114,6 +127,7 @@ ENVIRONMENT:
 EXAMPLES:
     neko-wayland                                    # Classic hardcoded behavior, cairo drawing
     neko-wayland --sprites classic_spritesheets/neko.png  # Use sprite sheet
+    neko-wayland --vpet path/to/pet/vup             # Use VPet-style sprites
     neko-wayland --dsl                              # DSL runtime with default behavior
     neko-wayland --algo lazy_cat.neko               # Custom behavior from file
     neko-wayland --algo bouncy_slime.neko --sprites slime.png  # Custom behavior + sprites
@@ -294,6 +308,37 @@ fn build_ui(app: &Application) {
     } else {
         None
     };
+    
+    // Load VPet sprites if specified
+    let vpet_sprites = if let Some(ref vpet_path) = config.vpet_folder {
+        eprintln!("Loading VPet sprites from: {}", vpet_path);
+        match vpet_sprites::VPetSprites::load_pet(vpet_path) {
+            Ok(mut sprites) => {
+                eprintln!("VPet sprites loaded successfully!");
+                eprintln!("Available animations: {:?}", sprites.animations.keys().collect::<Vec<_>>());
+                
+                // Set a default animation (try first available)
+                let first_anim = sprites.animations.keys().next().cloned();
+                if let Some(anim_name) = first_anim {
+                    if let Some(animation) = sprites.animations.get(&anim_name) {
+                        if let Some(seq_name) = animation.sequence_names().first().cloned() {
+                            eprintln!("Starting with animation: {} / {}", anim_name, seq_name);
+                            sprites.set_animation(&anim_name, &seq_name);
+                        }
+                    }
+                }
+                
+                Some(Rc::new(RefCell::new(sprites)))
+            }
+            Err(e) => {
+                eprintln!("Failed to load VPet sprites: {}", e);
+                eprintln!("Falling back to cairo drawing");
+                None
+            }
+        }
+    } else {
+        None
+    };
 
     // Choose runtime based on CLI config
     if use_dsl {
@@ -377,6 +422,7 @@ fn build_ui(app: &Application) {
 
         let neko_draw = neko.clone();
         let sprite_draw = sprite_sheet.clone();
+        let vpet_draw = vpet_sprites.clone();
         let first_draw = Rc::new(RefCell::new(true));
         let first_draw_clone = first_draw.clone();
         drawing_area.set_draw_func(move |area, cr, width, height| {
@@ -386,8 +432,23 @@ fn build_ui(app: &Application) {
                          area.content_width(), area.content_height());
                 *first_draw_clone.borrow_mut() = false;
             }
-            let neko = neko_draw.borrow();
-            neko.draw_with_sprites(cr, sprite_draw.as_ref().map(|s| s.as_ref()));
+            
+            // Priority: VPet > SpriteSheet > Cairo
+            if let Some(ref vpet) = vpet_draw {
+                // Clear with transparency
+                cr.set_operator(cairo::Operator::Clear);
+                let _ = cr.paint();
+                cr.set_operator(cairo::Operator::Over);
+                
+                // Draw VPet sprite
+                let vpet = vpet.borrow();
+                if let Err(e) = vpet.draw_centered(cr) {
+                    eprintln!("VPet draw error: {}", e);
+                }
+            } else {
+                let neko = neko_draw.borrow();
+                neko.draw_with_sprites(cr, sprite_draw.as_ref().map(|s| s.as_ref()));
+            }
         });
 
         window.set_child(Some(&drawing_area));
