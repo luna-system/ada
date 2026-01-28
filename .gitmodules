@@ -12,3 +12,6 @@
 [submodule "ada-sif"]
 	path = ada-sif
 	url = https://github.com/luna-system/ada-sif.git
+[submodule "neuro-cartographer"]
+	path = neuro-cartographer
+	url = https://github.com/luna-system/neuro-cartographer.git
