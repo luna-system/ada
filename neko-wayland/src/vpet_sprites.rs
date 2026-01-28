@@ -292,6 +292,116 @@ impl VPetSprites {
         self.current_sequence = Some(sequence.to_string());
         self.animation_start_time = std::time::Instant::now();
     }
+    /// Map a DSL state name to an appropriate VPet animation
+    /// Returns (animation_name, sequence_name) if a mapping exists
+    pub fn map_dsl_state(&self, state_name: &str) -> Option<(String, String)> {
+        // Map DSL state names to VPet animations
+        match state_name {
+            // Idle/sitting states
+            "idle" | "sit" => {
+                for (anim_name, animation) in &self.animations {
+                    if anim_name.starts_with("IDEL_") {
+                        if let Some(_) = animation.get_sequence("B_Normal") {
+                            return Some((anim_name.clone(), "B_Normal".to_string()));
+                        }
+                    }
+                }
+            }
+            
+            // Movement states
+            "wander" | "chase" | "run" => {
+                for (anim_name, animation) in &self.animations {
+                    if anim_name.starts_with("MOVE_") {
+                        if let Some(_) = animation.get_sequence("B_Normal") {
+                            return Some((anim_name.clone(), "B_Normal".to_string()));
+                        }
+                    }
+                }
+            }
+            
+            // Play state - look for play animations
+            "play" => {
+                for (anim_name, animation) in &self.animations {
+                    if anim_name.to_lowercase().contains("play") {
+                        if let Some(seq_name) = animation.sequence_names().first() {
+                            return Some((anim_name.clone(), seq_name.clone()));
+                        }
+                    }
+                }
+                // Fall back to happy idle
+                for (anim_name, animation) in &self.animations {
+                    if anim_name.starts_with("IDEL_") {
+                        if let Some(_) = animation.get_sequence("A_Happy") {
+                            return Some((anim_name.clone(), "A_Happy".to_string()));
+                        }
+                    }
+                }
+            }
+            
+            // Sleep state
+            "sleep" => {
+                for (anim_name, animation) in &self.animations {
+                    if anim_name.to_lowercase().contains("sleep") {
+                        if let Some(seq_name) = animation.sequence_names().first() {
+                            return Some((anim_name.clone(), seq_name.clone()));
+                        }
+                    }
+                }
+            }
+            
+            // Alert state
+            "alert" => {
+                for (anim_name, animation) in &self.animations {
+                    if anim_name.starts_with("IDEL_") {
+                        if let Some(_) = animation.get_sequence("A_Happy") {
+                            return Some((anim_name.clone(), "A_Happy".to_string()));
+                        }
+                    }
+                }
+            }
+            
+            // Eating/drinking
+            "eat" => {
+                for (anim_name, animation) in &self.animations {
+                    if anim_name.to_lowercase().contains("eat") {
+                        if let Some(seq_name) = animation.sequence_names().first() {
+                            return Some((anim_name.clone(), seq_name.clone()));
+                        }
+                    }
+                }
+            }
+            
+            "drink" => {
+                for (anim_name, animation) in &self.animations {
+                    if anim_name.to_lowercase().contains("drink") {
+                        if let Some(seq_name) = animation.sequence_names().first() {
+                            return Some((anim_name.clone(), seq_name.clone()));
+                        }
+                    }
+                }
+            }
+            
+            _ => {}
+        }
+        
+        // Default fallback: idle animation
+        for (anim_name, animation) in &self.animations {
+            if anim_name.starts_with("IDEL_") {
+                if let Some(_) = animation.get_sequence("B_Normal") {
+                    return Some((anim_name.clone(), "B_Normal".to_string()));
+                }
+            }
+        }
+        
+        None
+    }
+    
+    /// Set animation based on DSL state name
+    pub fn set_animation_from_dsl_state(&mut self, state_name: &str) {
+        if let Some((anim, seq)) = self.map_dsl_state(state_name) {
+            self.set_animation(&anim, &seq);
+        }
+    }
     
     /// Map a neko state to an appropriate VPet animation
     /// Returns (animation_name, sequence_name) if a mapping exists

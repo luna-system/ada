@@ -74,7 +74,7 @@ impl SpriteContainer {
     }
     
     /// Draw using DSL runtime state
-    pub fn draw_with_runtime(&self, cr: &cairo::Context, _runtime: &BehaviorRuntime) -> Result<(), String> {
+    pub fn draw_with_runtime(&self, cr: &cairo::Context, runtime: &BehaviorRuntime) -> Result<(), String> {
         match self {
             SpriteContainer::Cairo => {
                 // For now, cairo drawing is handled by ui::draw_pet
@@ -86,6 +86,11 @@ impl SpriteContainer {
                 Ok(())
             }
             SpriteContainer::VPet(vpet) => {
+                // Update VPet animation based on DSL state
+                let mut vpet_mut = vpet.borrow_mut();
+                vpet_mut.set_animation_from_dsl_state(&runtime.current_state);
+                drop(vpet_mut); // Release borrow before drawing
+                
                 vpet.borrow().draw(cr)
             }
         }

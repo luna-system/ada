@@ -203,19 +203,11 @@ fn build_ui(app: &Application) {
             if debug_mode {
                 ui::draw_pet(cr, &rt, debug_mode);
             } else {
-                // Use sprite container for actual drawing
-                // For now, VPet will use its current animation
-                // TODO: Map DSL state to VPet animation
-                match sprite_container_draw.as_ref() {
-                    crate::sprite_source::SpriteContainer::VPet(vpet) => {
-                        if let Err(e) = vpet.borrow().draw(cr) {
-                            eprintln!("VPet draw error: {}", e);
-                        }
-                    }
-                    _ => {
-                        // Fall back to cairo drawing for non-VPet
-                        ui::draw_pet(cr, &rt, false);
-                    }
+                // Use sprite container with DSL runtime state
+                if let Err(e) = sprite_container_draw.draw_with_runtime(cr, &rt) {
+                    eprintln!("Sprite draw error: {}", e);
+                    // Fall back to cairo drawing
+                    ui::draw_pet(cr, &rt, false);
                 }
             }
         });

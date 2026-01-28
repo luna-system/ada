@@ -7,30 +7,30 @@
 
 pet moody_vup {
   # Idle state - different reactions to cursor
-  idle {
+  idle(speed: 0) {
     on cursor_near(150px) → chase
     on idle(10s) → wander
   }
   
   # Wandering around
-  wander(radius: 300px, speed: 5) {
+  wander(radius: 300px, speed: 3) {
     on cursor_near(150px) → idle
     on idle(5s) → idle
   }
   
   # Chasing cursor
-  chase(speed: 7) {
+  chase(speed: 4) {
     on caught(50px) → play
     on cursor_far(300px) → idle
   }
   
   # Playing
-  play(duration: 5s) {
+  play(speed: 0, duration: 5s) {
     on timeout(5s) → idle
   }
   
   # Sleeping
-  sleep(duration: 10s) {
+  sleep(speed: 0, duration: 10s) {
     on timeout(10s) → idle
   }
 }
