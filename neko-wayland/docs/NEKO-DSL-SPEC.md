@@ -108,13 +108,15 @@ Built-in triggers:
 
 | Trigger | What it means |
 |---------|---------------|
-| `cursor_near` | Cursor is close (default: 300px) |
+| `cursor_near` | Cursor is close (default: 200px) |
 | `cursor_near(Npx)` | Cursor within N pixels |
-| `cursor_far` | Cursor went away |
+| `cursor_far` | Cursor went away (default: 400px) |
+| `cursor_far(Npx)` | Cursor farther than N pixels |
+| `caught` | Reached the target (default: 50px) |
+| `caught(Npx)` | Within N pixels of target |
 | `idle(time)` | Nothing happened for a while |
-| `timeout` | State's duration ended |
+| `timeout(time)` | State lasted for this long |
 | `click` | User clicked on pet |
-| `caught` | Reached the chase target |
 
 ---
 

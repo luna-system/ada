@@ -76,6 +76,13 @@ impl BehaviorRuntime {
         self.frame = self.frame.wrapping_add(1);
         self.state_ticks += 1;
         
+        // Debug cursor every 2 seconds
+        if self.frame % 40 == 0 && self.cursor_available {
+            let dist = self.cursor_distance();
+            eprintln!("DSL: cursor at ({:.0}, {:.0}), pet at ({:.0}, {:.0}), distance: {:.0}px", 
+                     self.cursor_x, self.cursor_y, self.x, self.y, dist);
+        }
+        
         // Get current state
         let state = match self.behavior.states.get(&self.current_state) {
             Some(s) => s.clone(),
@@ -155,8 +162,19 @@ impl BehaviorRuntime {
     fn check_transitions(&mut self, state: &State) {
         for transition in &state.transitions {
             if self.should_transition(transition) {
+                // Debug: show why we're transitioning
+                let trigger_desc = match &transition.trigger {
+                    None => "timeout".to_string(),
+                    Some(t) => format!("{}", t.name),
+                };
+                
                 // Roll for certainty
                 if transition.certainty.roll() {
+                    eprintln!("DSL: {} → {} (trigger: {}, certainty: {:.0}%)", 
+                             self.current_state, 
+                             transition.target_state,
+                             trigger_desc,
+                             transition.certainty.probability() * 100.0);
                     self.transition_to(&transition.target_state);
                     return;
                 }
@@ -177,13 +195,23 @@ impl BehaviorRuntime {
                         let threshold = trigger.params.first()
                             .map(|v| v.sample())
                             .unwrap_or(200.0);
-                        self.cursor_distance() < threshold
+                        let dist = self.cursor_distance();
+                        dist < threshold
                     }
                     "cursor_far" => {
                         let threshold = trigger.params.first()
                             .map(|v| v.sample())
                             .unwrap_or(400.0);
-                        self.cursor_distance() > threshold
+                        let dist = self.cursor_distance();
+                        dist > threshold
+                    }
+                    "caught" => {
+                        // Pet caught the cursor - check if we're very close
+                        let threshold = trigger.params.first()
+                            .map(|v| v.sample())
+                            .unwrap_or(50.0);
+                        let dist = self.cursor_distance();
+                        dist < threshold
                     }
                     "timeout" => {
                         let duration = trigger.params.first()
@@ -206,7 +234,10 @@ impl BehaviorRuntime {
                             .unwrap_or(0.01);
                         rand::thread_rng().gen::<f64>() < chance
                     }
-                    _ => false
+                    _ => {
+                        eprintln!("DSL: Unknown trigger '{}'", trigger.name);
+                        false
+                    }
                 }
             }
         }
@@ -215,7 +246,6 @@ impl BehaviorRuntime {
     /// Transition to a new state
     fn transition_to(&mut self, state_name: &str) {
         if self.behavior.states.contains_key(state_name) {
-            eprintln!("DSL: {} → {}", self.current_state, state_name);
             self.current_state = state_name.to_string();
             self.state_ticks = 0;
             self.idle_ticks = 0;
