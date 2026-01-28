@@ -34,6 +34,7 @@ static CLI_CONFIG: OnceLock<CliConfig> = OnceLock::new();
 struct CliConfig {
     algo_file: Option<String>,
     use_dsl: bool,
+    sprite_sheet: Option<String>,
 }
 
 fn main() -> glib::ExitCode {
@@ -53,6 +54,16 @@ fn main() -> glib::ExitCode {
                     continue;
                 } else {
                     eprintln!("Error: --algo requires a file path");
+                    std::process::exit(1);
+                }
+            }
+            "--sprites" | "-s" => {
+                if i + 1 < args.len() {
+                    config.sprite_sheet = Some(args[i + 1].clone());
+                    i += 2;
+                    continue;
+                } else {
+                    eprintln!("Error: --sprites requires a file path");
                     std::process::exit(1);
                 }
             }
@@ -92,17 +103,20 @@ USAGE:
     neko-wayland [OPTIONS]
 
 OPTIONS:
-    -a, --algo <FILE>    Load behavior from a .neko DSL file
-    --dsl                Use DSL runtime (default behavior if no file)
-    -h, --help           Show this help message
+    -a, --algo <FILE>      Load behavior from a .neko DSL file
+    -s, --sprites <FILE>   Load sprite sheet (PNG file)
+    --dsl                  Use DSL runtime (default behavior if no file)
+    -h, --help             Show this help message
 
 ENVIRONMENT:
-    NEKO_DEBUG           Enable debug visualization
+    NEKO_DEBUG             Enable debug visualization
 
 EXAMPLES:
-    neko-wayland                      # Classic hardcoded behavior
-    neko-wayland --dsl                # DSL runtime with default behavior
-    neko-wayland --algo lazy_cat.neko # Custom behavior from file
+    neko-wayland                                    # Classic hardcoded behavior, cairo drawing
+    neko-wayland --sprites classic_spritesheets/neko.png  # Use sprite sheet
+    neko-wayland --dsl                              # DSL runtime with default behavior
+    neko-wayland --algo lazy_cat.neko               # Custom behavior from file
+    neko-wayland --algo bouncy_slime.neko --sprites slime.png  # Custom behavior + sprites
 
 Made with 💜 by Ada & Luna - Ada Research Foundation
 "#);
@@ -263,6 +277,24 @@ fn build_ui(app: &Application) {
     drawing_area.set_content_width(SPRITE_SIZE);
     drawing_area.set_content_height(SPRITE_SIZE);
 
+    // Load sprite sheet if specified
+    let sprite_sheet = if let Some(ref sprite_path) = config.sprite_sheet {
+        eprintln!("Loading sprite sheet: {}", sprite_path);
+        match sprites::SpriteSheet::load(sprite_path, sprites::NEKO_SPRITE_WIDTH, sprites::NEKO_SPRITE_HEIGHT) {
+            Ok(sheet) => {
+                eprintln!("Sprite sheet loaded successfully!");
+                Some(Rc::new(sheet))
+            }
+            Err(e) => {
+                eprintln!("Failed to load sprite sheet: {}", e);
+                eprintln!("Falling back to cairo drawing");
+                None
+            }
+        }
+    } else {
+        None
+    };
+
     // Choose runtime based on CLI config
     if use_dsl {
         // DSL-driven behavior
@@ -344,6 +376,7 @@ fn build_ui(app: &Application) {
         }));
 
         let neko_draw = neko.clone();
+        let sprite_draw = sprite_sheet.clone();
         let first_draw = Rc::new(RefCell::new(true));
         let first_draw_clone = first_draw.clone();
         drawing_area.set_draw_func(move |area, cr, width, height| {
@@ -354,7 +387,7 @@ fn build_ui(app: &Application) {
                 *first_draw_clone.borrow_mut() = false;
             }
             let neko = neko_draw.borrow();
-            neko.draw(cr);
+            neko.draw_with_sprites(cr, sprite_draw.as_ref().map(|s| s.as_ref()));
         });
 
         window.set_child(Some(&drawing_area));

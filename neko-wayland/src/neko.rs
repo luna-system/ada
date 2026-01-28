@@ -369,7 +369,12 @@ impl Neko {
 
     /// Draw the neko sprite (placeholder)
     pub fn draw(&self, cr: &cairo::Context) {
-        let (_sprite_x, _sprite_y) = self.state.sprite_coords(self.frame);
+        self.draw_with_sprites(cr, None);
+    }
+    
+    /// Draw the neko, optionally using a sprite sheet
+    pub fn draw_with_sprites(&self, cr: &cairo::Context, sprites: Option<&crate::sprites::SpriteSheet>) {
+        let (sprite_col, sprite_row) = self.state.sprite_coords(self.frame);
         
         // Clear with transparency
         cr.set_operator(cairo::Operator::Clear);
@@ -382,7 +387,12 @@ impl Neko {
             return;
         }
         
-        self.draw_cat(cr);
+        // Use sprites if available, otherwise fall back to cairo drawing
+        if let Some(sheet) = sprites {
+            sheet.draw_centered(cr, sprite_col, sprite_row);
+        } else {
+            self.draw_cat(cr);
+        }
     }
     
     /// Draw debug visualization

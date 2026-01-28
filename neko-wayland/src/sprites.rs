@@ -2,9 +2,12 @@
 //!
 //! Classic neko sprite sheets are 32x32 pixels per frame,
 //! arranged in a grid with different animations in rows.
+//!
+//! Made with 💜 by Ada & Luna - Ada Research Foundation
 
 use cairo::{ImageSurface, Format};
 use std::path::Path;
+use crate::neko::NekoState;
 
 /// A loaded sprite sheet
 pub struct SpriteSheet {
@@ -30,6 +33,9 @@ impl SpriteSheet {
         
         let cols = width / sprite_width;
         let rows = height / sprite_height;
+        
+        eprintln!("Loaded sprite sheet: {}x{} pixels, {} cols x {} rows", 
+                 width, height, cols, rows);
         
         Ok(Self {
             surface,
@@ -95,10 +101,23 @@ impl SpriteSheet {
         let _ = cr.paint();
         cr.restore().unwrap();
     }
+    
+    /// Draw a sprite centered at the given position
+    pub fn draw_centered(&self, cr: &cairo::Context, col: i32, row: i32) {
+        // Center the sprite in a 32x32 area
+        let offset_x = (32.0 - self.sprite_width as f64) / 2.0;
+        let offset_y = (32.0 - self.sprite_height as f64) / 2.0;
+        self.draw(cr, col, row, offset_x, offset_y);
+    }
 
     /// Get sprite dimensions
     pub fn sprite_size(&self) -> (i32, i32) {
         (self.sprite_width, self.sprite_height)
+    }
+    
+    /// Get the sprite coordinates for a neko state
+    pub fn coords_for_state(&self, state: NekoState, frame: u8) -> (i32, i32) {
+        state.sprite_coords(frame)
     }
 }
 
@@ -108,7 +127,9 @@ impl SpriteSheet {
 /// Row 1: Alert(2), Sleep(2), [unused]
 /// Row 2: RunN(2), RunNE(2), RunE(2), RunSE(2)
 /// Row 3: RunS(2), RunSW(2), RunW(2), RunNW(2)
+/// Row 4: [Pawprints - optional, some sprites don't have this]
 pub const NEKO_SPRITE_WIDTH: i32 = 32;
 pub const NEKO_SPRITE_HEIGHT: i32 = 32;
 pub const NEKO_COLS: i32 = 8;
-pub const NEKO_ROWS: i32 = 4;
+pub const NEKO_ROWS: i32 = 4;  // Minimum rows (some have 5 for pawprints)
+
