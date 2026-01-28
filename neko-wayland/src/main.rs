@@ -414,6 +414,23 @@ fn build_ui(app: &Application) {
             };
             rt.screen_width = screen_w;
             rt.screen_height = screen_h;
+            
+            // Set sprite dimensions based on what we loaded
+            if let Some(ref vpet) = vpet_sprites {
+                if let Some((w, h)) = vpet.borrow().sprite_dimensions() {
+                    rt.sprite_width = (w as f64 * scale).max(1.0);
+                    rt.sprite_height = (h as f64 * scale).max(1.0);
+                    eprintln!("DEBUG: DSL sprite size set to {:.0}x{:.0} (scaled)", rt.sprite_width, rt.sprite_height);
+                }
+            } else if sprite_sheet.is_some() {
+                rt.sprite_width = 32.0 * scale;
+                rt.sprite_height = 32.0 * scale;
+                eprintln!("DEBUG: DSL sprite size set to {:.0}x{:.0} (scaled)", rt.sprite_width, rt.sprite_height);
+            } else {
+                rt.sprite_width = 32.0 * scale;
+                rt.sprite_height = 32.0 * scale;
+            }
+            
             rt
         }));
         
@@ -472,6 +489,25 @@ fn build_ui(app: &Application) {
             let mut n = Neko::new();
             n.screen_width = screen_w;
             n.screen_height = screen_h;
+            
+            // Set sprite dimensions based on what we loaded
+            if let Some(ref vpet) = vpet_sprites {
+                if let Some((w, h)) = vpet.borrow().sprite_dimensions() {
+                    n.sprite_width = (w as f64 * scale).max(1.0);
+                    n.sprite_height = (h as f64 * scale).max(1.0);
+                    eprintln!("DEBUG: Neko sprite size set to {:.0}x{:.0} (scaled)", n.sprite_width, n.sprite_height);
+                }
+            } else if sprite_sheet.is_some() {
+                // Classic sprite sheet is 32x32
+                n.sprite_width = 32.0 * scale;
+                n.sprite_height = 32.0 * scale;
+                eprintln!("DEBUG: Neko sprite size set to {:.0}x{:.0} (scaled)", n.sprite_width, n.sprite_height);
+            } else {
+                // Cairo drawing is also 32x32
+                n.sprite_width = 32.0 * scale;
+                n.sprite_height = 32.0 * scale;
+            }
+            
             eprintln!("DEBUG: Neko wander bounds set to {:.0}x{:.0}", screen_w, screen_h);
             n
         }));

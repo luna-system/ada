@@ -117,6 +117,10 @@ pub struct Neko {
     pub screen_width: f64,
     pub screen_height: f64,
     
+    // Sprite dimensions (for bounds checking)
+    pub sprite_width: f64,
+    pub sprite_height: f64,
+    
     // Cursor tracking
     pub cursor_x: f64,
     pub cursor_y: f64,
@@ -142,6 +146,8 @@ impl Neko {
             behavior_ticks: 0,
             screen_width: 1920.0,
             screen_height: 1080.0,
+            sprite_width: 32.0,  // Default to classic neko size
+            sprite_height: 32.0,
             cursor_x: 0.0,
             cursor_y: 0.0,
             cursor_available: false,
@@ -288,9 +294,9 @@ impl Neko {
         // Bias towards staying somewhat near current position
         let range = 300.0;
         self.target_x = (self.x + rng.gen_range(-range..range))
-            .clamp(50.0, self.screen_width - 50.0);
+            .clamp(0.0, self.screen_width - self.sprite_width);
         self.target_y = (self.y + rng.gen_range(-range..range))
-            .clamp(50.0, self.screen_height - 50.0);
+            .clamp(0.0, self.screen_height - self.sprite_height);
     }
 
     /// Move towards the current target
@@ -317,9 +323,9 @@ impl Neko {
             self.x += move_x;
             self.y += move_y;
             
-            // Clamp to screen
-            self.x = self.x.clamp(0.0, self.screen_width - 32.0);
-            self.y = self.y.clamp(0.0, self.screen_height - 32.0);
+            // Clamp to screen - keep sprite fully visible
+            self.x = self.x.clamp(0.0, self.screen_width - self.sprite_width);
+            self.y = self.y.clamp(0.0, self.screen_height - self.sprite_height);
         }
     }
 
