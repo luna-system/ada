@@ -246,6 +246,18 @@ fn build_ui(app: &Application) {
     window.set_default_size(SPRITE_SIZE, SPRITE_SIZE);
     window.set_decorated(false);
     
+    // Enable transparency - critical for the pet to float on desktop!
+    // We need to set CSS to make the window background transparent
+    let css_provider = gtk::CssProvider::new();
+    css_provider.load_from_data("window { background-color: transparent; }");
+    
+    use gtk::prelude::WidgetExt;
+    gtk::style_context_add_provider_for_display(
+        &WidgetExt::display(&window),
+        &css_provider,
+        gtk::STYLE_PROVIDER_PRIORITY_APPLICATION,
+    );
+    
     // Create drawing area
     let drawing_area = DrawingArea::new();
     drawing_area.set_content_width(SPRITE_SIZE);
