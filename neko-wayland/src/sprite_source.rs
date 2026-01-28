@@ -63,6 +63,11 @@ impl SpriteContainer {
                 Ok(())
             }
             SpriteContainer::VPet(vpet) => {
+                // Update VPet animation based on neko state
+                let mut vpet_mut = vpet.borrow_mut();
+                vpet_mut.set_animation_from_neko_state(neko.state);
+                drop(vpet_mut); // Release borrow before drawing
+                
                 vpet.borrow().draw(cr)
             }
         }

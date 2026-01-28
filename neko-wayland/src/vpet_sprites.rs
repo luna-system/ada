@@ -98,8 +98,7 @@ impl VPetAnimation {
             // Load this sequence
             match Self::load_sequence(&entry_path) {
                 Ok(sequence) => {
-                    eprintln!("Loaded VPet sequence: {} ({} frames, {}ms total)", 
-                             sequence_name, sequence.frames.len(), sequence.total_duration_ms);
+                    // Only log summary, not every frame
                     sequences.insert(sequence_name, sequence);
                 }
                 Err(e) => {
@@ -266,7 +265,6 @@ impl VPetSprites {
                 
                 match VPetAnimation::load(&anim_path) {
                     Ok(animation) => {
-                        eprintln!("Loaded VPet animation: {}", full_name);
                         sprites.animations.insert(full_name, animation);
                     }
                     Err(e) => {
@@ -280,6 +278,11 @@ impl VPetSprites {
             return Err("No valid animations found in pet folder".to_string());
         }
         
+        // Log summary instead of every frame
+        eprintln!("VPet loaded: {} animations with {} total sequences", 
+                 sprites.animations.len(),
+                 sprites.animations.values().map(|a| a.sequences.len()).sum::<usize>());
+        
         Ok(sprites)
     }
     
@@ -288,6 +291,91 @@ impl VPetSprites {
         self.current_animation = Some(animation.to_string());
         self.current_sequence = Some(sequence.to_string());
         self.animation_start_time = std::time::Instant::now();
+    }
+    
+    /// Map a neko state to an appropriate VPet animation
+    /// Returns (animation_name, sequence_name) if a mapping exists
+    pub fn map_neko_state(&self, state: crate::neko::NekoState) -> Option<(String, String)> {
+        use crate::neko::NekoState;
+        
+        // Try to find appropriate animations based on neko state
+        match state {
+            // Idle states - look for IDEL (idle) animations
+            NekoState::Sit | NekoState::Yawn | NekoState::Scratch | NekoState::Wash => {
+                // Try to find any IDEL animation
+                for (anim_name, animation) in &self.animations {
+                    if anim_name.starts_with("IDEL_") {
+                        // Prefer B_Normal for looping idle
+                        if let Some(_) = animation.get_sequence("B_Normal") {
+                            return Some((anim_name.clone(), "B_Normal".to_string()));
+                        }
+                        // Fall back to first available sequence
+                        if let Some(seq_name) = animation.sequence_names().first() {
+                            return Some((anim_name.clone(), seq_name.clone()));
+                        }
+                    }
+                }
+            }
+            
+            // Alert state - look for alert or idle animations
+            NekoState::Alert => {
+                // Try IDEL animations with A_Happy (alert/excited)
+                for (anim_name, animation) in &self.animations {
+                    if anim_name.starts_with("IDEL_") {
+                        if let Some(_) = animation.get_sequence("A_Happy") {
+                            return Some((anim_name.clone(), "A_Happy".to_string()));
+                        }
+                    }
+                }
+            }
+            
+            // Running states - look for MOVE animations
+            NekoState::RunN | NekoState::RunNE | NekoState::RunE | NekoState::RunSE |
+            NekoState::RunS | NekoState::RunSW | NekoState::RunW | NekoState::RunNW => {
+                // Try to find any MOVE animation
+                for (anim_name, animation) in &self.animations {
+                    if anim_name.starts_with("MOVE_") {
+                        // Prefer B_Normal for looping movement
+                        if let Some(_) = animation.get_sequence("B_Normal") {
+                            return Some((anim_name.clone(), "B_Normal".to_string()));
+                        }
+                        // Fall back to first available sequence
+                        if let Some(seq_name) = animation.sequence_names().first() {
+                            return Some((anim_name.clone(), seq_name.clone()));
+                        }
+                    }
+                }
+            }
+            
+            // Sleep states - look for sleep animations
+            NekoState::Sleep1 | NekoState::Sleep2 => {
+                // Try to find sleep animation
+                for (anim_name, animation) in &self.animations {
+                    if anim_name.to_lowercase().contains("sleep") {
+                        if let Some(seq_name) = animation.sequence_names().first() {
+                            return Some((anim_name.clone(), seq_name.clone()));
+                        }
+                    }
+                }
+                // Fall back to idle
+                for (anim_name, animation) in &self.animations {
+                    if anim_name.starts_with("IDEL_") {
+                        if let Some(seq_name) = animation.sequence_names().first() {
+                            return Some((anim_name.clone(), seq_name.clone()));
+                        }
+                    }
+                }
+            }
+        }
+        
+        None
+    }
+    
+    /// Set animation based on neko state
+    pub fn set_animation_from_neko_state(&mut self, state: crate::neko::NekoState) {
+        if let Some((anim, seq)) = self.map_neko_state(state) {
+            self.set_animation(&anim, &seq);
+        }
     }
     
     /// Get the current frame to draw
