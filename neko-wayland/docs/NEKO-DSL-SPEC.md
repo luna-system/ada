@@ -49,14 +49,40 @@ pet <name> {
 
 States are what your pet is doing. Built-in states:
 
-| State | What it does |
-|-------|--------------|
-| `wander` | Move around randomly |
-| `chase` | Follow the cursor |
-| `sleep` | Zzz... |
-| `sit` | Stay still |
-| `alert` | Ears up! Noticed something! |
-| `play` | Interact with a toy |
+| State | What it does | VPet Animation |
+|-------|--------------|----------------|
+| `wander` | Move around randomly | MOVE |
+| `chase` | Follow the cursor | MOVE |
+| `sleep` | Zzz... | SLEEP or IDEL |
+| `sit` | Stay still | IDEL |
+| `alert` | Ears up! Noticed something! | IDEL (A_Happy) |
+| `play` | Interact with a toy | PLAY |
+| `eat` | Nom nom nom | EAT |
+| `drink` | Sip sip | DRINK |
+| `squat` | Sitting down | IDEL/Squat |
+| `lie` | Lying down | IDEL/Lie |
+| `crawl` | Crawling movement | CRAWL |
+| `climb` | Climbing up | CLIMB |
+| `fall` | Falling down | FALL |
+| `jump` | Jumping | JUMP |
+
+**VPet Animation Categories:**
+
+VPet sprites are organized into animation categories. Common ones include:
+- `IDEL` - Idle/breathing animations (Squat, Lie, Stand, etc.)
+- `MOVE` - Walking/running animations
+- `SLEEP` - Sleeping animations
+- `EAT` - Eating animations
+- `DRINK` - Drinking animations
+- `PLAY` - Playing animations
+- `WORK` - Working/studying animations
+- `RAISE` - Being picked up
+- `FALL` - Falling animations
+- `CLIMB` - Climbing animations
+- `JUMP` - Jumping animations
+- `CRAWL` - Crawling animations
+
+Each animation can have mood variants (Happy, Normal, PoorCondition, Ill) and phases (A_start, B_loop, C_end).
 
 ### 3. Transitions
 
@@ -601,6 +627,167 @@ pet bouncy_slime {
   merge_attempt {
     # Future: check for other slimes nearby
     on timeout(1s) → wander
+  }
+}
+```
+
+### Maximalist VPet Showcase
+
+```neko
+# vup_showcase.neko - Cycles through ALL VPet animation states!
+# Perfect for testing that all animations work correctly.
+
+pet vup_showcase {
+  sprites: "vup/"
+  sprite_type: vpet
+  moods: [happy, normal, poor_condition, ill]
+  
+  # Start with idle
+  squat(duration: 3s) {
+    sprite: "IDEL_Squat"
+    on timeout → lie
+  }
+  
+  # Lying down
+  lie(duration: 3s) {
+    sprite: "IDEL_Lie"
+    on timeout → stand
+  }
+  
+  # Standing idle
+  stand(duration: 3s) {
+    sprite: "IDEL_Stand"
+    on timeout → walk
+  }
+  
+  # Walking around
+  walk(duration: 5s, speed: 4) {
+    sprite: "MOVE_Walk"
+    on timeout → run
+  }
+  
+  # Running
+  run(duration: 3s, speed: 8) {
+    sprite: "MOVE_Run"
+    on timeout → crawl
+  }
+  
+  # Crawling
+  crawl(duration: 3s, speed: 2) {
+    sprite: "CRAWL"
+    on timeout → climb
+  }
+  
+  # Climbing
+  climb(duration: 3s) {
+    sprite: "CLIMB"
+    on timeout → jump
+  }
+  
+  # Jumping
+  jump(duration: 2s) {
+    sprite: "JUMP"
+    on timeout → fall
+  }
+  
+  # Falling
+  fall(duration: 2s) {
+    sprite: "FALL"
+    on timeout → eat
+  }
+  
+  # Eating
+  eat(duration: 4s) {
+    sprite: "EAT"
+    on timeout → drink
+  }
+  
+  # Drinking
+  drink(duration: 3s) {
+    sprite: "DRINK"
+    on timeout → play
+  }
+  
+  # Playing
+  play(duration: 4s) {
+    sprite: "PLAY"
+    on timeout → work
+  }
+  
+  # Working/studying
+  work(duration: 5s) {
+    sprite: "WORK"
+    on timeout → sleep
+  }
+  
+  # Sleeping
+  sleep(duration: 5s) {
+    sprite: "SLEEP"
+    on timeout → raise
+  }
+  
+  # Being picked up
+  raise(duration: 2s) {
+    sprite: "RAISE"
+    on timeout → squat    # Loop back to start!
+  }
+}
+```
+
+### Mood-Aware VPet
+
+```neko
+# moody_vup.neko - Changes behavior based on mood!
+
+pet moody_vup {
+  sprites: "vup/"
+  sprite_type: vpet
+  moods: [happy, normal, poor_condition, ill]
+  
+  # Mood affects which sprite variant is used
+  idle {
+    sprite: "IDEL_Squat"
+    # Automatically uses:
+    # - IDEL_Squat/A_Happy/ when happy
+    # - IDEL_Squat/B_Normal/ when normal
+    # - IDEL_Squat/C_PoorCondition/ when poor
+    # - IDEL_Squat/D_Ill/ when ill
+    
+    when happy: on cursor_near → ●chase
+    when normal: on cursor_near → ◕chase
+    when poor_condition: on cursor_near → ◔chase
+    when ill: on cursor_near → ○chase
+  }
+  
+  chase {
+    sprite: "MOVE_Run"
+    when happy: speed: 10
+    when normal: speed: 7
+    when poor_condition: speed: 4
+    when ill: speed: 2
+    
+    on caught → play
+    on cursor_far → idle
+  }
+  
+  play {
+    sprite: "PLAY"
+    when happy: duration: 10s
+    when normal: duration: 5s
+    when poor_condition: duration: 2s
+    when ill: → sleep    # too tired to play
+    
+    on timeout → idle
+  }
+  
+  sleep {
+    sprite: "SLEEP"
+    when ill: duration: 30s      # sleep longer when ill
+    when poor_condition: duration: 15s
+    when normal: duration: 10s
+    when happy: duration: 5s
+    
+    on timeout → idle
   }
 }
 ```

@@ -1,0 +1,101 @@
+# vup_showcase.neko - Maximalist VPet Animation Showcase
+#
+# Cycles through ALL available VPet animation states to test
+# that the sprite system works correctly with every animation type.
+#
+# Made with 💜 by Ada & Luna - Ada Research Foundation
+
+pet vup_showcase {
+  # VPet sprite configuration
+  sprites: "vup/"
+  sprite_type: vpet
+  moods: [happy, normal, poor_condition, ill]
+  
+  # Cycle through all animation states!
+  # Each state shows for a few seconds, then moves to the next
+  
+  # === IDLE ANIMATIONS ===
+  
+  squat(duration: 3s) {
+    sprite: "IDEL_Squat"
+    on timeout → lie
+  }
+  
+  lie(duration: 3s) {
+    sprite: "IDEL_Lie"
+    on timeout → stand
+  }
+  
+  stand(duration: 3s) {
+    sprite: "IDEL_Stand"
+    on timeout → walk
+  }
+  
+  # === MOVEMENT ANIMATIONS ===
+  
+  walk(duration: 5s, speed: 4) {
+    sprite: "MOVE_Walk"
+    on timeout → run
+  }
+  
+  run(duration: 3s, speed: 8) {
+    sprite: "MOVE_Run"
+    on timeout → crawl
+  }
+  
+  # === SPECIAL MOVEMENT ===
+  
+  crawl(duration: 3s, speed: 2) {
+    sprite: "CRAWL"
+    on timeout → climb
+  }
+  
+  climb(duration: 3s) {
+    sprite: "CLIMB"
+    on timeout → jump
+  }
+  
+  jump(duration: 2s) {
+    sprite: "JUMP"
+    on timeout → fall
+  }
+  
+  fall(duration: 2s) {
+    sprite: "FALL"
+    on timeout → eat
+  }
+  
+  # === INTERACTION ANIMATIONS ===
+  
+  eat(duration: 4s) {
+    sprite: "EAT"
+    on timeout → drink
+  }
+  
+  drink(duration: 3s) {
+    sprite: "DRINK"
+    on timeout → play
+  }
+  
+  play(duration: 4s) {
+    sprite: "PLAY"
+    on timeout → work
+  }
+  
+  work(duration: 5s) {
+    sprite: "WORK"
+    on timeout → sleep
+  }
+  
+  # === REST ANIMATIONS ===
+  
+  sleep(duration: 5s) {
+    sprite: "SLEEP"
+    on timeout → raise
+  }
+  
+  raise(duration: 2s) {
+    sprite: "RAISE"
+    on timeout → squat    # Loop back to start!
+  }
+}
