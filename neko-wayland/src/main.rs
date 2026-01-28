@@ -37,12 +37,25 @@ struct CliConfig {
     use_dsl: bool,
     sprite_sheet: Option<String>,
     vpet_folder: Option<String>,
+    scale: f64,
+}
+
+impl CliConfig {
+    fn new() -> Self {
+        Self {
+            algo_file: None,
+            use_dsl: false,
+            sprite_sheet: None,
+            vpet_folder: None,
+            scale: 1.0, // Default scale
+        }
+    }
 }
 
 fn main() -> glib::ExitCode {
     // Parse CLI args BEFORE GTK sees them
     let args: Vec<String> = std::env::args().collect();
-    let mut config = CliConfig::default();
+    let mut config = CliConfig::new();
     let mut gtk_args: Vec<String> = vec![args[0].clone()]; // Keep program name
     
     let mut i = 1;
@@ -76,6 +89,24 @@ fn main() -> glib::ExitCode {
                     continue;
                 } else {
                     eprintln!("Error: --vpet requires a folder path");
+                    std::process::exit(1);
+                }
+            }
+            "--scale" => {
+                if i + 1 < args.len() {
+                    match args[i + 1].parse::<f64>() {
+                        Ok(scale) if scale > 0.0 && scale <= 10.0 => {
+                            config.scale = scale;
+                        }
+                        _ => {
+                            eprintln!("Error: --scale must be a number between 0.0 and 10.0");
+                            std::process::exit(1);
+                        }
+                    }
+                    i += 2;
+                    continue;
+                } else {
+                    eprintln!("Error: --scale requires a number");
                     std::process::exit(1);
                 }
             }
@@ -118,6 +149,7 @@ OPTIONS:
     -a, --algo <FILE>      Load behavior from a .neko DSL file
     -s, --sprites <FILE>   Load sprite sheet (PNG file, classic neko format)
     -v, --vpet <FOLDER>    Load VPet-style sprites from folder
+    --scale <NUMBER>       Scale factor for sprites (0.1-10.0, default: 1.0)
     --dsl                  Use DSL runtime (default behavior if no file)
     -h, --help             Show this help message
 
@@ -128,9 +160,10 @@ EXAMPLES:
     neko-wayland                                    # Classic hardcoded behavior, cairo drawing
     neko-wayland --sprites classic_spritesheets/neko.png  # Use sprite sheet
     neko-wayland --vpet path/to/pet/vup             # Use VPet-style sprites
+    neko-wayland --vpet path/to/pet/vup --scale 0.5 # VPet at half size
+    neko-wayland --sprites neko.png --scale 2.0     # Classic neko at 2x size
     neko-wayland --dsl                              # DSL runtime with default behavior
     neko-wayland --algo lazy_cat.neko               # Custom behavior from file
-    neko-wayland --algo bouncy_slime.neko --sprites slime.png  # Custom behavior + sprites
 
 Made with 💜 by Ada & Luna - Ada Research Foundation
 "#);
@@ -286,10 +319,23 @@ fn build_ui(app: &Application) {
         gtk::STYLE_PROVIDER_PRIORITY_APPLICATION,
     );
     
+    // Determine sprite size based on what we're loading
+    let (base_width, base_height) = if config.vpet_folder.is_some() {
+        // VPet sprites are typically larger - we'll detect actual size after loading
+        (SPRITE_SIZE, SPRITE_SIZE) // Placeholder, will be updated
+    } else {
+        // Classic neko or cairo drawing
+        (SPRITE_SIZE, SPRITE_SIZE)
+    };
+    
+    let scale = config.scale;
+    let window_width = (base_width as f64 * scale) as i32;
+    let window_height = (base_height as f64 * scale) as i32;
+    
     // Create drawing area
     let drawing_area = DrawingArea::new();
-    drawing_area.set_content_width(SPRITE_SIZE);
-    drawing_area.set_content_height(SPRITE_SIZE);
+    drawing_area.set_content_width(window_width);
+    drawing_area.set_content_height(window_height);
 
     // Load sprite sheet if specified
     let sprite_sheet = if let Some(ref sprite_path) = config.sprite_sheet {
@@ -326,6 +372,16 @@ fn build_ui(app: &Application) {
                             sprites.set_animation(&anim_name, &seq_name);
                         }
                     }
+                }
+                
+                // Get sprite dimensions and update window size
+                if let Some((w, h)) = sprites.sprite_dimensions() {
+                    eprintln!("VPet sprite size: {}x{}", w, h);
+                    let scaled_w = (w as f64 * scale) as i32;
+                    let scaled_h = (h as f64 * scale) as i32;
+                    drawing_area.set_content_width(scaled_w);
+                    drawing_area.set_content_height(scaled_h);
+                    eprintln!("Window size set to: {}x{} (scale: {})", scaled_w, scaled_h, scale);
                 }
                 
                 Some(Rc::new(RefCell::new(sprites)))
@@ -433,21 +489,33 @@ fn build_ui(app: &Application) {
                 *first_draw_clone.borrow_mut() = false;
             }
             
+            // Clear with transparency
+            cr.set_operator(cairo::Operator::Clear);
+            let _ = cr.paint();
+            cr.set_operator(cairo::Operator::Over);
+            
             // Priority: VPet > SpriteSheet > Cairo
             if let Some(ref vpet) = vpet_draw {
-                // Clear with transparency
-                cr.set_operator(cairo::Operator::Clear);
-                let _ = cr.paint();
-                cr.set_operator(cairo::Operator::Over);
+                // Scale the context
+                cr.scale(scale, scale);
                 
                 // Draw VPet sprite
                 let vpet = vpet.borrow();
-                if let Err(e) = vpet.draw_centered(cr) {
+                if let Err(e) = vpet.draw(cr) {
                     eprintln!("VPet draw error: {}", e);
                 }
-            } else {
+            } else if sprite_draw.is_some() {
+                // Scale for sprite sheet
+                cr.scale(scale, scale);
+                
                 let neko = neko_draw.borrow();
                 neko.draw_with_sprites(cr, sprite_draw.as_ref().map(|s| s.as_ref()));
+            } else {
+                // Cairo drawing - scale it too!
+                cr.scale(scale, scale);
+                
+                let neko = neko_draw.borrow();
+                neko.draw_with_sprites(cr, None);
             }
         });
 

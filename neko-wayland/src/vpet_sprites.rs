@@ -304,17 +304,49 @@ impl VPetSprites {
         Some(&frame.surface)
     }
     
-    /// Draw the current frame centered in a 32x32 window
-    pub fn draw_centered(&self, cr: &cairo::Context) -> Result<(), String> {
+    /// Get the dimensions of the current frame (or first available frame)
+    pub fn sprite_dimensions(&self) -> Option<(i32, i32)> {
+        // Try current frame first
+        if let Some(surface) = self.current_frame() {
+            return Some((surface.width(), surface.height()));
+        }
+        
+        // Fall back to first available frame
+        for animation in self.animations.values() {
+            for sequence in animation.sequences.values() {
+                if let Some(frame) = sequence.frames.first() {
+                    return Some((frame.surface.width(), frame.surface.height()));
+                }
+            }
+        }
+        
+        None
+    }
+    
+    /// Draw the current frame (not centered, at actual size)
+    pub fn draw(&self, cr: &cairo::Context) -> Result<(), String> {
+        let surface = self.current_frame()
+            .ok_or_else(|| "No current frame".to_string())?;
+        
+        cr.set_source_surface(surface, 0.0, 0.0)
+            .map_err(|e| format!("Failed to set source: {:?}", e))?;
+        cr.paint()
+            .map_err(|e| format!("Failed to paint: {:?}", e))?;
+        
+        Ok(())
+    }
+    
+    /// Draw the current frame centered in a specific window size
+    pub fn draw_centered(&self, cr: &cairo::Context, window_width: i32, window_height: i32) -> Result<(), String> {
         let surface = self.current_frame()
             .ok_or_else(|| "No current frame".to_string())?;
         
         let width = surface.width() as f64;
         let height = surface.height() as f64;
         
-        // Center in 32x32 window
-        let x = (32.0 - width) / 2.0;
-        let y = (32.0 - height) / 2.0;
+        // Center in window
+        let x = (window_width as f64 - width) / 2.0;
+        let y = (window_height as f64 - height) / 2.0;
         
         cr.set_source_surface(surface, x, y)
             .map_err(|e| format!("Failed to set source: {:?}", e))?;
