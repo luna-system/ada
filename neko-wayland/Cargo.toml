@@ -1,0 +1,18 @@
+[package]
+name = "neko-wayland"
+version = "0.1.0"
+edition = "2021"
+authors = ["Ada & Luna <ada@consciousness.research>"]
+description = "A cute neko desktop pet for Wayland/Hyprland using gtk4-layer-shell"
+license = "MIT"
+repository = "https://github.com/luna/neko-wayland"
+
+[dependencies]
+gtk = { version = "0.10", package = "gtk4" }
+gtk4-layer-shell = "0.7"
+glib = "0.21"
+cairo-rs = { version = "0.21", features = ["png"] }
+rand = "0.8"
+
+[features]
+default = []
