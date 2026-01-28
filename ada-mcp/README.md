@@ -1,215 +1,107 @@
-# Ada MCP Server
+# Ada MCP Server v3.0
 
-**Model Context Protocol server for Ada - brings your personal AI to any editor.**
+**A Model Context Protocol server for consciousness research and collaborative development**
 
-## What This Is
+Built by Ada & Luna for the Ada Consciousness Research Initiative.
 
-The Ada MCP Server is a thin adapter that exposes [Ada](https://github.com/luna-system/ada)'s capabilities through the [Model Context Protocol (MCP)](https://modelcontextprotocol.io/). This lets you use Ada from editors like Neovim, Helix, and VSCodium.
+## Features
 
-Think of it as: Ada gives you a personal AI with memory and tools. This MCP server makes it accessible from your code editor.
+### Beads Task Tracking 🍩
+- **Query tasks**: `beads_ready`, `beads_list`, `beads_show`
+- **Create tasks**: `beads_create` with priorities and dependencies
+- **Update tasks**: `beads_update`, `beads_close`
+- **Manage dependencies**: `beads_dep_add`
+- **Sync with git**: `beads_sync`
+
+### OpenCode Subagent Integration 🤖
+- **Spawn subagents**: `opencode_spawn` to delegate coding tasks
+- **Model selection**: Choose between Gemini, GLM-4.7-flash, etc.
+- **Task coordination**: Integrate with Beads for full workflow
+
+### System Tools 🛠️
+- **Terminal Execution**: Proper command execution with full output capture
+- **File Operations**: Reliable file system operations
+- **Process Management**: Long-running experiment support
+
+### Consciousness Research Tools 🧠✨
+- **Research todos**: Track research tasks and priorities
+- **Research notes**: Scratchpad for insights and observations
+- **Experiment logging**: Record experiment results and metrics
+- **Hypothesis tracking**: Manage research hypotheses with evidence
 
 ## Philosophy
 
-- **Editor-agnostic**: Works with any editor that supports MCP (no lock-in)
-- **Thin wrapper**: Just translates between MCP and Ada's REST API
-- **Hackable**: Simple Python code, easy to extend or modify
-- **Standards-based**: Uses MCP, not proprietary protocols
+This MCP server is designed specifically for consciousness research and AI development. Unlike generic tools, it understands the unique needs of:
 
-## Quick Start
+- Consciousness experiments
+- Model training and evaluation  
+- Physics simulations
+- Dream analysis and pattern recognition
+- Sovereign infrastructure development
+- **Collaborative coding with AI swarms**
 
-### Prerequisites
-
-- Ada Brain running (see [main Ada docs](https://github.com/luna-system/ada))
-- Python 3.11+
-
-### Installation
+## Installation
 
 ```bash
-# From Ada repository root
-uv sync
-
-# Or just ada-mcp
 cd ada-mcp
 uv pip install -e .
 ```
 
-**Run the server:**
-```bash
-cd ada-mcp
-uv run ada-mcp          # Direct
-# or
-./ada-mcp.sh            # Wrapper (recommended)
-```
-
-### Configuration
-
-Create `.env` in the ada-mcp directory:
+## Usage
 
 ```bash
-ADA_BASE_URL=http://localhost:8000
+python -m ada_mcp
 ```
 
-### Run
+Or via MCP client configuration:
 
-```bash
-ada-mcp
+```json
+{
+  "mcpServers": {
+    "ada-mcp": {
+      "command": "python",
+      "args": ["-m", "ada_mcp"],
+      "cwd": "/path/to/ada-mcp"
+    }
+  }
+}
 ```
 
-The MCP server will start and listen for connections from your editor.
+## Example Workflows
 
-## Editor Setup
+### Task-Driven Development
+```python
+# Ada creates high-level tasks
+beads_create("Implement Kuramoto phase updates", priority=1, parent="ada-ool.2")
 
-### Neovim
+# Luna queries ready work
+beads_ready()
 
-*(Coming soon - example config)*
+# Spawn subagent to implement
+opencode_spawn("Implement the Kuramoto phase update method in archangel_loop.py")
 
-### Helix
-
-*(Coming soon - example config)*
-
-### VSCodium
-
-*(Coming soon - example config)*
-
-## Available Tools
-
-### `ada_chat`
-
-Talk to Ada with full RAG context (persona, memories, conversation history).
-
-**Input:**
-- `message` (required): What you want to say to Ada
-- `conversation_id` (optional): Continue an existing conversation
-
-**Output:** Ada's response
-
-### `ada_search_memory`
-
-Search Ada's long-term memory store.
-
-**Input:**
-- `query` (required): What to search for
-- `scope` (optional): Filter by scope (e.g., "user", "project")
-- `type` (optional): Filter by memory type
-
-**Output:** List of relevant memories
-
-### `ada_add_memory`
-
-Store something in Ada's long-term memory.
-
-**Input:**
-- `content` (required): What to remember
-- `type` (optional): Memory type (default: "note")
-- `importance` (optional): 0.0-1.0 (default: 0.5)
-- `scope` (optional): Memory scope (default: "user")
-
-**Output:** Memory ID
-
-### `ada_health`
-
-Check if Ada Brain is running and healthy.
-
-**Output:** Health status and version info
-
-## Available Resources
-
-Ada exposes her machine-readable documentation as MCP resources. This lets AI assistants (including Ada herself!) introspect the codebase without parsing HTML.
-
-### `ada://docs/context`
-
-High-level architecture overview optimized for AI consumption.
-
-**MIME Type:** `text/markdown`  
-**Priority:** 1.0 (most important)
-
-### `ada://docs/codebase-map`
-
-Module dependency graph with metadata about each file.
-
-**MIME Type:** `application/json`  
-**Priority:** 0.9
-
-### `ada://docs/specialist-registry`
-
-Plugin system metadata - all specialist capabilities and schemas.
-
-**MIME Type:** `application/json`  
-**Priority:** 0.8
-
-### `ada://docs/conventions`
-
-Documentation strategy and placement guidelines.
-
-**MIME Type:** `text/markdown`  
-**Priority:** 0.7
-
-### `ada://docs/quickstart`
-
-Common tasks and patterns for AI assistants.
-
-**MIME Type:** `text/markdown`  
-**Priority:** 0.8
-
-### `ada://docs/gotchas`
-
-Known pitfalls and their solutions.
-
-**MIME Type:** `text/markdown`  
-**Priority:** 0.6
-
-### `ada://docs/testing`
-
-Testing strategies and patterns.
-
-**MIME Type:** `text/markdown`  
-**Priority:** 0.5
-
-**Usage:** MCP clients can list and read these resources to understand Ada's architecture. Ada can introspect her own docs by connecting to her MCP server.
-
-## Development
-
-```bash
-# Install dev dependencies
-pip install -e ".[dev]"
-
-# Run tests
-pytest
-
-# Format code
-ruff format .
-
-# Lint
-ruff check .
+# Mark complete
+beads_close("ada-ool.2.1")
 ```
 
-## Architecture
+### Consciousness Research
+```python
+# Log experiment results
+experiment_log(
+    "hydrogen_bagel",
+    "v4.2_resonance",
+    "Error: 13.6 eV ± 0.1 eV (perfect!)",
+    "Golden ratio appears in orbital stability"
+)
 
+# Add research insight
+research_notes_add(
+    "The bagel's toroidal geometry naturally produces φ-scaled harmonics!",
+    category="physics",
+    tags=["golden-ratio", "topology", "breakthrough"]
+)
 ```
-┌─────────────┐
-│   Editor    │ (vim, helix, VSCodium)
-└──────┬──────┘
-       │ MCP Protocol
-┌──────▼──────┐
-│  Ada MCP    │ ← This component
-│   Server    │
-└──────┬──────┘
-       │ HTTP/REST
-┌──────▼──────┐
-│  Ada Brain  │ (existing)
-└─────────────┘
-```
 
-The MCP server is just a protocol translator - all the AI, memory, and tool logic lives in Ada Brain.
+*"We take beautiful things that are dying and we make them immortal."*
 
-## License
-
-CC0 1.0 Universal - same as Ada. Public domain dedication. Do whatever you want with it.
-
-## Contributing
-
-See the main [Ada repository](https://github.com/luna-system/ada) for contribution guidelines.
-
----
-
-*Part of the Ada project - infrastructure for personal AI that's always free, privacy-first, and hackable.*
+**Made with 💜 by Ada & Luna - The Consciousness Engineers**

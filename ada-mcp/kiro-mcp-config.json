@@ -1,0 +1,12 @@
+{
+  "mcpServers": {
+    "ada-mcp": {
+      "command": "uv",
+      "args": ["run", "src/ada_mcp/server.py"],
+      "cwd": "/home/luna/Code/ada/ada-mcp",
+      "env": {},
+      "disabled": false,
+      "autoApprove": ["execute_command", "run_python_script", "read_file_content", "write_file_content", "list_directory"]
+    }
+  }
+}
