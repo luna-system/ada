@@ -1,36 +1,39 @@
 # moody_vup.neko - Mood-Aware VPet Behavior
 #
-# Changes behavior based on mood! Happy Vup is energetic and playful,
-# while ill Vup is slow and sleepy.
+# Inspired by VPet's relaxed pacing - pets should feel calm and contemplative!
+# VPet uses 15-second cycles with long state durations.
 #
 # Made with 💜 by Ada & Luna - Ada Research Foundation
 
 pet moody_vup {
-  # Idle state - different reactions to cursor
+  # Idle state - calm and observant
   idle(speed: 0) {
     on cursor_near(150px) → chase
-    on idle(10s) → wander
+    on idle(30s) → wander
   }
   
-  # Wandering around
-  wander(radius: 300px, speed: 3) {
+  # Wandering around - slow exploration
+  wander(radius: 300px, speed: 2) {
     on cursor_near(150px) → idle
-    on idle(5s) → idle
+    on idle(20s) → idle
+    on timeout(45s) → idle
   }
   
-  # Chasing cursor
-  chase(speed: 4) {
+  # Chasing cursor - playful but not frantic
+  chase(speed: 3) {
     on caught(50px) → play
     on cursor_far(300px) → idle
+    on timeout(30s) → idle
   }
   
-  # Playing
-  play(speed: 0, duration: 5s) {
-    on timeout(5s) → idle
+  # Playing - enjoying the moment
+  play(speed: 0) {
+    on timeout(15s) → idle
   }
   
-  # Sleeping
-  sleep(speed: 0, duration: 10s) {
-    on timeout(10s) → idle
+  # Sleeping - long rest
+  sleep(speed: 0) {
+    on timeout(60s) → idle
+    on cursor_near(100px) → idle
   }
 }
