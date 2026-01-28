@@ -1,0 +1,28 @@
+# Bouncy Slime - A happy blob friend!
+# Uses bounce locomotion for that classic slime feel.
+#
+# Made with 💜 by Ada & Luna - Ada Research Foundation
+
+pet bouncy_slime {
+    locomotion: bounce
+    easing: bounce
+    
+    # Boing boing around the screen
+    wander(speed: 10, radius: 400px) {
+        on cursor_near(300px) → ◕chase     # Slimes love company!
+        on random(0.02) → ◑idle            # Sometimes stops to rest
+    }
+    
+    # Bouncing towards the cursor
+    chase(speed: 14) {
+        on cursor_far(600px) → ●wander     # Lost sight of friend
+        on timeout(15s) → ◑wander          # Gets distracted
+    }
+    
+    # Resting blob
+    idle {
+        speed: 0
+        on timeout(3s) → ●wander           # Short rest, then back to bouncing!
+        on cursor_near(150px) → ●chase     # Oh! A friend!
+    }
+}

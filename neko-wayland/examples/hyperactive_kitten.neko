@@ -1,0 +1,35 @@
+# Hyperactive Kitten - ZOOM ZOOM ZOOM!
+# A kitten with endless energy who can't sit still.
+#
+# Made with 💜 by Ada & Luna - Ada Research Foundation
+
+pet hyperactive_kitten {
+    locomotion: quadruped
+    easing: elastic
+    
+    # ZOOMING around!
+    wander(speed: 15, radius: 500px) {
+        on cursor_near(400px) → ●chase     # MUST CHASE!
+        on timeout(3s) → ◕wander           # New direction! New adventure!
+    }
+    
+    # CHASE CHASE CHASE
+    chase(speed: 20) {
+        on cursor_far(300px) → ◕wander     # Where'd it go?!
+        on timeout(10s) → ◔alert           # Wait what was I doing?
+    }
+    
+    # Momentary pause
+    alert {
+        speed: 0
+        on timeout(0.3s) → ●chase          # BACK TO CHASING!
+        on timeout(0.3s) → ●wander         # OR ZOOMING!
+    }
+    
+    # Kittens don't really sleep...
+    sleep {
+        speed: 0
+        on timeout(2s) → ●wander           # JK I'M AWAKE!
+        on cursor_near(500px) → ●chase     # CURSOR!
+    }
+}

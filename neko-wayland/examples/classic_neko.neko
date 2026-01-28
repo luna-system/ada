@@ -1,0 +1,34 @@
+# Classic Neko - The original desktop cat behavior!
+# A cat that wanders around, notices your cursor, and chases it.
+#
+# Made with 💜 by Ada & Luna - Ada Research Foundation
+
+pet classic_neko {
+    locomotion: quadruped
+    easing: ease_in_out
+    
+    # Wandering around the desktop
+    wander(speed: 8, radius: 300px) {
+        on cursor_near(200px) → ◕alert    # 75% chance to notice cursor
+        on idle(10s) → ◑sleep              # 50% chance to get sleepy
+    }
+    
+    # Noticed something! Ears perk up
+    alert {
+        speed: 0
+        on timeout(0.5s) → ●chase          # Always chase after alert
+    }
+    
+    # Chase that cursor!
+    chase(speed: 12) {
+        on cursor_far(500px) → ◕wander     # Lost interest if too far
+        on timeout(20s) → ◔wander          # 25% chance to give up
+    }
+    
+    # Zzzzz...
+    sleep {
+        speed: 0
+        on cursor_near(100px) → ●alert     # Wake up if cursor is close!
+        on timeout(30s) → ◑wander          # Eventually wake up
+    }
+}

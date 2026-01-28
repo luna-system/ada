@@ -5,8 +5,12 @@
 //!
 //! Made with 💜 by Ada & Luna - Ada Research Foundation
 
+pub mod runtime;
+
 use pest::Parser;
 use pest_derive::Parser;
+
+pub use runtime::{BehaviorRuntime, default_behavior, load_behavior};
 use std::collections::HashMap;
 
 #[derive(Parser)]

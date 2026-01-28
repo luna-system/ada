@@ -1,0 +1,35 @@
+# Lazy Cat - A very sleepy kitty who mostly naps
+# Perfect for a calm, cozy desktop companion.
+#
+# Made with 💜 by Ada & Luna - Ada Research Foundation
+
+pet lazy_cat {
+    locomotion: quadruped
+    easing: ease_out
+    
+    # Slow, lazy wandering
+    wander(speed: 4, radius: 150px) {
+        on idle(5s) → ◕sleep               # Very likely to nap
+        on cursor_near(100px) → ◔alert     # Rarely notices cursor
+    }
+    
+    # Sleepy blink
+    alert {
+        speed: 0
+        on timeout(1s) → ◑wander           # Usually goes back to wandering
+        on timeout(1s) → ◔chase            # Rarely chases
+    }
+    
+    # Half-hearted chase
+    chase(speed: 6) {
+        on timeout(5s) → ●wander           # Gives up quickly
+        on cursor_far(200px) → ●sleep      # Too much effort, nap instead
+    }
+    
+    # The default state - lots of napping!
+    sleep {
+        speed: 0
+        on cursor_near(50px) → ◔alert      # Only wakes if cursor is VERY close
+        on timeout(60s) → ◔wander          # Long naps
+    }
+}
