@@ -37,9 +37,10 @@ struct CliConfig {
 }
 
 fn main() -> glib::ExitCode {
-    // Parse CLI args
+    // Parse CLI args BEFORE GTK sees them
     let args: Vec<String> = std::env::args().collect();
     let mut config = CliConfig::default();
+    let mut gtk_args: Vec<String> = vec![args[0].clone()]; // Keep program name
     
     let mut i = 1;
     while i < args.len() {
@@ -48,7 +49,8 @@ fn main() -> glib::ExitCode {
                 if i + 1 < args.len() {
                     config.algo_file = Some(args[i + 1].clone());
                     config.use_dsl = true;
-                    i += 1;
+                    i += 2; // Skip both --algo and the file path
+                    continue;
                 } else {
                     eprintln!("Error: --algo requires a file path");
                     std::process::exit(1);
@@ -56,13 +58,16 @@ fn main() -> glib::ExitCode {
             }
             "--dsl" => {
                 config.use_dsl = true;
+                i += 1;
+                continue;
             }
             "--help" | "-h" => {
                 print_help();
                 std::process::exit(0);
             }
             _ => {
-                // Ignore unknown args (GTK might use them)
+                // Pass unknown args to GTK (might be GTK flags)
+                gtk_args.push(args[i].clone());
             }
         }
         i += 1;
@@ -75,7 +80,9 @@ fn main() -> glib::ExitCode {
         .build();
 
     app.connect_activate(build_ui);
-    app.run()
+    
+    // Pass only GTK-compatible args
+    app.run_with_args(&gtk_args)
 }
 
 fn print_help() {
