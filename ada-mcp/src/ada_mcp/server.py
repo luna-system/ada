@@ -353,6 +353,7 @@ try:
         OpenCodeClient, 
         run_opencode_task, 
         parse_model_string,
+        list_available_models,
         HTTPX_AVAILABLE
     )
     OPENCODE_AVAILABLE = HTTPX_AVAILABLE
@@ -400,6 +401,334 @@ def opencode_spawn(
         
     except Exception as e:
         return output + f"❌ Failed to spawn subagent: {str(e)}"
+
+
+# ============================================================================
+# OPENCODE ASYNC SESSION MANAGEMENT (tmux-style) 🤖✨
+# ============================================================================
+
+# Global client for session management
+_opencode_client = None
+
+def _get_opencode_client() -> OpenCodeClient:
+    """Get or create the global OpenCode client."""
+    global _opencode_client
+    if _opencode_client is None:
+        _opencode_client = OpenCodeClient()
+    return _opencode_client
+
+
+@mcp.tool()
+def opencode_spawn_async(
+    task_description: str,
+    model: str = "gemini",
+    cwd: str = None
+) -> str:
+    """
+    Spawn an OpenCode subagent asynchronously (fire and forget).
+    Returns session ID immediately without waiting for completion.
+    
+    Use opencode_check() to poll for results or opencode_wait() to block until done.
+    
+    Args:
+        task_description: Description of what the subagent should do
+        model: Model to use (gemini, glm-4.7-flash, etc.)
+        cwd: Working directory for the subagent (optional)
+    
+    Returns:
+        Session ID and status
+    """
+    if not OPENCODE_AVAILABLE:
+        return "❌ httpx not available - run: uv add httpx"
+    
+    path_context = _get_path_context(cwd)
+    working_dir = path_context["full_path"]
+    
+    try:
+        client = _get_opencode_client()
+        
+        # Create session
+        session = client.create_session(title=f"Ada Task: {task_description[:50]}")
+        
+        # Parse model
+        provider_id, model_id = parse_model_string(model)
+        
+        # Send message async (returns immediately!)
+        success = client.send_message_async(
+            session_id=session.id,
+            text=task_description,
+            provider_id=provider_id,
+            model_id=model_id
+        )
+        
+        if success:
+            output = f"✨ OpenCode session spawned!\n"
+            output += f"📋 Session ID: {session.id}\n"
+            output += f"🎯 Model: {model}\n"
+            output += f"📁 Working Dir: {working_dir}\n"
+            output += f"📝 Task: {task_description[:100]}{'...' if len(task_description) > 100 else ''}\n\n"
+            output += f"💡 Use opencode_check('{session.id}') to poll for results\n"
+            output += f"💡 Use opencode_wait('{session.id}') to block until completion\n"
+            return output
+        else:
+            return f"❌ Failed to send async message to session {session.id}"
+        
+    except Exception as e:
+        return f"❌ Failed to spawn async session: {str(e)}"
+
+
+@mcp.tool()
+def opencode_check(session_id: str) -> str:
+    """
+    Check an OpenCode session for new messages since last check.
+    
+    This is tmux-style polling - only returns NEW messages since last check.
+    
+    Args:
+        session_id: Session ID to check
+    
+    Returns:
+        New messages and status
+    """
+    if not OPENCODE_AVAILABLE:
+        return "❌ httpx not available"
+    
+    try:
+        client = _get_opencode_client()
+        result = client.check_session(session_id)
+        
+        output = f"📋 Session: {session_id}\n"
+        output += f"📊 Total messages: {result['total_messages']}\n"
+        output += f"🆕 New messages: {len(result['new_messages'])}\n\n"
+        
+        if result['has_new']:
+            output += "--- New Messages ---\n"
+            for msg in result['new_messages']:
+                info = msg.get('info', {})
+                parts = msg.get('parts', [])
+                
+                role = info.get('role', 'unknown')
+                output += f"\n[{role.upper()}]\n"
+                
+                for part in parts:
+                    if isinstance(part, dict) and part.get('type') == 'text':
+                        text = part.get('text', '')
+                        output += f"{text}\n"
+        else:
+            output += "💤 No new messages yet. Session still processing...\n"
+        
+        return output
+        
+    except Exception as e:
+        return f"❌ Error checking session: {str(e)}"
+
+
+@mcp.tool()
+def opencode_wait(
+    session_id: str,
+    timeout: float = 300.0,
+    use_sse: bool = False
+) -> str:
+    """
+    Wait for an OpenCode session to complete (blocks until done or timeout).
+    
+    Args:
+        session_id: Session ID to wait for
+        timeout: Maximum time to wait in seconds (default: 300)
+        use_sse: Use Server-Sent Events for real-time monitoring (default: False)
+    
+    Returns:
+        Final session results
+    """
+    if not OPENCODE_AVAILABLE:
+        return "❌ httpx not available"
+    
+    try:
+        client = _get_opencode_client()
+        
+        output = f"⏳ Waiting for session {session_id} to complete...\n"
+        output += f"⏱️  Timeout: {timeout}s\n"
+        output += f"📡 Method: {'SSE streaming' if use_sse else 'Polling'}\n\n"
+        
+        result = client.wait_for_completion(
+            session_id=session_id,
+            timeout=timeout,
+            use_sse=use_sse
+        )
+        
+        if result['timed_out']:
+            output += f"⏰ Session timed out after {timeout}s\n"
+            output += f"📊 Received {len(result['messages'])} messages before timeout\n"
+        elif result['completed']:
+            output += f"✅ Session completed!\n"
+            output += f"📊 Total messages: {len(result['messages'])}\n\n"
+            output += "--- Final Response ---\n"
+            
+            # Extract final assistant response
+            for msg in reversed(result['messages']):
+                info = msg.get('info', {})
+                if info.get('role') == 'assistant':
+                    parts = msg.get('parts', [])
+                    for part in parts:
+                        if isinstance(part, dict) and part.get('type') == 'text':
+                            output += part.get('text', '') + "\n"
+                    break
+        
+        return output
+        
+    except Exception as e:
+        return f"❌ Error waiting for session: {str(e)}"
+
+
+@mcp.tool()
+def opencode_list() -> str:
+    """
+    List all active OpenCode sessions.
+    
+    Returns:
+        List of sessions with IDs and titles
+    """
+    if not OPENCODE_AVAILABLE:
+        return "❌ httpx not available"
+    
+    try:
+        client = _get_opencode_client()
+        sessions = client.list_sessions()
+        
+        if not sessions:
+            return "📭 No active sessions"
+        
+        output = f"📋 Active OpenCode Sessions ({len(sessions)})\n\n"
+        
+        for session in sessions:
+            sid = session.get('id', 'unknown')
+            title = session.get('title', 'Untitled')
+            created = session.get('createdAt', 'unknown')
+            
+            output += f"• {sid}\n"
+            output += f"  Title: {title}\n"
+            output += f"  Created: {created}\n\n"
+        
+        return output
+        
+    except Exception as e:
+        return f"❌ Error listing sessions: {str(e)}"
+
+
+@mcp.tool()
+def opencode_abort(session_id: str) -> str:
+    """
+    Abort a running OpenCode session.
+    
+    Args:
+        session_id: Session ID to abort
+    
+    Returns:
+        Abort status
+    """
+    if not OPENCODE_AVAILABLE:
+        return "❌ httpx not available"
+    
+    try:
+        client = _get_opencode_client()
+        success = client.abort_session(session_id)
+        
+        if success:
+            return f"✅ Session {session_id} aborted"
+        else:
+            return f"❌ Failed to abort session {session_id}"
+        
+    except Exception as e:
+        return f"❌ Error aborting session: {str(e)}"
+
+
+@mcp.tool()
+def opencode_delete(session_id: str) -> str:
+    """
+    Delete an OpenCode session.
+    
+    Args:
+        session_id: Session ID to delete
+    
+    Returns:
+        Delete status
+    """
+    if not OPENCODE_AVAILABLE:
+        return "❌ httpx not available"
+    
+    try:
+        client = _get_opencode_client()
+        success = client.delete_session(session_id)
+        
+        if success:
+            return f"✅ Session {session_id} deleted"
+        else:
+            return f"❌ Failed to delete session {session_id}"
+        
+    except Exception as e:
+        return f"❌ Error deleting session: {str(e)}"
+
+
+@mcp.tool()
+def opencode_models_list() -> str:
+    """
+    List all available OpenCode models grouped by provider.
+    
+    Shows cloud models (fast!) and local models (GPU).
+    
+    Returns:
+        Formatted list of models by provider
+    """
+    if not OPENCODE_AVAILABLE:
+        return "❌ httpx not available"
+    
+    try:
+        models = list_available_models()
+        
+        if "error" in models:
+            return f"❌ Error: {models['error'][0]}"
+        
+        output = "🤖 Available OpenCode Models\n\n"
+        
+        # Show cloud providers first (faster!)
+        cloud_providers = ["google", "zai", "moonshotai-cn", "anthropic"]
+        local_providers = ["ollama"]
+        
+        output += "☁️  CLOUD MODELS (Fast, recommended!)\n"
+        output += "=" * 50 + "\n\n"
+        
+        for provider in cloud_providers:
+            if provider in models:
+                output += f"📡 {provider}/\n"
+                for model in models[provider][:10]:  # Limit to 10 per provider
+                    output += f"   • {model}\n"
+                if len(models[provider]) > 10:
+                    output += f"   ... and {len(models[provider]) - 10} more\n"
+                output += "\n"
+        
+        output += "\n💻 LOCAL MODELS (GPU required)\n"
+        output += "=" * 50 + "\n\n"
+        
+        for provider in local_providers:
+            if provider in models:
+                output += f"🖥️  {provider}/\n"
+                for model in models[provider]:
+                    output += f"   • {model}\n"
+                output += "\n"
+        
+        output += "\n💡 SHORTCUTS:\n"
+        output += "   gemini → google/gemini-3-flash-preview (fast!)\n"
+        output += "   gemini-pro → google/gemini-3-pro-preview\n"
+        output += "   glm → zai/glm-4.6 (cloud, fast!)\n"
+        output += "   glm-local → ollama/glm-4.7-flash (GPU)\n"
+        output += "   moonshot → moonshotai-cn/kimi-k2.5\n"
+        output += "   qwen → ollama/qwen2.5-coder (GPU)\n"
+        
+        return output
+        
+    except Exception as e:
+        return f"❌ Error listing models: {str(e)}"
+
 
 # ============================================================================
 # BASIC SYSTEM TOOLS
