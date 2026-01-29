@@ -6,7 +6,7 @@ After=network.target
 Type=simple
 WorkingDirectory=/home/luna/Code/ada/ada-swarm
 EnvironmentFile=/home/luna/Code/ada/ada-swarm/.env
-ExecStart=/home/luna/Code/ada/ada-swarm/.venv/bin/python -m ada_swarm.service.api
+ExecStart=/home/luna/Code/ada/ada-swarm/.venv/bin/python -m ada_swarm.service
 Restart=always
 RestartSec=5
 Environment=PYTHONPATH=/home/luna/Code/ada/ada-swarm/src
