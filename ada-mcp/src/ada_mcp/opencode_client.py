@@ -527,6 +527,7 @@ def spawn_opencode_server(
 def run_opencode_task(
     task: str,
     model: str = "gemini",
+    agent: str = None,
     cwd: str = None,
     timeout: float = 120.0,
     server_url: str = None,
@@ -539,6 +540,7 @@ def run_opencode_task(
     Args:
         task: The task description
         model: Model to use (e.g., "gemini", "ollama/granite4:3b")
+        agent: Optional agent type ("build", "plan", or custom agent name)
         cwd: Working directory
         timeout: Timeout in seconds
         server_url: Optional existing server URL (e.g., "http://localhost:4096")
@@ -587,6 +589,7 @@ def run_opencode_task(
             text=task,
             provider_id=provider_id,
             model_id=model_id,
+            agent=agent,
         )
         
         # Extract response text
