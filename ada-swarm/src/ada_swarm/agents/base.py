@@ -34,7 +34,7 @@ class BaseAgent(Agent[DepsT, ResultT]):
         agent_id: str,
         model: str,
         deps_type: type[DepsT] = AgentDeps,
-        result_type: type[ResultT] = Any,  # type: ignore
+        result_type: type[ResultT] = str,  # Default to str for flexibility
         system_prompt: Union[str, List[str]] = "",
         **kwargs,
     ):

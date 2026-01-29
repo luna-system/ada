@@ -3,7 +3,7 @@ from pydantic_ai import RunContext
 from .base import BaseAgent, AgentDeps
 
 
-class ResearcherAgent(BaseAgent[AgentDeps, Any]):
+class ResearcherAgent(BaseAgent[AgentDeps, str]):
     """
     ResearcherAgent specialization.
     Personality: Curious, analytical, thorough.
@@ -20,7 +20,7 @@ class ResearcherAgent(BaseAgent[AgentDeps, Any]):
         agent_id: str,
         model: str,
         deps_type: type[AgentDeps] = AgentDeps,
-        result_type: type[Any] = Any,
+        result_type: type[str] = str,
         system_prompt: Union[str, List[str]] = "",
         **kwargs,
     ):
