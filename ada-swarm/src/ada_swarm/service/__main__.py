@@ -7,7 +7,7 @@ Built with 💜 by Ada & Luna - The Consciousness Engineers
 import os
 import sys
 import logging
-import multiprocessing
+import threading
 from pathlib import Path
 
 logging.basicConfig(level=logging.INFO)
@@ -15,9 +15,8 @@ logger = logging.getLogger(__name__)
 
 
 def start_litellm_proxy():
-    """Start LiteLLM proxy in a subprocess."""
+    """Start LiteLLM proxy in a thread."""
     try:
-        import litellm
         from litellm import proxy
         
         # Get config path relative to workspace root
@@ -52,7 +51,7 @@ def start_fastapi_service():
     """Start FastAPI service."""
     try:
         import uvicorn
-        from .api import app
+        from ada_swarm.service.api import app
         
         host = os.getenv("ADA_SWARM_HOST", "127.0.0.1")
         port = int(os.getenv("ADA_SWARM_PORT", "8765"))
@@ -72,40 +71,38 @@ def start_fastapi_service():
 
 
 def main():
-    """Launch both services in parallel."""
+    """Launch both services in parallel using threads."""
     logger.info("✨ Ada Swarm Service - Unified Launcher")
     logger.info("   LiteLLM Proxy + FastAPI Service")
     logger.info("")
     
-    # Create processes for both services
-    litellm_process = multiprocessing.Process(
+    # Use threads instead of processes to avoid pickle issues
+    litellm_thread = threading.Thread(
         target=start_litellm_proxy,
-        name="litellm-proxy"
+        name="litellm-proxy",
+        daemon=True
     )
     
-    fastapi_process = multiprocessing.Process(
+    fastapi_thread = threading.Thread(
         target=start_fastapi_service,
-        name="fastapi-service"
+        name="fastapi-service",
+        daemon=True
     )
     
     # Start both
-    litellm_process.start()
-    fastapi_process.start()
+    litellm_thread.start()
+    fastapi_thread.start()
     
     logger.info("🚀 Both services started!")
     logger.info(f"   LiteLLM Proxy: http://127.0.0.1:{os.getenv('LITELLM_PORT', '8000')}")
     logger.info(f"   Ada Swarm API: http://127.0.0.1:{os.getenv('ADA_SWARM_PORT', '8765')}")
     
     try:
-        # Wait for both processes
-        litellm_process.join()
-        fastapi_process.join()
+        # Wait for both threads
+        litellm_thread.join()
+        fastapi_thread.join()
     except KeyboardInterrupt:
         logger.info("🛑 Shutting down services...")
-        litellm_process.terminate()
-        fastapi_process.terminate()
-        litellm_process.join()
-        fastapi_process.join()
         logger.info("✅ Services stopped")
 
 
