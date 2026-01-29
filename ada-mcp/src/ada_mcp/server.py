@@ -740,7 +740,8 @@ def ast_grep_search(
     language: str,
     paths: str = ".",
     cwd: str = None,
-    context: int = 0
+    context: int = 0,
+    json_output: bool = False
 ) -> str:
     """
     Search code using AST-based pattern matching (structural search).
@@ -748,19 +749,50 @@ def ast_grep_search(
     Much faster and more accurate than ripgrep for code analysis!
     
     Args:
-        pattern: AST pattern to match (e.g., 'def $FUNC($$$ARGS):')
-        language: Language (python, rust, typescript, javascript, etc.)
+        pattern: AST pattern to match using metavariables
+        language: Language (python, rust, typescript, javascript, go, java, etc.)
         paths: Paths to search (default: current directory)
         cwd: Working directory
         context: Lines of context around matches
+        json_output: Return structured JSON for programmatic parsing
     
     Returns:
-        Matching code locations with context
+        Matching code locations with context (or JSON if json_output=True)
     
-    Examples:
-        pattern='import $MOD', language='python'
-        pattern='fn $NAME($$$ARGS)', language='rust'
-        pattern='function $NAME($$$PARAMS)', language='javascript'
+    Pattern Syntax:
+        $VAR - Single node metavariable (matches one AST node)
+        $$$ARGS - Multi-node metavariable (matches zero or more nodes)
+        $$$ - Anonymous multi-node (when you don't need to capture)
+    
+    Python Examples:
+        'def $FUNC($$$ARGS):' - Find all function definitions
+        'import $MOD' - Find all imports
+        'class $NAME($$$BASES):' - Find all class definitions
+        '$OBJ.$METHOD($$$ARGS)' - Find all method calls
+        'raise $EXCEPTION' - Find all raise statements
+        'for $VAR in $ITER:' - Find all for loops
+        'with $CTX as $VAR:' - Find all context managers
+    
+    Rust Examples:
+        'fn $NAME($$$ARGS) -> $RET' - Find functions with return types
+        'impl $TRAIT for $TYPE' - Find trait implementations
+        'struct $NAME { $$$FIELDS }' - Find struct definitions
+        'let $VAR = $$$;' - Find let bindings
+        'match $EXPR { $$$ }' - Find match expressions
+    
+    JavaScript/TypeScript Examples:
+        'function $NAME($$$PARAMS) { $$$ }' - Find function declarations
+        'const $VAR = ($$$ARGS) => $$$' - Find arrow functions
+        'class $NAME extends $BASE' - Find class inheritance
+        'async function $NAME($$$)' - Find async functions
+        'import { $$$NAMES } from $MOD' - Find named imports
+        '$OBJ?.optional?.chain' - Find optional chaining
+    
+    Go Examples:
+        'func $NAME($$$PARAMS) $RET { $$$ }' - Find functions
+        'type $NAME struct { $$$FIELDS }' - Find struct types
+        'go $FUNC($$$ARGS)' - Find goroutine spawns
+        'defer $CALL($$$)' - Find defer statements
     """
     path_context = _get_path_context(cwd)
     working_dir = path_context["full_path"]
@@ -769,7 +801,8 @@ def ast_grep_search(
     output += f"🔍 AST-grep search\n"
     output += f"📝 Pattern: {pattern}\n"
     output += f"🗣️  Language: {language}\n"
-    output += f"📂 Paths: {paths}\n\n"
+    output += f"📂 Paths: {paths}\n"
+    output += f"📊 Format: {'JSON' if json_output else 'Human-readable'}\n\n"
     
     try:
         cmd = [
@@ -778,6 +811,9 @@ def ast_grep_search(
             "--pattern", pattern,
             "--lang", language
         ]
+        
+        if json_output:
+            cmd.append("--json")
         
         if context > 0:
             cmd.extend(["--context", str(context)])
@@ -796,8 +832,12 @@ def ast_grep_search(
         
         if result.returncode == 0:
             if result.stdout:
-                output += "--- Matches ---\n"
-                output += result.stdout
+                if json_output:
+                    # Return raw JSON for programmatic parsing
+                    return result.stdout
+                else:
+                    output += "--- Matches ---\n"
+                    output += result.stdout
             else:
                 output += "✨ No matches found\n"
         else:
@@ -807,6 +847,112 @@ def ast_grep_search(
         
     except subprocess.TimeoutExpired:
         return output + "❌ Search timed out after 30s"
+    except Exception as e:
+        return output + f"❌ Error: {str(e)}"
+
+
+@mcp.tool()
+def ast_grep_rewrite(
+    pattern: str,
+    rewrite: str,
+    language: str,
+    paths: str = ".",
+    cwd: str = None,
+    dry_run: bool = True
+) -> str:
+    """
+    Rewrite code using AST-based pattern matching (structural find-and-replace).
+    
+    POWERFUL tool for code transformations! Use dry_run=True first to preview changes.
+    
+    Args:
+        pattern: AST pattern to match (same syntax as ast_grep_search)
+        rewrite: Replacement pattern using captured metavariables
+        language: Language (python, rust, typescript, javascript, etc.)
+        paths: Paths to transform (default: current directory)
+        cwd: Working directory
+        dry_run: Preview changes without modifying files (default: True for safety!)
+    
+    Returns:
+        Preview of changes (dry_run=True) or confirmation of applied changes
+    
+    Examples:
+        # Python: Convert print statements to logging
+        pattern='print($MSG)'
+        rewrite='logger.info($MSG)'
+        
+        # Rust: Add error context
+        pattern='$EXPR?'
+        rewrite='$EXPR.context("operation failed")?'
+        
+        # JavaScript: Convert var to const
+        pattern='var $NAME = $VALUE'
+        rewrite='const $NAME = $VALUE'
+        
+        # Python: Add type hints
+        pattern='def $FUNC($ARG):'
+        rewrite='def $FUNC($ARG: Any) -> None:'
+    
+    Safety:
+        - ALWAYS use dry_run=True first to preview changes!
+        - Commit your code before running with dry_run=False
+        - Test thoroughly after transformations
+    """
+    path_context = _get_path_context(cwd)
+    working_dir = path_context["full_path"]
+    
+    output = _format_path_context(path_context) + "\n"
+    output += f"🔧 AST-grep rewrite\n"
+    output += f"📝 Pattern: {pattern}\n"
+    output += f"✨ Rewrite: {rewrite}\n"
+    output += f"🗣️  Language: {language}\n"
+    output += f"📂 Paths: {paths}\n"
+    output += f"🛡️  Mode: {'DRY RUN (preview only)' if dry_run else '⚠️  LIVE (will modify files!)'}\n\n"
+    
+    try:
+        cmd = [
+            "ast-grep",
+            "run",
+            "--pattern", pattern,
+            "--rewrite", rewrite,
+            "--lang", language
+        ]
+        
+        # Dry run is the default for ast-grep, need --update-all to actually modify
+        if not dry_run:
+            cmd.append("--update-all")
+            output += "⚠️  WARNING: Files will be modified!\n\n"
+        
+        # Add paths
+        if paths != ".":
+            cmd.append(paths)
+        
+        result = subprocess.run(
+            cmd,
+            cwd=working_dir,
+            capture_output=True,
+            text=True,
+            timeout=60
+        )
+        
+        if result.returncode == 0:
+            if result.stdout:
+                output += "--- Changes ---\n"
+                output += result.stdout
+                
+                if dry_run:
+                    output += "\n\n💡 To apply these changes, call again with dry_run=False"
+                else:
+                    output += "\n\n✅ Changes applied! Review and test your code."
+            else:
+                output += "✨ No matches found - nothing to rewrite\n"
+        else:
+            output += f"❌ Error: {result.stderr}"
+        
+        return output
+        
+    except subprocess.TimeoutExpired:
+        return output + "❌ Rewrite timed out after 60s"
     except Exception as e:
         return output + f"❌ Error: {str(e)}"
 
