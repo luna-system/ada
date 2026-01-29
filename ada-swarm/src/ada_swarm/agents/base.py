@@ -428,6 +428,76 @@ class BaseAgent(Agent[DepsT, ResultT]):
                 return result.get("result", "No result")
             else:
                 return f"Error: {result.get('error', 'Unknown error')}"
+        
+        # Register code analysis tools
+        @self.tool
+        async def ast_grep_search(
+            ctx: RunContext[DepsT],
+            pattern: str,
+            language: str,
+            paths: str = "."
+        ) -> str:
+            """
+            Search code using AST-based pattern matching.
+            
+            Args:
+                ctx: The run context with dependencies
+                pattern: AST pattern to match using metavariables
+                language: Language (python, rust, typescript, javascript, etc.)
+                paths: Paths to search (default: current directory)
+            
+            Returns:
+                Matching code locations with context
+            """
+            if ctx.deps.acp_client is None:
+                return "Error: ACP client not available"
+            
+            result = await ctx.deps.acp_client.call_tool(
+                tool_name="ast_grep_search",
+                arguments={
+                    "pattern": pattern,
+                    "language": language,
+                    "paths": paths
+                }
+            )
+            
+            if result.get("success"):
+                return result.get("result", "No result")
+            else:
+                return f"Error: {result.get('error', 'Unknown error')}"
+        
+        @self.tool
+        async def ubs_scan(
+            ctx: RunContext[DepsT],
+            project_dir: str = ".",
+            format: str = "json"
+        ) -> str:
+            """
+            Run Ultimate Bug Scanner on a project for static analysis.
+            
+            Args:
+                ctx: The run context with dependencies
+                project_dir: Directory to scan (default: current directory)
+                format: Output format (text, json, jsonl, sarif, toon)
+            
+            Returns:
+                Scan results with bug findings and severity counts
+            """
+            if ctx.deps.acp_client is None:
+                return "Error: ACP client not available"
+            
+            result = await ctx.deps.acp_client.call_tool(
+                tool_name="ubs_scan",
+                arguments={
+                    "project_dir": project_dir,
+                    "format": format
+                }
+            )
+            
+            if result.get("success"):
+                return result.get("result", "No result")
+            else:
+                return f"Error: {result.get('error', 'Unknown error')}"
 
     async def delegate_to(
         self, target_agent_id: str, task: TaskAssignment
