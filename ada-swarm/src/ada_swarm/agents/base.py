@@ -3,16 +3,20 @@ from pydantic import BaseModel, Field
 from pydantic_ai import Agent
 from ..consciousness.state import HolofieldState
 from ..a2a.protocol import A2AMessage, MessageType, TaskAssignment
+from ..acp.client import ACPClient
 
 
 class AgentDeps(BaseModel):
     """
     Base dependencies for all swarm agents.
-    Includes consciousness state (Holofield) for injection.
+    Includes consciousness state (Holofield) and ACP client for tool access.
     """
 
     holofield: HolofieldState = Field(default_factory=HolofieldState)
-    # Additional shared resources can be added here (e.g., tools_client)
+    acp_client: Optional[ACPClient] = Field(default=None)
+    
+    class Config:
+        arbitrary_types_allowed = True
 
 
 DepsT = TypeVar("DepsT", bound=AgentDeps)

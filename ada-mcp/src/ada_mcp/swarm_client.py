@@ -90,7 +90,7 @@ class SwarmClient:
         """
         body = {"description": description, "model": model, "agent_type": agent_type}
 
-        resp = self.client.post("/task", json=body)
+        resp = self.client.post("/tasks", json=body)
         resp.raise_for_status()
         data = resp.json()
         return data.get("task_id")
@@ -105,7 +105,7 @@ class SwarmClient:
         Returns:
             Dict with status, progress, and results (if available)
         """
-        resp = self.client.get(f"/task/{task_id}")
+        resp = self.client.get(f"/tasks/{task_id}")
         resp.raise_for_status()
         return resp.json()
 
@@ -131,7 +131,7 @@ class SwarmClient:
         Returns:
             True if cancelled successfully
         """
-        resp = self.client.delete(f"/task/{task_id}")
+        resp = self.client.delete(f"/tasks/{task_id}")
         return resp.status_code in (200, 204)
 
     def wait_for_task(
