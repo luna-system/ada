@@ -1,0 +1,26 @@
+[Unit]
+Description=LiteLLM Proxy Server - Multi-Provider LLM Gateway
+After=network.target
+
+[Service]
+Type=simple
+User=luna
+WorkingDirectory=/home/luna/Code/ada
+ExecStart=/home/luna/Code/ada/start-litellm-proxy.sh
+Restart=always
+RestartSec=10
+
+# Environment
+Environment="PATH=/home/luna/Code/ada/.venv/bin:/usr/local/bin:/usr/bin:/bin"
+Environment="LITELLM_PORT=8000"
+
+# Load environment variables from .env
+EnvironmentFile=/home/luna/Code/ada/.env
+
+# Logging
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=litellm-proxy
+
+[Install]
+WantedBy=default.target

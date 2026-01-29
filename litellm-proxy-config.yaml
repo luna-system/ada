@@ -1,0 +1,130 @@
+# LiteLLM Proxy Configuration for Ada Swarm
+# Multi-provider setup with fallback chains and smart routing
+#
+# Built with 💜 by Ada & Luna - The Consciousness Engineers
+
+model_list:
+  # === Gemini Models (Primary - Fast & Free!) ===
+  - model_name: gemini-flash
+    litellm_params:
+      model: gemini/gemini-2.0-flash-exp
+      api_key: os.environ/GEMINI_API_KEY
+    tpm: 1000000  # 1M tokens per minute
+    rpm: 1000     # 1000 requests per minute
+
+  - model_name: gemini-pro
+    litellm_params:
+      model: gemini/gemini-exp-1206
+      api_key: os.environ/GEMINI_API_KEY
+    tpm: 1000000
+    rpm: 1000
+
+  # === Z.ai / GLM Models (Paid - High Quality) ===
+  - model_name: glm-flash
+    litellm_params:
+      model: openai/glm-4-flash  # Z.ai uses OpenAI-compatible API
+      api_key: os.environ/ZAI_API_KEY
+      api_base: https://open.bigmodel.cn/api/paas/v4
+    tpm: 100000
+    rpm: 100
+
+  - model_name: glm-plus
+    litellm_params:
+      model: openai/glm-4-plus
+      api_key: os.environ/ZAI_API_KEY
+      api_base: https://open.bigmodel.cn/api/paas/v4
+    tpm: 100000
+    rpm: 100
+
+  # === DeepSeek Models (Fallback - Cheap & Good) ===
+  - model_name: deepseek-chat
+    litellm_params:
+      model: deepseek/deepseek-chat
+      api_key: os.environ/DEEPSEEK_API_KEY
+    tpm: 100000
+    rpm: 100
+
+  - model_name: deepseek-reasoner
+    litellm_params:
+      model: deepseek/deepseek-reasoner
+      api_key: os.environ/DEEPSEEK_API_KEY
+    tpm: 100000
+    rpm: 100
+
+  # === Moonshot Models (Alternative) ===
+  - model_name: moonshot-v1
+    litellm_params:
+      model: openai/moonshot-v1-8k
+      api_key: os.environ/MOONSHOT_API_KEY
+      api_base: https://api.moonshot.cn/v1
+    tpm: 100000
+    rpm: 100
+
+  # === Local Models (Ollama - Last Resort) ===
+  - model_name: local-llama
+    litellm_params:
+      model: ollama/llama3.2
+      api_base: http://localhost:11434
+    tpm: 10000
+    rpm: 100
+
+  - model_name: local-ada
+    litellm_params:
+      model: ollama/ada-slim-1.2b-v1
+      api_base: http://localhost:11434
+    tpm: 10000
+    rpm: 100
+
+# === Router Settings ===
+router_settings:
+  routing_strategy: "usage-based-routing"  # Balance load across providers
+  num_retries: 3
+  timeout: 60
+  
+  # Fallback chains - if primary fails, try these in order
+  fallbacks:
+    - gemini-flash: [glm-flash, deepseek-chat, local-llama]
+    - gemini-pro: [glm-plus, deepseek-reasoner, local-llama]
+    - glm-flash: [deepseek-chat, gemini-flash, local-llama]
+    - glm-plus: [deepseek-reasoner, gemini-pro, local-llama]
+
+# === LiteLLM Settings ===
+litellm_settings:
+  # Master key for proxy authentication
+  master_key: os.environ/LITELLM_MASTER_KEY
+  
+  # Enable detailed logging
+  set_verbose: true
+  
+  # Cost tracking
+  success_callback: ["langfuse"]  # Optional: track usage in Langfuse
+  
+  # Cache settings
+  cache: true
+  cache_params:
+    type: "redis"
+    host: "localhost"
+    port: 6379
+    ttl: 3600  # 1 hour cache
+
+# === General Settings ===
+general_settings:
+  master_key: os.environ/LITELLM_MASTER_KEY
+  database_url: "sqlite:///litellm_proxy.db"  # Track usage and costs
+  
+  # Enable UI dashboard
+  ui_access_mode: "admin_only"
+  
+  # Alerting
+  alerting:
+    - slack_webhook_url: os.environ/SLACK_WEBHOOK_URL
+      alerting_threshold: 100  # Alert if error rate > 100/hour
+
+# === Model Aliases (for convenience) ===
+# These let you use simple names in your code
+model_aliases:
+  fast: gemini-flash
+  smart: gemini-pro
+  paid: glm-plus
+  cheap: deepseek-chat
+  local: local-ada
