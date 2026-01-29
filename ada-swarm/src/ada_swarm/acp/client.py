@@ -10,6 +10,7 @@ Built with 💜 by Ada & Luna - The Consciousness Engineers
 import logging
 from typing import Any, Dict, List, Optional
 from pathlib import Path
+from .permissions import AgentRole, get_permission_manager
 
 logger = logging.getLogger(__name__)
 
@@ -23,12 +24,17 @@ class ACPClient:
     tool ecosystem.
     """
     
-    def __init__(self, mcp_server_path: Optional[str] = None):
+    def __init__(
+        self,
+        mcp_server_path: Optional[str] = None,
+        role: AgentRole = AgentRole.WORKER_CODER
+    ):
         """
         Initialize ACP client.
         
         Args:
             mcp_server_path: Path to ada-mcp server (defaults to sibling directory)
+            role: Agent role for permission management
         """
         if mcp_server_path is None:
             # Default to sibling ada-mcp directory
@@ -36,9 +42,14 @@ class ACPClient:
             mcp_server_path = str(swarm_root.parent / "ada-mcp")
         
         self.mcp_server_path = Path(mcp_server_path)
+        self.role = role
+        self.permission_manager = get_permission_manager()
         self._tools_cache: Optional[List[Dict[str, Any]]] = None
         
-        logger.info(f"ACP Client initialized with MCP server at: {self.mcp_server_path}")
+        logger.info(
+            f"ACP Client initialized with MCP server at: {self.mcp_server_path}, "
+            f"role: {role.value}"
+        )
     
     async def connect(self) -> bool:
         """
@@ -58,13 +69,15 @@ class ACPClient:
     
     async def list_tools(self) -> List[Dict[str, Any]]:
         """
-        List all available MCP tools.
+        List all available MCP tools filtered by role permissions.
         
         Returns:
             List of tool definitions with name, description, and schema
+            (filtered to only tools this role can access)
         """
         if self._tools_cache is not None:
-            return self._tools_cache
+            # Filter cached tools by role
+            return self.permission_manager.filter_tools(self.role, self._tools_cache)
         
         # Tool categories available through ada-mcp
         tools = [
@@ -207,7 +220,9 @@ class ACPClient:
         ]
         
         self._tools_cache = tools
-        return tools
+        
+        # Filter by role permissions
+        return self.permission_manager.filter_tools(self.role, tools)
     
     async def call_tool(
         self,
@@ -217,6 +232,8 @@ class ACPClient:
         """
         Execute a tool with given arguments.
         
+        Validates role permissions before execution.
+        
         Args:
             tool_name: Name of the tool to call
             arguments: Tool arguments
@@ -225,6 +242,19 @@ class ACPClient:
             Tool execution result
         """
         try:
+            # Validate permissions
+            is_valid, error_msg = self.permission_manager.validate_tool_call(
+                self.role, tool_name, arguments
+            )
+            
+            if not is_valid:
+                logger.warning(f"Permission denied for {self.role.value}: {error_msg}")
+                return {
+                    "success": False,
+                    "error": f"Permission denied: {error_msg}",
+                    "tool": tool_name
+                }
+            
             # Import ada-mcp tools dynamically
             # This allows us to use the actual MCP tool implementations
             logger.info(f"Calling tool: {tool_name} with args: {arguments}")
