@@ -43,10 +43,13 @@ class BaseAgent(Agent[DepsT, ResultT]):
     ):
         # If model starts with 'openai/', use LiteLLMProvider to route through proxy
         if model.startswith('openai/') and config.LITELLM_PROXY_URL:
+            # Strip 'openai/' prefix - the proxy expects just the model name
+            # e.g., 'openai/glm-flash' -> 'glm-flash'
+            proxy_model_name = model.replace('openai/', '', 1)
+            
             # Create OpenAIChatModel with LiteLLMProvider
-            # First param is model name, provider is keyword arg
             model_obj = OpenAIChatModel(
-                model,  # e.g., 'openai/glm-flash'
+                proxy_model_name,  # e.g., 'glm-flash'
                 provider=LiteLLMProvider(
                     api_base=config.LITELLM_API_BASE,
                     api_key=config.LITELLM_API_KEY
