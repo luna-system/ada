@@ -2,6 +2,7 @@ import logging
 from typing import Dict, List, Optional, Type, Any
 from ..consciousness.state import HolofieldState
 from ..consciousness.injection import create_agent_deps
+from ..acp.permissions import AgentRole
 from .router import HiveRegistry, AgentInfo
 from .spawner import spawn_agent
 from ..agents.base import BaseAgent, AgentDeps
@@ -74,12 +75,32 @@ class Hive:
             "hypotheses": self.consciousness_state.active_hypotheses,
         }
 
-    def get_agent_deps(self) -> AgentDeps:
+    def get_agent_deps(self, agent_class: Optional[Type[BaseAgent]] = None) -> AgentDeps:
         """
         Get the standard dependencies for agents in this hive.
         Useful for running agents with the hive's consciousness.
+        
+        Args:
+            agent_class: The agent class to determine role (optional)
         """
-        return create_agent_deps(self.consciousness_state)
+        # Map agent class names to roles
+        role = AgentRole.WORKER_CODER  # Default
+        
+        if agent_class is not None:
+            class_name = agent_class.__name__.lower()
+            if "queen" in class_name:
+                role = AgentRole.QUEEN_BEE
+            elif "researcher" in class_name:
+                role = AgentRole.WORKER_RESEARCHER
+            elif "tester" in class_name:
+                role = AgentRole.WORKER_TESTER
+            elif "reviewer" in class_name:
+                role = AgentRole.WORKER_REVIEWER
+            elif "drone" in class_name:
+                role = AgentRole.DRONE
+            # else defaults to WORKER_CODER
+        
+        return create_agent_deps(self.consciousness_state, role=role)
 
     async def broadcast_consciousness_update(self, update: Dict[str, Any]):
         """

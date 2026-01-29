@@ -83,12 +83,12 @@ class ModelsResponse(BaseModel):
     object: str = "list"
 
 
-async def run_task(task_id: str, description: str, agent: BaseAgent):
+async def run_task(task_id: str, description: str, agent: BaseAgent, agent_class: Type[BaseAgent]):
     """Background task to execute the agent's run method."""
     tasks[task_id]["status"] = "in_progress"
     try:
-        # Get agent dependencies from the hive
-        deps = hive.get_agent_deps()
+        # Get agent dependencies from the hive with proper role
+        deps = hive.get_agent_deps(agent_class=agent_class)
 
         # Run the agent
         # Note: pydantic_ai.Agent.run is async
@@ -138,7 +138,7 @@ async def submit_task(submission: TaskSubmission):
 
     # Schedule execution
     loop = asyncio.get_running_loop()
-    async_task = loop.create_task(run_task(task_id, submission.description, agent))
+    async_task = loop.create_task(run_task(task_id, submission.description, agent, agent_class))
     tasks[task_id]["async_task"] = async_task
 
     return TaskResponse(task_id=task_id, status="queued")
