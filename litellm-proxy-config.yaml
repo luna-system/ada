@@ -22,14 +22,14 @@ model_list:
   # === Z.ai / GLM Models (Paid - High Quality) ===
   - model_name: glm-flash
     litellm_params:
-      model: zai/glm-4.5-air  # Z.ai fast model
+      model: zai/glm-4.5-flash  # Z.ai fast model (has balance!)
       api_key: os.environ/ZAI_API_KEY
     tpm: 100000
     rpm: 100
 
   - model_name: glm-plus
     litellm_params:
-      model: zai/glm-4.7  # Z.ai latest model
+      model: zai/glm-4.6  # Z.ai stable model (has balance!)
       api_key: os.environ/ZAI_API_KEY
     tpm: 100000
     rpm: 100
