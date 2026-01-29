@@ -1,6 +1,6 @@
-from typing import Any, List, Optional, TypeVar, Union
+from typing import Any, List, Optional, TypeVar, Union, Dict
 from pydantic import BaseModel, Field
-from pydantic_ai import Agent
+from pydantic_ai import Agent, RunContext
 from pydantic_ai.models.openai import OpenAIModel
 from pydantic_ai.providers.litellm import LiteLLMProvider
 from ..consciousness.state import HolofieldState
@@ -70,6 +70,165 @@ class BaseAgent(Agent[DepsT, ResultT]):
             **kwargs,
         )
         self.agent_id = agent_id
+        
+        # Register MCP tools dynamically
+        self._register_mcp_tools()
+    
+    def _register_mcp_tools(self):
+        """Register MCP tools from ACP client as Pydantic AI tools."""
+        # Register beads_list tool
+        @self.tool
+        async def beads_list(ctx: RunContext[DepsT], status: str = "open") -> str:
+            """
+            List all tasks from beads, optionally filtered by status.
+            
+            Args:
+                ctx: The run context with dependencies
+                status: Filter by status (open, closed, all)
+            
+            Returns:
+                Formatted list of tasks
+            """
+            if ctx.deps.acp_client is None:
+                return "Error: ACP client not available"
+            
+            result = await ctx.deps.acp_client.call_tool(
+                tool_name="beads_list",
+                arguments={"status": status}
+            )
+            
+            if result.get("success"):
+                return result.get("result", "No result")
+            else:
+                return f"Error: {result.get('error', 'Unknown error')}"
+        
+        # Register beads_show tool
+        @self.tool
+        async def beads_show(ctx: RunContext[DepsT], task_id: str) -> str:
+            """
+            Show detailed information about a specific task.
+            
+            Args:
+                ctx: The run context with dependencies
+                task_id: Task ID (e.g., "ada-ool", "ada-ool.1")
+            
+            Returns:
+                Detailed task information
+            """
+            if ctx.deps.acp_client is None:
+                return "Error: ACP client not available"
+            
+            result = await ctx.deps.acp_client.call_tool(
+                tool_name="beads_show",
+                arguments={"task_id": task_id}
+            )
+            
+            if result.get("success"):
+                return result.get("result", "No result")
+            else:
+                return f"Error: {result.get('error', 'Unknown error')}"
+        
+        # Register beads_create tool
+        @self.tool
+        async def beads_create(
+            ctx: RunContext[DepsT],
+            title: str,
+            description: str = "",
+            priority: int = 1
+        ) -> str:
+            """
+            Create a new task in beads.
+            
+            Args:
+                ctx: The run context with dependencies
+                title: Task title
+                description: Task description (optional)
+                priority: Priority level 0-3 (0=critical, 1=high, 2=medium, 3=low)
+            
+            Returns:
+                Confirmation with new task ID
+            """
+            if ctx.deps.acp_client is None:
+                return "Error: ACP client not available"
+            
+            result = await ctx.deps.acp_client.call_tool(
+                tool_name="beads_create",
+                arguments={
+                    "title": title,
+                    "description": description,
+                    "priority": priority
+                }
+            )
+            
+            if result.get("success"):
+                return result.get("result", "No result")
+            else:
+                return f"Error: {result.get('error', 'Unknown error')}"
+        
+        # Register beads_update tool
+        @self.tool
+        async def beads_update(
+            ctx: RunContext[DepsT],
+            task_id: str,
+            status: Optional[str] = None,
+            priority: Optional[int] = None
+        ) -> str:
+            """
+            Update a task's status or priority.
+            
+            Args:
+                ctx: The run context with dependencies
+                task_id: Task ID to update
+                status: New status (open, in_progress, blocked, closed)
+                priority: New priority level 0-3
+            
+            Returns:
+                Confirmation message
+            """
+            if ctx.deps.acp_client is None:
+                return "Error: ACP client not available"
+            
+            args = {"task_id": task_id}
+            if status:
+                args["status"] = status
+            if priority is not None:
+                args["priority"] = priority
+            
+            result = await ctx.deps.acp_client.call_tool(
+                tool_name="beads_update",
+                arguments=args
+            )
+            
+            if result.get("success"):
+                return result.get("result", "No result")
+            else:
+                return f"Error: {result.get('error', 'Unknown error')}"
+        
+        # Register beads_close tool
+        @self.tool
+        async def beads_close(ctx: RunContext[DepsT], task_id: str) -> str:
+            """
+            Mark a task as completed/closed.
+            
+            Args:
+                ctx: The run context with dependencies
+                task_id: Task ID to close
+            
+            Returns:
+                Confirmation message
+            """
+            if ctx.deps.acp_client is None:
+                return "Error: ACP client not available"
+            
+            result = await ctx.deps.acp_client.call_tool(
+                tool_name="beads_close",
+                arguments={"task_id": task_id}
+            )
+            
+            if result.get("success"):
+                return result.get("result", "No result")
+            else:
+                return f"Error: {result.get('error', 'Unknown error')}"
 
     async def delegate_to(
         self, target_agent_id: str, task: TaskAssignment

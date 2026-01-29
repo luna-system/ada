@@ -37,9 +37,14 @@ class ACPClient:
             role: Agent role for permission management
         """
         if mcp_server_path is None:
-            # Default to sibling ada-mcp directory
-            swarm_root = Path(__file__).parent.parent.parent.parent
-            mcp_server_path = str(swarm_root.parent / "ada-mcp")
+            # Check if we're in Docker (ada-mcp mounted at /app/ada-mcp)
+            docker_path = Path("/app/ada-mcp")
+            if docker_path.exists():
+                mcp_server_path = str(docker_path)
+            else:
+                # Default to sibling ada-mcp directory (local development)
+                swarm_root = Path(__file__).parent.parent.parent.parent
+                mcp_server_path = str(swarm_root.parent / "ada-mcp")
         
         self.mcp_server_path = Path(mcp_server_path)
         self.role = role
@@ -328,18 +333,96 @@ class ACPClient:
                     "tool": tool_name
                 }
             
-            # Import ada-mcp tools dynamically
-            # This allows us to use the actual MCP tool implementations
+            # Execute actual MCP tool from ada-mcp server
             logger.info(f"Calling tool: {tool_name} with args: {arguments}")
             
-            # For now, return a placeholder
-            # TODO: Implement actual tool execution via MCP protocol
-            return {
-                "success": True,
-                "tool": tool_name,
-                "result": f"Tool {tool_name} executed (placeholder)",
-                "arguments": arguments
-            }
+            # Import ada-mcp server module to access tool functions
+            try:
+                import sys
+                from pathlib import Path
+                
+                # Add ada-mcp to path if not already there
+                ada_mcp_path = self.mcp_server_path / "src"
+                if str(ada_mcp_path) not in sys.path:
+                    sys.path.insert(0, str(ada_mcp_path))
+                
+                from ada_mcp import server as mcp_server
+                
+                # Map tool names to actual functions
+                tool_map = {
+                    # Beads tools
+                    "beads_ready": mcp_server.beads_ready,
+                    "beads_list": mcp_server.beads_list,
+                    "beads_show": mcp_server.beads_show,
+                    "beads_create": mcp_server.beads_create,
+                    "beads_update": mcp_server.beads_update,
+                    "beads_close": mcp_server.beads_close,
+                    "beads_sync": mcp_server.beads_sync,
+                    "beads_dep_add": mcp_server.beads_dep_add,
+                    
+                    # File operations
+                    "read_file": mcp_server.read_file_content,
+                    "write_file": mcp_server.write_file_content,
+                    "list_directory": mcp_server.list_directory,
+                    
+                    # Command execution
+                    "execute_command": mcp_server.execute_command,
+                    
+                    # AST-grep
+                    "ast_grep_search": mcp_server.ast_grep_search,
+                    "ast_grep_rewrite": mcp_server.ast_grep_rewrite,
+                    "ast_grep_dump_ast": mcp_server.ast_grep_dump_ast,
+                    "ast_grep_scan": mcp_server.ast_grep_scan,
+                    
+                    # UBS
+                    "ubs_scan": mcp_server.ubs_scan,
+                    
+                    # Research tools
+                    "research_notes_add": mcp_server.research_notes_add,
+                    "research_notes_search": mcp_server.research_notes_search,
+                    "hypothesis_add": mcp_server.hypothesis_add,
+                    "hypothesis_list": mcp_server.hypothesis_list,
+                    "experiment_log": mcp_server.experiment_log,
+                    "experiment_history": mcp_server.experiment_history,
+                    "research_todo_add": mcp_server.research_todo_add,
+                    "research_todo_list": mcp_server.research_todo_list,
+                    "research_todo_complete": mcp_server.research_todo_complete,
+                }
+                
+                # Get the tool function
+                tool_func = tool_map.get(tool_name)
+                
+                if tool_func is None:
+                    return {
+                        "success": False,
+                        "error": f"Tool {tool_name} not implemented in ACP client",
+                        "tool": tool_name
+                    }
+                
+                # Call the actual tool function
+                result = tool_func(**arguments)
+                
+                return {
+                    "success": True,
+                    "tool": tool_name,
+                    "result": result,
+                    "arguments": arguments
+                }
+                
+            except ImportError as e:
+                logger.error(f"Failed to import ada-mcp tools: {e}")
+                return {
+                    "success": False,
+                    "error": f"Failed to import ada-mcp tools: {str(e)}",
+                    "tool": tool_name
+                }
+            except Exception as e:
+                logger.error(f"Tool execution error: {e}")
+                return {
+                    "success": False,
+                    "error": f"Tool execution failed: {str(e)}",
+                    "tool": tool_name
+                }
             
         except Exception as e:
             logger.error(f"Tool execution failed: {e}")
