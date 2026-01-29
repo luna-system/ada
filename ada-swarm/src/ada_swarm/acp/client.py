@@ -217,6 +217,79 @@ class ACPClient:
                     "cwd": {"type": "string", "description": "Working directory"}
                 }
             },
+            
+            # Swarm orchestration (Queen Bee only)
+            {
+                "name": "swarm_spawn_task",
+                "description": "Spawn a Worker Bee or Drone for a subtask",
+                "category": "swarm",
+                "parameters": {
+                    "description": {"type": "string", "description": "Task description", "required": True},
+                    "model": {"type": "string", "description": "Model to use", "required": True},
+                    "agent_type": {"type": "string", "description": "Agent type", "required": True},
+                    "cwd": {"type": "string", "description": "Working directory"}
+                }
+            },
+            {
+                "name": "swarm_check_status",
+                "description": "Check status of a spawned task",
+                "category": "swarm",
+                "parameters": {
+                    "task_id": {"type": "string", "description": "Task ID", "required": True}
+                }
+            },
+            {
+                "name": "swarm_cancel_task",
+                "description": "Cancel a running task",
+                "category": "swarm",
+                "parameters": {
+                    "task_id": {"type": "string", "description": "Task ID", "required": True}
+                }
+            },
+            {
+                "name": "swarm_list_agents",
+                "description": "List all active agents in the swarm",
+                "category": "swarm",
+                "parameters": {}
+            },
+            
+            # Research tools
+            {
+                "name": "research_notes_add",
+                "description": "Add a research note or insight",
+                "category": "research",
+                "parameters": {
+                    "note": {"type": "string", "description": "Research note", "required": True},
+                    "category": {"type": "string", "description": "Note category"},
+                    "tags": {"type": "array", "description": "Tags for organization"}
+                }
+            },
+            {
+                "name": "research_notes_search",
+                "description": "Search research notes",
+                "category": "research",
+                "parameters": {
+                    "query": {"type": "string", "description": "Search query", "required": True}
+                }
+            },
+            {
+                "name": "hypothesis_add",
+                "description": "Add a new research hypothesis",
+                "category": "research",
+                "parameters": {
+                    "hypothesis": {"type": "string", "description": "Hypothesis description", "required": True}
+                }
+            },
+            {
+                "name": "experiment_log",
+                "description": "Log experiment results",
+                "category": "research",
+                "parameters": {
+                    "experiment_name": {"type": "string", "description": "Experiment name", "required": True},
+                    "version": {"type": "string", "description": "Version", "required": True},
+                    "results": {"type": "string", "description": "Results", "required": True}
+                }
+            },
         ]
         
         self._tools_cache = tools
