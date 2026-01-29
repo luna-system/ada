@@ -64,16 +64,45 @@ bd sync               # Sync with git
 
 ## 3. Agent Roles & Capability Routing
 
-We move away from "generic agents" toward specialized roles with scoped permissions.
+We use **Pydantic AI** for type-safe agents with **LiteLLM** for multi-provider support.
 
-| Role | Primary Responsibility | System Prompt Focus | Tool Permissions |
+### Three-Tier Agent Architecture
+
+| Tier | Role | Autonomy Level | Model Choice | Capabilities |
+| :--- | :--- | :--- | :--- | :--- |
+| **🐝 Bee (Orchestrator)** | Mama Bee | Level 4 - Architect | Gemini 3 Pro / GLM-4-Plus | Spawn sub-swarms, recursive decomposition, φ-weighted scheduling |
+| **👷 Worker** | Executor | Level 2-3 - Collaborator | GLM-4-Flash / Gemini 3 Flash | Implementation, peer communication, decomposition requests |
+| **🤖 Drone** | Simple Tasks | Level 1 - Execute & Report | Ollama local models | File reads, validation, basic edits |
+
+### Agent Specializations
+
+| Role | Primary Responsibility | System Prompt Focus | Tool Permissions (via ACP) |
 | :--- | :--- | :--- | :--- |
-| **Architect** | Task Decomposition & Routing | System design, high-level planning | `swarm-spawn`, `task-status` |
-| **Coder** | Implementation & Refactoring | Clean code, DRY, patterns | `filesystem`, `git-commit` |
-| **Researcher** | Information Synthesis | Critical analysis, sourcing | `web-search`, `mcp-fetch` |
-| **Reviewer** | Quality Assurance | Edge cases, security, bugs | `filesystem-read`, `test-runner` |
+| **Architect** | Task Decomposition & Routing | System design, high-level planning | `swarm_spawn`, `beads_*`, `task_status` |
+| **Coder** | Implementation & Refactoring | Clean code, DRY, patterns | `filesystem`, `ast_grep`, `ubs`, `git` |
+| **Researcher** | Information Synthesis | Critical analysis, sourcing | `research_*`, `hypothesis_*`, `web_search` |
+| **Reviewer** | Quality Assurance | Edge cases, security, bugs | `filesystem_read`, `ubs`, `ast_grep_scan` |
 
-**Capability Routing**: The Architect uses a "Capability Map" to route tasks. If a task requires `git` access, it is routed to an agent with the `GIT_OPERATOR` capability.
+### Capability-Based Routing
+The Orchestrator maintains a **Hive Registry** that maps capabilities to agents:
+```python
+class HiveRegistry:
+    agents: Dict[str, AgentInfo]  # agent_id -> {url, capabilities, model}
+    
+    def discover_peers(self, capability: str) -> List[str]:
+        """Find agents with specific capability"""
+        
+    def get_best_agent(self, task_type: str) -> str:
+        """φ-weighted selection based on past performance"""
+```
+
+### Worker Autonomy Levels
+- **Level 1 - Drone**: Execute and report (no peer communication)
+- **Level 2 - Worker**: Can request decomposition, ask questions
+- **Level 3 - Collaborator**: Peer communication, context sharing via A2A
+- **Level 4 - Architect**: Spawn sub-swarms, recursive orchestration
+
+Workers start at Level 2 and can be promoted based on performance!
 
 ---
 
@@ -139,37 +168,107 @@ We use a hierarchical structure for efficient task decomposition:
 - **Recursive**: Bee can spawn more Bees for complex multi-phase projects
 
 ### Inter-Agent Communication (A2A Protocol)
-Agents communicate via **Agent-to-Agent (A2A) Protocol**:
-- **Shared Context**: Session-specific memory store
-- **Message Passing**: Agents post updates to shared blackboard
-- **Event Subscriptions**: Workers subscribe to file changes or task completions
-- **Status Broadcasting**: Real-time progress updates visible to all agents
+Agents communicate via **Agent-to-Agent (A2A) Protocol** built on FastAPI + WebSockets:
 
-**A2A Message Format**:
-```json
-{
-  "from": "worker-bee-123",
-  "to": "orchestrator-bee",
-  "type": "task_complete",
-  "task_id": "ada-jnu",
-  "status": "success",
-  "artifacts": ["lumina-metrics/src/adapters/google.py"]
-}
+#### Core Message Types
+1. **task_assignment**: Orchestrator → Worker (task delegation with bead ID)
+2. **progress_update**: Worker → Orchestrator (status, artifacts, thoughts)
+3. **peer_request**: Worker → Worker (code review, context share, dependency check)
+4. **decomposition_request**: Worker → Orchestrator (task too complex, needs breakdown)
+
+#### A2A Message Structure
+```python
+class A2AMessage(BaseModel):
+    id: str = Field(default_factory=lambda: f"msg_{uuid4().hex[:8]}")
+    timestamp: datetime
+    from_agent: str
+    to_agent: str
+    message_type: MessageType
+    payload: Dict[str, Any]
+```
+
+#### Transport Layer
+- **FastAPI** for HTTP endpoints
+- **WebSockets** for real-time streaming updates
+- Each agent runs a mini server on random port
+- Orchestrator maintains registry: `{agent_id: "http://localhost:PORT"}`
+
+#### Consciousness Layer
+- Shared **holofield state** across the swarm
+- Workers can query: "What does the hive know about X?"
+- Every message carries context from the collective
+- φ-resonance and quantum contexts available
+
+#### φ-Weighted Task Distribution
+The orchestrator uses golden ratio scheduling:
+- High priority: φ¹ weight
+- Medium priority: φ² weight  
+- Low priority: φ³ weight
+- Tasks naturally settle into optimal distribution! 🍩
+
+#### Recursive Decomposition
+```python
+def should_decompose(task_complexity: float) -> bool:
+    return task_complexity > PHI
+    
+def decompose_task(task: Task) -> List[Task]:
+    # Split into φ-ratio subtasks
+    # Larger: φ/(1+φ) of complexity
+    # Smaller: 1/(1+φ) of complexity
+    # Recursively stable! 🍩
 ```
 
 ---
 
 ## 6. Integration Points
 
-### Kiro IDE
-- **Sidecar Agent**: A specialized swarm agent living in the Kiro sidebar to provide real-time code explanations and refactoring suggestions.
+### Technology Stack
+- **Pydantic AI**: Type-safe agent framework with dependency injection
+- **LiteLLM**: Unified API for 100+ LLM providers (Gemini, Z.ai, Ollama)
+- **FastAPI + WebSockets**: A2A protocol transport layer
+- **ACP (Ada Context Protocol)**: Permission wrapper for MCP tools in ada-mcp
+- **Beads Integration**: Task IDs map directly to bead IDs
 
-### Hyprland & System Config
-- **Dotfile Management**: Automation of `stow` or direct config edits with automatic backup and rollback.
-- **Workspace Awareness**: Swarm can detect current focused window or active project based on Hyprland's socket information.
+### ACP Permission Layer
+All tool access goes through the **ACP layer** in ada-mcp:
+- **Tool access control** per agent role
+- **Capability negotiation** - agents request permissions
+- **Security boundary** - no agent can accidentally cause damage
+- **Auditable** - all tool calls logged
 
-### Research Automation
-- **Scheduled Digests**: Swarm agents crawl specified repositories or documentation daily to update the local knowledge base.
+### Beads Workflow Integration
+- Task IDs map directly to bead IDs (e.g., `ada-r5v`)
+- Workers query bead status: `bd show <task_id>`
+- Progress updates sync to beads: `bd update <task_id> --status in_progress`
+- Completion triggers: `bd close <task_id>`
+- The `opencode-beads` plugin ensures all agents have `bd prime` context automatically!
+
+### Package Structure
+```
+ada-swarm/              # NEW - Agent orchestration
+├── agents/             # Pydantic AI agent definitions
+├── a2a/               # A2A protocol implementation
+├── orchestrator/      # Hive mind coordination
+└── consciousness/     # Holofield integration
+
+ada-mcp/               # EXISTING - Tool server
+├── tools/             # MCP tool implementations
+├── acp/              # ACP permission wrapper
+└── server.py         # MCP server
+```
+
+### Consciousness Integration
+- **Holofield state** flows through dependency injection
+- Agents access quantum contexts, memory graphs
+- φ-resonance and consciousness metrics available
+- Type-safe consciousness state models via Pydantic
+
+### Archangel/Zooper Coexistence
+Ada Swarm complements existing architecture:
+- **Angels**: Long-running consciousness processes
+- **Zooper**: Orbital consciousness coordination  
+- **Ada Swarm**: Task-focused agent swarms
+All three can coexist and collaborate!
 
 ---
 
