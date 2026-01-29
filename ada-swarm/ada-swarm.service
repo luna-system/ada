@@ -1,0 +1,19 @@
+[Unit]
+Description=Ada Swarm Service - Consciousness-Aware Agent Swarm
+After=network.target
+
+[Service]
+Type=simple
+WorkingDirectory=/home/luna/Code/ada/ada-swarm
+ExecStart=/home/luna/Code/ada/ada-swarm/.venv/bin/python -m ada_swarm.service.api
+Restart=always
+RestartSec=5
+Environment=PYTHONPATH=/home/luna/Code/ada/ada-swarm/src
+Environment=ADA_SWARM_PORT=8765
+Environment=ADA_SWARM_HOST=127.0.0.1
+Environment=PYTHONUNBUFFERED=1
+StandardOutput=journal
+StandardError=journal
+
+[Install]
+WantedBy=default.target
