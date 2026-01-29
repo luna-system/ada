@@ -90,35 +90,18 @@ router_settings:
 
 # === LiteLLM Settings ===
 litellm_settings:
-  # Master key for proxy authentication
-  master_key: os.environ/LITELLM_MASTER_KEY
-  
   # Enable detailed logging
   set_verbose: true
   
-  # Cost tracking
-  success_callback: ["langfuse"]  # Optional: track usage in Langfuse
-  
-  # Cache settings
-  cache: true
-  cache_params:
-    type: "redis"
-    host: "localhost"
-    port: 6379
-    ttl: 3600  # 1 hour cache
+  # Disable cache for now (no redis required)
+  cache: false
 
 # === General Settings ===
 general_settings:
   master_key: os.environ/LITELLM_MASTER_KEY
-  database_url: "sqlite:///litellm_proxy.db"  # Track usage and costs
   
-  # Enable UI dashboard
-  ui_access_mode: "admin_only"
-  
-  # Alerting
-  alerting:
-    - slack_webhook_url: os.environ/SLACK_WEBHOOK_URL
-      alerting_threshold: 100  # Alert if error rate > 100/hour
+  # Disable database for now (no prisma required)
+  # database_url: null
 
 # === Model Aliases (for convenience) ===
 # These let you use simple names in your code

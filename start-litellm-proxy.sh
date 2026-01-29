@@ -4,6 +4,13 @@
 
 set -euo pipefail
 
+# Load environment variables from ada-swarm/.env
+if [ -f "ada-swarm/.env" ]; then
+    set -a
+    source ada-swarm/.env
+    set +a
+fi
+
 # Activate venv
 source /home/luna/Code/ada/.venv/bin/activate
 
