@@ -11,6 +11,7 @@ from .drone import DroneAgent
 from .researcher import ResearcherAgent
 from .coder import CoderAgent
 from .reviewer import ReviewerAgent
+from .queen import QueenAgent
 from .tester import TesterAgent
 
 __all__ = [
@@ -20,5 +21,6 @@ __all__ = [
     "ResearcherAgent",
     "CoderAgent",
     "ReviewerAgent",
+    "QueenAgent",
     "TesterAgent",
 ]
