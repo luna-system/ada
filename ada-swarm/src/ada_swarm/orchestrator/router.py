@@ -12,7 +12,7 @@ class AgentInfo(BaseModel):
     agent_id: str
     url: str
     capabilities: List[str] = Field(default_factory=list)
-    model: Optional[str] = None
+    model: Optional[Any] = None
     status: str = "active"
     metadata: Dict[str, Any] = Field(default_factory=dict)
 

@@ -37,7 +37,7 @@ class BaseAgent(Agent[DepsT, ResultT]):
         super().__init__(
             model=model,
             deps_type=deps_type,
-            result_type=result_type,
+            output_type=result_type,
             system_prompt=system_prompt,
             **kwargs,
         )
