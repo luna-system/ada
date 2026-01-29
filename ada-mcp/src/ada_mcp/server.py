@@ -731,6 +731,177 @@ def opencode_models_list() -> str:
 
 
 # ============================================================================
+# AST-GREP CODE SEARCH TOOLS 🔍
+# ============================================================================
+
+@mcp.tool()
+def ast_grep_search(
+    pattern: str,
+    language: str,
+    paths: str = ".",
+    cwd: str = None,
+    context: int = 0
+) -> str:
+    """
+    Search code using AST-based pattern matching (structural search).
+    
+    Much faster and more accurate than ripgrep for code analysis!
+    
+    Args:
+        pattern: AST pattern to match (e.g., 'def $FUNC($$$ARGS):')
+        language: Language (python, rust, typescript, javascript, etc.)
+        paths: Paths to search (default: current directory)
+        cwd: Working directory
+        context: Lines of context around matches
+    
+    Returns:
+        Matching code locations with context
+    
+    Examples:
+        pattern='import $MOD', language='python'
+        pattern='fn $NAME($$$ARGS)', language='rust'
+        pattern='function $NAME($$$PARAMS)', language='javascript'
+    """
+    path_context = _get_path_context(cwd)
+    working_dir = path_context["full_path"]
+    
+    output = _format_path_context(path_context) + "\n"
+    output += f"🔍 AST-grep search\n"
+    output += f"📝 Pattern: {pattern}\n"
+    output += f"🗣️  Language: {language}\n"
+    output += f"📂 Paths: {paths}\n\n"
+    
+    try:
+        cmd = [
+            "ast-grep",
+            "run",
+            "--pattern", pattern,
+            "--lang", language
+        ]
+        
+        if context > 0:
+            cmd.extend(["--context", str(context)])
+        
+        # Add paths
+        if paths != ".":
+            cmd.append(paths)
+        
+        result = subprocess.run(
+            cmd,
+            cwd=working_dir,
+            capture_output=True,
+            text=True,
+            timeout=30
+        )
+        
+        if result.returncode == 0:
+            if result.stdout:
+                output += "--- Matches ---\n"
+                output += result.stdout
+            else:
+                output += "✨ No matches found\n"
+        else:
+            output += f"❌ Error: {result.stderr}"
+        
+        return output
+        
+    except subprocess.TimeoutExpired:
+        return output + "❌ Search timed out after 30s"
+    except Exception as e:
+        return output + f"❌ Error: {str(e)}"
+
+
+@mcp.tool()
+def ast_grep_dump_ast(
+    code: str,
+    language: str
+) -> str:
+    """
+    Dump the AST (Abstract Syntax Tree) for a code snippet.
+    
+    Useful for understanding code structure and crafting patterns.
+    
+    Args:
+        code: Code snippet to analyze
+        language: Language (python, rust, typescript, etc.)
+    
+    Returns:
+        AST tree structure
+    """
+    output = f"🌳 AST Dump for {language}\n"
+    output += f"📝 Code:\n{code}\n\n"
+    
+    try:
+        result = subprocess.run(
+            ["ast-grep", "run", "--debug-query", "--pattern", code, "--lang", language],
+            capture_output=True,
+            text=True,
+            timeout=10
+        )
+        
+        if result.stdout:
+            output += "--- AST Structure ---\n"
+            output += result.stdout
+        elif result.stderr:
+            output += result.stderr
+        else:
+            output += "✨ No AST output\n"
+        
+        return output
+        
+    except Exception as e:
+        return output + f"❌ Error: {str(e)}"
+
+
+@mcp.tool()
+def ast_grep_scan(cwd: str = None) -> str:
+    """
+    Scan codebase with configured ast-grep rules.
+    
+    Requires sgconfig.yml in the project root.
+    
+    Args:
+        cwd: Working directory (project root)
+    
+    Returns:
+        Scan results showing rule violations
+    """
+    path_context = _get_path_context(cwd)
+    working_dir = path_context["full_path"]
+    
+    output = _format_path_context(path_context) + "\n"
+    output += "🔍 AST-grep scan\n\n"
+    
+    try:
+        result = subprocess.run(
+            ["ast-grep", "scan"],
+            cwd=working_dir,
+            capture_output=True,
+            text=True,
+            timeout=60
+        )
+        
+        if result.returncode == 0:
+            if result.stdout:
+                output += "--- Scan Results ---\n"
+                output += result.stdout
+            else:
+                output += "✨ No issues found!\n"
+        else:
+            if "sgconfig.yml" in result.stderr:
+                output += "⚠️  No sgconfig.yml found. Use ast_grep_search for ad-hoc searches.\n"
+            else:
+                output += f"❌ Error: {result.stderr}"
+        
+        return output
+        
+    except subprocess.TimeoutExpired:
+        return output + "❌ Scan timed out after 60s"
+    except Exception as e:
+        return output + f"❌ Error: {str(e)}"
+
+
+# ============================================================================
 # BASIC SYSTEM TOOLS
 # ============================================================================
 
