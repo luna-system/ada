@@ -14,6 +14,13 @@ from ..agents.base import BaseAgent
 from ..agents.coder import CoderAgent
 from ..agents.researcher import ResearcherAgent
 from ..agents.tester import TesterAgent
+from .a2a import (
+    A2AMessage,
+    MessageType,
+    TaskAssignment,
+    ProgressUpdate,
+    TaskResult,
+)
 
 # Setup logging
 logging.basicConfig(level=logging.INFO)
@@ -207,6 +214,109 @@ async def cancel_task(task_id: str):
 
     task_data["status"] = "cancelled"
     return TaskResponse(task_id=task_id, status="cancelled")
+
+
+# ============================================================================
+# A2A PROTOCOL ENDPOINTS 🐝✨
+# ============================================================================
+
+@app.post("/a2a/message")
+async def handle_a2a_message(message: A2AMessage):
+    """
+    Handle incoming A2A protocol messages.
+    
+    This is the main entry point for agent-to-agent communication.
+    Routes messages based on type and handles responses.
+    """
+    logger.info(f"📨 A2A message from {message.from_agent} to {message.to_agent}: {message.message_type}")
+    
+    try:
+        if message.message_type == MessageType.TASK_ASSIGNMENT:
+            # Parse task assignment
+            assignment = TaskAssignment(**message.payload)
+            
+            # Extract agent type and model from constraints
+            constraints = assignment.constraints or {}
+            agent_type = constraints.get("agent_type", "coder")
+            model = constraints.get("model", "litellm/glm-flash")
+            
+            # Submit task using existing infrastructure
+            submission = TaskSubmission(
+                description=assignment.description,
+                model=model,
+                agent_type=agent_type,
+                capabilities=constraints.get("tools"),
+            )
+            
+            response = await submit_task(submission)
+            
+            # Return A2A response
+            return A2AMessage(
+                from_agent="orchestrator",
+                to_agent=message.from_agent,
+                message_type=MessageType.TASK_RESULT,
+                payload={
+                    "task_id": response.task_id,
+                    "status": response.status,
+                    "message": f"Task {response.task_id} queued successfully"
+                }
+            )
+            
+        elif message.message_type == MessageType.PROGRESS_UPDATE:
+            # Handle progress update from worker
+            update = ProgressUpdate(**message.payload)
+            
+            if update.task_id in tasks:
+                tasks[update.task_id]["progress"] = update.progress
+                tasks[update.task_id]["status"] = update.status
+                logger.info(f"📊 Task {update.task_id} progress: {update.progress:.0%}")
+            
+            return A2AMessage(
+                from_agent="orchestrator",
+                to_agent=message.from_agent,
+                message_type=MessageType.TASK_RESULT,
+                payload={"acknowledged": True}
+            )
+            
+        else:
+            raise HTTPException(
+                status_code=400,
+                detail=f"Unsupported message type: {message.message_type}"
+            )
+            
+    except Exception as e:
+        logger.error(f"❌ Error handling A2A message: {e}")
+        return A2AMessage(
+            from_agent="orchestrator",
+            to_agent=message.from_agent,
+            message_type=MessageType.ERROR,
+            payload={"error": str(e)}
+        )
+
+
+@app.get("/a2a/status/{task_id}")
+async def get_a2a_task_status(task_id: str):
+    """
+    Get task status in A2A format.
+    
+    This endpoint returns task status wrapped in an A2A message,
+    making it easy for agents to query task progress.
+    """
+    if task_id not in tasks:
+        raise HTTPException(status_code=404, detail="Task not found")
+    
+    task_data = tasks[task_id]
+    
+    return A2AMessage(
+        from_agent="orchestrator",
+        to_agent="requester",
+        message_type=MessageType.TASK_RESULT,
+        payload=TaskResult(
+            task_id=task_id,
+            status=task_data["status"],
+            results=task_data["results"],
+        ).model_dump()
+    )
 
 
 if __name__ == "__main__":
