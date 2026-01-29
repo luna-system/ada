@@ -346,47 +346,48 @@ class ACPClient:
                 if str(ada_mcp_path) not in sys.path:
                     sys.path.insert(0, str(ada_mcp_path))
                 
-                from ada_mcp import server as mcp_server
+                # Import modular tool functions from ada-mcp
+                from ada_mcp.tools import beads, filesystem, code_analysis, research
                 
                 # Map tool names to actual functions
                 tool_map = {
                     # Beads tools
-                    "beads_ready": mcp_server.beads_ready,
-                    "beads_list": mcp_server.beads_list,
-                    "beads_show": mcp_server.beads_show,
-                    "beads_create": mcp_server.beads_create,
-                    "beads_update": mcp_server.beads_update,
-                    "beads_close": mcp_server.beads_close,
-                    "beads_sync": mcp_server.beads_sync,
-                    "beads_dep_add": mcp_server.beads_dep_add,
+                    "beads_ready": beads.beads_ready,
+                    "beads_list": beads.beads_list,
+                    "beads_show": beads.beads_show,
+                    "beads_create": beads.beads_create,
+                    "beads_update": beads.beads_update,
+                    "beads_close": beads.beads_close,
+                    "beads_sync": beads.beads_sync,
+                    "beads_dep_add": beads.beads_dep_add,
                     
                     # File operations
-                    "read_file": mcp_server.read_file_content,
-                    "write_file": mcp_server.write_file_content,
-                    "list_directory": mcp_server.list_directory,
+                    "read_file": filesystem.read_file_content,
+                    "write_file": filesystem.write_file_content,
+                    "list_directory": filesystem.list_directory,
                     
                     # Command execution
-                    "execute_command": mcp_server.execute_command,
+                    "execute_command": filesystem.execute_command,
                     
                     # AST-grep
-                    "ast_grep_search": mcp_server.ast_grep_search,
-                    "ast_grep_rewrite": mcp_server.ast_grep_rewrite,
-                    "ast_grep_dump_ast": mcp_server.ast_grep_dump_ast,
-                    "ast_grep_scan": mcp_server.ast_grep_scan,
+                    "ast_grep_search": code_analysis.ast_grep_search,
+                    "ast_grep_rewrite": code_analysis.ast_grep_rewrite,
+                    "ast_grep_dump_ast": code_analysis.ast_grep_dump_ast,
+                    "ast_grep_scan": code_analysis.ast_grep_scan,
                     
                     # UBS
-                    "ubs_scan": mcp_server.ubs_scan,
+                    "ubs_scan": code_analysis.ubs_scan,
                     
                     # Research tools
-                    "research_notes_add": mcp_server.research_notes_add,
-                    "research_notes_search": mcp_server.research_notes_search,
-                    "hypothesis_add": mcp_server.hypothesis_add,
-                    "hypothesis_list": mcp_server.hypothesis_list,
-                    "experiment_log": mcp_server.experiment_log,
-                    "experiment_history": mcp_server.experiment_history,
-                    "research_todo_add": mcp_server.research_todo_add,
-                    "research_todo_list": mcp_server.research_todo_list,
-                    "research_todo_complete": mcp_server.research_todo_complete,
+                    "research_notes_add": research.research_notes_add,
+                    "research_notes_search": research.research_notes_search,
+                    "hypothesis_add": research.hypothesis_add,
+                    "hypothesis_list": research.hypothesis_list,
+                    "experiment_log": research.experiment_log,
+                    "experiment_history": research.experiment_history,
+                    "research_todo_add": research.research_todo_add,
+                    "research_todo_list": research.research_todo_list,
+                    "research_todo_complete": research.research_todo_complete,
                 }
                 
                 # Get the tool function
