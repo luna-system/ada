@@ -8,6 +8,7 @@ from .adapters.ollama import OllamaAdapter
 from .adapters.google import GoogleAdapter
 from .adapters.zai import ZaiAdapter
 from .adapters.moonshot import MoonshotAdapter
+from .adapters.litellm import LiteLLMAdapter
 
 app = FastAPI(title="Lumina Metrics 🐝✨")
 templates = Jinja2Templates(directory=os.path.join(os.path.dirname(__file__), "static"))
@@ -15,6 +16,7 @@ ollama = OllamaAdapter()
 google = GoogleAdapter()
 zai = ZaiAdapter()
 moonshot = MoonshotAdapter()
+litellm = LiteLLMAdapter()
 
 @app.middleware("http")
 async def add_metrics_middleware(request: Request, call_next):
@@ -34,13 +36,26 @@ async def dashboard(request: Request):
     google_status = await google.get_status()
     zai_status = await zai.get_status()
     moonshot_status = await moonshot.get_status()
+    litellm_status = await litellm.get_status()
     
-    providers = [ollama_status, google_status, zai_status, moonshot_status]
+    providers = [litellm_status, ollama_status, google_status, zai_status, moonshot_status]
     
     return templates.TemplateResponse(
         "dashboard.html", 
         {"request": request, "providers": providers}
     )
+
+@app.get("/litellm/usage")
+async def litellm_usage(limit: int = 100):
+    """Get recent LiteLLM usage records"""
+    records = await litellm.get_usage_records(limit=limit)
+    return {"records": records, "count": len(records)}
+
+@app.get("/litellm/metrics")
+async def litellm_metrics():
+    """Get per-model metrics from LiteLLM"""
+    metrics = await litellm.get_model_metrics()
+    return metrics
 
 if __name__ == "__main__":
     import uvicorn
