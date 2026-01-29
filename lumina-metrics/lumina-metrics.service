@@ -5,6 +5,7 @@ After=network.target
 [Service]
 Type=simple
 WorkingDirectory=/home/luna/Code/ada/lumina-metrics
+EnvironmentFile=/home/luna/Code/ada/lumina-metrics/.env
 ExecStart=/home/luna/Code/ada/lumina-metrics/.venv/bin/python -m lumina_metrics.main
 Restart=always
 RestartSec=5

@@ -13,6 +13,7 @@ class ProviderStatus(BaseModel):
     status: str
     models: List[ModelInfo] = []
     running_models: List[str] = []
+    quota_info: Optional[str] = None
     last_updated: datetime = Field(default_factory=datetime.utcnow)
 
 class UsageRecord(BaseModel):
