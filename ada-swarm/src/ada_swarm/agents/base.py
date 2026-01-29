@@ -41,13 +41,16 @@ class BaseAgent(Agent[DepsT, ResultT]):
         system_prompt: Union[str, List[str]] = "",
         **kwargs,
     ):
-        # If model starts with 'openai/', use LiteLLMProvider to route through proxy
-        if model.startswith('openai/') and config.LITELLM_PROXY_URL:
-            # Strip 'openai/' prefix - the proxy expects just the model name
-            # e.g., 'openai/glm-flash' -> 'glm-flash'
-            proxy_model_name = model.replace('openai/', '', 1)
+        # If model starts with 'litellm/', use LiteLLMProvider to route through proxy
+        # Model name should match what's defined in litellm-proxy-config.yaml
+        # e.g., 'litellm/glm-flash' routes to the 'glm-flash' model in proxy config
+        if model.startswith('litellm/') and config.LITELLM_PROXY_URL:
+            # Strip 'litellm/' prefix to get proxy model name
+            # e.g., 'litellm/glm-flash' -> 'glm-flash'
+            proxy_model_name = model.replace('litellm/', '', 1)
             
             # Create OpenAIChatModel with LiteLLMProvider
+            # The proxy will handle routing to the actual provider
             model_obj = OpenAIChatModel(
                 proxy_model_name,  # e.g., 'glm-flash'
                 provider=LiteLLMProvider(

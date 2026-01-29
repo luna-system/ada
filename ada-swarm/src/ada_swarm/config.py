@@ -14,12 +14,12 @@ LITELLM_API_KEY = LITELLM_MASTER_KEY
 
 if LITELLM_PROXY_URL:
     print(f"✨ LiteLLM proxy configured: {LITELLM_PROXY_URL}")
-    print(f"   Use model format: 'openai/model-name' with LiteLLMProvider")
+    print(f"   Use model format: 'litellm/model-name' where model-name matches proxy config")
 else:
     print("⚠️  No LITELLM_PROXY_URL set, using direct provider access")
 
 # Model aliases - use with LiteLLMProvider
-# Format: openai/model-name where model-name matches proxy config
-DEFAULT_FAST_MODEL = "openai/gemini-flash"
-DEFAULT_SMART_MODEL = "openai/gemini-pro"
-DEFAULT_CODER_MODEL = "openai/glm-flash"  # Z.ai GLM through proxy!
+# Format: litellm/model-name where model-name matches proxy config
+DEFAULT_FAST_MODEL = "litellm/gemini-flash"
+DEFAULT_SMART_MODEL = "litellm/gemini-pro"
+DEFAULT_CODER_MODEL = "litellm/glm-flash"  # Z.ai GLM through proxy!
