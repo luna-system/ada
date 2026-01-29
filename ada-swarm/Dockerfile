@@ -23,7 +23,7 @@ COPY src ./src
 COPY README.md ./
 
 # Install dependencies using uv
-RUN uv sync --frozen
+RUN /root/.cargo/bin/uv sync --frozen
 
 # Expose service port
 EXPOSE 8765
@@ -33,5 +33,5 @@ HEALTHCHECK --interval=10s --timeout=5s --start-period=15s --retries=3 \
     CMD curl -f http://localhost:8765/models || exit 1
 
 # Run the service
-CMD ["uv", "run", "python", "-m", "ada_swarm.service.api"]
+CMD ["/root/.cargo/bin/uv", "run", "python", "-m", "ada_swarm.service.api"]
 

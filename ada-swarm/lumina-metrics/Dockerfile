@@ -22,7 +22,7 @@ COPY src ./src
 COPY README.md* ./
 
 # Install dependencies using uv
-RUN uv sync --frozen || uv sync
+RUN /root/.cargo/bin/uv sync --frozen || /root/.cargo/bin/uv sync
 
 # Expose service port
 EXPOSE 8001
@@ -32,5 +32,5 @@ HEALTHCHECK --interval=10s --timeout=5s --start-period=15s --retries=3 \
     CMD curl -f http://localhost:8001/health || exit 1
 
 # Run the service
-CMD ["uv", "run", "uvicorn", "lumina_metrics.main:app", "--host", "0.0.0.0", "--port", "8001"]
+CMD ["/root/.cargo/bin/uv", "run", "uvicorn", "lumina_metrics.main:app", "--host", "0.0.0.0", "--port", "8001"]
 
