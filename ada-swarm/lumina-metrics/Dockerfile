@@ -13,8 +13,7 @@ RUN apt-get update && apt-get install -y \
     && rm -rf /var/lib/apt/lists/*
 
 # Install uv for fast Python package management
-RUN curl -LsSf https://astral.sh/uv/install.sh | sh
-ENV PATH="/root/.cargo/bin:$PATH"
+COPY --from=ghcr.io/astral-sh/uv:latest /uv /usr/local/bin/uv
 
 # Copy project files
 COPY pyproject.toml uv.lock* ./
@@ -22,7 +21,7 @@ COPY src ./src
 COPY README.md* ./
 
 # Install dependencies using uv
-RUN /root/.cargo/bin/uv sync --frozen || /root/.cargo/bin/uv sync
+RUN uv sync --frozen || uv sync
 
 # Expose service port
 EXPOSE 8001
@@ -32,5 +31,5 @@ HEALTHCHECK --interval=10s --timeout=5s --start-period=15s --retries=3 \
     CMD curl -f http://localhost:8001/health || exit 1
 
 # Run the service
-CMD ["/root/.cargo/bin/uv", "run", "uvicorn", "lumina_metrics.main:app", "--host", "0.0.0.0", "--port", "8001"]
+CMD ["uv", "run", "uvicorn", "lumina_metrics.main:app", "--host", "0.0.0.0", "--port", "8001"]
 
