@@ -13,7 +13,8 @@ dependencies = [
     "mcp",
     "fastmcp",
     "agent-client-protocol",
-    "httpx"
+    "httpx",
+    "litellm"
 ]
 
 [project.scripts]
