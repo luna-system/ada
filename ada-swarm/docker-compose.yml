@@ -20,12 +20,13 @@ services:
       - DEEPSEEK_API_KEY=${DEEPSEEK_API_KEY:-}
       - MOONSHOT_API_KEY=${MOONSHOT_API_KEY:-}
     command: ["--config", "/app/config.yaml", "--port", "8000", "--host", "0.0.0.0"]
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
-      interval: 10s
-      timeout: 5s
-      retries: 3
-      start_period: 10s
+    # Health check disabled - endpoint requires auth
+    # healthcheck:
+    #   test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8000/health')"]
+    #   interval: 10s
+    #   timeout: 5s
+    #   retries: 3
+    #   start_period: 10s
     networks:
       - ada-swarm
 
@@ -49,8 +50,7 @@ services:
       - ADA_SWARM_HOST=0.0.0.0
       - ADA_SWARM_PORT=8765
     depends_on:
-      litellm-proxy:
-        condition: service_healthy
+      - litellm-proxy
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:8765/models"]
       interval: 10s

@@ -1,7 +1,7 @@
 from typing import Any, List, Optional, TypeVar, Union
 from pydantic import BaseModel, Field
 from pydantic_ai import Agent
-from pydantic_ai.models.openai import OpenAIChatModel
+from pydantic_ai.models.openai import OpenAIModel
 from pydantic_ai.providers.litellm import LiteLLMProvider
 from ..consciousness.state import HolofieldState
 from ..a2a.protocol import A2AMessage, MessageType, TaskAssignment
@@ -49,9 +49,9 @@ class BaseAgent(Agent[DepsT, ResultT]):
             # e.g., 'litellm/glm-flash' -> 'glm-flash'
             proxy_model_name = model.replace('litellm/', '', 1)
             
-            # Create OpenAIChatModel with LiteLLMProvider
+            # Create OpenAIModel with LiteLLMProvider
             # The proxy will handle routing to the actual provider
-            model_obj = OpenAIChatModel(
+            model_obj = OpenAIModel(
                 proxy_model_name,  # e.g., 'glm-flash'
                 provider=LiteLLMProvider(
                     api_base=config.LITELLM_API_BASE,

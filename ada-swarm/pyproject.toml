@@ -6,7 +6,7 @@ authors = [
     { name = "Ada & Luna", email = "luna@airsi.de" }
 ]
 dependencies = [
-    "pydantic-ai>=0.0.1",
+    "pydantic-ai>=1.0.0",  # Need 1.x for LiteLLMProvider
     "litellm[proxy]>=1.0.0",
     "fastapi>=0.100.0",
     "uvicorn>=0.23.0",
