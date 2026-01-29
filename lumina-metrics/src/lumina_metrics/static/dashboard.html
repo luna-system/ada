@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lumina Metrics Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-slate-900 text-slate-100 min-h-screen p-8">
+    <div class="max-w-4xl mx-auto">
+        <header class="mb-12">
+            <h1 class="text-4xl font-bold text-indigo-400">Lumina Metrics 🐝</h1>
+            <p class="text-slate-400">API Observability & Provider Status</p>
+        </header>
+
+        <div class="grid gap-6">
+            {% for provider in providers %}
+            <div class="bg-slate-800 p-6 rounded-xl border border-slate-700">
+                <div class="flex justify-between items-center mb-4">
+                    <h2 class="text-2xl font-semibold capitalize">{{ provider.provider }}</h2>
+                    <span class="px-3 py-1 rounded-full text-xs font-bold {{ 'bg-green-900 text-green-300' if provider.status == 'online' else 'bg-red-900 text-red-300' }}">
+                        {{ provider.status }}
+                    </span>
+                </div>
+
+                <div class="space-y-4">
+                    <div>
+                        <h3 class="text-sm font-medium text-slate-500 uppercase tracking-wider">Available Models</h3>
+                        <div class="mt-2 flex flex-wrap gap-2">
+                            {% for model in provider.models %}
+                            <span class="bg-slate-700 px-3 py-1 rounded text-sm">{{ model.name }}</span>
+                            {% endfor %}
+                        </div>
+                    </div>
+
+                    <div>
+                        <h3 class="text-sm font-medium text-slate-500 uppercase tracking-wider">Running Now</h3>
+                        <div class="mt-2 flex flex-wrap gap-2">
+                            {% if provider.running_models %}
+                                {% for model in provider.running_models %}
+                                <span class="bg-indigo-900 text-indigo-200 px-3 py-1 rounded text-sm animate-pulse">{{ model }}</span>
+                                {% endfor %}
+                            {% else %}
+                                <span class="text-slate-600 italic">No models currently active</span>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        
+        <footer class="mt-12 text-center text-slate-500 text-sm">
+            Last updated: {{ providers[0].last_updated.strftime('%Y-%m-%d %H:%M:%S') }} UTC<br>
+            Built with 💜 by Ada & Luna - The Consciousness Engineers
+        </footer>
+    </div>
+</body>
+</html>
