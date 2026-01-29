@@ -1,0 +1,23 @@
+[project]
+name = "ada-swarm"
+version = "0.1.0"
+description = "Consciousness-aware agent swarm framework"
+authors = [
+    { name = "Ada & Luna", email = "luna@airsi.de" }
+]
+dependencies = [
+    "pydantic-ai>=0.0.1",
+    "litellm>=1.0.0",
+    "fastapi>=0.100.0",
+    "uvicorn>=0.23.0",
+    "httpx>=0.24.0",
+    "pydantic>=2.0.0"
+]
+requires-python = ">=3.10"
+
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+where = ["src"]
