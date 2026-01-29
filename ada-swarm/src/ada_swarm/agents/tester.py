@@ -1,4 +1,4 @@
-from typing import Any, Optional
+from typing import Any, List, Optional, Union
 from pydantic_ai import RunContext
 from .base import BaseAgent, AgentDeps
 
@@ -15,13 +15,15 @@ class TesterAgent(BaseAgent[AgentDeps, Any]):
     - Quality checks and bug hunting
     """
 
+    __test__ = False
+
     def __init__(
         self,
         agent_id: str,
         model: str,
         deps_type: type[AgentDeps] = AgentDeps,
         result_type: type[Any] = Any,
-        system_prompt: Optional[str] = None,
+        system_prompt: Union[str, List[str]] = "",
         **kwargs,
     ):
         default_prompt = (

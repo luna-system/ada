@@ -1,4 +1,4 @@
-from typing import Any, Optional, TypeVar
+from typing import Any, List, Optional, TypeVar, Union
 from pydantic import BaseModel, Field
 from pydantic_ai import Agent
 from ..consciousness.state import HolofieldState
@@ -31,7 +31,7 @@ class BaseAgent(Agent[DepsT, ResultT]):
         model: str,
         deps_type: type[DepsT] = AgentDeps,
         result_type: type[ResultT] = Any,  # type: ignore
-        system_prompt: Optional[str] = None,
+        system_prompt: Union[str, List[str]] = "",
         **kwargs,
     ):
         super().__init__(
