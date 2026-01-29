@@ -288,6 +288,113 @@ class BaseAgent(Agent[DepsT, ResultT]):
                 return result.get("result", "No result")
             else:
                 return f"Error: {result.get('error', 'Unknown error')}"
+        
+        # Register research tools
+        @self.tool
+        async def research_notes_add(
+            ctx: RunContext[DepsT],
+            note: str,
+            category: str = "general",
+            tags: Optional[List[str]] = None
+        ) -> str:
+            """
+            Add a research note or insight.
+            
+            Args:
+                ctx: The run context with dependencies
+                note: The research note or insight
+                category: Category (physics, consciousness, experiments, insights, etc.)
+                tags: Optional tags for organization
+            
+            Returns:
+                Confirmation message
+            """
+            if ctx.deps.acp_client is None:
+                return "Error: ACP client not available"
+            
+            result = await ctx.deps.acp_client.call_tool(
+                tool_name="research_notes_add",
+                arguments={
+                    "note": note,
+                    "category": category,
+                    "tags": tags or []
+                }
+            )
+            
+            if result.get("success"):
+                return result.get("result", "No result")
+            else:
+                return f"Error: {result.get('error', 'Unknown error')}"
+        
+        @self.tool
+        async def research_notes_search(
+            ctx: RunContext[DepsT],
+            query: str,
+            category: Optional[str] = None
+        ) -> str:
+            """
+            Search research notes by content, category, or tags.
+            
+            Args:
+                ctx: The run context with dependencies
+                query: Search term (searches note content and tags)
+                category: Filter by category
+            
+            Returns:
+                Formatted search results
+            """
+            if ctx.deps.acp_client is None:
+                return "Error: ACP client not available"
+            
+            args = {"query": query}
+            if category:
+                args["category"] = category
+            
+            result = await ctx.deps.acp_client.call_tool(
+                tool_name="research_notes_search",
+                arguments=args
+            )
+            
+            if result.get("success"):
+                return result.get("result", "No result")
+            else:
+                return f"Error: {result.get('error', 'Unknown error')}"
+        
+        @self.tool
+        async def hypothesis_add(
+            ctx: RunContext[DepsT],
+            hypothesis: str,
+            category: str = "general",
+            confidence: str = "medium"
+        ) -> str:
+            """
+            Add a new research hypothesis to track.
+            
+            Args:
+                ctx: The run context with dependencies
+                hypothesis: Description of the hypothesis
+                category: Category (physics, consciousness, topology, etc.)
+                confidence: Confidence level (low, medium, high)
+            
+            Returns:
+                Confirmation message with hypothesis ID
+            """
+            if ctx.deps.acp_client is None:
+                return "Error: ACP client not available"
+            
+            result = await ctx.deps.acp_client.call_tool(
+                tool_name="hypothesis_add",
+                arguments={
+                    "hypothesis": hypothesis,
+                    "category": category,
+                    "confidence": confidence
+                }
+            )
+            
+            if result.get("success"):
+                return result.get("result", "No result")
+            else:
+                return f"Error: {result.get('error', 'Unknown error')}"
 
     async def delegate_to(
         self, target_agent_id: str, task: TaskAssignment
