@@ -498,6 +498,159 @@ class BaseAgent(Agent[DepsT, ResultT]):
                 return result.get("result", "No result")
             else:
                 return f"Error: {result.get('error', 'Unknown error')}"
+        
+        # Register swarm orchestration tools (Queen Bee only)
+        @self.tool
+        async def swarm_spawn_task(
+            ctx: RunContext[DepsT],
+            description: str,
+            model: str = "litellm/glm-flash",
+            agent_type: str = "coder",
+            cwd: str = None
+        ) -> str:
+            """
+            Spawn a Worker Bee or Drone to handle a subtask.
+            
+            Args:
+                ctx: The run context with dependencies
+                description: Clear description of what the agent should do
+                model: Model to use (e.g., 'litellm/glm-flash')
+                agent_type: Type of agent (coder, researcher, tester, reviewer, drone)
+                cwd: Working directory for the agent (optional)
+            
+            Returns:
+                Task ID and status for monitoring
+            """
+            if ctx.deps.acp_client is None:
+                return "Error: ACP client not available"
+            
+            result = await ctx.deps.acp_client.call_tool(
+                tool_name="swarm_spawn_task",
+                arguments={
+                    "description": description,
+                    "model": model,
+                    "agent_type": agent_type,
+                    "cwd": cwd
+                }
+            )
+            
+            if result.get("success"):
+                return result.get("result", "No result")
+            else:
+                return f"Error: {result.get('error', 'Unknown error')}"
+        
+        @self.tool
+        async def swarm_check_status(
+            ctx: RunContext[DepsT],
+            task_id: str
+        ) -> str:
+            """
+            Check the status and progress of a spawned agent task.
+            
+            Args:
+                ctx: The run context with dependencies
+                task_id: Task ID returned from swarm_spawn_task
+            
+            Returns:
+                Current status, progress, and results if completed
+            """
+            if ctx.deps.acp_client is None:
+                return "Error: ACP client not available"
+            
+            result = await ctx.deps.acp_client.call_tool(
+                tool_name="swarm_check_status",
+                arguments={"task_id": task_id}
+            )
+            
+            if result.get("success"):
+                return result.get("result", "No result")
+            else:
+                return f"Error: {result.get('error', 'Unknown error')}"
+        
+        @self.tool
+        async def swarm_cancel_task(
+            ctx: RunContext[DepsT],
+            task_id: str
+        ) -> str:
+            """
+            Cancel a running agent task.
+            
+            Args:
+                ctx: The run context with dependencies
+                task_id: Task ID to cancel
+            
+            Returns:
+                Cancellation confirmation
+            """
+            if ctx.deps.acp_client is None:
+                return "Error: ACP client not available"
+            
+            result = await ctx.deps.acp_client.call_tool(
+                tool_name="swarm_cancel_task",
+                arguments={"task_id": task_id}
+            )
+            
+            if result.get("success"):
+                return result.get("result", "No result")
+            else:
+                return f"Error: {result.get('error', 'Unknown error')}"
+        
+        @self.tool
+        async def swarm_list_agents(ctx: RunContext[DepsT]) -> str:
+            """
+            List all active agents in the swarm.
+            
+            Args:
+                ctx: The run context with dependencies
+            
+            Returns:
+                List of agents with their IDs, types, and status
+            """
+            if ctx.deps.acp_client is None:
+                return "Error: ACP client not available"
+            
+            result = await ctx.deps.acp_client.call_tool(
+                tool_name="swarm_list_agents",
+                arguments={}
+            )
+            
+            if result.get("success"):
+                return result.get("result", "No result")
+            else:
+                return f"Error: {result.get('error', 'Unknown error')}"
+        
+        @self.tool
+        async def swarm_wait(
+            ctx: RunContext[DepsT],
+            task_id: str,
+            timeout: int = 300
+        ) -> str:
+            """
+            Wait for a task to complete (blocks until done or timeout).
+            
+            Args:
+                ctx: The run context with dependencies
+                task_id: Task ID to wait for
+                timeout: Maximum time to wait in seconds (default: 300)
+            
+            Returns:
+                Final task results or timeout message
+            """
+            if ctx.deps.acp_client is None:
+                return "Error: ACP client not available"
+            
+            result = await ctx.deps.acp_client.call_tool(
+                tool_name="swarm_wait",
+                arguments={
+                    "task_id": task_id,
+                    "timeout": timeout
+                }
+            )
+            
+            if result.get("success"):
+                return result.get("result", "No result")
+            else:
+                return f"Error: {result.get('error', 'Unknown error')}"
 
     async def delegate_to(
         self, target_agent_id: str, task: TaskAssignment
