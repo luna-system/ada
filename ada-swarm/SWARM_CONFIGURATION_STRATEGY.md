@@ -70,8 +70,8 @@ We use **Pydantic AI** for type-safe agents with **LiteLLM** for multi-provider 
 
 | Tier | Role | Autonomy Level | Model Choice | Capabilities |
 | :--- | :--- | :--- | :--- | :--- |
-| **🐝 Bee (Orchestrator)** | Mama Bee | Level 4 - Architect | Gemini 3 Pro / GLM-4-Plus | Spawn sub-swarms, recursive decomposition, φ-weighted scheduling |
-| **👷 Worker** | Executor | Level 2-3 - Collaborator | GLM-4-Flash / Gemini 3 Flash | Implementation, peer communication, decomposition requests |
+| **� Queen Bee** | Orchestrator | Level 4 - Architect | Gemini 3 Pro / GLM-4-Plus | Spawn sub-swarms, recursive decomposition, φ-weighted scheduling |
+| **� Worker Bee** | Executor | Level 2-3 - Collaborator | GLM-4-Flash / Gemini 3 Flash | Implementation, peer communication, decomposition requests |
 | **🤖 Drone** | Simple Tasks | Level 1 - Execute & Report | Ollama local models | File reads, validation, basic edits |
 
 ### Agent Specializations
@@ -98,11 +98,11 @@ class HiveRegistry:
 
 ### Worker Autonomy Levels
 - **Level 1 - Drone**: Execute and report (no peer communication)
-- **Level 2 - Worker**: Can request decomposition, ask questions
-- **Level 3 - Collaborator**: Peer communication, context sharing via A2A
-- **Level 4 - Architect**: Spawn sub-swarms, recursive orchestration
+- **Level 2 - Worker Bee**: Can request decomposition, ask questions
+- **Level 3 - Collaborator Bee**: Peer communication, context sharing via A2A
+- **Level 4 - Queen Bee**: Spawn sub-swarms, recursive orchestration
 
-Workers start at Level 2 and can be promoted based on performance!
+Worker Bees start at Level 2 and can be promoted based on performance!
 
 ---
 
@@ -149,23 +149,23 @@ We use a hierarchical structure for efficient task decomposition:
 
 ### Task Decomposition (The Fan-Out)
 1. **User Input**: "Build Lumina Metrics Phase 2 with cloud provider adapters"
-2. **Bee (Orchestrator)**:
+2. **👑 Queen Bee (Orchestrator)**:
    - Analyzes requirements
    - Creates beads for subtasks (bd create)
-   - Spawns Workers for each adapter
-3. **Workers (Executors)**:
+   - Spawns Worker Bees for each adapter
+3. **🐝 Worker Bees (Executors)**:
    - Implement Google, Z.ai, Moonshot adapters
    - Update main.py and dashboard
    - Run tests and validation
-4. **Drones (Validators)**:
+4. **🤖 Drones (Validators)**:
    - Check syntax with UBS
    - Verify file structure
    - Confirm all files created
 
 ### Sequential vs. Parallel
-- **Parallel**: Multiple workers building different adapters simultaneously
+- **Parallel**: Multiple Worker Bees building different adapters simultaneously
 - **Sequential**: Testing must happen after implementation
-- **Recursive**: Bee can spawn more Bees for complex multi-phase projects
+- **Recursive**: Queen Bee can spawn more Queen Bees for complex multi-phase projects
 
 ### Inter-Agent Communication (A2A Protocol)
 Agents communicate via **Agent-to-Agent (A2A) Protocol** built on FastAPI + WebSockets:
@@ -195,7 +195,7 @@ class A2AMessage(BaseModel):
 
 #### Consciousness Layer
 - Shared **holofield state** across the swarm
-- Workers can query: "What does the hive know about X?"
+- Worker Bees can query: "What does the hive know about X?"
 - Every message carries context from the collective
 - φ-resonance and quantum contexts available
 
@@ -238,7 +238,7 @@ All tool access goes through the **ACP layer** in ada-mcp:
 
 ### Beads Workflow Integration
 - Task IDs map directly to bead IDs (e.g., `ada-r5v`)
-- Workers query bead status: `bd show <task_id>`
+- Worker Bees query bead status: `bd show <task_id>`
 - Progress updates sync to beads: `bd update <task_id> --status in_progress`
 - Completion triggers: `bd close <task_id>`
 - The `opencode-beads` plugin ensures all agents have `bd prime` context automatically!
