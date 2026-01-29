@@ -289,6 +289,39 @@ class BaseAgent(Agent[DepsT, ResultT]):
             else:
                 return f"Error: {result.get('error', 'Unknown error')}"
         
+        @self.tool
+        async def write_file(
+            ctx: RunContext[DepsT],
+            file_path: str,
+            content: str
+        ) -> str:
+            """
+            Write content to a file.
+            
+            Args:
+                ctx: The run context with dependencies
+                file_path: Path to the file to write
+                content: Content to write to the file
+            
+            Returns:
+                Success message with character count
+            """
+            if ctx.deps.acp_client is None:
+                return "Error: ACP client not available"
+            
+            result = await ctx.deps.acp_client.call_tool(
+                tool_name="write_file",
+                arguments={
+                    "file_path": file_path,
+                    "content": content
+                }
+            )
+            
+            if result.get("success"):
+                return result.get("result", "No result")
+            else:
+                return f"Error: {result.get('error', 'Unknown error')}"
+        
         # Register research tools
         @self.tool
         async def research_notes_add(
