@@ -70,7 +70,7 @@ async def run_task(task_id: str, description: str, agent: BaseAgent):
         result = await agent.run(description, deps=deps)
 
         tasks[task_id]["status"] = "completed"
-        tasks[task_id]["results"] = result.data
+        tasks[task_id]["results"] = result.output
         tasks[task_id]["progress"] = 1.0
         logger.info(f"Task {task_id} completed successfully.")
     except asyncio.CancelledError:
