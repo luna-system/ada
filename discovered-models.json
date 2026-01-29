@@ -1,0 +1,279 @@
+{
+  "Google Gemini": {
+    "models": [
+      {
+        "name": "gemini-2.5-flash",
+        "display_name": "Gemini 2.5 Flash",
+        "description": "Stable version of Gemini 2.5 Flash, our mid-size multimodal model that supports up to 1 million toke"
+      },
+      {
+        "name": "gemini-2.5-pro",
+        "display_name": "Gemini 2.5 Pro",
+        "description": "Stable release (June 17th, 2025) of Gemini 2.5 Pro"
+      },
+      {
+        "name": "gemini-2.0-flash",
+        "display_name": "Gemini 2.0 Flash",
+        "description": "Gemini 2.0 Flash"
+      },
+      {
+        "name": "gemini-2.0-flash-001",
+        "display_name": "Gemini 2.0 Flash 001",
+        "description": "Stable version of Gemini 2.0 Flash, our fast and versatile multimodal model for scaling across diver"
+      },
+      {
+        "name": "gemini-2.0-flash-exp-image-generation",
+        "display_name": "Gemini 2.0 Flash (Image Generation) Experimental",
+        "description": "Gemini 2.0 Flash (Image Generation) Experimental"
+      },
+      {
+        "name": "gemini-2.0-flash-lite-001",
+        "display_name": "Gemini 2.0 Flash-Lite 001",
+        "description": "Stable version of Gemini 2.0 Flash-Lite"
+      },
+      {
+        "name": "gemini-2.0-flash-lite",
+        "display_name": "Gemini 2.0 Flash-Lite",
+        "description": "Gemini 2.0 Flash-Lite"
+      },
+      {
+        "name": "gemini-exp-1206",
+        "display_name": "Gemini Experimental 1206",
+        "description": "Experimental release (March 25th, 2025) of Gemini 2.5 Pro"
+      },
+      {
+        "name": "gemini-2.5-flash-preview-tts",
+        "display_name": "Gemini 2.5 Flash Preview TTS",
+        "description": "Gemini 2.5 Flash Preview TTS"
+      },
+      {
+        "name": "gemini-2.5-pro-preview-tts",
+        "display_name": "Gemini 2.5 Pro Preview TTS",
+        "description": "Gemini 2.5 Pro Preview TTS"
+      },
+      {
+        "name": "gemma-3-1b-it",
+        "display_name": "Gemma 3 1B",
+        "description": ""
+      },
+      {
+        "name": "gemma-3-4b-it",
+        "display_name": "Gemma 3 4B",
+        "description": ""
+      },
+      {
+        "name": "gemma-3-12b-it",
+        "display_name": "Gemma 3 12B",
+        "description": ""
+      },
+      {
+        "name": "gemma-3-27b-it",
+        "display_name": "Gemma 3 27B",
+        "description": ""
+      },
+      {
+        "name": "gemma-3n-e4b-it",
+        "display_name": "Gemma 3n E4B",
+        "description": ""
+      },
+      {
+        "name": "gemma-3n-e2b-it",
+        "display_name": "Gemma 3n E2B",
+        "description": ""
+      },
+      {
+        "name": "gemini-flash-latest",
+        "display_name": "Gemini Flash Latest",
+        "description": "Latest release of Gemini Flash"
+      },
+      {
+        "name": "gemini-flash-lite-latest",
+        "display_name": "Gemini Flash-Lite Latest",
+        "description": "Latest release of Gemini Flash-Lite"
+      },
+      {
+        "name": "gemini-pro-latest",
+        "display_name": "Gemini Pro Latest",
+        "description": "Latest release of Gemini Pro"
+      },
+      {
+        "name": "gemini-2.5-flash-lite",
+        "display_name": "Gemini 2.5 Flash-Lite",
+        "description": "Stable version of Gemini 2.5 Flash-Lite, released in July of 2025"
+      },
+      {
+        "name": "gemini-2.5-flash-image",
+        "display_name": "Nano Banana",
+        "description": "Gemini 2.5 Flash Preview Image"
+      },
+      {
+        "name": "gemini-2.5-flash-preview-09-2025",
+        "display_name": "Gemini 2.5 Flash Preview Sep 2025",
+        "description": "Gemini 2.5 Flash Preview Sep 2025"
+      },
+      {
+        "name": "gemini-2.5-flash-lite-preview-09-2025",
+        "display_name": "Gemini 2.5 Flash-Lite Preview Sep 2025",
+        "description": "Preview release (Septempber 25th, 2025) of Gemini 2.5 Flash-Lite"
+      },
+      {
+        "name": "gemini-3-pro-preview",
+        "display_name": "Gemini 3 Pro Preview",
+        "description": "Gemini 3 Pro Preview"
+      },
+      {
+        "name": "gemini-3-flash-preview",
+        "display_name": "Gemini 3 Flash Preview",
+        "description": "Gemini 3 Flash Preview"
+      },
+      {
+        "name": "gemini-3-pro-image-preview",
+        "display_name": "Nano Banana Pro",
+        "description": "Gemini 3 Pro Image Preview"
+      },
+      {
+        "name": "nano-banana-pro-preview",
+        "display_name": "Nano Banana Pro",
+        "description": "Gemini 3 Pro Image Preview"
+      },
+      {
+        "name": "gemini-robotics-er-1.5-preview",
+        "display_name": "Gemini Robotics-ER 1.5 Preview",
+        "description": "Gemini Robotics-ER 1.5 Preview"
+      },
+      {
+        "name": "gemini-2.5-computer-use-preview-10-2025",
+        "display_name": "Gemini 2.5 Computer Use Preview 10-2025",
+        "description": "Gemini 2.5 Computer Use Preview 10-2025"
+      },
+      {
+        "name": "deep-research-pro-preview-12-2025",
+        "display_name": "Deep Research Pro Preview (Dec-12-2025)",
+        "description": "Preview release (December 12th, 2025) of Deep Research Pro"
+      }
+    ],
+    "count": 30
+  },
+  "Z.ai / ZhipuAI": {
+    "models": [
+      {
+        "id": "glm-4.5",
+        "owned_by": "z-ai"
+      },
+      {
+        "id": "glm-4.5-air",
+        "owned_by": "z-ai"
+      },
+      {
+        "id": "glm-4.6",
+        "owned_by": "z-ai"
+      },
+      {
+        "id": "glm-4.7",
+        "owned_by": "z-ai"
+      }
+    ],
+    "count": 4
+  },
+  "DeepSeek": {
+    "error": "Client error '401 Unauthorized' for url 'https://api.deepseek.com/models'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/401"
+  },
+  "Moonshot": {
+    "error": ""
+  },
+  "Ollama (Local)": {
+    "models": [
+      {
+        "name": "ministral-3:latest",
+        "size": 5,
+        "modified": "2026-01-27"
+      },
+      {
+        "name": "granite4:latest",
+        "size": 1,
+        "modified": "2026-01-27"
+      },
+      {
+        "name": "rnj-1:latest",
+        "size": 4,
+        "modified": "2026-01-27"
+      },
+      {
+        "name": "nomic-embed-text:latest",
+        "size": 0,
+        "modified": "2026-01-27"
+      },
+      {
+        "name": "qwen2.5-coder:1.5b-base",
+        "size": 0,
+        "modified": "2026-01-27"
+      },
+      {
+        "name": "llama3.1:8b",
+        "size": 4,
+        "modified": "2026-01-27"
+      },
+      {
+        "name": "mxbai-embed-large:latest",
+        "size": 0,
+        "modified": "2026-01-27"
+      },
+      {
+        "name": "glm-4.7-flash:latest",
+        "size": 17,
+        "modified": "2026-01-27"
+      },
+      {
+        "name": "ada-slim-1.2b-v1:latest",
+        "size": 2,
+        "modified": "2026-01-11"
+      },
+      {
+        "name": "ada-v5e-antithesis:latest",
+        "size": 2,
+        "modified": "2026-01-01"
+      },
+      {
+        "name": "ada-slm-v4b-creative:latest",
+        "size": 0,
+        "modified": "2025-12-31"
+      },
+      {
+        "name": "ada-v5c-balanced:latest",
+        "size": 0,
+        "modified": "2025-12-28"
+      },
+      {
+        "name": "ada-v6-golden:latest",
+        "size": 0,
+        "modified": "2025-12-28"
+      },
+      {
+        "name": "ada-v5b-pure:latest",
+        "size": 0,
+        "modified": "2025-12-28"
+      },
+      {
+        "name": "ada-v4-mixed:latest",
+        "size": 0,
+        "modified": "2025-12-28"
+      },
+      {
+        "name": "qwen2.5-coder:latest",
+        "size": 4,
+        "modified": "2025-04-01"
+      },
+      {
+        "name": "gemma3:latest",
+        "size": 3,
+        "modified": "2025-03-31"
+      },
+      {
+        "name": "gemma3:1b",
+        "size": 0,
+        "modified": "2025-03-31"
+      }
+    ],
+    "count": 18
+  }
+}

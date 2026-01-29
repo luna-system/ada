@@ -22,7 +22,7 @@ model_list:
   # === Z.ai / GLM Models (Paid - High Quality) ===
   - model_name: glm-flash
     litellm_params:
-      model: zhipuai/glm-4-flash  # Z.ai/ZhipuAI provider
+      model: zhipuai/glm-4.5-air  # Z.ai fast model
       api_key: os.environ/ZAI_API_KEY
       api_base: https://open.bigmodel.cn/api/paas/v4
     tpm: 100000
@@ -30,7 +30,7 @@ model_list:
 
   - model_name: glm-plus
     litellm_params:
-      model: zhipuai/glm-4-plus  # Z.ai/ZhipuAI provider
+      model: zhipuai/glm-4.7  # Z.ai latest model
       api_key: os.environ/ZAI_API_KEY
       api_base: https://open.bigmodel.cn/api/paas/v4
     tpm: 100000
