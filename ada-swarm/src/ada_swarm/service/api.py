@@ -4,6 +4,7 @@ import logging
 from typing import Dict, List, Optional, Any, Type
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
+import httpx
 
 # Configure LiteLLM proxy FIRST (before importing agents)
 from .. import config  # This sets up litellm.api_base
@@ -59,6 +60,18 @@ class TaskStatus(BaseModel):
 
 class AgentListResponse(BaseModel):
     agents: List[Dict[str, Any]]
+
+
+class ModelInfo(BaseModel):
+    id: str
+    object: str = "model"
+    created: int
+    owned_by: str
+
+
+class ModelsResponse(BaseModel):
+    data: List[ModelInfo]
+    object: str = "list"
 
 
 async def run_task(task_id: str, description: str, agent: BaseAgent):
@@ -140,6 +153,41 @@ async def get_task_status(task_id: str):
 async def list_agents():
     status = hive.get_swarm_status()
     return AgentListResponse(agents=status["registry"])
+
+
+@app.get("/models", response_model=ModelsResponse)
+async def list_models():
+    """
+    Query LiteLLM proxy for available models.
+    Returns all models configured in litellm-proxy-config.yaml.
+    """
+    if not config.LITELLM_PROXY_URL:
+        raise HTTPException(
+            status_code=503,
+            detail="LiteLLM proxy not configured. Set LITELLM_PROXY_URL environment variable."
+        )
+    
+    try:
+        async with httpx.AsyncClient() as client:
+            response = await client.get(
+                f"{config.LITELLM_PROXY_URL}/v1/models",
+                headers={"Authorization": f"Bearer {config.LITELLM_MASTER_KEY}"},
+                timeout=5.0
+            )
+            response.raise_for_status()
+            data = response.json()
+            
+            # Transform to our response format
+            return ModelsResponse(
+                data=[ModelInfo(**model) for model in data.get("data", [])],
+                object=data.get("object", "list")
+            )
+    except httpx.HTTPError as e:
+        logger.error(f"Failed to fetch models from LiteLLM proxy: {e}")
+        raise HTTPException(
+            status_code=502,
+            detail=f"Failed to fetch models from LiteLLM proxy: {str(e)}"
+        )
 
 
 @app.delete("/tasks/{task_id}", response_model=TaskResponse)
