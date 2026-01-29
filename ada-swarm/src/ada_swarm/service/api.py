@@ -5,6 +5,9 @@ from typing import Dict, List, Optional, Any, Type
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
 
+# Configure LiteLLM proxy FIRST (before importing agents)
+from .. import config  # This sets up litellm.api_base
+
 from ..orchestrator.hive import Hive
 from ..agents.base import BaseAgent
 from ..agents.coder import CoderAgent
