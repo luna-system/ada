@@ -22,7 +22,7 @@ model_list:
   # === Z.ai / GLM Models (Paid - High Quality) ===
   - model_name: glm-flash
     litellm_params:
-      model: glm-4-flash  # Z.ai model name (no prefix needed)
+      model: zhipuai/glm-4-flash  # Z.ai/ZhipuAI provider
       api_key: os.environ/ZAI_API_KEY
       api_base: https://open.bigmodel.cn/api/paas/v4
     tpm: 100000
@@ -30,7 +30,7 @@ model_list:
 
   - model_name: glm-plus
     litellm_params:
-      model: glm-4-plus  # Z.ai model name (no prefix needed)
+      model: zhipuai/glm-4-plus  # Z.ai/ZhipuAI provider
       api_key: os.environ/ZAI_API_KEY
       api_base: https://open.bigmodel.cn/api/paas/v4
     tpm: 100000
@@ -54,7 +54,7 @@ model_list:
   # === Moonshot Models (Alternative) ===
   - model_name: moonshot-v1
     litellm_params:
-      model: moonshot-v1-8k  # Moonshot model name (no prefix needed)
+      model: moonshot/moonshot-v1-8k  # Moonshot provider
       api_key: os.environ/MOONSHOT_API_KEY
       api_base: https://api.moonshot.cn/v1
     tpm: 100000
