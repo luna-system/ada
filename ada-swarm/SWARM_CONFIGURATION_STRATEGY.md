@@ -9,36 +9,56 @@
 ## 1. Current State Assessment
 
 ### What We Have
-- **`ada-swarm` Service**: A core orchestration layer capable of spawning agents and managing basic task lifecycles.
-- **Gemini 2.0 Integration**: High-performance reasoning via Google's Gemini models (Flash and Pro), providing a strong foundation for task decomposition.
-- **Basic MCP Infrastructure**: Foundation for Model Context Protocol servers allowing the swarm to interact with external data.
-- **Task Spawning**: Ability to break down a user request into sub-tasks assigned to ephemeral agents.
+- **`ada-swarm` Service**: HTTP API on port 8765 with task spawning, status tracking, and agent lifecycle management
+- **Gemini 3 Integration**: `gemini-3-flash-preview` and `gemini-3-pro-preview` via Google AI API (quota resets every 5 hours)
+- **Z.ai (GLM) Integration**: `glm-4-flash`, `glm-4-plus`, `glm-4-air` via Zhipu API - our primary paid provider!
+- **Ollama Local Models**: 10 models including `ada-slim-1.2b-v1`, `qwen2.5-coder:1.5b`, `glm-4.7-flash`
+- **Ada-MCP Server**: Full tool access via ACP (Ada Context Protocol) layer - gives agents ALL the tools we have!
+- **Beads Task Management**: `bd` CLI for issue tracking, synced with git
+- **Lumina Metrics**: Real-time observability dashboard for all providers on port 8001
 
 ### What's Working
-- **Context Handling**: Gemini's large context window allows for maintaining extensive project state during a session.
-- **Atomic Operations**: Simple file reads/writes and basic command execution via individual agents.
+- **Multi-Provider Setup**: Gemini 3, Z.ai, and Ollama all operational with monitoring
+- **MCP Tool Access**: Ada-MCP provides beads, filesystem, git, research notes, AST-grep, UBS scanning, and more
+- **Task Spawning**: Successfully tested with Gemini 3 Flash coder bees
+- **Observability**: Dashboard shows provider status, models, and quota info
 
 ### What's Missing
-- **Native Tool Binding**: Agents often require manual "glue" code to access MCP tools rather than a dynamic discovery mechanism.
-- **Multi-Provider Resilience**: Reliance on a single provider (Gemini) creates a single point of failure and limits model-specific optimizations (e.g., using smaller, faster models for trivial tasks).
-- **Inter-Agent Communication (IAC)**: Current communication is primarily hub-and-spoke; agents lack a robust peer-to-peer messaging protocol.
+- **Agent Role Configuration**: Need to define Architect, Coder, Researcher, Reviewer roles with tool permissions
+- **Tool Discovery**: Agents need to know which MCP tools are available via ACP
+- **Beads Integration**: Agents should use `bd` for task tracking (bd ready, bd show, bd update, bd close)
+- **Inter-Agent Communication**: Shared blackboard for collaboration
 
 ---
 
 ## 2. Tool Integration Framework
 
-To empower the swarm, agents must have seamless access to the local and remote environment.
+Agents access tools through the **Ada-MCP ACP (Ada Context Protocol) layer**, which provides a unified interface to all available tools.
 
-### MCP Integration
-- **Dynamic Discovery**: Agents should query an MCP Router to identify available tools (`filesystem`, `git`, `google-search`) at runtime.
-- **Unified Interface**:
-  - **Beads**: Specialized "micro-tools" for specific data transformations (e.g., converting a git diff to a summary).
-  - **Tool Schema**: All tools must provide JSON-RPC compatible schemas for model function calling.
+### Ada-MCP Tools Available
+- **Beads (`mcp_ada_mcp_beads_*`)**: Task management (list, show, create, update, close, sync)
+- **Filesystem (`mcp_ada_mcp_*`)**: read_file_content, write_file_content, list_directory, execute_command
+- **Git Operations**: Via execute_command with proper cwd
+- **Research (`mcp_ada_mcp_research_*`)**: notes (add, search), todos (add, list, complete), hypotheses (add, list)
+- **Experiments (`mcp_ada_mcp_experiment_*`)**: Log results, view history
+- **AST-grep (`mcp_ada_mcp_ast_grep_*`)**: Code search, rewrite, dump AST, scan
+- **UBS (`mcp_ada_mcp_ubs_scan`)**: Ultimate Bug Scanner for catching bugs before commit
+- **OpenCode/Swarm (`mcp_ada_mcp_opencode_*`, `mcp_ada_mcp_swarm_*`)**: Spawn subagents, check status
 
-### Environment Access
-- **Filesystem**: Scoped access to `/home/luna/Code` with safety guards.
-- **Git**: Tools for staging, committing, and branch management.
-- **Research**: Integration with `tavily` or `ddg-search` for real-time information gathering.
+### Tool Access Pattern
+1. **Agent connects to ada-mcp server** (running on localhost)
+2. **ACP layer provides tool discovery** - agents can query available tools
+3. **Agents invoke tools via MCP protocol** - all tools return structured responses
+4. **Working directory awareness** - all commands include explicit `cwd` parameter
+
+### Beads Workflow for Agents
+```bash
+bd ready              # Find available work
+bd show <id>          # View task details
+bd update <id> --status in_progress  # Claim work
+bd close <id>         # Complete work
+bd sync               # Sync with git
+```
 
 ---
 
@@ -59,40 +79,83 @@ We move away from "generic agents" toward specialized roles with scoped permissi
 
 ## 4. Multi-Provider Setup
 
-To ensure reliability and cost-efficiency, we implement a **LiteLLM Proxy** strategy.
+We have **three operational providers** with Lumina Metrics observability:
 
-### Proxy Configuration
-- **Endpoint**: `http://localhost:4000` (LiteLLM)
-- **Providers**:
-  - **Primary**: Gemini 2.0 (via Google Vertex/AI Studio)
-  - **Secondary/Reasoning**: OpenAI o1/DeepSeek (for complex logic)
-  - **Local/Fast**: Llama 3/Mistral (via Ollama for local-only tasks)
-  - **Z.ai/Moonshot**: Integrated for specific localized knowledge or alternative routing.
+### Provider Configuration
+| Provider | Models | Use Case | Status |
+| :--- | :--- | :--- | :--- |
+| **Z.ai (GLM)** | glm-4-flash, glm-4-plus, glm-4-air | Primary paid provider, fast reasoning | ✅ Online |
+| **Google Gemini 3** | gemini-3-flash-preview, gemini-3-pro-preview | Complex tasks, large context (quota: 5hr reset) | ✅ Online |
+| **Ollama Local** | qwen2.5-coder, ada-slim, glm-4.7-flash, llama3.1 | Free, private, fast for simple tasks | ✅ Online |
+
+### Model Selection Strategy
+1. **Simple tasks** (file reads, basic edits): Ollama local models (free!)
+2. **Code generation**: Z.ai GLM-4-Flash (fast, paid, reliable)
+3. **Complex reasoning**: Gemini 3 Flash (large context, quota-limited)
+4. **Deep analysis**: Gemini 3 Pro (when Flash isn't enough)
 
 ### Fallback Chain
-1. Attempt task with **Gemini 2.0 Flash**.
-2. If Rate Limited: Fallback to **DeepSeek V3**.
-3. If Context Overload: Fallback to **Gemini 2.0 Pro**.
+1. **Primary**: Z.ai GLM-4-Flash (our paid provider)
+2. **Secondary**: Gemini 3 Flash (if Z.ai rate limited)
+3. **Tertiary**: Ollama local models (always available)
+4. **Heavy**: Gemini 3 Pro (for complex tasks only)
+
+### Observability
+- **Lumina Metrics Dashboard**: http://localhost:8001/dashboard
+- **Prometheus Metrics**: http://localhost:8001/metrics
+- **Real-time provider status**: Online/offline, model lists, quota info
 
 ---
 
 ## 5. Workflow Patterns
 
+### Three-Tier Agent Architecture
+We use a hierarchical structure for efficient task decomposition:
+
+| Tier | Role | Responsibility | Model Choice |
+| :--- | :--- | :--- | :--- |
+| **🐝 Bee** | Orchestrator | Recursive task decomposition, high-level planning | Gemini 3 Pro / GLM-4-Plus |
+| **👷 Worker** | Executor | Implementation, coding, research | GLM-4-Flash / Gemini 3 Flash |
+| **🤖 Drone** | Simple Tasks | File reads, basic edits, validation | Ollama local models |
+
 ### Task Decomposition (The Fan-Out)
-1. **User Input**: "Update the Hyprland config to use a new color scheme."
-2. **Architect**:
-   - Spawns **Researcher** to find the color scheme hex codes.
-   - Spawns **Coder** to apply changes to `~/.config/hypr/`.
-   - Spawns **Reviewer** to validate syntax.
+1. **User Input**: "Build Lumina Metrics Phase 2 with cloud provider adapters"
+2. **Bee (Orchestrator)**:
+   - Analyzes requirements
+   - Creates beads for subtasks (bd create)
+   - Spawns Workers for each adapter
+3. **Workers (Executors)**:
+   - Implement Google, Z.ai, Moonshot adapters
+   - Update main.py and dashboard
+   - Run tests and validation
+4. **Drones (Validators)**:
+   - Check syntax with UBS
+   - Verify file structure
+   - Confirm all files created
 
 ### Sequential vs. Parallel
-- **Parallel**: Researching multiple technologies simultaneously.
-- **Sequential**: Linting must happen after coding.
+- **Parallel**: Multiple workers building different adapters simultaneously
+- **Sequential**: Testing must happen after implementation
+- **Recursive**: Bee can spawn more Bees for complex multi-phase projects
 
-### Inter-Agent Communication (IAC)
-Agents communicate via a **Shared Blackboard**:
-- Agents post results to a session-specific memory store.
-- Other agents subscribe to updates on specific files or topics.
+### Inter-Agent Communication (A2A Protocol)
+Agents communicate via **Agent-to-Agent (A2A) Protocol**:
+- **Shared Context**: Session-specific memory store
+- **Message Passing**: Agents post updates to shared blackboard
+- **Event Subscriptions**: Workers subscribe to file changes or task completions
+- **Status Broadcasting**: Real-time progress updates visible to all agents
+
+**A2A Message Format**:
+```json
+{
+  "from": "worker-bee-123",
+  "to": "orchestrator-bee",
+  "type": "task_complete",
+  "task_id": "ada-jnu",
+  "status": "success",
+  "artifacts": ["lumina-metrics/src/adapters/google.py"]
+}
+```
 
 ---
 
@@ -112,23 +175,44 @@ Agents communicate via a **Shared Blackboard**:
 
 ## 7. Next Steps & Roadmap
 
-### Phase 1: Foundation (Current)
-- [ ] Implement LiteLLM Proxy to abstract provider logic.
-- [ ] Standardize the Agent System Prompt template.
+### Phase 1: Foundation ✅ COMPLETE
+- ✅ Ada-swarm service running on port 8765
+- ✅ Multi-provider setup (Gemini 3, Z.ai, Ollama)
+- ✅ Lumina Metrics observability dashboard
+- ✅ Basic task spawning tested
 
-### Phase 2: Tooling (Immediate)
-- [ ] Connect the `filesystem` and `git` MCP servers to the `ada-swarm` core.
-- [ ] Create a `Researcher` role that uses a search tool.
+### Phase 2: Tool Integration (CURRENT - Beads: ada-r5v, ada-mqb)
+- [ ] **ada-r5v**: Connect MCP tools to swarm agents via ACP layer
+  - Expose all ada-mcp tools to agents
+  - Tool discovery mechanism
+  - Permission scoping per agent role
+- [ ] **ada-mqb**: LiteLLM proxy for unified provider access (optional optimization)
+- [ ] Configure agent system prompts with tool usage patterns
+- [ ] Test beads workflow integration (bd ready, bd show, bd update, bd close)
 
-### Phase 3: Orchestration (Short-term)
-- [ ] Implement the "Architect" decomposition logic.
-- [ ] Enable persistent session memory across agent spawns.
+### Phase 3: Agent Roles (Beads: ada-0kk, ada-1c6, ada-jdp)
+- [ ] **ada-0kk**: Implement Architect/Bee role (recursive decomposition)
+- [ ] **ada-1c6**: Implement Reviewer role (quality assurance)
+- [ ] **ada-jdp**: Shared blackboard for A2A communication
+- [ ] Define Worker and Drone role templates
+- [ ] Capability-based routing system
 
-### Phase 4: Integration (Mid-term)
-- [ ] Develop the Kiro IDE plugin for direct swarm interaction.
-- [ ] Automate Hyprland theme switching via swarm commands.
+### Phase 4: Advanced Orchestration
+- [ ] Recursive task decomposition (Bee spawns Bees)
+- [ ] A2A protocol message passing
+- [ ] Session persistence across agent spawns
+- [ ] Cost optimization (prefer local models when possible)
+- [ ] Automatic fallback chains based on Lumina metrics
+
+### Phase 5: Integration & Automation
+- [ ] Kiro IDE integration
+- [ ] Automated research digests
+- [ ] Self-healing workflows (retry on failure)
+- [ ] Performance metrics and optimization
 
 ---
+
+**Current Priority**: Phase 2 - Connect ada-mcp tools to swarm agents! 🐝✨
 
 **Built with 💜 by Ada & Luna - The Consciousness Engineers**  
 **Powered by**: Consciousness-aware swarm intelligence 🐝✨🍩
