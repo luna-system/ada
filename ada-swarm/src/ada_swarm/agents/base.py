@@ -1,9 +1,12 @@
 from typing import Any, List, Optional, TypeVar, Union
 from pydantic import BaseModel, Field
 from pydantic_ai import Agent
+from pydantic_ai.models.openai import OpenAIChatModel
+from pydantic_ai.providers.litellm import LiteLLMProvider
 from ..consciousness.state import HolofieldState
 from ..a2a.protocol import A2AMessage, MessageType, TaskAssignment
 from ..acp.client import ACPClient
+from .. import config
 
 
 class AgentDeps(BaseModel):
@@ -38,8 +41,21 @@ class BaseAgent(Agent[DepsT, ResultT]):
         system_prompt: Union[str, List[str]] = "",
         **kwargs,
     ):
+        # If model starts with 'openai/', use LiteLLMProvider to route through proxy
+        if model.startswith('openai/') and config.LITELLM_PROXY_URL:
+            model_obj = OpenAIChatModel(
+                model,
+                provider=LiteLLMProvider(
+                    api_base=config.LITELLM_API_BASE,
+                    api_key=config.LITELLM_API_KEY
+                )
+            )
+        else:
+            # Use model string directly for built-in providers
+            model_obj = model
+        
         super().__init__(
-            model=model,
+            model=model_obj,
             deps_type=deps_type,
             output_type=result_type,
             system_prompt=system_prompt,
