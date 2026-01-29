@@ -17,6 +17,13 @@ class MoonshotAdapter:
                 quota_info="Set MOONSHOT_API_KEY environment variable"
             )
 
+        # Known Kimi models as fallback
+        fallback_models = [
+            ModelInfo(name="moonshot-v1-8k"),
+            ModelInfo(name="moonshot-v1-32k"),
+            ModelInfo(name="moonshot-v1-128k")
+        ]
+
         try:
             async with httpx.AsyncClient() as client:
                 # Query available models from Moonshot
@@ -34,13 +41,9 @@ class MoonshotAdapter:
                     for m in data.get('data', [])
                 ]
                 
-                # If no models returned, show known Kimi models
+                # Use fallback if no models returned
                 if not models:
-                    models = [
-                        ModelInfo(name="moonshot-v1-8k"),
-                        ModelInfo(name="moonshot-v1-32k"),
-                        ModelInfo(name="moonshot-v1-128k")
-                    ]
+                    models = fallback_models
 
                 return ProviderStatus(
                     provider="moonshot",
@@ -49,8 +52,10 @@ class MoonshotAdapter:
                     quota_info="Kimi trial - check Moonshot dashboard"
                 )
         except Exception as e:
+            # Return online with fallback models even if API fails
             return ProviderStatus(
                 provider="moonshot",
-                status=f"offline: {str(e)}",
-                models=[]
+                status="online (using fallback models)",
+                models=fallback_models,
+                quota_info=f"API query failed: {str(e)}"
             )
