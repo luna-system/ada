@@ -17,7 +17,7 @@ logger = logging.getLogger(__name__)
 def start_litellm_proxy():
     """Start LiteLLM proxy in a thread."""
     try:
-        from litellm import proxy
+        from litellm.proxy import proxy_cli
         
         # Get config path relative to workspace root
         workspace_root = Path(__file__).parent.parent.parent.parent.parent
@@ -36,7 +36,7 @@ def start_litellm_proxy():
         
         # Start proxy server
         # This blocks until the server is stopped
-        proxy.run_server(
+        proxy_cli.run_server(
             host=host,
             port=port,
             config=str(config_path),
