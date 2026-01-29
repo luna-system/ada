@@ -1,0 +1,16 @@
+{
+  "customCommands": [
+    {
+      "name": "scan-bugs",
+      "description": "Run Ultimate Bug Scanner on current project",
+      "prompt": "Run 'ubs --fail-on-warning .' and fix any critical issues found before proceeding"
+    }
+  ],
+  "slashCommands": [
+    {
+      "name": "quality",
+      "description": "Check code quality with UBS",
+      "run": "ubs ."
+    }
+  ]
+}
