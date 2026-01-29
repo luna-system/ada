@@ -364,18 +364,34 @@ except ImportError:
 def opencode_spawn(
     task_description: str,
     model: str = "gemini",
+    agent_type: str = "build",
     cwd: str = None
 ) -> str:
     """
-    Spawn an OpenCode subagent to work on a task.
+    ⚠️  DEPRECATED: Use opencode_spawn_async() instead for better control.
+    
+    Spawn an OpenCode subagent to work on a task (BLOCKING).
+    
+    This tool will be removed in a future version. Please migrate to:
+    - opencode_spawn_async() for fire-and-forget spawning
+    - opencode_check() to poll for results
+    - opencode_wait() to block until completion
+    
+    For the new ada-swarm framework, use Pydantic AI + LiteLLM instead.
     
     Args:
         task_description: Description of what the subagent should do
         model: Model to use (gemini, glm-4.7-flash, etc.)
+        agent_type: Agent type - "build" (default, for implementation) or "plan" (for planning/design)
         cwd: Working directory for the subagent (optional)
     
     Returns:
         Subagent execution results
+    
+    Agent Types:
+        - "build": Implementation agent (default) - writes code, fixes bugs, implements features
+        - "plan": Planning agent - creates designs, architectures, breaks down tasks
+        - Custom agents can be defined in OpenCode config
     """
     if not OPENCODE_AVAILABLE:
         return "❌ httpx not available - run: uv add httpx"
@@ -383,15 +399,18 @@ def opencode_spawn(
     path_context = _get_path_context(cwd)
     working_dir = path_context["full_path"]
     
-    output = _format_path_context(path_context) + "\n"
+    output = "⚠️  DEPRECATED: This tool will be removed. Use opencode_spawn_async() instead.\n\n"
+    output += _format_path_context(path_context) + "\n"
     output += f"🤖 Spawning OpenCode subagent...\n"
     output += f"🎯 Model: {model}\n"
+    output += f"🔧 Agent Type: {agent_type}\n"
     output += f"📝 Task: {task_description[:100]}{'...' if len(task_description) > 100 else ''}\n\n"
     
     try:
         result = run_opencode_task(
             task=task_description,
             model=model,
+            agent=agent_type,
             cwd=working_dir,
             timeout=120.0,
         )
@@ -422,21 +441,31 @@ def _get_opencode_client() -> OpenCodeClient:
 def opencode_spawn_async(
     task_description: str,
     model: str = "gemini",
+    agent_type: str = "build",
     cwd: str = None
 ) -> str:
     """
     Spawn an OpenCode subagent asynchronously (fire and forget).
     Returns session ID immediately without waiting for completion.
     
+    ⚠️  NOTE: OpenCode tools are being phased out in favor of ada-swarm (Pydantic AI + LiteLLM).
+    This tool will remain for backward compatibility but new code should use ada-swarm.
+    
     Use opencode_check() to poll for results or opencode_wait() to block until done.
     
     Args:
         task_description: Description of what the subagent should do
         model: Model to use (gemini, glm-4.7-flash, etc.)
+        agent_type: Agent type - "build" (default, for implementation) or "plan" (for planning/design)
         cwd: Working directory for the subagent (optional)
     
     Returns:
         Session ID and status
+    
+    Agent Types:
+        - "build": Implementation agent (default) - writes code, fixes bugs, implements features
+        - "plan": Planning agent - creates designs, architectures, breaks down tasks
+        - Custom agents can be defined in OpenCode config
     """
     if not OPENCODE_AVAILABLE:
         return "❌ httpx not available - run: uv add httpx"
@@ -458,13 +487,15 @@ def opencode_spawn_async(
             session_id=session.id,
             text=task_description,
             provider_id=provider_id,
-            model_id=model_id
+            model_id=model_id,
+            agent=agent_type
         )
         
         if success:
             output = f"✨ OpenCode session spawned!\n"
             output += f"📋 Session ID: {session.id}\n"
             output += f"🎯 Model: {model}\n"
+            output += f"🔧 Agent Type: {agent_type}\n"
             output += f"📁 Working Dir: {working_dir}\n"
             output += f"📝 Task: {task_description[:100]}{'...' if len(task_description) > 100 else ''}\n\n"
             output += f"💡 Use opencode_check('{session.id}') to poll for results\n"
