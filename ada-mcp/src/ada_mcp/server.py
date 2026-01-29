@@ -39,12 +39,20 @@ def _get_path_context(cwd: str = None) -> Dict[str, Any]:
     Get rich context about a directory path.
 
     Args:
-        cwd: Working directory (optional, defaults to current)
+        cwd: Working directory (optional, defaults to workspace root)
 
     Returns:
         Dict with full path, git info, and other context
     """
-    path = Path(cwd) if cwd else Path.cwd()
+    # Default to workspace root (parent of ada-mcp) if no cwd provided
+    if cwd:
+        path = Path(cwd)
+    else:
+        # Get workspace root: go up from ada-mcp to parent directory
+        server_dir = Path(__file__).parent.parent.parent  # ada-mcp/src/ada_mcp/server.py -> ada-mcp
+        workspace_root = server_dir.parent  # ada-mcp -> workspace root
+        path = workspace_root
+    
     path = path.resolve()  # Get absolute path
 
     context = {
