@@ -35,6 +35,10 @@ def start_litellm_proxy():
         logger.info(f"📄 Config: {config_path}")
         
         # Start proxy using subprocess (it's a Click CLI)
+        # Use asyncio loop instead of uvloop (Python 3.14 compatibility)
+        env = os.environ.copy()
+        env['UVICORN_LOOP'] = 'asyncio'
+        
         # This blocks until the process exits
         subprocess.run([
             sys.executable,
@@ -42,7 +46,7 @@ def start_litellm_proxy():
             "--host", host,
             "--port", str(port),
             "--config", str(config_path),
-        ], check=True)
+        ], check=True, env=env)
         
     except Exception as e:
         logger.error(f"Failed to start LiteLLM proxy: {e}")
@@ -60,11 +64,13 @@ def start_fastapi_service():
         
         logger.info(f"🐝 Starting Ada Swarm API on {host}:{port}")
         
+        # Use asyncio loop instead of uvloop (Python 3.14 compatibility)
         uvicorn.run(
             app,
             host=host,
             port=port,
             log_level="info",
+            loop="asyncio",  # Force asyncio instead of uvloop
         )
         
     except Exception as e:
