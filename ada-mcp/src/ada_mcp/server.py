@@ -1048,6 +1048,136 @@ def ast_grep_scan(cwd: str = None) -> str:
 
 
 # ============================================================================
+# ULTIMATE BUG SCANNER (UBS) TOOLS 🔬
+# ============================================================================
+
+@mcp.tool()
+def ubs_scan(
+    project_dir: str = ".",
+    fail_on_warning: bool = False,
+    format: str = "json",
+    category: str = None,
+    staged: bool = False,
+    git_diff: bool = False,
+    cwd: str = None,
+    timeout: int = 60
+) -> str:
+    """
+    Run Ultimate Bug Scanner on a project for multi-language static analysis.
+    
+    UBS catches 1000+ bug patterns across 8 languages (Python, JS/TS, Go, Rust, Java, C++, Ruby, Swift).
+    Built specifically for AI coding workflows - fast, zero-config, and catches bugs LLMs commonly generate.
+    
+    Args:
+        project_dir: Directory to scan (default: current directory)
+        fail_on_warning: Exit with error on warnings (strict mode)
+        format: Output format (text, json, jsonl, sarif, toon)
+        category: Filter by category (e.g., "resource-lifecycle", "security")
+        staged: Scan only files staged for commit
+        git_diff: Scan only modified files (working tree vs HEAD)
+        cwd: Working directory (optional)
+        timeout: Timeout in seconds (default: 60)
+    
+    Returns:
+        Scan results with bug findings, severity counts, and file locations
+    
+    Common Bug Categories:
+        - Null/nil safety (unguarded access, missing checks)
+        - Security (XSS, injection, eval, hardcoded secrets)
+        - Async/await (missing await, unhandled promises)
+        - Memory leaks (event listeners, timers, resources)
+        - Type coercion (=== vs ==, NaN comparison)
+        - Resource lifecycle (files, connections, goroutines)
+    
+    Examples:
+        # Scan whole project (JSON output)
+        ubs_scan(".", format="json")
+        
+        # Scan only staged files before commit
+        ubs_scan(".", staged=True, fail_on_warning=True)
+        
+        # Scan specific directory with category filter
+        ubs_scan("src/", category="security")
+        
+        # Scan only changed files (fast!)
+        ubs_scan(".", git_diff=True)
+    """
+    path_context = _get_path_context(cwd)
+    working_dir = path_context["full_path"]
+    
+    output = _format_path_context(path_context) + "\n"
+    output += f"🔬 Ultimate Bug Scanner\n"
+    output += f"📂 Project: {project_dir}\n"
+    output += f"📊 Format: {format}\n"
+    
+    if category:
+        output += f"🏷️  Category: {category}\n"
+    if staged:
+        output += f"📋 Scope: Staged files only\n"
+    elif git_diff:
+        output += f"📋 Scope: Modified files only\n"
+    
+    output += "\n"
+    
+    try:
+        cmd = ["ubs", project_dir, f"--format={format}"]
+        
+        if fail_on_warning:
+            cmd.append("--fail-on-warning")
+        
+        if category:
+            cmd.append(f"--category={category}")
+        
+        if staged:
+            cmd.append("--staged")
+        elif git_diff:
+            cmd.append("--git-diff")
+        
+        result = subprocess.run(
+            cmd,
+            cwd=working_dir,
+            capture_output=True,
+            text=True,
+            timeout=timeout
+        )
+        
+        # UBS returns exit code 1 when bugs are found (not an error!)
+        if format == "json" or format == "jsonl":
+            # Return raw JSON/JSONL for programmatic parsing
+            if result.stdout:
+                return result.stdout
+            else:
+                return '{"totals": {"critical": 0, "warning": 0, "info": 0, "files": 0}}'
+        else:
+            # Human-readable output
+            if result.stdout:
+                output += "--- Scan Results ---\n"
+                output += result.stdout
+            
+            if result.stderr:
+                output += "\n--- Diagnostics ---\n"
+                output += result.stderr
+            
+            output += f"\n\nExit Code: {result.returncode}"
+            
+            if result.returncode == 0:
+                output += " ✅ (No critical issues)"
+            elif result.returncode == 1:
+                output += " ⚠️  (Issues found - review above)"
+            else:
+                output += " ❌ (Scanner error)"
+        
+        return output
+        
+    except subprocess.TimeoutExpired:
+        return output + f"❌ Scan timed out after {timeout}s"
+    except FileNotFoundError:
+        return output + "❌ UBS not found - run: curl -fsSL https://raw.githubusercontent.com/Dicklesworthstone/ultimate_bug_scanner/master/install.sh | bash -s -- --easy-mode"
+    except Exception as e:
+        return output + f"❌ Error: {str(e)}"
+
+
+# ============================================================================
 # BASIC SYSTEM TOOLS
 # ============================================================================
 
