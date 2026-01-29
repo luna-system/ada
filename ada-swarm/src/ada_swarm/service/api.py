@@ -168,4 +168,5 @@ if __name__ == "__main__":
     host = os.getenv("ADA_SWARM_HOST", "127.0.0.1")
     port = int(os.getenv("ADA_SWARM_PORT", "8765"))
 
-    uvicorn.run(app, host=host, port=port)
+    # Force asyncio loop for Python 3.14 compatibility (uvloop not supported yet)
+    uvicorn.run(app, host=host, port=port, loop="asyncio")

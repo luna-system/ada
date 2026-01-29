@@ -13,6 +13,7 @@ RestartSec=10
 # Environment
 Environment="PATH=/home/luna/Code/ada/.venv/bin:/usr/local/bin:/usr/bin:/bin"
 Environment="LITELLM_PORT=8000"
+Environment="UVICORN_LOOP=asyncio"
 
 # Load environment variables from .env
 EnvironmentFile=/home/luna/Code/ada/.env
