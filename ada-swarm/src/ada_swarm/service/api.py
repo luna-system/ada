@@ -14,6 +14,7 @@ from ..agents.base import BaseAgent
 from ..agents.coder import CoderAgent
 from ..agents.researcher import ResearcherAgent
 from ..agents.tester import TesterAgent
+from ..agents.queen import QueenAgent
 from .a2a import (
     A2AMessage,
     MessageType,
@@ -43,6 +44,7 @@ AGENT_CLASSES: Dict[str, Type[BaseAgent]] = {
     "coder": CoderAgent,
     "researcher": ResearcherAgent,
     "tester": TesterAgent,
+    "queen": QueenAgent,
 }
 
 
