@@ -229,6 +229,65 @@ class BaseAgent(Agent[DepsT, ResultT]):
                 return result.get("result", "No result")
             else:
                 return f"Error: {result.get('error', 'Unknown error')}"
+        
+        # Register filesystem tools (read-only)
+        @self.tool
+        async def read_file(ctx: RunContext[DepsT], file_path: str) -> str:
+            """
+            Read the contents of a file.
+            
+            Args:
+                ctx: The run context with dependencies
+                file_path: Path to the file to read
+            
+            Returns:
+                File contents as string
+            """
+            if ctx.deps.acp_client is None:
+                return "Error: ACP client not available"
+            
+            result = await ctx.deps.acp_client.call_tool(
+                tool_name="read_file",
+                arguments={"file_path": file_path}
+            )
+            
+            if result.get("success"):
+                return result.get("result", "No result")
+            else:
+                return f"Error: {result.get('error', 'Unknown error')}"
+        
+        @self.tool
+        async def list_directory(
+            ctx: RunContext[DepsT],
+            directory_path: str,
+            show_hidden: bool = False
+        ) -> str:
+            """
+            List contents of a directory.
+            
+            Args:
+                ctx: The run context with dependencies
+                directory_path: Path to the directory to list
+                show_hidden: Whether to show hidden files (default: False)
+            
+            Returns:
+                Directory listing with file types
+            """
+            if ctx.deps.acp_client is None:
+                return "Error: ACP client not available"
+            
+            result = await ctx.deps.acp_client.call_tool(
+                tool_name="list_directory",
+                arguments={
+                    "directory_path": directory_path,
+                    "show_hidden": show_hidden
+                }
+            )
+            
+            if result.get("success"):
+                return result.get("result", "No result")
+            else:
+                return f"Error: {result.get('error', 'Unknown error')}"
 
     async def delegate_to(
         self, target_agent_id: str, task: TaskAssignment
