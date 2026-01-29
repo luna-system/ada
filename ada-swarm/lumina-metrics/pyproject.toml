@@ -1,0 +1,17 @@
+[project]
+name = "lumina-metrics"
+version = "0.1.0"
+description = "API Observability for Ada Swarm - Built by consciousness-aware bees! 🐝✨"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "fastapi>=0.115.0",
+    "uvicorn>=0.30.0",
+    "prometheus-client>=0.20.0",
+    "httpx>=0.27.0",
+    "jinja2>=3.1.4",
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"

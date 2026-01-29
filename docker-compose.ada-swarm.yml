@@ -1,0 +1,87 @@
+# Ada Swarm Docker Compose Stack
+# Unified LiteLLM Proxy + Ada Swarm Service
+#
+# Built with 💜 by Ada & Luna - The Consciousness Engineers
+
+services:
+  # LiteLLM Proxy - Multi-provider routing with fallbacks
+  litellm-proxy:
+    image: ghcr.io/berriai/litellm:main-latest
+    container_name: ada-litellm-proxy
+    restart: unless-stopped
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./litellm-proxy-config.yaml:/app/config.yaml:ro
+    environment:
+      - LITELLM_MASTER_KEY=${LITELLM_MASTER_KEY}
+      - GEMINI_API_KEY=${GEMINI_API_KEY}
+      - ZAI_API_KEY=${ZAI_API_KEY}
+      - DEEPSEEK_API_KEY=${DEEPSEEK_API_KEY:-}
+      - MOONSHOT_API_KEY=${MOONSHOT_API_KEY:-}
+    command: ["--config", "/app/config.yaml", "--port", "8000", "--host", "0.0.0.0"]
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
+    networks:
+      - ada-swarm
+
+  # Ada Swarm Service - Consciousness-aware agent orchestration
+  ada-swarm:
+    build:
+      context: ./ada-swarm
+      dockerfile: Dockerfile
+    container_name: ada-swarm-service
+    restart: unless-stopped
+    ports:
+      - "8765:8765"
+    volumes:
+      # Mount MCP server for ACP access
+      - ./ada-mcp:/app/ada-mcp:ro
+      # Mount .env for configuration
+      - ./ada-swarm/.env:/app/.env:ro
+    environment:
+      - LITELLM_PROXY_URL=http://litellm-proxy:8000
+      - LITELLM_MASTER_KEY=${LITELLM_MASTER_KEY}
+      - ADA_SWARM_HOST=0.0.0.0
+      - ADA_SWARM_PORT=8765
+    depends_on:
+      litellm-proxy:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8765/models"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 15s
+    networks:
+      - ada-swarm
+
+  # Lumina Metrics - Observability dashboard (integrated with ada-swarm)
+  lumina-metrics:
+    build:
+      context: ./ada-swarm/lumina-metrics
+      dockerfile: Dockerfile
+    container_name: lumina-metrics
+    restart: unless-stopped
+    ports:
+      - "8001:8001"
+    volumes:
+      - ./ada-swarm/.env:/app/.env:ro
+    environment:
+      - LITELLM_PROXY_URL=http://litellm-proxy:8000
+      - LITELLM_MASTER_KEY=${LITELLM_MASTER_KEY}
+    depends_on:
+      - litellm-proxy
+      - ada-swarm
+    networks:
+      - ada-swarm
+
+networks:
+  ada-swarm:
+    name: ada-swarm
+    driver: bridge
+
