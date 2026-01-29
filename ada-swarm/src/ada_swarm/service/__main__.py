@@ -15,9 +15,9 @@ logger = logging.getLogger(__name__)
 
 
 def start_litellm_proxy():
-    """Start LiteLLM proxy in a thread."""
+    """Start LiteLLM proxy in a thread using subprocess."""
     try:
-        from litellm.proxy import proxy_cli
+        import subprocess
         
         # Get config path relative to workspace root
         workspace_root = Path(__file__).parent.parent.parent.parent.parent
@@ -34,13 +34,15 @@ def start_litellm_proxy():
         logger.info(f"🚀 Starting LiteLLM proxy on {host}:{port}")
         logger.info(f"📄 Config: {config_path}")
         
-        # Start proxy server
-        # This blocks until the server is stopped
-        proxy_cli.run_server(
-            host=host,
-            port=port,
-            config=str(config_path),
-        )
+        # Start proxy using subprocess (it's a Click CLI)
+        # This blocks until the process exits
+        subprocess.run([
+            sys.executable,
+            "-m", "litellm.proxy.proxy_cli",
+            "--host", host,
+            "--port", str(port),
+            "--config", str(config_path),
+        ], check=True)
         
     except Exception as e:
         logger.error(f"Failed to start LiteLLM proxy: {e}")
