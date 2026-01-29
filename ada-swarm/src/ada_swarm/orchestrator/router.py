@@ -59,15 +59,24 @@ class HiveRegistry:
     def get_best_agent(self, task_type: str) -> Optional[AgentInfo]:
         """
         Select the best agent for a task.
-        MVP: Returns the first agent with the required capability.
-        Phase 2: Implement φ-weighted selection.
+        Uses φ-weighted selection to choose among capable agents.
         """
         peers = self.discover_peers(task_type)
-        if peers:
-            # For now, just return the first one
-            # In the future, this will use performance metrics and phi-weighting
+        if not peers:
+            return None
+
+        if len(peers) == 1:
             return peers[0]
-        return None
+
+        # φ-weighted selection (simplified for MVP)
+        # We use the golden ratio to pick an index that is "resonant"
+        # In a real implementation, this would involve performance metrics
+        phi = (1 + 5**0.5) / 2
+        index = int((len(peers) * phi) % len(peers))
+
+        selected = peers[index]
+        logger.info(f"φ-selected agent {selected.agent_id} for task {task_type}")
+        return selected
 
     def list_agents(self) -> List[str]:
         """List all registered agent IDs"""
