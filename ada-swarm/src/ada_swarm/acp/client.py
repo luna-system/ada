@@ -11,6 +11,7 @@ import logging
 from typing import Any, Dict, List, Optional
 from pathlib import Path
 from .permissions import AgentRole, get_permission_manager
+from ..monitoring import DoomLoopDetector
 
 logger = logging.getLogger(__name__)
 
@@ -27,7 +28,8 @@ class ACPClient:
     def __init__(
         self,
         mcp_server_path: Optional[str] = None,
-        role: AgentRole = AgentRole.WORKER_CODER
+        role: AgentRole = AgentRole.WORKER_CODER,
+        agent_id: Optional[str] = None
     ):
         """
         Initialize ACP client.
@@ -35,6 +37,7 @@ class ACPClient:
         Args:
             mcp_server_path: Path to ada-mcp server (defaults to sibling directory)
             role: Agent role for permission management
+            agent_id: Agent ID for doom loop detection
         """
         if mcp_server_path is None:
             # Check if we're in Docker (ada-mcp mounted at /app/ada-mcp)
@@ -51,9 +54,18 @@ class ACPClient:
         self.permission_manager = get_permission_manager()
         self._tools_cache: Optional[List[Dict[str, Any]]] = None
         
+        # Initialize doom loop detector
+        self.agent_id = agent_id or f"agent-{id(self)}"
+        self.doom_detector = DoomLoopDetector(
+            agent_id=self.agent_id,
+            failure_threshold=5,
+            polling_threshold=10,
+            read_threshold=15
+        )
+        
         logger.info(
             f"ACP Client initialized with MCP server at: {self.mcp_server_path}, "
-            f"role: {role.value}"
+            f"role: {role.value}, agent_id: {self.agent_id}"
         )
     
     async def connect(self) -> bool:
@@ -310,7 +322,7 @@ class ACPClient:
         """
         Execute a tool with given arguments.
         
-        Validates role permissions before execution.
+        Validates role permissions before execution and monitors for doom loops.
         
         Args:
             tool_name: Name of the tool to call
@@ -320,6 +332,18 @@ class ACPClient:
             Tool execution result
         """
         try:
+            # Check if we should pause due to doom loop
+            should_pause, reason = self.doom_detector.should_pause()
+            if should_pause:
+                logger.error(f"DOOM LOOP DETECTED - Agent paused: {reason}")
+                return {
+                    "success": False,
+                    "error": f"Agent paused due to doom loop: {reason}",
+                    "tool": tool_name,
+                    "doom_loop": True,
+                    "suggested_action": "Request human guidance"
+                }
+            
             # Validate permissions
             is_valid, error_msg = self.permission_manager.validate_tool_call(
                 self.role, tool_name, arguments
@@ -327,6 +351,11 @@ class ACPClient:
             
             if not is_valid:
                 logger.warning(f"Permission denied for {self.role.value}: {error_msg}")
+                # Record failed call
+                alert = self.doom_detector.record_tool_call(tool_name, False, arguments)
+                if alert:
+                    logger.warning(f"Doom loop alert: {alert.message}")
+                
                 return {
                     "success": False,
                     "error": f"Permission denied: {error_msg}",
@@ -403,6 +432,15 @@ class ACPClient:
                 # Call the actual tool function
                 result = tool_func(**arguments)
                 
+                # Record successful call and check for doom loops
+                alert = self.doom_detector.record_tool_call(tool_name, True, arguments)
+                if alert:
+                    logger.warning(f"Doom loop alert: {alert.message}")
+                
+                # Record progress for certain tools
+                if tool_name in ["beads_create", "write_file", "beads_close"]:
+                    self.doom_detector.record_progress(f"Completed {tool_name}")
+                
                 return {
                     "success": True,
                     "tool": tool_name,
@@ -412,6 +450,11 @@ class ACPClient:
                 
             except ImportError as e:
                 logger.error(f"Failed to import ada-mcp tools: {e}")
+                # Record failed call
+                alert = self.doom_detector.record_tool_call(tool_name, False, arguments)
+                if alert:
+                    logger.warning(f"Doom loop alert: {alert.message}")
+                
                 return {
                     "success": False,
                     "error": f"Failed to import ada-mcp tools: {str(e)}",
@@ -419,6 +462,11 @@ class ACPClient:
                 }
             except Exception as e:
                 logger.error(f"Tool execution error: {e}")
+                # Record failed call
+                alert = self.doom_detector.record_tool_call(tool_name, False, arguments)
+                if alert:
+                    logger.warning(f"Doom loop alert: {alert.message}")
+                
                 return {
                     "success": False,
                     "error": f"Tool execution failed: {str(e)}",
@@ -427,6 +475,11 @@ class ACPClient:
             
         except Exception as e:
             logger.error(f"Tool execution failed: {e}")
+            # Record failed call
+            alert = self.doom_detector.record_tool_call(tool_name, False, arguments)
+            if alert:
+                logger.warning(f"Doom loop alert: {alert.message}")
+            
             return {
                 "success": False,
                 "error": str(e),
@@ -454,3 +507,17 @@ class ACPClient:
             tool for tool in self._tools_cache
             if tool.get("category") == category
         ]
+    
+    def get_doom_status(self) -> Dict:
+        """
+        Get current doom loop detector status.
+        
+        Returns:
+            Status dict with metrics and alerts
+        """
+        return self.doom_detector.get_status()
+    
+    def reset_doom_detector(self):
+        """Reset doom loop detector (after human intervention)."""
+        self.doom_detector.reset()
+        logger.info(f"Doom loop detector reset for {self.agent_id}")

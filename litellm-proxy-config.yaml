@@ -22,14 +22,21 @@ model_list:
   # === Z.ai / GLM Models (Paid - High Quality) ===
   - model_name: glm-flash
     litellm_params:
-      model: zai/glm-4.5-flash  # Z.ai fast model (has balance!)
+      model: zai/glm-4.5-flash  # Z.ai fast model
       api_key: os.environ/ZAI_API_KEY
     tpm: 100000
     rpm: 100
 
   - model_name: glm-plus
     litellm_params:
-      model: zai/glm-4.6  # Z.ai stable model (has balance!)
+      model: zai/glm-4.7  # Z.ai newest model (best quality!)
+      api_key: os.environ/ZAI_API_KEY
+    tpm: 100000
+    rpm: 100
+  
+  - model_name: glm-stable
+    litellm_params:
+      model: zai/glm-4.6  # Z.ai stable model
       api_key: os.environ/ZAI_API_KEY
     tpm: 100000
     rpm: 100
@@ -83,7 +90,8 @@ router_settings:
     - gemini-flash: [glm-flash, deepseek-chat, local-llama]
     - gemini-pro: [glm-plus, deepseek-reasoner, local-llama]
     - glm-flash: [deepseek-chat, gemini-flash, local-llama]
-    - glm-plus: [deepseek-reasoner, gemini-pro, local-llama]
+    - glm-plus: [glm-stable, deepseek-reasoner, gemini-pro, local-llama]
+    - glm-stable: [glm-plus, deepseek-reasoner, gemini-pro, local-llama]
 
 # === LiteLLM Settings ===
 litellm_settings:
@@ -105,6 +113,7 @@ general_settings:
 model_aliases:
   fast: gemini-flash
   smart: gemini-pro
-  paid: glm-plus
+  paid: glm-plus      # GLM 4.7 - newest and best!
+  stable: glm-stable  # GLM 4.6 - reliable
   cheap: deepseek-chat
   local: local-ada
