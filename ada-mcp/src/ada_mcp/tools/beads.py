@@ -28,7 +28,7 @@ def _run_bd_command(args: List[str], cwd: str, get_path_context, format_path_con
 
     try:
         result = subprocess.run(
-            ["bd"] + args, capture_output=True, text=True, cwd=working_dir, timeout=30
+            ["br"] + args, capture_output=True, text=True, cwd=working_dir, timeout=30
         )
 
         return {
@@ -262,13 +262,13 @@ def register_beads_tools(mcp, get_path_context, format_path_context):
 # ============================================================================
 
 def _simple_run_bd(args: List[str], cwd: Optional[str] = None) -> Dict[str, Any]:
-    """Simple bd command runner without path context dependencies."""
+    """Simple br command runner without path context dependencies."""
     import os
     working_dir = cwd or os.getcwd()
     
     try:
         result = subprocess.run(
-            ["bd"] + args,
+            ["br"] + args,
             capture_output=True,
             text=True,
             cwd=working_dir,
