@@ -80,8 +80,37 @@ services:
     networks:
       - ada-swarm
 
+  # MCP Agent Mail - Message passing for agent coordination
+  mcp-agent-mail:
+    build:
+      context: ./mcp_agent_mail
+      dockerfile: Dockerfile
+    container_name: mcp-agent-mail
+    restart: unless-stopped
+    ports:
+      - "8766:8766"  # HTTP MCP + Web UI
+    volumes:
+      - ./mcp_agent_mail/.env:/app/.env:ro
+      - mcp-agent-mail-storage:/root/.mcp_agent_mail_git_mailbox_repo
+    environment:
+      - HTTP_HOST=0.0.0.0
+      - HTTP_PORT=8766
+      - STORAGE_ROOT=/root/.mcp_agent_mail_git_mailbox_repo
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8766/mcp/"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
+    networks:
+      - ada-swarm
+
 networks:
   ada-swarm:
     name: ada-swarm
     driver: bridge
+
+volumes:
+  mcp-agent-mail-storage:
+    name: mcp-agent-mail-storage
 
