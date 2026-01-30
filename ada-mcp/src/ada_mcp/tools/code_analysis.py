@@ -227,3 +227,97 @@ def register_code_analysis_tools(mcp, get_path_context, format_path_context):
             return output + "❌ UBS not found"
         except Exception as e:
             return output + f"❌ Error: {str(e)}"
+
+
+# ============================================================================
+# Exportable wrapper functions for direct import (used by ACP client)
+# ============================================================================
+
+def ast_grep_search(pattern: str, language: str, paths: str = ".", cwd: str = None, **kwargs) -> str:
+    """Search code using AST patterns."""
+    import os
+    import subprocess
+    working_dir = cwd or os.getcwd()
+    
+    try:
+        result = subprocess.run(
+            ["sg", "-p", pattern, "-l", language, paths],
+            capture_output=True,
+            text=True,
+            cwd=working_dir,
+            timeout=30
+        )
+        return result.stdout if result.returncode == 0 else f"Error: {result.stderr}"
+    except Exception as e:
+        return f"Error: {str(e)}"
+
+
+def ast_grep_rewrite(pattern: str, rewrite: str, language: str, paths: str = ".", dry_run: bool = True, cwd: str = None) -> str:
+    """Rewrite code using AST patterns."""
+    import os
+    import subprocess
+    working_dir = cwd or os.getcwd()
+    
+    try:
+        args = ["sg", "-p", pattern, "-r", rewrite, "-l", language, paths]
+        if not dry_run:
+            args.append("--update-all")
+        
+        result = subprocess.run(args, capture_output=True, text=True, cwd=working_dir, timeout=30)
+        return result.stdout if result.returncode == 0 else f"Error: {result.stderr}"
+    except Exception as e:
+        return f"Error: {str(e)}"
+
+
+def ast_grep_dump_ast(code: str, language: str) -> str:
+    """Dump AST for code snippet."""
+    import subprocess
+    try:
+        result = subprocess.run(
+            ["sg", "--dump-ast", "-l", language],
+            input=code,
+            capture_output=True,
+            text=True,
+            timeout=10
+        )
+        return result.stdout if result.returncode == 0 else f"Error: {result.stderr}"
+    except Exception as e:
+        return f"Error: {str(e)}"
+
+
+def ast_grep_scan(cwd: str = None) -> str:
+    """Scan with ast-grep rules."""
+    import os
+    import subprocess
+    working_dir = cwd or os.getcwd()
+    
+    try:
+        result = subprocess.run(
+            ["sg", "scan"],
+            capture_output=True,
+            text=True,
+            cwd=working_dir,
+            timeout=60
+        )
+        return result.stdout if result.returncode == 0 else f"Error: {result.stderr}"
+    except Exception as e:
+        return f"Error: {str(e)}"
+
+
+def ubs_scan(project_dir: str = ".", format: str = "json", cwd: str = None, **kwargs) -> str:
+    """Run UBS bug scanner."""
+    import os
+    import subprocess
+    working_dir = cwd or os.getcwd()
+    
+    try:
+        result = subprocess.run(
+            ["ubs", project_dir, "--format", format],
+            capture_output=True,
+            text=True,
+            cwd=working_dir,
+            timeout=120
+        )
+        return result.stdout if result.returncode == 0 else f"Scan completed with warnings:\n{result.stdout}"
+    except Exception as e:
+        return f"Error: {str(e)}"

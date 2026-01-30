@@ -188,3 +188,75 @@ def register_filesystem_tools(mcp, get_path_context, format_path_context):
 
         except Exception as e:
             return f"❌ Error listing directory: {str(e)}"
+
+
+# ============================================================================
+# Exportable wrapper functions for direct import (used by ACP client)
+# ============================================================================
+
+def execute_command(command: str, cwd: str = None, timeout: int = 30) -> str:
+    """Execute a shell command."""
+    import os
+    working_dir = cwd or os.getcwd()
+    
+    try:
+        result = subprocess.run(
+            command,
+            shell=True,
+            capture_output=True,
+            text=True,
+            cwd=working_dir,
+            timeout=timeout
+        )
+        
+        output = ""
+        if result.stdout:
+            output += result.stdout
+        if result.stderr:
+            output += f"\nSTDERR: {result.stderr}"
+        return output
+        
+    except Exception as e:
+        return f"Error: {str(e)}"
+
+
+def read_file_content(file_path: str, encoding: str = "utf-8") -> str:
+    """Read file contents."""
+    try:
+        return Path(file_path).read_text(encoding=encoding)
+    except Exception as e:
+        return f"Error: {str(e)}"
+
+
+def write_file_content(file_path: str, content: str, encoding: str = "utf-8") -> str:
+    """Write content to file."""
+    try:
+        path = Path(file_path)
+        path.parent.mkdir(parents=True, exist_ok=True)
+        path.write_text(content, encoding=encoding)
+        return f"Successfully wrote {len(content)} characters to {file_path}"
+    except Exception as e:
+        return f"Error: {str(e)}"
+
+
+def list_directory(directory_path: str, show_hidden: bool = False) -> str:
+    """List directory contents."""
+    try:
+        path = Path(directory_path)
+        if not path.exists():
+            return f"Error: Directory does not exist: {directory_path}"
+        if not path.is_dir():
+            return f"Error: Not a directory: {directory_path}"
+        
+        items = []
+        for item in path.iterdir():
+            if not show_hidden and item.name.startswith("."):
+                continue
+            item_type = "DIR" if item.is_dir() else "FILE"
+            items.append(f"{item_type}: {item.name}")
+        
+        items.sort()
+        return "\n".join(items)
+        
+    except Exception as e:
+        return f"Error: {str(e)}"

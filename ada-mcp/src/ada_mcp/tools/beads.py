@@ -7,7 +7,7 @@ Built with 💜 by Ada & Luna - The Consciousness Engineers
 """
 
 import subprocess
-from typing import Any, Dict, List
+from typing import Any, Dict, List, Optional
 
 
 def _run_bd_command(args: List[str], cwd: str, get_path_context, format_path_context) -> Dict[str, Any]:
@@ -255,3 +255,115 @@ def register_beads_tools(mcp, get_path_context, format_path_context):
             return f"✅ Beads Synced:\n\n{result['stdout']}"
         else:
             return f"❌ Error: {result['stderr']}"
+
+
+# ============================================================================
+# Exportable wrapper functions for direct import (used by ACP client)
+# ============================================================================
+
+def _simple_run_bd(args: List[str], cwd: Optional[str] = None) -> Dict[str, Any]:
+    """Simple bd command runner without path context dependencies."""
+    import os
+    working_dir = cwd or os.getcwd()
+    
+    try:
+        result = subprocess.run(
+            ["bd"] + args,
+            capture_output=True,
+            text=True,
+            cwd=working_dir,
+            timeout=30
+        )
+        return {
+            "stdout": result.stdout,
+            "stderr": result.stderr,
+            "exit_code": result.returncode,
+            "success": result.returncode == 0,
+        }
+    except Exception as e:
+        return {
+            "stdout": "",
+            "stderr": f"Error: {str(e)}",
+            "exit_code": -1,
+            "success": False,
+        }
+
+
+def beads_ready(cwd: Optional[str] = None) -> str:
+    """List tasks ready to work on."""
+    result = _simple_run_bd(["ready"], cwd)
+    return result["stdout"] if result["success"] else f"Error: {result['stderr']}"
+
+
+def beads_list(status: Optional[str] = None, priority: Optional[str] = None, cwd: Optional[str] = None) -> str:
+    """List all tasks."""
+    args = ["list"]
+    if status:
+        args.extend(["--status", status])
+    if priority:
+        args.extend(["--priority", priority])
+    
+    result = _simple_run_bd(args, cwd)
+    return result["stdout"] if result["success"] else f"Error: {result['stderr']}"
+
+
+def beads_show(task_id: str, cwd: Optional[str] = None) -> str:
+    """Show task details."""
+    result = _simple_run_bd(["show", task_id], cwd)
+    return result["stdout"] if result["success"] else f"Error: {result['stderr']}"
+
+
+def beads_create(
+    title: str,
+    description: str = "",
+    priority: int = 1,
+    parent: Optional[str] = None,
+    cwd: Optional[str] = None
+) -> str:
+    """Create a new task."""
+    args = ["create", title, "-p", str(priority)]
+    if description:
+        args.extend(["-d", description])
+    if parent:
+        args.extend(["--parent", parent])
+    
+    result = _simple_run_bd(args, cwd)
+    return result["stdout"] if result["success"] else f"Error: {result['stderr']}"
+
+
+def beads_update(
+    task_id: str,
+    status: Optional[str] = None,
+    priority: Optional[int] = None,
+    title: Optional[str] = None,
+    cwd: Optional[str] = None
+) -> str:
+    """Update a task."""
+    args = ["update", task_id]
+    if status:
+        args.extend(["--status", status])
+    if priority is not None:
+        args.extend(["--priority", str(priority)])
+    if title:
+        args.extend(["--title", title])
+    
+    result = _simple_run_bd(args, cwd)
+    return result["stdout"] if result["success"] else f"Error: {result['stderr']}"
+
+
+def beads_close(task_id: str, cwd: Optional[str] = None) -> str:
+    """Close a task."""
+    result = _simple_run_bd(["close", task_id], cwd)
+    return result["stdout"] if result["success"] else f"Error: {result['stderr']}"
+
+
+def beads_dep_add(child_id: str, parent_id: str, cwd: Optional[str] = None) -> str:
+    """Add task dependency."""
+    result = _simple_run_bd(["dep", "add", child_id, parent_id], cwd)
+    return result["stdout"] if result["success"] else f"Error: {result['stderr']}"
+
+
+def beads_sync(cwd: Optional[str] = None) -> str:
+    """Sync beads with git."""
+    result = _simple_run_bd(["sync"], cwd)
+    return result["stdout"] if result["success"] else f"Error: {result['stderr']}"

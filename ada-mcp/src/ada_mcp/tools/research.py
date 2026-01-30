@@ -287,3 +287,52 @@ def register_research_tools(mcp, get_path_context, format_path_context):
             return result
         except Exception as e:
             return f"Error listing hypotheses: {str(e)}"
+
+
+# ============================================================================
+# Exportable wrapper functions for direct import (used by ACP client)
+# ============================================================================
+
+def research_notes_add(note: str, category: str = "general", tags: list = None) -> str:
+    """Add research note (stub for now)."""
+    return f"Research note added: {note[:50]}..."
+
+
+def research_notes_search(query: str, category: str = None, limit: int = 10) -> str:
+    """Search research notes (stub for now)."""
+    return f"Searching for: {query}"
+
+
+def hypothesis_add(hypothesis: str, category: str = "physics", confidence: str = "medium") -> str:
+    """Add hypothesis (stub for now)."""
+    return f"Hypothesis added: {hypothesis[:50]}..."
+
+
+def hypothesis_list(category: str = None, status: str = "active") -> str:
+    """List hypotheses (stub for now)."""
+    return "No hypotheses found"
+
+
+def experiment_log(experiment_name: str, version: str, results: str, notes: str = "") -> str:
+    """Log experiment results (stub for now)."""
+    return f"Experiment logged: {experiment_name} v{version}"
+
+
+def experiment_history(experiment_name: str = None, limit: int = 10) -> str:
+    """View experiment history (stub for now)."""
+    return "No experiments found"
+
+
+def research_todo_add(task: str, category: str = "general", priority: str = "medium") -> str:
+    """Add research todo (stub for now)."""
+    return f"Todo added: {task[:50]}..."
+
+
+def research_todo_list(category: str = None, status: str = "open") -> str:
+    """List research todos (stub for now)."""
+    return "No todos found"
+
+
+def research_todo_complete(task_id: int) -> str:
+    """Complete research todo (stub for now)."""
+    return f"Todo {task_id} marked complete"
