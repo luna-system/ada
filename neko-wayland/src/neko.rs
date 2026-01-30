@@ -37,12 +37,12 @@ pub enum NekoState {
     // Idle states
     Sit,
     Yawn,
-    Itch,         // Scratching ear (grooming)
-    Wash,         // Licking paw
-    
+    Itch, // Scratching ear (grooming)
+    Wash, // Licking paw
+
     // Alert state
     Alert,
-    
+
     // Running states (8 directions)
     RunN,
     RunNE,
@@ -52,13 +52,13 @@ pub enum NekoState {
     RunSW,
     RunW,
     RunNW,
-    
+
     // Wall scratching (4 directions)
     ScratchWallDown,
     ScratchWallRight,
     ScratchWallUp,
     ScratchWallLeft,
-    
+
     // Sleeping states
     Sleep1,
     Sleep2,
@@ -66,7 +66,7 @@ pub enum NekoState {
 
 impl NekoState {
     /// Get sprite sheet coordinates for this state
-    /// 
+    ///
     /// Classic neko sprite sheet layout (8 cols x 6 rows):
     /// Row 0: Sit, LickPaw, ScratchEar(2), Yawn, Sleep(2), Awake
     /// Row 1: S(2), SE(2), E(2), NE(2)
@@ -76,32 +76,36 @@ impl NekoState {
     /// Row 5: System/debug
     pub fn sprite_coords(&self, frame: u8) -> (i32, i32) {
         let frame = (frame % 2) as i32;
-        
+
         match self {
             // Row 0: Idle animations
-            NekoState::Sit => (0, 0),           // Sitting neutral
+            NekoState::Sit => (0, 0), // Sitting neutral
             NekoState::Wash => {
                 // Alternate between Sit (0,0) and Wash (1,0) for animation
-                if frame == 0 { (0, 0) } else { (1, 0) }
+                if frame == 0 {
+                    (0, 0)
+                } else {
+                    (1, 0)
+                }
             }
-            NekoState::Itch => (2 + frame, 0),  // Scratching ear (2 frames)
-            NekoState::Yawn => (4, 0),          // Yawn (single frame)
-            NekoState::Sleep1 => (5, 0),        // Sleep frame 1
-            NekoState::Sleep2 => (6, 0),        // Sleep frame 2
-            NekoState::Alert => (7, 0),         // Awake/surprised
-            
+            NekoState::Itch => (2 + frame, 0), // Scratching ear (2 frames)
+            NekoState::Yawn => (4, 0),         // Yawn (single frame)
+            NekoState::Sleep1 => (5, 0),       // Sleep frame 1
+            NekoState::Sleep2 => (6, 0),       // Sleep frame 2
+            NekoState::Alert => (7, 0),        // Awake/surprised
+
             // Row 1: S, SE, E, NE (2 frames each)
             NekoState::RunS => (0 + frame, 1),
             NekoState::RunSE => (2 + frame, 1),
             NekoState::RunE => (4 + frame, 1),
             NekoState::RunNE => (6 + frame, 1),
-            
+
             // Row 2: N, NW, W, SW (2 frames each)
             NekoState::RunN => (0 + frame, 2),
             NekoState::RunNW => (2 + frame, 2),
             NekoState::RunW => (4 + frame, 2),
             NekoState::RunSW => (6 + frame, 2),
-            
+
             // Row 3: Wall scratching (2 frames each)
             NekoState::ScratchWallDown => (0 + frame, 3),
             NekoState::ScratchWallRight => (2 + frame, 3),
@@ -121,25 +125,25 @@ pub struct Neko {
     pub frame: u8,
     pub idle_ticks: u32,
     pub speed: f64,
-    
+
     // Behavior
     pub behavior_mode: BehaviorMode,
     pub behavior_state: BehaviorState,
     pub behavior_ticks: u32,
-    
+
     // Screen bounds
     pub screen_width: f64,
     pub screen_height: f64,
-    
+
     // Sprite dimensions (for bounds checking)
     pub sprite_width: f64,
     pub sprite_height: f64,
-    
+
     // Cursor tracking
     pub cursor_x: f64,
     pub cursor_y: f64,
     pub cursor_available: bool,
-    
+
     // Debug mode
     pub debug_mode: bool,
 }
@@ -160,7 +164,7 @@ impl Neko {
             behavior_ticks: 0,
             screen_width: 1920.0,
             screen_height: 1080.0,
-            sprite_width: 32.0,  // Default to classic neko size
+            sprite_width: 32.0, // Default to classic neko size
             sprite_height: 32.0,
             cursor_x: 0.0,
             cursor_y: 0.0,
@@ -179,20 +183,20 @@ impl Neko {
     /// Main update loop
     pub fn update(&mut self) {
         self.behavior_ticks += 1;
-        
+
         // Slow down sprite animation - only update frame every 3 ticks
         // This gives us ~6-7 fps for sprite animation instead of 20fps
         if self.behavior_ticks % 3 == 0 {
             self.frame = self.frame.wrapping_add(1);
         }
-        
+
         // Update target based on behavior mode
         match self.behavior_mode {
             BehaviorMode::Chase => self.update_chase(),
             BehaviorMode::Wander => self.update_wander(),
             BehaviorMode::Mixed => self.update_mixed(),
         }
-        
+
         // Move towards target
         self.move_towards_target();
     }
@@ -208,7 +212,7 @@ impl Neko {
     /// Wander mode: random exploration
     fn update_wander(&mut self) {
         let distance = self.distance_to_target();
-        
+
         // Pick new random target when close or after timeout
         if distance < 20.0 || self.behavior_ticks > 200 {
             self.pick_random_target();
@@ -223,12 +227,15 @@ impl Neko {
         } else {
             f64::MAX
         };
-        
+
         // Debug cursor distance periodically
         if self.behavior_ticks % 40 == 1 && self.cursor_available {
-            eprintln!("DEBUG mixed: cursor_dist={:.0}, state={:?}", cursor_distance, self.behavior_state);
+            eprintln!(
+                "DEBUG mixed: cursor_dist={:.0}, state={:?}",
+                cursor_distance, self.behavior_state
+            );
         }
-        
+
         match self.behavior_state {
             BehaviorState::Wandering => {
                 // Wander around
@@ -237,21 +244,24 @@ impl Neko {
                     self.pick_random_target();
                     self.behavior_ticks = 0;
                 }
-                
+
                 // Notice cursor if it's close - 600px range for big displays, high probability
                 if cursor_distance < 600.0 && rand::thread_rng().gen_ratio(1, 10) {
-                    eprintln!("DEBUG: Cat noticed cursor! Distance: {:.0}", cursor_distance);
+                    eprintln!(
+                        "DEBUG: Cat noticed cursor! Distance: {:.0}",
+                        cursor_distance
+                    );
                     self.behavior_state = BehaviorState::Alerted;
                     self.behavior_ticks = 0;
                     self.state = NekoState::Alert;
                 }
             }
-            
+
             BehaviorState::Alerted => {
                 // Pause and look at cursor
                 self.target_x = self.x; // Stay still
                 self.target_y = self.y;
-                
+
                 if self.behavior_ticks > 30 {
                     // Decide to chase or ignore
                     if cursor_distance < 300.0 && rand::thread_rng().gen_ratio(3, 4) {
@@ -262,14 +272,14 @@ impl Neko {
                     self.behavior_ticks = 0;
                 }
             }
-            
+
             BehaviorState::Chasing => {
                 // Chase the cursor!
                 if self.cursor_available {
                     self.target_x = self.cursor_x;
                     self.target_y = self.cursor_y;
                 }
-                
+
                 // Lose interest after a while or if cursor is too far
                 if self.behavior_ticks > 400 || cursor_distance > 600.0 {
                     if rand::thread_rng().gen_ratio(1, 60) {
@@ -278,7 +288,7 @@ impl Neko {
                         self.behavior_ticks = 0;
                     }
                 }
-                
+
                 // Also lose interest if we catch up
                 if cursor_distance < 30.0 && self.behavior_ticks > 60 {
                     eprintln!("DEBUG: Cat caught cursor, losing interest");
@@ -286,11 +296,11 @@ impl Neko {
                     self.behavior_ticks = 0;
                 }
             }
-            
+
             BehaviorState::LosingInterest => {
                 // Slow down, transition to idle
                 self.speed = 4.0;
-                
+
                 if self.behavior_ticks > 40 {
                     self.behavior_state = BehaviorState::Wandering;
                     self.speed = 8.0;
@@ -304,7 +314,7 @@ impl Neko {
     /// Pick a random target within screen bounds
     fn pick_random_target(&mut self) {
         let mut rng = rand::thread_rng();
-        
+
         // Bias towards staying somewhat near current position
         let range = 300.0;
         self.target_x = (self.x + rng.gen_range(-range..range))
@@ -318,7 +328,7 @@ impl Neko {
         let dx = self.target_x - self.x;
         let dy = self.target_y - self.y;
         let distance = (dx * dx + dy * dy).sqrt();
-        
+
         if distance < 10.0 {
             // Close enough - go idle
             self.idle_ticks += 1;
@@ -326,17 +336,17 @@ impl Neko {
         } else {
             // Moving
             self.idle_ticks = 0;
-            
+
             // Determine direction and set running state
             let angle = dy.atan2(dx);
             self.state = Self::direction_to_state(angle);
-            
+
             // Move
             let move_x = (dx / distance) * self.speed;
             let move_y = (dy / distance) * self.speed;
             self.x += move_x;
             self.y += move_y;
-            
+
             // Clamp to screen - keep sprite fully visible
             self.x = self.x.clamp(0.0, self.screen_width - self.sprite_width);
             self.y = self.y.clamp(0.0, self.screen_height - self.sprite_height);
@@ -356,7 +366,7 @@ impl Neko {
                 _ => NekoState::Sit,
             };
         }
-        
+
         // Fall asleep after long idle
         if self.idle_ticks > 300 {
             self.state = if (self.frame / 20) % 2 == 0 {
@@ -377,10 +387,10 @@ impl Neko {
     /// Convert angle to running state (8 directions)
     fn direction_to_state(angle: f64) -> NekoState {
         use std::f64::consts::PI;
-        
+
         let angle = if angle < 0.0 { angle + 2.0 * PI } else { angle };
         let sector = ((angle + PI / 8.0) / (PI / 4.0)) as i32 % 8;
-        
+
         match sector {
             0 => NekoState::RunE,
             1 => NekoState::RunSE,
@@ -398,7 +408,7 @@ impl Neko {
     pub fn set_target(&mut self, x: f64, y: f64) {
         self.target_x = x;
         self.target_y = y;
-        
+
         // Wake up if sleeping!
         if matches!(self.state, NekoState::Sleep1 | NekoState::Sleep2) {
             self.state = NekoState::Alert;
@@ -410,22 +420,26 @@ impl Neko {
     pub fn draw(&self, cr: &cairo::Context) {
         self.draw_with_sprites(cr, None);
     }
-    
+
     /// Draw the neko, optionally using a sprite sheet
-    pub fn draw_with_sprites(&self, cr: &cairo::Context, sprites: Option<&crate::sprites::SpriteSheet>) {
+    pub fn draw_with_sprites(
+        &self,
+        cr: &cairo::Context,
+        sprites: Option<&crate::sprites::SpriteSheet>,
+    ) {
         let (sprite_col, sprite_row) = self.state.sprite_coords(self.frame);
-        
+
         // Clear with transparency
         cr.set_operator(cairo::Operator::Clear);
         let _ = cr.paint();
         cr.set_operator(cairo::Operator::Over);
-        
+
         // Debug mode: draw larger area with info
         if self.debug_mode {
             self.draw_debug(cr);
             return;
         }
-        
+
         // Use sprites if available, otherwise fall back to cairo drawing
         if let Some(sheet) = sprites {
             sheet.draw_centered(cr, sprite_col, sprite_row);
@@ -433,7 +447,7 @@ impl Neko {
             self.draw_cat(cr);
         }
     }
-    
+
     /// Draw debug visualization
     fn draw_debug(&self, cr: &cairo::Context) {
         // Draw OUTER debug outline - bright magenta, should be at exact edges
@@ -442,13 +456,13 @@ impl Neko {
         cr.set_line_width(3.0);
         cr.rectangle(1.5, 1.5, 29.0, 29.0); // Inset slightly so stroke is visible
         let _ = cr.stroke();
-        
+
         // Draw inner debug outline - green, shows the "safe" drawing area
         cr.set_source_rgba(0.0, 1.0, 0.0, 0.7);
         cr.set_line_width(1.0);
         cr.rectangle(4.0, 4.0, 24.0, 24.0);
         let _ = cr.stroke();
-        
+
         // Draw crosshairs at center (16, 16) to verify coordinate system
         cr.set_source_rgba(1.0, 1.0, 0.0, 0.5); // Yellow
         cr.set_line_width(1.0);
@@ -457,63 +471,63 @@ impl Neko {
         cr.move_to(0.0, 16.0);
         cr.line_to(32.0, 16.0);
         let _ = cr.stroke();
-        
+
         // Draw the cat
         self.draw_cat(cr);
-        
+
         // Draw target indicator (small red dot showing direction to target)
         let rel_target_x = self.target_x - self.x;
         let rel_target_y = self.target_y - self.y;
         let target_dist = (rel_target_x.powi(2) + rel_target_y.powi(2)).sqrt();
-        
+
         // Normalize and scale to fit within sprite area (max 12px from center)
         if target_dist > 1.0 {
             let scale = 12.0 / target_dist.max(12.0);
             let dot_x = 16.0 + rel_target_x * scale;
             let dot_y = 16.0 + rel_target_y * scale;
-            
+
             cr.set_source_rgba(1.0, 0.0, 0.0, 0.8); // Red
             cr.arc(dot_x, dot_y, 3.0, 0.0, 2.0 * std::f64::consts::PI);
             let _ = cr.fill();
         }
-        
+
         // Draw cursor indicator (blue dot showing direction to cursor)
         if self.cursor_available {
             let rel_cursor_x = self.cursor_x - self.x;
             let rel_cursor_y = self.cursor_y - self.y;
             let cursor_dist = (rel_cursor_x.powi(2) + rel_cursor_y.powi(2)).sqrt();
-            
+
             // Normalize and scale to fit within sprite area
             if cursor_dist > 1.0 {
                 let scale = 14.0 / cursor_dist.max(14.0);
                 let dot_x = 16.0 + rel_cursor_x * scale;
                 let dot_y = 16.0 + rel_cursor_y * scale;
-                
+
                 cr.set_source_rgba(0.0, 0.5, 1.0, 0.8); // Blue
                 cr.arc(dot_x, dot_y, 4.0, 0.0, 2.0 * std::f64::consts::PI);
                 let _ = cr.fill();
             }
         }
-        
+
         // Draw behavior state indicator (top-right corner)
         let state_color = match self.behavior_state {
-            BehaviorState::Wandering => (0.5, 0.5, 0.5), // Gray
-            BehaviorState::Alerted => (1.0, 1.0, 0.0),   // Yellow
-            BehaviorState::Chasing => (1.0, 0.5, 0.0),   // Orange
+            BehaviorState::Wandering => (0.5, 0.5, 0.5),      // Gray
+            BehaviorState::Alerted => (1.0, 1.0, 0.0),        // Yellow
+            BehaviorState::Chasing => (1.0, 0.5, 0.0),        // Orange
             BehaviorState::LosingInterest => (0.5, 0.0, 0.5), // Purple
         };
         cr.set_source_rgb(state_color.0, state_color.1, state_color.2);
         cr.arc(28.0, 4.0, 3.0, 0.0, 2.0 * std::f64::consts::PI);
         let _ = cr.fill();
     }
-    
+
     /// Draw the cat face
     fn draw_cat(&self, cr: &cairo::Context) {
         // Background circle (body)
         cr.set_source_rgb(0.9, 0.7, 0.5); // Tan
         cr.arc(16.0, 18.0, 14.0, 0.0, 2.0 * std::f64::consts::PI);
         let _ = cr.fill();
-        
+
         // Ears
         cr.set_source_rgb(0.9, 0.7, 0.5);
         cr.move_to(4.0, 8.0);
@@ -521,13 +535,13 @@ impl Neko {
         cr.line_to(12.0, 8.0);
         cr.close_path();
         let _ = cr.fill();
-        
+
         cr.move_to(20.0, 8.0);
         cr.line_to(24.0, 0.0);
         cr.line_to(28.0, 8.0);
         cr.close_path();
         let _ = cr.fill();
-        
+
         // Inner ears
         cr.set_source_rgb(1.0, 0.8, 0.8);
         cr.move_to(6.0, 7.0);
@@ -535,13 +549,13 @@ impl Neko {
         cr.line_to(10.0, 7.0);
         cr.close_path();
         let _ = cr.fill();
-        
+
         cr.move_to(22.0, 7.0);
         cr.line_to(24.0, 2.0);
         cr.line_to(26.0, 7.0);
         cr.close_path();
         let _ = cr.fill();
-        
+
         // Eyes - change based on state
         cr.set_source_rgb(0.0, 0.0, 0.0);
         match self.state {
@@ -575,7 +589,7 @@ impl Neko {
                 let _ = cr.fill();
             }
         }
-        
+
         // Nose
         cr.set_source_rgb(1.0, 0.6, 0.6);
         cr.move_to(16.0, 18.0);
@@ -583,7 +597,7 @@ impl Neko {
         cr.line_to(18.0, 21.0);
         cr.close_path();
         let _ = cr.fill();
-        
+
         // Mouth
         cr.set_source_rgb(0.0, 0.0, 0.0);
         cr.set_line_width(1.0);
@@ -594,7 +608,7 @@ impl Neko {
         cr.move_to(16.0, 24.0);
         cr.curve_to(20.0, 26.0, 20.0, 24.0, 18.0, 23.0);
         let _ = cr.stroke();
-        
+
         // Whiskers
         cr.set_line_width(1.0);
         cr.move_to(2.0, 16.0);

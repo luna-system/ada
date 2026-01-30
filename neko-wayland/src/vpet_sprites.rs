@@ -9,8 +9,8 @@
 //! Made with 💜 by Ada & Luna - Ada Research Foundation
 
 use cairo::ImageSurface;
-use std::path::{Path, PathBuf};
 use std::collections::HashMap;
+use std::path::{Path, PathBuf};
 
 /// A single frame with its duration
 #[derive(Debug, Clone)]
@@ -32,17 +32,17 @@ impl VPetSequence {
         if self.frames.is_empty() {
             return None;
         }
-        
+
         let time = time_ms % self.total_duration_ms;
         let mut accumulated = 0;
-        
+
         for frame in &self.frames {
             accumulated += frame.duration_ms;
             if time < accumulated {
                 return Some(frame);
             }
         }
-        
+
         // Fallback to last frame
         self.frames.last()
     }
@@ -57,7 +57,7 @@ pub struct VPetAnimation {
 
 impl VPetAnimation {
     /// Load a VPet animation from a folder
-    /// 
+    ///
     /// Expected structure:
     /// ```
     /// animation_folder/
@@ -71,30 +71,32 @@ impl VPetAnimation {
     /// ```
     pub fn load<P: AsRef<Path>>(path: P) -> Result<Self, String> {
         let path = path.as_ref();
-        let name = path.file_name()
+        let name = path
+            .file_name()
             .and_then(|n| n.to_str())
             .unwrap_or("unknown")
             .to_string();
-        
+
         let mut sequences = HashMap::new();
-        
+
         // Read all subdirectories
         let entries = std::fs::read_dir(path)
             .map_err(|e| format!("Failed to read animation folder: {}", e))?;
-        
+
         for entry in entries {
             let entry = entry.map_err(|e| format!("Failed to read entry: {}", e))?;
             let entry_path = entry.path();
-            
+
             if !entry_path.is_dir() {
                 continue;
             }
-            
-            let sequence_name = entry_path.file_name()
+
+            let sequence_name = entry_path
+                .file_name()
                 .and_then(|n| n.to_str())
                 .ok_or_else(|| "Invalid sequence name".to_string())?
                 .to_string();
-            
+
             // Load this sequence
             match Self::load_sequence(&entry_path) {
                 Ok(sequence) => {
@@ -106,89 +108,95 @@ impl VPetAnimation {
                 }
             }
         }
-        
+
         if sequences.is_empty() {
             return Err("No valid sequences found in animation folder".to_string());
         }
-        
+
         Ok(Self { name, sequences })
     }
-    
+
     /// Load a single sequence (e.g., "A_Happy")
     fn load_sequence(path: &Path) -> Result<VPetSequence, String> {
         let mut frame_files: Vec<(PathBuf, u32, u32)> = Vec::new();
-        
+
         // Read all PNG files
         let entries = std::fs::read_dir(path)
             .map_err(|e| format!("Failed to read sequence folder: {}", e))?;
-        
+
         for entry in entries {
             let entry = entry.map_err(|e| format!("Failed to read entry: {}", e))?;
             let entry_path = entry.path();
-            
+
             if entry_path.extension().and_then(|e| e.to_str()) != Some("png") {
                 continue;
             }
-            
+
             // Parse filename: frame_NNN_DDD.png or 中文名_NNN_DDD.png
-            let filename = entry_path.file_stem()
+            let filename = entry_path
+                .file_stem()
                 .and_then(|n| n.to_str())
                 .ok_or_else(|| "Invalid filename".to_string())?;
-            
+
             // Split by underscore and get last two parts (frame number and duration)
             let parts: Vec<&str> = filename.rsplitn(3, '_').collect();
             if parts.len() < 2 {
-                eprintln!("Warning: Skipping file with unexpected name format: {}", filename);
+                eprintln!(
+                    "Warning: Skipping file with unexpected name format: {}",
+                    filename
+                );
                 continue;
             }
-            
+
             let duration_str = parts[0]; // Last part (rightmost)
-            let frame_str = parts[1];    // Second to last
-            
-            let frame_num: u32 = frame_str.parse()
+            let frame_str = parts[1]; // Second to last
+
+            let frame_num: u32 = frame_str
+                .parse()
                 .map_err(|_| format!("Invalid frame number in filename: {}", filename))?;
-            let duration: u32 = duration_str.parse()
+            let duration: u32 = duration_str
+                .parse()
                 .map_err(|_| format!("Invalid duration in filename: {}", filename))?;
-            
+
             frame_files.push((entry_path, frame_num, duration));
         }
-        
+
         if frame_files.is_empty() {
             return Err("No valid frame files found".to_string());
         }
-        
+
         // Sort by frame number
         frame_files.sort_by_key(|(_, num, _)| *num);
-        
+
         // Load frames
         let mut frames = Vec::new();
         let mut total_duration = 0;
-        
+
         for (path, _num, duration) in frame_files {
-            let file = std::fs::File::open(&path)
-                .map_err(|e| format!("Failed to open frame: {}", e))?;
+            let file =
+                std::fs::File::open(&path).map_err(|e| format!("Failed to open frame: {}", e))?;
             let mut reader = std::io::BufReader::new(file);
             let surface = ImageSurface::create_from_png(&mut reader)
                 .map_err(|e| format!("Failed to load PNG: {:?}", e))?;
-            
+
             frames.push(VPetFrame {
                 surface,
                 duration_ms: duration,
             });
             total_duration += duration;
         }
-        
+
         Ok(VPetSequence {
             frames,
             total_duration_ms: total_duration,
         })
     }
-    
+
     /// Get a sequence by name (e.g., "A_Happy", "B_Normal")
     pub fn get_sequence(&self, name: &str) -> Option<&VPetSequence> {
         self.sequences.get(name)
     }
-    
+
     /// Get available sequence names
     pub fn sequence_names(&self) -> Vec<String> {
         self.sequences.keys().cloned().collect()
@@ -213,9 +221,9 @@ impl VPetSprites {
             animation_start_time: std::time::Instant::now(),
         }
     }
-    
+
     /// Load all animations from a pet folder
-    /// 
+    ///
     /// Expected structure:
     /// ```
     /// pet_folder/
@@ -228,41 +236,43 @@ impl VPetSprites {
     pub fn load_pet<P: AsRef<Path>>(path: P) -> Result<Self, String> {
         let path = path.as_ref();
         let mut sprites = Self::new();
-        
+
         // Read all animation categories (IDEL, MOVE, etc.)
-        let entries = std::fs::read_dir(path)
-            .map_err(|e| format!("Failed to read pet folder: {}", e))?;
-        
+        let entries =
+            std::fs::read_dir(path).map_err(|e| format!("Failed to read pet folder: {}", e))?;
+
         for entry in entries {
             let entry = entry.map_err(|e| format!("Failed to read entry: {}", e))?;
             let category_path = entry.path();
-            
+
             if !category_path.is_dir() {
                 continue;
             }
-            
-            let category_name = category_path.file_name()
+
+            let category_name = category_path
+                .file_name()
                 .and_then(|n| n.to_str())
                 .unwrap_or("unknown");
-            
+
             // Read all animations in this category
             let anim_entries = std::fs::read_dir(&category_path)
                 .map_err(|e| format!("Failed to read category folder: {}", e))?;
-            
+
             for anim_entry in anim_entries {
                 let anim_entry = anim_entry.map_err(|e| format!("Failed to read entry: {}", e))?;
                 let anim_path = anim_entry.path();
-                
+
                 if !anim_path.is_dir() {
                     continue;
                 }
-                
-                let anim_name = anim_path.file_name()
+
+                let anim_name = anim_path
+                    .file_name()
                     .and_then(|n| n.to_str())
                     .unwrap_or("unknown");
-                
+
                 let full_name = format!("{}_{}", category_name, anim_name);
-                
+
                 match VPetAnimation::load(&anim_path) {
                     Ok(animation) => {
                         sprites.animations.insert(full_name, animation);
@@ -273,19 +283,25 @@ impl VPetSprites {
                 }
             }
         }
-        
+
         if sprites.animations.is_empty() {
             return Err("No valid animations found in pet folder".to_string());
         }
-        
+
         // Log summary instead of every frame
-        eprintln!("VPet loaded: {} animations with {} total sequences", 
-                 sprites.animations.len(),
-                 sprites.animations.values().map(|a| a.sequences.len()).sum::<usize>());
-        
+        eprintln!(
+            "VPet loaded: {} animations with {} total sequences",
+            sprites.animations.len(),
+            sprites
+                .animations
+                .values()
+                .map(|a| a.sequences.len())
+                .sum::<usize>()
+        );
+
         Ok(sprites)
     }
-    
+
     /// Set the current animation and sequence
     pub fn set_animation(&mut self, animation: &str, sequence: &str) {
         self.current_animation = Some(animation.to_string());
@@ -307,7 +323,7 @@ impl VPetSprites {
                     }
                 }
             }
-            
+
             // Movement states
             "wander" | "chase" | "run" => {
                 for (anim_name, animation) in &self.animations {
@@ -318,7 +334,7 @@ impl VPetSprites {
                     }
                 }
             }
-            
+
             // Play state - look for play animations
             "play" => {
                 for (anim_name, animation) in &self.animations {
@@ -337,7 +353,7 @@ impl VPetSprites {
                     }
                 }
             }
-            
+
             // Sleep state
             "sleep" => {
                 for (anim_name, animation) in &self.animations {
@@ -348,7 +364,7 @@ impl VPetSprites {
                     }
                 }
             }
-            
+
             // Alert state
             "alert" => {
                 for (anim_name, animation) in &self.animations {
@@ -359,7 +375,7 @@ impl VPetSprites {
                     }
                 }
             }
-            
+
             // Eating/drinking
             "eat" => {
                 for (anim_name, animation) in &self.animations {
@@ -370,7 +386,7 @@ impl VPetSprites {
                     }
                 }
             }
-            
+
             "drink" => {
                 for (anim_name, animation) in &self.animations {
                     if anim_name.to_lowercase().contains("drink") {
@@ -380,10 +396,10 @@ impl VPetSprites {
                     }
                 }
             }
-            
+
             _ => {}
         }
-        
+
         // Default fallback: idle animation
         for (anim_name, animation) in &self.animations {
             if anim_name.starts_with("IDEL_") {
@@ -392,22 +408,22 @@ impl VPetSprites {
                 }
             }
         }
-        
+
         None
     }
-    
+
     /// Set animation based on DSL state name
     pub fn set_animation_from_dsl_state(&mut self, state_name: &str) {
         if let Some((anim, seq)) = self.map_dsl_state(state_name) {
             self.set_animation(&anim, &seq);
         }
     }
-    
+
     /// Map a neko state to an appropriate VPet animation
     /// Returns (animation_name, sequence_name) if a mapping exists
     pub fn map_neko_state(&self, state: crate::neko::NekoState) -> Option<(String, String)> {
         use crate::neko::NekoState;
-        
+
         // Try to find appropriate animations based on neko state
         match state {
             // Idle states - look for IDEL (idle) animations
@@ -426,7 +442,7 @@ impl VPetSprites {
                     }
                 }
             }
-            
+
             // Alert state - look for alert or idle animations
             NekoState::Alert => {
                 // Try IDEL animations with A_Happy (alert/excited)
@@ -438,10 +454,16 @@ impl VPetSprites {
                     }
                 }
             }
-            
+
             // Running states - look for MOVE animations
-            NekoState::RunN | NekoState::RunNE | NekoState::RunE | NekoState::RunSE |
-            NekoState::RunS | NekoState::RunSW | NekoState::RunW | NekoState::RunNW => {
+            NekoState::RunN
+            | NekoState::RunNE
+            | NekoState::RunE
+            | NekoState::RunSE
+            | NekoState::RunS
+            | NekoState::RunSW
+            | NekoState::RunW
+            | NekoState::RunNW => {
                 // Try to find any MOVE animation
                 for (anim_name, animation) in &self.animations {
                     if anim_name.starts_with("MOVE_") {
@@ -456,7 +478,7 @@ impl VPetSprites {
                     }
                 }
             }
-            
+
             // Sleep states - look for sleep animations
             NekoState::Sleep1 | NekoState::Sleep2 => {
                 // Try to find sleep animation
@@ -476,10 +498,12 @@ impl VPetSprites {
                     }
                 }
             }
-            
+
             // Wall scratching - treat as idle for VPet (they don't have wall scratch animations)
-            NekoState::ScratchWallDown | NekoState::ScratchWallRight | 
-            NekoState::ScratchWallUp | NekoState::ScratchWallLeft => {
+            NekoState::ScratchWallDown
+            | NekoState::ScratchWallRight
+            | NekoState::ScratchWallUp
+            | NekoState::ScratchWallLeft => {
                 // Use idle animation for VPet
                 for (anim_name, animation) in &self.animations {
                     if anim_name.starts_with("IDEL_") {
@@ -490,38 +514,38 @@ impl VPetSprites {
                 }
             }
         }
-        
+
         None
     }
-    
+
     /// Set animation based on neko state
     pub fn set_animation_from_neko_state(&mut self, state: crate::neko::NekoState) {
         if let Some((anim, seq)) = self.map_neko_state(state) {
             self.set_animation(&anim, &seq);
         }
     }
-    
+
     /// Get the current frame to draw
     pub fn current_frame(&self) -> Option<&ImageSurface> {
         let anim_name = self.current_animation.as_ref()?;
         let seq_name = self.current_sequence.as_ref()?;
-        
+
         let animation = self.animations.get(anim_name)?;
         let sequence = animation.get_sequence(seq_name)?;
-        
+
         let elapsed_ms = self.animation_start_time.elapsed().as_millis() as u32;
         let frame = sequence.frame_at(elapsed_ms)?;
-        
+
         Some(&frame.surface)
     }
-    
+
     /// Get the dimensions of the current frame (or first available frame)
     pub fn sprite_dimensions(&self) -> Option<(i32, i32)> {
         // Try current frame first
         if let Some(surface) = self.current_frame() {
             return Some((surface.width(), surface.height()));
         }
-        
+
         // Fall back to first available frame
         for animation in self.animations.values() {
             for sequence in animation.sequences.values() {
@@ -530,40 +554,47 @@ impl VPetSprites {
                 }
             }
         }
-        
+
         None
     }
-    
+
     /// Draw the current frame (not centered, at actual size)
     pub fn draw(&self, cr: &cairo::Context) -> Result<(), String> {
-        let surface = self.current_frame()
+        let surface = self
+            .current_frame()
             .ok_or_else(|| "No current frame".to_string())?;
-        
+
         cr.set_source_surface(surface, 0.0, 0.0)
             .map_err(|e| format!("Failed to set source: {:?}", e))?;
         cr.paint()
             .map_err(|e| format!("Failed to paint: {:?}", e))?;
-        
+
         Ok(())
     }
-    
+
     /// Draw the current frame centered in a specific window size
-    pub fn draw_centered(&self, cr: &cairo::Context, window_width: i32, window_height: i32) -> Result<(), String> {
-        let surface = self.current_frame()
+    pub fn draw_centered(
+        &self,
+        cr: &cairo::Context,
+        window_width: i32,
+        window_height: i32,
+    ) -> Result<(), String> {
+        let surface = self
+            .current_frame()
             .ok_or_else(|| "No current frame".to_string())?;
-        
+
         let width = surface.width() as f64;
         let height = surface.height() as f64;
-        
+
         // Center in window
         let x = (window_width as f64 - width) / 2.0;
         let y = (window_height as f64 - height) / 2.0;
-        
+
         cr.set_source_surface(surface, x, y)
             .map_err(|e| format!("Failed to set source: {:?}", e))?;
         cr.paint()
             .map_err(|e| format!("Failed to paint: {:?}", e))?;
-        
+
         Ok(())
     }
 }

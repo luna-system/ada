@@ -62,6 +62,30 @@ def spawn_agent(
         model = config.get_model_for_role(role)
         logger.info(f"Auto-selected model '{model}' for role '{role}'")
     
+    # Auto-select max_tokens based on role if not explicitly provided
+    if "max_tokens" not in agent_kwargs:
+        if role is None:
+            # Try to infer role from agent class name
+            class_name = agent_class.__name__.lower()
+            if "queen" in class_name:
+                role = "queen"
+            elif "coder" in class_name:
+                role = "coder"
+            elif "researcher" in class_name:
+                role = "researcher"
+            elif "tester" in class_name:
+                role = "tester"
+            elif "reviewer" in class_name:
+                role = "reviewer"
+            elif "drone" in class_name:
+                role = "drone"
+            else:
+                role = "coder"  # Default to coder
+        
+        max_tokens = config.get_max_tokens_for_role(role)
+        agent_kwargs["max_tokens"] = max_tokens
+        logger.info(f"Auto-selected max_tokens={max_tokens} for role '{role}'")
+    
     logger.info(f"Spawning agent {agent_id} with model {model}")
 
     # 1. Initialize the agent

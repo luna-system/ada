@@ -49,6 +49,8 @@ pub struct WindowConfig {
     pub debug: bool,
     /// Window always on top
     pub always_on_top: bool,
+    /// Use daemon for state management (thin client mode)
+    pub use_daemon: bool,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -96,6 +98,7 @@ impl Default for WindowConfig {
         Self {
             debug: false,
             always_on_top: true,
+            use_daemon: false,
         }
     }
 }
@@ -113,46 +116,45 @@ impl Config {
     /// Load config from file, or create default if it doesn't exist
     pub fn load() -> Result<Self, String> {
         let config_path = Self::config_path()?;
-        
+
         if config_path.exists() {
             let contents = std::fs::read_to_string(&config_path)
                 .map_err(|e| format!("Failed to read config file: {}", e))?;
-            
-            toml::from_str(&contents)
-                .map_err(|e| format!("Failed to parse config file: {}", e))
+
+            toml::from_str(&contents).map_err(|e| format!("Failed to parse config file: {}", e))
         } else {
             // Return default config
             Ok(Self::default())
         }
     }
-    
+
     /// Save config to file
     pub fn save(&self) -> Result<(), String> {
         let config_path = Self::config_path()?;
-        
+
         // Create config directory if it doesn't exist
         if let Some(parent) = config_path.parent() {
             std::fs::create_dir_all(parent)
                 .map_err(|e| format!("Failed to create config directory: {}", e))?;
         }
-        
+
         let contents = toml::to_string_pretty(self)
             .map_err(|e| format!("Failed to serialize config: {}", e))?;
-        
+
         std::fs::write(&config_path, contents)
             .map_err(|e| format!("Failed to write config file: {}", e))?;
-        
+
         Ok(())
     }
-    
+
     /// Get the config file path
     pub fn config_path() -> Result<PathBuf, String> {
-        let config_dir = dirs::config_dir()
-            .ok_or_else(|| "Could not find config directory".to_string())?;
-        
+        let config_dir =
+            dirs::config_dir().ok_or_else(|| "Could not find config directory".to_string())?;
+
         Ok(config_dir.join("neko-wayland").join("config.toml"))
     }
-    
+
     /// Merge CLI arguments into config (CLI wins)
     pub fn merge_cli_args(&mut self, args: &[String]) {
         let mut i = 1; // Skip program name
@@ -183,6 +185,10 @@ impl Config {
                     self.behavior.use_dsl = true;
                     i += 1;
                 }
+                "--daemon" => {
+                    self.window.use_daemon = true;
+                    i += 1;
+                }
                 "--debug" => {
                     self.window.debug = true;
                     i += 1;
@@ -193,10 +199,11 @@ impl Config {
             }
         }
     }
-    
+
     /// Print help message
     pub fn print_help() {
-        eprintln!(r#"neko-wayland - A cute desktop pet for Wayland/Hyprland
+        eprintln!(
+            r#"neko-wayland - A cute desktop pet for Wayland/Hyprland
 
 USAGE:
     neko-wayland [OPTIONS]
@@ -207,12 +214,13 @@ OPTIONS:
     -v, --vpet <FOLDER>    Load VPet-style sprites from folder
     --scale <NUMBER>       Scale factor for sprites (0.1-10.0, default: 1.0)
     --dsl                  Use DSL runtime (default behavior if no file)
+    --daemon               Use daemon for state management (thin client mode)
     --debug                Enable debug visualization
     -h, --help             Show this help message
 
 CONFIG FILE:
     ~/.config/neko-wayland/config.toml
-    
+
     CLI arguments override config file values.
 
 EXAMPLES:
@@ -223,8 +231,10 @@ EXAMPLES:
     neko-wayland --sprites neko.png --scale 2.0     # Classic neko at 2x size
     neko-wayland --dsl                              # DSL runtime with default behavior
     neko-wayland --algo lazy_cat.neko               # Custom behavior from file
+    neko-wayland --daemon                           # Thin client mode (requires neko-daemon)
 
 Made with 💜 by Ada & Luna - Ada Research Foundation
-"#);
+"#
+        );
     }
 }

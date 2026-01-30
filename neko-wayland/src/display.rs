@@ -18,8 +18,8 @@ pub struct Monitor {
     pub name: String,
     pub width: u32,
     pub height: u32,
-    pub x: i32,  // Global X offset
-    pub y: i32,  // Global Y offset
+    pub x: i32, // Global X offset
+    pub y: i32, // Global Y offset
     pub scale: f64,
     pub focused: bool,
 }
@@ -38,23 +38,26 @@ impl DisplayBackend for HyprlandBackend {
     fn name(&self) -> &'static str {
         "Hyprland"
     }
-    
+
     fn get_monitors(&self) -> Option<Vec<Monitor>> {
         let output = Command::new("hyprctl")
             .args(["monitors", "-j"])
             .output()
             .ok()?;
-        
+
         if !output.status.success() {
             return None;
         }
-        
+
         let stdout = String::from_utf8_lossy(&output.stdout);
-        eprintln!("DEBUG display: raw hyprctl output length = {}", stdout.len());
-        
+        eprintln!(
+            "DEBUG display: raw hyprctl output length = {}",
+            stdout.len()
+        );
+
         parse_hyprland_monitors(&stdout)
     }
-    
+
     fn get_focused_monitor(&self) -> Option<Monitor> {
         self.get_monitors()?.into_iter().find(|m| m.focused)
     }
@@ -63,21 +66,21 @@ impl DisplayBackend for HyprlandBackend {
 /// Parse Hyprland's JSON monitor output
 fn parse_hyprland_monitors(json: &str) -> Option<Vec<Monitor>> {
     let mut monitors = Vec::new();
-    
+
     // Split by monitor objects (each starts with '{' after '[' or ',')
     // This is a simple parser that doesn't require serde
-    
+
     let mut depth = 0;
     let mut in_string = false;
     let mut escape_next = false;
     let mut obj_start = None;
-    
+
     for (i, c) in json.char_indices() {
         if escape_next {
             escape_next = false;
             continue;
         }
-        
+
         match c {
             '\\' if in_string => escape_next = true,
             '"' => in_string = !in_string,
@@ -102,13 +105,15 @@ fn parse_hyprland_monitors(json: &str) -> Option<Vec<Monitor>> {
             _ => {}
         }
     }
-    
+
     eprintln!("DEBUG display: parsed {} monitors", monitors.len());
     for m in &monitors {
-        eprintln!("DEBUG display:   {} {}x{} at ({}, {}) focused={}", 
-                 m.name, m.width, m.height, m.x, m.y, m.focused);
+        eprintln!(
+            "DEBUG display:   {} {}x{} at ({}, {}) focused={}",
+            m.name, m.width, m.height, m.x, m.y, m.focused
+        );
     }
-    
+
     if monitors.is_empty() {
         None
     } else {
@@ -134,11 +139,11 @@ fn extract_string(json: &str, key: &str) -> Option<String> {
     let pattern = format!("\"{}\":", key);
     let start = json.find(&pattern)? + pattern.len();
     let rest = &json[start..].trim_start();
-    
+
     if !rest.starts_with('"') {
         return None;
     }
-    
+
     let rest = &rest[1..]; // Skip opening quote
     let end = rest.find('"')?;
     Some(rest[..end].to_string())
@@ -149,7 +154,7 @@ fn extract_number(json: &str, key: &str) -> Option<f64> {
     let pattern = format!("\"{}\":", key);
     let start = json.find(&pattern)? + pattern.len();
     let rest = &json[start..].trim_start();
-    
+
     // Find end of number (including negative and decimal)
     let mut end = 0;
     for (i, c) in rest.char_indices() {
@@ -159,11 +164,11 @@ fn extract_number(json: &str, key: &str) -> Option<f64> {
             break;
         }
     }
-    
+
     if end == 0 {
         return None;
     }
-    
+
     rest[..end].parse().ok()
 }
 
@@ -172,7 +177,7 @@ fn extract_bool(json: &str, key: &str) -> Option<bool> {
     let pattern = format!("\"{}\":", key);
     let start = json.find(&pattern)? + pattern.len();
     let rest = &json[start..].trim_start();
-    
+
     if rest.starts_with("true") {
         Some(true)
     } else if rest.starts_with("false") {
@@ -189,16 +194,16 @@ pub fn detect_backend() -> Box<dyn DisplayBackend> {
         eprintln!("DEBUG display: detected Hyprland");
         return Box::new(HyprlandBackend);
     }
-    
+
     // Try running hyprctl anyway (might work)
     if Command::new("hyprctl").arg("version").output().is_ok() {
         eprintln!("DEBUG display: hyprctl available, using Hyprland backend");
         return Box::new(HyprlandBackend);
     }
-    
+
     // TODO: Add Sway detection
     // if std::env::var("SWAYSOCK").is_ok() { ... }
-    
+
     // Fallback to Hyprland (will fail gracefully)
     eprintln!("DEBUG display: no compositor detected, defaulting to Hyprland");
     Box::new(HyprlandBackend)

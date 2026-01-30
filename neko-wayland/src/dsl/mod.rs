@@ -10,7 +10,7 @@ pub mod runtime;
 use pest::Parser;
 use pest_derive::Parser;
 
-pub use runtime::{BehaviorRuntime, default_behavior, load_behavior};
+pub use runtime::{default_behavior, load_behavior, BehaviorRuntime};
 use std::collections::HashMap;
 
 #[derive(Parser)]
@@ -20,11 +20,11 @@ pub struct NekoParser;
 /// AGL Certainty levels - maps glyphs to probabilities
 #[derive(Debug, Clone, Copy, PartialEq)]
 pub enum Certainty {
-    Certain,    // ● = 100%
-    Likely,     // ◕ = 75%
-    Possible,   // ◑ = 50%
-    Unlikely,   // ◔ = 25%
-    Rare,       // ○ = 10%
+    Certain,  // ● = 100%
+    Likely,   // ◕ = 75%
+    Possible, // ◑ = 50%
+    Unlikely, // ◔ = 25%
+    Rare,     // ○ = 10%
 }
 
 impl Certainty {
@@ -37,7 +37,7 @@ impl Certainty {
             Certainty::Rare => 0.1,
         }
     }
-    
+
     pub fn from_glyph(s: &str) -> Option<Self> {
         match s {
             "●" => Some(Certainty::Certain),
@@ -48,7 +48,7 @@ impl Certainty {
             _ => None,
         }
     }
-    
+
     /// Roll the dice - does this certainty trigger?
     pub fn roll(&self) -> bool {
         rand::random::<f64>() < self.probability()
@@ -66,8 +66,8 @@ impl Default for Certainty {
 pub enum Value {
     Number(f64),
     Range(f64, f64),
-    Duration(f64),      // in seconds
-    Distance(f64),      // in pixels
+    Duration(f64), // in seconds
+    Distance(f64), // in pixels
     String(String),
     Ident(String),
 }
@@ -77,9 +77,7 @@ impl Value {
     pub fn sample(&self) -> f64 {
         match self {
             Value::Number(n) => *n,
-            Value::Range(min, max) => {
-                min + rand::random::<f64>() * (max - min)
-            }
+            Value::Range(min, max) => min + rand::random::<f64>() * (max - min),
             Value::Duration(s) => *s,
             Value::Distance(px) => *px,
             _ => 0.0,
@@ -118,24 +116,22 @@ impl State {
             transitions: Vec::new(),
         }
     }
-    
+
     /// Get a parameter value, with default fallback
     pub fn get_param(&self, key: &str, default: f64) -> f64 {
-        self.params.get(key)
-            .map(|v| v.sample())
-            .unwrap_or(default)
+        self.params.get(key).map(|v| v.sample()).unwrap_or(default)
     }
 }
 
 /// Locomotion style for the pet
 #[derive(Debug, Clone, Copy, PartialEq)]
 pub enum Locomotion {
-    Quadruped,  // Four-legged walk (cats, dogs)
-    Biped,      // Two-legged walk (humans, birds standing)
-    Bounce,     // Bouncy blob (slimes!)
-    Float,      // Smooth floating (ghosts)
-    Hop,        // Discrete hops (frogs, birds)
-    Slither,    // Snake-like
+    Quadruped, // Four-legged walk (cats, dogs)
+    Biped,     // Two-legged walk (humans, birds standing)
+    Bounce,    // Bouncy blob (slimes!)
+    Float,     // Smooth floating (ghosts)
+    Hop,       // Discrete hops (frogs, birds)
+    Slither,   // Snake-like
 }
 
 impl Default for Locomotion {
@@ -223,11 +219,11 @@ impl PetBehavior {
 
 /// Parse a .neko file into a PetBehavior
 pub fn parse_neko(input: &str) -> Result<PetBehavior, String> {
-    let pairs = NekoParser::parse(Rule::program, input)
-        .map_err(|e| format!("Parse error: {}", e))?;
-    
+    let pairs =
+        NekoParser::parse(Rule::program, input).map_err(|e| format!("Parse error: {}", e))?;
+
     let mut behavior = PetBehavior::new("unnamed");
-    
+
     for pair in pairs {
         match pair.as_rule() {
             Rule::program => {
@@ -246,23 +242,23 @@ pub fn parse_neko(input: &str) -> Result<PetBehavior, String> {
             _ => {}
         }
     }
-    
+
     Ok(behavior)
 }
 
 fn parse_pet_def(pair: pest::iterators::Pair<Rule>) -> Result<PetBehavior, String> {
     let mut inner = pair.into_inner();
-    
-    let name = inner.next()
-        .ok_or("Expected pet name")?
-        .as_str();
-    
+
+    let name = inner.next().ok_or("Expected pet name")?.as_str();
+
     let mut behavior = PetBehavior::new(name);
-    
+
     for item in inner {
         match item.as_rule() {
             Rule::extends_clause => {
-                let parent = item.into_inner().next()
+                let parent = item
+                    .into_inner()
+                    .next()
                     .ok_or("Expected parent name")?
                     .as_str();
                 behavior.extends = Some(parent.to_string());
@@ -273,16 +269,19 @@ fn parse_pet_def(pair: pest::iterators::Pair<Rule>) -> Result<PetBehavior, Strin
             _ => {}
         }
     }
-    
+
     // Set initial state to first defined state, or "wander" as default
     if let Some(first_state) = behavior.states.keys().next() {
         behavior.initial_state = first_state.clone();
     }
-    
+
     Ok(behavior)
 }
 
-fn parse_pet_body(pair: pest::iterators::Pair<Rule>, behavior: &mut PetBehavior) -> Result<(), String> {
+fn parse_pet_body(
+    pair: pest::iterators::Pair<Rule>,
+    behavior: &mut PetBehavior,
+) -> Result<(), String> {
     for item in pair.into_inner() {
         match item.as_rule() {
             Rule::property => {
@@ -325,16 +324,16 @@ fn parse_pet_body(pair: pest::iterators::Pair<Rule>, behavior: &mut PetBehavior)
                 // Handle shorthand: `wander → sleep`
                 let mut inner = item.into_inner();
                 let from_state = inner.next().ok_or("Expected from state")?.as_str();
-                
+
                 // Skip arrow
                 let mut certainty = Certainty::Certain;
                 let mut to_state = "";
-                
+
                 for part in inner {
                     match part.as_rule() {
                         Rule::certainty => {
-                            certainty = Certainty::from_glyph(part.as_str())
-                                .unwrap_or(Certainty::Certain);
+                            certainty =
+                                Certainty::from_glyph(part.as_str()).unwrap_or(Certainty::Certain);
                         }
                         Rule::ident => {
                             to_state = part.as_str();
@@ -342,12 +341,13 @@ fn parse_pet_body(pair: pest::iterators::Pair<Rule>, behavior: &mut PetBehavior)
                         _ => {}
                     }
                 }
-                
+
                 // Add or update the from_state with this transition
-                let state = behavior.states
+                let state = behavior
+                    .states
                     .entry(from_state.to_string())
                     .or_insert_with(|| State::new(from_state));
-                
+
                 state.transitions.push(Transition {
                     trigger: None, // timeout/default transition
                     certainty,
@@ -357,44 +357,44 @@ fn parse_pet_body(pair: pest::iterators::Pair<Rule>, behavior: &mut PetBehavior)
             _ => {}
         }
     }
-    
+
     Ok(())
 }
 
 fn parse_property(pair: pest::iterators::Pair<Rule>) -> Result<(String, Value), String> {
     let mut inner = pair.into_inner();
-    
-    let key = inner.next()
+
+    let key = inner
+        .next()
         .ok_or("Expected property key")?
         .as_str()
         .to_string();
-    
-    let value_pair = inner.next()
-        .ok_or("Expected property value")?;
-    
+
+    let value_pair = inner.next().ok_or("Expected property value")?;
+
     let value = parse_value(value_pair)?;
-    
+
     Ok((key, value))
 }
 
 fn parse_value(pair: pest::iterators::Pair<Rule>) -> Result<Value, String> {
-    let inner = pair.into_inner().next()
-        .ok_or("Expected value content")?;
-    
+    let inner = pair.into_inner().next().ok_or("Expected value content")?;
+
     match inner.as_rule() {
         Rule::number => {
-            let n: f64 = inner.as_str().parse()
-                .map_err(|_| "Invalid number")?;
+            let n: f64 = inner.as_str().parse().map_err(|_| "Invalid number")?;
             Ok(Value::Number(n))
         }
         Rule::range => {
             let mut parts = inner.into_inner();
-            let min: f64 = parts.next()
+            let min: f64 = parts
+                .next()
                 .ok_or("Expected range min")?
                 .as_str()
                 .parse()
                 .map_err(|_| "Invalid range min")?;
-            let max: f64 = parts.next()
+            let max: f64 = parts
+                .next()
                 .ok_or("Expected range max")?
                 .as_str()
                 .parse()
@@ -421,25 +421,21 @@ fn parse_value(pair: pest::iterators::Pair<Rule>) -> Result<Value, String> {
         Rule::string => {
             let s = inner.as_str();
             // Remove quotes
-            let s = &s[1..s.len()-1];
+            let s = &s[1..s.len() - 1];
             Ok(Value::String(s.to_string()))
         }
-        Rule::ident => {
-            Ok(Value::Ident(inner.as_str().to_string()))
-        }
-        _ => Err(format!("Unknown value type: {:?}", inner.as_rule()))
+        Rule::ident => Ok(Value::Ident(inner.as_str().to_string())),
+        _ => Err(format!("Unknown value type: {:?}", inner.as_rule())),
     }
 }
 
 fn parse_state_def(pair: pest::iterators::Pair<Rule>) -> Result<State, String> {
     let mut inner = pair.into_inner();
-    
-    let name = inner.next()
-        .ok_or("Expected state name")?
-        .as_str();
-    
+
+    let name = inner.next().ok_or("Expected state name")?.as_str();
+
     let mut state = State::new(name);
-    
+
     for item in inner {
         match item.as_rule() {
             Rule::state_params => {
@@ -460,7 +456,7 @@ fn parse_state_def(pair: pest::iterators::Pair<Rule>) -> Result<State, String> {
             _ => {}
         }
     }
-    
+
     Ok(state)
 }
 
@@ -478,7 +474,7 @@ fn parse_state_body(pair: pest::iterators::Pair<Rule>, state: &mut State) -> Res
             _ => {}
         }
     }
-    
+
     Ok(())
 }
 
@@ -487,7 +483,7 @@ fn parse_trigger_def(pair: pest::iterators::Pair<Rule>) -> Result<Transition, St
     let mut trigger_params = Vec::new();
     let mut certainty = Certainty::Certain;
     let mut target_state = String::new();
-    
+
     for item in pair.into_inner() {
         match item.as_rule() {
             Rule::trigger_expr => {
@@ -509,8 +505,7 @@ fn parse_trigger_def(pair: pest::iterators::Pair<Rule>) -> Result<Transition, St
                 }
             }
             Rule::certainty => {
-                certainty = Certainty::from_glyph(item.as_str())
-                    .unwrap_or(Certainty::Certain);
+                certainty = Certainty::from_glyph(item.as_str()).unwrap_or(Certainty::Certain);
             }
             Rule::ident => {
                 target_state = item.as_str().to_string();
@@ -518,7 +513,7 @@ fn parse_trigger_def(pair: pest::iterators::Pair<Rule>) -> Result<Transition, St
             _ => {}
         }
     }
-    
+
     Ok(Transition {
         trigger: if trigger_name.is_empty() {
             None
@@ -536,7 +531,7 @@ fn parse_trigger_def(pair: pest::iterators::Pair<Rule>) -> Result<Transition, St
 #[cfg(test)]
 mod tests {
     use super::*;
-    
+
     #[test]
     fn test_simple_pet() {
         let input = r#"
@@ -545,16 +540,16 @@ mod tests {
                 sleep → wander
             }
         "#;
-        
+
         let result = parse_neko(input);
         assert!(result.is_ok(), "Parse failed: {:?}", result);
-        
+
         let pet = result.unwrap();
         assert_eq!(pet.name, "sleepy_cat");
         assert!(pet.states.contains_key("wander"));
         assert!(pet.states.contains_key("sleep"));
     }
-    
+
     #[test]
     fn test_state_with_params() {
         let input = r#"
@@ -570,19 +565,19 @@ mod tests {
                 }
             }
         "#;
-        
+
         let result = parse_neko(input);
         assert!(result.is_ok(), "Parse failed: {:?}", result);
-        
+
         let pet = result.unwrap();
         assert_eq!(pet.name, "fast_cat");
         assert_eq!(pet.locomotion, Locomotion::Quadruped);
-        
+
         let wander = pet.states.get("wander").expect("wander state missing");
         assert!(wander.params.contains_key("speed"));
         assert!(wander.transitions.len() > 0);
     }
-    
+
     #[test]
     fn test_certainty_in_transitions() {
         let input = r#"
@@ -591,18 +586,18 @@ mod tests {
                 sleep → ◔wander
             }
         "#;
-        
+
         let result = parse_neko(input);
         assert!(result.is_ok(), "Parse failed: {:?}", result);
-        
+
         let pet = result.unwrap();
         let wander = pet.states.get("wander").expect("wander state missing");
         assert_eq!(wander.transitions[0].certainty, Certainty::Likely);
-        
+
         let sleep = pet.states.get("sleep").expect("sleep state missing");
         assert_eq!(sleep.transitions[0].certainty, Certainty::Unlikely);
     }
-    
+
     #[test]
     fn test_certainty_glyphs() {
         assert_eq!(Certainty::Certain.probability(), 1.0);
@@ -611,25 +606,30 @@ mod tests {
         assert_eq!(Certainty::Unlikely.probability(), 0.25);
         assert_eq!(Certainty::Rare.probability(), 0.1);
     }
-    
+
     #[test]
     fn test_easing_functions() {
         // Linear should be identity
         assert_eq!(Easing::Linear.apply(0.5), 0.5);
-        
+
         // EaseIn should be slower at start
         assert!(Easing::EaseIn.apply(0.5) < 0.5);
-        
+
         // EaseOut should be faster at start
         assert!(Easing::EaseOut.apply(0.5) > 0.5);
-        
+
         // All should hit endpoints
-        for easing in [Easing::Linear, Easing::EaseIn, Easing::EaseOut, Easing::EaseInOut] {
+        for easing in [
+            Easing::Linear,
+            Easing::EaseIn,
+            Easing::EaseOut,
+            Easing::EaseInOut,
+        ] {
             assert_eq!(easing.apply(0.0), 0.0);
             assert!((easing.apply(1.0) - 1.0).abs() < 0.001);
         }
     }
-    
+
     #[test]
     fn test_value_range() {
         let range = Value::Range(4.0, 8.0);

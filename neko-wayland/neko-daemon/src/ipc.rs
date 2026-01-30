@@ -5,14 +5,34 @@ use tokio::{
 use serde::{Serialize, Deserialize};
 use anyhow::Result;
 
+use crate::state::PetState;
+
 const SOCKET_PATH: &str = "/tmp/neko-daemon.sock";
 
+/// Messages from client to daemon
 #[derive(Debug, Serialize, Deserialize)]
-pub enum Message {
+pub enum ClientMessage {
     Connect,
     Disconnect,
     CursorPosition { x: f64, y: f64 },
-    StateUpdate { state: String }, // Placeholder for now
+    Click,
+    LoadConfig { config: serde_json::Value },
+    GetState,
+}
+
+/// Messages from daemon to client
+#[derive(Debug, Serialize, Deserialize)]
+pub enum DaemonMessage {
+    Connected { pet_id: String },
+    StateUpdate { state: PetState },
+    Error { message: String },
+}
+
+/// Unified message type for bidirectional communication
+#[derive(Debug, Serialize, Deserialize)]
+pub enum Message {
+    Client(ClientMessage),
+    Daemon(DaemonMessage),
 }
 
 pub async fn run_ipc_server() -> Result<()> {
@@ -22,7 +42,7 @@ pub async fn run_ipc_server() -> Result<()> {
     }
 
     let listener = UnixListener::bind(SOCKET_PATH)?;
-    println!("Listening on {}", SOCKET_PATH);
+    println!("Neko Daemon listening on {}", SOCKET_PATH);
 
     loop {
         let (mut stream, _addr) = listener.accept().await?;
@@ -36,21 +56,89 @@ pub async fn run_ipc_server() -> Result<()> {
 
 async fn handle_client(stream: &mut UnixStream) -> Result<()> {
     let mut buffer = vec![0; 1024];
+
+    // Send welcome message
+    let welcome = Message::Daemon(DaemonMessage::Connected {
+        pet_id: "neko-1".to_string(),
+    });
+    send_message(stream, &welcome).await?;
+
     loop {
         let n = stream.read(&mut buffer).await?;
         if n == 0 {
-            // EOF, client disconnected
             println!("Client disconnected.");
             break;
         }
 
-        let message: Message = serde_json::from_slice(&buffer[..n])?;
-        println!("Received message: {:?}", message);
-
-        // Simple response for now
-        let response = Message::StateUpdate { state: "Acknowledged".to_string() };
-        let serialized_response = serde_json::to_vec(&response)?;
-        stream.write_all(&serialized_response).await?;
+        match serde_json::from_slice::<Message>(&buffer[..n]) {
+            Ok(Message::Client(msg)) => {
+                println!("Received client message: {:?}", msg);
+                handle_client_message(stream, msg).await?;
+            }
+            Ok(msg) => {
+                eprintln!("Unexpected message type: {:?}", msg);
+            }
+            Err(e) => {
+                eprintln!("Failed to parse message: {:?}", e);
+                let error = Message::Daemon(DaemonMessage::Error {
+                    message: format!("Parse error: {}", e),
+                });
+                send_message(stream, &error).await?;
+            }
+        }
     }
+
+    Ok(())
+}
+
+async fn handle_client_message(stream: &mut UnixStream, msg: ClientMessage) -> Result<()> {
+    match msg {
+        ClientMessage::Connect => {
+            // Already handled in initial connection
+        }
+        ClientMessage::Disconnect => {
+            println!("Client requested disconnect");
+        }
+        ClientMessage::CursorPosition { x, y } => {
+            println!("Cursor at: ({}, {})", x, y);
+            // TODO: Update pet state with cursor position
+            // For now, echo back the position in state
+            let state = PetState {
+                position: (x, y),
+                current_behavior: "chase".to_string(),
+                frame: 0,
+                direction: 0,
+                mood: "happy".to_string(),
+                target: None,
+                animation_speed: 1.0,
+                speed: 5.0,
+            };
+            let update = Message::Daemon(DaemonMessage::StateUpdate { state });
+            send_message(stream, &update).await?;
+        }
+        ClientMessage::Click => {
+            println!("Client clicked!");
+            // TODO: Handle click interaction
+        }
+        ClientMessage::LoadConfig { config } => {
+            println!("Loading config: {:?}", config);
+            // TODO: Load and apply configuration
+        }
+        ClientMessage::GetState => {
+            // Send current state
+            let state = PetState::default();
+            let update = Message::Daemon(DaemonMessage::StateUpdate { state });
+            send_message(stream, &update).await?;
+        }
+    }
+    Ok(())
+}
+
+async fn send_message(stream: &mut UnixStream, msg: &Message) -> Result<()> {
+    let serialized = serde_json::to_vec(msg)?;
+    // Send length prefix then message
+    let len = serialized.len() as u32;
+    stream.write_all(&len.to_be_bytes()).await?;
+    stream.write_all(&serialized).await?;
     Ok(())
 }

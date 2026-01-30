@@ -4,12 +4,12 @@
 //!
 //! Made with 💜 by Ada & Luna - Ada Research Foundation
 
-use std::cell::RefCell;
-use std::rc::Rc;
+use crate::config::Config;
+use crate::sprite_source::SpriteContainer;
 use crate::sprites;
 use crate::vpet_sprites;
-use crate::sprite_source::SpriteContainer;
-use crate::config::Config;
+use std::cell::RefCell;
+use std::rc::Rc;
 
 /// Load sprites based on config and return a unified SpriteContainer
 pub fn load_sprites(config: &Config) -> SpriteContainer {
@@ -19,8 +19,11 @@ pub fn load_sprites(config: &Config) -> SpriteContainer {
         match vpet_sprites::VPetSprites::load_pet(vpet_path) {
             Ok(mut sprites) => {
                 eprintln!("VPet sprites loaded successfully!");
-                eprintln!("Available animations: {:?}", sprites.animations.keys().collect::<Vec<_>>());
-                
+                eprintln!(
+                    "Available animations: {:?}",
+                    sprites.animations.keys().collect::<Vec<_>>()
+                );
+
                 // Set a default animation (try first available)
                 let first_anim = sprites.animations.keys().next().cloned();
                 if let Some(anim_name) = first_anim {
@@ -31,12 +34,12 @@ pub fn load_sprites(config: &Config) -> SpriteContainer {
                         }
                     }
                 }
-                
+
                 // Log sprite dimensions
                 if let Some((w, h)) = sprites.sprite_dimensions() {
                     eprintln!("VPet sprite size: {}x{}", w, h);
                 }
-                
+
                 return SpriteContainer::VPet(Rc::new(RefCell::new(sprites)));
             }
             Err(e) => {
@@ -45,10 +48,14 @@ pub fn load_sprites(config: &Config) -> SpriteContainer {
             }
         }
     }
-    
+
     if let Some(ref sprite_path) = config.sprites.sprite_sheet {
         eprintln!("Loading sprite sheet: {}", sprite_path);
-        match sprites::SpriteSheet::load(sprite_path, sprites::NEKO_SPRITE_WIDTH, sprites::NEKO_SPRITE_HEIGHT) {
+        match sprites::SpriteSheet::load(
+            sprite_path,
+            sprites::NEKO_SPRITE_WIDTH,
+            sprites::NEKO_SPRITE_HEIGHT,
+        ) {
             Ok(sheet) => {
                 eprintln!("Sprite sheet loaded successfully!");
                 return SpriteContainer::Classic(Rc::new(sheet));
@@ -59,6 +66,6 @@ pub fn load_sprites(config: &Config) -> SpriteContainer {
             }
         }
     }
-    
+
     SpriteContainer::Cairo
 }

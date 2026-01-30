@@ -7,22 +7,22 @@
 //!
 //! Made with 💜 by Ada & Luna - Ada Research Foundation
 
-use std::cell::RefCell;
-use std::rc::Rc;
+use crate::dsl::BehaviorRuntime;
+use crate::neko::Neko;
 use crate::sprites;
 use crate::vpet_sprites;
-use crate::neko::Neko;
-use crate::dsl::BehaviorRuntime;
+use std::cell::RefCell;
+use std::rc::Rc;
 
 /// Common interface for all sprite sources
 pub trait SpriteSource {
     /// Get the sprite dimensions (width, height)
     fn dimensions(&self) -> (i32, i32);
-    
+
     /// Draw the sprite at the current position
     /// The cairo context should already be scaled appropriately
     fn draw(&self, cr: &cairo::Context) -> Result<(), String>;
-    
+
     /// Update animation state (for animated sprites)
     fn update(&mut self, _delta_ms: u32) {}
 }
@@ -42,15 +42,16 @@ impl SpriteContainer {
     pub fn dimensions(&self) -> (i32, i32) {
         match self {
             SpriteContainer::Cairo => (sprites::NEKO_SPRITE_WIDTH, sprites::NEKO_SPRITE_HEIGHT),
-            SpriteContainer::Classic(_) => (sprites::NEKO_SPRITE_WIDTH, sprites::NEKO_SPRITE_HEIGHT),
-            SpriteContainer::VPet(vpet) => {
-                vpet.borrow()
-                    .sprite_dimensions()
-                    .unwrap_or((sprites::NEKO_SPRITE_WIDTH, sprites::NEKO_SPRITE_HEIGHT))
+            SpriteContainer::Classic(_) => {
+                (sprites::NEKO_SPRITE_WIDTH, sprites::NEKO_SPRITE_HEIGHT)
             }
+            SpriteContainer::VPet(vpet) => vpet
+                .borrow()
+                .sprite_dimensions()
+                .unwrap_or((sprites::NEKO_SPRITE_WIDTH, sprites::NEKO_SPRITE_HEIGHT)),
         }
     }
-    
+
     /// Draw using Neko state (for classic behavior)
     pub fn draw_with_neko(&self, cr: &cairo::Context, neko: &Neko) -> Result<(), String> {
         match self {
@@ -67,14 +68,18 @@ impl SpriteContainer {
                 let mut vpet_mut = vpet.borrow_mut();
                 vpet_mut.set_animation_from_neko_state(neko.state);
                 drop(vpet_mut); // Release borrow before drawing
-                
+
                 vpet.borrow().draw(cr)
             }
         }
     }
-    
+
     /// Draw using DSL runtime state
-    pub fn draw_with_runtime(&self, cr: &cairo::Context, runtime: &BehaviorRuntime) -> Result<(), String> {
+    pub fn draw_with_runtime(
+        &self,
+        cr: &cairo::Context,
+        runtime: &BehaviorRuntime,
+    ) -> Result<(), String> {
         match self {
             SpriteContainer::Cairo => {
                 // For now, cairo drawing is handled by ui::draw_pet
@@ -85,15 +90,15 @@ impl SpriteContainer {
                 // Calculate movement direction
                 let dx = runtime.target_x - runtime.x;
                 let dy = runtime.target_y - runtime.y;
-                
+
                 // Map DSL state to NekoState with directional movement
                 let mut neko_state = map_dsl_state_to_neko_with_direction(
-                    &runtime.current_state, 
+                    &runtime.current_state,
                     runtime.is_moving(),
                     dx,
-                    dy
+                    dy,
                 );
-                
+
                 // Special case: if scratching, use directional wall scratch based on closest edge
                 if runtime.current_state == "scratch" {
                     use crate::neko::NekoState;
@@ -105,12 +110,12 @@ impl SpriteContainer {
                         _ => NekoState::ScratchWallDown,
                     };
                 }
-                
+
                 let (sprite_x, sprite_y) = neko_state.sprite_coords(runtime.frame);
-                
+
                 eprintln!("DEBUG Classic: state={}, moving={}, neko_state={:?}, coords=({},{}), pos=({:.0},{:.0})", 
                          runtime.current_state, runtime.is_moving(), neko_state, sprite_x, sprite_y, runtime.x, runtime.y);
-                
+
                 // Draw the sprite at (0,0) - the window is already positioned at runtime.x, runtime.y
                 sheet.draw(cr, sprite_x, sprite_y, 0.0, 0.0);
                 Ok(())
@@ -120,12 +125,12 @@ impl SpriteContainer {
                 let mut vpet_mut = vpet.borrow_mut();
                 vpet_mut.set_animation_from_dsl_state(&runtime.current_state);
                 drop(vpet_mut); // Release borrow before drawing
-                
+
                 vpet.borrow().draw(cr)
             }
         }
     }
-    
+
     /// Update animation state
     pub fn update(&mut self, delta_ms: u32) {
         if let SpriteContainer::VPet(vpet) = self {
@@ -141,11 +146,11 @@ impl SpriteContainer {
     pub fn is_vpet(&self) -> bool {
         matches!(self, SpriteContainer::VPet(_))
     }
-    
+
     pub fn is_classic(&self) -> bool {
         matches!(self, SpriteContainer::Classic(_))
     }
-    
+
     pub fn is_cairo(&self) -> bool {
         matches!(self, SpriteContainer::Cairo)
     }
@@ -153,45 +158,50 @@ impl SpriteContainer {
 
 /// Map DSL state name to NekoState enum with directional movement
 /// This allows classic sprite sheets to work with DSL behavior
-fn map_dsl_state_to_neko_with_direction(state_name: &str, is_moving: bool, dx: f64, dy: f64) -> crate::neko::NekoState {
+fn map_dsl_state_to_neko_with_direction(
+    state_name: &str,
+    is_moving: bool,
+    dx: f64,
+    dy: f64,
+) -> crate::neko::NekoState {
     use crate::neko::NekoState;
     use std::f64::consts::PI;
-    
+
     // If moving, calculate direction based on movement vector
     if is_moving && (dx.abs() > 0.1 || dy.abs() > 0.1) {
         // Calculate angle in radians (-PI to PI)
         // Note: dy is negated because screen Y increases downward, but we want North to be "up"
         let angle = (-dy).atan2(dx);
-        
+
         // Convert to 8 directions (0 = East, going counter-clockwise)
         // Each direction covers 45 degrees (PI/4 radians)
         let direction = ((angle + PI / 8.0) / (PI / 4.0)).floor() as i32;
-        
+
         return match direction {
-            -4 | 4 => NekoState::RunW,   // West
-            -3 => NekoState::RunSW,       // Southwest  
-            -2 => NekoState::RunS,        // South
-            -1 => NekoState::RunSE,       // Southeast
-            0 => NekoState::RunE,         // East
-            1 => NekoState::RunNE,        // Northeast
-            2 => NekoState::RunN,         // North
-            3 => NekoState::RunNW,        // Northwest
-            _ => NekoState::RunE,         // Fallback
+            -4 | 4 => NekoState::RunW, // West
+            -3 => NekoState::RunSW,    // Southwest
+            -2 => NekoState::RunS,     // South
+            -1 => NekoState::RunSE,    // Southeast
+            0 => NekoState::RunE,      // East
+            1 => NekoState::RunNE,     // Northeast
+            2 => NekoState::RunN,      // North
+            3 => NekoState::RunNW,     // Northwest
+            _ => NekoState::RunE,      // Fallback
         };
     }
-    
+
     // Map state names to appropriate NekoState
     match state_name {
         "idle" | "sit" => NekoState::Sit,
-        "wander" => NekoState::RunE,  // Will be moving (direction calculated above)
-        "chase" => NekoState::Alert,   // Alert before running
-        "play" | "itch" => NekoState::Itch,  // Scratching ear
-        "scratch" => NekoState::Itch,  // Also ear scratching for now
-        "wash" | "groom" => NekoState::Wash,  // Licking paw
+        "wander" => NekoState::RunE, // Will be moving (direction calculated above)
+        "chase" => NekoState::Alert, // Alert before running
+        "play" | "itch" => NekoState::Itch, // Scratching ear
+        "scratch" => NekoState::Itch, // Also ear scratching for now
+        "wash" | "groom" => NekoState::Wash, // Licking paw
         "sleep" => NekoState::Sleep1,
         "alert" => NekoState::Alert,
-        "eat" => NekoState::Wash,      // Closest to eating
+        "eat" => NekoState::Wash, // Closest to eating
         "drink" => NekoState::Wash,
-        _ => NekoState::Sit,           // Default fallback
+        _ => NekoState::Sit, // Default fallback
     }
 }
