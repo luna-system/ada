@@ -52,6 +52,21 @@ pub struct PetState {
     pub speed: f64,
 }
 
+impl Default for PetState {
+    fn default() -> Self {
+        Self {
+            position: (0.0, 0.0),
+            current_behavior: "idle".to_string(),
+            frame: 0,
+            direction: 2, // Facing down
+            mood: "happy".to_string(),
+            target: None,
+            animation_speed: 1.0,
+            speed: 5.0,
+        }
+    }
+}
+
 /// Thin client that connects to neko-daemon
 pub struct DaemonClient {
     stream: UnixStream,
@@ -130,16 +145,24 @@ impl DaemonClient {
 
     /// Non-blocking read for async integration
     pub fn try_read_message(&mut self) -> Result<Option<Message>> {
-        // Check if data is available
-        let stream = self.reader.get_ref();
-        match stream.set_nonblocking(true) {
-            Ok(_) => {
-                let result = self.read_message().ok(); // Returns Option<Message>
-                let _ = stream.set_nonblocking(false); // Reset to blocking
-                Ok(result)
-            }
-            Err(_) => Ok(None),
+        // Set stream to non-blocking
+        let stream = self.stream.try_clone()?;
+        let was_blocking = stream.set_nonblocking(true).is_ok();
+
+        if !was_blocking {
+            return Ok(None);
         }
+
+        // Try to read
+        let result = match self.read_message() {
+            Ok(msg) => Some(msg),
+            Err(_) => None,
+        };
+
+        // Reset to blocking
+        let _ = self.stream.set_nonblocking(false);
+
+        Ok(result)
     }
 }
 

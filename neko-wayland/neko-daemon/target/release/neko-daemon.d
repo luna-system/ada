@@ -1,0 +1,1 @@
+/home/luna/Code/ada/neko-wayland/neko-daemon/target/release/neko-daemon: /home/luna/Code/ada/neko-wayland/neko-daemon/src/behavior.rs /home/luna/Code/ada/neko-wayland/neko-daemon/src/ipc.rs /home/luna/Code/ada/neko-wayland/neko-daemon/src/lib.rs /home/luna/Code/ada/neko-wayland/neko-daemon/src/main.rs /home/luna/Code/ada/neko-wayland/neko-daemon/src/state.rs

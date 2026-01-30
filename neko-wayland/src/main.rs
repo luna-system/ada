@@ -76,6 +76,7 @@ fn main() -> glib::ExitCode {
                     | "-v"
                     | "--scale"
                     | "--dsl"
+                    | "--daemon"
                     | "--debug"
             ) && (*i == 0
                 || !matches!(
@@ -105,6 +106,7 @@ fn build_ui(app: &Application) {
     let default_config = config::Config::default();
     let config = CLI_CONFIG.get().unwrap_or(&default_config);
     let use_dsl = config.behavior.use_dsl;
+    let use_daemon = config.window.use_daemon;
     let debug = config.window.debug;
 
     // Debug: print environment info
@@ -114,6 +116,14 @@ fn build_ui(app: &Application) {
             "DEBUG: WAYLAND_DISPLAY = {:?}",
             std::env::var("WAYLAND_DISPLAY")
         );
+        eprintln!("DEBUG: Daemon mode = {}", use_daemon);
+    }
+
+    // Daemon mode - thin client
+    if use_daemon {
+        eprintln!("Starting in daemon mode (thin client)...");
+        build_ui_daemon(app, config, debug);
+        return;
     }
 
     if use_dsl {
@@ -398,4 +408,130 @@ fn build_ui(app: &Application) {
     }
 
     eprintln!("Press Ctrl+C to exit.");
+}
+
+/// Daemon mode - thin client that only renders
+fn build_ui_daemon(app: &Application, config: &config::Config, debug: bool) {
+    use daemon_client::{DaemonClient, PetState as DaemonPetState};
+
+    // Connect to daemon
+    let client = Rc::new(RefCell::new(match DaemonClient::connect() {
+        Ok(c) => {
+            eprintln!("Connected to neko-daemon!");
+            c
+        }
+        Err(e) => {
+            eprintln!("Failed to connect to daemon: {}", e);
+            eprintln!("Make sure neko-daemon is running at /tmp/neko-daemon.sock");
+            eprintln!("Run: cd neko-daemon && cargo run");
+            std::process::exit(1);
+        }
+    }));
+
+    // Get display info
+    let backend = display::detect_backend();
+    let (screen_w, screen_h, offset_x, offset_y) =
+        if let Some(monitor) = backend.get_focused_monitor() {
+            (
+                monitor.width as f64,
+                monitor.height as f64,
+                monitor.x,
+                monitor.y,
+            )
+        } else {
+            (1920.0, 1080.0, 0, 0)
+        };
+
+    // Initialize cursor
+    cursor::init_with_offset(offset_x, offset_y);
+
+    // Check layer shell
+    let layer_shell_supported = gtk4_layer_shell::is_supported();
+    let scale = config.sprites.scale;
+
+    // Load sprites (client still needs to handle rendering)
+    let sprite_container = pet::load_sprites(config);
+    let (base_w, base_h) = sprite_container.dimensions();
+    let window_width = (base_w as f64 * scale) as i32;
+    let window_height = (base_h as f64 * scale) as i32;
+
+    // Create window
+    let window = app::create_pet_window(app, layer_shell_supported, window_width, window_height);
+    let drawing_area = DrawingArea::new();
+    drawing_area.set_content_width(window_width);
+    drawing_area.set_content_height(window_height);
+
+    // State from daemon
+    let daemon_state = Rc::new(RefCell::new(DaemonPetState::default()));
+
+    // Drawing function - uses state from daemon
+    let daemon_state_draw = daemon_state.clone();
+    let sprite_container_draw = Rc::new(sprite_container);
+    drawing_area.set_draw_func(move |_area, cr, _width, _height| {
+        // Clear with transparency
+        cr.set_operator(cairo::Operator::Clear);
+        let _ = cr.paint();
+        cr.set_operator(cairo::Operator::Over);
+
+        // Scale the context
+        cr.scale(scale, scale);
+
+        let state = daemon_state_draw.borrow();
+
+        // TODO: Draw using sprite container with daemon state
+        // For now, simple indicator that we're in daemon mode
+        // Draw a pink circle to show daemon mode is working
+        cr.set_source_rgb(1.0, 0.5, 0.8);
+        cr.arc(
+            state.position.0,
+            state.position.1,
+            16.0,
+            0.0,
+            2.0 * std::f64::consts::PI,
+        );
+        cr.fill().unwrap();
+    });
+
+    window.set_child(Some(&drawing_area));
+
+    // Update loop - receives state from daemon
+    let daemon_state_update = daemon_state.clone();
+    let drawing_area_update = drawing_area.clone();
+    let window_update = window.clone();
+    let use_layer_shell = layer_shell_supported;
+    let client_update = client.clone();
+
+    timeout_add_local(Duration::from_millis(UPDATE_INTERVAL_MS), move || {
+        // Send cursor position to daemon
+        if let Some((cx, cy)) = cursor::get_cursor_position() {
+            let _ = client_update.borrow_mut().update_cursor(cx, cy);
+        }
+
+        // Try to read state update from daemon
+        if let Ok(Some(msg)) = client_update.borrow_mut().try_read_message() {
+            if let daemon_client::Message::Daemon(daemon_client::DaemonMessage::StateUpdate {
+                state,
+            }) = msg
+            {
+                *daemon_state_update.borrow_mut() = state;
+            }
+        }
+
+        // Update window position from daemon state
+        let state = daemon_state_update.borrow();
+        if use_layer_shell {
+            window_update.set_margin(Edge::Left, state.position.0 as i32);
+            window_update.set_margin(Edge::Top, state.position.1 as i32);
+        }
+
+        drawing_area_update.queue_draw();
+        glib::ControlFlow::Continue
+    });
+
+    window.present();
+    eprintln!(
+        "neko-wayland (daemon mode) started! Layer shell active: {}",
+        window.is_layer_window()
+    );
+    eprintln!("Thin client: rendering only, state managed by daemon");
 }
