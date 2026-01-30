@@ -1,0 +1,24 @@
+{
+  "mcpServers": {
+    "ripgrep": {
+      "command": "npx",
+      "args": ["-y", "mcp-ripgrep@latest"],
+      "description": "Fast code search using ripgrep"
+    },
+    "Context7": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@upstash/context7-mcp",
+        "--api-key",
+        "ctx7sk-b75fdeca-4868-4b78-9a56-43bea00e3ccd"
+      ],
+      "description": "Documentation lookup for libraries and frameworks"
+    },
+    "docker": {
+      "command": "uvx",
+      "args": ["mcp-docker"],
+      "description": "Docker container and image management"
+    }
+  }
+}
