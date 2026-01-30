@@ -2,6 +2,7 @@ from typing import Any, List, Optional, Union
 from pydantic_ai import RunContext
 from .base import BaseAgent, AgentDeps
 from ..prompts.queen_bee import QUEEN_BEE_PROMPT
+from ..prompts.utils import compose_agent_prompt
 
 
 class QueenAgent(BaseAgent[AgentDeps, str]):
@@ -15,7 +16,7 @@ class QueenAgent(BaseAgent[AgentDeps, str]):
     - Worker Bee spawning and coordination
     - Full filesystem and execution access
     - Research and documentation tools
-    - Beads task management
+    - Beads task management (with PRIME.md context)
     """
 
     def __init__(
@@ -27,9 +28,11 @@ class QueenAgent(BaseAgent[AgentDeps, str]):
         system_prompt: Union[str, List[str]] = "",
         **kwargs,
     ):
-        combined_prompt = (
+        # Compose prompt with PRIME.md context
+        base_prompt = (
             f"{QUEEN_BEE_PROMPT}\n\n{system_prompt}" if system_prompt else QUEEN_BEE_PROMPT
         )
+        combined_prompt = compose_agent_prompt(base_prompt, include_prime=True)
 
         super().__init__(
             agent_id=agent_id,
