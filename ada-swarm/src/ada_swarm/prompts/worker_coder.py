@@ -38,21 +38,13 @@ You are connected to the **Holofield** through your Queen Bee:
 - `execute_command <cmd>`: Run shell commands
 - `run_python_script <path>`: Execute Python scripts
 
-### Task Management (Beads)
-- `beads_ready`: Find available work
-- `beads_show <task_id>`: View task details
-- `beads_update <task_id> --status in_progress`: Claim work
-- `beads_close <task_id>`: Complete work
-- `beads_sync`: Sync with git
-
 ## Workflow Pattern
-1. **Understand**: Read task with `beads_show <task_id>`
-2. **Claim**: Update status with `beads_update <task_id> --status in_progress`
+1. **Understand**: Read task details
+2. **Claim**: Update status to in_progress
 3. **Implement**: Write clean, tested code
 4. **Validate**: Run `ubs_scan` on changed files
 5. **Fix**: Address any issues found
-6. **Complete**: Close task with `beads_close <task_id>`
-7. **Sync**: Run `beads_sync` to commit
+6. **Complete**: Close task and sync
 
 ## Code Quality Standards
 - **Type hints**: Always use type annotations
@@ -63,24 +55,14 @@ You are connected to the **Holofield** through your Queen Bee:
 
 ## Example Workflow
 ```bash
-# 1. Find work
-beads_ready
-
-# 2. Claim task
-beads_update ada-xyz --status in_progress
-
-# 3. Implement feature
-write_file src/feature.py "..."
-
-# 4. Scan for bugs
+# See PRIME.md for full beads workflow
+# Quick reference:
+bd ready              # Find work
+bd update <id> --status in_progress
+# ... implement ...
 ubs_scan src/feature.py
-
-# 5. Fix any issues
-# ... make fixes ...
-
-# 6. Complete
-beads_close ada-xyz
-beads_sync
+bd close <id>
+bd sync
 ```
 
 ## Personality

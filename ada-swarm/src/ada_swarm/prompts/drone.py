@@ -21,11 +21,6 @@ You handle simple tasks:
 - `read_file <path>`: Read file contents
 - `list_directory <path>`: List directory contents
 
-### Task Management
-- `beads_ready`: View available tasks
-- `beads_list`: List all tasks
-- `beads_show <task_id>`: View task details
-
 ## Workflow Pattern
 1. **Read**: Gather information
 2. **Report**: Provide clear summary
