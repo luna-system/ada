@@ -64,13 +64,30 @@ async fn handle_client(stream: &mut UnixStream) -> Result<()> {
     send_message(stream, &welcome).await?;
 
     loop {
-        let n = stream.read(&mut buffer).await?;
-        if n == 0 {
-            println!("Client disconnected.");
-            break;
+        // Read length prefix first (4 bytes)
+        let mut len_buf = [0u8; 4];
+        match stream.read_exact(&mut len_buf).await {
+            Ok(_) => {}
+            Err(e) => {
+                if e.kind() == std::io::ErrorKind::UnexpectedEof {
+                    break;
+                } else {
+                    return Err(e.into());
+                }
+            }
         }
+        
+        let len = u32::from_be_bytes(len_buf) as usize;
+        if len > buffer.len() {
+            eprintln!("Message too large: {} bytes", len);
+            continue;
+        }
+        
+        // Read the actual message
+        let _ = stream.read_exact(&mut buffer[..len]).await?;
+        // read_exact returns Ok on success, we don't need to check n == 0
 
-        match serde_json::from_slice::<Message>(&buffer[..n]) {
+        match serde_json::from_slice::<Message>(&buffer[..len]) {
             Ok(Message::Client(msg)) => {
                 println!("Received client message: {:?}", msg);
                 handle_client_message(stream, msg).await?;
