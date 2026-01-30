@@ -65,17 +65,18 @@ model_list:
     rpm: 100
 
   # === Local Models (Ollama - Last Resort) ===
+  # Note: 172.17.0.1 is the Docker bridge gateway IP (host machine)
   - model_name: local-llama
     litellm_params:
       model: ollama/llama3.2
-      api_base: http://localhost:11434
+      api_base: http://172.17.0.1:11434
     tpm: 10000
     rpm: 100
 
   - model_name: local-ada
     litellm_params:
       model: ollama/ada-slim-1.2b-v1
-      api_base: http://localhost:11434
+      api_base: http://172.17.0.1:11434
     tpm: 10000
     rpm: 100
 
