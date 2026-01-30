@@ -191,10 +191,10 @@ def register_filesystem_tools(mcp, get_path_context, format_path_context):
             path = path.resolve()
 
             if not path.exists():
-                return f"❌ Directory does not exist: {directory_path}"
+                return f"❌ Directory does not exist: {directory_path}\n📍 Resolved to: {path}\n💡 Tip: Paths are relative to workspace root ({workspace_root})"
 
             if not path.is_dir():
-                return f"❌ Path is not a directory: {directory_path}"
+                return f"❌ Path is not a directory: {directory_path}\n📍 Resolved to: {path}"
 
             path_context = get_path_context(str(path))
 
