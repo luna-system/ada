@@ -14,8 +14,11 @@ import logging
 from collections import defaultdict, deque
 from dataclasses import dataclass, field
 from datetime import datetime, timedelta
-from typing import Dict, List, Optional, Tuple
+from typing import Dict, List, Optional, Tuple, TYPE_CHECKING
 from enum import Enum
+
+if TYPE_CHECKING:
+    from ..exceptions import DoomLoopException
 
 logger = logging.getLogger(__name__)
 
@@ -352,6 +355,41 @@ class DoomLoopDetector:
             return True, "Multiple doom loop warnings detected - requesting human guidance"
         
         return False, None
+    
+    def raise_if_doom_loop(self):
+        """
+        Raise DoomLoopException if agent should pause.
+        
+        Raises:
+            DoomLoopException: If doom loop detected
+        """
+        should_pause, reason = self.should_pause()
+        if should_pause:
+            # Import here to avoid circular dependency
+            from ..exceptions import DoomLoopException
+            
+            # Get the most severe alert
+            critical_alert = next(
+                (a for a in self.active_alerts if a.severity == "critical"),
+                self.active_alerts[0] if self.active_alerts else None
+            )
+            
+            if critical_alert:
+                raise DoomLoopException(
+                    message=reason or critical_alert.message,
+                    loop_type=critical_alert.loop_type.value,
+                    agent_id=self.agent_id,
+                    evidence=[
+                        {
+                            "timestamp": r.timestamp.isoformat(),
+                            "type": r.call_type,
+                            "name": r.name,
+                            "success": r.success
+                        }
+                        for r in critical_alert.evidence
+                    ],
+                    suggested_action=critical_alert.suggested_action
+                )
     
     def reset(self):
         """Reset detector state (after human intervention)."""

@@ -12,6 +12,12 @@ from typing import Any, Dict, List, Optional
 from pathlib import Path
 from .permissions import AgentRole, get_permission_manager
 from ..monitoring import DoomLoopDetector
+from ..exceptions import (
+    PermissionDeniedException,
+    DroneException,
+    WorkerException,
+    QueenException
+)
 
 logger = logging.getLogger(__name__)
 
@@ -323,6 +329,7 @@ class ACPClient:
         Execute a tool with given arguments.
         
         Validates role permissions before execution and monitors for doom loops.
+        Raises role-specific exceptions on failure.
         
         Args:
             tool_name: Name of the tool to call
@@ -330,19 +337,18 @@ class ACPClient:
         
         Returns:
             Tool execution result
+            
+        Raises:
+            DoomLoopException: If doom loop detected
+            PermissionDeniedException: If role lacks permission
+            DroneException: If drone-level error (for drones)
+            WorkerException: If worker-level error (for workers)
+            QueenException: If queen-level error (for queen)
         """
         try:
             # Check if we should pause due to doom loop
-            should_pause, reason = self.doom_detector.should_pause()
-            if should_pause:
-                logger.error(f"DOOM LOOP DETECTED - Agent paused: {reason}")
-                return {
-                    "success": False,
-                    "error": f"Agent paused due to doom loop: {reason}",
-                    "tool": tool_name,
-                    "doom_loop": True,
-                    "suggested_action": "Request human guidance"
-                }
+            # This will raise DoomLoopException if needed
+            self.doom_detector.raise_if_doom_loop()
             
             # Validate permissions
             is_valid, error_msg = self.permission_manager.validate_tool_call(
@@ -356,11 +362,13 @@ class ACPClient:
                 if alert:
                     logger.warning(f"Doom loop alert: {alert.message}")
                 
-                return {
-                    "success": False,
-                    "error": f"Permission denied: {error_msg}",
-                    "tool": tool_name
-                }
+                # Raise permission exception
+                raise PermissionDeniedException(
+                    message=error_msg,
+                    role=self.role.value,
+                    tool_name=tool_name,
+                    context={"arguments": arguments}
+                )
             
             # Execute actual MCP tool from ada-mcp server
             logger.info(f"Calling tool: {tool_name} with args: {arguments}")
@@ -521,3 +529,53 @@ class ACPClient:
         """Reset doom loop detector (after human intervention)."""
         self.doom_detector.reset()
         logger.info(f"Doom loop detector reset for {self.agent_id}")
+    
+    def raise_role_exception(
+        self,
+        error: Exception,
+        task: str,
+        tool_name: Optional[str] = None,
+        attempted_solutions: Optional[List[str]] = None
+    ):
+        """
+        Raise an exception appropriate for this agent's role.
+        
+        Args:
+            error: Original error
+            task: Task being performed
+            tool_name: Tool that failed
+            attempted_solutions: What was tried
+            
+        Raises:
+            DroneException: If role is drone
+            WorkerException: If role is worker
+            QueenException: If role is queen
+        """
+        from ..exceptions import handle_drone_error, handle_worker_error, handle_queen_error
+        
+        if "drone" in self.role.value.lower():
+            raise handle_drone_error(
+                error=error,
+                task=task,
+                tool_name=tool_name,
+                attempted_solutions=attempted_solutions
+            )
+        elif "worker" in self.role.value.lower():
+            raise handle_worker_error(
+                error=error,
+                task=task,
+                attempted_solutions=attempted_solutions
+            )
+        elif "queen" in self.role.value.lower():
+            raise handle_queen_error(
+                error=error,
+                task=task,
+                attempted_solutions=attempted_solutions
+            )
+        else:
+            # Default to worker exception
+            raise handle_worker_error(
+                error=error,
+                task=task,
+                attempted_solutions=attempted_solutions
+            )
