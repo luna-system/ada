@@ -97,14 +97,23 @@ def register_filesystem_tools(mcp, get_path_context, format_path_context):
         Read the contents of a file.
 
         Args:
-            file_path: Path to the file to read
+            file_path: Path to the file to read (relative to workspace root)
             encoding: File encoding (optional, defaults to utf-8)
 
         Returns:
             File contents as string with path context
         """
         try:
-            path = Path(file_path).resolve()
+            # Get workspace root for resolving relative paths
+            workspace_root = get_path_context(None)["full_path"]
+            
+            # Resolve path relative to workspace root if not absolute
+            if Path(file_path).is_absolute():
+                path = Path(file_path)
+            else:
+                path = Path(workspace_root) / file_path
+            
+            path = path.resolve()
             path_context = get_path_context(str(path.parent))
 
             output = format_path_context(path_context) + "\n"
@@ -124,7 +133,7 @@ def register_filesystem_tools(mcp, get_path_context, format_path_context):
         Write content to a file.
 
         Args:
-            file_path: Path to the file to write
+            file_path: Path to the file to write (relative to workspace root)
             content: Content to write to the file
             encoding: File encoding (optional, defaults to utf-8)
 
@@ -132,7 +141,16 @@ def register_filesystem_tools(mcp, get_path_context, format_path_context):
             Success message with character count and path context
         """
         try:
-            path = Path(file_path).resolve()
+            # Get workspace root for resolving relative paths
+            workspace_root = get_path_context(None)["full_path"]
+            
+            # Resolve path relative to workspace root if not absolute
+            if Path(file_path).is_absolute():
+                path = Path(file_path)
+            else:
+                path = Path(workspace_root) / file_path
+            
+            path = path.resolve()
             path.parent.mkdir(parents=True, exist_ok=True)
 
             path_context = get_path_context(str(path.parent))
@@ -154,14 +172,23 @@ def register_filesystem_tools(mcp, get_path_context, format_path_context):
         List contents of a directory.
 
         Args:
-            directory_path: Path to the directory to list
+            directory_path: Path to the directory to list (relative to workspace root)
             show_hidden: Whether to show hidden files (optional, defaults to false)
 
         Returns:
             Directory listing with file types and path context
         """
         try:
-            path = Path(directory_path).resolve()
+            # Get workspace root for resolving relative paths
+            workspace_root = get_path_context(None)["full_path"]
+            
+            # Resolve path relative to workspace root if not absolute
+            if Path(directory_path).is_absolute():
+                path = Path(directory_path)
+            else:
+                path = Path(workspace_root) / directory_path
+            
+            path = path.resolve()
 
             if not path.exists():
                 return f"❌ Directory does not exist: {directory_path}"
