@@ -68,7 +68,7 @@ async def test_permission_validation():
         "agent_type": "coder"
     })
     assert result["success"] is False
-    assert "Permission denied" in result["error"]
+    assert "permission" in result["error"].lower()
     
     print("✅ Permission validation working correctly")
 

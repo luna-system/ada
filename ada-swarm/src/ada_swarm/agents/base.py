@@ -39,7 +39,6 @@ class BaseAgent(Agent[DepsT, ResultT]):
         deps_type: type[DepsT] = AgentDeps,
         result_type: type[ResultT] = str,  # Default to str for flexibility
         system_prompt: Union[str, List[str]] = "",
-        max_tokens: Optional[int] = None,
         **kwargs,
     ):
         # If model starts with 'litellm/', use LiteLLMProvider to route through proxy
@@ -63,9 +62,8 @@ class BaseAgent(Agent[DepsT, ResultT]):
             # Use model string directly for built-in providers
             model_obj = model
         
-        # Add max_tokens to kwargs if provided
-        if max_tokens is not None:
-            kwargs['max_tokens'] = max_tokens
+        # Note: max_tokens is no longer a valid kwarg in pydantic-ai >= 1.48
+        # The model handles token limits internally
         
         super().__init__(
             model=model_obj,

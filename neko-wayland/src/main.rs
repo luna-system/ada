@@ -247,6 +247,9 @@ fn build_ui(app: &Application) {
             let _ = cr.paint();
             cr.set_operator(cairo::Operator::Over);
 
+            // Disable anti-aliasing for sharp pixel art rendering
+            cr.set_antialias(cairo::Antialias::None);
+
             // Scale the context
             cr.scale(scale, scale);
 
@@ -350,6 +353,9 @@ fn build_ui(app: &Application) {
             let _ = cr.paint();
             cr.set_operator(cairo::Operator::Over);
 
+            // Disable anti-aliasing for sharp pixel art rendering
+            cr.set_antialias(cairo::Antialias::None);
+
             // Scale the context
             cr.scale(scale, scale);
 
@@ -411,7 +417,7 @@ fn build_ui(app: &Application) {
 }
 
 /// Daemon mode - thin client that only renders
-fn build_ui_daemon(app: &Application, config: &config::Config, debug: bool) {
+fn build_ui_daemon(app: &Application, config: &config::Config, _debug: bool) {
     use daemon_client::{DaemonClient, PetState as DaemonPetState};
 
     // Connect to daemon
@@ -430,7 +436,7 @@ fn build_ui_daemon(app: &Application, config: &config::Config, debug: bool) {
 
     // Get display info
     let backend = display::detect_backend();
-    let (screen_w, screen_h, offset_x, offset_y) =
+    let (_screen_w, _screen_h, offset_x, offset_y) =
         if let Some(monitor) = backend.get_focused_monitor() {
             (
                 monitor.width as f64,
@@ -466,7 +472,7 @@ fn build_ui_daemon(app: &Application, config: &config::Config, debug: bool) {
 
     // Drawing function - uses state from daemon
     let daemon_state_draw = daemon_state.clone();
-    let sprite_container_draw = Rc::new(sprite_container);
+    let _sprite_container_draw = Rc::new(sprite_container);
     drawing_area.set_draw_func(move |_area, cr, _width, _height| {
         // Clear with transparency
         cr.set_operator(cairo::Operator::Clear);
