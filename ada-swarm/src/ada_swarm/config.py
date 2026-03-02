@@ -24,49 +24,49 @@ else:
 # Format: litellm/model-name where model-name matches proxy config
 #
 # Strategy:
-# - Queen: Most powerful models for strategic thinking (gemini-pro, glm-plus)
-# - Workers: Fast, reliable models for implementation (gemini-flash, glm-flash)
-# - Drones: Fastest models for simple read-only tasks (gemini-flash, glm-flash)
+# - Queen: Most powerful models for strategic thinking (gemini-pro, kimi-pro)
+# - Workers: Fast, reliable models for implementation (gemini-flash, kimi-code)
+# - Drones: Fastest models for simple read-only tasks (gemini-flash, kimi-8k)
 #
 # Note: LiteLLM proxy handles automatic fallbacks per litellm-proxy-config.yaml
 # These are just the preferred starting models for each role.
 
 AGENT_MODEL_CONFIG: Dict[str, Dict[str, any]] = {
     "queen": {
-        "primary": "litellm/gemini-pro",  # gemini-exp-1206 (Gemini 2.5 Pro preview)
-        "fallback": "litellm/glm-plus",   # glm-4.7 (Z.ai newest)
+        "primary": "litellm/gemini-pro",    # Gemini 2.5 Pro - powerful reasoning
+        "fallback": "litellm/kimi-pro",     # Kimi 128k - large context
         "description": "Strategic orchestrator - needs powerful reasoning",
-        "max_tokens": 4096,  # Higher context for complex planning
+        "max_tokens": 4096,
     },
     "coder": {
-        "primary": "litellm/gemini-flash",  # gemini-2.0-flash-exp (fast & free)
-        "fallback": "litellm/glm-flash",    # glm-4.5-flash (Z.ai fast)
+        "primary": "litellm/kimi-code",     # Kimi 32k - excellent for coding
+        "fallback": "litellm/gemini-flash", # Gemini Flash - fast & free
         "description": "Implementation specialist - needs speed + quality",
-        "max_tokens": 2048,  # Medium context for code implementation
+        "max_tokens": 2048,
     },
     "researcher": {
-        "primary": "litellm/gemini-pro",    # gemini-exp-1206 (deep analysis)
-        "fallback": "litellm/glm-stable",   # glm-4.6 (reliable)
+        "primary": "litellm/gemini-pro",    # Gemini Pro - deep analysis
+        "fallback": "litellm/kimi-pro",     # Kimi Pro - large context
         "description": "Research specialist - needs deep reasoning",
-        "max_tokens": 4096,  # Higher context for research
+        "max_tokens": 4096,
     },
     "tester": {
-        "primary": "litellm/gemini-flash",  # gemini-2.0-flash-exp (fast)
-        "fallback": "litellm/glm-flash",    # glm-4.5-flash (fast)
+        "primary": "litellm/kimi-code",     # Kimi - precise for testing
+        "fallback": "litellm/gemini-flash", # Gemini Flash - fast
         "description": "Testing specialist - needs speed + precision",
-        "max_tokens": 2048,  # Medium context for test generation
+        "max_tokens": 2048,
     },
     "reviewer": {
-        "primary": "litellm/gemini-pro",    # gemini-exp-1206 (thorough analysis)
-        "fallback": "litellm/glm-stable",   # glm-4.6 (reliable)
+        "primary": "litellm/kimi-pro",      # Kimi Pro - thorough analysis
+        "fallback": "litellm/gemini-pro",   # Gemini Pro - careful review
         "description": "Code reviewer - needs careful analysis",
-        "max_tokens": 3072,  # Higher context for code review
+        "max_tokens": 3072,
     },
     "drone": {
-        "primary": "litellm/gemini-flash",  # gemini-2.0-flash-exp (fastest)
-        "fallback": "litellm/glm-flash",    # glm-4.5-flash (fast)
+        "primary": "litellm/gemini-flash",  # Gemini Flash - fastest & free
+        "fallback": "litellm/kimi-8k",      # Kimi 8k - fast alternative
         "description": "Simple read-only tasks - needs maximum speed",
-        "max_tokens": 1024,  # Lower context for simple tasks
+        "max_tokens": 1024,
     },
 }
 
@@ -81,14 +81,6 @@ def get_model_for_role(role: str, prefer_fallback: bool = False) -> str:
     
     Returns:
         Model string in format 'litellm/model-name'
-    
-    Examples:
-        >>> get_model_for_role("queen")
-        'litellm/gemini-pro'
-        >>> get_model_for_role("drone")
-        'litellm/gemini-flash'
-        >>> get_model_for_role("coder", prefer_fallback=True)
-        'litellm/glm-flash'
     """
     config = AGENT_MODEL_CONFIG.get(role.lower())
     if not config:
@@ -118,4 +110,4 @@ def get_max_tokens_for_role(role: str) -> int:
 # Legacy model aliases (for backward compatibility)
 DEFAULT_FAST_MODEL = "litellm/gemini-flash"
 DEFAULT_SMART_MODEL = "litellm/gemini-pro"
-DEFAULT_CODER_MODEL = "litellm/glm-flash"  # Z.ai GLM through proxy!
+DEFAULT_CODER_MODEL = "litellm/kimi-code"  # Kimi for coding!

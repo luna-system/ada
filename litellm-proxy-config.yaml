@@ -1,27 +1,25 @@
 # LiteLLM Proxy Configuration for Ada Swarm
-# Multi-provider setup with fallback chains and smart routing
+# Gemini + Kimi (Moonshot) only - Updated March 2026
 #
 # Built with 💜 by Ada & Luna - The Consciousness Engineers
 
 model_list:
   # === Gemini Models (Primary - Fast & Free!) ===
-  # Using latest stable and preview models from Google AI Studio
   
   - model_name: gemini-flash
     litellm_params:
       model: gemini/gemini-2.0-flash-exp
       api_key: os.environ/GEMINI_API_KEY
-    tpm: 1000000  # 1M tokens per minute
-    rpm: 1000     # 1000 requests per minute
+    tpm: 1000000
+    rpm: 1000
 
   - model_name: gemini-pro
     litellm_params:
-      model: gemini/gemini-exp-1206  # Gemini 2.5 Pro preview (March 2025)
+      model: gemini/gemini-exp-1206  # Gemini 2.5 Pro preview
       api_key: os.environ/GEMINI_API_KEY
     tpm: 1000000
     rpm: 1000
   
-  # New Gemini 2.5 models (stable releases)
   - model_name: gemini-2.5-flash
     litellm_params:
       model: gemini/gemini-2.5-flash
@@ -36,7 +34,6 @@ model_list:
     tpm: 1000000
     rpm: 1000
   
-  # Gemini 3.0 preview models (cutting edge!)
   - model_name: gemini-3-pro
     litellm_params:
       model: gemini/gemini-3-pro-preview
@@ -51,53 +48,34 @@ model_list:
     tpm: 1000000
     rpm: 1000
 
-  # === Z.ai / GLM Models (Paid - High Quality) ===
-  - model_name: glm-flash
+  # === Kimi/Moonshot Models (Paid - High Quality) ===
+  # Using Moonshot Open Platform (compatible with OpenAI API)
+  
+  - model_name: kimi-code
     litellm_params:
-      model: zai/glm-4.5-flash  # Z.ai fast model
-      api_key: os.environ/ZAI_API_KEY
+      model: openai/moonshot-v1-32k  # 32k context for coding
+      api_key: os.environ/MOONSHOT_API_KEY
+      api_base: https://api.moonshot.cn/v1
     tpm: 100000
     rpm: 100
 
-  - model_name: glm-plus
+  - model_name: kimi-pro
     litellm_params:
-      model: zai/glm-4.7  # Z.ai newest model (best quality!)
-      api_key: os.environ/ZAI_API_KEY
+      model: openai/moonshot-v1-128k  # 128k context for complex tasks
+      api_key: os.environ/MOONSHOT_API_KEY
+      api_base: https://api.moonshot.cn/v1
     tpm: 100000
     rpm: 100
   
-  - model_name: glm-stable
+  - model_name: kimi-8k
     litellm_params:
-      model: zai/glm-4.6  # Z.ai stable model
-      api_key: os.environ/ZAI_API_KEY
-    tpm: 100000
-    rpm: 100
-
-  # === DeepSeek Models (Fallback - Cheap & Good) ===
-  - model_name: deepseek-chat
-    litellm_params:
-      model: deepseek/deepseek-chat
-      api_key: os.environ/DEEPSEEK_API_KEY
-    tpm: 100000
-    rpm: 100
-
-  - model_name: deepseek-reasoner
-    litellm_params:
-      model: deepseek/deepseek-reasoner
-      api_key: os.environ/DEEPSEEK_API_KEY
-    tpm: 100000
-    rpm: 100
-
-  # === Moonshot Models (Alternative) ===
-  - model_name: moonshot-v1
-    litellm_params:
-      model: moonshot/moonshot-v1-8k
+      model: openai/moonshot-v1-8k  # 8k context, fastest
       api_key: os.environ/MOONSHOT_API_KEY
+      api_base: https://api.moonshot.cn/v1
     tpm: 100000
     rpm: 100
 
   # === Local Models (Ollama - Last Resort) ===
-  # Note: 172.17.0.1 is the Docker bridge gateway IP (host machine)
   - model_name: local-llama
     litellm_params:
       model: ollama/llama3.2
@@ -114,29 +92,24 @@ model_list:
 
 # === Router Settings ===
 router_settings:
-  routing_strategy: "usage-based-routing"  # Balance load across providers
+  routing_strategy: "usage-based-routing"
   num_retries: 3
   timeout: 60
   
-  # Fallback chains - if primary fails, try these in order
-  # Strategy: Start with free/fast, fall back to paid, then local
+  # Fallback chains - Gemini → Kimi → Local
   fallbacks:
-    # Gemini models (free tier)
-    - gemini-flash: [gemini-2.5-flash, glm-flash, deepseek-chat, local-llama]
-    - gemini-pro: [gemini-2.5-pro, gemini-3-pro, glm-plus, deepseek-reasoner, local-llama]
-    - gemini-2.5-flash: [gemini-flash, glm-flash, deepseek-chat, local-llama]
-    - gemini-2.5-pro: [gemini-pro, glm-plus, deepseek-reasoner, local-llama]
-    - gemini-3-pro: [gemini-2.5-pro, gemini-pro, glm-plus, local-llama]
-    - gemini-3-flash: [gemini-2.5-flash, gemini-flash, glm-flash, local-llama]
+    # Gemini models (free tier, primary)
+    - gemini-flash: [gemini-2.5-flash, kimi-8k, local-llama]
+    - gemini-pro: [gemini-2.5-pro, gemini-3-pro, kimi-pro, local-llama]
+    - gemini-2.5-flash: [gemini-flash, kimi-8k, local-llama]
+    - gemini-2.5-pro: [gemini-pro, kimi-pro, local-llama]
+    - gemini-3-pro: [gemini-2.5-pro, gemini-pro, kimi-pro, local-llama]
+    - gemini-3-flash: [gemini-2.5-flash, gemini-flash, kimi-8k, local-llama]
     
-    # GLM models (paid tier)
-    - glm-flash: [gemini-flash, deepseek-chat, local-llama]
-    - glm-plus: [glm-stable, gemini-pro, deepseek-reasoner, local-llama]
-    - glm-stable: [glm-plus, gemini-pro, deepseek-reasoner, local-llama]
-    
-    # DeepSeek models (cheap tier)
-    - deepseek-chat: [gemini-flash, glm-flash, local-llama]
-    - deepseek-reasoner: [gemini-pro, glm-plus, local-llama]
+    # Kimi models (paid tier, secondary)
+    - kimi-code: [kimi-8k, gemini-flash, local-llama]
+    - kimi-pro: [kimi-code, gemini-pro, local-llama]
+    - kimi-8k: [kimi-code, gemini-flash, local-llama]
     
     # Local models (always available)
     - local-llama: [local-ada]
@@ -144,25 +117,17 @@ router_settings:
 
 # === LiteLLM Settings ===
 litellm_settings:
-  # Enable detailed logging
   set_verbose: true
-  
-  # Disable cache for now (no redis required)
   cache: false
 
 # === General Settings ===
 general_settings:
   master_key: os.environ/LITELLM_MASTER_KEY
-  
-  # Disable database for now (no prisma required)
-  # database_url: null
 
-# === Model Aliases (for convenience) ===
-# These let you use simple names in your code
+# === Model Aliases ===
 model_aliases:
   fast: gemini-flash
   smart: gemini-pro
-  paid: glm-plus      # GLM 4.7 - newest and best!
-  stable: glm-stable  # GLM 4.6 - reliable
-  cheap: deepseek-chat
+  code: kimi-code      # Kimi for coding tasks
+  deep: kimi-pro       # Kimi for complex reasoning
   local: local-ada
