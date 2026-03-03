@@ -31,40 +31,41 @@ if LITELLM_PROXY_URL:
     else:
         print("   ⚠️  Warning: No LITELLM_MASTER_KEY set!")
 
-# === Agent Model Configuration - Gemini Only ===
+# === Agent Model Configuration - Gemini 1.5 (Paid Tier) ===
+# Using Gemini 1.5 models which are in Luna's paid tier with better rate limits!
 AGENT_MODEL_CONFIG: Dict[str, Dict[str, any]] = {
     "queen": {
-        "primary": "litellm/gemini-2.5-flash",
-        "fallback": "litellm/gemini-flash",
+        "primary": "litellm/gemini-pro",      # Gemini 1.5 Pro - most capable
+        "fallback": "litellm/gemini-flash",   # Fallback to Gemini 1.5 Flash
         "description": "Strategic orchestrator",
         "max_tokens": 4096,
     },
     "coder": {
-        "primary": "litellm/gemini-2.5-flash",
-        "fallback": "litellm/gemini-flash",
+        "primary": "litellm/gemini-flash",    # Gemini 1.5 Flash - fast & capable
+        "fallback": "litellm/gemini-pro",
         "description": "Implementation specialist",
         "max_tokens": 2048,
     },
     "researcher": {
-        "primary": "litellm/gemini-2.5-flash",
+        "primary": "litellm/gemini-pro",      # Deep reasoning
         "fallback": "litellm/gemini-flash",
         "description": "Research specialist",
         "max_tokens": 4096,
     },
     "tester": {
-        "primary": "litellm/gemini-flash",
-        "fallback": "litellm/gemini-2.5-flash",
+        "primary": "litellm/gemini-flash",    # Fast for testing
+        "fallback": "litellm/gemini-pro",
         "description": "Testing specialist",
         "max_tokens": 2048,
     },
     "reviewer": {
-        "primary": "litellm/gemini-2.5-flash",
+        "primary": "litellm/gemini-pro",      # Thorough analysis
         "fallback": "litellm/gemini-flash",
         "description": "Code reviewer",
         "max_tokens": 3072,
     },
     "drone": {
-        "primary": "litellm/gemini-flash",
+        "primary": "litellm/gemini-flash",    # Fastest
         "fallback": "litellm/local-llama",
         "description": "Simple read-only tasks",
         "max_tokens": 1024,

@@ -8,14 +8,14 @@ model_list:
   
   - model_name: gemini-flash
     litellm_params:
-      model: gemini/gemini-2.0-flash-exp
+      model: gemini/gemini-1.5-flash
       api_key: os.environ/GEMINI_API_KEY
     tpm: 1000000
     rpm: 1000
 
   - model_name: gemini-pro
     litellm_params:
-      model: gemini/gemini-exp-1206  # Gemini 2.5 Pro preview
+      model: gemini/gemini-1.5-pro
       api_key: os.environ/GEMINI_API_KEY
     tpm: 1000000
     rpm: 1000
