@@ -25,14 +25,14 @@ async def test_queen_simple_task():
     print("🐝 Testing Queen Bee with new configuration...")
     print("=" * 60)
     
-    # Create Queen with auto-selected model and max_tokens
+    # Create Queen with working model (gemini-2.5-flash tested)
     queen = QueenAgent(
         agent_id="test-queen",
-        model="litellm/gemini-pro",  # Will use gemini-exp-1206
+        model="litellm/gemini-2.5-flash",  # Tested working!
         # max_tokens will be auto-set to 4096 by spawner logic
     )
     
-    print(f"✨ Queen initialized with model: litellm/gemini-pro")
+    print(f"✨ Queen initialized with model: litellm/gemini-2.5-flash")
     print(f"📊 Expected max_tokens: 4096 (strategic orchestration)")
     print()
     
@@ -78,7 +78,7 @@ async def test_queen_simple_task():
         print()
         print("📋 Queen's Response:")
         print("-" * 60)
-        print(result.data)
+        print(result.output if hasattr(result, 'output') else result)
         print("-" * 60)
         print()
         print("🎉 Test passed! Queen is working with new configuration!")
