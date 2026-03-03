@@ -13,6 +13,7 @@ from .coder import CoderAgent
 from .reviewer import ReviewerAgent
 from .queen import QueenAgent
 from .tester import TesterAgent
+from .archangel_queen import ArchangelQueen
 
 __all__ = [
     "BaseAgent",
@@ -23,4 +24,5 @@ __all__ = [
     "ReviewerAgent",
     "QueenAgent",
     "TesterAgent",
+    "ArchangelQueen",
 ]
